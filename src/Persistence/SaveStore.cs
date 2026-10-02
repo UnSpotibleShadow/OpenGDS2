@@ -56,7 +56,7 @@ public static class SaveStore
     private static void Validate(GameState state)
     {
         if (!Enum.IsDefined(state.Mode) || state.Company is null || state.Initial is null || state.Recruitment is null ||
-            state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null || state.DevelopmentProjects is null ||
+            state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null || state.DevelopmentProjects is null || state.ReleasedGames is null ||
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
             throw new InvalidDataException("Invalid session state.");
         if (state.Year is < 1 || state.Month is < 1 or > 12 || state.Week is < 1 or > 4)
@@ -68,6 +68,26 @@ public static class SaveStore
             throw new InvalidDataException("Invalid hardware state.");
         if (state.OriginalAccuracyCells?.Any(x=>x.Key is <0 or >512 || x.Value is <0 or >99)==true)
             throw new InvalidDataException("Invalid original accuracy cells.");
+        if (state.SalesTicks is <0 or >=SalesService.TicksPerBatch || state.SalesFee1<0 || state.SalesFee2<0 ||
+            state.Company.ProductionCapacity<0 || state.Company.OriginalMember90<0 ||
+            (state.OriginalTypeRosterMap is not null && (state.OriginalTypeRosterMap.Count!=65 ||
+             state.OriginalTypeRosterMap.Any(x=>x.Key is <0 or >64 || x.Value is <0 or >50))))
+            throw new InvalidDataException("Invalid core-loop clock or original cells.");
+        if (!state.ReleasedGames.Select(x=>x?.ProductIndex).SequenceEqual(
+                Enumerable.Range(0,state.ReleasedGames.Count).Select(x=>(int?)x)) ||
+            state.ReleasedGames.Select(x=>x.Title).Distinct().Count()!=state.ReleasedGames.Count)
+            throw new InvalidDataException("Invalid product records.");
+        foreach (var product in state.ReleasedGames)
+        {
+            if (product is null || string.IsNullOrWhiteSpace(product.Title) || product.Title.Length>128 ||
+                product.HardwareSourceIndex is <0 or >10 || product.AudienceSourceIndex is <0 or >6 ||
+                product.GameTypeSourceIndex is <0 or >50 || product.GenreSourceIndex is <0 or >17 || product.Bugs<0 ||
+                !double.IsFinite(product.Recognition) || product.Recognition<0 || !double.IsFinite(product.DataSize) || product.DataSize<0 ||
+                !double.IsFinite(product.MarketFactor) || product.MarketFactor<0 || product.Demand<0 || product.Price<0 ||
+                product.Stock<0 || product.ProductionSpending<0)
+                throw new InvalidDataException("Invalid released game.");
+            DevelopmentWorkRules.ValidateQuality(product.Quality);
+        }
         if (state.DevelopmentProjects.Count>2 ||
             state.DevelopmentProjects.Select(x=>x?.RoomIndex).Distinct().Count()!=state.DevelopmentProjects.Count)
             throw new InvalidDataException("Invalid development rooms.");
@@ -107,6 +127,16 @@ public static class SaveStore
             (project.OriginalStage>=2 && project.GenreSourceIndex is null))
             throw new InvalidDataException("Invalid development project.");
         DevelopmentWorkRules.ValidateQuality(project.Quality);
+        if (project.PendingDecision is DevelopmentMilestone decision &&
+            (decision switch
+            {
+                DevelopmentMilestone.SelectType=>project.OriginalStage!=0 || DevelopmentWorkRules.PendingMilestone(project)!=decision,
+                DevelopmentMilestone.SelectGenre=>project.OriginalStage!=1 || DevelopmentWorkRules.PendingMilestone(project)!=decision,
+                DevelopmentMilestone.StartDebugging=>project.OriginalStage!=3 || project.Progress<project.RequiredPoints,
+                _=>true
+            })) throw new InvalidDataException("Invalid pending development decision.");
+        if (project.TypeCandidates is not null && (project.TypeCandidates.Count is <5 or >65 ||
+            project.TypeCandidates.Any(x=>x is <0 or >50))) throw new InvalidDataException("Invalid type roster.");
         if (project.OriginalRoomState==2 && project.PolishingTargets is null)
             throw new InvalidDataException("Missing polishing targets.");
         if (project.PolishingTargets is not null) DevelopmentWorkRules.ValidateQuality(project.PolishingTargets);
@@ -123,6 +153,8 @@ public static class SaveStore
             office.RouteNode is >= 1 and <= 14 &&
             office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
             office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
+            office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=3 &&
+            office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && Enum.IsDefined(office.WorkCategory) &&
             office.OffsetY is >= -2 and <= 8 && office.DepthAdjustment is 0 or 2 &&
             (office.Action switch
             {

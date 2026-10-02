@@ -21,6 +21,7 @@ public sealed class OriginalGameImporter
         var catalog = JsonSerializer.Deserialize<OriginalCatalog>(File.ReadAllText(path));
         if (catalog is null || catalog.SchemaVersion != 1 || catalog.SourceHash != EmployeeDatabaseImporter.ExpectedHash)
             throw new InvalidDataException("Unsupported local catalog.");
+        if (catalog.Hardware.Any(x=>x.ProductionBands.Count!=4)) return null; // Reimport pre-M13 catalog caches.
         return catalog;
     }
 

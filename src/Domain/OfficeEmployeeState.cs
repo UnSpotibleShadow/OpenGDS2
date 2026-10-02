@@ -24,4 +24,12 @@ public sealed class OfficeEmployeeState
     public int OffsetX { get; set; }
     public int OffsetY { get; set; }
     public int DepthAdjustment { get; set; }
+    public int WorkTicks { get; set; }
+    public int WorkIdleTicks { get; set; }
+    // Zero is the original unclassified/exhausted tier.
+    public int WorkTier { get; set; }
+    public DevelopmentWorkCategory WorkCategory { get; set; }
+    public int BurstTicks { get; set; }
+    public int BurstCount { get; set; }
+    public bool IdleBreak { get; set; }
 }

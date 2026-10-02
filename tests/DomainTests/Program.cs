@@ -32,6 +32,174 @@ GameState PlanningState(long? money=100)=>new()
     Money=money,Company=new() {Name="Synthetic",PresidentName="Tester",Fame=14},
     DevelopmentComputerIndex=0,AvailableHardware=[0],HardwareLicenses=[0]
 };
+OriginalCatalog CoreCatalog()
+{
+    var c=PlanningCatalog();c.Hardware[0].RawMembers["1050"]=40;
+    c.Hardware[0].ProductionBands=[new(16,300),new(32,700),new(48,1200),new(64,1800)];
+    c.GameTypes[0].RawMembers["12EC"]=3;c.GameTypes[1].RawMembers["12EC"]=3;
+    return c;
+}
+EmployeeState Worker(int action=6)=>new()
+{
+    Name="Synthetic Worker",SourceIndex=0,PortraitId=1,Level=1,Experience=0,Stress=0,
+    Fun=50,Novelty=50,Graphics=50,Music=50,Accuracy=50,DevelopmentSpeed=50,Inspiration=50,
+    Office=new(){Action=action,SeatedAction=action,WorkEngaged=true,MovementState=0,Facing=1}
+};
+Test("production cost uses floored data-size bands plus packaging",()=>
+{
+    var h=CoreCatalog().Hardware[0];
+    Check(ReleaseService.UnitProductionCost(h,16.99)==500);
+    Check(ReleaseService.UnitProductionCost(h,17)==900);
+    Check(ReleaseService.UnitProductionCost(h,32.99)==900);
+    Check(ReleaseService.UnitProductionCost(h,33)==1400);
+    Check(ReleaseService.UnitProductionCost(h,49)==2000);
+    h.ProductionBands.Clear();Throws<InvalidDataException>(()=>ReleaseService.UnitProductionCost(h,0));
+});
+Test("release charges production, snapshots project and frees room exactly once",()=>
+{
+    var s=PlanningState(100000);var c=CoreCatalog();
+    var p=new DevelopmentProjectState {Title="Synthetic Game",RequiredPoints=100,Progress=100,OriginalStage=3,
+        GameTypeSourceIndex=0,GenreSourceIndex=0,Quality=new(10,20,30,40),Bugs=70,Recognition=4,DataSize=16.9};
+    s.DevelopmentProjects.Add(p);var e=Worker();e.Office!.WorkTicks=12;s.Employees.Add(e);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6))==ReleaseResult.Success);
+    var g=s.ReleasedGames.Single();
+    Check(s.Money==50000 && s.DevelopmentProjects.Count==0 && g.Stock==100 && g.Demand==100 && g.MarketFactor==.9);
+    Check(g.Quality==p.Quality && g.Bugs==70 && g.ProductionSpending==50000 && e.Office.WorkTicks==0 && e.Office.WorkEngaged);
+    p.Quality=new(999,0,0,0);Check(g.Quality.Fun==10);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom())==ReleaseResult.NotReady && s.Money==50000);
+});
+Test("release and reprint failure guards are atomic",()=>
+{
+    var s=PlanningState(49999);var c=CoreCatalog();var p=new DevelopmentProjectState {Title="Synthetic",RequiredPoints=1,Progress=1,
+        OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(p);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom())==ReleaseResult.InsufficientFunds);
+    Check(s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==0 && s.Money==49999);
+    s.Money=100000;Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6))==ReleaseResult.Success);
+    var g=s.ReleasedGames.Single();
+    Check(ReleaseService.TryProduce(s,g,c,101)==ReleaseResult.InsufficientFunds && g.Stock==100 && g.ProductionSpending==50000);
+    Check(ReleaseService.TryProduce(s,g,c,100)==ReleaseResult.Success && s.Money==0 && g.Stock==200 && g.ProductionSpending==100000);
+    var other=new DevelopmentProjectState {RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(other);
+    Check(ReleaseService.TryRelease(s,other,c,"Synthetic",5800,100,new SequenceRandom())==ReleaseResult.DuplicateTitle);
+});
+Test("market-factor branches preserve first-two penalty and unreachable music tiers",()=>
+{
+    Check(ReleaseService.MarketFactor(0,new(1000,1000,0,1000),new SequenceRandom(0))==2.4);
+    Check(ReleaseService.MarketFactor(1,new(),new SequenceRandom(3))==.4);
+    Check(Math.Abs(ReleaseService.MarketFactor(2,new(201,201,0,201),new SequenceRandom(6,0,0,1))-5.1)<1e-12);
+    Check(ReleaseService.MarketFactor(2,new(0,201,0,0),new SequenceRandom(3,1))==0);
+});
+Test("sales formula, audience, recognition, jitter and all price boundaries",()=>
+{
+    var c=CoreCatalog();c.Audiences[0].RawMembers["14A8"]=1;
+    var g=new ReleasedGameState {Quality=new(100,100,100,100),Bugs=10,Recognition=40,MarketFactor=.9,Price=5800};
+    // floor(420/2 * 10000/800)=2625; (2625+7)*1.5*2*.9*1*(.7+3/10).
+    Check(SalesService.PotentialSales(g,c,7)==7106);
+    c.Audiences[0].RawMembers["14A8"]=7;Check(SalesService.PotentialSales(g,c,7)==3553);
+    long[] prices=[2999,3000,3999,4000,4999,5000,5999,6000,6999,7000,7999,8000,8999,9000,9999,10000,19999,20000];
+    double[] factors=[2,1.5,1.5,1.2,1.2,1,1,.7,.7,.5,.5,.2,.2,.1,.1,.05,.05,0];
+    for (int i=0;i<prices.Length;i++) Check(SalesService.PriceMultiplier(prices[i])==factors[i]);
+    g.Demand=0;Check(SalesService.PotentialSales(g,c,19)==0);
+});
+Test("sales batches consume stock, net fees and demand even while out of stock",()=>
+{
+    var c=CoreCatalog();var s=PlanningState(1000);s.SalesFee1=s.SalesFee2=1500;
+    var g=new ReleasedGameState {Title="Synthetic",Quality=new(100,100,100,100),MarketFactor=1,Price=5800,Stock=100};s.ReleasedGames.Add(g);
+    for (int i=0;i<19;i++) SalesService.Tick(s,c,new SequenceRandom());
+    Check(s.Money==1000 && g.Stock==100 && s.SalesTicks==19);
+    SalesService.Tick(s,c,new SequenceRandom(7,1,1));
+    Check(g.Stock==0 && g.UnitsSold==100 && s.Money==281000 && g.NetSalesReceipts==280000 && g.Demand==98 && g.LastBatchSold==100);
+    for (int i=0;i<19;i++) SalesService.Tick(s,c,new SequenceRandom());
+    SalesService.Tick(s,c,new SequenceRandom(1,0));
+    Check(g.Stock==0 && g.UnitsSold==100 && g.Demand==100 && g.LastBatchSold==0);
+    Check(SalesService.NextDemand(1,1,1)==0 && SalesService.NextDemand(50,0)==50);
+});
+Test("sales retain original negative-result defect rather than inventing a clamp",()=>
+{
+    var c=CoreCatalog();var g=new ReleasedGameState {Quality=new(),Bugs=100,MarketFactor=1,Price=5800,Stock=100};
+    Check(SalesService.PotentialSales(g,c,0)<0);
+});
+Test("work cadence and ordinary contribution are persisted mid-task",()=>
+{
+    var c=CoreCatalog();var s=PlanningState(100000);var e=Worker();s.Employees.Add(e);
+    var p=new DevelopmentProjectState {Title="Synthetic",RequiredPoints=1000,Focus=new(100,0,0,0)};s.DevelopmentProjects.Add(p);
+    e.Office!.WorkIdleTicks=35;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==2 && e.Office.WorkTier==1 && e.Experience==3.7);
+    var restored=SaveStore.Deserialize(SaveStore.Serialize(s));s=restored;e=s.Employees.Single();p=s.DevelopmentProjects.Single();
+    for (int i=0;i<14;i++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Progress==0 && e.Office!.WorkTicks==16);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Progress==2 && p.Quality.Fun==2 && p.DataSize>0 && e.Office!.WorkTicks==0);
+});
+Test("burst completes after 120 accumulation ticks starting at animation tick 32",()=>
+{
+    var c=CoreCatalog();var s=PlanningState();var e=Worker();s.Employees.Add(e);
+    var p=new DevelopmentProjectState {Title="Synthetic",RequiredPoints=1000,Focus=new(100,0,0,0)};s.DevelopmentProjects.Add(p);
+    e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    for (int i=0;i<119;i++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Progress==0 && e.Office.BurstTicks==119);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTicks==0 && e.Office.BurstTicks==120);
+});
+Test("development checkpoints award once, pause all clocks and resume after selection",()=>
+{
+    var c=CoreCatalog();var s=PlanningState(10000);var e=Worker();s.Employees.Add(e);
+    s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
+    s.OriginalAccuracyCells=new(){{99,0}};s.SalesFee1=s.SalesFee2=1500;
+    var p=new DevelopmentProjectState {Title="Synthetic",RequiredPoints=100,Progress=50,Focus=new(100,0,0,0)};s.DevelopmentProjects.Add(p);
+    var session=new GameSession(new WorkRandom());session.Restore(s);session.TickOffice(c);
+    Check(p.PendingDecision==DevelopmentMilestone.SelectType && e.Experience==10);
+    int ticks=s.SalesTicks;double stress=e.Stress!.Value;
+    for (int i=0;i<100;i++) session.TickOffice(c);
+    Check(e.Experience==10 && s.SalesTicks==ticks && e.Stress==stress);
+    // Source 0 as chosen type, points indexed through roster[0]=1.
+    s.OriginalTypeRosterMap[0]=1;
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,s.OriginalTypeRosterMap)==DevelopmentSelectionResult.Success && p.PendingDecision is null);
+    p.Progress=p.RequiredPoints*.81;session.TickOffice(c);Check(p.PendingDecision==DevelopmentMilestone.SelectGenre && e.Experience==30);
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+    p.Progress=p.RequiredPoints;session.TickOffice(c);
+    Check(p.OriginalStage==3 && p.PendingDecision==DevelopmentMilestone.StartDebugging && e.Experience==70);
+    var saved=SaveStore.Deserialize(SaveStore.Serialize(s));Check(saved.DevelopmentProjects.Single().PendingDecision==DevelopmentMilestone.StartDebugging);
+});
+Test("development release sales second production and another project form a repeatable loop",()=>
+{
+    var c=CoreCatalog();var s=PlanningState(10000000);s.Company.ProductionCapacity=50;s.Company.OriginalMember90=23;
+    s.SalesFee1=s.SalesFee2=1500;s.OriginalAccuracyCells=new(){{99,0}};s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
+    var e=Worker();s.Employees.Add(e);var session=new GameSession(new Random(1234));session.Restore(s);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Synthetic Loop",new(100,0,0,0))==DevelopmentPlanningResult.Success);
+    var p=s.DevelopmentProjects.Single();int tick=0;
+    while (p.OriginalStage<3 && tick++<30000)
+    {
+        session.TickOffice(c);
+        if (p.PendingDecision==DevelopmentMilestone.SelectType)
+        {
+            var roster=DevelopmentSimulation.PrepareTypeCandidates(s,p,c,new Random(2));
+            Check(DevelopmentSelectionRules.TrySelectType(s,p,c,roster[0],s.OriginalTypeRosterMap)==DevelopmentSelectionResult.Success);
+        }
+        if (p.PendingDecision==DevelopmentMilestone.SelectGenre)
+            Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+        // Lounge management is a player choice; keep this synthetic worker fresh
+        // without changing any production gameplay rule.
+        e.Stress=0;
+    }
+    Check(tick<30000 && p.OriginalStage==3 && p.Progress==p.RequiredPoints);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,5000,new SequenceRandom(6))==ReleaseResult.Success);
+    var g=s.ReleasedGames.Single();long before=s.Money!.Value;
+    for (int i=0;i<20;i++) session.TickOffice(c);
+    Check(g.UnitsSold>0 && g.Stock<5000 && s.Money>before);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
+    long stock=g.Stock;Check(ReleaseService.TryProduce(s,g,c,1000)==ReleaseResult.Success && g.Stock==stock+1000);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Synthetic Second",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    Check(s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==1);
+});
+Test("core-loop save rejects corrupt stocks, checkpoints, cells and counters",()=>
+{
+    var s=PlanningState();s.SalesTicks=20;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.SalesTicks=0;
+    s.OriginalTypeRosterMap=new(){{0,0}};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OriginalTypeRosterMap=null;
+    var g=new ReleasedGameState {Title="Synthetic",Stock=-1};s.ReleasedGames.Add(g);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.Stock=1;g.MarketFactor=double.NaN;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.ReleasedGames.Clear();
+    var e=Worker();s.Employees.Add(e);e.Office!.BurstCount=51;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+
 Test("planning acceptance initializes two rooms, charges once and persists",()=>
 {
     var state=PlanningState();var catalog=PlanningCatalog();var focus=new DevelopmentFocus(25,25,25,25);
@@ -714,6 +882,51 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original import supports development release and real-catalog sales",()=>
+    {
+        var db=EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));
+        var catalog=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        var session=new GameSession(new Random(123));
+        var state=session.StartNewGame("Compatibility test","Tester",GameMode.Beginner,db,catalog);
+        foreach (var candidate in session.OpenRecruitment().Candidates.ToArray().Take(3))
+            Check(session.Hire(candidate)==HireResult.Success);
+        Check(state.Employees.Count==3);
+        var desks=new Dictionary<int,int>();
+        for (int i=0;i<3;i++)
+        {
+            var employee=state.Employees[i];desks[employee.SourceIndex!.Value]=6+i;
+            Check(OfficeAssignmentService.TryAssignDesk(state,employee,6+i)==OfficeAssignmentResult.Success);
+        }
+        Check(DevelopmentProjectService.TryAcceptNewPlan(state,catalog,0,0,0,"Compatibility test game",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+        var project=state.DevelopmentProjects.Single();int ticks=0;
+        while (project.OriginalStage<3 && ticks++<200000)
+        {
+            session.TickOffice(catalog);
+            if (project.PendingDecision==DevelopmentMilestone.SelectType)
+            {
+                var roster=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,new Random(12));
+                Check(DevelopmentSelectionRules.TrySelectType(state,project,catalog,roster[0],state.OriginalTypeRosterMap!)==DevelopmentSelectionResult.Success);
+            }
+            if (project.PendingDecision==DevelopmentMilestone.SelectGenre)
+            {
+                var genre=catalog.Genres.First(x=>DevelopmentSelectionRules.IsGenreEligible(x,state.Company.OriginalMember90!.Value));
+                Check(DevelopmentSelectionRules.TrySelectGenre(state,project,catalog,genre.SourceIndex)==DevelopmentSelectionResult.Success);
+            }
+            foreach (var employee in state.Employees)
+            {
+                if (employee.Office!.Action is >=6 and <=17 && employee.Stress>=80)
+                    Check(OfficeAssignmentService.TryTakeBreak(state,employee,new Random(4))==OfficeAssignmentResult.Success);
+                else if (employee.Office.MovementState==6 && employee.Stress<=20)
+                    Check(OfficeAssignmentService.TryAssignDesk(state,employee,desks[employee.SourceIndex!.Value])==OfficeAssignmentResult.Success);
+            }
+        }
+        Check(ticks<200000 && project.OriginalStage==3 && project.Quality.Fun+project.Quality.Novelty+project.Quality.Graphics+project.Quality.Music>project.Bugs);
+        Check(ReleaseService.TryRelease(state,project,catalog,project.Title,5800,5000,new SequenceRandom(6))==ReleaseResult.Success);
+        long funds=state.Money!.Value;
+        for (int i=0;i<20;i++) session.TickOffice(catalog);
+        Check(state.ReleasedGames.Single().UnitsSold>0 && state.Money>funds);
+        Check(SaveStore.Deserialize(SaveStore.Serialize(state)).ReleasedGames.Count==1);
+    });
     Test("optional local original database parity", () =>
     {
         var database = EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));
@@ -758,7 +971,8 @@ if (args.Length == 2)
             {
                 var actual = catalog.Hardware[n]; var row = expected.Hardware[n];
                 Check(actual.SourceIndex == row.SourceIndex && actual.Name == row.Name && actual.Description == row.Description &&
-                    actual.RawMembers.OrderBy(x=>x.Key).SequenceEqual(row.RawMembers.OrderBy(x=>x.Key)));
+                    actual.RawMembers.OrderBy(x=>x.Key).SequenceEqual(row.RawMembers.OrderBy(x=>x.Key)) &&
+                    actual.ProductionBands.Count==4 && actual.ProductionBands.SequenceEqual(row.ProductionBands));
             }
             Check(catalog.GameTypes.Count == 51 && expected.GameTypes.Count == 51);
             for (int n = 0; n < 51; n++)
@@ -801,4 +1015,10 @@ sealed class SequenceRandom(params int[] values) : Random
         if (value < 0 || value >= maxValue) throw new Exception("Invalid synthetic random draw");
         return value;
     }
+}
+
+sealed class WorkRandom : Random
+{
+    public override int Next(int maxValue)=>maxValue switch {130=>1,300=>0,50=>1,_=>0};
+    public override double NextDouble()=>.99;
 }

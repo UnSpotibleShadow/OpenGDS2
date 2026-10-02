@@ -219,7 +219,7 @@ msgid "NEXT_WEEK"
 msgstr "次の週"
 
 msgid "RECONSTRUCTION_STATUS"
-msgstr "復元開発版：ゲーム開発・給与・契約・イベントは未実装です。"
+msgstr "開発・発売・販売はプレイ可能です。暦に連動する経営・評価・イベントは復元中です。"
 
 msgid "DATABASE_IMPORT_REQUIRED"
 msgstr "社員雇用を有効にするにはオリジナル配布版を読み込んでください。"
@@ -390,7 +390,7 @@ msgid "PLANNING_NO_HARDWARE"
 msgstr "利用可能なハードの情報がありません。"
 
 msgid "PLANNING_RESULT_Success"
-msgstr "現在の開発パソコンとライセンスで対応できます。"
+msgstr "開発を開始できます。"
 
 msgid "PLANNING_RESULT_RoomOccupied"
 msgstr "この開発室は使用中です。"
@@ -432,7 +432,7 @@ msgid "LOUNGE"
 msgstr "休憩室"
 
 msgid "DESK_ASSIGNMENT_NOTE"
-msgstr "開発席に社員を配置できます。このビルドでは開発の進行はまだ動作しません。"
+msgstr "ゲームを開発する部屋の机を選んでください。"
 
 msgid "ASSIGNMENT_RESULT_Success"
 msgstr "配置を変更しました。"
@@ -448,3 +448,108 @@ msgstr "すでに配置されています。"
 
 msgid "ASSIGNMENT_RESULT_NoLoungeSeat"
 msgstr "空いている休憩席が見つかりませんでした。"
+
+msgid "GAME_TITLE"
+msgstr "ゲーム名"
+
+msgid "NEW_PROJECT_TITLE"
+msgstr "新しいゲーム"
+
+msgid "SALES"
+msgstr "販売状況"
+
+msgid "PAUSE"
+msgstr "一時停止／再開"
+
+msgid "PAUSED"
+msgstr "一時停止中"
+
+msgid "BACK_TO_OFFICE"
+msgstr "会社に戻る"
+
+msgid "BUGS"
+msgstr "バグ"
+
+msgid "GAME_RECOGNITION"
+msgstr "ゲームの認知度"
+
+msgid "DEVELOPMENT_STAFF_NOTE"
+msgstr "社員画面からこの開発室の机に配置してください。疲れた社員は休憩室へ。"
+
+msgid "SELECT_GAME_TYPE"
+msgstr "ゲームの種類を選択"
+
+msgid "SELECT_GENRE"
+msgstr "ジャンルを選択"
+
+msgid "DEVELOPMENT_COMPLETE"
+msgstr "開発完了"
+
+msgid "RELEASE_GAME"
+msgstr "ゲームを発売"
+
+msgid "CONTINUE_DEBUGGING"
+msgstr "デバッグを続ける"
+
+msgid "RELEASE_BUG_WARNING"
+msgstr "バグが多く残っています。発売前のデバッグをおすすめします。"
+
+msgid "LEGACY_ROSTER_UNKNOWN"
+msgstr "古いセーブには開発に必要な情報がありません。新しい会社で開始してください。"
+
+msgid "RETAIL_PRICE"
+msgstr "販売価格"
+
+msgid "PRODUCTION_COPIES"
+msgstr "生産本数"
+
+msgid "PRODUCTION_COST"
+msgstr "生産費用"
+
+msgid "NET_PER_COPY"
+msgstr "１本あたりの受取額"
+
+msgid "RELEASE_RESULT_NotReady"
+msgstr "開発が完了していません。"
+
+msgid "RELEASE_RESULT_DuplicateTitle"
+msgstr "同じ名前のゲームが発売済みです。"
+
+msgid "RELEASE_RESULT_MoneyUnknown"
+msgstr "資金情報がありません。"
+
+msgid "RELEASE_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"
+
+msgid "SELECTION_RESULT_WrongStage"
+msgstr "選択の段階ではありません。"
+
+msgid "SELECTION_RESULT_MoneyUnknown"
+msgstr "資金情報がありません。"
+
+msgid "SELECTION_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"
+
+msgid "SELECTION_RESULT_CompanyFameUnknown"
+msgstr "会社の認知度が不明です。"
+
+msgid "STOCK"
+msgstr "在庫"
+
+msgid "UNITS_SOLD"
+msgstr "販売本数"
+
+msgid "LAST_SALES_BATCH"
+msgstr "直近の販売本数"
+
+msgid "NET_SALES_RECEIPTS"
+msgstr "販売受取額"
+
+msgid "DEMAND"
+msgstr "需要"
+
+msgid "PRODUCE_MORE"
+msgstr "追加生産"
+
+msgid "NO_RELEASED_GAMES"
+msgstr "発売したゲームはまだありません。"

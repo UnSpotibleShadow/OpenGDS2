@@ -36,7 +36,10 @@ public sealed class HardwareDefinition
     public int PlanningPoints => checked((int)RawMembers["0FE0"]);
     public long LicenseFee => RawMembers["0FC4"];
     public int Identifier => checked((int)RawMembers["0EC8"]);
+    public List<ProductionBand> ProductionBands {get;set;}=[];
 }
+
+public sealed record ProductionBand(int SizeThreshold,long UnitCost);
 
 public sealed class DevelopmentComputerDefinition
 {

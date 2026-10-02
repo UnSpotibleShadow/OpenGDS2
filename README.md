@@ -1,12 +1,13 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M12.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M13.
 
-**This is not gameplay-complete.** There is an interactive recruitment/hiring,
-staff inspection, manual level-up rules and a save/load loop. Development, sales, awards, office progression
-and complete weekly economics are still incomplete and disabled. No substitute
-simulation formulas or fabricated employees are supplied.
+The own-game **development → release → sales** loop is playable. Staff develop
+projects at their assigned desks; you select a type and genre, debug or release,
+then manage inventory and further production. Hiring, employee inspection,
+manual level-up and modern save/load are also available. Awards, reviews, office
+progression and complete weekly economics remain unfinished.
 
 M8 adds verified March-end contract renewal rules and local importing for seven
 audience definitions. See [M8 evidence and limitations](docs/milestone-8.md).
@@ -23,14 +24,22 @@ behavior and unresolved work paths.
 
 M11 adds development-domain formulas and planning transitions, a bilingual planning
 preview, imported employee portraits, full office route rules and computer-upgrade
-sprites. Work scheduling and release/sales remain incomplete. See
+sprites. M13 subsequently connects work scheduling and release/sales. See
 [M11 evidence and integration gaps](docs/development-work.md).
 
 M12 connects employee reassignment to the office: choose a development desk under
 Staff, watch the employee walk and sit, then send them back to the lounge.
 Assigned desks display locally imported computers, including the purchased model.
 Movement, reservations and seated state survive save/load. See
-[M12 evidence and limits](docs/milestone-12.md). Project progress is not yet scheduled.
+[M12 evidence and limits](docs/milestone-12.md). M13 now schedules project progress.
+
+M13 connects the **development → release → sales** loop. Hire and assign staff,
+start a project, choose its type and genre, debug or ship, and produce more copies
+as stock sells. The original sales formula and production size bands drive the
+simulation. Save/load preserves work and selection checkpoints. Reimport your
+original archive and start a new company for this milestone.
+See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
+reviews, awards and recall effects are still unfinished.
 
 ## Run
 
@@ -47,8 +56,10 @@ legally obtained `GameDev2DX.lzh`; the importer also extracts employee definitio
 from the game in memory. The SFX installer itself is not supported.
 
 New Game → enter company/president → select mode → Hire Employees → choose an
-applicant → Staff → Assign a Desk → Take a Break → Save game. Reopening recruitment rebuilds its five
-slots. Load restores funds, staff, source gates, names and candidate snapshots.
+applicant → Staff → Assign a Desk → Start Game Development → choose type/genre →
+debug or release → Sales → Produce More Copies. Use the lounge for tired staff.
+Reopening recruitment rebuilds its five slots. Save/load preserves funds, staff,
+source gates, projects, decisions and released products.
 Imported character names remain Japanese proper names; interface language can be
 changed under Settings. A calendar inspector previews the reconstructed calendar
 without skipping unresolved company simulation.

@@ -6,7 +6,7 @@ public enum DevelopmentMilestone { SelectType, SelectGenre, StartDebugging }
 public sealed record DevelopmentFocus(int Fun, int Novelty, int Graphics, int Music);
 public sealed record DevelopmentQuality(double Fun=0, double Novelty=0, double Graphics=0, double Music=0);
 
-/// <summary>Verified project fields; complete scheduling and release remain unimplemented.</summary>
+/// <summary>Verified new-project fields and persisted selection checkpoints.</summary>
 public sealed class DevelopmentProjectState
 {
     public int RoomIndex {get;set;}
@@ -27,4 +27,6 @@ public sealed class DevelopmentProjectState
     public double Recognition {get;set;}
     public double DataSize {get;set;}
     public DevelopmentFocus? Focus {get;set;}
+    public DevelopmentMilestone? PendingDecision {get;set;}
+    public List<int>? TypeCandidates {get;set;}
 }

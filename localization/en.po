@@ -219,7 +219,7 @@ msgid "NEXT_WEEK"
 msgstr "Next week"
 
 msgid "RECONSTRUCTION_STATUS"
-msgstr "Reconstruction build: development, payroll, contracts and events remain unavailable."
+msgstr "Development, release and sales are playable. Calendar economics, reviews and events are still being reconstructed."
 
 msgid "DATABASE_IMPORT_REQUIRED"
 msgstr "Import your original distribution to enable recruitment."
@@ -390,7 +390,7 @@ msgid "PLANNING_NO_HARDWARE"
 msgstr "No available hardware data."
 
 msgid "PLANNING_RESULT_Success"
-msgstr "The current computer and license support this plan."
+msgstr "Ready to begin development."
 
 msgid "PLANNING_RESULT_RoomOccupied"
 msgstr "This development room is occupied."
@@ -432,7 +432,7 @@ msgid "LOUNGE"
 msgstr "Lounge"
 
 msgid "DESK_ASSIGNMENT_NOTE"
-msgstr "Assign staff to a development desk. Project progress is not yet running in this build."
+msgstr "Choose a desk in the room developing your game."
 
 msgid "ASSIGNMENT_RESULT_Success"
 msgstr "Assignment changed."
@@ -448,3 +448,108 @@ msgstr "Already assigned here."
 
 msgid "ASSIGNMENT_RESULT_NoLoungeSeat"
 msgstr "No free lounge seat was found."
+
+msgid "GAME_TITLE"
+msgstr "Game title"
+
+msgid "NEW_PROJECT_TITLE"
+msgstr "New Game"
+
+msgid "SALES"
+msgstr "Sales"
+
+msgid "PAUSE"
+msgstr "Pause / Resume"
+
+msgid "PAUSED"
+msgstr "Paused"
+
+msgid "BACK_TO_OFFICE"
+msgstr "Back to Office"
+
+msgid "BUGS"
+msgstr "Bugs"
+
+msgid "GAME_RECOGNITION"
+msgstr "Game recognition"
+
+msgid "DEVELOPMENT_STAFF_NOTE"
+msgstr "Assign employees to this room from Staff → Assign Desk. Rest tired staff in the lounge."
+
+msgid "SELECT_GAME_TYPE"
+msgstr "Choose a game type"
+
+msgid "SELECT_GENRE"
+msgstr "Choose a genre"
+
+msgid "DEVELOPMENT_COMPLETE"
+msgstr "Development complete"
+
+msgid "RELEASE_GAME"
+msgstr "Release Game"
+
+msgid "CONTINUE_DEBUGGING"
+msgstr "Continue Debugging"
+
+msgid "RELEASE_BUG_WARNING"
+msgstr "Many bugs remain. Consider debugging before release."
+
+msgid "LEGACY_ROSTER_UNKNOWN"
+msgstr "This older save is missing original core-loop fields. Start a new company to use the reconstructed loop."
+
+msgid "RETAIL_PRICE"
+msgstr "Retail price"
+
+msgid "PRODUCTION_COPIES"
+msgstr "Copies to produce"
+
+msgid "PRODUCTION_COST"
+msgstr "Production spending"
+
+msgid "NET_PER_COPY"
+msgstr "Net receipts per copy"
+
+msgid "RELEASE_RESULT_NotReady"
+msgstr "Development is not complete."
+
+msgid "RELEASE_RESULT_DuplicateTitle"
+msgstr "A game with this title has already been released."
+
+msgid "RELEASE_RESULT_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "RELEASE_RESULT_InsufficientFunds"
+msgstr "Not enough company funds."
+
+msgid "SELECTION_RESULT_WrongStage"
+msgstr "This selection is not pending."
+
+msgid "SELECTION_RESULT_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "SELECTION_RESULT_InsufficientFunds"
+msgstr "Not enough company funds."
+
+msgid "SELECTION_RESULT_CompanyFameUnknown"
+msgstr "Company recognition is unknown."
+
+msgid "STOCK"
+msgstr "In stock"
+
+msgid "UNITS_SOLD"
+msgstr "Copies sold"
+
+msgid "LAST_SALES_BATCH"
+msgstr "Last sales batch"
+
+msgid "NET_SALES_RECEIPTS"
+msgstr "Net sales receipts"
+
+msgid "DEMAND"
+msgstr "Demand"
+
+msgid "PRODUCE_MORE"
+msgstr "Produce More Copies"
+
+msgid "NO_RELEASED_GAMES"
+msgstr "No games released yet."

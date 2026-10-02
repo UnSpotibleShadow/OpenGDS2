@@ -9,6 +9,7 @@ from verify_m7_evidence import verify
 from recover_genre_catalog import recover as recover_genres
 from verify_office_evidence import verify as verify_office
 from verify_development_evidence import verify as verify_development
+from verify_core_loop_evidence import verify as verify_core_loop
 
 def synthetic_pe():
     data=bytearray(1024);data[:2]=b'MZ';struct.pack_into('<I',data,0x3c,0x80)
@@ -46,6 +47,7 @@ class PublicTests(unittest.TestCase):
         with self.assertRaises(ParseError):recover(b'MZ'+bytes(200))
         with self.assertRaises(ParseError):verify_office(b'MZ'+bytes(200))
         with self.assertRaises(ParseError):verify_development(b'MZ'+bytes(200))
+        with self.assertRaises(ParseError):verify_core_loop(b'MZ'+bytes(200))
     def test_localization_key_parity(self):
         import re
         keys=[]
@@ -72,6 +74,8 @@ class OriginalTests(unittest.TestCase):
         self.assertTrue(verify_office(self.data))
     def test_development_behavior_anchors(self):
         self.assertTrue(verify_development(self.data))
+    def test_core_loop_behavior_anchors(self):
+        self.assertTrue(verify_core_loop(self.data))
     def test_complete_and_isolated_rows(self):
         rows=self.database['Employees'];self.assertEqual([x['SourceIndex'] for x in rows],list(range(60)))
         self.assertTrue(all(len(x['RawAttributes'])==7 and x['ContractFee']>=0 for x in rows))

@@ -120,8 +120,8 @@ increase required points, so the denominator changes.
 
 Type confirmation 009ACF14 +06C2..08B4 charges the selected source's fee,
 but reads points through rosterMap[selectedSource], after list selection already
-mapped the source. The API requires that original map. Unknown or stale tail
-entries are not substituted with a direct type lookup. Recognition adds
+mapped the source. The API requires that original map. M13 recovers the 65-cell fresh VARIANT declaration and persists the shared map;
+legacy missing cells are not substituted with a direct type lookup. Recognition adds
 floor(company recognition/3).
 
 Type roster construction 009D2F68 +0184..05F3 scans all sources, accepting a
@@ -160,7 +160,12 @@ Tests cover all 289 pairs of work destinations and nearby diagonal/axis targets.
 Hiring continues to use its recovered entry/lounge state machine. Desk standing,
 chair visibility, assignment, meetings and working animation are not yet integrated.
 
-## Next integration work
+## M13 integration
+
+The own-game scheduler, checkpoint UI, release and sales are now connected. See
+[core-loop.md](core-loop.md) for evidence, compatibility quirks and remaining gaps.
+
+## Further integration work
 
 Trace assignment and pending modal transitions; implement chair/standing state;
 connect work cadence, stress, experience and project contributions to the original

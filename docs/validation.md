@@ -1,4 +1,23 @@
-# Validation — M12 checkpoint
+# Validation — M13 checkpoint
+
+M13 local checks passed:
+
+- 71 C# checks, including an end-to-end imported-original development/release/sales
+  cycle with ordinary lounge rest management and C#/Python catalog parity.
+- 17 Python checks, including seven optional original-evidence/import checks.
+- Godot C# source-generator compilation with zero warnings/errors.
+- Original-import UI suite with zero failures.
+- Synthetic-data Godot core-loop UI suite with zero failures: development,
+  checkpoint save/load, type/genre selection, debugging, release, sales revenue,
+  reprinting and a second project. Synthetic fixtures are authored test data.
+
+The public suite has 69 C# checks and ten Python checks, with seven original
+checks skipped when no local fixture is supplied. The [M13 standard SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37077097177)
+passed: 69 public C# checks, ten public Python checks (seven optional checks
+skipped), normal SDK build with zero warnings/errors, headless editor/game
+startup, fixture-free UI smoke and complete core-loop UI smoke with zero failures.
+
+## M12 historical checkpoint
 
 The recovered final M11 source was retested after the execution workspace resumed:
 52 C# checks and all 16 Python checks passed with the optional local original.
@@ -37,6 +56,6 @@ That scan is not a successful local standard build; GitHub CI verifies that path
 - Original Windows behavior and original RNG sequence reproduction.
 - Whole-window graphical rendering, keyboard/pointer usability and packaging.
 - Original save fixtures for compatibility import.
-- A verified development, release and sales loop, calendar economics and progression.
+- Complete calendar economics, recalls/reviews/awards and company progression.
 
 No original binary, graphics, audio, imported catalog or private save is included.

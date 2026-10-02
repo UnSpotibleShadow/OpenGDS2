@@ -10,4 +10,7 @@ public sealed class CompanyState
     public int? Fame { get; set; }
     public int? DevelopmentPower { get; set; }
     public int? Rank { get; set; }
+    public int? ProductionCapacity { get; set; }
+    // Genre eligibility reads this member; its broader meaning is unresolved.
+    public int? OriginalMember90 { get; set; }
 }

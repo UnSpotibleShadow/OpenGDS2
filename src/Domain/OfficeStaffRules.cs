@@ -157,8 +157,7 @@ public static class OfficeStaffRules
             }
             office.ActionTicks++;
         }
-        // The scheduling branch must decide between idle, ordinary work and
-        // debugging. Until it is connected, retain the verified seated pose.
+        // DevelopmentSimulation advances work after this seating/navigation step.
     }
 
     public static (int X, int Y) SeatTarget(int seat) => seat switch
