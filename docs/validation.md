@@ -12,8 +12,10 @@ M13 local checks passed:
   reprinting and a second project. Synthetic fixtures are authored test data.
 
 The public suite has 69 C# checks and ten Python checks, with seven original
-checks skipped when no local fixture is supplied. Standard SDK/Godot CI is
-required before merging M13.
+checks skipped when no local fixture is supplied. The [M13 standard SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37077097177)
+passed: 69 public C# checks, ten public Python checks (seven optional checks
+skipped), normal SDK build with zero warnings/errors, headless editor/game
+startup, fixture-free UI smoke and complete core-loop UI smoke with zero failures.
 
 ## M12 historical checkpoint
 
