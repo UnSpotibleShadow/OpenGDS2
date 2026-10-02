@@ -15,6 +15,10 @@ public sealed class GameState
     public HashSet<int>? HardwareLicenses { get; set; }
     public HashSet<int>? AvailableHardware { get; set; }
 
+    public List<DevelopmentProjectState> DevelopmentProjects { get; set; } = [];
+    // Sparse original sourceIndex+99 cells; old modern saves keep these unknown.
+    public Dictionary<int,int>? OriginalAccuracyCells { get; set; }
+
     public GameMode Mode { get; set; } = GameMode.Normal;
     public GameModeRules Rules { get; set; } = GameModeRules.For(GameMode.Normal);
     public InitialConditions Initial { get; set; } = new();

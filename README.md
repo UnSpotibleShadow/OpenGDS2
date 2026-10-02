@@ -1,11 +1,11 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M10.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M11.
 
 **This is not gameplay-complete.** There is an interactive recruitment/hiring,
 staff inspection, manual level-up rules and a save/load loop. Development, sales, awards, office progression
-and complete weekly economics are still unresolved and disabled. No substitute
+and complete weekly economics are still incomplete and disabled. No substitute
 simulation formulas or fabricated employees are supplied.
 
 M8 adds verified March-end contract renewal rules and local importing for seven
@@ -20,6 +20,11 @@ animates hired employees entering and resting in the lounge. Movement survives
 save/load. Existing caches need reimporting. See
 [original presentation recovery](docs/original-presentation.md) for verified
 behavior and unresolved work paths.
+
+M11 adds development-domain formulas and planning transitions, a bilingual planning
+preview, imported employee portraits, full office route rules and computer-upgrade
+sprites. Work scheduling and release/sales remain incomplete. See
+[M11 evidence and integration gaps](docs/development-work.md).
 
 ## Run
 

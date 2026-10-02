@@ -24,9 +24,7 @@ public sealed class OriginalOfficeRenderer(OfficeSceneData scene, byte[] backgro
     private Image Compose(GameState state)
     {
         var pixels = (byte[])background.Clone();
-        var sprites = state.Year is int year && state.Month is int month && state.Week is int week
-            ? OfficePresentationRules.ForDate(scene, new(year, month, week))
-            : scene.Sprites.Where(x => x.Id != 144 && x.Id != 145 && (long)x.X + x.Width > 0 && x.Y > 0);
+        var sprites = OfficePresentationRules.ForState(scene,state);
         sprites = sprites.Concat(state.Employees.Where(x => x.Office is not null).Select(OfficeStaffRules.Sprite));
         foreach (var sprite in sprites.OrderBy(x => x.SortKey))
             OriginalBitmapCompositor.Blit(pixels, width, height, colors, masks, atlasWidth, atlasHeight, sprite);

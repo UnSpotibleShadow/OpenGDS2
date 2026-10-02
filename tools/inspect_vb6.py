@@ -70,8 +70,8 @@ class PeImage:
     def va_to_offset(self, va: int) -> int:
         rva = va - self.image_base
         for s in self.sections:
-            span = max(s.virtual_size, s.raw_size)
-            if s.rva <= rva < s.rva + span:
+            # Zero-filled virtual memory has no file data; BSS must not map into PE headers.
+            if s.rva <= rva < s.rva + s.raw_size:
                 off = s.raw_offset + (rva - s.rva)
                 if off >= len(self.data):
                     break
@@ -79,13 +79,13 @@ class PeImage:
         raise ParseError(f"VA 0x{va:08X} is not file-backed")
 
     def u16(self, va: int) -> int:
-        return self.u16_off(self.va_to_offset(va))
+        return struct.unpack('<H', self.bytes_at(va, 2))[0]
 
     def s16(self, va: int) -> int:
-        return self.s16_off(self.va_to_offset(va))
+        return struct.unpack('<h', self.bytes_at(va, 2))[0]
 
     def u32(self, va: int) -> int:
-        return self.u32_off(self.va_to_offset(va))
+        return struct.unpack('<I', self.bytes_at(va, 4))[0]
 
     def nts(self, va: int, encoding: str = "cp932", max_len: int = 4096) -> str:
         if va == 0:
@@ -97,7 +97,12 @@ class PeImage:
         return self.data[off:end].decode(encoding, "replace")
 
     def bytes_at(self, va: int, size: int) -> bytes:
+        if size < 0:
+            raise ParseError('negative byte count')
         off = self.va_to_offset(va)
+        section = next(s for s in self.sections if s.rva <= va - self.image_base < s.rva + s.raw_size)
+        if size > section.raw_size - (va - self.image_base - section.rva) or off + size > len(self.data):
+            raise ParseError(f'read crosses file-backed section at VA 0x{va:08X}')
         return self.data[off:off+size]
 
 

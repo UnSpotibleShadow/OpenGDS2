@@ -8,6 +8,7 @@ from recover_employee_database import recover, bstr
 from verify_m7_evidence import verify
 from recover_genre_catalog import recover as recover_genres
 from verify_office_evidence import verify as verify_office
+from verify_development_evidence import verify as verify_development
 
 def synthetic_pe():
     data=bytearray(1024);data[:2]=b'MZ';struct.pack_into('<I',data,0x3c,0x80)
@@ -23,6 +24,16 @@ class PublicTests(unittest.TestCase):
     def test_va_mapping(self):
         pe=PeImage(synthetic_pe());self.assertEqual(pe.va_to_offset(0x401080),0x280)
         with self.assertRaises(ParseError):pe.va_to_offset(0x402000)
+    def test_virtual_zero_fill_is_not_file_data(self):
+        data=synthetic_pe()+bytes(2048)
+        struct.pack_into('<I',data,0x178+8,0x400)
+        with self.assertRaises(ParseError):PeImage(data).va_to_offset(0x401250)
+        struct.pack_into('<II',data,0x178+16,0,0)
+        with self.assertRaises(ParseError):PeImage(data).u32(0x401000)
+    def test_reads_cannot_cross_section_or_silently_truncate(self):
+        pe=PeImage(synthetic_pe())
+        with self.assertRaises(ParseError):pe.bytes_at(0x4011F8,16)
+        with self.assertRaises(ParseError):pe.bytes_at(0x401080,-1)
     def test_literal32_opcode(self):
         i,pos=_decode_one(bytes.fromhex('fe c1 3c fd 00 2d 31 01'),0)
         self.assertEqual(pos,8);self.assertEqual(i.mnemonic,'LitVarI4')
@@ -34,6 +45,7 @@ class PublicTests(unittest.TestCase):
     def test_wrapper_or_unknown_hash_rejected(self):
         with self.assertRaises(ParseError):recover(b'MZ'+bytes(200))
         with self.assertRaises(ParseError):verify_office(b'MZ'+bytes(200))
+        with self.assertRaises(ParseError):verify_development(b'MZ'+bytes(200))
     def test_localization_key_parity(self):
         import re
         keys=[]
@@ -58,6 +70,8 @@ class OriginalTests(unittest.TestCase):
         self.assertEqual(len(d['NameComponents']),8)
     def test_office_behavior_anchors(self):
         self.assertTrue(verify_office(self.data))
+    def test_development_behavior_anchors(self):
+        self.assertTrue(verify_development(self.data))
     def test_complete_and_isolated_rows(self):
         rows=self.database['Employees'];self.assertEqual([x['SourceIndex'] for x in rows],list(range(60)))
         self.assertTrue(all(len(x['RawAttributes'])==7 and x['ContractFee']>=0 for x in rows))

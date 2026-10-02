@@ -290,6 +290,7 @@ public partial class Main : Control
         });
         OfficeAction("LOAD_GAME", LoadSession, System.IO.File.Exists(SavePath));
         OfficeAction("CALENDAR_INSPECTOR", () => ShowCalendar(state));
+        OfficeAction("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), _importer.LoadCatalog() is not null);
         OfficeAction("START_GAME_DEVELOPMENT", () => { }, false);
         OfficeAction("IMPORT_BUTTON", ShowImporter);
         OfficeAction("BACK_TO_TITLE", ShowTitleScreen);
@@ -310,10 +311,7 @@ public partial class Main : Control
         _content.AddChild(_status);
         foreach (var candidate in roster.Candidates)
         {
-            var panel = new VBoxContainer();
-            panel.AddChild(new Label { Text = $"{candidate.Name}   Lv. {candidate.Level}   ¥{candidate.ContractFee:N0}" });
-            panel.AddChild(new Label { Text = $"{Tr("STAT_FUN")}: {candidate.Fun}   {Tr("STAT_NOVELTY")}: {candidate.Novelty}   {Tr("STAT_ACCURACY")}: {candidate.Accuracy}" });
-            panel.AddChild(new Label { Text = $"{Tr("STAT_GRAPHICS")}: {candidate.Graphics}   {Tr("STAT_MUSIC")}: {candidate.Music}   {Tr("STAT_DEVELOPMENT_SPEED")}: {candidate.DevelopmentSpeed}   {Tr("STAT_INSPIRATION")}: {candidate.Inspiration}" });
+            var panel = AddEmployeeCard(candidate);
             var hire = new Button { Text = Tr("HIRE_CONFIRM"), Disabled = state.Money < candidate.ContractFee };
             hire.Pressed += () =>
             {
@@ -321,7 +319,7 @@ public partial class Main : Control
                 if (result == HireResult.Success) ShowOfficeReconstruction(state);
                 else _status.Text = Tr("HIRE_FAILED") + " " + Tr($"HIRE_RESULT_{result}");
             };
-            panel.AddChild(hire); _content.AddChild(panel);
+            panel.AddChild(hire);
         }
         if (roster.Candidates.Count == 0) AddHeading(Tr("NO_APPLICANTS"), 18);
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
@@ -368,10 +366,11 @@ public partial class Main : Control
         ClearContent(); AddHeading(Tr("STAFF"), 30);
         foreach (var employee in state.Employees)
         {
-            AddHeading($"{employee.Name}   Lv. {employee.Level}", 18);
+            var panel = AddEmployeeCard(employee);
             string threshold = employee.Level is >= 1 and <= 10
                 ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
-            AddHeading($"{Tr("EXPERIENCE")}: {employee.Experience?.ToString() ?? Tr("NOT_YET_DECODED")} / {threshold}", 16);
+            panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});
+            panel.AddChild(new Label {Text=$"{Tr("STRESS")}: {employee.Stress?.ToString("0.0") ?? Tr("NOT_YET_DECODED")}"});
             if (employee.SourceIndex is int source)
                 AddAction("LEVEL_UP", () =>
                 {

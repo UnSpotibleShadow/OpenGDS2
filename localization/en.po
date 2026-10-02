@@ -361,3 +361,57 @@ msgstr "Insufficient funds."
 
 msgid "OFFICE_IMPORT_REQUIRED"
 msgstr "Import your original archive to load the office graphics. Existing imports need to be imported again."
+
+msgid "STRESS"
+msgstr "Stress"
+
+msgid "DEVELOPMENT_PLANNING"
+msgstr "Development Planning"
+
+msgid "PLANNING_PREVIEW_NOTE"
+msgstr "Preview planning costs and development focus. This preview does not spend funds; project work and release are still under reconstruction."
+
+msgid "TARGET_HARDWARE"
+msgstr "Target hardware"
+
+msgid "TARGET_AUDIENCE"
+msgstr "Target audience"
+
+msgid "PLANNING_COST"
+msgstr "Planning cost"
+
+msgid "DEVELOPMENT_POINTS"
+msgstr "Development points"
+
+msgid "PLANNING_NEW_PROPOSAL"
+msgstr "Another focus proposal"
+
+msgid "PLANNING_NO_HARDWARE"
+msgstr "No available hardware data."
+
+msgid "PLANNING_RESULT_Success"
+msgstr "The current computer and license support this plan."
+
+msgid "PLANNING_RESULT_RoomOccupied"
+msgstr "This development room is occupied."
+
+msgid "PLANNING_RESULT_ComputerUnknown"
+msgstr "Current computer data is unavailable."
+
+msgid "PLANNING_RESULT_HardwareStateUnknown"
+msgstr "Hardware availability or licenses are unknown."
+
+msgid "PLANNING_RESULT_HardwareUnavailable"
+msgstr "This hardware is unavailable."
+
+msgid "PLANNING_RESULT_LicenseRequired"
+msgstr "Acquire a hardware license before accepting this plan."
+
+msgid "PLANNING_RESULT_ComputerTooSmall"
+msgstr "Upgrade the development computer for this hardware."
+
+msgid "PLANNING_RESULT_MoneyUnknown"
+msgstr "Company funds are unavailable."
+
+msgid "PLANNING_RESULT_InsufficientFunds"
+msgstr "Insufficient funds for this plan."

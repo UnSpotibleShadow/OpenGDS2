@@ -129,26 +129,8 @@ public static class OfficeStaffRules
     private static bool At(OfficeEmployeeState office, (int X, int Y) target)
         => office.X / 8.0 + 20 == target.X && office.Y / 4.0 + 20 == target.Y;
 
-    private static void Move(OfficeEmployeeState office, (int X, int Y) target)
-    {
-        int dx = Math.Sign(target.X - (office.X / 8.0 + 20));
-        int dy = Math.Sign(target.Y - (office.Y / 4.0 + 20));
-        // Recovered entry/lounging segments are diagonal. Unsupported routes
-        // must be reconstructed before being passed to this subset.
-        if (dx == 0 && dy == 0) { office.MovementDirection = 0; return; }
-        if (dx == 0 || dy == 0) throw new InvalidDataException("Unsupported non-diagonal lounge segment.");
-        int direction = dx < 0 ? (dy < 0 ? 1 : 4) : (dy < 0 ? 2 : 3);
-        office.MovementDirection = direction;
-        office.X += dx * 8 / TimingFactor;
-        office.Y += dy * 4 / TimingFactor;
-        office.WalkingTicks++;
-        int phase = office.WalkingTicks / TimingFactor;
-        if (office.WalkingTicks % TimingFactor == 0)
-        {
-            office.Frame = (direction - 1) * 3 + (phase == 2 ? 2 : phase == 4 ? 3 : 1);
-            if (phase == 4) office.WalkingTicks = 0;
-        }
-    }
+    private static void Move(OfficeEmployeeState office, (int X,int Y) target)
+        => OfficeNavigationRules.Step(office,target);
 
     public static OfficeSpriteDefinition Sprite(EmployeeState employee)
     {

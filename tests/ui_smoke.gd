@@ -47,6 +47,7 @@ func run() -> void:
     await press("SETTINGS")
     await press("English")
     check(tr("HARDWARE_LICENSES") == "Hardware Licenses", "English license translation loaded")
+    check(tr("DEVELOPMENT_PLANNING") == "Development Planning", "English planning translation loaded")
     await press("BACK_TO_TITLE")
     var fixture := OS.get_environment("OPENGDS2_ORIGINAL_LZH")
     if not fixture.is_empty():
@@ -77,6 +78,18 @@ func run() -> void:
     await press("CONFIRM")
     await press("NORMAL_MODE")
     check(button("START_GAME_DEVELOPMENT").disabled, "Unknown simulation remains disabled")
+    await press("DEVELOPMENT_PLANNING")
+    check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
+    check(main.find_child("PlanningAudience", true, false).item_count == 7, "Planning audience catalog")
+    check(main.find_child("PlanningQuote", true, false).text.contains("20,000,000"), "Initial planning cost")
+    check(main.find_child("PlanningQuote", true, false).text.contains("400"), "Initial planning points")
+    await press("PLANNING_NEW_PROPOSAL")
+    var focus_total := 0
+    for label in main.find_child("PlanningFocus", true, false).get_children():
+        if label.text.ends_with("%"):
+            focus_total += int(label.text.trim_suffix("%"))
+    check(focus_total == 100, "Planning focus totals one hundred")
+    await press("CANCEL")
     if not fixture.is_empty():
         var office_background = main.find_child("OriginalOfficeBackground", true, false)
         check(office_background != null and office_background.texture != null, "Original office background decoded")
@@ -109,6 +122,10 @@ func run() -> void:
             await process_frame
         await press("CANCEL")
         await press("HIRE_EMPLOYEES")
+        var portraits = main.find_children("EmployeePortrait", "TextureRect", true, false)
+        check(portraits.size() == 5, "Five imported applicant portraits")
+        for portrait in portraits:
+            check(portrait.texture.get_width() == 64 and portrait.texture.get_height() == 64, "Original portrait dimensions")
         var hire_buttons: Array[Node] = []
         for node in nodes_of_type("Button"):
             if node.text == tr("HIRE_CONFIRM"):
@@ -130,6 +147,7 @@ func run() -> void:
                 check(saved.State.Company.Name == "Smoke Company", "Save company")
                 check(saved.State.Company.Fame == 12 and saved.State.Company.Rank == 0, "Opening recognition/rank")
                 check(saved.State.Year == 1 and saved.State.Month == 4 and saved.State.Week == 1, "Opening date")
+                check(saved.State.DevelopmentProjects.is_empty(), "Planning preview does not start a project")
                 check(saved.State.Employees.size() == (1 if not fixture.is_empty() else 0), "Hired staff persisted")
                 if not fixture.is_empty() and saved.State.Employees.size() == 1:
                     check(saved.State.Employees[0].Office != null and saved.State.Employees[0].Office.MovementState == 6, "Hired employee walks to lounge and rests in Godot")
@@ -141,6 +159,7 @@ func run() -> void:
                 # changes through get_image. Reload forces fresh composition.
                 main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-hired-test.png")
     await press("STAFF")
+    check(main.find_children("EmployeePortrait", "TextureRect", true, false).size() == 1, "Imported staff portrait")
     await press("CANCEL")
     await press("CALENDAR_INSPECTOR")
     await press("NEXT_WEEK")
