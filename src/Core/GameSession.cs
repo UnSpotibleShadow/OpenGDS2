@@ -44,6 +44,21 @@ public sealed class GameSession
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
         return state.Recruitment;
     }
+    public HireResult Hire(EmployeeState candidate)
+        => HiringService.TryHire(Current ?? throw new InvalidOperationException("No current session."), candidate, _random);
+
+    public void TickOffice()
+    {
+        var state = Current ?? throw new InvalidOperationException("No current session.");
+        foreach (var employee in state.Employees)
+        {
+            OfficeStaffRules.Tick(employee, _random);
+            // Original employees refer back to the source arrays. Keep the
+            // modern employed copy and source projection consistent.
+            var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == employee.SourceIndex);
+            if (source is not null) source.Employee.Stress = employee.Stress;
+        }
+    }
     public void Restore(GameState state) => Current = state ?? throw new ArgumentNullException(nameof(state));
     public void Clear() => Current = null;
 }

@@ -72,9 +72,27 @@ public static class SaveStore
             state.Employees.Concat(state.Recruitment.Candidates).Any(x => x is null || string.IsNullOrWhiteSpace(x.Name) || x.OriginalAttributes is null || x.ContractFee < 0 || x.Experience < 0 || x.Stress < 0 || (x.Experience.HasValue && !double.IsFinite(x.Experience.Value)) || (x.Stress.HasValue && !double.IsFinite(x.Stress.Value)) || x.Level is < 1 or > 10) ||
             state.Employees.Where(x => x.SourceIndex.HasValue).Select(x => x.SourceIndex).Distinct().Count() != state.Employees.Count(x => x.SourceIndex.HasValue))
             throw new InvalidDataException("Invalid employee records.");
+        var workspaces = state.Employees.Where(x => x.Office is not null).ToArray();
+        if (workspaces.Any(x => x.PortraitId is not (>= 1 and <= 10) || !ValidOffice(x.Office!)) ||
+            workspaces.Select(x => x.Office!.SlotIndex).Distinct().Count() != workspaces.Length ||
+            workspaces.Where(x => x.Office!.LoungeSeat.HasValue).Select(x => x.Office!.LoungeSeat).Distinct().Count() !=
+                workspaces.Count(x => x.Office!.LoungeSeat.HasValue))
+            throw new InvalidDataException("Invalid office workspaces.");
         if (state.MinimumSourceIndex < 0 || state.SourceUpperBound < state.MinimumSourceIndex ||
             (state.Recruitment.CandidateDatabaseDecoded && (state.MinimumSourceIndex is null || state.SourceUpperBound is null ||
              state.EmployeeSources.Count == 0 || state.EmployeeSources.Any(x => x.SourceIndex >= state.SourceUpperBound))))
             throw new InvalidDataException("Invalid recruitment bounds.");
     }
+
+    private static bool ValidOffice(OfficeEmployeeState office)
+        => office.SlotIndex >= 0 && office.SlotIndex <= short.MaxValue &&
+            office.X is >= short.MinValue and <= short.MaxValue && office.Y is >= short.MinValue and <= short.MaxValue &&
+            office.Frame is >= 1 and <= 44 && office.MovementDirection is >= 0 and <= 4 &&
+            office.WalkingTicks is >= 0 and <= 7 && office.ActionTicks is >= 0 and <= 100 &&
+            office.RouteNode is 1 or 2 or 3 or 4 or 12 or 13 or 14 &&
+            office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
+            office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
+            office.OffsetY is >= -2 and <= 8 && office.DepthAdjustment is 0 or 2 &&
+            (office.LoungeSeat is null ? office.Action == 0 && office.MovementState == 0 :
+                office.LoungeSeat is >= 0 and <= 11 && office.Action == 18 + office.LoungeSeat / 4 && office.MovementState != 0);
 }

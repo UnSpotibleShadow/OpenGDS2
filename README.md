@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M9.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M10.
 
 **This is not gameplay-complete.** There is an interactive recruitment/hiring,
 staff inspection, manual level-up rules and a save/load loop. Development, sales, awards, office progression
@@ -14,11 +14,12 @@ M9 adds development computer upgrades, available hardware license purchases,
 eleven hardware records, 51 game types and verified planning quotes. See
 [development planning evidence](docs/development-planning.md).
 
-The presentation correction imports the original embedded office background and
-sprite/mask atlases locally, displays the office base, and routes New Game to
-the importer when original data is missing. Existing imports need reimporting.
-The populated office and development loop are still incomplete; see
-[original presentation recovery](docs/original-presentation.md).
+M10 composes the original office from locally imported sprite/mask atlases and
+128 recovered tiles, restores calendar glyphs and classic desktop controls, and
+animates hired employees entering and resting in the lounge. Movement survives
+save/load. Existing caches need reimporting. See
+[original presentation recovery](docs/original-presentation.md) for verified
+behavior and unresolved work paths.
 
 ## Run
 
@@ -53,7 +54,7 @@ The C# suite has no Godot or third-party test-framework dependency.
 
 [Milestone 7](docs/milestone-7.md) distinguishes recovered facts from gaps.
 [Remaining work](docs/remaining-work.md) lists exact next trace targets.
-[Validation](docs/validation.md) records **20 passing C# tests, 12 Python checks, source-generator compilation
+[Validation](docs/validation.md) records **33 passing C# tests, 13 Python checks, source-generator compilation
 and passing Godot headless UI tests**, plus the temporary host workaround used.
 Standard SDK/MSBuild verification is still pending.
 The CI workflow is supplied for an ordinary .NET-capable environment and has not

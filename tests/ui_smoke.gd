@@ -81,7 +81,12 @@ func run() -> void:
         var office_background = main.find_child("OriginalOfficeBackground", true, false)
         check(office_background != null and office_background.texture != null, "Original office background decoded")
         if office_background != null:
+            if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
+                office_background.texture.get_image().save_png("user://office-test.png")
             check(office_background.texture.get_width() == 466 and office_background.texture.get_height() == 290, "Original office bitmap dimensions")
+            check(office_background.size == Vector2(932,580), "Office uses integer 2x pixels")
+            check(office_background.get_global_rect().end.x <= main.get_viewport_rect().end.x, "Office fits the viewport")
+            check(button("BACK_TO_TITLE").get_global_rect().end.x <= main.get_viewport_rect().end.x, "Sidebar fits the viewport")
         check(FileAccess.file_exists("user://original/Graphic/Embedded/OfficeSprites.bmp"), "Embedded sprite sheet imported locally")
         await press("HARDWARE_LICENSES")
         var license_buttons: Array[Node] = []
@@ -112,6 +117,9 @@ func run() -> void:
         if hire_buttons.size() == 5:
             hire_buttons[0].pressed.emit()
             await process_frame
+            # Exercise the actual Godot clock and compositor, rather than only
+            # testing a domain update detached from the running scene.
+            await create_timer(4.5).timeout
     if OS.get_environment("OPENGDS2_UI_TEST_SAVE") == "1":
         check(not OS.get_environment("XDG_DATA_HOME").is_empty(), "Save tests require isolated XDG_DATA_HOME")
         if not OS.get_environment("XDG_DATA_HOME").is_empty():
@@ -123,9 +131,15 @@ func run() -> void:
                 check(saved.State.Company.Fame == 12 and saved.State.Company.Rank == 0, "Opening recognition/rank")
                 check(saved.State.Year == 1 and saved.State.Month == 4 and saved.State.Week == 1, "Opening date")
                 check(saved.State.Employees.size() == (1 if not fixture.is_empty() else 0), "Hired staff persisted")
+                if not fixture.is_empty() and saved.State.Employees.size() == 1:
+                    check(saved.State.Employees[0].Office != null and saved.State.Employees[0].Office.MovementState == 6, "Hired employee walks to lounge and rests in Godot")
                 check(saved.State.DevelopmentComputerIndex == (1 if not fixture.is_empty() else 0), "Computer upgrade persisted")
                 check(saved.State.HardwareLicenses.size() == (2 if not fixture.is_empty() else 1), "Hardware license persisted")
             await press("LOAD_GAME")
+            if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
+                # Dummy headless rendering does not expose texture.Update pixel
+                # changes through get_image. Reload forces fresh composition.
+                main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-hired-test.png")
     await press("STAFF")
     await press("CANCEL")
     await press("CALENDAR_INSPECTOR")

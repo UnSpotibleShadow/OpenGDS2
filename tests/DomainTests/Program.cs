@@ -16,6 +16,84 @@ EmployeeState Candidate(int id, long? fee = 100) => new() { SourceIndex = id, Na
 RecruitmentSourceRecord Row(int id, int gate = 0) => new() { SourceIndex = id, GateValue = gate, Employee = Candidate(id) };
 GameState State(long? money = 100) => new() { Money = money, Company = new() { Name = "Test", PresidentName = "Tester" } };
 
+Test("hired staff enter at original coordinates, rest at all twelve seats and survive save/load", () =>
+{
+    for (int seat = 0; seat < 12; seat++)
+    {
+        var state = State(200);
+        var candidate = new EmployeeState { SourceIndex = seat, PortraitId = 2, Name = "Synthetic", ContractFee = 100, Stress = 50 };
+        Check(HiringService.TryHire(state, candidate, new SequenceRandom(seat)) == HireResult.Success);
+        var employee = state.Employees.Single();
+        var office = employee.Office!;
+        Check(office.X == 128 && office.Y == 56 && office.Frame == 7 && office.LoungeSeat == seat);
+        int ticks = 0;
+        while (office.MovementState != 6 && ticks++ < 200) OfficeStaffRules.Tick(employee, new Random(1));
+        Check(ticks < 200 && office.MovementState == 6);
+        var target = OfficeStaffRules.SeatTarget(seat);
+        Check(office.X == (target.X-20)*8 && office.Y == (target.Y-20)*4);
+        Check(employee.Stress < 50 && employee.Stress >= 49.7);
+        // Persist an in-flight action counter; loading may not respawn the worker.
+        var restored = SaveStore.Deserialize(SaveStore.Serialize(state)).Employees.Single();
+        Check(restored.Office!.X == office.X && restored.Office.ActionTicks == office.ActionTicks && restored.Office.Frame == office.Frame);
+        for (int tick = 0; tick < 200; tick++) OfficeStaffRules.Tick(restored, new Random(5));
+        Check(restored.Office.Frame is >= 13 and <= 44 && restored.Stress < employee.Stress);
+    }
+});
+Test("lounge sampling retries fourteen draws without forcing an occupied seat", () =>
+{
+    var state = State();
+    state.Employees.Add(new() {Name="Existing", PortraitId=1, Office=new() {SlotIndex=0,LoungeSeat=0,Action=18}});
+    var draws = new SequenceRandom(Enumerable.Repeat(0,13).Append(7).ToArray());
+    var office = OfficeStaffRules.CreateHire(state, draws);
+    Check(draws.Calls == 14 && office.LoungeSeat == 7 && office.SlotIndex == 1 && office.Action == 19);
+    draws = new SequenceRandom(Enumerable.Repeat(0,14).ToArray());
+    office = OfficeStaffRules.CreateHire(state, draws);
+    Check(draws.Calls == 14 && office.LoungeSeat is null && office.Action == 0 && office.MovementState == 0);
+});
+Test("employee animation uses portrait columns and original feet depth", () =>
+{
+    var employee = new EmployeeState {Name="Synthetic",PortraitId=3,Office=new() {SlotIndex=2,Frame=7}};
+    var sprite = OfficeStaffRules.Sprite(employee);
+    Check(sprite.X == 128 && sprite.Y == 56 && sprite.SourceX == 304 && sprite.SourceY == 64 && sprite.SortKey == 84);
+    employee.Office.Frame = 44; employee.Office.OffsetX=8;employee.Office.OffsetY=4;
+    sprite = OfficeStaffRules.Sprite(employee);
+    Check(sprite.SourceX==416 && sprite.SourceY==160 && sprite.X==136 && sprite.Y==60 && sprite.SortKey==84);
+    employee.Office.Frame = 0;
+    Throws<InvalidDataException>(() => OfficeStaffRules.Sprite(employee));
+});
+Test("save rejects conflicting or malformed office workspaces", () =>
+{
+    var state = State();
+    state.Employees.Add(new(){Name="Synthetic",PortraitId=1,Office=new(){LoungeSeat=0,Action=18}});
+    state.Employees.Add(new(){Name="Other",PortraitId=2,Office=new(){SlotIndex=1,LoungeSeat=0,Action=18}});
+    Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+    state.Employees.RemoveAt(1); state.Employees[0].Office!.Frame=45;
+    Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+});
+
+Test("original raster mask preserves background and replaces opaque pixels", () =>
+{
+    for (int value = 0; value < 256; value++)
+    {
+        Check(OriginalBitmapCompositor.CompositeChannel((byte)value, 255, 255) == value);
+        Check(OriginalBitmapCompositor.CompositeChannel((byte)value, 0, 73) == 73);
+    }
+    byte[] target = [10,20,30,40,50,60];
+    byte[] colors = [1,2,3,91,92,93]; byte[] masks = [0,0,0,0,0,0];
+    OriginalBitmapCompositor.Blit(target, 2, 1, colors, masks, 2, 1, new(0,-1,0,0,0,2,1,0));
+    Check(target.SequenceEqual(new byte[]{91,92,93,40,50,60}));
+    OriginalBitmapCompositor.Blit(target, 2, 1, colors, masks, 2, 1, new(0,0,0,0,0,0,0,0));
+    Check(target.SequenceEqual(new byte[]{91,92,93,40,50,60}));
+    Throws<ArgumentException>(() => OriginalBitmapCompositor.Blit(target,2,1,colors,masks,2,1,new(0,0,0,2,0,1,1,0)));
+});
+Test("office draw filtering and calendar glyphs follow original renderer", () =>
+{
+    var scene = new OfficeSceneData { Sprites = [new(23,-100,0,0,0,162,111,0),new(144,345,23,0,0,28,21,10000),new(145,390,23,0,0,28,21,10000)] };
+    var rows = OfficePresentationRules.ForDate(scene,new(1,4,1)).ToList();
+    Check(rows.Count == 2 && rows[0].SourceX == 949 && rows[0].SourceY == 294 && rows[1].SourceY == 228);
+    Check(OfficePresentationRules.ForDate(scene,new(2,12,4)).First().SourceX == 978);
+    Throws<ArgumentOutOfRangeException>(() => OfficePresentationRules.ForDate(scene,new(1,13,1)).ToList());
+});
 Test("renewal is due once per year at March end", () =>
 {
     var due = new List<GameDate>();
@@ -344,6 +422,9 @@ if (args.Length == 2)
                     actual.RawTable13CC.SequenceEqual(row.RawTable13CC) && actual.RawMembers.OrderBy(x=>x.Key).SequenceEqual(row.RawMembers.OrderBy(x=>x.Key)));
             }
         }
+        var scene = OfficeSceneImporter.Extract(File.ReadAllBytes(args[0]));
+        Check(scene.Sprites.Count == 128 && scene.Sprites[0] == new OfficeSpriteDefinition(23,148,64,47,226,11,21,20));
+        Check(scene.Sprites[121].Id == 144 && scene.Sprites[122].Id == 145);
         var archivePath = Path.ChangeExtension(args[0], ".lzh");
         if (File.Exists(archivePath))
         {
@@ -358,3 +439,14 @@ if (args.Length == 2)
 Console.WriteLine($"{passed} tests passed");
 sealed class ConstantRandom(int value) : Random { public override int Next(int maxValue) => value; }
 sealed class AlternatingRandom : Random { private int n; public override int Next(int maxValue) => n++ % 2 == 0 ? 3 : 0; }
+sealed class SequenceRandom(params int[] values) : Random
+{
+    public int Calls { get; private set; }
+    public override int Next(int maxValue)
+    {
+        if (Calls >= values.Length) throw new Exception("Unexpected random draw");
+        int value = values[Calls++];
+        if (value < 0 || value >= maxValue) throw new Exception("Invalid synthetic random draw");
+        return value;
+    }
+}

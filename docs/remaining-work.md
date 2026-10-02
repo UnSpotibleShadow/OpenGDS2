@@ -1,13 +1,13 @@
 # Remaining reconstruction work
 
 Completion means a verified development/release/sales loop, calendar economics,
-company progression and regression coverage. M9 does not meet that criterion.
+company progression and regression coverage. M10 does not meet that criterion.
 
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |
 | Employee database | 60 definitions and seven named stats imported | C#/Python parity passed; compare original recruitment runtime |
 | Opening company | Mode funds/date, 12% recognition and rank 0 verified statically | Locate initial employee assignment and development power |
-| Hiring | Five-slot generator, gate, fee transaction | Employee-slot capacity/placement, UI close and greeting observations |
+| Hiring | Five-slot generator, gate, fee transaction | Entry/lounge placement implemented; trace hiring capacity guard, failed seat-search behavior and original runtime |
 | Contract renewal | March-end annual trigger; atomic employee/finance projection tested; unchecked gates/stress reset | Integrate workspace cleanup and pending renewal into complete weekly simulation; no individual expiry inferred |
 | Dismissal | Helper start 009981CC, size 1052; clears employed gate at +0399 | Workspace/task cleanup and source/slot lifecycle; avoid treating it as just list removal |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Module2 work branches +6612/+A605/+A99F/+AD23: trace task eligibility and scheduling |
@@ -17,7 +17,7 @@ company progression and regression coverage. M9 does not meet that criterion.
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Hardware release events, type-table semantics, genre licenses and technologies |
 | Reviews/sales/awards | Forms and procedures identified in existing metadata | Correlate fGMSyukka, fGMOuri and fGMKontesuto pools with Module2 state |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
-| Original presentation | Embedded office base and sprite/mask sheets imported locally; base displayed | Recover sprite rectangles, compositing, depth, employee placement and animation; compare rendered original/game screens |
+| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Recover work/meeting paths, computer-upgrade tiles, remaining office state; compare original/game screens |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
 | Localization | Current usable UI bilingual | Translate each implemented screen; original names remain local proper names |
 | Runtime | Direct compilation/domain tests and headless UI pass with host workaround | Standard SDK build/CI and graphical tests on a normal host |

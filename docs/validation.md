@@ -1,31 +1,17 @@
-# Validation — M9 continuation
+# Validation — M10 continuation
 
-Date: 2026-10-02. Original executable inspected statically, never executed.
+M10 adds office compositing, date glyphs, employee entry/lounge animation and a
+classic control theme. The final checks currently pass:
 
-## Passed
-
-- **27 C# tests**: 26 public tests plus optional local-original parity/extraction.
-  Includes March-end renewal timing, atomic rejection, dismissal gates/stress,
-  retained progression, stale identities and overflow guards.
-  Includes computer purchase, license availability/payment/save state and planning quote rules.
-  The latter compares all 60 employee records, 18 genres, 51 game types,
-  7 audiences, 4 computers and 11 hardware records against independent
-  Python extraction, extracts all 48 LHA entries with size/CRC validation, and
-  compares the extracted executable bytes with the private original fixture.
-- **12 Python checks**: 8 public tests and 4 opt-in original-fixture tests.
-  Includes initializer shape, supported hash/tamper rejection, evidence anchors,
-  localization key parity and exclusion of original assets from the public tree.
-- Direct Roslyn C# compilation against .NET 8 reference assemblies, including
-  every project source and **Godot 4.4.1 source generators**. No compiler errors
-  or warnings in the final invocation.
-- Godot **4.4.1 .NET** headless launch exited successfully.
-- Headless scene-tree UI tests: title, English/Japanese settings, required-name
-  validation, Normal startup, import, five applicant cards, hire, save/load,
-  staff screen, computer upgrade, hardware license payment, persisted hardware
-  state, loaded English/Japanese translations, calendar preview and return to office. Save checks use a disposable
-  data directory. The imported cache contains no executable.
-- A first-save regression was caught and fixed: the office refreshes after saving
-  so Load Game becomes enabled immediately. The UI test exercises that transition.
+- **33 C# checks**, including the optional local original fixture; 32 without it.
+- **13 Python checks** with the local original fixture; 8 public checks and 5
+  opt-in checks skipped when no original is supplied.
+- Every C# source compiled with Godot 4.4.1 source generators: no errors.
+- Imported-data Godot headless scene-tree suite: **0 failures**, including actual
+  40 ms office animation, lounge arrival, persisted worker movement, texture
+  decoding and office/sidebar viewport bounds.
+- Private composed opening/hired-worker images inspected; no original graphics
+  are shipped. Whole-window desktop rendering remains unverified.
 
 ## Environment workaround and scope
 

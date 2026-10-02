@@ -10,8 +10,8 @@ public sealed class InitialConditions
     public int? StartingYear { get; set; }
     public int? StartingMonth { get; set; }
 
-    // Contemporary documentation of the original PC release says the company opens with a
-    // secretary and one employee. Employee identity/stats still need binary confirmation.
+    // A secretary is visible in the imported opening scene. An earlier external
+    // description suggested one initial employee; no roster assignment is proven.
     public bool SecretaryPresent { get; set; } = true;
-    public int KnownEmployeeCount { get; set; } = 1;
+    public int? KnownEmployeeCount { get; set; }
 }

@@ -17,6 +17,25 @@ public partial class Main : Control
     private FileDialog _fileDialog = null!;
     private LineEdit? _companyName;
     private LineEdit? _presidentName;
+    private OriginalOfficeRenderer? _officeRenderer;
+    private ImageTexture? _officeTexture;
+    private double _officeElapsed;
+
+    public override void _Process(double delta)
+    {
+        if (_officeRenderer is null || _officeTexture is null || _session.Current is not GameState state) return;
+        _officeElapsed += delta;
+        // Keep at most one second of backlog after a suspended window.
+        _officeElapsed = Math.Min(_officeElapsed, 1);
+        bool updated = false;
+        while (_officeElapsed >= OfficeStaffRules.TickSeconds)
+        {
+            _session.TickOffice();
+            _officeElapsed -= OfficeStaffRules.TickSeconds;
+            updated = state.Employees.Any(x => x.Office?.LoungeSeat is not null);
+        }
+        if (updated) _officeRenderer.UpdateTexture(_officeTexture, state);
+    }
 
     public override void _Ready()
     {
@@ -27,7 +46,8 @@ public partial class Main : Control
 
     private void BuildShell()
     {
-        var background = new ColorRect { Color = new Color(0.09f, 0.10f, 0.12f, 1.0f), MouseFilter = MouseFilterEnum.Ignore };
+        Theme = ClassicTheme.Create();
+        var background = new ColorRect { Color = ClassicTheme.Face, MouseFilter = MouseFilterEnum.Ignore };
         background.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(background);
 
@@ -213,16 +233,18 @@ public partial class Main : Control
     private void ShowOfficeReconstruction(GameState state)
     {
         ClearContent();
-        _content.CustomMinimumSize = new Vector2(1120, 0);
+        _content.CustomMinimumSize = new Vector2(1248, 0);
         var row = new HBoxContainer();
-        row.AddThemeConstantOverride("separation", 20);
+        row.AddThemeConstantOverride("separation", 16);
         _content.AddChild(row);
-        var office = new VBoxContainer { CustomMinimumSize = new Vector2(760, 0) };
+        var office = new VBoxContainer { CustomMinimumSize = new Vector2(932, 0) };
         row.AddChild(office);
         var company = new Label { Text = state.Company.Name, HorizontalAlignment = HorizontalAlignment.Center };
         company.AddThemeFontSizeOverride("font_size", 22);
         office.AddChild(company);
-        var texture = OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
+        _officeRenderer = OriginalAssetStore.LoadOfficeRenderer();
+        _officeTexture = _officeRenderer?.CreateTexture(state);
+        var texture = (Texture2D?)_officeTexture ?? OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
         if (texture is not null)
         {
             office.AddChild(new TextureRect
@@ -231,16 +253,16 @@ public partial class Main : Control
                 TextureFilter = TextureFilterEnum.Nearest,
                 ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
                 StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2(760, 475)
+                CustomMinimumSize = new Vector2(932, 580)
             });
         }
         else
         {
             var importNote = new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"),
-                AutowrapMode = TextServer.AutowrapMode.WordSmart, CustomMinimumSize = new Vector2(760, 100) };
+                AutowrapMode = TextServer.AutowrapMode.WordSmart, CustomMinimumSize = new Vector2(932, 100) };
             office.AddChild(importNote);
         }
-        var sidebar = new VBoxContainer { CustomMinimumSize = new Vector2(320, 0) };
+        var sidebar = new VBoxContainer { CustomMinimumSize = new Vector2(300, 0) };
         sidebar.AddThemeConstantOverride("separation", 5);
         row.AddChild(sidebar);
         var metrics = new GridContainer { Columns = 2 };
@@ -295,7 +317,7 @@ public partial class Main : Control
             var hire = new Button { Text = Tr("HIRE_CONFIRM"), Disabled = state.Money < candidate.ContractFee };
             hire.Pressed += () =>
             {
-                var result = HiringService.TryHire(state, candidate);
+                var result = _session.Hire(candidate);
                 if (result == HireResult.Success) ShowOfficeReconstruction(state);
                 else _status.Text = Tr("HIRE_FAILED") + " " + Tr($"HIRE_RESULT_{result}");
             };
@@ -434,6 +456,9 @@ public partial class Main : Control
 
     private void ClearContent()
     {
+        _officeRenderer = null;
+        _officeTexture = null;
+        _officeElapsed = 0;
         _content.CustomMinimumSize = new Vector2(620, 0);
         _companyName = null;
         _presidentName = null;

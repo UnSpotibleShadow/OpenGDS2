@@ -146,4 +146,3 @@ The serialized designer blocks distinguish two similarly named forms:
 The hiring form directly exposes the PC game's employee stat labels: level, fun, novelty, accuracy,
 graphics, music, development speed, inspiration and contract fee. See `docs/milestone-4.md` and the
 reproducible output under `generated/vb6/`.
-

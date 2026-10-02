@@ -40,6 +40,7 @@ public sealed class OriginalGameImporter
         var bytes = archive.Extract(executable);
         var database = EmployeeDatabaseImporter.Extract(bytes);
         var catalog = OriginalCatalogImporter.Extract(bytes);
+        var office = OfficeSceneImporter.Extract(bytes);
         string cache = ProjectSettings.GlobalizePath(CacheRoot);
         string staging = cache + ".staging-" + Guid.NewGuid().ToString("N");
         Directory.CreateDirectory(staging);
@@ -60,6 +61,7 @@ public sealed class OriginalGameImporter
             }
             File.WriteAllText(Path.Combine(staging, "employees.json"), JsonSerializer.Serialize(database));
             EmbeddedGraphicsImporter.Extract(bytes, Path.Combine(staging, "Graphic", "Embedded"));
+            File.WriteAllText(Path.Combine(staging, "office.json"), JsonSerializer.Serialize(office));
             File.WriteAllText(Path.Combine(staging, "catalog.json"), JsonSerializer.Serialize(catalog));
             File.WriteAllText(Path.Combine(staging, ".imported"), $"OpenGDS2 original asset import\nfiles={count}\n");
             string backup = cache + ".previous";

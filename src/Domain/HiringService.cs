@@ -9,7 +9,7 @@ namespace OpenGDS2.Domain;
 /// </summary>
 public static class HiringService
 {
-    public static HireResult TryHire(GameState state, EmployeeState? candidate)
+    public static HireResult TryHire(GameState state, EmployeeState? candidate, Random? random = null)
     {
         if (candidate is null)
             return HireResult.NoActiveCandidate;
@@ -23,8 +23,11 @@ public static class HiringService
         if (state.Money.Value < candidate.ContractFee.Value)
             return HireResult.InsufficientFunds;
 
+        var employee = CloneEmployee(candidate);
+        if (candidate.PortraitId is >= 1 and <= 10)
+            employee.Office = OfficeStaffRules.CreateHire(state, random ?? Random.Shared);
         state.Money -= candidate.ContractFee.Value;
-        state.Employees.Add(CloneEmployee(candidate));
+        state.Employees.Add(employee);
         var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == candidate.SourceIndex);
         if (source is not null) source.GateValue = 1;
         return HireResult.Success;

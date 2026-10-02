@@ -7,6 +7,7 @@ namespace OpenGDS2.Domain;
 /// </summary>
 public sealed class EmployeeState
 {
+    public OfficeEmployeeState? Office { get; set; }
     public int? SourceIndex { get; init; }
     public int? PortraitId { get; init; }
     // Literal order: inspiration, speed, accuracy, music, graphics, novelty, fun.
