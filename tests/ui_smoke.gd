@@ -160,6 +160,34 @@ func run() -> void:
                 main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-hired-test.png")
     await press("STAFF")
     check(main.find_children("EmployeePortrait", "TextureRect", true, false).size() == 1, "Imported staff portrait")
+    await press("ASSIGN_DESK")
+    var desk = main.find_child("AssignDesk6", true, false)
+    check(desk != null and not desk.disabled, "Empty development desk can be selected")
+    if desk != null:
+        desk.pressed.emit()
+        await process_frame
+        await create_timer(8.0).timeout
+        await press("SAVE_GAME")
+        var seated = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        if seated != null:
+            var workspace = seated.State.Employees[0].Office
+            check(workspace.Action == 6 and workspace.SeatedAction == 6 and workspace.WorkEngaged, "Staff reaches development desk in Godot")
+            check(workspace.MovementState == 0 and workspace.LoungeSeat == null, "Desk assignment releases lounge reservation")
+        await press("LOAD_GAME")
+        if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
+            main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-desk-test.png")
+        await press("STAFF")
+        await press("ASSIGN_DESK")
+        check(main.find_child("AssignDesk6", true, false).disabled, "Occupied desk cannot be assigned twice")
+        await press("CANCEL")
+        await press("TAKE_BREAK")
+        await create_timer(8.0).timeout
+        await press("SAVE_GAME")
+        var resting = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        if resting != null:
+            var workspace = resting.State.Employees[0].Office
+            check(workspace.MovementState == 6 and not workspace.WorkEngaged and workspace.SeatedAction == 0, "Staff returns from desk to lounge")
+        await press("STAFF")
     await press("CANCEL")
     await press("CALENDAR_INSPECTOR")
     await press("NEXT_WEEK")

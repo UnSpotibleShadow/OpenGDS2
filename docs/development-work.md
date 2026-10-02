@@ -12,6 +12,10 @@ project save validation. These APIs are foundations for the scheduled simulation
 The UI offers a planning preview without financial mutation; Start Development
 remains disabled until assignment, completion and release are connected.
 
+M12 subsequently connected development-desk assignment and seated presentation;
+see [milestone-12.md](milestone-12.md). Work eligibility, scheduling and completion
+remain unconnected. The following formulas describe the M11 domain reconstruction.
+
 Employee cards use user-imported 64×64 portraits. Their file path is constructed
 from portrait member C14 in fGMSKoyou procedure 5 +003C..0056. Computer purchases
 now update office tile 140: initializer 009F651C +50F4 stores its allocated ID in

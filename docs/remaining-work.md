@@ -1,7 +1,7 @@
 # Remaining reconstruction work
 
 Completion means a verified development/release/sales loop, calendar economics,
-company progression and regression coverage. M11 does not meet that criterion.
+company progression and regression coverage. M12 does not meet that criterion.
 
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |
@@ -12,15 +12,15 @@ company progression and regression coverage. M11 does not meet that criterion.
 | Dismissal | Helper start 009981CC, size 1052; clears employed gate at +0399 | Workspace/task cleanup and source/slot lifecycle; avoid treating it as just list removal |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Module2 work branches +6612/+A605/+A99F/+AD23: trace task eligibility and scheduling |
 | Weekly economics | Calendar verified; monthly payroll loop uses scratch member 3018 instead of loop index | Confirm apparent original defect dynamically; see milestone-8.md before implementing payroll |
-| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | Connect assignment/chair state, eligibility, clock, debugging/polishing and release; see development-work.md |
+| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | Desk assignment connected in M12; connect work eligibility, clock, debugging/polishing and release; see development-work.md |
 | Events/progression | Module2 periodic body identified | Module2 ordinal 12 start 009E3830, size 10216; separate event eligibility and effects |
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; recover hardware events, company member 90, genre eligibility and technologies |
 | Reviews/sales/awards | Forms and procedures identified in existing metadata | Correlate fGMSyukka, fGMOuri and fGMKontesuto pools with Module2 state |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
-| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Route graph, work targets, portraits and computer tiles recovered; connect standing/meeting/work animations and compare original runtime |
+| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk walking/sitting/reassignment and assigned computers connected; recover meeting/work animations, pointer interaction and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
 | Localization | Current usable UI bilingual | Translate each implemented screen; original names remain local proper names |
-| Runtime | Direct compilation/domain tests and headless UI pass with host workaround | Standard SDK build/CI and graphical tests on a normal host |
+| Runtime | Direct compilation/domain tests and headless UI pass with host workaround | Standard SDK/Godot CI passes; graphical usability and original Windows comparison remain |
 
 Unknown mechanics must remain disabled or nullable. The calendar inspector and
 modern save validation are modern infrastructure, not replacements for missing

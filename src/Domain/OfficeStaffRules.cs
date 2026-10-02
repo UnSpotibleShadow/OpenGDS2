@@ -1,8 +1,8 @@
 namespace OpenGDS2.Domain;
 
 /// <summary>
-/// Verified hiring-to-lounge subset of Module2 11. Work assignment and calendar
-/// economics are separate, still incomplete systems; this does not advance dates.
+/// Verified lounge and development-seat presentation from Module2 11.
+/// Development scheduling and calendar economics remain separate.
 /// </summary>
 public static class OfficeStaffRules
 {
@@ -36,22 +36,15 @@ public static class OfficeStaffRules
     public static void Tick(EmployeeState employee, Random random)
     {
         var office = employee.Office;
+        if (office?.Action is >=6 and <=17) { TickDesk(office, random); return; }
         if (office?.LoungeSeat is not int seat || office.Action is < 18 or > 20) return;
         int destinationNode = office.Action - 6;
         if (office.MovementState == 3)
         {
-            var target = office.RouteNode switch
-            {
-                1 => (43,41), 2 => (55,53), 3 => (57,55),
-                4 => (63,61), 12 => (63,49), _ => throw new InvalidDataException("Unsupported lounge route.")
-            };
+            var target = OfficeNavigationRules.NextWaypoint(office.RouteNode, destinationNode);
             if (At(office, target))
             {
-                office.RouteNode = office.RouteNode switch
-                {
-                    1 => 2, 2 => 3, 3 => destinationNode == 14 ? 4 : 12,
-                    4 => 14, 12 => 13, _ => office.RouteNode
-                };
+                office.RouteNode = OfficeNavigationRules.NodeOnArrival(target, destinationNode) ?? office.RouteNode;
             }
             // Main loop +20ED..2358 switches to final approach as soon as the
             // selected route node is entered, before movement in this tick.
@@ -117,6 +110,55 @@ public static class OfficeStaffRules
             if (employee.Stress is double stress) employee.Stress = Math.Max(0, stress - 0.3 / TimingFactor);
             office.ActionTicks++;
         }
+    }
+
+    private static void TickDesk(OfficeEmployeeState office, Random random)
+    {
+        int destination = OfficeNavigationRules.DestinationNode(office.Action);
+        if (office.MovementState == 3)
+        {
+            var waypoint=OfficeNavigationRules.NextWaypoint(office.RouteNode,destination);
+            if (At(office,waypoint))
+                office.RouteNode=OfficeNavigationRules.NodeOnArrival(waypoint,destination) ?? office.RouteNode;
+            if (office.RouteNode==destination) office.MovementState=10;
+            else { Move(office,waypoint); return; }
+        }
+        if (office.MovementState==10)
+        {
+            var target=OfficeNavigationRules.WorkTarget(office.Action);
+            office.Facing=OfficeNavigationRules.WorkFacing(office.Action);
+            if (!At(office,target)) { Move(office,target); return; }
+            office.MovementState=4;
+            office.MovementDirection=0;
+        }
+        // +3311..3789: work-seat frames, offsets and base-coordinate shift.
+        if (office.MovementState==4)
+        {
+            int tick=office.ActionTicks;
+            if (tick==0) office.Frame=1+3*(office.Facing-1);
+            if (tick==4)
+            {
+                office.Frame=24+office.Facing;
+                if (office.Facing is 3 or 4)
+                    (office.OffsetX,office.OffsetY)=(office.Facing==3 ? 4 : -4,2);
+            }
+            if (tick==6)
+                (office.OffsetX,office.OffsetY)=office.Facing switch
+                {1=>(-2,-1),2=>(2,-1),3=>(4,2),_=>(-4,2)};
+            if (tick>=8)
+            {
+                if (office.Action is >=6 and <=8 or >=12 and <=14) office.OffsetY=4;
+                office.Frame=13+3*(office.Facing-1);
+                office.SeatedAction=office.Action;
+                office.X+=office.Facing is 1 or 4 ? -8 : 8;
+                office.Y+=office.Facing is 1 or 2 ? -4 : 4;
+                office.MovementState=0;
+                office.WorkEngaged=true;
+            }
+            office.ActionTicks++;
+        }
+        // The scheduling branch must decide between idle, ordinary work and
+        // debugging. Until it is connected, retain the verified seated pose.
     }
 
     public static (int X, int Y) SeatTarget(int seat) => seat switch

@@ -14,6 +14,10 @@ public sealed class OfficeEmployeeState
     public int MovementState { get; set; } = 3;
     public int? LoungeSeat { get; set; }
     public int Action { get; set; }
+    // Member 2754; lounge sitting does not set this field.
+    public int SeatedAction { get; set; }
+    // Member 28F8; set after reaching a work seat, cleared by reassignment.
+    public bool WorkEngaged { get; set; }
     public int Facing { get; set; }
     public int ActionTicks { get; set; }
     public int IdleAnimation { get; set; }

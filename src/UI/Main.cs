@@ -32,7 +32,7 @@ public partial class Main : Control
         {
             _session.TickOffice();
             _officeElapsed -= OfficeStaffRules.TickSeconds;
-            updated = state.Employees.Any(x => x.Office?.LoungeSeat is not null);
+            updated = state.Employees.Any(x => x.Office is not null);
         }
         if (updated) _officeRenderer.UpdateTexture(_officeTexture, state);
     }
@@ -371,6 +371,19 @@ public partial class Main : Control
                 ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
             panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});
             panel.AddChild(new Label {Text=$"{Tr("STRESS")}: {employee.Stress?.ToString("0.0") ?? Tr("NOT_YET_DECODED")}"});
+            if (employee.Office is OfficeEmployeeState workspace)
+            {
+                panel.AddChild(new Label {Text=workspace.Action is >=6 and <=17
+                    ? $"{Tr("DEVELOPMENT_ROOM")} {(workspace.Action-6)/6+1} / {Tr("DESK")} {(workspace.Action-6)%6+1}"
+                    : Tr("LOUNGE")});
+                AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
+                AddAction("TAKE_BREAK",()=>
+                {
+                    var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());
+                    if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
+                    else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
+                },workspace.Action is >=6 and <=17);
+            }
             if (employee.SourceIndex is int source)
                 AddAction("LEVEL_UP", () =>
                 {
