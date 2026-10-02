@@ -14,8 +14,10 @@ M12 local checks passed:
 - Private opening/hired/desk compositor frames inspected.
 
 The current public suite has 57 C# checks and ten Python checks. Original fixtures
-are local-only and are not uploaded to CI. The normal GitHub SDK/runtime checks
-are run on the M12 pull request before merge; their results will be recorded here.
+are local-only and are not uploaded to CI. The M12 [normal GitHub SDK/runtime checks](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37068490579)
+passed before merge: 57 public C# checks, ten public Python checks (six optional
+original checks skipped), standard SDK build with zero warnings/errors, Godot
+headless editor/game startup, and fixture-free UI checks with zero failures.
 
 The preceding M11 normal [GitHub Validate workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37035351393)
 passed the standard .NET 8/Godot SDK build with zero warnings/errors, headless
