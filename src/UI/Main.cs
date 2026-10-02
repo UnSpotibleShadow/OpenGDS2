@@ -20,21 +20,28 @@ public partial class Main : Control
     private OriginalOfficeRenderer? _officeRenderer;
     private ImageTexture? _officeTexture;
     private double _officeElapsed;
+    private OriginalCatalog? _activeCatalog;
+    private bool _clockRunning;
+    private bool _paused;
+    private Action? _refreshCoreStatus;
 
     public override void _Process(double delta)
     {
-        if (_officeRenderer is null || _officeTexture is null || _session.Current is not GameState state) return;
+        if (!_clockRunning || _paused || _session.Current is not GameState state) return;
         _officeElapsed += delta;
         // Keep at most one second of backlog after a suspended window.
         _officeElapsed = Math.Min(_officeElapsed, 1);
         bool updated = false;
         while (_officeElapsed >= OfficeStaffRules.TickSeconds)
         {
-            _session.TickOffice();
+            _session.TickOffice(_activeCatalog);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
             updated = state.Employees.Any(x => x.Office is not null);
+            var pending=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue);
+            if (pending is not null) {ShowProjectDecision(state,pending);return;}
         }
-        if (updated) _officeRenderer.UpdateTexture(_officeTexture, state);
+        if (updated && _officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture, state);
+        _refreshCoreStatus?.Invoke();
     }
 
     public override void _Ready()
@@ -219,6 +226,7 @@ public partial class Main : Control
     {
         try
         {
+            _paused=false;
             var state = _session.StartNewGame(companyName, presidentName, mode, _importer.LoadEmployeeDatabase(), _importer.LoadCatalog());
             ShowOfficeReconstruction(state);
         }
@@ -233,6 +241,8 @@ public partial class Main : Control
     private void ShowOfficeReconstruction(GameState state)
     {
         ClearContent();
+        _activeCatalog=_importer.LoadCatalog();
+        _clockRunning=true;
         _content.CustomMinimumSize = new Vector2(1248, 0);
         var row = new HBoxContainer();
         row.AddThemeConstantOverride("separation", 16);
@@ -291,11 +301,26 @@ public partial class Main : Control
         OfficeAction("LOAD_GAME", LoadSession, System.IO.File.Exists(SavePath));
         OfficeAction("CALENDAR_INSPECTOR", () => ShowCalendar(state));
         OfficeAction("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), _importer.LoadCatalog() is not null);
-        OfficeAction("START_GAME_DEVELOPMENT", () => { }, false);
+        OfficeAction("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), _activeCatalog is not null);
+        OfficeAction("SALES", () => ShowSales(state), _activeCatalog is not null);
+        OfficeAction("PAUSE", () => _paused=!_paused);
+        foreach (var project in state.DevelopmentProjects.OrderBy(x=>x.RoomIndex))
+        {
+            var button=new Button {Name=$"OpenProject{project.RoomIndex}",Text=$"{Tr("DEVELOPMENT_ROOM")} {project.RoomIndex+1}: {project.Title}",
+                CustomMinimumSize=new Vector2(0,30)};
+            button.Pressed+=()=>ShowProject(state,project);sidebar.AddChild(button);
+        }
         OfficeAction("IMPORT_BUTTON", ShowImporter);
         OfficeAction("BACK_TO_TITLE", ShowTitleScreen);
         _status = new Label { AutowrapMode = TextServer.AutowrapMode.WordSmart };
         sidebar.AddChild(_status);
+        _refreshCoreStatus=()=>
+        {
+            ((Label)metrics.GetChild(1)).Text=state.Money?.ToString("N0") ?? Tr("NOT_YET_DECODED");
+            _status.Text=string.Join("\n",state.DevelopmentProjects.OrderBy(x=>x.RoomIndex).Select(ProjectSummary));
+            if (_paused) _status.Text+="\n"+Tr("PAUSED");
+        };
+        _refreshCoreStatus();
         var progress = new Label { Text = Tr("RECONSTRUCTION_STATUS"), AutowrapMode = TextServer.AutowrapMode.WordSmart };
         sidebar.AddChild(progress);
         if (!state.Recruitment.CandidateDatabaseDecoded) _status.Text = Tr("DATABASE_IMPORT_REQUIRED");
@@ -468,6 +493,8 @@ public partial class Main : Control
 
     private void ClearContent()
     {
+        _clockRunning=false;
+        _refreshCoreStatus=null;
         _officeRenderer = null;
         _officeTexture = null;
         _officeElapsed = 0;

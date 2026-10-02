@@ -46,5 +46,6 @@ public static class OfficeAssignmentService
         office.Action=action;
         office.MovementState=3;
         office.ActionTicks=0;
+        ReleaseService.ResetWork(office);
     }
 }

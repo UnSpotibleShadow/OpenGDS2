@@ -31,8 +31,9 @@ Important tools:
 M4 models the original PC employee fields recovered from `fGMSKoyou`/`fGMSKoyouKz`:
 Level, Fun, Novelty, Accuracy, Graphics, Music, Development Speed, Inspiration and Contract Fee.
 
-The applicant database/generator is not decoded, so `RecruitmentState.Candidates` intentionally starts empty and the
-Hire action cannot mutate state yet.
+The applicant database and generator are reconstructed. Recruitment populates
+`RecruitmentState.Candidates`; hiring charges the recovered fee and creates an
+independent employed record with an office workspace.
 
 ## Compatibility milestones
 
@@ -41,5 +42,11 @@ Hire action cannot mutate state yet.
 - M3: VB6/P-Code object map + first office state (implemented).
 - M4: employee-hiring form/stat schema (implemented).
 - M5: applicant generator + hiring transaction + active employee roster.
-- M6: game-development loop.
-- Later: publishing/reviews/sales, progression, save compatibility and optional modernization features.
+- M6: supplied baseline; development remained a reconstruction target.
+- Later: complete economics, reviews/awards, progression, original-save compatibility and isolated modernization.
+
+- M13: `DevelopmentSimulation` schedules seated own-game work and debugging.
+  `ReleaseService` snapshots projects and charges production; `SalesService`
+  advances inventory, receipts and demand. `Main.CoreLoop.cs` presents checkpoints
+  and release/sales controls without embedding formulas in Godot nodes.
+  New fields remain inside the backward-readable schema-1 modern envelope.

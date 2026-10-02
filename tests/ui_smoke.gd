@@ -77,7 +77,7 @@ func run() -> void:
         fields[1].text = "Smoke President"
     await press("CONFIRM")
     await press("NORMAL_MODE")
-    check(button("START_GAME_DEVELOPMENT").disabled, "Unknown simulation remains disabled")
+    check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
     check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
     check(main.find_child("PlanningAudience", true, false).item_count == 7, "Planning audience catalog")

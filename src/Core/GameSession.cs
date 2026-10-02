@@ -21,6 +21,7 @@ public sealed class GameSession
             Year = date.Year, Month = date.Month, Week = date.Week,
             DevelopmentComputerIndex = 0,
             HardwareLicenses = [0],
+            SalesFee1 = 1500, SalesFee2 = 1500,
             AvailableHardware = catalog?.Hardware.Where(x => x.RawMembers["0F1C"] == 1).Select(x => x.SourceIndex).ToHashSet(),
         };
         state.Initial.StartingMoney = state.Money;
@@ -28,6 +29,10 @@ public sealed class GameSession
         state.Company.Name = companyName.Trim(); state.Company.PresidentName = presidentName.Trim();
         state.Company.Rank = 0;
         state.Company.Fame = 12;
+        state.Company.ProductionCapacity = 50;
+        state.Company.OriginalMember90 = 23;
+        if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
+            state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)
         {
             state.EmployeeSources = database.CreateSources(_random);
@@ -54,16 +59,20 @@ public sealed class GameSession
     public HireResult Hire(EmployeeState candidate)
         => HiringService.TryHire(Current ?? throw new InvalidOperationException("No current session."), candidate, _random);
 
-    public void TickOffice()
+    public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
+        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue)) return;
+        if (catalog is not null) SalesService.Tick(state,catalog,_random);
         foreach (var employee in state.Employees)
         {
             OfficeStaffRules.Tick(employee, _random);
+            if (catalog is not null) DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
             // Original employees refer back to the source arrays. Keep the
             // modern employed copy and source projection consistent.
             var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == employee.SourceIndex);
-            if (source is not null) source.Employee.Stress = employee.Stress;
+            if (source is not null) { source.Employee.Stress = employee.Stress; source.Employee.Experience=employee.Experience; }
+            if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue)) break;
         }
     }
     public void Restore(GameState state) => Current = state ?? throw new ArgumentNullException(nameof(state));

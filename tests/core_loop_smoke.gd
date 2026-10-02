@@ -1,0 +1,157 @@
+extends SceneTree
+# Author-created synthetic data only. Always use disposable XDG_DATA_HOME.
+var main: Node
+var failures := 0
+
+func check(condition: bool, message: String) -> void:
+    if not condition:
+        failures += 1
+        push_error("FAIL CORE UI: " + message)
+
+func press(key: String) -> void:
+    var found := false
+    for button in main.find_children("*", "Button", true, false):
+        if button.text == tr(key):
+            check(not button.disabled, "Enabled: " + key)
+            if not button.disabled:
+                button.pressed.emit()
+            found = true
+            break
+    check(found, "Button exists: " + key)
+    await process_frame
+
+func press_node(name: String) -> void:
+    var button = main.find_child(name, true, false)
+    check(button != null and not button.disabled, name)
+    if button != null and not button.disabled:
+        button.pressed.emit()
+    await process_frame
+
+func write_json(path: String, value: Variant) -> void:
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
+    var file := FileAccess.open(path, FileAccess.WRITE)
+    file.store_string(JSON.stringify(value))
+
+func await_node(name: String) -> bool:
+    for frame in range(15000):
+        if main.find_child(name, true, false) != null:
+            return true
+        await process_frame
+    check(false, "Timed out waiting for " + name)
+    return false
+
+func _initialize() -> void:
+    call_deferred("run")
+
+func run() -> void:
+    if OS.get_environment("XDG_DATA_HOME").is_empty():
+        push_error("core_loop_smoke requires disposable XDG_DATA_HOME")
+        quit(1)
+        return
+    var raw_type := {"1378":5,"1308":10,"13B0":1,"12EC":3}
+    var catalog := {
+        "SchemaVersion":1,"SourceHash":"4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+        "Hardware":[{"SourceIndex":0,"Name":"Synthetic Hardware","RawMembers":{"0F00":8,"0FE0":20,"0FFC":10,"0EC8":0,"1050":40},
+            "ProductionBands":[{"SizeThreshold":16,"UnitCost":300},{"SizeThreshold":32,"UnitCost":700},{"SizeThreshold":48,"UnitCost":1200},{"SizeThreshold":64,"UnitCost":1800}]}],
+        "Audiences":[{"SourceIndex":0,"Name":"Synthetic Audience","RawMembers":{"14A8":1,"1454":10,"148C":20}}],
+        "DevelopmentComputers":[{"SourceIndex":0,"Name":"Synthetic Computer","BitWidth":8}],
+        "GameTypes":[{"SourceIndex":0,"Name":"Synthetic Type A","RawMembers":raw_type,"RawTable13CC":[]},
+            {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
+        "Genres":[{"SourceIndex":0,"Name":"Synthetic Genre","RawMembers":{"1224":7,"1208":10,"1240":1,"125C":0}}]
+    }
+    # Genre helper validates its fifteen-column table even for broad audience.
+    for type in catalog.GameTypes:
+        for column in range(15):
+            type.RawTable13CC.append(1)
+    var roster := {}
+    for cell in range(65):
+        roster[str(cell)] = 0
+    var worker := {"Name":"Synthetic Worker","SourceIndex":0,"PortraitId":1,"Level":1,"Experience":0,"Stress":0,
+        "Fun":80,"Novelty":80,"Graphics":80,"Music":80,"Accuracy":80,"DevelopmentSpeed":80,"Inspiration":80,
+        "Office":{"Action":6,"SeatedAction":6,"WorkEngaged":true,"MovementState":0,"Facing":1,"Frame":13}}
+    var state := {"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
+        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23},
+        "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500}
+    write_json("user://original/catalog.json",catalog)
+    write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
+    main = load("res://scenes/Main.tscn").instantiate()
+    root.add_child(main)
+    await process_frame
+    await press("LOAD_GAME")
+    await press("START_GAME_DEVELOPMENT")
+    check(not main.find_child("AcceptPlan",true,false).disabled,"Planning can begin")
+    main.find_child("PlanningTitle",true,false).text = "Synthetic UI Game"
+    await press_node("AcceptPlan")
+    check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
+    Engine.time_scale = 100
+    if not await await_node("SelectType0"):
+        quit(1)
+        return
+    await press("SAVE_GAME")
+    var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(checkpoint.State.DevelopmentProjects[0].PendingDecision == 0,"Type checkpoint persisted")
+    # Reload checkpoint through the actual office controls before selecting.
+    await press("LOAD_GAME")
+    await await_node("SelectType0")
+    await press_node("SelectType0")
+    if not await await_node("SelectGenre0"):
+        quit(1)
+        return
+    await press_node("SelectGenre0")
+    var ready := false
+    for frame in range(15000):
+        for button in main.find_children("*", "Button", true, false):
+            if button.text == tr("RELEASE_GAME"):
+                ready = true
+                break
+        if ready:
+            break
+        await process_frame
+    check(ready,"Development reaches completion")
+    if not ready:
+        quit(1)
+        return
+    await press("CONTINUE_DEBUGGING")
+    var debugged := false
+    for frame in range(15000):
+        var report = main.find_child("DevelopmentReport",true,false)
+        if report != null and report.text.contains(tr("BUGS") + ": 0"):
+            debugged = true
+            break
+        await process_frame
+    check(debugged,"Stage-three work removes bugs")
+    if not debugged:
+        quit(1)
+        return
+    await press("RELEASE_GAME")
+    check(main.find_child("ReleasePrice",true,false).value == 5800,"Original default price")
+    check(main.find_child("ReleaseCopies",true,false).value == 5000,"Original default production")
+    await press_node("ConfirmRelease")
+    check(main.find_child("SalesProduct0",true,false) != null,"Release opens sales screen")
+    for frame in range(100):
+        await process_frame
+    Engine.time_scale = 1
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    var released = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(released.State.DevelopmentProjects.is_empty(),"Release frees room")
+    check(released.State.ReleasedGames.size() == 1,"One product released")
+    var product = released.State.ReleasedGames[0]
+    check(product.UnitsSold > 0 and product.Stock < 5000,"Sales consume stock")
+    check(product.NetSalesReceipts == product.UnitsSold * 2800,"Revenue uses original per-copy fees")
+    await press("LOAD_GAME")
+    await press("SALES")
+    await press_node("ProduceProduct0")
+    check(main.find_child("ProductionCopies",true,false) != null,"Reprint controls")
+    main.find_child("ProductionCopies",true,false).value = 1000
+    await press_node("ConfirmProduction")
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    var reprinted = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(reprinted.State.ReleasedGames[0].ProductionSpending == product.ProductionSpending + 500000,"Reprint costs original band plus packaging")
+    await press("START_GAME_DEVELOPMENT")
+    main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
+    await press_node("AcceptPlan")
+    check(main.find_child("DevelopmentProgress",true,false) != null,"Room accepts another project")
+    print("Core loop UI checks complete; failures=",failures)
+    quit(0 if failures == 0 else 1)

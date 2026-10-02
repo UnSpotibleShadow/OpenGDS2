@@ -16,6 +16,12 @@ public sealed class GameState
     public HashSet<int>? AvailableHardware { get; set; }
 
     public List<DevelopmentProjectState> DevelopmentProjects { get; set; } = [];
+    public List<ReleasedGameState> ReleasedGames { get; set; } = [];
+    public int SalesTicks { get; set; }
+    public long? SalesFee1 { get; set; }
+    public long? SalesFee2 { get; set; }
+    // Global member 31A8: shared across type-selection forms, not per project.
+    public Dictionary<int,int>? OriginalTypeRosterMap { get; set; }
     // Sparse original sourceIndex+99 cells; old modern saves keep these unknown.
     public Dictionary<int,int>? OriginalAccuracyCells { get; set; }
 

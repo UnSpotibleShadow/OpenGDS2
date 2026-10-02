@@ -80,7 +80,14 @@ def recover(data):
             else:
                 require(pos,b'\x28');fields[member]=struct.unpack('<h',pe.bytes_at(pos+3,2))[0];pos+=5
         require(pos,b'\x04');require(pos+3,bytes.fromhex('0a 0c 01 44 00'))
-        hardware.append({'SourceIndex':index,'Name':strings['0EE4'],'Description':strings['1034'],'RawMembers':fields})
+        bands=[]
+        for band in range(4):
+            bp=START+call+(0x31 if index==3 else 0x2f)+band*0x2d
+            require(bp,bytes.fromhex('28 ac fe'));require(bp+5,bytes.fromhex('28 bc fe'))
+            require(bp+10,bytes.fromhex('3a 6c ff'));require(bp+24,bytes.fromhex('0a 0e 01 10 00'))
+            bands.append({'SizeThreshold':struct.unpack('<h',pe.bytes_at(bp+8,2))[0],
+                          'UnitCost':struct.unpack('<h',pe.bytes_at(bp+3,2))[0]})
+        hardware.append({'SourceIndex':index,'Name':strings['0EE4'],'Description':strings['1034'],'RawMembers':fields,'ProductionBands':bands})
     game_types=[]
     for index,member in enumerate([0x1394,0x13B0,0x12B4,0x12D0,0x12EC,0x1308,0x1378,0x1324,0x1340,0x135C]):
         require(0x9836A4+index*0x14,bytes.fromhex('fd 16')+struct.pack('<H',0x10+index*4)+bytes.fromhex('5c ff 07 08 00 a0 12 fc 22 07 08 00')+struct.pack('<H',member)+bytes.fromhex('fc b0'))

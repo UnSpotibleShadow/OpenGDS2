@@ -101,6 +101,17 @@ public static class OriginalCatalogImporter
             }
             pe.Require(pos, 0x04); pos += 3;
             pe.Require(pos, 0x0A, 0x0C, 0x01, 0x44, 0x00);
+            // Four calls to 0060ED44 populate size/cost tables 10F8/111C.
+            int bandOffset=hardwareCalls[index]+(index==3 ? 0x31 : 0x2F);
+            for (int band=0;band<4;band++)
+            {
+                int bp=pe.Offset(start+bandOffset+band*0x2D);
+                long unitCost=pe.Literal16(ref bp,0xFEAC);
+                int threshold=pe.Literal16(ref bp,0xFEBC);
+                pe.Require(bp,0x3A,0x6C,0xFF);
+                pe.Require(bp+14,0x0A,0x0E,0x01,0x10,0x00);
+                hardware.ProductionBands.Add(new(threshold,unitCost));
+            }
             result.Hardware.Add(hardware);
         }
         string[] typeMembers = ["135C","1340","1324","1378","1308","12EC","12D0","12B4","13B0","1394"];

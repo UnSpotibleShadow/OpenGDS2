@@ -31,7 +31,10 @@ public partial class Main
     {
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog.");
         ClearContent();AddHeading(Tr("DEVELOPMENT_PLANNING"),28);
-        _content.AddChild(new Label {Text=Tr("PLANNING_PREVIEW_NOTE"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+        var title=AddField(Tr("GAME_TITLE"),Tr("NEW_PROJECT_TITLE"),128);title.Name="PlanningTitle";
+        var room=new OptionButton {Name="PlanningRoom"};
+        for (int i=0;i<2;i++) room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
+        _content.AddChild(room);
         AddHeading(Tr("TARGET_HARDWARE"),18);
         var hardware=new OptionButton {Name="PlanningHardware"};
         foreach (var item in catalog.Hardware.Where(x=>state.AvailableHardware?.Contains(x.SourceIndex)==true))
@@ -45,23 +48,33 @@ public partial class Main
         var gate=new Label {Name="PlanningGate",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(gate);
         var grid=new GridContainer {Name="PlanningFocus",Columns=2};_content.AddChild(grid);
         var random=new Random();
+        DevelopmentFocus focus=new(25,25,25,25);
+        var start=new Button {Name="AcceptPlan",Text=Tr("START_GAME_DEVELOPMENT"),CustomMinimumSize=new Vector2(0,42)};
         void ShowFocus()
         {
             foreach (Node child in grid.GetChildren()) {grid.RemoveChild(child);child.QueueFree();}
-            var focus=DevelopmentFocusRules.Generate(random);
+            focus=DevelopmentFocusRules.Generate(random);
             foreach (var item in new[] {("STAT_FUN",focus.Fun),("STAT_NOVELTY",focus.Novelty),("STAT_GRAPHICS",focus.Graphics),("STAT_MUSIC",focus.Music)})
                 AddMetric(grid,Tr(item.Item1),$"{item.Item2}%");
         }
         void RefreshQuote()
         {
-            if (hardware.ItemCount==0 || audience.ItemCount==0) {quote.Text=Tr("PLANNING_NO_HARDWARE");return;}
-            var result=DevelopmentProjectService.CheckNewPlan(state,catalog,0,hardware.GetSelectedId(),audience.GetSelectedId(),out var value);
+            if (hardware.ItemCount==0 || audience.ItemCount==0) {quote.Text=Tr("PLANNING_NO_HARDWARE");start.Disabled=true;return;}
+            var result=DevelopmentProjectService.CheckNewPlan(state,catalog,room.GetSelectedId(),hardware.GetSelectedId(),audience.GetSelectedId(),out var value);
             quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}   {Tr("DEVELOPMENT_POINTS")}: {value.Points}";
             gate.Text=Tr($"PLANNING_RESULT_{result}");
+            start.Disabled=result!=DevelopmentPlanningResult.Success || string.IsNullOrWhiteSpace(title.Text);
         }
-        hardware.ItemSelected+=_=>RefreshQuote();audience.ItemSelected+=_=>RefreshQuote();
+        hardware.ItemSelected+=_=>RefreshQuote();audience.ItemSelected+=_=>RefreshQuote();room.ItemSelected+=_=>RefreshQuote();title.TextChanged+=_=>RefreshQuote();
         RefreshQuote();ShowFocus();
         AddAction("PLANNING_NEW_PROPOSAL",ShowFocus);
+        start.Pressed+=()=>
+        {
+            var result=DevelopmentProjectService.TryAcceptNewPlan(state,catalog,room.GetSelectedId(),hardware.GetSelectedId(),audience.GetSelectedId(),title.Text,focus);
+            if (result==DevelopmentPlanningResult.Success) ShowProject(state,state.DevelopmentProjects.Single(x=>x.RoomIndex==room.GetSelectedId()));
+            else gate.Text=Tr($"PLANNING_RESULT_{result}");
+        };
+        _content.AddChild(start);
         AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
     }
 }

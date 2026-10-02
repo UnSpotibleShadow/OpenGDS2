@@ -45,6 +45,7 @@ public static class DevelopmentSelectionRules
         state.Money-=selected.SelectionFee;
         project.GameTypeSourceIndex=selectedSourceIndex;project.RequiredPoints=points;project.OriginalStage=1;
         project.Recognition+=Math.Floor(fame/3.0);
+        project.PendingDecision=null;
         return DevelopmentSelectionResult.Success;
     }
     public static DevelopmentSelectionResult TrySelectGenre(GameState state,DevelopmentProjectState project,
@@ -70,6 +71,7 @@ public static class DevelopmentSelectionRules
         state.Money-=selected.SelectionFee;
         project.GenreSourceIndex=selectedSourceIndex;project.RequiredPoints=points;project.OriginalStage=2;
         if (affinity) project.Quality=project.Quality with {Fun=project.Quality.Fun+20};
+        project.PendingDecision=null;
         return DevelopmentSelectionResult.Success;
     }
 }

@@ -1,7 +1,7 @@
 # Remaining reconstruction work
 
 Completion means a verified development/release/sales loop, calendar economics,
-company progression and regression coverage. M12 does not meet that criterion.
+company progression and regression coverage. M13 implements the own-game core loop; calendar economics and company progression remain incomplete.
 
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |
@@ -10,12 +10,12 @@ company progression and regression coverage. M12 does not meet that criterion.
 | Hiring | Five-slot generator, gate, fee transaction | Entry/lounge placement implemented; trace hiring capacity guard, failed seat-search behavior and original runtime |
 | Contract renewal | March-end annual trigger; atomic employee/finance projection tested; unchecked gates/stress reset | Integrate workspace cleanup and pending renewal into complete weekly simulation; no individual expiry inferred |
 | Dismissal | Helper start 009981CC, size 1052; clears employed gate at +0399 | Workspace/task cleanup and source/slot lifecycle; avoid treating it as just list removal |
-| Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Module2 work branches +6612/+A605/+A99F/+AD23: trace task eligibility and scheduling |
+| Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Ordinary work/debugging and checkpoint experience scheduled in M13; complete study/external jobs and source-slot lifecycle |
 | Weekly economics | Calendar verified; monthly payroll loop uses scratch member 3018 instead of loop index | Confirm apparent original defect dynamically; see milestone-8.md before implementing payroll |
-| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | Desk assignment connected in M12; connect work eligibility, clock, debugging/polishing and release; see development-work.md |
+| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; polishing and external/contract workflows remain; see core-loop.md |
 | Events/progression | Module2 periodic body identified | Module2 ordinal 12 start 009E3830, size 10216; separate event eligibility and effects |
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; recover hardware events, company member 90, genre eligibility and technologies |
-| Reviews/sales/awards | Forms and procedures identified in existing metadata | Correlate fGMSyukka, fGMOuri and fGMKontesuto pools with Module2 state |
+| Reviews/sales/awards | Own-game release/sales reconstructed in M13 | Recover reviews, recall effects, genre experience, awards and milestone events |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
 | Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk walking/sitting/reassignment and assigned computers connected; recover meeting/work animations, pointer interaction and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
