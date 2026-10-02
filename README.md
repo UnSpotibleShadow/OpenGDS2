@@ -14,6 +14,12 @@ M9 adds development computer upgrades, available hardware license purchases,
 eleven hardware records, 51 game types and verified planning quotes. See
 [development planning evidence](docs/development-planning.md).
 
+The presentation correction imports the original embedded office background and
+sprite/mask atlases locally, displays the office base, and routes New Game to
+the importer when original data is missing. Existing imports need reimporting.
+The populated office and development loop are still incomplete; see
+[original presentation recovery](docs/original-presentation.md).
+
 ## Run
 
 Install Godot **4.4.1 .NET** and .NET SDK 8, then:

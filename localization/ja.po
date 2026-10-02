@@ -358,3 +358,6 @@ msgstr "会社の資金が不明です。"
 
 msgid "LICENSE_RESULT_InsufficientFunds"
 msgstr "資金が足りません。"
+
+msgid "OFFICE_IMPORT_REQUIRED"
+msgstr "オフィス画像を読み込むにはオリジナルのアーカイブをインポートしてください。以前のインポートは再実行が必要です。"

@@ -62,6 +62,12 @@ func run() -> void:
         check(catalog != null and catalog.GameTypes.size() == 51, "Game type catalog import")
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
     await press("NEW_GAME")
+    if fixture.is_empty():
+        check(nodes_of_type("LineEdit").is_empty(), "New game requires local original data")
+        check(button("IMPORT_BUTTON") != null, "Missing original data opens importer")
+        print("UI smoke checks complete (without original data); failures=", failures)
+        quit(0 if failures == 0 else 1)
+        return
     await press("CONFIRM")
     check(nodes_of_type("LineEdit").size() == 2, "Empty name rejected")
     var fields := nodes_of_type("LineEdit")
@@ -72,6 +78,11 @@ func run() -> void:
     await press("NORMAL_MODE")
     check(button("START_GAME_DEVELOPMENT").disabled, "Unknown simulation remains disabled")
     if not fixture.is_empty():
+        var office_background = main.find_child("OriginalOfficeBackground", true, false)
+        check(office_background != null and office_background.texture != null, "Original office background decoded")
+        if office_background != null:
+            check(office_background.texture.get_width() == 466 and office_background.texture.get_height() == 290, "Original office bitmap dimensions")
+        check(FileAccess.file_exists("user://original/Graphic/Embedded/OfficeSprites.bmp"), "Embedded sprite sheet imported locally")
         await press("HARDWARE_LICENSES")
         var license_buttons: Array[Node] = []
         for node in nodes_of_type("Button"):

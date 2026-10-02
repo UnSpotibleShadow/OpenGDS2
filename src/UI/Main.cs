@@ -107,7 +107,11 @@ public partial class Main : Control
         foreach (var (key, enabled) in new[] { ("NEW_GAME", true), ("LOAD_GAME", System.IO.File.Exists(SavePath)), ("SETTINGS", true) })
         {
             var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, 46) };
-            if (key == "NEW_GAME") button.Pressed += ShowCompanySetup;
+            if (key == "NEW_GAME") button.Pressed += () =>
+            {
+                if (_importer.HasImportedAssets()) ShowCompanySetup();
+                else ShowImporter();
+            };
             if (key == "LOAD_GAME") button.Pressed += LoadSession;
             if (key == "SETTINGS") button.Pressed += ShowSettings;
             _content.AddChild(button);
@@ -209,33 +213,69 @@ public partial class Main : Control
     private void ShowOfficeReconstruction(GameState state)
     {
         ClearContent();
-        AddHeading(state.Company.Name, 32);
-        AddHeading($"{Tr("PRESIDENT_NAME")}: {state.Company.PresidentName}", 18);
+        _content.CustomMinimumSize = new Vector2(1120, 0);
+        var row = new HBoxContainer();
+        row.AddThemeConstantOverride("separation", 20);
+        _content.AddChild(row);
+        var office = new VBoxContainer { CustomMinimumSize = new Vector2(760, 0) };
+        row.AddChild(office);
+        var company = new Label { Text = state.Company.Name, HorizontalAlignment = HorizontalAlignment.Center };
+        company.AddThemeFontSizeOverride("font_size", 22);
+        office.AddChild(company);
+        var texture = OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
+        if (texture is not null)
+        {
+            office.AddChild(new TextureRect
+            {
+                Name = "OriginalOfficeBackground", Texture = texture,
+                TextureFilter = TextureFilterEnum.Nearest,
+                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                CustomMinimumSize = new Vector2(760, 475)
+            });
+        }
+        else
+        {
+            var importNote = new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"),
+                AutowrapMode = TextServer.AutowrapMode.WordSmart, CustomMinimumSize = new Vector2(760, 100) };
+            office.AddChild(importNote);
+        }
+        var sidebar = new VBoxContainer { CustomMinimumSize = new Vector2(320, 0) };
+        sidebar.AddThemeConstantOverride("separation", 5);
+        row.AddChild(sidebar);
         var metrics = new GridContainer { Columns = 2 };
-        metrics.AddThemeConstantOverride("h_separation", 24);
+        metrics.AddThemeConstantOverride("h_separation", 12);
         AddMetric(metrics, Tr("FUNDS"), state.Money?.ToString("N0") ?? Tr("NOT_YET_DECODED"));
         AddMetric(metrics, Tr("DATE"), $"{state.Year} / {state.Month} / {state.Week}");
         AddMetric(metrics, Tr("STAFF"), state.Employees.Count.ToString());
         AddMetric(metrics, Tr("COMPANY_RANK"), state.Company.Rank is int rank ? Tr($"COMPANY_RANK_{rank}") : Tr("NOT_YET_DECODED"));
         AddMetric(metrics, Tr("COMPANY_FAME"), state.Company.Fame is int fame ? $"{fame}%" : Tr("NOT_YET_DECODED"));
-        _content.AddChild(metrics);
-        AddAction("HIRE_EMPLOYEES", ShowRecruitment, state.Recruitment.CandidateDatabaseDecoded);
-        AddAction("STAFF", () => ShowStaff(state));
-        AddAction("DEVELOPMENT_COMPUTERS", () => ShowComputers(state), _importer.LoadCatalog()?.DevelopmentComputers.Count == 4);
-        AddAction("HARDWARE_LICENSES", () => ShowLicenses(state), state.AvailableHardware is not null && state.HardwareLicenses is not null);
-        AddAction("SAVE_GAME", () =>
+        sidebar.AddChild(metrics);
+        void OfficeAction(string key, Action action, bool enabled = true)
+        {
+            var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, 30) };
+            button.Pressed += () => action();
+            sidebar.AddChild(button);
+        }
+        OfficeAction("HIRE_EMPLOYEES", ShowRecruitment, state.Recruitment.CandidateDatabaseDecoded);
+        OfficeAction("STAFF", () => ShowStaff(state));
+        OfficeAction("DEVELOPMENT_COMPUTERS", () => ShowComputers(state), _importer.LoadCatalog()?.DevelopmentComputers.Count == 4);
+        OfficeAction("HARDWARE_LICENSES", () => ShowLicenses(state), state.AvailableHardware is not null && state.HardwareLicenses is not null);
+        OfficeAction("SAVE_GAME", () =>
         {
             try { SaveStore.Save(SavePath, state); ShowOfficeReconstruction(state); _status.Text = Tr("SAVE_OK"); }
             catch (Exception ex) { _status.Text = $"{Tr("SAVE_FAILED")}: {ex.Message}"; }
         });
-        AddAction("LOAD_GAME", LoadSession, System.IO.File.Exists(SavePath));
-        AddAction("CALENDAR_INSPECTOR", () => ShowCalendar(state));
-        AddAction("START_GAME_DEVELOPMENT", () => { }, false);
-        _status = new Label { HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart };
-        _content.AddChild(_status);
-        AddHeading(Tr("RECONSTRUCTION_STATUS"), 14);
-        if (!state.Recruitment.CandidateDatabaseDecoded) AddHeading(Tr("DATABASE_IMPORT_REQUIRED"), 14);
-        AddAction("BACK_TO_TITLE", ShowTitleScreen);
+        OfficeAction("LOAD_GAME", LoadSession, System.IO.File.Exists(SavePath));
+        OfficeAction("CALENDAR_INSPECTOR", () => ShowCalendar(state));
+        OfficeAction("START_GAME_DEVELOPMENT", () => { }, false);
+        OfficeAction("IMPORT_BUTTON", ShowImporter);
+        OfficeAction("BACK_TO_TITLE", ShowTitleScreen);
+        _status = new Label { AutowrapMode = TextServer.AutowrapMode.WordSmart };
+        sidebar.AddChild(_status);
+        var progress = new Label { Text = Tr("RECONSTRUCTION_STATUS"), AutowrapMode = TextServer.AutowrapMode.WordSmart };
+        sidebar.AddChild(progress);
+        if (!state.Recruitment.CandidateDatabaseDecoded) _status.Text = Tr("DATABASE_IMPORT_REQUIRED");
     }
 
     private void ShowRecruitment()
@@ -394,6 +434,7 @@ public partial class Main : Control
 
     private void ClearContent()
     {
+        _content.CustomMinimumSize = new Vector2(620, 0);
         _companyName = null;
         _presidentName = null;
         foreach (Node child in _content.GetChildren()) { _content.RemoveChild(child); child.QueueFree(); }

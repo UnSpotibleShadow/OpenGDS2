@@ -358,3 +358,6 @@ msgstr "Company funds are unavailable."
 
 msgid "LICENSE_RESULT_InsufficientFunds"
 msgstr "Insufficient funds."
+
+msgid "OFFICE_IMPORT_REQUIRED"
+msgstr "Import your original archive to load the office graphics. Existing imports need to be imported again."

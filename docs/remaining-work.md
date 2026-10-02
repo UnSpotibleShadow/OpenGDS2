@@ -17,6 +17,7 @@ company progression and regression coverage. M9 does not meet that criterion.
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Hardware release events, type-table semantics, genre licenses and technologies |
 | Reviews/sales/awards | Forms and procedures identified in existing metadata | Correlate fGMSyukka, fGMOuri and fGMKontesuto pools with Module2 state |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
+| Original presentation | Embedded office base and sprite/mask sheets imported locally; base displayed | Recover sprite rectangles, compositing, depth, employee placement and animation; compare rendered original/game screens |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
 | Localization | Current usable UI bilingual | Translate each implemented screen; original names remain local proper names |
 | Runtime | Direct compilation/domain tests and headless UI pass with host workaround | Standard SDK build/CI and graphical tests on a normal host |

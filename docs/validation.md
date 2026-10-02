@@ -54,6 +54,12 @@ compilation and the game scene-tree tests afterward passed.
 
 ## Remaining verification
 
+The office presentation correction compiles without errors and passes the
+Godot imported-data UI suite (0 failures), including decoding the embedded
+466 × 290 office bitmap and local sprite extraction. The no-data UI suite also
+passes (0 failures): New Game opens the importer rather than an empty company.
+Graphical rendering is still unverified in this host.
+
 - Standard SDK restore/build and CI on a normal .NET-capable host.
 - Graphical layout, native file picker, pointer/keyboard usability and packaging.
   Headless control tests do not prove rendered layout quality.

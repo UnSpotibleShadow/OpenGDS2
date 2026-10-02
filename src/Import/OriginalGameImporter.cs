@@ -59,6 +59,7 @@ public sealed class OriginalGameImporter
                 count++;
             }
             File.WriteAllText(Path.Combine(staging, "employees.json"), JsonSerializer.Serialize(database));
+            EmbeddedGraphicsImporter.Extract(bytes, Path.Combine(staging, "Graphic", "Embedded"));
             File.WriteAllText(Path.Combine(staging, "catalog.json"), JsonSerializer.Serialize(catalog));
             File.WriteAllText(Path.Combine(staging, ".imported"), $"OpenGDS2 original asset import\nfiles={count}\n");
             string backup = cache + ".previous";
@@ -75,7 +76,8 @@ public sealed class OriginalGameImporter
     public bool HasImportedAssets()
     {
         string cache = ProjectSettings.GlobalizePath(CacheRoot);
-        return File.Exists(Path.Combine(cache, "employees.json")) && File.Exists(Path.Combine(cache, ".imported")) && File.Exists(Path.Combine(cache, "Graphic", "Title.bmp"));
+        return File.Exists(Path.Combine(cache, "employees.json")) && File.Exists(Path.Combine(cache, ".imported")) && File.Exists(Path.Combine(cache, "Graphic", "Title.bmp")) &&
+            File.Exists(Path.Combine(cache, "Graphic", "Embedded", "OfficeBase.bmp"));
     }
 
     public EmployeeDatabase? LoadEmployeeDatabase()
