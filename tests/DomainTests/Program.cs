@@ -211,6 +211,106 @@ Test("office routes connect every pair of seventeen work destinations",()=>
         Check(ticks<400 && OfficeNavigationRules.WorkFacing(to) is >=1 and <=4);
     }
 });
+Test("employees can leave all lounge seats, reach every development desk and return",()=>
+{
+    for (int lounge=0; lounge<12; lounge++)
+    for (int action=6; action<=17; action++)
+    {
+        var state=State();
+        var employee=new EmployeeState {Name="Synthetic",PortraitId=1,Stress=50,Office=new(){LoungeSeat=lounge,Action=18+lounge/4}};
+        state.Employees.Add(employee); var office=employee.Office!;
+        int ticks=0;
+        while (office.MovementState!=6 && ticks++<400) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(ticks<400); int x=office.X,y=office.Y;
+        Check(OfficeAssignmentService.TryAssignDesk(state,employee,action)==OfficeAssignmentResult.Success);
+        Check(office.X==x && office.Y==y && office.OffsetX==0 && office.OffsetY==0 && office.LoungeSeat is null);
+        ticks=0;
+        while (!office.WorkEngaged && ticks++<500) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(ticks<500 && office.MovementState==0 && office.SeatedAction==action);
+        var target=OfficeNavigationRules.WorkTarget(action); int facing=OfficeNavigationRules.WorkFacing(action);
+        Check(office.X==(target.X-20)*8+(facing is 1 or 4 ? -8 : 8));
+        Check(office.Y==(target.Y-20)*4+(facing is 1 or 2 ? -4 : 4));
+        Check(office.Frame==13+3*(facing-1) && office.Facing==facing);
+        double? stress=employee.Stress;
+        for (int i=0;i<100;i++) OfficeStaffRules.Tick(employee,new Random(2));
+        Check(employee.Stress==stress); // Desk sitting is not lounge recovery.
+        Check(OfficeAssignmentService.TryTakeBreak(state,employee,new SequenceRandom(lounge))==OfficeAssignmentResult.Success);
+        Check(!office.WorkEngaged && office.SeatedAction==0);
+        ticks=0;
+        while (office.MovementState!=6 && ticks++<500) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(ticks<500 && office.LoungeSeat==lounge);
+    }
+});
+Test("desk reassignment retains coordinates and frees the old occupied action",()=>
+{
+    for (int from=6;from<=17;from++)
+    for (int to=6;to<=17;to++)
+    {
+        if (from==to) continue;
+        var state=State(); var employee=new EmployeeState {Name="Synthetic",PortraitId=2,Office=new()};
+        state.Employees.Add(employee);
+        Check(OfficeAssignmentService.TryAssignDesk(state,employee,from)==OfficeAssignmentResult.Success);
+        for (int tick=0;tick<500 && !employee.Office!.WorkEngaged;tick++) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(employee.Office!.WorkEngaged);
+        int x=employee.Office.X,y=employee.Office.Y;
+        Check(OfficeAssignmentService.TryAssignDesk(state,employee,to)==OfficeAssignmentResult.Success);
+        Check(employee.Office.X==x && employee.Office.Y==y && employee.Office.SeatedAction==0);
+        for (int tick=0;tick<500 && !employee.Office.WorkEngaged;tick++) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(employee.Office.WorkEngaged && employee.Office.SeatedAction==to);
+    }
+});
+Test("desk and lounge assignment failures are atomic",()=>
+{
+    var state=State(); var employee=new EmployeeState {Name="Synthetic",PortraitId=1,Office=new(){MovementState=0}};
+    var other=new EmployeeState {Name="Other",PortraitId=2,Office=new(){SlotIndex=1}};
+    state.Employees.AddRange([employee,other]);
+    Check(OfficeAssignmentService.TryAssignDesk(state,other,6)==OfficeAssignmentResult.Success);
+    string before=SaveStore.Serialize(state);
+    Check(OfficeAssignmentService.TryAssignDesk(state,employee,6)==OfficeAssignmentResult.Occupied);
+    Check(OfficeAssignmentService.TryAssignDesk(state,other,6)==OfficeAssignmentResult.AlreadyAssigned);
+    Check(SaveStore.Serialize(state)==before);
+    state.Employees.Add(new(){Name="Resting",PortraitId=3,Office=new(){SlotIndex=2,LoungeSeat=0,Action=18}});
+    before=SaveStore.Serialize(state); var draws=new SequenceRandom(Enumerable.Repeat(0,14).ToArray());
+    Check(OfficeAssignmentService.TryTakeBreak(state,other,draws)==OfficeAssignmentResult.NoLoungeSeat);
+    Check(draws.Calls==14 && SaveStore.Serialize(state)==before);
+});
+Test("work-seat transition poses preserve four and six tick offsets",()=>
+{
+    foreach (int action in new[]{6,8,9,10,12,14,15,16})
+    {
+        var target=OfficeNavigationRules.WorkTarget(action);
+        var office=new OfficeEmployeeState {Action=action,X=(target.X-20)*8,Y=(target.Y-20)*4,
+            MovementState=10,RouteNode=OfficeNavigationRules.DestinationNode(action)};
+        var employee=new EmployeeState {Name="Synthetic",PortraitId=1,Office=office};
+        OfficeStaffRules.Tick(employee,new Random(1));
+        Check(office.ActionTicks==1 && office.Frame==1+3*(office.Facing-1));
+        for (int i=1;i<=4;i++) OfficeStaffRules.Tick(employee,new Random(1));
+        Check(office.ActionTicks==5 && office.Frame==24+office.Facing && !office.WorkEngaged);
+        OfficeStaffRules.Tick(employee,new Random(1)); OfficeStaffRules.Tick(employee,new Random(1));
+        Check(office.ActionTicks==7);
+        Check((office.OffsetX,office.OffsetY)==(office.Facing switch {1=>(-2,-1),2=>(2,-1),3=>(4,2),_=>(-4,2)}));
+        OfficeStaffRules.Tick(employee,new Random(1)); OfficeStaffRules.Tick(employee,new Random(1));
+        Check(office.WorkEngaged && office.ActionTicks==9);
+    }
+});
+Test("assignment and seated workspaces persist and reject conflicting desks",()=>
+{
+    var state=State(); var employee=new EmployeeState {Name="Synthetic",PortraitId=1,Office=new()};state.Employees.Add(employee);
+    Check(OfficeAssignmentService.TryAssignDesk(state,employee,14)==OfficeAssignmentResult.Success);
+    for (int tick=0;tick<500;tick++)
+    {
+        OfficeStaffRules.Tick(employee,new Random(1));
+        var restored=SaveStore.Deserialize(SaveStore.Serialize(state)).Employees.Single().Office!;
+        Check(restored.X==employee.Office!.X && restored.SeatedAction==employee.Office.SeatedAction && restored.WorkEngaged==employee.Office.WorkEngaged);
+        if (employee.Office.WorkEngaged) break;
+    }
+    Check(employee.Office!.WorkEngaged);
+    state.Employees.Add(new(){Name="Conflict",PortraitId=2,Office=new(){SlotIndex=1,Action=14,MovementState=3}});
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.Employees.RemoveAt(1);employee.Office.WorkEngaged=false;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+});
+
 Test("computer models select corresponding imported office rectangle",()=>
 {
     var scene=new OfficeSceneData {Sprites=[new(140,91,96,571,318,36,29,32)]};
@@ -221,6 +321,33 @@ Test("computer models select corresponding imported office rectangle",()=>
     }
     Check(OfficePresentationRules.ForState(scene,new GameState()).Single().SourceX==571);
 });
+Test("assigned desks display local computer tiles and retain original depth keys",()=>
+{
+    var scene=new OfficeSceneData();
+    for (int action=6;action<=17;action++)
+        scene.Sprites.Add(new(93+2*(action-6),-1000,-1000,1,296,46,35,-200));
+    var state=State();state.Year=1;state.Month=4;state.Week=1;
+    Check(!OfficePresentationRules.ForState(scene,state).Any());
+    state.Employees.Add(new(){Name="Synthetic",PortraitId=1,Office=new(){Action=6}});
+    for (int computer=0;computer<4;computer++)
+    {
+        state.DevelopmentComputerIndex=computer;
+        for (int action=6;action<=17;action++)
+        {
+            state.Employees[0].Office!.Action=action;
+            var tile=OfficePresentationRules.ForState(scene,state).Single();
+            var original=scene.Sprites.Single(x=>x.Id==tile.Id);
+            Check(tile.SortKey==original.SortKey && tile.Width==46 && tile.Height==35);
+            Check(tile.SourceX==(action is 8 or 9 or 14 or 15 ? 571 : 608)+74*computer);
+            Check(tile.SourceY==(action is 6 or 7 or 8 or 12 or 13 or 14 ? 318 : 228));
+        }
+    }
+    state.Employees.Clear();Check(!OfficePresentationRules.ForState(scene,state).Any());
+    state.DevelopmentComputerIndex=null;
+    state.Employees.Add(new(){Name="Unknown",PortraitId=1,Office=new(){Action=6}});
+    Check(!OfficePresentationRules.ForState(scene,state).Any());
+});
+
 Test("fresh supported sessions preserve reset accuracy cells while legacy saves remain unknown",()=>
 {
     var db=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,MinimumSourceIndex=35,SourceUpperBound=60};
@@ -645,6 +772,11 @@ if (args.Length == 2)
         var scene = OfficeSceneImporter.Extract(File.ReadAllBytes(args[0]));
         Check(scene.Sprites.Count == 128 && scene.Sprites[0] == new OfficeSpriteDefinition(23,148,64,47,226,11,21,20));
         Check(scene.Sprites[121].Id == 144 && scene.Sprites[122].Id == 145);
+        for (int action=6;action<=17;action++)
+        {
+            var computer=scene.Sprites.Single(x=>x.Id==93+2*(action-6));
+            Check(computer.X==-1000 && computer.Y==-1000 && computer.Width==46 && computer.Height==35 && computer.DepthOffset==-200);
+        }
         var archivePath = Path.ChangeExtension(args[0], ".lzh");
         if (File.Exists(archivePath))
         {

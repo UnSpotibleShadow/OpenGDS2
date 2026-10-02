@@ -51,9 +51,11 @@ It uses domain state independent of Godot, and persists movement across saves.
 | `+3BF0..404E` | Four rest animation branches; stress decreases by 0.3/2 per tick and clamps at zero |
 | `+C044..C7AD` | 44 animation rectangles; portrait-column stride 152; feet depth and visual offsets |
 
+M12 extends these paths with development-seat assignment; see [milestone-12.md](milestone-12.md).
+
 A failed lounge random search remains unassigned; it does not force an occupied
-seat. The route implementation deliberately accepts only the traced diagonal
-entry/lounging segments. Work paths must be reconstructed before enabling them.
+seat. The M10 scope was entry/lounging segments. M11 reconstructed the full route graph,
+and M12 connects development-seat paths, sitting and return to the lounge.
 A shared session random source supplies modern random draws; VB6 RNG parity and
 exact random consumption across the entire original loop remain unresolved.
 Office animation currently runs while the office is shown and pauses in menus.

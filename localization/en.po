@@ -415,3 +415,36 @@ msgstr "Company funds are unavailable."
 
 msgid "PLANNING_RESULT_InsufficientFunds"
 msgstr "Insufficient funds for this plan."
+
+msgid "ASSIGN_DESK"
+msgstr "Assign a Desk"
+
+msgid "TAKE_BREAK"
+msgstr "Take a Break"
+
+msgid "DEVELOPMENT_ROOM"
+msgstr "Development Room"
+
+msgid "DESK"
+msgstr "Desk"
+
+msgid "LOUNGE"
+msgstr "Lounge"
+
+msgid "DESK_ASSIGNMENT_NOTE"
+msgstr "Assign staff to a development desk. Project progress is not yet running in this build."
+
+msgid "ASSIGNMENT_RESULT_Success"
+msgstr "Assignment changed."
+
+msgid "ASSIGNMENT_RESULT_UnknownWorkspace"
+msgstr "Employee placement is unknown."
+
+msgid "ASSIGNMENT_RESULT_Occupied"
+msgstr "This desk is occupied."
+
+msgid "ASSIGNMENT_RESULT_AlreadyAssigned"
+msgstr "Already assigned here."
+
+msgid "ASSIGNMENT_RESULT_NoLoungeSeat"
+msgstr "No free lounge seat was found."

@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M11.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M12.
 
 **This is not gameplay-complete.** There is an interactive recruitment/hiring,
 staff inspection, manual level-up rules and a save/load loop. Development, sales, awards, office progression
@@ -26,6 +26,12 @@ preview, imported employee portraits, full office route rules and computer-upgra
 sprites. Work scheduling and release/sales remain incomplete. See
 [M11 evidence and integration gaps](docs/development-work.md).
 
+M12 connects employee reassignment to the office: choose a development desk under
+Staff, watch the employee walk and sit, then send them back to the lounge.
+Assigned desks display locally imported computers, including the purchased model.
+Movement, reservations and seated state survive save/load. See
+[M12 evidence and limits](docs/milestone-12.md). Project progress is not yet scheduled.
+
 ## Run
 
 Install Godot **4.4.1 .NET** and .NET SDK 8, then:
@@ -41,7 +47,7 @@ legally obtained `GameDev2DX.lzh`; the importer also extracts employee definitio
 from the game in memory. The SFX installer itself is not supported.
 
 New Game → enter company/president → select mode → Hire Employees → choose an
-applicant → inspect staff → Save game. Reopening recruitment rebuilds its five
+applicant → Staff → Assign a Desk → Take a Break → Save game. Reopening recruitment rebuilds its five
 slots. Load restores funds, staff, source gates, names and candidate snapshots.
 Imported character names remain Japanese proper names; interface language can be
 changed under Settings. A calendar inspector previews the reconstructed calendar
@@ -59,11 +65,10 @@ The C# suite has no Godot or third-party test-framework dependency.
 
 [Milestone 7](docs/milestone-7.md) distinguishes recovered facts from gaps.
 [Remaining work](docs/remaining-work.md) lists exact next trace targets.
-[Validation](docs/validation.md) records **33 passing C# tests, 13 Python checks, source-generator compilation
-and passing Godot headless UI tests**, plus the temporary host workaround used.
-Standard SDK/MSBuild verification is still pending.
-The CI workflow is supplied for an ordinary .NET-capable environment and has not
-been remotely run.
+[Validation](docs/validation.md) records **58 passing local C# checks, 16 Python checks
+and passing imported-data Godot UI tests**, including desk assignment and return.
+The normal SDK build and fixture-free runtime are also tested in GitHub Actions;
+original-fixture checks run locally and do not upload original content.
 
 ## Copyright boundary
 

@@ -1,49 +1,39 @@
-# Validation — M11 checkpoint
+# Validation — M12 checkpoint
 
-The final functional source at commit 2b5185a passed the repository's normal
-[GitHub Validate workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37035351393):
+The recovered final M11 source was retested after the execution workspace resumed:
+52 C# checks and all 16 Python checks passed with the optional local original.
+This closes the earlier pending accuracy-cell/computer/evidence-verifier checks.
 
-- Standard .NET 8/Godot SDK build: zero warnings, zero errors.
-- 51 public C# checks passed.
-- Ten public Python checks passed; six original-fixture checks were skipped.
-- Godot 4.4.1 .NET headless editor/resource import and game launch passed.
-- Fixture-free Godot UI suite: zero failures.
+M12 local checks passed:
 
-This verifies the standard SDK/MSBuild pipeline on GitHub's Ubuntu runner,
-including the new project/save models, sparse accuracy projection, route graph,
-planning UI and computer presentation code. CI contains no original assets.
+- 58 C# checks, including the private original-import parity check.
+- 16 Python checks, including all six optional original-evidence checks.
+- Godot C# source-generator compilation: zero warnings/errors.
+- Imported-data Godot UI suite: zero failures, including desk assignment,
+  occupied-seat handling, seated save/load and returning to the lounge.
+- Private opening/hired/desk compositor frames inspected.
 
-Before the local workspace disconnected, an intermediate continuation passed
-50 C# checks including the original fixture, 15 Python checks including five
-opt-in checks, direct Godot C# compilation and the imported-data Godot UI suite
-with zero failures. Those UI checks exercised planning quotes/focus, imported
-employee portraits, hiring, the actual 40 ms office timer, save/load and bounds.
-The final computer sprite/accuracy-cell changes and new evidence verifier still
-need renewed local original-fixture checks; CI success does not cover them.
+The current public suite has 57 C# checks and ten Python checks. Original fixtures
+are local-only and are not uploaded to CI. The normal GitHub SDK/runtime checks
+are run on the M12 pull request before merge; their results will be recorded here.
 
-The final suite has 52 C# checks with its optional original fixture and 16 Python
-checks with all six original checks enabled. These totals are available coverage,
-not a claim that the final optional suite has run.
+The preceding M11 normal [GitHub Validate workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37035351393)
+passed the standard .NET 8/Godot SDK build with zero warnings/errors, headless
+editor/game startup and fixture-free UI checks.
 
 ## Local host limitations
 
-The local host has no /proc. Its normal SDK/MSBuild process failed during runtime
-or process-metadata queries. Direct Roslyn compilation used .NET 8 references
-and Godot 4.4.1 source generators; temporary private native shims allowed compiler
+The local host has no /proc. Its normal SDK/MSBuild process fails during runtime
+or process-metadata queries. Direct Roslyn compilation uses .NET 8 references
+and Godot 4.4.1 source generators; temporary private native shims allow compiler
 and headless runtime checks. No shims, assemblies or toolchain are distributed.
-A headless editor scan refreshed translations, but its SDK plugin failed locally.
-That scan is not a successful local standard build; the successful standard build
-is the remote CI run linked above.
-
-The execution service subsequently reported environment_offline. The authored
-checkpoint was recovered through the GitHub connection from the exact M10 base,
-then verified using CI. Private original files remain outside GitHub.
+A headless editor scan refreshed translations, but its SDK plugin fails locally.
+That scan is not a successful local standard build; GitHub CI verifies that path.
 
 ## Remaining validation
 
 - Original Windows behavior and original RNG sequence reproduction.
-- Imported-data checks after the final sparse accuracy/computer sprite changes.
-- Graphical rendering, keyboard/pointer usability and packaging on a normal host.
+- Whole-window graphical rendering, keyboard/pointer usability and packaging.
 - Original save fixtures for compatibility import.
 - A verified development, release and sales loop, calendar economics and progression.
 

@@ -415,3 +415,36 @@ msgstr "会社の資金が不明です。"
 
 msgid "PLANNING_RESULT_InsufficientFunds"
 msgstr "この計画には資金が不足しています。"
+
+msgid "ASSIGN_DESK"
+msgstr "開発席に配置"
+
+msgid "TAKE_BREAK"
+msgstr "休憩する"
+
+msgid "DEVELOPMENT_ROOM"
+msgstr "開発室"
+
+msgid "DESK"
+msgstr "席"
+
+msgid "LOUNGE"
+msgstr "休憩室"
+
+msgid "DESK_ASSIGNMENT_NOTE"
+msgstr "開発席に社員を配置できます。このビルドでは開発の進行はまだ動作しません。"
+
+msgid "ASSIGNMENT_RESULT_Success"
+msgstr "配置を変更しました。"
+
+msgid "ASSIGNMENT_RESULT_UnknownWorkspace"
+msgstr "社員の配置が不明です。"
+
+msgid "ASSIGNMENT_RESULT_Occupied"
+msgstr "この席は使用中です。"
+
+msgid "ASSIGNMENT_RESULT_AlreadyAssigned"
+msgstr "すでに配置されています。"
+
+msgid "ASSIGNMENT_RESULT_NoLoungeSeat"
+msgstr "空いている休憩席が見つかりませんでした。"
