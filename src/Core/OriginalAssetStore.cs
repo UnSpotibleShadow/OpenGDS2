@@ -25,6 +25,9 @@ public static class OriginalAssetStore
     public static Texture2D? LoadOpeningOffice(GameState state)
         => LoadOfficeRenderer()?.CreateTexture(state) ?? LoadTexture("Graphic/Embedded/OfficeBase.bmp");
 
+    public static Texture2D? LoadEmployeePortrait(int? portraitId)
+        => portraitId is >=1 and <=10 ? LoadTexture($"Graphic/Human/Human{portraitId}.bmp") : null;
+
     public static OriginalOfficeRenderer? LoadOfficeRenderer()
     {
         string scenePath = PathFor("office.json");

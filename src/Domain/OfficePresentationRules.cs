@@ -2,6 +2,17 @@ namespace OpenGDS2.Domain;
 
 public static class OfficePresentationRules
 {
+    public static IEnumerable<OfficeSpriteDefinition> ForState(OfficeSceneData scene,GameState state)
+    {
+        if (state.DevelopmentComputerIndex is <0 or >3) throw new InvalidDataException("Invalid development computer.");
+        var sprites=state.Year is int year && state.Month is int month && state.Week is int week
+            ? ForDate(scene,new(year,month,week))
+            : scene.Sprites.Where(x=>x.Id!=144 && x.Id!=145 && (long)x.X+x.Width>0 && x.Y>0);
+        foreach (var sprite in sprites)
+            yield return sprite.Id==140 && state.DevelopmentComputerIndex is int computer
+                ? sprite with {X=91,Y=96,SourceX=571+computer*74,SourceY=318} : sprite;
+    }
+
     public static IEnumerable<OfficeSpriteDefinition> ForDate(OfficeSceneData scene, GameDate date)
     {
         CalendarRules.Validate(date);

@@ -1,4 +1,5 @@
 using OpenGDS2.Domain;
+using OpenGDS2.Import;
 
 namespace OpenGDS2.Core;
 
@@ -32,6 +33,12 @@ public sealed class GameSession
             state.EmployeeSources = database.CreateSources(_random);
             state.MinimumSourceIndex = database.MinimumSourceIndex; state.SourceUpperBound = database.SourceUpperBound;
             state.Recruitment.CandidateDatabaseDecoded = true;
+            if (database.SourceHash == EmployeeDatabaseImporter.ExpectedHash && database.SourceUpperBound == 60 &&
+                state.EmployeeSources.Select(x=>x.SourceIndex).Order().SequenceEqual(Enumerable.Range(0,60)))
+            {
+                // Reset 009DD234 empties 0..256; initialization writes only 0..59.
+                state.OriginalAccuracyCells=Enumerable.Range(99,60).ToDictionary(x=>x,_=>0);
+            }
         }
         Current = state;
         return state;

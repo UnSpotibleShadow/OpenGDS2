@@ -16,6 +16,226 @@ EmployeeState Candidate(int id, long? fee = 100) => new() { SourceIndex = id, Na
 RecruitmentSourceRecord Row(int id, int gate = 0) => new() { SourceIndex = id, GateValue = gate, Employee = Candidate(id) };
 GameState State(long? money = 100) => new() { Money = money, Company = new() { Name = "Test", PresidentName = "Tester" } };
 
+
+OriginalCatalog PlanningCatalog()=>new()
+{
+    DevelopmentComputers=[new() {SourceIndex=0,BitWidth=8}],
+    Hardware=[new() {SourceIndex=0,RawMembers=new() {{"0F00",8},{"0FE0",100},{"0FFC",10},{"0EC8",0}}}],
+    Audiences=[new() {SourceIndex=0,RawMembers=new() {{"1454",300},{"148C",20},{"14A8",2}}}],
+    GameTypes=[
+        new() {SourceIndex=0,RawMembers=new() {{"1378",5},{"1308",10},{"13B0",8}},RawTable13CC=Enumerable.Repeat(42,15).ToList()},
+        new() {SourceIndex=1,RawMembers=new() {{"1378",6},{"1308",20},{"13B0",9}},RawTable13CC=Enumerable.Repeat(99,15).ToList()}],
+    Genres=[new() {SourceIndex=0,RawMembers=new() {{"1224",7},{"1208",30},{"1240",42},{"125C",3}}}]
+};
+GameState PlanningState(long? money=100)=>new()
+{
+    Money=money,Company=new() {Name="Synthetic",PresidentName="Tester",Fame=14},
+    DevelopmentComputerIndex=0,AvailableHardware=[0],HardwareLicenses=[0]
+};
+Test("planning acceptance initializes two rooms, charges once and persists",()=>
+{
+    var state=PlanningState();var catalog=PlanningCatalog();var focus=new DevelopmentFocus(25,25,25,25);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(state,catalog,0,0,0," Title ",focus)==DevelopmentPlanningResult.Success);
+    var p=state.DevelopmentProjects.Single();
+    Check(state.Money==70 && p.RequiredPoints==400 && p.Progress==0 && p.Quality==new DevelopmentQuality());
+    Check(p.Title=="Title" && p.Focus==focus && p.GameTypeSourceIndex is null && p.GenreSourceIndex is null && p.DataSize==0 && p.Recognition==0);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(state,catalog,0,0,0,"Second",focus)==DevelopmentPlanningResult.RoomOccupied && state.Money==70);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(state)).DevelopmentProjects.Single().Focus==focus);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(state,catalog,1,0,0,"Other",focus)==DevelopmentPlanningResult.Success && state.DevelopmentProjects.Count==2);
+});
+Test("planning guards are atomic and equal computer bits pass",()=>
+{
+    var s=PlanningState(29);var c=PlanningCatalog();var f=new DevelopmentFocus(25,25,25,25);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Title",f)==DevelopmentPlanningResult.InsufficientFunds && s.Money==29 && s.DevelopmentProjects.Count==0);
+    s.Money=null;Check(DevelopmentProjectService.CheckNewPlan(s,c,0,0,0,out var q)==DevelopmentPlanningResult.MoneyUnknown && q.Cost==30);
+    s.Money=30;c.DevelopmentComputers[0].BitWidth=7;Check(DevelopmentProjectService.CheckNewPlan(s,c,0,0,0,out _)==DevelopmentPlanningResult.ComputerTooSmall);
+    c.DevelopmentComputers[0].BitWidth=8;s.HardwareLicenses!.Clear();Check(DevelopmentProjectService.CheckNewPlan(s,c,0,0,0,out _)==DevelopmentPlanningResult.LicenseRequired);
+    s.HardwareLicenses.Add(0);s.AvailableHardware!.Clear();Check(DevelopmentProjectService.CheckNewPlan(s,c,0,0,0,out _)==DevelopmentPlanningResult.HardwareUnavailable);
+    s.AvailableHardware.Add(0);
+    Throws<ArgumentException>(()=>DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Title",new(0,0,0,0)));
+    Throws<ArgumentException>(()=>DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,new string('x',129),f));
+    Check(s.Money==30 && s.DevelopmentProjects.Count==0);
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Title",f)==DevelopmentPlanningResult.Success && s.Money==0);
+});
+Test("type fee and double-index points use different original sources",()=>
+{
+    var s=PlanningState();var c=PlanningCatalog();var p=new DevelopmentProjectState {RequiredPoints=100,Progress=50};
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int>{{0,1}})==DevelopmentSelectionResult.Success);
+    Check(s.Money==95 && p.RequiredPoints==120 && p.GameTypeSourceIndex==0 && p.OriginalStage==1 && p.Recognition==4);
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int>{{0,1}})==DevelopmentSelectionResult.WrongStage && s.Money==95);
+});
+Test("missing roster and insufficient funds cannot partially select type",()=>
+{
+    var s=PlanningState(4);var c=PlanningCatalog();var p=new DevelopmentProjectState {RequiredPoints=100,Progress=50};
+    Throws<InvalidOperationException>(()=>DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int>()));
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int>{{0,1}})==DevelopmentSelectionResult.InsufficientFunds);
+    Check(p.GameTypeSourceIndex is null && p.RequiredPoints==100 && p.OriginalStage==0 && s.Money==4);
+    s.Money=100;s.Company.Fame=null;
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int>{{0,1}})==DevelopmentSelectionResult.CompanyFameUnknown && s.Money==100);
+});
+Test("genre affinity uses identifier table and excludes broad audience",()=>
+{
+    var s=PlanningState();var c=PlanningCatalog();
+    var p=new DevelopmentProjectState {RequiredPoints=100,Progress=81,OriginalStage=1,GameTypeSourceIndex=0};
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+    Check(s.Money==93 && p.RequiredPoints==130 && p.OriginalStage==2 && p.GenreSourceIndex==0 && p.Quality.Fun==20);
+    c.Audiences[0].RawMembers["14A8"]=1;p=new() {RequiredPoints=100,Progress=81,OriginalStage=1,GameTypeSourceIndex=0};
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success && p.Quality.Fun==0);
+    c.Audiences[0].RawMembers["14A8"]=2;p=new() {RequiredPoints=100,Progress=81,OriginalStage=1,GameTypeSourceIndex=1};
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success && p.Quality.Fun==0);
+    Check(!DevelopmentSelectionRules.IsGenreEligible(c.Genres[0],2) && DevelopmentSelectionRules.IsGenreEligible(c.Genres[0],3));
+});
+Test("type audience affinity families retain original memberships",()=>
+{
+    var t=new GameTypeDefinition {RawMembers=new() {{"13B0",8}}};var a=new AudienceDefinition {RawMembers=new() {{"14A8",2}}};
+    Check(DevelopmentSelectionRules.MatchesAudience(t,a));a.RawMembers["14A8"]=5;Check(!DevelopmentSelectionRules.MatchesAudience(t,a));
+    t.RawMembers["13B0"]=10;Check(DevelopmentSelectionRules.MatchesAudience(t,a));
+    t.RawMembers["13B0"]=12;a.RawMembers["14A8"]=7;Check(DevelopmentSelectionRules.MatchesAudience(t,a));
+    t.RawMembers["13B0"]=2;Check(!DevelopmentSelectionRules.MatchesAudience(t,a));a.RawMembers["14A8"]=1;Check(DevelopmentSelectionRules.MatchesAudience(t,a));
+});
+Test("invalid project quality and saves fail before mutation",()=>
+{
+    var s=PlanningState();DevelopmentProjectService.TryAcceptNewPlan(s,PlanningCatalog(),0,0,0,"Title",new(25,25,25,25));
+    var p=s.DevelopmentProjects.Single();p.Quality=new(double.NaN,0,0,0);
+    Throws<InvalidDataException>(()=>DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Bugs,DevelopmentWorkTier.Medium));
+    Check(p.Progress==0 && p.Bugs==0);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.Quality=new();p.OriginalStage=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.OriginalStage=0;s.DevelopmentProjects.Add(p);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("type fallback roster preserves original duplicate predicate",()=>
+{
+    var c=PlanningCatalog();var r=new ConstantRandom(0);
+    Check(DevelopmentTypeRosterRules.Build(c,c.Audiences[0],r).SequenceEqual(new[] {0,1,0,1,0}));
+    c.Audiences[0].RawMembers["14A8"]=1;
+    Check(DevelopmentTypeRosterRules.Build(c,c.Audiences[0],r).SequenceEqual(new[] {0,1,0,1,0}));
+    c.GameTypes[1].SourceIndex=2;Throws<InvalidDataException>(()=>DevelopmentTypeRosterRules.Build(c,c.Audiences[0],r));
+});
+Test("planning profiles distribute their remainder to one hundred",()=>
+{
+    Check(DevelopmentFocusRules.Generate(new ConstantRandom(0))==new DevelopmentFocus(43,19,19,19));
+    var r=new SequenceRandom(5,0,0);Check(DevelopmentFocusRules.Generate(r)==new DevelopmentFocus(35,35,15,15) && r.Calls==3);
+    for(int seed=0;seed<100;seed++){var f=DevelopmentFocusRules.Generate(new Random(seed));Check(f.Fun+f.Novelty+f.Graphics+f.Music==100);}
+});
+Test("work category preserves inclusive original boundaries",()=>
+{
+    var f=new DevelopmentFocus(25,25,25,25);
+    Check(DevelopmentWorkRules.SelectCategory(f,25)==DevelopmentWorkCategory.Fun);
+    Check(DevelopmentWorkRules.SelectCategory(f,26)==DevelopmentWorkCategory.Novelty);
+    Check(DevelopmentWorkRules.SelectCategory(f,100)==DevelopmentWorkCategory.Music);
+    Check(DevelopmentWorkRules.SelectCategory(f,101)==DevelopmentWorkCategory.Bugs);
+    Check(DevelopmentWorkRules.SelectCategory(f,110)==DevelopmentWorkCategory.Bugs);
+    Check(DevelopmentWorkRules.SelectCategory(f,111)==DevelopmentWorkCategory.Speed);
+    Throws<ArgumentException>(()=>DevelopmentWorkRules.SelectCategory(new(20,20,20,20),1));
+});
+Test("work tiers retain stat eighty discontinuity and distinct debugging",()=>
+{
+    Check(DevelopmentWorkRules.RequiredIdleTicks(0)==50);Check(Math.Abs(DevelopmentWorkRules.RequiredIdleTicks(99)-20.3)<1e-9);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Fun,79,0,.5)==DevelopmentWorkTier.Small);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Fun,80,0,.5)==DevelopmentWorkTier.Medium);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Fun,0,0,1.99/130)==DevelopmentWorkTier.Burst);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Fun,0,0,2.01/130)==DevelopmentWorkTier.Medium);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Debugging,99,99,0)==DevelopmentWorkTier.Medium);
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Debugging,99,99,.99)==DevelopmentWorkTier.Small);
+    Throws<InvalidOperationException>(()=>DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Bugs,80,50,.5));
+    Throws<ArgumentOutOfRangeException>(()=>DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Music,80,50,double.NaN));
+});
+Test("burst accumulation stops at fifty or beyond one hundred ticks",()=>
+{
+    Check(DevelopmentWorkRules.IncreasesBurstCounter(DevelopmentWorkCategory.Fun,99,49,100,.5));
+    Check(!DevelopmentWorkRules.IncreasesBurstCounter(DevelopmentWorkCategory.Fun,99,50,100,.5));
+    Check(!DevelopmentWorkRules.IncreasesBurstCounter(DevelopmentWorkCategory.Fun,99,49,101,.5));
+    Check(DevelopmentWorkRules.IncreasesBurstCounter(DevelopmentWorkCategory.Bugs,0,0,50,.5));
+    Check(!DevelopmentWorkRules.IncreasesBurstCounter(DevelopmentWorkCategory.Bugs,99,0,50,.5));
+});
+Test("contributions preserve fractional progress and separate debugging",()=>
+{
+    var p=new DevelopmentProjectState {RequiredPoints=100};
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Fun,DevelopmentWorkTier.Small);
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Graphics,DevelopmentWorkTier.Medium);
+    Check(p.Quality==new DevelopmentQuality(2,0,4,0) && p.Progress==6);
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Music,DevelopmentWorkTier.Burst,7);
+    Check(p.Quality.Music==7 && Math.Abs(p.Progress-(6+7/3.0))<1e-9);
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Bugs,DevelopmentWorkTier.Medium);Check(p.Bugs==4);
+    double before=p.Progress;
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Debugging,DevelopmentWorkTier.Medium);
+    Check(p.Bugs==2 && p.Progress==before);
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Debugging,DevelopmentWorkTier.Medium);Check(p.Bugs==0);
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Speed,DevelopmentWorkTier.Burst,50);Check(p.Progress==before+50);
+    Throws<InvalidOperationException>(()=>DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Fun,DevelopmentWorkTier.Burst));
+});
+Test("polishing targets clip and original milestone thresholds remain exact",()=>
+{
+    var p=new DevelopmentProjectState {RequiredPoints=100,Progress=99,OriginalRoomState=2,Quality=new(9,0,0,0),PolishingTargets=new(10,10,10,10)};
+    DevelopmentWorkRules.ApplyContribution(p,DevelopmentWorkCategory.Fun,DevelopmentWorkTier.Medium);
+    Check(p.Quality.Fun==10 && p.Progress==100 && DevelopmentWorkRules.PendingMilestone(p) is null);
+    p.OriginalRoomState=1;p.OriginalStage=0;p.Progress=49.99;Check(DevelopmentWorkRules.PendingMilestone(p) is null);
+    p.Progress=50;Check(DevelopmentWorkRules.PendingMilestone(p)==DevelopmentMilestone.SelectType);
+    p.OriginalStage=1;p.Progress=80.99;Check(DevelopmentWorkRules.PendingMilestone(p) is null);
+    p.Progress=81;Check(DevelopmentWorkRules.PendingMilestone(p)==DevelopmentMilestone.SelectGenre);
+    p.OriginalStage=2;p.Progress=100;Check(DevelopmentWorkRules.PendingMilestone(p)==DevelopmentMilestone.StartDebugging);
+});
+Test("data size uses category jitter and hardware identifier",()=>
+{
+    Check(Math.Abs(DevelopmentWorkRules.DataSizeGain(DevelopmentWorkCategory.Graphics,2,0)-.32)<1e-9);
+    Check(Math.Abs(DevelopmentWorkRules.DataSizeGain(DevelopmentWorkCategory.Fun,0,.999)-.037)<1e-9);
+    Check(DevelopmentWorkRules.DataSizeGain(DevelopmentWorkCategory.Debugging,2,.5)==0);
+});
+Test("isometric detours reach diagonal and axis targets",()=>
+{
+    Check(OfficeNavigationRules.Direction(0,0,1,1)==3);Check(OfficeNavigationRules.Direction(0,0,-1,-1)==1);
+    Check(OfficeNavigationRules.Direction(0,0,1,-1)==2);Check(OfficeNavigationRules.Direction(0,0,-1,1)==4);
+    Check(OfficeNavigationRules.Direction(0,0,2,0)==2);Check(OfficeNavigationRules.Direction(0,0,0,2)==4);Check(OfficeNavigationRules.Direction(0,0,0,0)==0);
+    for(int x=-4;x<=4;x++)for(int y=-4;y<=4;y++)
+    {
+        var o=new OfficeEmployeeState {X=0,Y=0};int ticks=0;
+        while((o.X/8.0+20!=20+x || o.Y/4.0+20!=20+y) && ticks++<40)OfficeNavigationRules.Step(o,(20+x,20+y));
+        Check(ticks<40 && o.X==x*8 && o.Y==y*4);
+    }
+});
+Test("office routes connect every pair of seventeen work destinations",()=>
+{
+    for(int from=1;from<=17;from++)for(int to=1;to<=17;to++)
+    {
+        var origin=OfficeNavigationRules.WorkTarget(from);var target=OfficeNavigationRules.WorkTarget(to);
+        var o=new OfficeEmployeeState {X=(origin.X-20)*8,Y=(origin.Y-20)*4,RouteNode=OfficeNavigationRules.DestinationNode(from)};
+        int destination=OfficeNavigationRules.DestinationNode(to),ticks=0;
+        while(o.RouteNode!=destination && ticks++<300)
+        {
+            var waypoint=OfficeNavigationRules.NextWaypoint(o.RouteNode,destination);
+            if(o.X==(waypoint.X-20)*8 && o.Y==(waypoint.Y-20)*4)
+                o.RouteNode=OfficeNavigationRules.NodeOnArrival(waypoint,destination) ?? throw new Exception("Missing route transition");
+            else OfficeNavigationRules.Step(o,waypoint);
+        }
+        Check(ticks<300);
+        while((o.X!=(target.X-20)*8 || o.Y!=(target.Y-20)*4) && ticks++<400)OfficeNavigationRules.Step(o,target);
+        Check(ticks<400 && OfficeNavigationRules.WorkFacing(to) is >=1 and <=4);
+    }
+});
+Test("computer models select corresponding imported office rectangle",()=>
+{
+    var scene=new OfficeSceneData {Sprites=[new(140,91,96,571,318,36,29,32)]};
+    for(int computer=0;computer<4;computer++)
+    {
+        var sprite=OfficePresentationRules.ForState(scene,new GameState {DevelopmentComputerIndex=computer}).Single();
+        Check(sprite.SourceX==571+74*computer && sprite.SourceY==318 && sprite.Width==36 && sprite.Height==29);
+    }
+    Check(OfficePresentationRules.ForState(scene,new GameState()).Single().SourceX==571);
+});
+Test("fresh supported sessions preserve reset accuracy cells while legacy saves remain unknown",()=>
+{
+    var db=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,MinimumSourceIndex=35,SourceUpperBound=60};
+    for(int source=0;source<60;source++)db.Employees.Add(new EmployeeDefinition
+    {
+        SourceIndex=source,Name="Synthetic "+source,Level=1,PortraitId=1,ContractFee=100,RawAttributes=[20,30,40,50,60,70,80]
+    });
+    var s=new GameSession(new Random(1)).StartNewGame("Synthetic","Tester",GameMode.Normal,db);
+    Check(s.OriginalAccuracyCells!.Count==60 && s.OriginalAccuracyCells.Keys.Min()==99 && s.OriginalAccuracyCells.Keys.Max()==158 && s.OriginalAccuracyCells.Values.All(x=>x==0));
+    Check(DevelopmentWorkRules.Classify(DevelopmentWorkCategory.Bugs,99,0,.5,s.OriginalAccuracyCells[134])==DevelopmentWorkTier.Small);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).OriginalAccuracyCells![134]==0);
+    db.SourceHash="Unknown";Check(new GameSession().StartNewGame("Synthetic","Tester",GameMode.Normal,db).OriginalAccuracyCells is null);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(State())).OriginalAccuracyCells is null);
+});
+
 Test("hired staff enter at original coordinates, rest at all twelve seats and survive save/load", () =>
 {
     for (int seat = 0; seat < 12; seat++)

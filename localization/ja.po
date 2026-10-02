@@ -361,3 +361,57 @@ msgstr "資金が足りません。"
 
 msgid "OFFICE_IMPORT_REQUIRED"
 msgstr "オフィス画像を読み込むにはオリジナルのアーカイブをインポートしてください。以前のインポートは再実行が必要です。"
+
+msgid "STRESS"
+msgstr "ストレス"
+
+msgid "DEVELOPMENT_PLANNING"
+msgstr "開発計画"
+
+msgid "PLANNING_PREVIEW_NOTE"
+msgstr "開発費と開発方針を確認できます。この画面では資金を消費しません。開発作業と発売の再構築は進行中です。"
+
+msgid "TARGET_HARDWARE"
+msgstr "対象ハード"
+
+msgid "TARGET_AUDIENCE"
+msgstr "対象ユーザー"
+
+msgid "PLANNING_COST"
+msgstr "企画費"
+
+msgid "DEVELOPMENT_POINTS"
+msgstr "開発ポイント"
+
+msgid "PLANNING_NEW_PROPOSAL"
+msgstr "別の開発方針"
+
+msgid "PLANNING_NO_HARDWARE"
+msgstr "利用可能なハードの情報がありません。"
+
+msgid "PLANNING_RESULT_Success"
+msgstr "現在の開発パソコンとライセンスで対応できます。"
+
+msgid "PLANNING_RESULT_RoomOccupied"
+msgstr "この開発室は使用中です。"
+
+msgid "PLANNING_RESULT_ComputerUnknown"
+msgstr "現在の開発パソコンの情報がありません。"
+
+msgid "PLANNING_RESULT_HardwareStateUnknown"
+msgstr "ハードの利用状況またはライセンスが不明です。"
+
+msgid "PLANNING_RESULT_HardwareUnavailable"
+msgstr "このハードは利用できません。"
+
+msgid "PLANNING_RESULT_LicenseRequired"
+msgstr "この計画にはハードのライセンスが必要です。"
+
+msgid "PLANNING_RESULT_ComputerTooSmall"
+msgstr "このハードに対応する開発パソコンが必要です。"
+
+msgid "PLANNING_RESULT_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "PLANNING_RESULT_InsufficientFunds"
+msgstr "この計画には資金が不足しています。"

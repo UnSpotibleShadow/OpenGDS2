@@ -56,7 +56,7 @@ public static class SaveStore
     private static void Validate(GameState state)
     {
         if (!Enum.IsDefined(state.Mode) || state.Company is null || state.Initial is null || state.Recruitment is null ||
-            state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null ||
+            state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null || state.DevelopmentProjects is null ||
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
             throw new InvalidDataException("Invalid session state.");
         if (state.Year is < 1 || state.Month is < 1 or > 12 || state.Week is < 1 or > 4)
@@ -66,6 +66,12 @@ public static class SaveStore
         if ((state.HardwareLicenses?.Any(x => x is < 0 or > 10) ?? false) ||
             (state.AvailableHardware?.Any(x => x is < 0 or > 10) ?? false))
             throw new InvalidDataException("Invalid hardware state.");
+        if (state.OriginalAccuracyCells?.Any(x=>x.Key is <0 or >512 || x.Value is <0 or >99)==true)
+            throw new InvalidDataException("Invalid original accuracy cells.");
+        if (state.DevelopmentProjects.Count>2 ||
+            state.DevelopmentProjects.Select(x=>x?.RoomIndex).Distinct().Count()!=state.DevelopmentProjects.Count)
+            throw new InvalidDataException("Invalid development rooms.");
+        foreach (var project in state.DevelopmentProjects) ValidateProject(project);
         if (state.EmployeeSources.Any(x => x is null || x.Employee is null || x.SourceIndex < 0 ||
                 string.IsNullOrWhiteSpace(x.Employee.Name) || x.Employee.OriginalAttributes is null || x.Employee.ContractFee < 0) ||
             state.EmployeeSources.Select(x => x.SourceIndex).Distinct().Count() != state.EmployeeSources.Count ||
@@ -82,6 +88,28 @@ public static class SaveStore
             (state.Recruitment.CandidateDatabaseDecoded && (state.MinimumSourceIndex is null || state.SourceUpperBound is null ||
              state.EmployeeSources.Count == 0 || state.EmployeeSources.Any(x => x.SourceIndex >= state.SourceUpperBound))))
             throw new InvalidDataException("Invalid recruitment bounds.");
+    }
+
+    private static void ValidateProject(DevelopmentProjectState project)
+    {
+        if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >10 ||
+            project.AudienceSourceIndex is <0 or >6 || project.GameTypeSourceIndex is <0 or >50 ||
+            project.GenreSourceIndex is <0 or >17 || project.OriginalMode!=0 ||
+            project.OriginalRoomState is not (1 or 2) || project.OriginalStage is <0 or >3 ||
+            string.IsNullOrWhiteSpace(project.Title) || project.Title.Length>128 ||
+            !double.IsFinite(project.RequiredPoints) || project.RequiredPoints<=0 ||
+            !double.IsFinite(project.Progress) || project.Progress<0 || project.Progress>project.RequiredPoints ||
+            !double.IsFinite(project.Recognition) || project.Recognition<0 ||
+            !double.IsFinite(project.DataSize) || project.DataSize<0 || project.Bugs<0 || project.Focus is null ||
+            (project.OriginalStage>=1 && project.GameTypeSourceIndex is null) ||
+            (project.OriginalStage>=2 && project.GenreSourceIndex is null))
+            throw new InvalidDataException("Invalid development project.");
+        DevelopmentWorkRules.ValidateQuality(project.Quality);
+        if (project.OriginalRoomState==2 && project.PolishingTargets is null)
+            throw new InvalidDataException("Missing polishing targets.");
+        if (project.PolishingTargets is not null) DevelopmentWorkRules.ValidateQuality(project.PolishingTargets);
+        try {DevelopmentWorkRules.SelectCategory(project.Focus,0);}
+        catch (ArgumentException ex) {throw new InvalidDataException("Invalid planning focus.",ex);}
     }
 
     private static bool ValidOffice(OfficeEmployeeState office)

@@ -1,60 +1,42 @@
-# Validation — M10 continuation
+# Validation — M11 checkpoint
 
-M10 adds office compositing, date glyphs, employee entry/lounge animation and a
-classic control theme. The final checks currently pass:
+Before the workspace disconnected, the continuation passed 50 C# checks including
+the local original fixture, 15 Python checks including five opt-in checks, direct
+Godot C# compilation, and the imported-data Godot UI suite with zero failures.
+The UI checks exercised planning quotes/focus, imported employee portraits, hiring,
+the real 40 ms office timer, save/load and viewport bounds.
 
-- **33 C# checks**, including the optional local original fixture; 32 without it.
-- **13 Python checks** with the local original fixture; 8 public checks and 5
-  opt-in checks skipped when no original is supplied.
-- Every C# source compiled with Godot 4.4.1 source generators: no errors.
-- Imported-data Godot headless scene-tree suite: **0 failures**, including actual
-  40 ms office animation, lounge arrival, persisted worker movement, texture
-  decoding and office/sidebar viewport bounds.
-- Private composed opening/hired-worker images inspected; no original graphics
-  are shipped. Whole-window desktop rendering remains unverified.
+The final branch contains 51 public C# checks (52 with the optional original
+fixture), ten public Python checks and six optional original checks. Computer
+sprite selection, preserved fresh-game accuracy cells and the new evidence
+verifier were added after the last local test run. Their final verification is
+pending GitHub CI and renewed local original-fixture checks.
 
-## Environment workaround and scope
+The execution service then reported environment_offline. The source checkpoint
+was recovered into GitHub from the authored changes and the exact M10 base.
+Its final source must be verified by the normal SDK workflow, rather than assuming
+the earlier local test run covers every final change.
 
-The environment has no `/proc`. The downloaded ordinary .NET SDK initially
-failed during CoreCLR initialization (`0x8007000E`). An alternate Mono .NET 8.0.15
-runtime also initially failed on its `/proc` check and glibc main-thread stack
-metadata retrieval.
+## Build verification limits
 
-A temporary local native shim derived the stack's mapped upper boundary through
-`mincore` and its size through `getrlimit`, and bypassed Mono's existence-only
-`/proc/self/maps` startup check. With this shim, Roslyn 4.11, the C# test executable
-and Godot headless scene-tree tests ran. Compiler options, .NET 8 references and
-Godot source-generator inputs were supplied directly. The runtime, shim,
-compiled assemblies and user data are outside the deliverable.
+Earlier local checks used direct Roslyn compilation with Godot 4.4.1 source
+generators and .NET 8 references. This host has no /proc, and its normal SDK/MSBuild
+pipeline failed during runtime/process metadata queries. Temporary private native
+shims allowed compiler and headless runtime checks; no shims, assemblies or toolchain
+are distributed. A headless editor resource scan refreshed translations, but its
+SDK/MSBuild plugin failed, so that scan is not a successful standard build.
 
-**Standard `dotnet build`/MSBuild remains unverified here.** SDK/MSBuild startup
-still fails while querying process metadata from missing `/proc` files. Direct
-compiler success does not establish the complete SDK restore/build pipeline.
-The supplied CI workflow runs normal builds and tests without this workaround;
-it has not been remotely executed.
+The repository's Validate workflow runs normal .NET domain tests, Python tests,
+dotnet build, Godot headless editor/import and launch, and fixture-free UI checks.
+Remote CI must be checked separately. It cannot validate the copyrighted optional
+fixture, which must remain local.
 
-M9 also attempted a headless editor refresh. Asset/translation scanning completed,
-but the Godot editor's SDK discovery/MSBuild plugin reported missing SDK/assembly
-errors in this host setup. This is not a successful editor build. Direct source
-compilation and the game scene-tree tests afterward passed.
+## Remaining validation
 
-## Remaining verification
+- Original Windows behavioral comparison and original RNG sequence reproduction.
+- Imported-data checks after the final sparse accuracy/computer sprite changes.
+- A graphical host for full window rendering, keyboard/pointer usability and packaging.
+- Original save fixtures for compatibility import.
+- A verified development, release and sales loop, calendar economics and progression.
 
-The office presentation correction compiles without errors and passes the
-Godot imported-data UI suite (0 failures), including decoding the embedded
-466 × 290 office bitmap and local sprite extraction. The no-data UI suite also
-passes (0 failures): New Game opens the importer rather than an empty company.
-Graphical rendering is still unverified in this host.
-
-- Standard SDK restore/build and CI on a normal .NET-capable host.
-- Graphical layout, native file picker, pointer/keyboard usability and packaging.
-  Headless control tests do not prove rendered layout quality.
-- Original Windows runtime comparison: recruitment draws, initial staff assignment,
-  workspace capacity, weekly finance/contract behavior and RNG sequences.
-- Original save fixtures to verify serialization/encoding before compatibility import.
-- A verified development/release/sales loop and company progression are still
-  required before declaring the project gameplay-complete.
-
-No original executable, graphics, sounds, imported catalogs or private saves are
-included in the public archive. Static reports retain structures/anchors rather
-than redistributing a wholesale decoded original program.
+No original binary, graphics, audio, imported catalog or private save is included.
