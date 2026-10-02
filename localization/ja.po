@@ -1,0 +1,360 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenGDS2\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "APP_TITLE"
+msgstr "OpenGDS2"
+
+msgid "APP_SUBTITLE"
+msgstr "ゲーム発展途上国ⅡDX コミュニティ現代化プロジェクト"
+
+msgid "IMPORT_PROMPT"
+msgstr "オリジナルの GameDev2DX.lzh を選択してください。"
+
+msgid "IMPORT_BUTTON"
+msgstr "オリジナルゲームを読み込む"
+
+msgid "IMPORTING"
+msgstr "オリジナル素材を読み込み中…"
+
+msgid "IMPORT_OK"
+msgstr "オリジナル素材を読み込みました。"
+
+msgid "IMPORT_FAILED"
+msgstr "読み込みに失敗しました"
+
+msgid "NEW_GAME"
+msgstr "新しいゲーム"
+
+msgid "LOAD_GAME"
+msgstr "ゲームの読込"
+
+msgid "SETTINGS"
+msgstr "設定"
+
+msgid "QUIT"
+msgstr "ゲームの終了"
+
+msgid "DEV_BUILD"
+msgstr "初期互換ビルド — ゲームプレイを再構築中"
+
+msgid "COMPANY_NAME"
+msgstr "会社名"
+
+msgid "PRESIDENT_NAME"
+msgstr "社長名"
+
+msgid "CONFIRM"
+msgstr "決定"
+
+msgid "CANCEL"
+msgstr "キャンセル"
+
+msgid "NAME_REQUIRED"
+msgstr "会社名と社長名を入力してください。"
+
+msgid "GAME_START"
+msgstr "ゲーム開始"
+
+msgid "BEGINNER_MODE"
+msgstr "初心者モード"
+
+msgid "NORMAL_MODE"
+msgstr "通常モード"
+
+msgid "MODE"
+msgstr "モード"
+
+msgid "ORIGINAL_FORM"
+msgstr "復元元フォーム"
+
+msgid "RECONSTRUCTION_STARTED"
+msgstr "新規ゲーム状態を作成しました"
+
+msgid "SIMULATION_BOUNDARY"
+msgstr "マイルストーン2では、確認できた起動フローまでを再構築しました。会社経営シミュレーションのルールは次の解析対象で、未確認の仕様は作っていません。"
+
+msgid "BACK_TO_TITLE"
+msgstr "タイトルへ戻る"
+
+msgid "OFFICE"
+msgstr "会社"
+
+msgid "FUNDS"
+msgstr "資金"
+
+msgid "COMPANY_RANK"
+msgstr "会社ランク"
+
+msgid "COMPANY_FAME"
+msgstr "会社知名度"
+
+msgid "STAFF"
+msgstr "開始時の人員"
+
+msgid "NOT_YET_DECODED"
+msgstr "解析中"
+
+msgid "OPENING_STAFF_DOCUMENTED"
+msgstr "秘書1人＋社員1人（人物・能力値は解析中）"
+
+msgid "BEGINNER_RULES_VERIFIED"
+msgstr "初心者モードではチュートリアルが表示され、プレイ期間はゲーム内3年間です。通常モードより開始資金が多いことも確認できますが、正確な金額は解析中です。"
+
+msgid "NORMAL_RULES_VERIFIED"
+msgstr "通常モードには初心者モードの常時チュートリアル／3年間制限はありません。開始資金の正確な金額は解析中です。"
+
+msgid "FIRST_OBJECTIVE"
+msgstr "最初の目標 — 社員を雇用"
+
+msgid "TUTORIAL_HIRE_TEXT"
+msgstr "社員を雇用しなくては始まりません。まずは新規雇用しましょう、会社が発展すれば優秀な社員を引き抜くこともできます。"
+
+msgid "HIRE_EMPLOYEES"
+msgstr "社員を雇用"
+
+msgid "START_GAME_DEVELOPMENT"
+msgstr "ゲームソフト開発開始"
+
+msgid "NEXT_RECONSTRUCTION_TARGET"
+msgstr "オリジナルに存在する操作ですが、ゲーム処理は次の解析対象です。"
+
+msgid "M3_BOUNDARY"
+msgstr "マイルストーン3では、確認できた会社画面の状態まで進みます。未解析の数値は推測せず、そのまま未確定として表示します。"
+
+msgid "EMPLOYEE_NAME"
+msgstr "名前"
+
+msgid "EMPLOYEE_LEVEL"
+msgstr "レベル"
+
+msgid "STAT_FUN"
+msgstr "おもしろさ"
+
+msgid "STAT_NOVELTY"
+msgstr "意外性"
+
+msgid "STAT_ACCURACY"
+msgstr "正確性"
+
+msgid "STAT_GRAPHICS"
+msgstr "グラフィック"
+
+msgid "STAT_MUSIC"
+msgstr "音楽性"
+
+msgid "STAT_DEVELOPMENT_SPEED"
+msgstr "開発速度"
+
+msgid "STAT_INSPIRATION"
+msgstr "ひらめき度"
+
+msgid "CONTRACT_FEE"
+msgstr "契約金"
+
+msgid "HIRE_CONFIRM"
+msgstr "雇用決定"
+
+msgid "HIRING_FORM_VERIFIED"
+msgstr "オリジナルの社員雇用フォームと表示される能力項目をVB6実行ファイルから復元しました。"
+
+msgid "APPLICANT_ROSTER_PENDING"
+msgstr "応募者の元データにある名前・能力値は解析中です。候補選出アルゴリズムは復元済みで、このビルドでは仮の応募者を作成しません。"
+
+msgid "APPLICANT_REFRESH_EVIDENCE"
+msgstr "オリジナルの雇用フォームは開くたびに5人の候補枠を再構築します。乱数選出ルールは復元済みで、元の人物データは解析中です。"
+
+msgid "APPLICANT_COUNT"
+msgstr "応募者: {0}"
+
+msgid "HIRING_ACTION_PENDING"
+msgstr "応募者生成と契約処理を復元すると雇用決定が有効になります。"
+
+msgid "M4_OFFICE_NOTE"
+msgstr "マイルストーン4では確認済みの社員雇用フォームを開けます。ゲーム開発処理は次の大きな復元対象です。"
+
+msgid "M4_BOUNDARY"
+msgstr "マイルストーン4では社員雇用UIとPC版固有の社員能力モデルを復元しました。応募者生成と実際の契約処理は、オリジナルの挙動を確認できるまで意図的に無効化しています。"
+
+msgid "M5_RECRUITMENT_RULES"
+msgstr "復元済みの募集ルール：応募者枠は5人。元データの判定フラグを通る候補に対して1回の走査ごとに4分の1の乱数判定を行い、5枠が埋まるまで走査を繰り返します。"
+
+msgid "M5_HIRE_RULES"
+msgstr "復元済みの雇用ルール：資金が選択した候補者の契約金未満なら雇用は失敗します。成功時は候補者を社員枠へコピーし、契約金を支払います。"
+
+msgid "M5_DATABASE_PENDING"
+msgstr "元の社員データベースと対象判定フィールドはまだ解析中のため、実在する候補者名や能力値は捏造せず無効のままです。"
+
+msgid "M5_OFFICE_NOTE"
+msgstr "マイルストーン5では雇用取引と5枠の候補選出アルゴリズムを復元しました。次の境界は元の社員データベースです。"
+
+msgid "M5_BOUNDARY"
+msgstr "マイルストーン5では候補者枠、乱数選出判定、資金チェック、社員コピー処理、契約金支払いを復元しました。元データベースが復元されるまで実際の候補者は無効です。"
+
+msgid "DATE"
+msgstr "年 / 月 / 週"
+
+msgid "SAVE_GAME"
+msgstr "ゲームの保存"
+
+msgid "SAVE_OK"
+msgstr "保存しました。"
+
+msgid "SAVE_FAILED"
+msgstr "保存できませんでした"
+
+msgid "LOAD_FAILED"
+msgstr "読み込めませんでした"
+
+msgid "CALENDAR_INSPECTOR"
+msgstr "カレンダー確認"
+
+msgid "CALENDAR_INSPECTOR_NOTE"
+msgstr "プレビューのみ。会社の日付は変更しません。"
+
+msgid "NEXT_WEEK"
+msgstr "次の週"
+
+msgid "RECONSTRUCTION_STATUS"
+msgstr "復元開発版：ゲーム開発・給与・契約・イベントは未実装です。"
+
+msgid "DATABASE_IMPORT_REQUIRED"
+msgstr "社員雇用を有効にするにはオリジナル配布版を読み込んでください。"
+
+msgid "RECOVERED_ATTRIBUTES"
+msgstr "復元した能力値（項目名は未確認）"
+
+msgid "HIRE_FAILED"
+msgstr "雇用できませんでした："
+
+msgid "NO_APPLICANTS"
+msgstr "応募者はいません。"
+
+msgid "COMPANY_RANK_0"
+msgstr "小企業"
+
+msgid "COMPANY_RANK_1"
+msgstr "中企業"
+
+msgid "COMPANY_RANK_2"
+msgstr "大企業"
+
+msgid "COMPANY_RANK_3"
+msgstr "一流企業"
+
+msgid "COMPANY_RANK_4"
+msgstr "天下御免"
+
+msgid "EXPERIENCE"
+msgstr "経験値"
+
+msgid "LEVEL_UP"
+msgstr "レベルアップ"
+
+msgid "LEVEL_UP_FAILED"
+msgstr "レベルアップ失敗:"
+
+msgid "HIRE_RESULT_Success"
+msgstr "採用しました。"
+
+msgid "HIRE_RESULT_InvalidContractFee"
+msgstr "契約金が不正です。"
+
+msgid "HIRE_RESULT_AlreadyEmployed"
+msgstr "すでに雇用しています。"
+
+msgid "HIRE_RESULT_NoActiveCandidate"
+msgstr "応募者が選択されていません。"
+
+msgid "HIRE_RESULT_MoneyUnknown"
+msgstr "会社の資金が未解明です。"
+
+msgid "HIRE_RESULT_ContractFeeUnknown"
+msgstr "契約金が未解明です。"
+
+msgid "HIRE_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"
+
+msgid "LEVEL_UP_RESULT_Success"
+msgstr "レベルアップしました。"
+
+msgid "LEVEL_UP_RESULT_EmployeeNotFound"
+msgstr "社員が見つかりません。"
+
+msgid "LEVEL_UP_RESULT_LevelUnknown"
+msgstr "レベルが未解明です。"
+
+msgid "LEVEL_UP_RESULT_MaximumLevel"
+msgstr "最大レベルです。"
+
+msgid "LEVEL_UP_RESULT_ExperienceUnknown"
+msgstr "経験値が未解明です。"
+
+msgid "LEVEL_UP_RESULT_InsufficientExperience"
+msgstr "経験値が足りません。"
+
+msgid "LEVEL_UP_RESULT_AttributesUnknown"
+msgstr "能力値が未解明です。"
+
+msgid "LEVEL_UP_RESULT_FeeUnknown"
+msgstr "契約金が未解明です。"
+
+msgid "DEVELOPMENT_COMPUTERS"
+msgstr "開発パソコン"
+
+msgid "COMPUTER_CURRENT"
+msgstr "現在使用中"
+
+msgid "COMPUTER_BUY"
+msgstr "パソコンを購入"
+
+msgid "COMPUTER_RESULT_Success"
+msgstr "パソコンを購入しました。"
+
+msgid "COMPUTER_RESULT_CurrentComputerUnknown"
+msgstr "現在のパソコンのデータが不明です。"
+
+msgid "COMPUTER_RESULT_AlreadyOwned"
+msgstr "このパソコンは現在使用中です。"
+
+msgid "COMPUTER_RESULT_Downgrade"
+msgstr "現在より低いビット数のパソコンは購入できません。"
+
+msgid "COMPUTER_RESULT_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "COMPUTER_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"
+
+msgid "HARDWARE_LICENSES"
+msgstr "ハードライセンス"
+
+msgid "LICENSE_OWNED"
+msgstr "ライセンス取得済み"
+
+msgid "LICENSE_BUY"
+msgstr "ライセンス料を支払う"
+
+msgid "LICENSE_RESULT_Success"
+msgstr "ライセンスを取得しました。"
+
+msgid "LICENSE_RESULT_AvailabilityUnknown"
+msgstr "ハードの発売状況が不明です。"
+
+msgid "LICENSE_RESULT_Unavailable"
+msgstr "このハードはまだ利用できません。"
+
+msgid "LICENSE_RESULT_LicensesUnknown"
+msgstr "ライセンスのデータが不明です。"
+
+msgid "LICENSE_RESULT_AlreadyOwned"
+msgstr "このライセンスは取得済みです。"
+
+msgid "LICENSE_RESULT_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "LICENSE_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"

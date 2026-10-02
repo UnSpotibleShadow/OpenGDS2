@@ -1,0 +1,23 @@
+.godot/
+.mono/
+bin/
+obj/
+*.user
+*.sln.DotSettings.user
+# Original copyrighted game files / imported cache
+original/
+original_cache/
+GameDev2DX.lzh
+GameDev2DX.exe
+
+# Local reverse-engineering text extraction; do not commit wholesale
+generated/cp932_string_candidates.tsv
+generated/
+__pycache__/
+*.pyc
+
+# Locally imported rule data and private saves
+employees.json
+catalog.json
+saves/
+private-original/

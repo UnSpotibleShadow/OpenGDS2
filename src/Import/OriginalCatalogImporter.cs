@@ -1,0 +1,150 @@
+using System.Security.Cryptography;
+using OpenGDS2.Domain;
+
+namespace OpenGDS2.Import;
+
+public static class OriginalCatalogImporter
+{
+    public static OriginalCatalog Extract(byte[] data)
+    {
+        if (!Convert.ToHexString(SHA256.HashData(data)).Equals(EmployeeDatabaseImporter.ExpectedHash, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidDataException("Unsupported catalog executable.");
+        var pe = new EmployeeDatabaseImporter.Image(data);
+        var result = new OriginalCatalog { SourceHash = EmployeeDatabaseImporter.ExpectedHash };
+        const int start = 0x9F651C, pool = 0x60DF28;
+        // Genre helper writes seven arguments to members 1240,125C,11B4,
+        // 11D0,11EC,1208,1224. Only the name column is semantically identified.
+        for (int index = 0; index < 18; index++)
+        {
+            int pos = pe.Offset(start + 0x6331 + index * 0x4C);
+            long member1224 = pe.Literal32(ref pos, 0xFE1C);
+            int member1208 = pe.Literal16(ref pos, 0xFE3C);
+            int member11EC = pe.Literal16(ref pos, 0xFE5C);
+            int member11D0 = pe.Literal16(ref pos, 0xFE7C);
+            pe.Require(pos, 0x3A, 0x1C, 0xFF);
+            string name = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0xAC, 0xFE, 0x04, 0xAC, 0xFE); pos += 11;
+            int member125C = pe.Literal16(ref pos, 0xFEBC);
+            int member1240 = pe.Literal16(ref pos, 0xFECC);
+            pe.Require(pos, 0x04, 0xFC, 0xFD, 0x0A, 0x35, 0x01, 0x20, 0x00);
+            result.Genres.Add(new GenreDefinition { SourceIndex = index, Name = name,
+                DefinitionAddress = $"0x{start + 0x6360 + index * 0x4C:X8}",
+                RawMembers = new() { ["1240"] = member1240, ["125C"] = member125C,
+                    ["11D0"] = member11D0, ["11EC"] = member11EC, ["1208"] = member1208, ["1224"] = member1224 } });
+        }
+        // Audience setter: arguments 10..28 -> 14A8,1400,141C,1438,
+        // 1454,148C,1470. The first argument is a numeric identifier,
+        // not the description; arguments are pushed in reverse order.
+        for (int index = 0; index < 7; index++)
+        {
+            int pos = pe.Offset(start + 0x9B3E + index * 0x52);
+            pe.Require(pos, 0x3A, 0x2C, 0xFE);
+            string description = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0x1C, 0xFE, 0x04, 0x1C, 0xFE); pos += 11;
+            long member148C = pe.Literal32(ref pos, 0xFE3C);
+            int member1454 = pe.Literal16(ref pos, 0xFE5C);
+            int member1438 = pe.Literal16(ref pos, 0xFE7C);
+            int member141C = pe.Literal16(ref pos, 0xFEAC);
+            pe.Require(pos, 0x3A, 0x2C, 0xFF);
+            string name = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0xBC, 0xFE, 0x04, 0xBC, 0xFE); pos += 11;
+            int member14A8 = pe.Literal16(ref pos, 0xFECC);
+            pe.Require(pos, 0x04, 0xFC, 0xFD, 0x0A, 0x25, 0x02, 0x20, 0x00);
+            result.Audiences.Add(new AudienceDefinition { SourceIndex = index, Name = name, Description = description,
+                DefinitionAddress = $"0x{start + 0x9B73 + index * 0x52:X8}",
+                RawMembers = new() { ["14A8"] = member14A8, ["141C"] = member141C,
+                    ["1438"] = member1438, ["1454"] = member1454, ["148C"] = member148C } });
+        }
+        for (int index = 0; index < 4; index++)
+        {
+            int pos = pe.Offset(start + 0xA332 + index * 0x51);
+            pe.Require(pos, 0x3A, 0x4C, 0xFE);
+            string description = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0x3C, 0xFE, 0x04, 0x3C, 0xFE); pos += 11;
+            long price = pe.Literal32(ref pos, 0xFE5C);
+            int bits = pe.Literal16(ref pos, 0xFE7C);
+            pe.Require(pos, 0x3A, 0x1C, 0xFF);
+            string label = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0xAC, 0xFE, 0x04, 0xAC, 0xFE); pos += 11;
+            pe.Require(pos, 0x3A, 0x2C, 0xFF);
+            string name = pe.String(pool, pe.U16(pos + 3));
+            pe.Require(pos + 5, 0x4E, 0xBC, 0xFE, 0x04, 0xBC, 0xFE); pos += 11;
+            int id = pe.Literal16(ref pos, 0xFECC);
+            pe.Require(pos, 0x04, 0x1C, 0xFE, 0x0A, 0x49, 0x02, 0x1C, 0x00);
+            if (id != index) throw new InvalidDataException("Computer index changed.");
+            result.DevelopmentComputers.Add(new() { SourceIndex = id, Name = name, Description = description,
+                BitLabel = label, BitWidth = bits, PurchasePrice = price });
+        }
+        int[] hardwareCalls = [0x54F3,0x5644,0x5795,0x5905,0x5A58,0x5BA9,0x5CFA,0x5E4B,0x5F9C,0x60ED,0x623E];
+        string[] members = ["1034","0F70","0FFC","0FE0","0F54","0F38","1050","0F1C","0FC4","0F00","0FA8","0EE4","0EC8"];
+        for (int index = 0; index < hardwareCalls.Length; index++)
+        {
+            int pos = pe.Offset(start + hardwareCalls[index] - 0x59);
+            var hardware = new HardwareDefinition { SourceIndex = index };
+            foreach (string member in members)
+            {
+                if (member is "1034" or "0EE4")
+                {
+                    pe.Require(pos, 0x3A);
+                    string value = pe.String(pool, pe.U16(pos + 3));
+                    pe.Require(pos + 5, 0x4E);
+                    ushort local = pe.U16(pos + 6);
+                    pe.Require(pos + 8, 0x04, (byte)local, (byte)(local >> 8)); pos += 11;
+                    if (member == "1034") hardware.Description = value; else hardware.Name = value;
+                }
+                else
+                {
+                    bool wide = member is "0F70" or "0FFC" or "0FC4";
+                    ushort local = pe.U16(pos + (wide ? 2 : 1));
+                    hardware.RawMembers[member] = wide ? pe.Literal32(ref pos, local) : pe.Literal16(ref pos, local);
+                }
+            }
+            pe.Require(pos, 0x04); pos += 3;
+            pe.Require(pos, 0x0A, 0x0C, 0x01, 0x44, 0x00);
+            result.Hardware.Add(hardware);
+        }
+        string[] typeMembers = ["135C","1340","1324","1378","1308","12EC","12D0","12B4","13B0","1394"];
+        for (int index = 0; index < 51; index++)
+        {
+            int pos = pe.Offset(start + 0x6889 + index * 0xF5);
+            var type = new GameTypeDefinition { SourceIndex = index };
+            var examples = new Dictionary<string,string>();
+            foreach (string member in typeMembers)
+            {
+                if (member is "135C" or "1340" or "1324" or "12B4")
+                {
+                    pe.Require(pos, 0x3A);
+                    string value = pe.String(pool, pe.U16(pos + 3));
+                    pe.Require(pos + 5, 0x4E);
+                    ushort local = pe.U16(pos + 6);
+                    pe.Require(pos + 8, 0x04, (byte)local, (byte)(local >> 8)); pos += 11;
+                    if (member == "12B4") type.Name = value; else examples[member] = value;
+                }
+                else
+                {
+                    bool wide = member == "1378";
+                    ushort local = pe.U16(pos + (wide ? 2 : 1));
+                    type.RawMembers[member] = wide ? pe.Literal32(ref pos, local) : pe.Literal16(ref pos, local);
+                }
+            }
+            pe.Require(pos, 0x04); pos += 3;
+            pe.Require(pos, 0x0A, 0x4B, 0x01, 0x2C, 0x00);
+            type.ExampleTitles = [examples["1324"], examples["1340"], examples["135C"]];
+            pos = pe.Offset(start + 0x68FC + index * 0xF5);
+            for (int column = 0; column < 16; column++)
+            {
+                ushort local = pe.U16(pos + 1);
+                type.RawTable13CC.Add(pe.Literal16(ref pos, local));
+            }
+            type.RawTable13CC.Reverse();
+            // Helper 0098F178 does not consume argument 48. Argument 4C
+            // populates column 14; there is no column 15 write in this helper.
+            type.RawUnusedArgument48 = type.RawTable13CC[14];
+            type.RawTable13CC.RemoveAt(14);
+            pe.Require(pos, 0x04); pos += 3;
+            pe.Require(pos, 0x0A, 0x4C, 0x01, 0x44, 0x00);
+            result.GameTypes.Add(type);
+        }
+        return result;
+    }
+}

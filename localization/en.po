@@ -1,0 +1,360 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenGDS2\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "APP_TITLE"
+msgstr "OpenGDS2"
+
+msgid "APP_SUBTITLE"
+msgstr "Community modernization for Game Dev Story 2 DX"
+
+msgid "IMPORT_PROMPT"
+msgstr "Choose your original GameDev2DX.lzh to import the game's assets."
+
+msgid "IMPORT_BUTTON"
+msgstr "Import Original Game"
+
+msgid "IMPORTING"
+msgstr "Importing original assets…"
+
+msgid "IMPORT_OK"
+msgstr "Original assets imported successfully."
+
+msgid "IMPORT_FAILED"
+msgstr "Import failed"
+
+msgid "NEW_GAME"
+msgstr "New Game"
+
+msgid "LOAD_GAME"
+msgstr "Load Game"
+
+msgid "SETTINGS"
+msgstr "Settings"
+
+msgid "QUIT"
+msgstr "Quit"
+
+msgid "DEV_BUILD"
+msgstr "Early compatibility build — gameplay reconstruction in progress"
+
+msgid "COMPANY_NAME"
+msgstr "Company Name"
+
+msgid "PRESIDENT_NAME"
+msgstr "President Name"
+
+msgid "CONFIRM"
+msgstr "Confirm"
+
+msgid "CANCEL"
+msgstr "Cancel"
+
+msgid "NAME_REQUIRED"
+msgstr "Enter both a company name and a president name."
+
+msgid "GAME_START"
+msgstr "Game Start"
+
+msgid "BEGINNER_MODE"
+msgstr "Beginner Mode"
+
+msgid "NORMAL_MODE"
+msgstr "Normal Mode"
+
+msgid "MODE"
+msgstr "Mode"
+
+msgid "ORIGINAL_FORM"
+msgstr "Recovered original form"
+
+msgid "RECONSTRUCTION_STARTED"
+msgstr "New Game State Created"
+
+msgid "SIMULATION_BOUNDARY"
+msgstr "Milestone 2 reaches the first verified reconstruction boundary. The startup flow is recovered; the office simulation rules are next and are not being invented."
+
+msgid "BACK_TO_TITLE"
+msgstr "Back to Title"
+
+msgid "OFFICE"
+msgstr "Office"
+
+msgid "FUNDS"
+msgstr "Funds"
+
+msgid "COMPANY_RANK"
+msgstr "Company Rank"
+
+msgid "COMPANY_FAME"
+msgstr "Company Fame"
+
+msgid "STAFF"
+msgstr "Staff"
+
+msgid "NOT_YET_DECODED"
+msgstr "Not yet decoded"
+
+msgid "OPENING_STAFF_DOCUMENTED"
+msgstr "Secretary + 1 employee (identity/stats pending)"
+
+msgid "BEGINNER_RULES_VERIFIED"
+msgstr "Documented Beginner rules: tutorial guidance is enabled, the run is limited to 3 in-game years, and starting funds are higher than Normal mode. The exact starting amount is still being decoded."
+
+msgid "NORMAL_RULES_VERIFIED"
+msgstr "Normal mode does not use the Beginner mode's permanent tutorial/3-year limit. The exact starting-funds value is still being decoded."
+
+msgid "FIRST_OBJECTIVE"
+msgstr "First Objective — Hire Employees"
+
+msgid "TUTORIAL_HIRE_TEXT"
+msgstr "You can't get started without hiring employees. Recruit some new staff first. As the company grows, you'll also be able to poach talented employees."
+
+msgid "HIRE_EMPLOYEES"
+msgstr "Hire Employees"
+
+msgid "START_GAME_DEVELOPMENT"
+msgstr "Start Game Development"
+
+msgid "NEXT_RECONSTRUCTION_TARGET"
+msgstr "This original action is verified, but its mechanics are the next reconstruction target."
+
+msgid "M3_BOUNDARY"
+msgstr "Milestone 3 now enters the documented office state. Unknown numeric defaults remain visibly unresolved instead of being guessed."
+
+msgid "EMPLOYEE_NAME"
+msgstr "Name"
+
+msgid "EMPLOYEE_LEVEL"
+msgstr "Level"
+
+msgid "STAT_FUN"
+msgstr "Fun"
+
+msgid "STAT_NOVELTY"
+msgstr "Novelty"
+
+msgid "STAT_ACCURACY"
+msgstr "Accuracy"
+
+msgid "STAT_GRAPHICS"
+msgstr "Graphics"
+
+msgid "STAT_MUSIC"
+msgstr "Music"
+
+msgid "STAT_DEVELOPMENT_SPEED"
+msgstr "Development Speed"
+
+msgid "STAT_INSPIRATION"
+msgstr "Inspiration"
+
+msgid "CONTRACT_FEE"
+msgstr "Contract Fee"
+
+msgid "HIRE_CONFIRM"
+msgstr "Hire"
+
+msgid "HIRING_FORM_VERIFIED"
+msgstr "The original employee-hiring form and its displayed stat schema have been recovered from the VB6 executable."
+
+msgid "APPLICANT_ROSTER_PENDING"
+msgstr "Applicant source names and values are still being decoded; the roster algorithm is recovered, and no placeholder candidates are invented in this build."
+
+msgid "APPLICANT_REFRESH_EVIDENCE"
+msgstr "The original form rebuilds its five-slot roster when opened. Its random selection rule is recovered; source records remain pending."
+
+msgid "APPLICANT_COUNT"
+msgstr "Applicants: {0}"
+
+msgid "HIRING_ACTION_PENDING"
+msgstr "Hire becomes active once the original applicant generation and contract behavior are decoded."
+
+msgid "M4_OFFICE_NOTE"
+msgstr "Milestone 4 opens the verified employee-hiring form. Game development remains the next major reconstruction boundary."
+
+msgid "M4_BOUNDARY"
+msgstr "Milestone 4 reconstructs the hiring UI and the PC game's employee stat model. Candidate generation and the actual contract transaction are intentionally still blocked until recovered from the original."
+
+msgid "M5_RECRUITMENT_RULES"
+msgstr "Recovered roster rule: 5 applicant slots. Source records whose original gate/flag test passes then face a 1-in-4 random acceptance test per scan until the roster is filled."
+
+msgid "M5_HIRE_RULES"
+msgstr "Recovered hire rule: hiring is rejected when funds are below the selected contract fee; a successful hire copies that applicant into the employee roster and charges the contract fee."
+
+msgid "M5_DATABASE_PENDING"
+msgstr "The source employee database and its eligibility field are still being decoded, so real applicant identities and stats remain disabled rather than fabricated."
+
+msgid "M5_OFFICE_NOTE"
+msgstr "Milestone 5 recovers the hiring transaction and the 5-slot roster-selection algorithm. The source employee database is the next recruitment boundary."
+
+msgid "M5_BOUNDARY"
+msgstr "Milestone 5 has decoded the roster shape, random acceptance test, affordability check, employee-copy helper, and contract-fee charge. Real applicants remain blocked until their source database is recovered."
+
+msgid "DATE"
+msgstr "Year / Month / Week"
+
+msgid "SAVE_GAME"
+msgstr "Save game"
+
+msgid "SAVE_OK"
+msgstr "Saved."
+
+msgid "SAVE_FAILED"
+msgstr "Save failed"
+
+msgid "LOAD_FAILED"
+msgstr "Load failed"
+
+msgid "CALENDAR_INSPECTOR"
+msgstr "Calendar inspector"
+
+msgid "CALENDAR_INSPECTOR_NOTE"
+msgstr "Preview only. The company calendar is unchanged."
+
+msgid "NEXT_WEEK"
+msgstr "Next week"
+
+msgid "RECONSTRUCTION_STATUS"
+msgstr "Reconstruction build: development, payroll, contracts and events remain unavailable."
+
+msgid "DATABASE_IMPORT_REQUIRED"
+msgstr "Import your original distribution to enable recruitment."
+
+msgid "RECOVERED_ATTRIBUTES"
+msgstr "Attributes"
+
+msgid "HIRE_FAILED"
+msgstr "Hiring failed:"
+
+msgid "NO_APPLICANTS"
+msgstr "No applicants available."
+
+msgid "COMPANY_RANK_0"
+msgstr "Small company"
+
+msgid "COMPANY_RANK_1"
+msgstr "Medium company"
+
+msgid "COMPANY_RANK_2"
+msgstr "Large company"
+
+msgid "COMPANY_RANK_3"
+msgstr "Leading company"
+
+msgid "COMPANY_RANK_4"
+msgstr "Top company"
+
+msgid "EXPERIENCE"
+msgstr "Experience"
+
+msgid "LEVEL_UP"
+msgstr "Level up"
+
+msgid "LEVEL_UP_FAILED"
+msgstr "Level-up failed:"
+
+msgid "HIRE_RESULT_Success"
+msgstr "Hired."
+
+msgid "HIRE_RESULT_InvalidContractFee"
+msgstr "Invalid contract fee."
+
+msgid "HIRE_RESULT_AlreadyEmployed"
+msgstr "Already employed."
+
+msgid "HIRE_RESULT_NoActiveCandidate"
+msgstr "No applicant selected."
+
+msgid "HIRE_RESULT_MoneyUnknown"
+msgstr "Company funds are unresolved."
+
+msgid "HIRE_RESULT_ContractFeeUnknown"
+msgstr "Contract fee is unresolved."
+
+msgid "HIRE_RESULT_InsufficientFunds"
+msgstr "Insufficient funds."
+
+msgid "LEVEL_UP_RESULT_Success"
+msgstr "Leveled up."
+
+msgid "LEVEL_UP_RESULT_EmployeeNotFound"
+msgstr "Employee not found."
+
+msgid "LEVEL_UP_RESULT_LevelUnknown"
+msgstr "Level is unresolved."
+
+msgid "LEVEL_UP_RESULT_MaximumLevel"
+msgstr "Maximum level reached."
+
+msgid "LEVEL_UP_RESULT_ExperienceUnknown"
+msgstr "Experience is unresolved."
+
+msgid "LEVEL_UP_RESULT_InsufficientExperience"
+msgstr "Insufficient experience."
+
+msgid "LEVEL_UP_RESULT_AttributesUnknown"
+msgstr "Attributes are unresolved."
+
+msgid "LEVEL_UP_RESULT_FeeUnknown"
+msgstr "Contract fee is unresolved."
+
+msgid "DEVELOPMENT_COMPUTERS"
+msgstr "Development Computers"
+
+msgid "COMPUTER_CURRENT"
+msgstr "Currently in use"
+
+msgid "COMPUTER_BUY"
+msgstr "Buy computer"
+
+msgid "COMPUTER_RESULT_Success"
+msgstr "Computer purchased."
+
+msgid "COMPUTER_RESULT_CurrentComputerUnknown"
+msgstr "Current computer data is unavailable."
+
+msgid "COMPUTER_RESULT_AlreadyOwned"
+msgstr "This computer is already in use."
+
+msgid "COMPUTER_RESULT_Downgrade"
+msgstr "A computer with fewer bits cannot be purchased."
+
+msgid "COMPUTER_RESULT_MoneyUnknown"
+msgstr "Company funds are unavailable."
+
+msgid "COMPUTER_RESULT_InsufficientFunds"
+msgstr "Insufficient funds."
+
+msgid "HARDWARE_LICENSES"
+msgstr "Hardware Licenses"
+
+msgid "LICENSE_OWNED"
+msgstr "License acquired"
+
+msgid "LICENSE_BUY"
+msgstr "Pay license fee"
+
+msgid "LICENSE_RESULT_Success"
+msgstr "License acquired."
+
+msgid "LICENSE_RESULT_AvailabilityUnknown"
+msgstr "Hardware availability is unknown."
+
+msgid "LICENSE_RESULT_Unavailable"
+msgstr "This hardware is unavailable."
+
+msgid "LICENSE_RESULT_LicensesUnknown"
+msgstr "License data is unavailable."
+
+msgid "LICENSE_RESULT_AlreadyOwned"
+msgstr "This license is already acquired."
+
+msgid "LICENSE_RESULT_MoneyUnknown"
+msgstr "Company funds are unavailable."
+
+msgid "LICENSE_RESULT_InsufficientFunds"
+msgstr "Insufficient funds."
