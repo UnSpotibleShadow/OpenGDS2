@@ -56,6 +56,7 @@ public static class CompanyActivityService
             ticks=0;state.CompanyActivityPerformed=false;
             // Weekly procedure 009DB4F4 +000B clears the company production flag.
             state.ProductionPerformedThisWeek=false;
+            RecallService.AdvanceWeek(state,random);
         }
         state.CompanyActivityTicks=ticks;
     }

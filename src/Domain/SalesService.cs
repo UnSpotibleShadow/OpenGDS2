@@ -42,7 +42,7 @@ public static class SalesService
     {
         // Unknown legacy fees must not silently become zero.
         if (state.Money is null || state.SalesFee1 is null || state.SalesFee2 is null ||
-            state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
+            state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (state.SalesTicks+1>=TicksPerBatch)
             foreach (var product in state.ReleasedGames)
                 if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
@@ -61,6 +61,7 @@ public static class SalesService
             product.NetSalesReceipts=net;product.LastBatchSold=sales;product.Demand=demand;
             if (weekly is long unitsThisWeek) product.WeeklySalesHistory![0]=unitsThisWeek;
             SalesMilestoneService.QueueReached(product);
+            RecallService.CheckAfterSales(product,random);
         }
     }
 }

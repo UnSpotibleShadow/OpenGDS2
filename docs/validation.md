@@ -1,9 +1,20 @@
-# Validation — M20 checkpoint
+# Validation — M21 checkpoint
+
+M21 local validation passed: 120 C# checks (118 public), all 18 Python checks
+with the local original, Godot C# compilation with zero warnings/errors, and both
+UI suites with zero failures. Coverage includes all recall outcomes, live five-week
+countdowns, refunds alongside ongoing sales, reprint guards, signed/negative
+financial cases, legacy unknowns and both saved event dialogs.
+
+## M20 historical checkpoint
 
 M20 local checks passed: 113 C# checks (111 public), all 18 Python checks with
 the optional original fixture, direct Godot C# compilation and both Godot UI
 suites with zero failures. Coverage adds original graph thresholds, signed weekly
 counts, exact budget-boundary ordering, saved histories and legacy guards.
+The [M20 standard SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37117477406)
+passed 111 public C# checks, all ten public Python checks, a normal build with
+zero warnings/errors and both UI suites with zero failures.
 
 ## M19 historical checkpoint
 

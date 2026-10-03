@@ -67,9 +67,11 @@ public sealed class GameSession
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
+        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         CompanyActivityService.Tick(state,_random);
+        if (RecallService.HasPending(state)) return;
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
+        if (SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         foreach (var employee in state.Employees)
         {
             OfficeStaffRules.Tick(employee, _random);

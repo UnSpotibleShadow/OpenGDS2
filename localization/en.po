@@ -753,7 +753,7 @@ msgid "RELEASE_RESULT_AlreadyProducedThisWeek"
 msgstr "Production has already been used this budget week. Wait for the next week to reprint."
 
 msgid "RELEASE_RESULT_StateUnknown"
-msgstr "The production allowance is unknown in this save. Start a new company."
+msgstr "Production data is unavailable in this save. Start a new company."
 
 msgid "SALES_HISTORY"
 msgstr "Sales History"
@@ -772,3 +772,30 @@ msgstr "This save has no recorded weekly sales history."
 
 msgid "BACK_TO_SALES"
 msgstr "Back to Sales"
+
+msgid "CONSUMER_INVESTIGATION"
+msgstr "Consumer Investigation"
+
+msgid "RECALL_INVESTIGATION_STARTED"
+msgstr "A consumer group is investigating bugs in this game. A decision will follow after five weeks."
+
+msgid "RECALL_WEEKS_REMAINING"
+msgstr "Investigation weeks remaining"
+
+msgid "RECALL_REFUND"
+msgstr "Refund"
+
+msgid "RECALL_OUTCOME_0"
+msgstr "Full-price refunds were ordered. Remaining copies have been withdrawn."
+
+msgid "RECALL_OUTCOME_1"
+msgstr "Refunds of ¥1,000 per copy were ordered. Remaining copies have been withdrawn."
+
+msgid "RECALL_OUTCOME_2"
+msgstr "Refunds of ¥1,000 per copy were ordered. Remaining copies have been withdrawn."
+
+msgid "RECALL_OUTCOME_3"
+msgstr "The investigation closed without a recall."
+
+msgid "RELEASE_RESULT_Recalled"
+msgstr "This game was recalled and cannot be reprinted."

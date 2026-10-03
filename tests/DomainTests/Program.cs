@@ -399,6 +399,86 @@ Test("recall eligibility countdown and refunds match original branches",()=>
     Check(RecallRules.Refund(-20,30,5800,0)==58000);
     Throws<OverflowException>(()=>RecallRules.Refund(long.MaxValue,1,5800,0));
 });
+Test("late-demand recall check runs once even when no investigation begins",()=>
+{
+    var g=new ReleasedGameState {Title="Checked",Demand=16,Recall=new()};var r=new DoubleSequenceRandom(0,0,0);
+    Check(!RecallService.CheckAfterSales(g,r) && r.Calls==0 && g.Recall.OriginalState==0);
+    g.Demand=15;Check(!RecallService.CheckAfterSales(g,r) && r.Calls==3 && g.Recall.OriginalState==1 && g.Recall.WeeksRemaining==0);
+    g.Bugs=50;Check(!RecallService.CheckAfterSales(g,r) && r.Calls==3);
+    var s=PlanningState();s.ReleasedGames.Add(g);RecallService.AdvanceWeek(s,new SequenceRandom());
+    Check(g.Recall.OriginalState==1 && g.Recall.PendingEvent is null && g.Recall.WeeksRemaining==0);
+});
+Test("all recall decisions preserve original refunds stock disposal and reprint eligibility",()=>
+{
+    for (int outcome=0;outcome<4;outcome++)
+    {
+        var s=PlanningState(900000);var g=new ReleasedGameState {Title="Outcome",UnitsSold=120,Stock=30,Price=5800,
+            Recall=new() {OriginalState=1,WeeksRemaining=1}};s.ReleasedGames.Add(g);
+        RecallService.AdvanceWeek(s,new SequenceRandom(outcome));
+        long refund=outcome==0 ? 870000 : outcome==3 ? 0 : 150000;
+        Check(s.Money==900000-refund && g.Recall.RefundAmount==refund && g.Recall.OutcomeRoll==outcome);
+        Check(g.Recall.WeeksRemaining==0 && g.Recall.PendingEvent==RecallEvent.Result && g.Recall.OriginalState==(outcome==3 ? 3 : 2));
+        Check(g.Stock==(outcome==3 ? 30 : 0));
+        Check(ReleaseService.CheckProduction(s,g)==(outcome==3 ? ReleaseResult.Success : ReleaseResult.Recalled));
+        Check(RecallService.Acknowledge(s,g) && !RecallService.Acknowledge(s,g));
+        RecallService.AdvanceWeek(s,new SequenceRandom());Check(s.Money==900000-refund);
+        Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].Recall!.OutcomeRoll==outcome);
+    }
+});
+Test("investigation modals pause budget weeks and a saved result never charges twice",()=>
+{
+    var s=PlanningState(1000000);s.CompanyActivityTicks=199;
+    var g=new ReleasedGameState {Title="Investigated",UnitsSold=120,Stock=30,Price=5800,Bugs=50,Demand=15,Recall=new()};s.ReleasedGames.Add(g);
+    Check(RecallService.CheckAfterSales(g,new DoubleSequenceRandom(.99,.99,.99)) && g.Recall!.WeeksRemaining==5);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
+    var session=new GameSession(new SequenceRandom(0));session.Restore(s);
+    for (int i=0;i<20;i++) session.TickOffice();
+    Check(s.CompanyActivityTicks==199 && g.Recall!.WeeksRemaining==5 && s.Money==1000000);
+    Check(RecallService.Acknowledge(s,g));session.TickOffice();Check(s.CompanyActivityTicks==0 && g.Recall!.WeeksRemaining==4);
+    for (int i=0;i<799;i++) session.TickOffice();
+    Check(g.Recall!.WeeksRemaining==1 && g.Recall.PendingEvent is null && s.Money==1000000);
+    session.TickOffice();Check(g.Recall.WeeksRemaining==0 && g.Recall.PendingEvent==RecallEvent.Result && s.Money==130000);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];session.Restore(s);
+    for (int i=0;i<20;i++) session.TickOffice();Check(s.Money==130000 && s.CompanyActivityTicks==0);
+    Check(RecallService.Acknowledge(s,g));session.TickOffice();Check(s.Money==130000 && s.CompanyActivityTicks==1);
+});
+Test("recall refunds retain negative funds and signed original quantity behavior",()=>
+{
+    var s=PlanningState(1000);var g=new ReleasedGameState {Title="Debt",UnitsSold=120,Stock=30,Price=5800,
+        Recall=new() {OriginalState=1,WeeksRemaining=1}};s.ReleasedGames.Add(g);
+    RecallService.AdvanceWeek(s,new SequenceRandom(0));Check(s.Money==-869000 && g.Stock==0);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Money==-869000);
+    s=PlanningState(1000);g=new ReleasedGameState {Title="Signed",UnitsSold=-20,Stock=10,Price=5800,
+        Recall=new() {OriginalState=1,WeeksRemaining=1}};s.ReleasedGames.Add(g);
+    RecallService.AdvanceWeek(s,new SequenceRandom(0));Check(s.Money==59000 && g.Recall.RefundAmount==-58000 && g.Stock==0);
+});
+Test("unknown recall data and corrupt event saves are never silently reconstructed",()=>
+{
+    var s=PlanningState(1000);var g=new ReleasedGameState {Title="Unknown",Stock=100,Bugs=50,Demand=0};s.ReleasedGames.Add(g);
+    Check(!RecallService.CheckAfterSales(g,new DoubleSequenceRandom()) && ReleaseService.CheckProduction(s,g)==ReleaseResult.StateUnknown);
+    RecallService.AdvanceWeek(s,new SequenceRandom());Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].Recall is null);
+    g.Recall=new() {WeeksRemaining=1};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.Recall=new() {OriginalState=1,WeeksRemaining=4,PendingEvent=RecallEvent.Investigation};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.Recall=new() {OriginalState=2,OutcomeRoll=0,RefundAmount=100};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.Stock=0;g.Recall=new() {OriginalState=3,OutcomeRoll=2,RefundAmount=0};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("recall resolution rejects overflow before changing funds stock or countdown",()=>
+{
+    var s=PlanningState(1000);var g=new ReleasedGameState {Title="Overflow",UnitsSold=long.MaxValue,Stock=1,Price=5800,
+        Recall=new() {OriginalState=1,WeeksRemaining=1}};s.ReleasedGames.Add(g);
+    Throws<OverflowException>(()=>RecallService.AdvanceWeek(s,new SequenceRandom(0)));
+    Check(s.Money==1000 && g.Stock==1 && g.Recall.OriginalState==1 && g.Recall.WeeksRemaining==1 && g.Recall.PendingEvent is null);
+});
+Test("sales decay starts and saves a guaranteed high-bug investigation",()=>
+{
+    var s=PlanningState(1000);s.SalesFee1=s.SalesFee2=1500;s.SalesTicks=19;
+    var g=new ReleasedGameState {Title="Sales Investigation",Stock=0,Demand=16,Bugs=50,Recall=new()};s.ReleasedGames.Add(g);
+    var r=new RecallSalesRandom();SalesService.Tick(s,CoreCatalog(),r);
+    Check(g.Demand==14 && g.Recall.OriginalState==1 && g.Recall.WeeksRemaining==5 && g.Recall.PendingEvent==RecallEvent.Investigation);
+    Check(r.Bounds.SequenceEqual(new[] {50,7}) && r.DoubleCalls==3 && s.Money==1000);
+    SalesService.Tick(s,CoreCatalog(),r);Check(s.SalesTicks==0 && r.DoubleCalls==3);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].Recall!.PendingEvent==RecallEvent.Investigation);
+});
 Test("company activities charge shared cost, increase original fields and cap research/fame",()=>
 {
     var session=new GameSession();var s=session.StartNewGame("Synthetic","Tester",GameMode.Normal);
@@ -551,8 +631,8 @@ Test("history save validation rejects wrong shapes without filling unknown recor
 Test("production budget is shared across products and resets at exactly two hundred ticks",()=>
 {
     var s=PlanningState(200000);var c=CoreCatalog();
-    var first=new ReleasedGameState {Title="First",Stock=100,ProductionSpending=50000};
-    var second=new ReleasedGameState {ProductIndex=1,Title="Second",Stock=100};
+    var first=new ReleasedGameState {Title="First",Stock=100,ProductionSpending=50000,Recall=new()};
+    var second=new ReleasedGameState {ProductIndex=1,Title="Second",Stock=100,Recall=new()};
     s.ReleasedGames.AddRange([first,second]);
     Check(ReleaseService.TryProduce(s,first,c,100)==ReleaseResult.Success);
     Check(s.Money==150000 && first.Stock==200 && s.ProductionPerformedThisWeek==true);
@@ -576,7 +656,7 @@ Test("first shipments set the production flag without using the reprint guard",(
 });
 Test("production unknowns remain unknown and checkpoint modals pause the reset",()=>
 {
-    var s=PlanningState(100000);var g=new ReleasedGameState {Title="Synthetic",Stock=100};s.ReleasedGames.Add(g);
+    var s=PlanningState(100000);var g=new ReleasedGameState {Title="Synthetic",Stock=100,Recall=new()};s.ReleasedGames.Add(g);
     s.ProductionPerformedThisWeek=null;
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
     Check(s.ProductionPerformedThisWeek is null && ReleaseService.TryProduce(s,g,CoreCatalog(),100)==ReleaseResult.StateUnknown);
@@ -1524,6 +1604,13 @@ if (args.Length == 2)
 }
 Console.WriteLine($"{passed} tests passed");
 sealed class ConstantRandom(int value) : Random { public override int Next(int maxValue) => value; }
+sealed class RecallSalesRandom : Random
+{
+    public List<int> Bounds {get;}=[];
+    public int DoubleCalls {get;private set;}
+    public override int Next(int maxValue) {Bounds.Add(maxValue);return 1;}
+    public override double NextDouble() {DoubleCalls++;return .99;}
+}
 sealed class AlternatingRandom : Random { private int n; public override int Next(int maxValue) => n++ % 2 == 0 ? 3 : 0; }
 sealed class SequenceRandom(params int[] values) : Random
 {

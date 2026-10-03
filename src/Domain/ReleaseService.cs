@@ -1,6 +1,6 @@
 namespace OpenGDS2.Domain;
 
-public enum ReleaseResult { Success, NotReady, DuplicateTitle, MoneyUnknown, InsufficientFunds, AlreadyProducedThisWeek, StateUnknown }
+public enum ReleaseResult { Success, NotReady, DuplicateTitle, MoneyUnknown, InsufficientFunds, AlreadyProducedThisWeek, StateUnknown, Recalled }
 
 /// <summary>fGMSyukka own-game release and fGMSyukkaSai production transactions.</summary>
 public static class ReleaseService
@@ -24,7 +24,7 @@ public static class ReleaseService
             return ReleaseResult.NotReady;
         title=title.Trim();
         if (state.ReleasedGames.Any(x=>x.Title==title)) return ReleaseResult.DuplicateTitle;
-        if (state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return ReleaseResult.NotReady;
+        if (state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return ReleaseResult.NotReady;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize)*copies);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
@@ -32,6 +32,7 @@ public static class ReleaseService
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
             WeeklySalesHistory=SalesHistoryRules.NewHistory(),
+            Recall=new(),
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,
@@ -51,7 +52,7 @@ public static class ReleaseService
     {
         if (copies<1) throw new ArgumentOutOfRangeException(nameof(copies));
         if (!state.ReleasedGames.Contains(product)) throw new ArgumentException("Product is not in this company.");
-        var availability=CheckProduction(state);
+        var availability=CheckProduction(state,product);
         if (availability!=ReleaseResult.Success) return availability;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize)*copies);
         long stock=checked(product.Stock+copies),spending=checked(product.ProductionSpending+cost);
@@ -61,8 +62,14 @@ public static class ReleaseService
         state.ProductionPerformedThisWeek=true;
         return ReleaseResult.Success;
     }
-    public static ReleaseResult CheckProduction(GameState state)
+    public static ReleaseResult CheckProduction(GameState state,ReleasedGameState? product=null)
     {
+        // Original menu checks recall state 2 before the company production flag.
+        if (product is not null)
+        {
+            if (product.Recall is null) return ReleaseResult.StateUnknown;
+            if (product.Recall.OriginalState==2) return ReleaseResult.Recalled;
+        }
         if (state.ProductionPerformedThisWeek==true) return ReleaseResult.AlreadyProducedThisWeek;
         if (state.ProductionPerformedThisWeek is null || state.CompanyActivityTicks is null) return ReleaseResult.StateUnknown;
         return ReleaseResult.Success;

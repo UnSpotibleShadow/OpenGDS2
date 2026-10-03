@@ -1,6 +1,6 @@
 namespace OpenGDS2.Domain;
 
-/// <summary>Verified arithmetic only. Do not schedule without the complete weekly pipeline.</summary>
+/// <summary>Verified original recall arithmetic; scheduling is handled by RecallService.</summary>
 public static class RecallRules
 {
     public const int InvestigationWeeks=5;

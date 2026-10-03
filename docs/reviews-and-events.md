@@ -52,7 +52,7 @@ record dates and sales chart history remain outside this checkpoint because the
 complete calendar is not integrated. Hall of Fame marks sequel eligibility;
 sequel development itself is still unimplemented.
 
-## Recall investigation: traced, not yet integrated
+## Recall investigation: integrated in M21
 
 After demand decay, Module2 +12FD tests demand <16 and recall-state A12F20 =0,
 then sets state 1 even if no investigation occurs. Its condition evaluates three
@@ -67,8 +67,10 @@ state 1, decrements a positive countdown and opens mode 12 at zero. Mode 12
 +3A62..4136 draws floor(Rnd×4): 0 refunds (units sold + remaining stock) × price;
 1/2 refunds that quantity ×1000; 3 dismisses the case. Refund branches set state
 2 and stock zero; dismissal sets state 3. There is no immediate refund in mode 11.
-Scheduling remains disabled until the weekly economics and event pipeline are
-reconstructed. Bankruptcy/negative funds after a refund need further tracing.
+M21 connects this schedule to the recovered 200-tick budget week, with saved
+modals, atomic result projection and the original reprint prohibition. See
+[consumer-recalls.md](consumer-recalls.md). Complete calendar economics and
+bankruptcy/game-over behavior still require further reconstruction.
 
 ## Research correction and limits
 
