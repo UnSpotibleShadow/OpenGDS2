@@ -1,9 +1,9 @@
 # Optional community soundtrack
 
 These eight recordings were supplied by project owner UnSpotibleShadow on
-2026-10-03 for local integration in OpenGDS2, with an assurance that their use is lawful.
-Public redistribution of the recordings awaits explicit authorization. No audio
-files are included in the public source or development packages.
+2026-10-03 for integration in OpenGDS2, with an assurance that their use is lawful.
+The owner explicitly authorized distributing all eight tracks in the public
+OpenGDS2 GitHub repository and downloadable game builds on 2026-10-03.
 The source files' metadata identifies Suno as their creation tool.
 They are additions to the reimplementation, not original Kairosoft game audio.
 

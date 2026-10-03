@@ -1,0 +1,35 @@
+name: Assemble supplied community music
+on:
+  push:
+    branches: [codex/m28-community-soundtrack]
+    paths: [.audio-transfer/manifest.json]
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and verify explicitly authorized tracks
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          for entry in json.loads(Path(".audio-transfer/manifest.json").read_text()):
+              data = b"".join(Path(part).read_bytes() for part in entry["parts"])
+              assert len(data) == entry["bytes"], "Size mismatch"
+              assert hashlib.sha256(data).hexdigest() == entry["sha256"], "Hash mismatch"
+              target = Path(entry["path"])
+              assert target.parent == Path("audio/community") and target.suffix == ".ogg"
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              print(target.name, len(data), entry["sha256"])
+          PY
+      - name: Commit verified audio to staging branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audio/community/*.ogg
+          git commit -m "Add verified owner-supplied community soundtrack"
+          git push origin HEAD:refs/heads/codex/m28-community-soundtrack

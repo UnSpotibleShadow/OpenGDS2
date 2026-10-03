@@ -98,7 +98,8 @@ its installed package retains its own license and attribution.
 Music is an optional modern addition, independent of original game behavior.
 Recordings are loaded from `user://music` in filename order (Ogg Vorbis, WAV or
 MP3). The resolved folder is displayed in Settings. Place files there and restart.
-The public source and desktop packages contain no soundtrack recordings.
+The public source and desktop packages include eight owner-supplied tracks. A valid
+local playlist overrides the bundled tracks; an empty folder uses the bundled music.
 
 For a user-owned ZIP containing audio, run:
 
@@ -114,13 +115,14 @@ remove the LZH requirement, upload files or contact a music service.
 
 The eight supplied recordings have been converted and decoded locally (total
 931.32 seconds, about 14.9 MB). Both supplied recordings named Office Loop have
-different durations and were retained. Public redistribution awaits explicit
-approval; their use is not covered by the source-code MIT license.
+different durations and were retained. The owner explicitly authorized public
+repository and game-build distribution on 2026-10-03; the recordings are not
+covered by the source-code MIT license.
 See `audio/community/NOTICE.md` for source provenance.
 
 The playlist starts during gameplay, advances on the audio player's finished
 signal, wraps after the last recording and pauses on the title screen. With no
-local tracks, the game remains silent and Next Track is disabled. Settings expose
+valid local tracks, the bundled playlist is used. Settings expose
 an enable toggle, volume and Next Track. Preferences use `user://audio.cfg` and
 do not alter saved simulation state, RNG calls or clocks. Manual simulation pause
 and decision dialogs do not change the soundtrack. Headless tests load and inspect
@@ -136,7 +138,8 @@ native office dimensions, imported wallpaper, hiring, desk assignment and lounge
 return. The complete core-loop UI fixture also verifies simultaneous windows,
 window controls, planning that preserves the office, employee-table refresh,
 locally generated audio durations, saved audio preferences, playlist advancement
-and wrapping. Public tests generate silent WAV fixtures, without supplied music.
+and wrapping. Public core-loop tests generate silent WAV fixtures to verify local overrides.
+The title smoke test separately checks all eight bundled track durations.
 
 These are automated geometry/resource/control checks. A full graphical
 comparison of all dialogs against a running original game remains outstanding;
