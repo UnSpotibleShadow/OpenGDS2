@@ -754,3 +754,21 @@ msgstr "Production has already been used this budget week. Wait for the next wee
 
 msgid "RELEASE_RESULT_StateUnknown"
 msgstr "The production allowance is unknown in this save. Start a new company."
+
+msgid "SALES_HISTORY"
+msgstr "Sales History"
+
+msgid "SALES_HISTORY_CURRENT"
+msgstr "This week"
+
+msgid "SALES_HISTORY_PREVIOUS"
+msgstr "Last week"
+
+msgid "SALES_HISTORY_OLDEST"
+msgstr "12 weeks ago"
+
+msgid "SALES_HISTORY_UNKNOWN"
+msgstr "This save has no recorded weekly sales history."
+
+msgid "BACK_TO_SALES"
+msgstr "Back to Sales"

@@ -1,10 +1,20 @@
-# Validation — M19 checkpoint
+# Validation — M20 checkpoint
+
+M20 local checks passed: 113 C# checks (111 public), all 18 Python checks with
+the optional original fixture, direct Godot C# compilation and both Godot UI
+suites with zero failures. Coverage adds original graph thresholds, signed weekly
+counts, exact budget-boundary ordering, saved histories and legacy guards.
+
+## M19 historical checkpoint
 
 M19 local validation passed: 109 C# checks (107 public), all 18 Python checks
 with the optional original fixture, direct Godot C# compilation, synthetic
 gameplay UI and original-import UI with zero failures. Coverage adds company-wide
 reprint limits, the exact budget reset, modal pauses and saved production state.
 M18 technology-use and M19 production evidence anchors also match the original.
+The [M19 standard SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37116610923)
+passed 107 public C# checks, all ten public Python checks, the normal Godot build
+with zero warnings/errors and both UI suites with zero failures.
 
 ## M18 historical checkpoint
 

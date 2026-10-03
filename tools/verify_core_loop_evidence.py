@@ -70,6 +70,13 @@ def verify(data):
     require(0x984BB0,0x0064,'28 4c ff 01 00 fd b6 06 00')
     require(0x9DB4F4,0x000B,'28 6c ff 00 00 fd e6 08 00 b0 00')
     require(0x984A78,0x006D,'05 05 00 28 6c ff 01 00 5d fb 33 1c cd 00')
+    # Product weekly units: thirteen reset cells, reverse shift at week end,
+    # accumulation in cell zero, and the original chart's two scale thresholds.
+    require(0x9DD234,0x153E,'28 3c ff 00 00 04 ac fd 28 4c ff 0c 00')
+    require(0x9DB4F4,0x0135,'28 1c ff 0c 00 04 ec fe 28 2c ff 01 00 28 6c ff ff ff')
+    require(0x9E3830,0x1090,'05 56 01 a7 02 00 06 00 00 05 41 01 fb 94 58 ff')
+    require(0x9C2568,0x070E,'04 f8 fe fe c1 58 ff a0 86 01 00 5d fb 5a 1c e3 08')
+    require(0x9C2568,0x08E3,'04 f8 fe 28 58 ff 30 75 5d fb 5a 1c b1 0a')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

@@ -50,6 +50,9 @@ public static class CompanyActivityService
             TryPerform(state,CompanyActivity.ProductionExpansion,random);
         if (ticks==TicksPerWeek)
         {
+            // Weekly procedure +0119..01A5 shifts the history before the
+            // periodic sales call; a boundary batch enters the new week.
+            SalesHistoryRules.AdvanceWeek(state);
             ticks=0;state.CompanyActivityPerformed=false;
             // Weekly procedure 009DB4F4 +000B clears the company production flag.
             state.ProductionPerformedThisWeek=false;
