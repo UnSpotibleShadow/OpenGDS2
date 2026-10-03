@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M27.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M29.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -65,8 +65,8 @@ M24 fixes immediate pause/resume feedback and clock regression coverage.
 M25 restores the compact desktop with simultaneous office, company, employee
 and product windows, original-size office graphics and locally imported toolbar
 icons/wallpaper. It includes eight optional owner-supplied background tracks and supports local music overrides,
-with mute/volume settings and independent audio preferences. Recordings are not
-bundled; see the local conversion instructions below. Required LZH
+with mute/volume settings and independent audio preferences. M28 bundles the
+explicitly authorized recordings; local playlists can override them. Required LZH
 importing remains unchanged. Local translated-artwork overrides remain outside
 the repository; a hash-checked local patch tool creates replacements without
 changing imported originals. See [desktop/UI and music scope](docs/desktop-ui-and-music.md).
@@ -121,8 +121,13 @@ applicant → Staff → Assign a Desk → Start Game Development → choose type
 debug or release → Sales → Produce More Copies. Use the lounge for tired staff.
 Reopening recruitment rebuilds its five slots. Save/load preserves funds, staff,
 source gates, projects, decisions and released products.
-Imported character names remain Japanese proper names; interface language can be
-changed under Settings. Music can be disabled or adjusted there as well.
+English translates all imported genre, type, audience, hardware, computer and
+technology labels. Imported character names retain their local Japanese readings;
+bitmap text can use local artwork overrides. Change language under Settings.
+Toolbar images have translated tooltips and status-bar help; older imports can
+be refreshed from the LZH to obtain the original icons.
+See [translation coverage and remaining work](docs/localization-and-toolbar.md).
+Music can be disabled or adjusted in Settings as well.
 A calendar inspector previews the reconstructed calendar
 without skipping unresolved company simulation.
 
@@ -138,8 +143,9 @@ The C# suite has no Godot or third-party test-framework dependency.
 
 [Milestone 7](docs/milestone-7.md) distinguishes recovered facts from gaps.
 [Remaining work](docs/remaining-work.md) lists exact next trace targets.
-[Validation](docs/validation.md) records **58 passing local C# checks, 16 Python checks
-and passing imported-data Godot UI tests**, including desk assignment and return.
+[Validation](docs/validation.md) records 130 public C# checks at M28, 19 public
+Python checks at M29, and passing imported-data Godot UI tests. Optional private
+fixtures add two C# checks and eight Python checks.
 The normal SDK build and fixture-free runtime are also tested in GitHub Actions;
 original-fixture checks run locally and do not upload original content.
 

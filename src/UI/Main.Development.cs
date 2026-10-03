@@ -21,7 +21,7 @@ public partial class Main
                 CustomMinimumSize=new Vector2(64,64)
             });
         var details=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};row.AddChild(details);
-        details.AddChild(new Label {Text=$"{employee.Name}   Lv. {employee.Level}"});
+        details.AddChild(new Label {Text=$"{employee.Name}   {Tr("LEVEL")} {employee.Level}"});
         details.AddChild(new Label {Text=$"{Tr("CONTRACT_FEE")}: ¥{employee.ContractFee:N0}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_FUN")}: {employee.Fun}   {Tr("STAT_NOVELTY")}: {employee.Novelty}   {Tr("STAT_ACCURACY")}: {employee.Accuracy}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_GRAPHICS")}: {employee.Graphics}   {Tr("STAT_MUSIC")}: {employee.Music}   {Tr("STAT_DEVELOPMENT_SPEED")}: {employee.DevelopmentSpeed}   {Tr("STAT_INSPIRATION")}: {employee.Inspiration}"});
@@ -38,11 +38,11 @@ public partial class Main
         AddHeading(Tr("TARGET_HARDWARE"),18);
         var hardware=new OptionButton {Name="PlanningHardware"};
         foreach (var item in catalog.Hardware.Where(x=>state.AvailableHardware?.Contains(x.SourceIndex)==true))
-            hardware.AddItem($"{item.Name} · {item.BitWidth} bit",item.SourceIndex);
+            hardware.AddItem($"{CatalogName(catalog,"HARDWARE",item.SourceIndex,item.Name)} · {item.BitWidth} {Tr("BIT_UNIT")}",item.SourceIndex);
         _content.AddChild(hardware);
         AddHeading(Tr("TARGET_AUDIENCE"),18);
         var audience=new OptionButton {Name="PlanningAudience"};
-        foreach (var item in catalog.Audiences) audience.AddItem(item.Name,item.SourceIndex);
+        foreach (var item in catalog.Audiences) audience.AddItem(CatalogName(catalog,"AUDIENCE",item.SourceIndex,item.Name),item.SourceIndex);
         _content.AddChild(audience);
         var quote=new Label {Name="PlanningQuote",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(quote);
         var gate=new Label {Name="PlanningGate",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(gate);

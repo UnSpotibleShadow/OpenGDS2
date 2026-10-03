@@ -894,4 +894,297 @@ msgid "MUSIC_DIRECTORY"
 msgstr "追加音楽フォルダー"
 
 msgid "MUSIC_LOCAL_NOTE"
-msgstr "Ogg Vorbis、WAV、MP3ファイルを配置して再起動してください。ファイル名順に再生します。"
+msgstr "8曲の音楽が付属しています。ここにOgg Vorbis、WAV、MP3を配置して再起動すると、ファイル名順に優先再生します。"
+
+# Display-only catalog names; Japanese names are resolved from the local import.
+
+msgid "CATALOG_GENRE_0"
+msgstr ""
+
+msgid "CATALOG_GENRE_1"
+msgstr ""
+
+msgid "CATALOG_GENRE_2"
+msgstr ""
+
+msgid "CATALOG_GENRE_3"
+msgstr ""
+
+msgid "CATALOG_GENRE_4"
+msgstr ""
+
+msgid "CATALOG_GENRE_5"
+msgstr ""
+
+msgid "CATALOG_GENRE_6"
+msgstr ""
+
+msgid "CATALOG_GENRE_7"
+msgstr ""
+
+msgid "CATALOG_GENRE_8"
+msgstr ""
+
+msgid "CATALOG_GENRE_9"
+msgstr ""
+
+msgid "CATALOG_GENRE_10"
+msgstr ""
+
+msgid "CATALOG_GENRE_11"
+msgstr ""
+
+msgid "CATALOG_GENRE_12"
+msgstr ""
+
+msgid "CATALOG_GENRE_13"
+msgstr ""
+
+msgid "CATALOG_GENRE_14"
+msgstr ""
+
+msgid "CATALOG_GENRE_15"
+msgstr ""
+
+msgid "CATALOG_GENRE_16"
+msgstr ""
+
+msgid "CATALOG_GENRE_17"
+msgstr ""
+
+msgid "CATALOG_TYPE_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_3"
+msgstr ""
+
+msgid "CATALOG_TYPE_4"
+msgstr ""
+
+msgid "CATALOG_TYPE_5"
+msgstr ""
+
+msgid "CATALOG_TYPE_6"
+msgstr ""
+
+msgid "CATALOG_TYPE_7"
+msgstr ""
+
+msgid "CATALOG_TYPE_8"
+msgstr ""
+
+msgid "CATALOG_TYPE_9"
+msgstr ""
+
+msgid "CATALOG_TYPE_10"
+msgstr ""
+
+msgid "CATALOG_TYPE_11"
+msgstr ""
+
+msgid "CATALOG_TYPE_12"
+msgstr ""
+
+msgid "CATALOG_TYPE_13"
+msgstr ""
+
+msgid "CATALOG_TYPE_14"
+msgstr ""
+
+msgid "CATALOG_TYPE_15"
+msgstr ""
+
+msgid "CATALOG_TYPE_16"
+msgstr ""
+
+msgid "CATALOG_TYPE_17"
+msgstr ""
+
+msgid "CATALOG_TYPE_18"
+msgstr ""
+
+msgid "CATALOG_TYPE_19"
+msgstr ""
+
+msgid "CATALOG_TYPE_20"
+msgstr ""
+
+msgid "CATALOG_TYPE_21"
+msgstr ""
+
+msgid "CATALOG_TYPE_22"
+msgstr ""
+
+msgid "CATALOG_TYPE_23"
+msgstr ""
+
+msgid "CATALOG_TYPE_24"
+msgstr ""
+
+msgid "CATALOG_TYPE_25"
+msgstr ""
+
+msgid "CATALOG_TYPE_26"
+msgstr ""
+
+msgid "CATALOG_TYPE_27"
+msgstr ""
+
+msgid "CATALOG_TYPE_28"
+msgstr ""
+
+msgid "CATALOG_TYPE_29"
+msgstr ""
+
+msgid "CATALOG_TYPE_30"
+msgstr ""
+
+msgid "CATALOG_TYPE_31"
+msgstr ""
+
+msgid "CATALOG_TYPE_32"
+msgstr ""
+
+msgid "CATALOG_TYPE_33"
+msgstr ""
+
+msgid "CATALOG_TYPE_34"
+msgstr ""
+
+msgid "CATALOG_TYPE_35"
+msgstr ""
+
+msgid "CATALOG_TYPE_36"
+msgstr ""
+
+msgid "CATALOG_TYPE_37"
+msgstr ""
+
+msgid "CATALOG_TYPE_38"
+msgstr ""
+
+msgid "CATALOG_TYPE_39"
+msgstr ""
+
+msgid "CATALOG_TYPE_40"
+msgstr ""
+
+msgid "CATALOG_TYPE_41"
+msgstr ""
+
+msgid "CATALOG_TYPE_42"
+msgstr ""
+
+msgid "CATALOG_TYPE_43"
+msgstr ""
+
+msgid "CATALOG_TYPE_44"
+msgstr ""
+
+msgid "CATALOG_TYPE_45"
+msgstr ""
+
+msgid "CATALOG_TYPE_46"
+msgstr ""
+
+msgid "CATALOG_TYPE_47"
+msgstr ""
+
+msgid "CATALOG_TYPE_48"
+msgstr ""
+
+msgid "CATALOG_TYPE_49"
+msgstr ""
+
+msgid "CATALOG_TYPE_50"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_0"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_1"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_2"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_3"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_4"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_5"
+msgstr ""
+
+msgid "CATALOG_AUDIENCE_6"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_0"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_1"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_2"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_3"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_4"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_5"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_6"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_7"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_8"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_9"
+msgstr ""
+
+msgid "CATALOG_HARDWARE_10"
+msgstr ""
+
+msgid "CATALOG_COMPUTER_0"
+msgstr ""
+
+msgid "CATALOG_COMPUTER_1"
+msgstr ""
+
+msgid "CATALOG_COMPUTER_2"
+msgstr ""
+
+msgid "CATALOG_COMPUTER_3"
+msgstr ""
+
+msgid "BIT_UNIT"
+msgstr "ビット"
+
+msgid "IMPORT_DIALOG_TITLE"
+msgstr "GameDev2DX.lzh を選択"
+
+msgid "LZH_ARCHIVES"
+msgstr "LHA/LZH アーカイブ"
+
+msgid "FILES_IMPORTED"
+msgstr "ファイルを読み込み"
+
+msgid "TOOLBAR_ARTWORK_MISSING"
+msgstr "ツールバーの画像が不足しています。LZH を再読み込みしてください。"
+
+msgid "TOOLBAR_READY"
+msgstr "ツールバーまたは上のメニューから操作を選んでください。"

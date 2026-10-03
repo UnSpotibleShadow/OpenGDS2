@@ -69,6 +69,8 @@ func run() -> void:
         check(catalog != null and catalog.Hardware.size() == 11, "Hardware catalog import")
         check(catalog != null and catalog.GameTypes.size() == 51, "Game type catalog import")
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
+        for index in range(16):
+            check(FileAccess.file_exists("user://original/Graphic/Embedded/Toolbar%d.bmp" % index),"Original toolbar bitmap imported locally: %d" % index)
     await press("NEW_GAME")
     if fixture.is_empty():
         check(nodes_of_type("LineEdit").is_empty(), "New game requires local original data")
@@ -87,10 +89,16 @@ func run() -> void:
     for name in ["OfficeWindow", "CompanyWindow", "EmployeeWindow", "ProductWindow"]:
         check(main.find_child(name,true,false) != null,"Original desktop window: " + name)
     check(main.find_child("OriginalDesktopWallpaper",true,false) != null,"Imported original desktop wallpaper")
+    check(main.find_child("ToolbarSAVE_GAME",true,false).icon != null,"Original toolbar save icon is loaded")
     check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
     check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
     check(main.find_child("PlanningAudience", true, false).item_count == 7, "Planning audience catalog")
+    for dropdown_name in ["PlanningHardware", "PlanningAudience"]:
+        var dropdown = main.find_child(dropdown_name,true,false)
+        var category = "HARDWARE" if dropdown_name == "PlanningHardware" else "AUDIENCE"
+        for index in range(dropdown.item_count):
+            check(dropdown.get_item_text(index).begins_with(tr("CATALOG_%s_%d" % [category,dropdown.get_item_id(index)])),"Original catalog label translated: " + dropdown_name)
     check(main.find_child("PlanningQuote", true, false).text.contains("20,000,000"), "Initial planning cost")
     check(main.find_child("PlanningQuote", true, false).text.contains("400"), "Initial planning points")
     await press("PLANNING_NEW_PROPOSAL")

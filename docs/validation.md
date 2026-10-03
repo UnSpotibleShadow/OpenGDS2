@@ -1,4 +1,23 @@
-# Validation — M27 checkpoint
+# Validation — M29 local / M28 desktop checkpoint
+
+M29 local direct compilation passes, all 27 Python checks pass with the private
+original fixture, and both Godot UI suites report zero failures. Coverage includes
+91 new English catalog labels, Japanese fallback to imported names, unchanged
+catalog data, toolbar images/tooltips and localized status help. See
+[localization and toolbar scope](localization-and-toolbar.md). Standard SDK and
+extracted desktop checks for M29 are pending.
+
+M28 bundles all eight explicitly authorized community recordings with local
+playlist overrides. The final GitHub tree contains no temporary transfer files;
+each track matches its local byte count, Git blob hash and SHA-256 digest. The
+[M28 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37142986101)
+passed all four jobs: 130 public C# checks, 18 public Python checks (eight private
+fixtures skipped), zero standard build warnings/errors, bundled track duration
+checks, both UI suites, both exports and full core-loop fixtures in extracted
+Linux and Windows packages. Both packaged runs reported zero failures.
+Download `OpenGDS2-desktop-development` from that run.
+
+## M27 checkpoint
 
 M27 fixes modern save-size integrity: serialization now refuses output above the
 loader's 4 MiB limit before creating a temporary file or replacing an existing

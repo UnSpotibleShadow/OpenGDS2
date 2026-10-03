@@ -29,6 +29,8 @@ public partial class Main
     private HBoxContainer? _projectButtons;
     private string _projectSignature = string.Empty;
     private int _desktopRefreshFrame;
+    private string _toolbarHelp = string.Empty;
+    private bool _toolbarArtworkMissing;
 
     private void DestroyDesktop()
     {
@@ -37,6 +39,7 @@ public partial class Main
         _desktopFunds = null; _desktopStatus = null; _desktopPause = null; _desktopLoad = null;
         _staffTable = null; _productTable = null; _staffRows.Clear(); _productRows.Clear();
         _windows.Clear(); _companyMetrics.Clear(); _projectButtons = null; _projectSignature = string.Empty;
+        _toolbarHelp = string.Empty; _toolbarArtworkMissing = false;
         _screen.Show();
     }
 
@@ -95,6 +98,8 @@ public partial class Main
         _desktopPause = ToolbarAction(toolbar, _paused ? "RESUME" : "PAUSE", () =>
         {
             _paused = !_paused; _desktopPause!.Text = Tr(_paused ? "RESUME" : "PAUSE");
+            _desktopPause.Icon = ToolbarArtwork.CreateFallback(_paused ? "RESUME" : "PAUSE");
+            if (!string.IsNullOrEmpty(_toolbarHelp)) _toolbarHelp = _desktopPause.Text;
             _desktopPause.TooltipText = _desktopPause.Text; RefreshDesktop(); _refreshCoreStatus?.Invoke();
         }, null);
         _desktopPause.Name = "TogglePause";
@@ -189,21 +194,21 @@ public partial class Main
 
     private Button ToolbarAction(HBoxContainer parent, string key, Action action, int? icon, bool enabled = true)
     {
-        var button = new Button { Text = Tr(key), TooltipText = Tr(key), Disabled = !enabled, ClipText = true,
+        var button = new Button { Name = $"Toolbar{key}", Text = Tr(key), TooltipText = Tr(key), Disabled = !enabled, ClipText = true,
             CustomMinimumSize = new Vector2(29, 26), FocusMode = FocusModeEnum.All };
+        button.TextureFilter = TextureFilterEnum.Nearest;
         button.AddThemeStyleboxOverride("normal", ClassicTheme.CompactButton());
         button.AddThemeStyleboxOverride("pressed", ClassicTheme.CompactButton(true));
         button.AddThemeFontSizeOverride("font_size", 1);
         foreach (string color in new[] { "font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color" })
             button.AddThemeColorOverride(color, Colors.Transparent);
         if (icon is int id) button.Icon = OriginalAssetStore.LoadTexture($"Graphic/Embedded/Toolbar{id}.bmp");
-        if (button.Icon is null)
-        {
-            var symbol = new Label { Text = key switch { "PAUSE" or "RESUME" => "Ⅱ/▶", "IMPORT_BUTTON" => "↓", _ => Tr(key)[..1] },
-                HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center,
-                MouseFilter = MouseFilterEnum.Ignore };
-            symbol.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); symbol.AddThemeFontSizeOverride("font_size", 12); button.AddChild(symbol);
-        }
+        if (icon is not null && button.Icon is null) _toolbarArtworkMissing = true;
+        button.Icon ??= ToolbarArtwork.CreateFallback(key);
+        button.MouseEntered += () => { _toolbarHelp = button.Text; RefreshDesktop(); };
+        button.MouseExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
+        button.FocusEntered += () => { _toolbarHelp = button.Text; RefreshDesktop(); };
+        button.FocusExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
         button.Pressed += () => action(); parent.AddChild(button); return button;
     }
 
@@ -235,7 +240,10 @@ public partial class Main
         _companyMetrics["STAFF"].Text = state.Employees.Count.ToString();
         _companyMetrics["RELEASED_COUNT"].Text = state.ReleasedGames.Count.ToString();
         _companyMetrics["HALL_OF_FAME_COUNT"].Text = state.ReleasedGames.Count(x => x.HallOfFame).ToString();
-        _desktopStatus.Text = (_paused ? Tr("PAUSED") + " · " : "") + string.Join(" · ", state.DevelopmentProjects.Select(ProjectSummary).Select(x => x.Replace('\n', ' ')));
+        string projects = string.Join(" · ", state.DevelopmentProjects.Select(ProjectSummary).Select(x => x.Replace('\n', ' ')));
+        _desktopStatus.Text = !string.IsNullOrEmpty(_toolbarHelp) ? _toolbarHelp :
+            (_paused ? Tr("PAUSED") + " · " : "") + (string.IsNullOrEmpty(projects)
+                ? Tr(_toolbarArtworkMissing ? "TOOLBAR_ARTWORK_MISSING" : "TOOLBAR_READY") : projects);
         string signature = string.Join("|", state.DevelopmentProjects.Select(x => $"{x.RoomIndex}:{x.Title}"));
         if (signature != _projectSignature && _projectButtons is not null)
         {

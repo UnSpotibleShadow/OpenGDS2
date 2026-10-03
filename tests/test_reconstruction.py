@@ -57,6 +57,16 @@ class PublicTests(unittest.TestCase):
             self.assertEqual(len(ids),len(set(ids)),language+' duplicate msgid')
             keys.append(set(ids))
         self.assertEqual(keys[0],keys[1])
+    def test_english_catalog_translation_coverage(self):
+        import re
+        text=(ROOT/'localization'/'en.po').read_text()
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',text,re.M))
+        for category,count in {'GENRE':18,'TYPE':51,'AUDIENCE':7,'HARDWARE':11,'COMPUTER':4}.items():
+            for index in range(count):
+                key=f'CATALOG_{category}_{index}'
+                self.assertIn(key,entries,key)
+                self.assertTrue(entries[key],key+' missing English label')
+                self.assertFalse(any('\u3040' <= c <= '\u30ff' or '\u4e00' <= c <= '\u9fff' for c in entries[key]),key)
     def test_public_tree_no_original_files(self):
         for path in ROOT.rglob('*'):
             if any(part in ['.git','.godot','bin','obj','__pycache__'] for part in path.parts):continue

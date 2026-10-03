@@ -69,7 +69,7 @@ public partial class Main
                 foreach (int source in candidates)
                 {
                     var type=catalog.GameTypes.Single(x=>x.SourceIndex==source);
-                    var button=new Button {Name=$"SelectType{listIndex++}",Text=$"{type.Name} · ¥{type.SelectionFee:N0}",
+                    var button=new Button {Name=$"SelectType{listIndex++}",Text=$"{CatalogName(catalog,"TYPE",type.SourceIndex,type.Name)} · ¥{type.SelectionFee:N0}",
                         Disabled=state.Money is null || state.Money<type.SelectionFee};
                     button.Pressed+=()=>
                     {
@@ -88,7 +88,7 @@ public partial class Main
             if (state.Company.OriginalMember90 is not int companyValue) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");return;}
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
-                var button=new Button {Name=$"SelectGenre{genre.SourceIndex}",Text=$"{genre.Name} · ¥{genre.SelectionFee:N0}",
+                var button=new Button {Name=$"SelectGenre{genre.SourceIndex}",Text=$"{CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name)} · ¥{genre.SelectionFee:N0}",
                     Disabled=state.Money is null || state.Money<genre.SelectionFee};
                 button.Pressed+=()=>
                 {

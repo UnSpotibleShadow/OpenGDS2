@@ -30,7 +30,7 @@ public partial class Main
         {
             AddHeading(Tr("AVAILABLE_GENRES"),20);
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,research)))
-                AddHeading(genre.Name,16);
+                AddHeading(CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name),16);
         }
         _status=new Label();_content.AddChild(_status);
         AddAction("SAVE_GAME",()=>
