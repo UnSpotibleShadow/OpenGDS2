@@ -27,8 +27,9 @@ table contains every index from zero through SourceUpperBound minus one.
 A partial, duplicate or unbounded table leaves the scratch unknown.
 This completeness requirement is a modern guard, not an original formula.
 
-The staff screen shows individual salaries, their total and a separately labeled
-original-payroll preview. It changes no funds. Opening Staff again rebuilds the
+The staff screen shows individual salaries and their total. The separate calendar
+inspector contains the original-payroll preview, keeping reconstruction details
+out of the staff-management screen. It changes no funds. Opening Staff again rebuilds the
 scratch; gate changes alone do not silently recompute it. Save/load retains the
 snapshot independently of the current employed count. Legacy saves have null.
 
@@ -53,7 +54,7 @@ scratch emulation.
   and hardware progression in a live calendar.
 
 Signed values are retained by the pure arithmetic; checked modern arithmetic
-rejects overflow. The UI reports an unavailable preview if monetary projection
+rejects overflow. The inspector reports an unavailable preview if monetary projection
 overflows. Those are data-integrity protections, not a replacement salary rule.
 
 ## Validation
