@@ -24,6 +24,7 @@ public sealed class OfficeEmployeeState
     public int OffsetX { get; set; }
     public int OffsetY { get; set; }
     public int DepthAdjustment { get; set; }
+    public TechnologyApplicationState? TechnologyApplication { get; set; }
     public EmployeeTrainingState? Training { get; set; }
     public int TrainingIdleTicks { get; set; }
     public int WorkTicks { get; set; }

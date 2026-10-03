@@ -709,3 +709,39 @@ msgstr "Fun technique"
 
 msgid "TECHNOLOGY_NAME_7"
 msgstr "Originality technique"
+
+msgid "USE_TECHNOLOGY"
+msgstr "Use technology"
+
+msgid "TECHNOLOGY_REMAINING_WORK"
+msgstr "Remaining technology work"
+
+msgid "TECHNOLOGY_USE_NOTE"
+msgstr "Use learned technologies from a development desk. Effects consume experience; repeated project applications have diminishing returns."
+
+msgid "TECHNOLOGY_USE_Success"
+msgstr "Technology accepted."
+
+msgid "TECHNOLOGY_USE_NotEmployed"
+msgstr "Employee is no longer employed."
+
+msgid "TECHNOLOGY_USE_StateUnknown"
+msgstr "Technology or project data is unavailable."
+
+msgid "TECHNOLOGY_USE_NotAtDevelopmentDesk"
+msgstr "Assign a development desk and let the employee reach it first."
+
+msgid "TECHNOLOGY_USE_NoProject"
+msgstr "This room needs an active development project."
+
+msgid "TECHNOLOGY_USE_DecisionPending"
+msgstr "Complete the pending project decision first."
+
+msgid "TECHNOLOGY_USE_NotLearned"
+msgstr "This technology has not been learned."
+
+msgid "TECHNOLOGY_USE_InsufficientExperience"
+msgstr "Not enough experience."
+
+msgid "TECHNOLOGY_USE_UnresolvedBehavior"
+msgstr "This technology effect is not available in this build."

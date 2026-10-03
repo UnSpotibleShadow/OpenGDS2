@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M17.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M18.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -52,15 +52,17 @@ unresolved. See [employee dismissal evidence](docs/employee-dismissal.md).
 
 M17 imports the eight technology definitions and initial employee skills, connects
 technology purchasing and study at all five training seats, and preserves learned
-skills through saving, dismissal and rehiring. Applying technologies during
-development remains the next target; see [training evidence](docs/training-and-technologies.md).
+skills through saving, dismissal and rehiring; see [training evidence](docs/training-and-technologies.md).
+M18 connects six timed project technologies with diminishing returns, plus two
+stress-relief levels. Speed and top-level stress relief remain unresolved; see
+[application evidence](docs/technology-application.md).
 
 M16 connects public relations, genre research and production expansion, including
 the shared budget and automatic production growth. Research unlocks more genres;
 fame increases future project recognition. See [company activity evidence and
 clock scope](docs/company-activities.md).
 See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
-reviews, awards and recall effects are still unfinished.
+awards and recall effects are still unfinished. Reviews and sales milestones are connected.
 
 ## Run
 

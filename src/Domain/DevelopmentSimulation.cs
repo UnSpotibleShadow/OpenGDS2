@@ -8,7 +8,13 @@ public static class DevelopmentSimulation
         var office=employee.Office;
         if (office is null || !office.WorkEngaged || office.MovementState!=0 || office.SeatedAction is <6 or >17) return;
         var project=state.DevelopmentProjects.SingleOrDefault(x=>x.RoomIndex==(office.SeatedAction-6)/6);
-        if (project is null || project.PendingDecision.HasValue || project.OriginalRoomState!=1) return;
+        if (project is null)
+        {
+            // Original +4886..48EA cancels a workspace application when its room is empty.
+            office.TechnologyApplication=null;ReleaseService.ResetWork(office);return;
+        }
+        if (project.PendingDecision.HasValue || project.OriginalRoomState!=1 ||
+            office.TechnologyApplication is not null && project.TechnologyApplicationCounts is null) return;
         if (employee.Stress is not double stress || employee.DevelopmentSpeed is not int speed ||
             employee.Inspiration is not int inspiration || employee.Experience is null || employee.Level is null)
             return; // Unknown imported/legacy employee fields cannot be guessed.
@@ -35,7 +41,7 @@ public static class DevelopmentSimulation
             office.ActionTicks++;
         }
         double idleThreshold=project.OriginalStage==3 ? 2*(10+(100-speed)/10.0) : DevelopmentWorkRules.RequiredIdleTicks(speed);
-        if (!office.IdleBreak && office.WorkTicks==0 && office.WorkIdleTicks>=idleThreshold)
+        if (office.TechnologyApplication is null && !office.IdleBreak && office.WorkTicks==0 && office.WorkIdleTicks>=idleThreshold)
         {
             if (project.OriginalStage==3)
             {
@@ -46,6 +52,10 @@ public static class DevelopmentSimulation
             else Start(DevelopmentWorkRules.SelectCategory(project.Focus!,random.Next(300)));
         }
         else office.WorkIdleTicks=checked(office.WorkIdleTicks+1);
+        if (office.TechnologyApplication is not null && office.WorkTicks==0)
+        {
+            office.WorkIdleTicks=0;office.BurstTicks=0;office.WorkTicks=1;office.WorkTier=4;
+        }
         bool complete=false;
         if (office.WorkTier is 1 or 2 && office.WorkTicks==16) complete=true;
         if (office.WorkTier==3 && office.WorkTicks>=32)
@@ -64,6 +74,7 @@ public static class DevelopmentSimulation
                     catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex).Identifier,random.NextDouble());
             office.WorkTicks=0;
         }
+        TechnologyApplicationService.TickWork(project,employee,catalog,random);
         if (office.WorkTicks>=1) office.WorkTicks++;
         var milestone=DevelopmentWorkRules.PendingMilestone(project);
         if (milestone.HasValue)

@@ -414,6 +414,7 @@ public partial class Main : Control
                     : workspace.Action is >=1 and <=5 ? $"{Tr("STUDY_SEAT")} {workspace.Action}" : Tr("LOUNGE")});
                 AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
                 AddAction("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _importer.LoadCatalog()?.Technologies.Count>0);
+                AddAction("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(x=>x.Value>0)==true);
                 AddAction("TAKE_BREAK",()=>
                 {
                     var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());

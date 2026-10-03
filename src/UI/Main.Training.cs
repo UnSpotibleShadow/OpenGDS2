@@ -78,6 +78,37 @@ public partial class Main
         AddSaveActions(state);
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
     }
+    private void ShowTechnologyUse(GameState state,EmployeeState employee)
+    {
+        ClearContent();AddHeading(Tr("USE_TECHNOLOGY"),28);AddEmployeeCard(employee);
+        AddHeading($"{Tr("EXPERIENCE")}: {employee.Experience:0.0}",18);
+        var catalog=_importer.LoadCatalog();
+        if (catalog is not null)
+        foreach (var technology in catalog.Technologies)
+        {
+            if (employee.TechnologyLevels?.TryGetValue(technology.SourceIndex,out int level)!=true || level<1) continue;
+            var result=TechnologyApplicationService.CheckUse(state,employee,technology);
+            AddHeading($"{TechnologyName(technology)} — {Tr("LEVEL")} {level}",18);
+            if (technology.RawTable1568.Count!=3) continue;
+            var button=new Button {Name=$"UseTechnology{technology.SourceIndex}",
+                Text=$"{Tr("USE_TECHNOLOGY")} — {technology.RawTable1568[level-1]} {Tr("EXPERIENCE")}",
+                Disabled=result!=TechnologyApplicationResult.Success};
+            _content.AddChild(button);
+            if (result!=TechnologyApplicationResult.Success) AddHeading(Tr($"TECHNOLOGY_USE_{result}"),16);
+            button.Pressed+=()=>
+            {
+                var outcome=TechnologyApplicationService.TryUse(state,employee,technology);
+                if (outcome==TechnologyApplicationResult.Success) ShowOfficeReconstruction(state);
+                else {ShowTechnologyUse(state,employee);AddHeading(Tr($"TECHNOLOGY_USE_{outcome}"),16);}
+            };
+        }
+        AddHeading(Tr("TECHNOLOGY_USE_NOTE"),16);
+        if (employee.Office?.TechnologyApplication is TechnologyApplicationState active)
+            AddHeading($"{Tr("TECHNOLOGY_REMAINING_WORK")}: {active.RemainingUnits}",16);
+        AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
+        AddSaveActions(state);
+        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+    }
     private void AddSaveActions(GameState state)
     {
         _status=new Label();_content.AddChild(_status);

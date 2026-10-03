@@ -1,10 +1,29 @@
-# Validation — M17 checkpoint
+# Validation — M18 checkpoint
+
+The [M18 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37091862119)
+passed 104 public C# checks, all ten public Python checks (eight original checks
+remain opt-in), a normal Godot build with zero warnings/errors, and both UI
+suites with zero failures.
+
+Coverage adds application costs, six effect formulas, diminishing returns,
+original random-width differences, flooring, shared-counter timing, save/load,
+desk lifecycle, stress relief and guards for unresolved branches. The UI runs
+active-application save/load and live compression through the actual Godot game.
+
+M18 was authored and verified through GitHub while the local execution workspace
+was disconnected. The optional original-fixture suite has not yet been rerun for
+M18. The last local imported-original validation is M17; new source traces were
+recovered before the interruption. Reconcile the local checkout with remote main
+before continuing reconstruction when execution becomes available.
+
+## M17 historical checkpoint
 
 M17 local checks passed: 98 C# checks (96 public), 18 Python checks with the
 local original, direct Godot C# compilation, and the complete synthetic gameplay
 UI with zero failures. The UI now covers technology purchase, course acceptance,
-mid-course save/load, completed study and study-seat persistence. Normal SDK/Godot
-CI will be recorded after publication.
+mid-course save/load, completed study and study-seat persistence. The [M17 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37090668093)
+passed 96 public domain checks, a build with zero warnings/errors, and both UI
+suites with zero failures.
 
 ## M16 historical checkpoint
 
