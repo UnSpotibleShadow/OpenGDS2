@@ -16,7 +16,7 @@ Test("modern saves validate progression in inactive source records too", () =>
 {
     var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
     var employee = new EmployeeState { SourceIndex = 0, Name = "Synthetic source", Level = 1, Experience = 5, Stress = 10 };
-    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = employee });
+    state.EmployeeSources.Add(new() { SourceIndex = 0, GateValue = 0, Employee = employee });
     foreach (double invalid in new[] { -1d, double.NaN, double.PositiveInfinity, double.NegativeInfinity })
     {
         employee.Experience = invalid;
@@ -35,7 +35,7 @@ Test("modern saves validate progression in inactive source records too", () =>
 Test("modern loads reject corrupt source progression before recruitment", () =>
 {
     var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
-    state.EmployeeSources.Add(new() { SourceIndex = 0,
+    state.EmployeeSources.Add(new() { SourceIndex = 0, GateValue = 0,
         Employee = new() { SourceIndex = 0, Name = "Synthetic source", Level = 1, Experience = 5, Stress = 10 } });
     string text = SaveStore.Serialize(state);
     foreach (var field in new[] { "Level", "Experience", "Stress" })
@@ -52,7 +52,7 @@ Test("invalid source progression cannot replace a readable modern slot", () =>
     string slot = Path.Combine(directory, "slot1.json");
     var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
     var employee = new EmployeeState { SourceIndex = 0, Name = "Synthetic source", Level = 1 };
-    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = employee });
+    state.EmployeeSources.Add(new() { SourceIndex = 0, GateValue = 0, Employee = employee });
     try
     {
         SaveStore.Save(slot, state);
@@ -68,7 +68,7 @@ Test("invalid source progression cannot replace a readable modern slot", () =>
 Test("unknown source progression remains nullable across modern save load", () =>
 {
     var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
-    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = new() { SourceIndex = 0, Name = "Synthetic source" } });
+    state.EmployeeSources.Add(new() { SourceIndex = 0, GateValue = 0, Employee = new() { SourceIndex = 0, Name = "Synthetic source" } });
     var restored = SaveStore.Deserialize(SaveStore.Serialize(state)).EmployeeSources.Single().Employee;
     Check(restored.Level is null && restored.Experience is null && restored.Stress is null);
 });
