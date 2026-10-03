@@ -45,6 +45,10 @@ reprints consume it; the sales screen re-enables reproduction at the next
 200-tick budget reset. Older saves with an unknown allowance require a new
 company. See [production-budget.md](docs/production-budget.md).
 
+M20 records the original current-week and twelve prior weeks of product sales.
+Open **Sales History** for the classic graph; signed counts and original scale
+boundaries are preserved. See [sales-history.md](docs/sales-history.md).
+
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements
 survive save/load and pause the office clock until acknowledged. See

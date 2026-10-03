@@ -163,6 +163,8 @@ public partial class Main
             var button=new Button {Name=$"ProduceProduct{product.ProductIndex}",Text=Tr("PRODUCE_MORE"),Disabled=state.Company.ProductionCapacity is null};
             button.Pressed+=()=>ShowProduction(state,product);_content.AddChild(button);
             rows.Add((product,report,button));
+            var history=new Button {Name=$"SalesHistoryProduct{product.ProductIndex}",Text=Tr("SALES_HISTORY")};
+            history.Pressed+=()=>ShowSalesHistory(state,product);_content.AddChild(history);
             if (product.ReviewScores is not null)
             {
                 var reviews=new Button {Name=$"ReviewsProduct{product.ProductIndex}",Text=Tr("MAGAZINE_REVIEWS")};

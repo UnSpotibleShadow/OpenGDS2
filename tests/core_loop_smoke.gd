@@ -169,6 +169,10 @@ func run() -> void:
     check(product.NetSalesReceipts == product.UnitsSold * 2800,"Revenue uses original per-copy fees")
     await press("LOAD_GAME")
     await press("SALES")
+    await press_node("SalesHistoryProduct0")
+    check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
+    check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
+    await press("BACK_TO_SALES")
     await press_node("ProduceProduct0")
     check(main.find_child("ProductionCopies",true,false) != null,"Reprint controls")
     main.find_child("ProductionCopies",true,false).value = 1000
@@ -179,6 +183,7 @@ func run() -> void:
     var reprinted = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(reprinted.State.ReleasedGames[0].ProductionSpending == product.ProductionSpending + 500000,"Reprint costs original band plus packaging")
     check(reprinted.State.ProductionPerformedThisWeek,"Production allowance persists in saves")
+    check(reprinted.State.ReleasedGames[0].WeeklySalesHistory.size() == 13,"Sales history persists all thirteen cells")
     await press("START_GAME_DEVELOPMENT")
     main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
     await press_node("AcceptPlan")

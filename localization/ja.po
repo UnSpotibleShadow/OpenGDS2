@@ -754,3 +754,21 @@ msgstr "今週はすでに生産しました。再生産は翌週までお待ち
 
 msgid "RELEASE_RESULT_StateUnknown"
 msgstr "このセーブでは生産の状態が不明です。新しい会社を始めてください。"
+
+msgid "SALES_HISTORY"
+msgstr "売上推移"
+
+msgid "SALES_HISTORY_CURRENT"
+msgstr "今週"
+
+msgid "SALES_HISTORY_PREVIOUS"
+msgstr "先週"
+
+msgid "SALES_HISTORY_OLDEST"
+msgstr "12週前"
+
+msgid "SALES_HISTORY_UNKNOWN"
+msgstr "このセーブには週ごとの売上記録がありません。"
+
+msgid "BACK_TO_SALES"
+msgstr "売上画面へ戻る"

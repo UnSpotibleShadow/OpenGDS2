@@ -43,6 +43,9 @@ public static class SalesService
         // Unknown legacy fees must not silently become zero.
         if (state.Money is null || state.SalesFee1 is null || state.SalesFee2 is null ||
             state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
+        if (state.SalesTicks+1>=TicksPerBatch)
+            foreach (var product in state.ReleasedGames)
+                if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
         if (++state.SalesTicks<TicksPerBatch) return;
         state.SalesTicks=0;
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
@@ -51,10 +54,12 @@ public static class SalesService
             long receipts=checked(checked(product.Price-state.SalesFee1.Value-state.SalesFee2.Value)*sales);
             long stock=checked(product.Stock-sales),units=checked(product.UnitsSold+sales);
             long funds=checked(state.Money!.Value+receipts),net=checked(product.NetSalesReceipts+receipts);
+            long? weekly=product.WeeklySalesHistory is not null ? checked(product.WeeklySalesHistory[0]+sales) : null;
             int first=random.Next(50);
             int demand=NextDemand(product.Demand,first,first==0 ? null : random.Next(7));
             state.Money=funds;product.Stock=stock;product.UnitsSold=units;
             product.NetSalesReceipts=net;product.LastBatchSold=sales;product.Demand=demand;
+            if (weekly is long unitsThisWeek) product.WeeklySalesHistory![0]=unitsThisWeek;
             SalesMilestoneService.QueueReached(product);
         }
     }

@@ -501,6 +501,53 @@ Test("release and reprint failure guards are atomic",()=>
     var other=new DevelopmentProjectState {RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(other);
     Check(ReleaseService.TryRelease(s,other,c,"Synthetic",5800,100,new SequenceRandom())==ReleaseResult.DuplicateTitle);
 });
+Test("weekly sales history records signed units and preserves missing legacy data",()=>
+{
+    var s=PlanningState(100000);s.SalesTicks=19;s.SalesFee1=s.SalesFee2=1500;
+    var g=new ReleasedGameState {Title="History",Stock=10000,Price=5800,MarketFactor=1,Quality=new(100,100,100,100),
+        WeeklySalesHistory=SalesHistoryRules.NewHistory()};s.ReleasedGames.Add(g);
+    SalesService.Tick(s,CoreCatalog(),new SequenceRandom(0,0));
+    Check(g.UnitsSold==3627 && g.WeeklySalesHistory[0]==3627 && g.WeeklySalesHistory.Skip(1).All(x=>x==0));
+    s.SalesTicks=19;g.Quality=new();g.Bugs=100;g.WeeklySalesHistory[0]=0;g.UnitsSold=0;g.Stock=10000;
+    SalesService.Tick(s,CoreCatalog(),new SequenceRandom(0,0));
+    Check(g.LastBatchSold==-844 && g.WeeklySalesHistory[0]==-844 && g.Stock==10844);
+    g.WeeklySalesHistory=null;s.SalesTicks=19;g.Quality=new(100,100,100,100);g.Bugs=0;
+    SalesService.Tick(s,CoreCatalog(),new SequenceRandom(0,0));
+    SalesHistoryRules.AdvanceWeek(s);Check(g.WeeklySalesHistory is null && g.LastBatchSold==3627);
+});
+Test("week-boundary sales enter the new history cell after shifting and survive reload",()=>
+{
+    var s=PlanningState(100000);s.SalesTicks=19;s.SalesFee1=s.SalesFee2=1500;s.CompanyActivityTicks=199;
+    var g=new ReleasedGameState {Title="Boundary",Stock=10000,Price=5800,MarketFactor=1,Quality=new(100,100,100,100),
+        WeeklySalesHistory=SalesHistoryRules.NewHistory()};s.ReleasedGames.Add(g);
+    g.WeeklySalesHistory[0]=1234;g.WeeklySalesHistory[1]=567;g.WeeklySalesHistory[12]=99;
+    var restored=SaveStore.Deserialize(SaveStore.Serialize(s));var session=new GameSession(new SequenceRandom(0,0));session.Restore(restored);
+    session.TickOffice(CoreCatalog());var history=restored.ReleasedGames[0].WeeklySalesHistory!;
+    Check(history.Count==13 && history[0]==3627 && history[1]==1234 && history[2]==567 && history[12]==0);
+    Check(restored.CompanyActivityTicks==0 && g.WeeklySalesHistory[0]==1234);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(restored)).ReleasedGames[0].WeeklySalesHistory!.SequenceEqual(history));
+});
+Test("sales chart uses original thresholds and omits the oldest cell from scale selection",()=>
+{
+    var history=SalesHistoryRules.NewHistory();Check(SalesHistoryRules.ChartCeiling(history)==40000);
+    history[0]=29999;Check(SalesHistoryRules.ChartCeiling(history)==40000);
+    history[0]=30000;Check(SalesHistoryRules.ChartCeiling(history)==80000);
+    history[0]=99999;Check(SalesHistoryRules.ChartCeiling(history)==80000);
+    history[0]=100000;Check(SalesHistoryRules.ChartCeiling(history)==200000);
+    history[0]=long.MaxValue;Check(SalesHistoryRules.ChartCeiling(history)==200000);
+    history[0]=0;history[12]=long.MaxValue;Check(SalesHistoryRules.ChartCeiling(history)==40000);
+    history[11]=30000;Check(SalesHistoryRules.ChartCeiling(history)==80000);
+});
+Test("history save validation rejects wrong shapes without filling unknown records",()=>
+{
+    var s=PlanningState();var g=new ReleasedGameState {Title="History",WeeklySalesHistory=[1]};s.ReleasedGames.Add(g);
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.WeeklySalesHistory=SalesHistoryRules.NewHistory();g.WeeklySalesHistory[0]=-7;
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].WeeklySalesHistory![0]==-7);
+    g.WeeklySalesHistory=null;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].WeeklySalesHistory is null);
+    g.WeeklySalesHistory=[1];s.SalesTicks=19;s.SalesFee1=s.SalesFee2=1500;
+    Throws<InvalidDataException>(()=>SalesService.Tick(s,CoreCatalog(),new SequenceRandom()));Check(s.SalesTicks==19);
+});
 Test("production budget is shared across products and resets at exactly two hundred ticks",()=>
 {
     var s=PlanningState(200000);var c=CoreCatalog();

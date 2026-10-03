@@ -31,6 +31,7 @@ public static class ReleaseService
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
+            WeeklySalesHistory=SalesHistoryRules.NewHistory(),
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,
