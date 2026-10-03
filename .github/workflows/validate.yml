@@ -9,6 +9,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - run: dotnet run --project tests/DomainTests/DomainTests.csproj
+      - run: python3 -m pip install -r requirements-tools.txt
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
   godot:
     runs-on: ubuntu-latest

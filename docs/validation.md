@@ -1,7 +1,7 @@
 # Validation — M25 checkpoint
 
 Local workspace access has been restored. Direct C# compilation passed, with
-126 domain checks including two optional original-fixture checks. All 21 Python
+126 domain checks including two optional original-fixture checks. All 26 Python
 checks passed with the supplied original executable. The imported-original Godot
 UI suite and the full development/release/sales UI suite reported zero failures.
 M25 adds desktop geometry/window-control checks, required-original local artwork
@@ -10,6 +10,7 @@ local; public tests generate authored silent WAV fixtures. ZIP conversion tests
 cover path isolation, no-overwrite behavior and failure without partial output.
 Final GitHub SDK
 build and exported Linux/Windows package results are recorded below once complete.
+The local bitmap patch tool has five additional authored-fixture integrity tests.
 
 The constrained local host uses a direct Roslyn compiler because Godot's editor
 SDK discovery cannot use the unavailable /proc environment. These local runs do

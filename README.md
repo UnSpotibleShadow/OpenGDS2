@@ -68,7 +68,8 @@ icons/wallpaper. It supports optional local background music,
 with mute/volume settings and independent audio preferences. Recordings are not
 bundled; see the local conversion instructions below. Required LZH
 importing remains unchanged. Local translated-artwork overrides remain outside
-the repository. See [desktop/UI and music scope](docs/desktop-ui-and-music.md).
+the repository; a hash-checked local patch tool creates replacements without
+changing imported originals. See [desktop/UI and music scope](docs/desktop-ui-and-music.md).
 See [desktop build instructions](docs/building.md).
 
 M14 adds original review scoring, four-reviewer release results, Hall of Fame

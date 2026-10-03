@@ -63,9 +63,35 @@ must retain dimensions; office atlases must retain the verified coordinates and
 raster-mask geometry. The imported files remain untouched, so deleting an
 override restores the original presentation. Reimports leave overrides alone.
 
-This is a local replacement loader, not a public translated-artwork pack or an
-automatic bitmap patch. It makes no claim that a particular translation or
-adaptation is licensed. Original-derived output remains excluded from exports.
+The local patch tool can generate these replacements without modifying imported
+files. It contains no original pixels or premade game-specific translation plan:
+
+```sh
+python3 -m pip install -r requirements-tools.txt
+python3 tools/patch_local_artwork.py --original "/path/to/user/original" --inspect "Graphic/Title.bmp" > local-plan.json
+```
+
+The inspection prints the locally imported catalog hash, bitmap hash and size.
+Add verified rectangle operations to `operations` in that private plan. Each
+operation has `rect: [x, y, width, height]`, `background: "#RRGGBB"` and optionally
+`text`, `color` and `fontSize`. Text uses printable English ASCII and the optional
+Pillow dependency's default font; it must fit the rectangle. No original bitmap
+coordinates or replacement Japanese text are guessed or bundled.
+
+```sh
+python3 tools/patch_local_artwork.py --original "/path/to/user/original" --overrides "/path/to/user/asset-overrides" --plan local-plan.json
+```
+
+The complete plan is validated before any output is written. Only imported
+`Graphic/...bmp` files matching the plan's hashes and dimensions are accepted.
+Metadata files, traversal paths, symlinks, oversized/out-of-bounds rectangles and
+existing replacements are rejected. Output is a same-size PNG in the separate
+local override directory. Delete it to restore the imported original.
+
+This mechanism makes no claim that a particular translation or adaptation is
+licensed. Original-derived output remains local and excluded from exports.
+Pillow is an optional Python tool dependency, not bundled with the Godot runtime;
+its installed package retains its own license and attribution.
 
 ## Optional soundtrack
 
@@ -102,7 +128,9 @@ resources but do not start dummy-driver playback.
 
 ## Validation limits
 
-Domain tests cover local-overlay precedence, original-file requirements,
+Authored Python fixtures cover patch hash/catalog matching, unchanged originals,
+pixel boundaries, path/symlink rejection, existing-output preservation and atomic
+validation of multiple patches. Domain tests cover local-overlay precedence, original-file requirements,
 rule-data exclusion and unsafe paths. The original-fixture UI suite verifies the
 native office dimensions, imported wallpaper, hiring, desk assignment and lounge
 return. The complete core-loop UI fixture also verifies simultaneous windows,

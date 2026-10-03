@@ -1,0 +1,2 @@
+# Optional local bitmap patch tool and its authored-fixture tests.
+Pillow==12.3.0
