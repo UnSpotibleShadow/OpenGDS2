@@ -1,4 +1,20 @@
-# Validation — M26 checkpoint
+# Validation — M27 checkpoint
+
+M27 fixes modern save-size integrity: serialization now refuses output above the
+loader's 4 MiB limit before creating a temporary file or replacing an existing
+slot. Regressions verify preservation of the old readable slot, absence of
+leftover temporary files, an exact-limit round trip including JSON overhead, and
+rejection one byte above the limit. This does not change original simulation
+rules or establish original-save compatibility.
+
+The [M27 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37135926273)
+passed all four jobs: 130 public C# checks; 18 public Python checks (eight private
+fixtures skipped); a normal Godot/.NET build with zero warnings/errors; both UI
+suites; Linux/Windows exports; and full core-loop fixtures in extracted packages
+on native Linux and Windows. Both packaged runs reported zero failures.
+Download `OpenGDS2-desktop-development` from that run.
+
+## M26 checkpoint
 
 M26 adds four public domain checks for the independently recovered outcome
 branches of both per-copy fee negotiations. Local direct compilation passed with
