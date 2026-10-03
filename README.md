@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M31.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M32.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -107,6 +107,10 @@ fame increases future project recognition. See [company activity evidence and
 clock scope](docs/company-activities.md).
 See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
 awards and company progression are still unfinished. Reviews and sales milestones are connected.
+
+M32 audits the original and current implementation and restores employee selection
+from office clicks and staff-table activation. See the
+[original/OpenGDS2 comparison and prioritized gaps](docs/original-comparison.md).
 
 ## Run
 

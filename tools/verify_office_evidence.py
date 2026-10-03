@@ -49,6 +49,25 @@ def verify(data):
     require(tick, 0xDD0D, '0a 2d 01 04 00 3c 0a 2e 01 00 00 1e 09 00')
     require(tick, 0xD957, 'f5 28 03 44 00')
     require(tick, 0xDA30, 'f5 46 00 66 00')
+    # fMainVisual left-click scans workspace slots in ascending order. Its
+    # inclusive 16x32 hit box omits the outer two pixels on each side.
+    select = 0x9C66BC
+    require(select, 0x0758, '28 08 ff 00 00 04 18 ff 05 25 00')
+    require(select, 0x07BE, '28 4c ff 02 00 fb 94 3c ff fb 56 b8 fe')
+    require(select, 0x07E6, '28 88 fe 10 00 fb 94 78 fe 28 68 fe 02 00 fb 9c 58 fe fb 49 38 fe')
+    require(select, 0x081B, '28 f8 fd 02 00 fb 94 e8 fd fb 56 c8 fd')
+    require(select, 0x0847, '28 88 fd 20 00 fb 94 78 fd 28 68 fd 02 00 fb 9c 58 fd fb 49 38 fd')
+    require(select, 0x0879, '04 18 ff fd c0 24 00')
+    require(select, 0x08BF, '1e cb 08')
+    # Pending notification 2EF4 is copied into the active visual field. It is
+    # separate from work tier 28A4; notification 4 selects a 51x14 atlas bubble.
+    for index, value in [(0x19,0xA14530),(0xEC,0xA139F4),(0x18,0xA138A4)]:
+        if pe.u32(0x5F99AC+index*4) != value:
+            raise ParseError('Notification/work-tier pool mapping changed')
+    require(tick, 0xC96C, '05 19 00 fc 96 6b 48 ff e7 05 ec 00 fc b0')
+    require(tick, 0xC97A, '28 6c ff 00 00 6b 48 ff e7 05 19 00 52')
+    require(tick, 0xCA55, '28 6c ff 37 00 fc f6 4c fc 28 6c ff 8b 01 fc f6 3c fc')
+    require(tick, 0xCA67, '28 6c ff 33 00 fc f6 7c fa 28 6c ff 0e 00 fc f6 6c fa')
     return True
 
 

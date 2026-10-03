@@ -124,6 +124,13 @@ func run() -> void:
     var office = main.find_child("OfficeWindow",true,false)
     var staff_table = main.find_child("DesktopEmployeeTable",true,false)
     check(staff_table.get_root().get_child_count() == 1,"Desktop table shows loaded employee")
+    staff_table.get_root().get_first_child().select(0)
+    staff_table.item_activated.emit()
+    await process_frame
+    var selected_employee = main.find_child("SelectedEmployee",true,false)
+    check(selected_employee != null and selected_employee.get_meta("employee_source") == 0,"Activating an employee row opens that employee's controls")
+    check(main.find_child("DismissEmployee0",true,false) != null,"Selected employee supports existing management actions")
+    await press("CANCEL")
     var employee_window = main.find_child("EmployeeWindow",true,false)
     var original_position = employee_window.position
     employee_window.find_child("MinimizeWindow",true,false).pressed.emit()
