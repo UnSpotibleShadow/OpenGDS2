@@ -69,6 +69,8 @@ public static class SaveStore
         if (state.OriginalAccuracyCells?.Any(x=>x.Key is <0 or >512 || x.Value is <0 or >99)==true)
             throw new InvalidDataException("Invalid original accuracy cells.");
         if (state.SalesTicks is <0 or >=SalesService.TicksPerBatch || state.SalesFee1<0 || state.SalesFee2<0 ||
+            state.CompanyActivityTicks is <0 or >=CompanyActivityService.TicksPerWeek || state.Company.ActivityCost<0 ||
+            state.Company.Fame is <0 or >100 || state.Company.OriginalMember90>100 ||
             state.Company.ProductionCapacity<0 || state.Company.OriginalMember90<0 || state.Company.HallOfFameCount<0 ||
             (state.OriginalTypeRosterMap is not null && (state.OriginalTypeRosterMap.Count!=65 ||
              state.OriginalTypeRosterMap.Any(x=>x.Key is <0 or >64 || x.Value is <0 or >50))))

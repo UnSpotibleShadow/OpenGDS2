@@ -135,7 +135,8 @@ regression tests cover it instead of silently changing the formula.
 - Polishing, sequels, external studios/jobs and their shipping modifiers.
 - Contests/awards, recall effects and company progression. M14 adds reviews and
   sales milestone dialogs; see reviews-and-events.md.
-- Company member 90 progression and research. The earlier claim that sales
+- M16 connects company member 90/genre research; see company-activities.md.
+  The earlier claim that sales
   credited genre experience was incorrect: A1301C is indexed by product. Its
   history structure still needs reconstruction.
 - Complete meeting, idle-break and burst icon/animation presentation.

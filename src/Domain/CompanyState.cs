@@ -11,7 +11,8 @@ public sealed class CompanyState
     public int? DevelopmentPower { get; set; }
     public int? Rank { get; set; }
     public int? ProductionCapacity { get; set; }
-    // Genre eligibility reads this member; its broader meaning is unresolved.
+    // Original member 90: genre research, confirmed by fGMSeisanZ.
     public int? OriginalMember90 { get; set; }
     public int? HallOfFameCount { get; set; }
+    public long? ActivityCost { get; set; }
 }

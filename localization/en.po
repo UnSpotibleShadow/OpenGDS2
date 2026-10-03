@@ -592,3 +592,39 @@ msgstr "This employee is no longer employed."
 
 msgid "DISMISS_RESULT_IdentityUnknown"
 msgstr "Original employee identity is unknown."
+
+msgid "COMPANY_ACTIVITIES"
+msgstr "Company activities"
+
+msgid "COMPANY_ACTIVITY_COST"
+msgstr "Activity cost"
+
+msgid "GENRE_RESEARCH"
+msgstr "Genre research"
+
+msgid "PUBLIC_RELATIONS"
+msgstr "Public relations"
+
+msgid "EXPAND_PRODUCTION"
+msgstr "Expand production"
+
+msgid "PRODUCTION_CAPACITY"
+msgstr "Production capacity"
+
+msgid "AVAILABLE_GENRES"
+msgstr "Available genres"
+
+msgid "COMPANY_ACTIVITY_ALREADY_USED"
+msgstr "An activity has already been performed this week."
+
+msgid "COMPANY_ACTIVITY_RESULT_Success"
+msgstr "Activity completed."
+
+msgid "COMPANY_ACTIVITY_RESULT_AlreadyActed"
+msgstr "Wait until next week for another activity."
+
+msgid "COMPANY_ACTIVITY_RESULT_StateUnknown"
+msgstr "Company activity state is unavailable."
+
+msgid "COMPANY_ACTIVITY_RESULT_InsufficientFunds"
+msgstr "Not enough funds."
