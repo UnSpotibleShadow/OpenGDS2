@@ -580,3 +580,15 @@ msgstr "続ける"
 
 msgid "SALES_MILESTONE"
 msgstr "販売本数の達成"
+
+msgid "DISMISS_EMPLOYEE"
+msgstr "社員を解雇"
+
+msgid "DISMISS_EMPLOYEE_CONFIRM"
+msgstr "この社員との契約を終了しますか？座席は空きになります。"
+
+msgid "DISMISS_RESULT_NotEmployed"
+msgstr "この社員はすでに退職しています。"
+
+msgid "DISMISS_RESULT_IdentityUnknown"
+msgstr "元の社員情報が不明です。"

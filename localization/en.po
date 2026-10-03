@@ -580,3 +580,15 @@ msgstr "Continue"
 
 msgid "SALES_MILESTONE"
 msgstr "Sales milestone"
+
+msgid "DISMISS_EMPLOYEE"
+msgstr "Dismiss employee"
+
+msgid "DISMISS_EMPLOYEE_CONFIRM"
+msgstr "Release this employee from their contract? Their seat will become available."
+
+msgid "DISMISS_RESULT_NotEmployed"
+msgstr "This employee is no longer employed."
+
+msgid "DISMISS_RESULT_IdentityUnknown"
+msgstr "Original employee identity is unknown."

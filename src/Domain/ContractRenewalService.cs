@@ -4,8 +4,8 @@ public enum ContractRenewalResult { Success, MoneyUnknown, FeeUnknown, Insuffici
 
 /// <summary>
 /// Verified employee/finance projection of fGMSKoyouKz.Command1.
-/// Scheduling and original workspace/task cleanup belong to their own systems.
-/// Do not expose this transaction during active work until that cleanup is reconstructed.
+/// Dismissal clears supported workspace projections. Calendar scheduling and
+/// training/external task cleanup remain separate reconstruction work.
 /// </summary>
 public static class ContractRenewalService
 {
@@ -44,14 +44,7 @@ public static class ContractRenewalService
 
         foreach (var employee in roster.Where(x => !selectedSourceIds.Contains(x.SourceIndex!.Value)))
         {
-            employee.Stress = 0;
-            var source = sources[employee.SourceIndex!.Value];
-            if (source is not null)
-            {
-                source.GateValue = 0;
-                source.Employee.Stress = 0;
-            }
-            state.Employees.Remove(employee);
+            EmployeeDismissalService.DismissResolved(state,employee,sources[employee.SourceIndex!.Value]);
         }
         state.Money -= total;
         return ContractRenewalResult.Success;

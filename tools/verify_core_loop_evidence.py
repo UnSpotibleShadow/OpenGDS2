@@ -35,6 +35,15 @@ def verify(data):
     # Hall-of-Fame company counter starts at zero and increments once per ceremony.
     require(0x9F651C,0x0066,'28 6c ff 00 00 fd e6 08 00 00 01')
     require(0x986780,0x0124,'05 09 00 28 58 ff 01 00 fb 94 48 ff fd b6 09 00')
+    # Dismissal clears the source employed gate/stress, not progression fields.
+    require(0x9981CC,0x03AF,'07 08 00 84 0c 52')
+    require(0x9981CC,0x03CB,'07 08 00 68 0c 52')
+    # Monthly payroll's index is shared scratch 3018, not the loop variable.
+    require(0x9DB4F4,0x06F6,'07 08 00 18 30 fc 22 07 08 00 dc 0b fc 96 fb 94 4c ff')
+    # Investigation delay, four-way outcome and zero-stock refund branch.
+    require(0x9EFA40,0x38A0,'28 6c ff 05 00 05 eb 00 fc 22 05 ec 00 52')
+    require(0x9EFA40,0x3A58,'f4 04 eb b3 fb e6')
+    require(0x9EFA40,0x3D15,'28 6c ff 00 00 05 eb 00 fc 22 05 fc 00 52')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True
