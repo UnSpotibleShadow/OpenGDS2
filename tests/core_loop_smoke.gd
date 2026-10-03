@@ -11,7 +11,7 @@ func check(condition: bool, message: String) -> void:
 func press(key: String) -> void:
     var found := false
     for button in main.find_children("*", "Button", true, false):
-        if button.text == tr(key):
+        if button.text == tr(key) and button.is_visible_in_tree():
             check(not button.disabled, "Enabled: " + key)
             if not button.disabled:
                 button.pressed.emit()
@@ -56,6 +56,19 @@ func await_node(name: String) -> bool:
 func _initialize() -> void:
     call_deferred("run")
 
+func create_music_fixture() -> void:
+    # Community-authored silent WAVs exercise local loading in exported builds.
+    # No supplied recordings or original-game audio are required by public CI.
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://music"))
+    for index in range(8):
+        var track := AudioStreamWAV.new()
+        track.format = AudioStreamWAV.FORMAT_16_BITS
+        track.mix_rate = 8000
+        var samples := PackedByteArray()
+        samples.resize(16000 * (index + 1))
+        track.data = samples
+        check(track.save_to_wav("user://music/office-%02d.wav" % (index+1)) == OK,"Write local music fixture")
+
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():
         push_error("core_loop_smoke requires disposable XDG_DATA_HOME")
@@ -88,11 +101,39 @@ func run() -> void:
         "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
+    create_music_fixture()
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
     await press("LOAD_GAME")
+    for name in ["OfficeWindow", "CompanyWindow", "EmployeeWindow", "ProductWindow"]:
+        var window = main.find_child(name,true,false)
+        check(window != null and window.visible,"Simultaneous desktop window: " + name)
+        check(window.get_global_rect().end.x <= main.get_viewport_rect().end.x,"Desktop window fits viewport: " + name)
+    var office = main.find_child("OfficeWindow",true,false)
+    var staff_table = main.find_child("DesktopEmployeeTable",true,false)
+    check(staff_table.get_root().get_child_count() == 1,"Desktop table shows loaded employee")
+    var employee_window = main.find_child("EmployeeWindow",true,false)
+    var original_position = employee_window.position
+    employee_window.find_child("MinimizeWindow",true,false).pressed.emit()
+    await process_frame
+    check(not staff_table.is_visible_in_tree(),"Employee window minimizes")
+    employee_window.find_child("MinimizeWindow",true,false).pressed.emit()
+    await process_frame
+    check(staff_table.is_visible_in_tree(),"Employee window restores")
+    employee_window.find_child("MaximizeWindow",true,false).pressed.emit()
+    await process_frame
+    check(employee_window.position == Vector2.ZERO,"Employee window maximizes within desktop")
+    employee_window.find_child("MaximizeWindow",true,false).pressed.emit()
+    await process_frame
+    check(employee_window.position == original_position,"Employee window restores original position")
+    employee_window.find_child("CloseWindow",true,false).pressed.emit()
+    check(not employee_window.visible,"Employee child window closes")
+    main.find_child("MENU_WINDOWS",true,false).get_popup().id_pressed.emit(2)
+    await process_frame
+    check(employee_window.visible,"Window menu reopens employee list")
     await press("START_GAME_DEVELOPMENT")
+    check(main.find_child("OfficeWindow",true,false) == office and office.visible,"Planning retains the office window")
     check(not main.find_child("AcceptPlan",true,false).disabled,"Planning can begin")
     main.find_child("PlanningTitle",true,false).text = "Synthetic UI Game"
     await press_node("AcceptPlan")
@@ -462,5 +503,42 @@ func run() -> void:
     await press("SAVE_GAME")
     var resumed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(resumed_save.State.CompanyActivityTicks != pause_saved.State.CompanyActivityTicks,"Resume advances the clock again")
+    var player = main.find_child("MusicPlayer",true,false)
+    check(player != null and player.stream != null and abs(player.stream.get_length()-1.0) < 0.01,"Local music loads during gameplay")
+    for index in range(8):
+        var track = AudioStreamWAV.load_from_file("user://music/office-%02d.wav" % (index+1))
+        check(track != null and abs(track.get_length()-(index+1)) < 0.01,"Local music duration %d" % (index+1))
+    await press("SETTINGS")
+    var enabled = main.find_child("MusicEnabled",true,false)
+    var volume = main.find_child("MusicVolume",true,false)
+    enabled.button_pressed = false
+    volume.value = 42
+    await process_frame
+    check(player.stream_paused or not player.playing,"Music toggle prevents playback independently")
+    var config = ConfigFile.new()
+    check(config.load("user://audio.cfg") == OK,"Audio preferences saved")
+    check(config.get_value("music","enabled") == false and config.get_value("music","volume") == 42,"Mute and volume survive configuration save")
+    enabled.button_pressed = true
+    var previous_stream = player.stream
+    await press("NEXT_MUSIC_TRACK")
+    check(player.stream != previous_stream and not player.stream_paused,"Next soundtrack track resumes playback")
+    previous_stream = player.stream
+    player.finished.emit()
+    await process_frame
+    check(player.stream != previous_stream,"Finished recording advances the playlist")
+    # Eight advances must restore the same stream identity.
+    previous_stream = player.stream
+    for index in range(8):
+        player.finished.emit()
+        await process_frame
+    check(player.stream == previous_stream,"Playlist wraps after all eight local tracks")
+    await press("BACK_TO_OFFICE")
+    check(main.find_child("DesktopEmployeeTable",true,false).get_root().get_child_count() == 2,"Desktop table refreshes after management")
+    previous_stream = null
+    player = null
+    main.queue_free()
+    main = null
+    await process_frame
+    await process_frame
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)

@@ -12,6 +12,8 @@ public partial class Main : Control
     private readonly OriginalGameImporter _importer = new();
     private readonly GameSession _session = new();
     private VBoxContainer _content = null!;
+    private VBoxContainer _screenContent = null!;
+    private BackgroundMusic _music = null!;
     private Label _status = null!;
     private Button _importButton = null!;
     private FileDialog _fileDialog = null!;
@@ -27,6 +29,7 @@ public partial class Main : Control
 
     public override void _Process(double delta)
     {
+        if (++_desktopRefreshFrame % 6 == 0) RefreshDesktop();
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
         _officeElapsed += delta;
         // Keep at most one second of backlog after a suspended window.
@@ -49,7 +52,14 @@ public partial class Main : Control
     {
         BuildShell();
         TranslationServer.SetLocale("en");
+        _music = new BackgroundMusic { Name = "BackgroundMusic" };
+        AddChild(_music);
         ShowTitleScreen();
+    }
+
+    public override void _ExitTree()
+    {
+        _officeTexture?.Dispose(); _officeTexture = null; _officeRenderer = null;
     }
 
     private void BuildShell()
@@ -62,12 +72,14 @@ public partial class Main : Control
         var scroll = new ScrollContainer();
         scroll.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(scroll);
+        _screen = scroll;
         var center = new CenterContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsVertical = SizeFlags.ExpandFill };
         scroll.AddChild(center);
 
         _content = new VBoxContainer { CustomMinimumSize = new Vector2(620, 0) };
         _content.AddThemeConstantOverride("separation", 14);
         center.AddChild(_content);
+        _screenContent = _content;
 
         _fileDialog = new FileDialog
         {
@@ -83,6 +95,8 @@ public partial class Main : Control
 
     private void ShowImporter()
     {
+        DestroyDesktop();
+        _music?.SetGameplayActive(false);
         ClearContent();
         AddHeading(Tr("APP_TITLE"), 42);
         AddHeading(Tr("APP_SUBTITLE"), 18);
@@ -116,6 +130,8 @@ public partial class Main : Control
 
     private void ShowTitleScreen()
     {
+        DestroyDesktop();
+        _music?.SetGameplayActive(false);
         ClearContent();
         var titleTexture = OriginalAssetStore.LoadTexture("Graphic/Title.bmp");
         if (titleTexture is not null)
@@ -242,106 +258,16 @@ public partial class Main : Control
 
     private void ShowOfficeReconstruction(GameState state)
     {
+        _activeCatalog = _importer.LoadCatalog();
+        EnsureDesktop(state);
         if (ShowPendingProductEvent(state)) return;
-        ClearContent();
-        _activeCatalog=_importer.LoadCatalog();
-        _clockRunning=true;
-        _content.CustomMinimumSize = new Vector2(1248, 0);
-        var row = new HBoxContainer();
-        row.AddThemeConstantOverride("separation", 16);
-        _content.AddChild(row);
-        var office = new VBoxContainer { CustomMinimumSize = new Vector2(932, 0) };
-        row.AddChild(office);
-        var company = new Label { Text = state.Company.Name, HorizontalAlignment = HorizontalAlignment.Center };
-        company.AddThemeFontSizeOverride("font_size", 22);
-        office.AddChild(company);
-        _officeRenderer = OriginalAssetStore.LoadOfficeRenderer();
-        _officeTexture = _officeRenderer?.CreateTexture(state);
-        var texture = (Texture2D?)_officeTexture ?? OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
-        if (texture is not null)
-        {
-            office.AddChild(new TextureRect
-            {
-                Name = "OriginalOfficeBackground", Texture = texture,
-                TextureFilter = TextureFilterEnum.Nearest,
-                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
-                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2(932, 580)
-            });
-        }
-        else
-        {
-            var importNote = new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"),
-                AutowrapMode = TextServer.AutowrapMode.WordSmart, CustomMinimumSize = new Vector2(932, 100) };
-            office.AddChild(importNote);
-        }
-        var sidebar = new VBoxContainer { CustomMinimumSize = new Vector2(300, 0) };
-        sidebar.AddThemeConstantOverride("separation", 5);
-        row.AddChild(sidebar);
-        var metrics = new GridContainer { Columns = 2 };
-        metrics.AddThemeConstantOverride("h_separation", 12);
-        AddMetric(metrics, Tr("FUNDS"), state.Money?.ToString("N0") ?? Tr("NOT_YET_DECODED"));
-        AddMetric(metrics, Tr("DATE"), $"{state.Year} / {state.Month} / {state.Week}");
-        AddMetric(metrics, Tr("STAFF"), state.Employees.Count.ToString());
-        AddMetric(metrics, Tr("COMPANY_RANK"), state.Company.Rank is int rank ? Tr($"COMPANY_RANK_{rank}") : Tr("NOT_YET_DECODED"));
-        AddMetric(metrics, Tr("COMPANY_FAME"), state.Company.Fame is int fame ? $"{fame}%" : Tr("NOT_YET_DECODED"));
-        AddMetric(metrics,Tr("GENRE_RESEARCH"),state.Company.OriginalMember90?.ToString() ?? Tr("NOT_YET_DECODED"));
-        AddMetric(metrics,Tr("PRODUCTION_CAPACITY"),state.Company.ProductionCapacity?.ToString() ?? Tr("NOT_YET_DECODED"));
-        sidebar.AddChild(metrics);
-        void OfficeAction(string key, Action action, bool enabled = true)
-        {
-            var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, 30) };
-            button.Pressed += () => action();
-            sidebar.AddChild(button);
-        }
-        OfficeAction("HIRE_EMPLOYEES", ShowRecruitment, state.Recruitment.CandidateDatabaseDecoded);
-        OfficeAction("STAFF", () => ShowStaff(state));
-        OfficeAction("TECHNOLOGIES",()=>ShowTechnologies(state),_activeCatalog?.Technologies.Count>0);
-        OfficeAction("COMPANY_ACTIVITIES",()=>ShowCompanyActivities(state),state.Company.ActivityCost is not null && state.CompanyActivityPerformed is not null && state.CompanyActivityTicks is not null);
-        OfficeAction("DEVELOPMENT_COMPUTERS", () => ShowComputers(state), _importer.LoadCatalog()?.DevelopmentComputers.Count == 4);
-        OfficeAction("HARDWARE_LICENSES", () => ShowLicenses(state), state.AvailableHardware is not null && state.HardwareLicenses is not null);
-        OfficeAction("SAVE_GAME", () =>
-        {
-            try { SaveStore.Save(SavePath, state); ShowOfficeReconstruction(state); _status.Text = Tr("SAVE_OK"); }
-            catch (Exception ex) { _status.Text = $"{Tr("SAVE_FAILED")}: {ex.Message}"; }
-        });
-        OfficeAction("LOAD_GAME", LoadSession, System.IO.File.Exists(SavePath));
-        OfficeAction("CALENDAR_INSPECTOR", () => ShowCalendar(state));
-        OfficeAction("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), _importer.LoadCatalog() is not null);
-        OfficeAction("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), _activeCatalog is not null);
-        OfficeAction("SALES", () => ShowSales(state), _activeCatalog is not null);
-        var pause=new Button {Name="TogglePause",Text=Tr(_paused ? "RESUME" : "PAUSE"),
-            CustomMinimumSize=new Vector2(0,30)};
-        pause.Pressed+=()=>
-        {
-            _paused=!_paused;
-            pause.Text=Tr(_paused ? "RESUME" : "PAUSE");
-            _refreshCoreStatus?.Invoke();
-        };
-        sidebar.AddChild(pause);
-        foreach (var project in state.DevelopmentProjects.OrderBy(x=>x.RoomIndex))
-        {
-            var button=new Button {Name=$"OpenProject{project.RoomIndex}",Text=$"{Tr("DEVELOPMENT_ROOM")} {project.RoomIndex+1}: {project.Title}",
-                CustomMinimumSize=new Vector2(0,30)};
-            button.Pressed+=()=>ShowProject(state,project);sidebar.AddChild(button);
-        }
-        OfficeAction("IMPORT_BUTTON", ShowImporter);
-        OfficeAction("BACK_TO_TITLE", ShowTitleScreen);
-        _status = new Label {Name="OfficeStatus", AutowrapMode = TextServer.AutowrapMode.WordSmart };
-        sidebar.AddChild(_status);
-        _refreshCoreStatus=()=>
-        {
-            ((Label)metrics.GetChild(1)).Text=state.Money?.ToString("N0") ?? Tr("NOT_YET_DECODED");
-            ((Label)metrics.GetChild(9)).Text=state.Company.Fame is int currentFame ? $"{currentFame}%" : Tr("NOT_YET_DECODED");
-            ((Label)metrics.GetChild(11)).Text=state.Company.OriginalMember90?.ToString() ?? Tr("NOT_YET_DECODED");
-            ((Label)metrics.GetChild(13)).Text=state.Company.ProductionCapacity?.ToString() ?? Tr("NOT_YET_DECODED");
-            _status.Text=string.Join("\n",state.DevelopmentProjects.OrderBy(x=>x.RoomIndex).Select(ProjectSummary));
-            if (_paused) _status.Text+="\n"+Tr("PAUSED");
-        };
-        _refreshCoreStatus();
-        var progress = new Label { Text = Tr("RECONSTRUCTION_STATUS"), AutowrapMode = TextServer.AutowrapMode.WordSmart };
-        sidebar.AddChild(progress);
-        if (!state.Recruitment.CandidateDatabaseDecoded) _status.Text = Tr("DATABASE_IMPORT_REQUIRED");
+        CloseDesktopDialog();
+        _refreshCoreStatus = null;
+        _officeElapsed = 0;
+        _clockRunning = true;
+        RefreshDesktop();
+        _status = _desktopStatus!;
+        _music.SetGameplayActive(true);
     }
 
     private void ShowRecruitment()
@@ -478,7 +404,7 @@ public partial class Main : Control
     private void LoadSession()
     {
         try { var state = SaveStore.Load(SavePath); _session.Restore(state); ShowOfficeReconstruction(state); }
-        catch (Exception ex) { _status.Text = $"{Tr("LOAD_FAILED")}: {ex.Message}"; }
+        catch (Exception ex) { ShowTitleScreen(); _status.Text = $"{Tr("LOAD_FAILED")}: {ex.Message}"; }
     }
 
     private void ShowSettings()
@@ -490,22 +416,32 @@ public partial class Main : Control
             button.Pressed += () => { TranslationServer.SetLocale(locale); ShowSettings(); };
             _content.AddChild(button);
         }
+        AddHeading(Tr("MUSIC_SETTINGS"), 18);
+        _content.AddChild(new Label { Text = $"{Tr("MUSIC_DIRECTORY")}: {ProjectSettings.GlobalizePath(BackgroundMusic.DirectoryPath)}", AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        _content.AddChild(new Label { Text = Tr("MUSIC_LOCAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        var enabled = new CheckButton { Name = "MusicEnabled", Text = Tr("MUSIC_ENABLED"), ButtonPressed = _music.Enabled };
+        enabled.Toggled += value => _music.SetEnabled(value); _content.AddChild(enabled);
+        var volumeLabel = new Label { Text = $"{Tr("MUSIC_VOLUME")}: {_music.VolumePercent:N0}%" }; _content.AddChild(volumeLabel);
+        var volume = new HSlider { Name = "MusicVolume", MinValue = 0, MaxValue = 100, Step = 1, Value = _music.VolumePercent };
+        volume.ValueChanged += value => { _music.SetVolume((float)value); volumeLabel.Text = $"{Tr("MUSIC_VOLUME")}: {value:N0}%"; }; _content.AddChild(volume);
+        AddAction("NEXT_MUSIC_TRACK", _music.NextTrack, _music.TrackCount > 0);
+        if (_desktopState is GameState state) AddAction("BACK_TO_OFFICE", () => ShowOfficeReconstruction(state));
         AddAction("BACK_TO_TITLE", ShowTitleScreen);
     }
 
     private void AddAction(string key, Action action, bool enabled = true)
     {
-        var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, 42) };
+        var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, _desktop is null ? 42 : 26) };
         button.Pressed += () => action(); _content.AddChild(button);
     }
 
-    private static void AddMetric(GridContainer grid, string label, string value)
+    private void AddMetric(GridContainer grid, string label, string value)
     {
         var left = new Label { Text = label };
-        left.AddThemeFontSizeOverride("font_size", 17);
+        left.AddThemeFontSizeOverride("font_size", _desktop is null ? 17 : 13);
         grid.AddChild(left);
         var right = new Label { Text = value, HorizontalAlignment = HorizontalAlignment.Right };
-        right.AddThemeFontSizeOverride("font_size", 17);
+        right.AddThemeFontSizeOverride("font_size", 13);
         grid.AddChild(right);
     }
 
@@ -528,7 +464,8 @@ public partial class Main : Control
     private void AddHeading(string text, int size)
     {
         var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center };
-        label.AddThemeFontSizeOverride("font_size", size);
+        label.AddThemeFontSizeOverride("font_size", _desktop is null ? size : Math.Min(size, 18));
+        if (_dialog is not null && _content.GetChildCount() == 0) _dialog.SetTitle(text);
         _content.AddChild(label);
     }
 
@@ -538,9 +475,14 @@ public partial class Main : Control
     {
         _clockRunning=false;
         _refreshCoreStatus=null;
-        _officeRenderer = null;
-        _officeTexture = null;
+        if (_desktop is null)
+        {
+            _officeRenderer = null;
+            _officeTexture = null;
+        }
         _officeElapsed = 0;
+        if (_desktop is not null) PrepareDesktopDialog();
+        else _content = _screenContent;
         _content.CustomMinimumSize = new Vector2(620, 0);
         _companyName = null;
         _presidentName = null;

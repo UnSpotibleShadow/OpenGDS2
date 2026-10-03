@@ -14,7 +14,7 @@ def package(source, export, platform, notices, output):
         raise ValueError("The native executable and game pack are required")
     if not list(export.rglob("OpenGDS2.dll")):
         raise ValueError("Export is missing its managed game assembly")
-    forbidden = {"original","original_cache","private-original","saves","upload","generated","tests","tools"}
+    forbidden = {"original","original_cache","private-original","asset-overrides","saves","upload","generated","tests","tools"}
     for file in export.rglob("*"):
         if file.is_symlink():
             raise ValueError("Symlinks are not accepted in desktop packages")
@@ -26,6 +26,9 @@ def package(source, export, platform, notices, output):
     license_dir.mkdir(exist_ok=True)
     for filename in ("LICENSE","notice.md"):
         shutil.copyfile(source / filename, export / filename)
+    music_notice = source / "audio" / "community" / "NOTICE.md"
+    if music_notice.is_file():
+        shutil.copyfile(music_notice, license_dir / "COMMUNITY_MUSIC_NOTICE.md")
     for filename in ("GODOT_LICENSE.txt","GODOT_THIRD_PARTY.txt"):
         shutil.copyfile(notices / filename, license_dir / filename)
     # The runtime pack selected by dotnet publish contains the authoritative
@@ -58,6 +61,9 @@ The title screen runs without original files. For gameplay and the original
 office appearance, select Import Original Game and choose your legally obtained
 GameDev2DX.lzh archive. Import happens locally; this package contains no original
 Kairosoft executable, graphics, sounds or game database.
+
+Optional background music uses local files in the music folder shown in Settings.
+No soundtrack recordings are bundled. Original LZH importing is still required.
 
 Imported files are stored in Godot's user://original directory; saves are in
 user://saves/slot1.json. Do not copy either directory into a public package.

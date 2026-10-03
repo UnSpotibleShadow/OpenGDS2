@@ -814,3 +814,84 @@ msgstr "給与の支払いはまだ実行されません。原作の共有イン
 
 msgid "RESUME"
 msgstr "再開"
+
+msgid "MENU_GAME"
+msgstr "ゲーム"
+
+msgid "MENU_COMPANY"
+msgstr "会社"
+
+msgid "MENU_DEVELOPMENT"
+msgstr "開発"
+
+msgid "MENU_WINDOWS"
+msgstr "ウィンドウ"
+
+msgid "MENU_HELP"
+msgstr "ヘルプ"
+
+msgid "MENU_STAFF"
+msgstr "社員管理"
+
+msgid "MENU_PRODUCTS"
+msgstr "製品"
+
+msgid "OFFICE_WINDOW"
+msgstr "オフィス"
+
+msgid "COMPANY_WINDOW"
+msgstr "会社情報"
+
+msgid "EMPLOYEE_WINDOW"
+msgstr "社員一覧"
+
+msgid "PRODUCT_WINDOW"
+msgstr "製品一覧"
+
+msgid "RELEASED_COUNT"
+msgstr "発売本数"
+
+msgid "HALL_OF_FAME_COUNT"
+msgstr "殿堂入り"
+
+msgid "SHORT_FUN"
+msgstr "面白"
+
+msgid "SHORT_NOVELTY"
+msgstr "意外"
+
+msgid "SHORT_GRAPHICS"
+msgstr "画"
+
+msgid "SHORT_MUSIC"
+msgstr "音"
+
+msgid "SHORT_ACCURACY"
+msgstr "正確"
+
+msgid "SHORT_SPEED"
+msgstr "速度"
+
+msgid "SHORT_INSPIRATION"
+msgstr "発想"
+
+msgid "SHORT_EXPERIENCE"
+msgstr "経験"
+
+msgid "MUSIC_SETTINGS"
+msgstr "背景音楽"
+
+msgid "MUSIC_ENABLED"
+msgstr "追加音楽を再生"
+
+msgid "NEXT_MUSIC_TRACK"
+msgstr "次の曲"
+
+msgid "MUSIC_VOLUME"
+msgstr "音楽の音量"
+
+msgid "MUSIC_DIRECTORY"
+msgstr "追加音楽フォルダー"
+
+msgid "MUSIC_LOCAL_NOTE"
+msgstr "Ogg Vorbis、WAV、MP3ファイルを配置して再起動してください。ファイル名順に再生します。"

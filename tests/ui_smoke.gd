@@ -21,7 +21,7 @@ func check(condition: bool, message: String) -> void:
 
 func button(key: String) -> Button:
     for node in nodes_of_type("Button"):
-        if node.text == tr(key):
+        if node.text == tr(key) and node.is_visible_in_tree():
             return node
     check(false, "Button missing: " + key)
     return null
@@ -40,6 +40,9 @@ func run() -> void:
     await process_frame
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
+    if DirAccess.get_files_at("user://music").is_empty():
+        check(main.find_child("MusicPlayer",true,false).stream == null,"No local recordings leaves music silent")
+        check(button("NEXT_MUSIC_TRACK").disabled,"Next track disabled without local recordings")
     await press("日本語")
     check(TranslationServer.get_locale() == "ja", "Japanese setting")
     check(tr("DEVELOPMENT_COMPUTERS") == "開発パソコン", "Japanese computer translation loaded")
@@ -77,6 +80,9 @@ func run() -> void:
         fields[1].text = "Smoke President"
     await press("CONFIRM")
     await press("NORMAL_MODE")
+    for name in ["OfficeWindow", "CompanyWindow", "EmployeeWindow", "ProductWindow"]:
+        check(main.find_child(name,true,false) != null,"Original desktop window: " + name)
+    check(main.find_child("OriginalDesktopWallpaper",true,false) != null,"Imported original desktop wallpaper")
     check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
     check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
@@ -97,9 +103,9 @@ func run() -> void:
             if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
                 office_background.texture.get_image().save_png("user://office-test.png")
             check(office_background.texture.get_width() == 466 and office_background.texture.get_height() == 290, "Original office bitmap dimensions")
-            check(office_background.size == Vector2(932,580), "Office uses integer 2x pixels")
+            check(office_background.size == Vector2(466,290), "Office uses original-size pixels")
             check(office_background.get_global_rect().end.x <= main.get_viewport_rect().end.x, "Office fits the viewport")
-            check(button("BACK_TO_TITLE").get_global_rect().end.x <= main.get_viewport_rect().end.x, "Sidebar fits the viewport")
+            check(button("BACK_TO_TITLE").get_global_rect().end.x <= main.get_viewport_rect().end.x, "Toolbar fits the viewport")
         check(FileAccess.file_exists("user://original/Graphic/Embedded/OfficeSprites.bmp"), "Embedded sprite sheet imported locally")
         await press("HARDWARE_LICENSES")
         var license_buttons: Array[Node] = []

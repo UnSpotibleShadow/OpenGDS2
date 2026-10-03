@@ -10,15 +10,28 @@ namespace OpenGDS2.Core;
 
 public static class OriginalAssetStore
 {
+    public const string OverlayRoot = "user://asset-overrides";
     public static string PathFor(string relative)
-        => System.IO.Path.Combine(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot), relative.Replace('/', System.IO.Path.DirectorySeparatorChar));
+        => LocalAssetOverlay.Resolve(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot),
+            ProjectSettings.GlobalizePath(OverlayRoot), relative);
 
     public static Texture2D? LoadTexture(string relative)
     {
         string path = PathFor(relative);
         if (!File.Exists(path)) return null;
-        var image = new Image();
+        using var image = new Image();
         if (image.Load(path) != Error.Ok) return null;
+        if (path.StartsWith(ProjectSettings.GlobalizePath(OverlayRoot) + System.IO.Path.DirectorySeparatorChar, StringComparison.Ordinal))
+        {
+            using var original = new Image();
+            string imported = System.IO.Path.Combine(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot), relative.Replace('/', System.IO.Path.DirectorySeparatorChar));
+            if (original.Load(imported) != Error.Ok) return null;
+            if (original.GetSize() != image.GetSize())
+            {
+                GD.PushWarning("Ignoring local artwork override with changed dimensions: " + relative);
+                return ImageTexture.CreateFromImage(original);
+            }
+        }
         return ImageTexture.CreateFromImage(image);
     }
 
@@ -41,6 +54,8 @@ public static class OriginalAssetStore
             masks.Load(PathFor("Graphic/Embedded/OfficeMasks.bmp")) != Error.Ok)
             throw new InvalidDataException("Missing local office graphics. Reimport your original archive.");
         frame.Convert(Image.Format.Rgb8); colors.Convert(Image.Format.Rgb8); masks.Convert(Image.Format.Rgb8);
+        if (frame.GetSize() != new Vector2I(466, 290) || colors.GetSize() != new Vector2I(1600, 530) || masks.GetSize() != colors.GetSize())
+            throw new InvalidDataException("Local office artwork must retain the verified background and atlas dimensions.");
         return new(scene, frame.GetData(), frame.GetWidth(), frame.GetHeight(),
             colors.GetData(), masks.GetData(), colors.GetWidth(), colors.GetHeight());
     }

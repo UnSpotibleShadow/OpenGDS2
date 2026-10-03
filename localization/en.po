@@ -814,3 +814,84 @@ msgstr "Payroll is not charged yet. This preview preserves the original shared-i
 
 msgid "RESUME"
 msgstr "Resume"
+
+msgid "MENU_GAME"
+msgstr "Game"
+
+msgid "MENU_COMPANY"
+msgstr "Company"
+
+msgid "MENU_DEVELOPMENT"
+msgstr "Development"
+
+msgid "MENU_WINDOWS"
+msgstr "Windows"
+
+msgid "MENU_HELP"
+msgstr "Help"
+
+msgid "MENU_STAFF"
+msgstr "Employees"
+
+msgid "MENU_PRODUCTS"
+msgstr "Products"
+
+msgid "OFFICE_WINDOW"
+msgstr "Office"
+
+msgid "COMPANY_WINDOW"
+msgstr "Company"
+
+msgid "EMPLOYEE_WINDOW"
+msgstr "Employees"
+
+msgid "PRODUCT_WINDOW"
+msgstr "Products"
+
+msgid "RELEASED_COUNT"
+msgstr "Released"
+
+msgid "HALL_OF_FAME_COUNT"
+msgstr "Hall of Fame"
+
+msgid "SHORT_FUN"
+msgstr "Fun"
+
+msgid "SHORT_NOVELTY"
+msgstr "New"
+
+msgid "SHORT_GRAPHICS"
+msgstr "Gfx"
+
+msgid "SHORT_MUSIC"
+msgstr "Snd"
+
+msgid "SHORT_ACCURACY"
+msgstr "Acc"
+
+msgid "SHORT_SPEED"
+msgstr "Spd"
+
+msgid "SHORT_INSPIRATION"
+msgstr "Idea"
+
+msgid "SHORT_EXPERIENCE"
+msgstr "XP"
+
+msgid "MUSIC_SETTINGS"
+msgstr "Background music"
+
+msgid "MUSIC_ENABLED"
+msgstr "Enable community music"
+
+msgid "NEXT_MUSIC_TRACK"
+msgstr "Next track"
+
+msgid "MUSIC_VOLUME"
+msgstr "Music volume"
+
+msgid "MUSIC_DIRECTORY"
+msgstr "Local music folder"
+
+msgid "MUSIC_LOCAL_NOTE"
+msgstr "Place Ogg Vorbis, WAV or MP3 files here, then restart. Files play in filename order."
