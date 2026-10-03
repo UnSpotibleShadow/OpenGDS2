@@ -49,6 +49,10 @@ M20 records the original current-week and twelve prior weeks of product sales.
 Open **Sales History** for the classic graph; signed counts and original scale
 boundaries are preserved. See [sales-history.md](docs/sales-history.md).
 
+M21 adds consumer investigations, the original five-week recall countdown,
+refund decisions and reproduction prohibitions. Both event dialogs survive
+save/load without charging twice. See [consumer-recalls.md](docs/consumer-recalls.md).
+
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements
 survive save/load and pause the office clock until acknowledged. See

@@ -753,7 +753,7 @@ msgid "RELEASE_RESULT_AlreadyProducedThisWeek"
 msgstr "今週はすでに生産しました。再生産は翌週までお待ちください。"
 
 msgid "RELEASE_RESULT_StateUnknown"
-msgstr "このセーブでは生産の状態が不明です。新しい会社を始めてください。"
+msgstr "このセーブでは生産に必要な情報が不明です。新しい会社を始めてください。"
 
 msgid "SALES_HISTORY"
 msgstr "売上推移"
@@ -772,3 +772,30 @@ msgstr "このセーブには週ごとの売上記録がありません。"
 
 msgid "BACK_TO_SALES"
 msgstr "売上画面へ戻る"
+
+msgid "CONSUMER_INVESTIGATION"
+msgstr "消費者団体の調査"
+
+msgid "RECALL_INVESTIGATION_STARTED"
+msgstr "ゲームの不具合について消費者団体が調査を始めました。5週間後に結果が出ます。"
+
+msgid "RECALL_WEEKS_REMAINING"
+msgstr "調査終了までの週数"
+
+msgid "RECALL_REFUND"
+msgstr "返金額"
+
+msgid "RECALL_OUTCOME_0"
+msgstr "定価での返金が必要になりました。在庫は回収されました。"
+
+msgid "RECALL_OUTCOME_1"
+msgstr "1本あたり1,000円の返金が必要になりました。在庫は回収されました。"
+
+msgid "RECALL_OUTCOME_2"
+msgstr "1本あたり1,000円の返金が必要になりました。在庫は回収されました。"
+
+msgid "RECALL_OUTCOME_3"
+msgstr "回収の必要はないという結果で調査が終了しました。"
+
+msgid "RELEASE_RESULT_Recalled"
+msgstr "回収されたゲームは再生産できません。"

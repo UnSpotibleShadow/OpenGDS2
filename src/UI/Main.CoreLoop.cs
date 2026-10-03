@@ -181,10 +181,15 @@ public partial class Main
             budget.Text=availability==ReleaseResult.Success ? Tr("PRODUCTION_READY") : Tr($"RELEASE_RESULT_{availability}");
             foreach (var (p,label,production) in rows)
             {
-                production.Disabled=state.Company.ProductionCapacity is null || availability!=ReleaseResult.Success;
+                production.Disabled=state.Company.ProductionCapacity is null || ReleaseService.CheckProduction(state,p)!=ReleaseResult.Success;
                 label.Text=$"{Tr("RETAIL_PRICE")}: ¥{p.Price:N0} · {Tr("STOCK")}: {p.Stock:N0}\n"+
                 $"{Tr("UNITS_SOLD")}: {p.UnitsSold:N0} · {Tr("LAST_SALES_BATCH")}: {p.LastBatchSold:N0}\n"+
                 $"{Tr("NET_SALES_RECEIPTS")}: ¥{p.NetSalesReceipts:N0}\n{Tr("PRODUCTION_COST")}: ¥{p.ProductionSpending:N0}\n{Tr("DEMAND")}: {p.Demand}";
+                var result=ReleaseService.CheckProduction(state,p);
+                if (result is ReleaseResult.Recalled or ReleaseResult.StateUnknown) label.Text+="\n"+Tr($"RELEASE_RESULT_{result}");
+                if (p.Recall?.OriginalState==1 && p.Recall.WeeksRemaining>0)
+                    label.Text+=$"\n{Tr("RECALL_WEEKS_REMAINING")}: {p.Recall.WeeksRemaining}";
+                if (p.Recall?.RefundAmount is long refund) label.Text+=$"\n{Tr("RECALL_REFUND")}: ¥{refund:N0}";
             }
         };
         _refreshCoreStatus();
@@ -217,9 +222,12 @@ public partial class Main
     {
         var review=state.ReleasedGames.FirstOrDefault(x=>x.ReviewPending);
         if (review is not null) {ShowReviews(state,review);return true;}
-        var milestone=state.ReleasedGames.FirstOrDefault(x=>x.PendingSalesMilestones.Count>0);
-        if (milestone is null) return false;
-        ShowSalesMilestone(state,milestone);return true;
+        foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
+        {
+            if (product.PendingSalesMilestones.Count>0) {ShowSalesMilestone(state,product);return true;}
+            if (product.Recall?.PendingEvent is not null) {ShowRecall(state,product);return true;}
+        }
+        return false;
     }
     private void ShowSalesMilestone(GameState state,ReleasedGameState product)
     {
@@ -238,7 +246,7 @@ public partial class Main
     }
     private void ShowProduction(GameState state,ReleasedGameState product)
     {
-        var availability=ReleaseService.CheckProduction(state);
+        var availability=ReleaseService.CheckProduction(state,product);
         if (availability!=ReleaseResult.Success)
         {
             ClearContent();AddHeading(Tr($"RELEASE_RESULT_{availability}"),20);

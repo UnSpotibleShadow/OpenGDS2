@@ -24,6 +24,7 @@ public sealed class ReleasedGameState
     public long LastBatchSold {get;set;}
     // Original product history, newest/current week first. Unknown in older saves.
     public List<long>? WeeklySalesHistory {get;set;}
+    public ProductRecallState? Recall {get;set;}
     // Older modern saves have unknown reviews; loading must not reroll them.
     public List<int>? ReviewScores {get;set;}
     public bool ReviewPending {get;set;}

@@ -77,6 +77,15 @@ def verify(data):
     require(0x9E3830,0x1090,'05 56 01 a7 02 00 06 00 00 05 41 01 fb 94 58 ff')
     require(0x9C2568,0x070E,'04 f8 fe fe c1 58 ff a0 86 01 00 5d fb 5a 1c e3 08')
     require(0x9C2568,0x08E3,'04 f8 fe 28 58 ff 30 75 5d fb 5a 1c b1 0a')
+    # Recall checks mark state 1 even when the draw does not start an inquiry.
+    require(0x9E3830,0x1300,'28 68 ff 01 00 6b 7a ff e7 05 60 01 52')
+    require(0x9DD234,0x14B7,'fc 67 6c ff 04 5c ff fc 22 07 08 00 04 1f 52')
+    require(0x9DD234,0x14C6,'fc 67 6c ff 04 5c ff fc 22 07 08 00 20 1f 52')
+    require(0x9DB4F4,0x14F0,'07 08 00 20 1f fc 96 28 6c ff 01 00 fb 9c 4c ff')
+    require(0x9EFA40,0x3B4E,'28 6c ff 02 00 05 eb 00 fc 22 05 f9 00 52')
+    require(0x9EFA40,0x4129,'28 6c ff 03 00 05 eb 00 fc 22 05 f9 00 52')
+    # The financial helper adds the signed delta; it does not clamp cash at zero.
+    require(0x97DD04,0x0000,'07 08 00 20 00 fd 16 10 00 5c ff fb 94 4c ff fd e6 08 00 20 00')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

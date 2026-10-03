@@ -92,6 +92,7 @@ public static class SaveStore
                 throw new InvalidDataException("Invalid released game.");
             DevelopmentWorkRules.ValidateQuality(product.Quality);
             if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
+            RecallService.Validate(product);
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
                 (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
                 product.PendingSalesMilestones.Count>4 ||

@@ -148,6 +148,8 @@ func run() -> void:
     check(review_save.State.ProductionPerformedThisWeek,"First shipment sets the production flag")
     # Isolate the budget boundary from variable development duration.
     review_save.State.CompanyActivityTicks = 0
+    # Separate consumer investigations from this baseline sales/chart check.
+    review_save.State.ReleasedGames[0].Recall = {"OriginalState":1,"WeeksRemaining":0,"PendingEvent":null,"OutcomeRoll":null,"RefundAmount":null}
     write_json("user://saves/slot1.json",review_save)
     Engine.time_scale = 1
     await press("LOAD_GAME")
@@ -219,6 +221,63 @@ func run() -> void:
     await press("SAVE_GAME")
     var completed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(completed_save.State.ReleasedGames[0].SalesMilestoneStage == 4,"Acknowledged milestone progress persists")
+    # Guaranteed investigation fixture drives the real sales and weekly clocks.
+    var recall_save = completed_save
+    var recall_product = recall_save.State.ReleasedGames[0]
+    recall_product.UnitsSold = 120
+    recall_product.Stock = 30
+    recall_product.Price = 5800
+    recall_product.Demand = 0
+    recall_product.Bugs = 50
+    recall_product.Recall = {"OriginalState":0,"WeeksRemaining":0,"PendingEvent":null,"OutcomeRoll":null,"RefundAmount":null}
+    recall_save.State.Money = 100000000
+    recall_save.State.CompanyActivityTicks = 0
+    recall_save.State.SalesTicks = 19
+    var recall_project = recall_save.State.DevelopmentProjects[0]
+    recall_project.OriginalStage = 3
+    recall_project.GameTypeSourceIndex = 0
+    recall_project.GenreSourceIndex = 0
+    recall_project.Progress = recall_project.RequiredPoints
+    recall_project.PendingDecision = null
+    recall_project.Bugs = 0
+    write_json("user://saves/slot1.json",recall_save)
+    await press("LOAD_GAME")
+    if not await await_node("AcknowledgeRecall"):
+        quit(1)
+        return
+    await press("SAVE_GAME")
+    var investigation_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(investigation_save.State.ReleasedGames[0].Recall.WeeksRemaining == 5,"Consumer investigation starts a five-week countdown")
+    check(investigation_save.State.ReleasedGames[0].Recall.PendingEvent == 0,"Investigation modal persists")
+    var paused_budget = investigation_save.State.CompanyActivityTicks
+    Engine.time_scale = 100
+    for frame in range(20):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var paused_recall_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(paused_recall_save.State.CompanyActivityTicks == paused_budget,"Investigation modal freezes the budget clock")
+    await press("LOAD_GAME")
+    await press_node("AcknowledgeRecall")
+    Engine.time_scale = 100
+    if not await await_node("AcknowledgeRecall"):
+        quit(1)
+        return
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var decision_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var decision_recall = decision_save.State.ReleasedGames[0].Recall
+    check(decision_recall.PendingEvent == 1 and decision_recall.WeeksRemaining == 0,"Five live budget weeks produce the recall decision")
+    var expected_refund = 0 if decision_recall.OutcomeRoll == 3 else (870000 if decision_recall.OutcomeRoll == 0 else 150000)
+    check(decision_recall.RefundAmount == expected_refund,"Original recall refund formula")
+    var investigation_receipts = decision_save.State.ReleasedGames[0].NetSalesReceipts-recall_save.State.ReleasedGames[0].NetSalesReceipts
+    check(decision_save.State.Money == 100000000+investigation_receipts-expected_refund,"Recall charges once alongside ongoing sales")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == decision_save.State.Money,"Result reload does not charge a second refund")
+    await press_node("AcknowledgeRecall")
+    check(main.find_child("ProduceProduct0",true,false).disabled == (decision_recall.OriginalState == 2),"Recall result controls reprint eligibility")
+    await press("BACK_TO_OFFICE")
     await press("TECHNOLOGIES")
     await press_node("PurchaseTechnology0")
     check(main.find_child("PurchaseTechnology0",true,false).disabled,"Owned technology cannot be bought again")
