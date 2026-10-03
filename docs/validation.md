@@ -6,6 +6,13 @@ clock advancement. It also removes an original default personal-name literal
 from the public company-setup screen; that default remains unavailable until a
 local import recovers it.
 
+The [M24 workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37121420386)
+passed all 123 public C# checks, ten public Python checks, a build with zero
+warnings/errors, both editor UI suites, both desktop exports and the complete
+core-loop UI fixture against extracted Linux and native Windows packages.
+Both packaged runs reported zero failures. Local original-fixture reruns remain
+pending because the local execution workspace is disconnected.
+
 ## M23 historical checkpoint
 
 The [M23 desktop workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37121052813)
