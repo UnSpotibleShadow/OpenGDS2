@@ -70,6 +70,7 @@ func run() -> void:
         "DevelopmentComputers":[{"SourceIndex":0,"Name":"Synthetic Computer","BitWidth":8}],
         "GameTypes":[{"SourceIndex":0,"Name":"Synthetic Type A","RawMembers":raw_type,"RawTable13CC":[]},
             {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
+        "Technologies":[{"SourceIndex":0,"Identifier":0,"Name":"Synthetic Technology","PurchaseFee":50,"InitialOwnershipLevel":0,"RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable158C":[1,2,3],"RawTable1568":[1,2,3]}],
         "Genres":[{"SourceIndex":0,"Name":"Synthetic Genre","RawMembers":{"1224":7,"1208":10,"1240":1,"125C":0}}]
     }
     # Genre helper validates its fifteen-column table even for broad audience.
@@ -79,10 +80,10 @@ func run() -> void:
     var roster := {}
     for cell in range(65):
         roster[str(cell)] = 0
-    var worker := {"Name":"Synthetic Worker","SourceIndex":0,"PortraitId":1,"Level":1,"Experience":0,"Stress":0,
+    var worker := {"RawParameter34":1,"TechnologyLevels":{"0":0},"Name":"Synthetic Worker","SourceIndex":0,"PortraitId":1,"Level":1,"Experience":0,"Stress":0,
         "Fun":80,"Novelty":80,"Graphics":80,"Music":80,"Accuracy":80,"DevelopmentSpeed":80,"Inspiration":80,
         "Office":{"Action":6,"SeatedAction":6,"WorkEngaged":true,"MovementState":0,"Facing":1,"Frame":13}}
-    var state := {"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
+    var state := {"TechnologyOwnershipLevels":{"0":0},"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
         "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000},
         "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
@@ -204,6 +205,43 @@ func run() -> void:
     await press("SAVE_GAME")
     var completed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(completed_save.State.ReleasedGames[0].SalesMilestoneStage == 4,"Acknowledged milestone progress persists")
+    await press("TECHNOLOGIES")
+    await press_node("PurchaseTechnology0")
+    check(main.find_child("PurchaseTechnology0",true,false).disabled,"Owned technology cannot be bought again")
+    await press("SAVE_GAME")
+    var owned_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(owned_save.State.TechnologyOwnershipLevels["0"] == 3,"Purchase unlocks all training levels")
+    var training_xp = owned_save.State.Employees[0].Experience
+    await press("LOAD_GAME")
+    await press("STAFF")
+    await press("TAKE_BREAK")
+    Engine.time_scale = 100
+    for frame in range(20):
+        await process_frame
+    Engine.time_scale = 1
+    await press("STAFF")
+    await press("TRAINING")
+    check(main.find_child("TrainTechnology0",true,false).disabled,"Training needs a study seat")
+    await press_node("AssignStudySeat1")
+    await press_node("TrainTechnology0")
+    await press("SAVE_GAME")
+    var training_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(training_save.State.Employees[0].Experience == training_xp-10,"Training spends experience upfront")
+    check(training_save.State.Employees[0].Office.Training != null,"Active course is saved")
+    await press("LOAD_GAME")
+    Engine.time_scale = 100
+    for frame in range(25):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var learned_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(learned_save.State.Employees[0].TechnologyLevels["0"] == 1,"Training completes in the live office")
+    check(learned_save.State.Employees[0].Office.Training == null,"Completed course is cleared")
+    await press("LOAD_GAME")
+    await press("STAFF")
+    await press("TRAINING")
+    check(main.find_child("AssignStudySeat1",true,false).disabled,"Study seat survives reload")
+    await press("BACK_TO_OFFICE")
     await press("STAFF")
     await press_node("DismissEmployee0")
     check(main.find_child("ConfirmDismissal",true,false) != null,"Dismissal confirmation opens")

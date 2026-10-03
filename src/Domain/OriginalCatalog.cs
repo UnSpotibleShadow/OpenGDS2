@@ -10,6 +10,7 @@ public sealed class OriginalCatalog
     public List<DevelopmentComputerDefinition> DevelopmentComputers { get; set; } = [];
     public List<HardwareDefinition> Hardware { get; set; } = [];
     public List<GameTypeDefinition> GameTypes { get; set; } = [];
+    public List<TechnologyDefinition> Technologies { get; set; } = [];
 }
 
 public sealed class GameTypeDefinition
@@ -71,4 +72,19 @@ public sealed class GenreDefinition
     public int SelectionPoints => checked((int)RawMembers["1208"]);
     public int RequiredCompanyValue => checked((int)RawMembers["125C"]);
     public string DefinitionAddress { get; set; } = string.Empty;
+}
+
+/// <summary>Training columns proven by the study form and main loop. Other tables remain structural.</summary>
+public sealed class TechnologyDefinition
+{
+    public int SourceIndex { get; set; }
+    public int Identifier { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public long PurchaseFee { get; set; }
+    public int InitialOwnershipLevel { get; set; }
+    public List<int> RequiredTrainingWork { get; set; } = [];
+    public List<int> ExperienceCosts { get; set; } = [];
+    public List<int> RawTable158C { get; set; } = [];
+    public List<int> RawTable1568 { get; set; } = [];
 }

@@ -63,6 +63,21 @@ public static class EmployeeDatabaseImporter
             });
             pos = cursor + 7;
         }
+        // Fresh skill cells are Empty (numeric zero), then selected special rows
+        // receive direct skill writes following their employee setter call.
+        foreach (var row in result.Employees) row.InitialTechnologyLevels=Enumerable.Range(0,8).ToDictionary(x=>x,_=>0);
+        int employeeIndex=-1;
+        for (int pos=pe.Offset(start+0x4A4);pos<limit;pos++)
+        {
+            if (employeeIndex+1<result.Employees.Count && pos==pe.Offset(Convert.ToInt32(result.Employees[employeeIndex+1].DefinitionAddress,16))) employeeIndex++;
+            if (!pe.Matches(pos,0x28,0x2C,0xFF) || !pe.Matches(pos+5,0x07,0x08,0x00,0x60,0x0A)) continue;
+            pe.Require(pos+10,0x28,0x6C,0xFF,0x01,0x00,0xFB,0x9C,0xCC,0xFE,0xFC,0x22,0xF5);
+            pe.Require(pos+26,0x07,0x08,0x00,0x58,0x0D,0xA7,0x02,0x00,0xFD,0x86,0x00,0x00);
+            pe.Require(pos+24,0x00,0x00);
+            int level=pe.U16(pos+3),technology=pe.U16(pos+22);
+            if (employeeIndex<0 || technology>7 || level is <1 or >3) throw new InvalidDataException("Initial technology shape changed.");
+            result.Employees[employeeIndex].InitialTechnologyLevels![technology]=level;
+        }
         if (result.Employees.Count != 60) throw new InvalidDataException("Employee initializer shape changed.");
         return result;
     }

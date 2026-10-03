@@ -36,7 +36,7 @@ public static class OfficeStaffRules
     public static void Tick(EmployeeState employee, Random random)
     {
         var office = employee.Office;
-        if (office?.Action is >=6 and <=17) { TickDesk(office, random); return; }
+        if (office?.Action is >=1 and <=17) { TickDesk(office, random); return; }
         if (office?.LoungeSeat is not int seat || office.Action is < 18 or > 20) return;
         int destinationNode = office.Action - 6;
         if (office.MovementState == 3)

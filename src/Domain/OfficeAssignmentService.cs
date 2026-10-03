@@ -2,12 +2,21 @@ namespace OpenGDS2.Domain;
 
 public enum OfficeAssignmentResult { Success, UnknownWorkspace, Occupied, AlreadyAssigned, NoLoungeSeat }
 
-/// <summary>Development-seat subset of Module2 10 (009AF6BC). Training remains separate.</summary>
+/// <summary>Study and development seat subset of Module2 10 (009AF6BC).</summary>
 public static class OfficeAssignmentService
 {
-    public static OfficeAssignmentResult TryAssignDesk(GameState state, EmployeeState employee, int action)
+    public static OfficeAssignmentResult TryAssignStudySeat(GameState state,EmployeeState employee,int action)
+    {
+        if (action is <1 or >5) throw new ArgumentOutOfRangeException(nameof(action));
+        return TryAssignSeat(state,employee,action);
+    }
+    public static OfficeAssignmentResult TryAssignDesk(GameState state,EmployeeState employee,int action)
     {
         if (action is <6 or >17) throw new ArgumentOutOfRangeException(nameof(action));
+        return TryAssignSeat(state,employee,action);
+    }
+    private static OfficeAssignmentResult TryAssignSeat(GameState state, EmployeeState employee, int action)
+    {
         if (!state.Employees.Contains(employee) || employee.Office is not OfficeEmployeeState office)
             return OfficeAssignmentResult.UnknownWorkspace;
         if (office.Action == action || office.SeatedAction == action) return OfficeAssignmentResult.AlreadyAssigned;

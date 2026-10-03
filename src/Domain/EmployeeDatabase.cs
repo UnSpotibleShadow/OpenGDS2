@@ -56,6 +56,7 @@ public sealed class EmployeeDatabase
                     Accuracy = row.RawAttributes[2], Graphics = row.RawAttributes[4],
                     Music = row.RawAttributes[3], DevelopmentSpeed = row.RawAttributes[1],
                     Inspiration = row.RawAttributes[0],
+                    TechnologyLevels = row.InitialTechnologyLevels is null ? null : new(row.InitialTechnologyLevels),
                     RawParameter34 = row.RawParameter34, RawParameter3C = row.RawParameter3C,
                     RawParameter40 = row.RawParameter40, SpecialFlag = row.InitialSpecialFlag
                 }
@@ -83,6 +84,7 @@ public sealed class EmployeeDefinition
     public int RawParameter3C { get; set; }
     public int RawParameter34 { get; set; }
     public long RawParameter40 { get; set; }
+    public Dictionary<int,int>? InitialTechnologyLevels { get; set; }
     public int InitialGate { get; set; }
     public int InitialSpecialFlag { get; set; }
     public string DefinitionAddress { get; set; } = string.Empty;

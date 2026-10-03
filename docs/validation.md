@@ -1,10 +1,19 @@
-# Validation — M16 checkpoint
+# Validation — M17 checkpoint
+
+M17 local checks passed: 98 C# checks (96 public), 18 Python checks with the
+local original, direct Godot C# compilation, and the complete synthetic gameplay
+UI with zero failures. The UI now covers technology purchase, course acceptance,
+mid-course save/load, completed study and study-seat persistence. Normal SDK/Godot
+CI will be recorded after publication.
+
+## M16 historical checkpoint
 
 M16 local checks passed: 90 C# checks (88 public), all 17 Python checks with the
 local original, Godot source-generator compilation with zero warnings/errors,
 and the complete synthetic gameplay UI including all company actions and shared
-budget save/load/reset with zero failures. Normal SDK/Godot CI will be recorded
-after publishing.
+budget save/load/reset with zero failures. The [M16 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37089203543)
+passed 88 public domain checks, a normal build with zero warnings/errors,
+and both UI suites with zero failures.
 
 ## M15 historical checkpoint
 

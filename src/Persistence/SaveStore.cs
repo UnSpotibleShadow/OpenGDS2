@@ -66,6 +66,8 @@ public static class SaveStore
         if ((state.HardwareLicenses?.Any(x => x is < 0 or > 10) ?? false) ||
             (state.AvailableHardware?.Any(x => x is < 0 or > 10) ?? false))
             throw new InvalidDataException("Invalid hardware state.");
+        if (state.TechnologyOwnershipLevels?.Any(x=>x.Key is <0 or >7 || x.Value is <0 or >3)==true)
+            throw new InvalidDataException("Invalid technology ownership.");
         if (state.OriginalAccuracyCells?.Any(x=>x.Key is <0 or >512 || x.Value is <0 or >99)==true)
             throw new InvalidDataException("Invalid original accuracy cells.");
         if (state.SalesTicks is <0 or >=SalesService.TicksPerBatch || state.SalesFee1<0 || state.SalesFee2<0 ||
@@ -112,13 +114,22 @@ public static class SaveStore
             state.Employees.Concat(state.Recruitment.Candidates).Any(x => x is null || string.IsNullOrWhiteSpace(x.Name) || x.OriginalAttributes is null || x.ContractFee < 0 || x.Experience < 0 || x.Stress < 0 || (x.Experience.HasValue && !double.IsFinite(x.Experience.Value)) || (x.Stress.HasValue && !double.IsFinite(x.Stress.Value)) || x.Level is < 1 or > 10) ||
             state.Employees.Where(x => x.SourceIndex.HasValue).Select(x => x.SourceIndex).Distinct().Count() != state.Employees.Count(x => x.SourceIndex.HasValue))
             throw new InvalidDataException("Invalid employee records.");
+        foreach (var employee in state.Employees.Concat(state.EmployeeSources.Select(x=>x.Employee)).Concat(state.Recruitment.Candidates))
+        {
+            if (employee.TechnologyLevels?.Any(x=>x.Key is <0 or >7 || x.Value is <0 or >3)==true || employee.MaximumTechnologies<0)
+                throw new InvalidDataException("Invalid employee technologies.");
+            if (employee.Office?.Training is EmployeeTrainingState training && (training.TechnologySourceIndex is <0 or >7 ||
+                training.Progress<0 || employee.TechnologyLevels is null ||
+                !employee.TechnologyLevels.TryGetValue(training.TechnologySourceIndex,out int level) || level>=3))
+                throw new InvalidDataException("Invalid active training.");
+        }
         var workspaces = state.Employees.Where(x => x.Office is not null).ToArray();
         if (workspaces.Any(x => x.PortraitId is not (>= 1 and <= 10) || !ValidOffice(x.Office!)) ||
             workspaces.Select(x => x.Office!.SlotIndex).Distinct().Count() != workspaces.Length ||
             workspaces.Where(x => x.Office!.LoungeSeat.HasValue).Select(x => x.Office!.LoungeSeat).Distinct().Count() !=
                 workspaces.Count(x => x.Office!.LoungeSeat.HasValue) ||
-            workspaces.Where(x => x.Office!.Action is >=6 and <=17).Select(x => x.Office!.Action).Distinct().Count() !=
-                workspaces.Count(x => x.Office!.Action is >=6 and <=17))
+            workspaces.Where(x => x.Office!.Action is >=1 and <=17).Select(x => x.Office!.Action).Distinct().Count() !=
+                workspaces.Count(x => x.Office!.Action is >=1 and <=17))
             throw new InvalidDataException("Invalid office workspaces.");
         if (state.MinimumSourceIndex < 0 || state.SourceUpperBound < state.MinimumSourceIndex ||
             (state.Recruitment.CandidateDatabaseDecoded && (state.MinimumSourceIndex is null || state.SourceUpperBound is null ||
@@ -167,13 +178,13 @@ public static class SaveStore
             office.RouteNode is >= 1 and <= 14 &&
             office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
             office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
-            office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=3 &&
+            office.TrainingIdleTicks>=0 && office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=3 &&
             office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && Enum.IsDefined(office.WorkCategory) &&
             office.OffsetY is >= -2 and <= 8 && office.DepthAdjustment is 0 or 2 &&
             (office.Action switch
             {
                 0 => office.LoungeSeat is null && office.MovementState == 0 && office.SeatedAction == 0 && !office.WorkEngaged,
-                >=6 and <=17 => office.LoungeSeat is null &&
+                >=1 and <=17 => office.LoungeSeat is null &&
                     (office.MovementState == 0 ? office.SeatedAction == office.Action && office.WorkEngaged :
                      office.MovementState is 3 or 4 or 10 && office.SeatedAction == 0 && !office.WorkEngaged),
                 >=18 and <=20 => office.LoungeSeat is >=0 and <=11 && office.Action == 18 + office.LoungeSeat / 4 &&

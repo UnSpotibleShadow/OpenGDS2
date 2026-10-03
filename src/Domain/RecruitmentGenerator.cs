@@ -53,6 +53,7 @@ public static class RecruitmentGenerator
     {
         SourceIndex = x.SourceIndex, PortraitId = x.PortraitId,
         OriginalAttributes = [.. x.OriginalAttributes],
+        TechnologyLevels = x.TechnologyLevels is null ? null : new(x.TechnologyLevels),
         RawParameter34 = x.RawParameter34, RawParameter3C = x.RawParameter3C,
         RawParameter40 = x.RawParameter40, SpecialFlag = x.SpecialFlag,
         Name = x.Name,

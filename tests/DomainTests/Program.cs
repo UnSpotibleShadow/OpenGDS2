@@ -45,6 +45,90 @@ EmployeeState Worker(int action=6)=>new()
     Fun=50,Novelty=50,Graphics=50,Music=50,Accuracy=50,DevelopmentSpeed=50,Inspiration=50,
     Office=new(){Action=action,SeatedAction=action,WorkEngaged=true,MovementState=0,Facing=1}
 };
+TechnologyDefinition TrainingTechnology(int id=0)=>new() {SourceIndex=id,RequiredTrainingWork=[3,6,9],ExperienceCosts=[10,20,30],PurchaseFee=50};
+(GameState State,EmployeeState Employee,OriginalCatalog Catalog) TrainingFixture()
+{
+    var s=State();var e=Worker(1);e.Experience=100;e.TechnologyLevels=new() {{0,0},{1,0}};
+    e=new EmployeeState {Name=e.Name,SourceIndex=0,PortraitId=1,Experience=100,Stress=0,DevelopmentSpeed=100,
+        RawParameter34=1,TechnologyLevels=e.TechnologyLevels,Office=e.Office};
+    s.Employees.Add(e);s.TechnologyOwnershipLevels=new() {{0,3},{1,3}};
+    return (s,e,new() {Technologies=[TrainingTechnology(),TrainingTechnology(1)]});
+}
+Test("technology purchase charges once and unlocks all three training levels",()=>
+{
+    var s=State(50);s.TechnologyOwnershipLevels=new() {{0,0}};var t=TrainingTechnology();
+    Check(TechnologyService.TryPurchase(s,t)==TechnologyPurchaseResult.Success && s.Money==0 && s.TechnologyOwnershipLevels[0]==3);
+    Check(TechnologyService.TryPurchase(s,t)==TechnologyPurchaseResult.AlreadyOwned && s.Money==0);
+    s.TechnologyOwnershipLevels[0]=0;Check(TechnologyService.TryPurchase(s,t)==TechnologyPurchaseResult.InsufficientFunds && s.TechnologyOwnershipLevels[0]==0);
+    s.Money=null;Check(TechnologyService.TryPurchase(s,t)==TechnologyPurchaseResult.StateUnknown);
+});
+Test("training acceptance spends experience once and upgrades a known skill at capacity",()=>
+{
+    var (s,e,c)=TrainingFixture();e.TechnologyLevels![0]=1;
+    Check(TrainingService.TryStart(s,e,c.Technologies[1])==TrainingResult.CapacityReached && e.Experience==100 && e.Office!.Training is null);
+    Check(TrainingService.TryStart(s,e,c.Technologies[0])==TrainingResult.Success && e.Experience==80 && e.Office!.Training!.Progress==0);
+    e.Experience=19;Check(TrainingService.TryStart(s,e,c.Technologies[0])==TrainingResult.InsufficientExperience && e.Experience==19);
+    e.TechnologyLevels[0]=3;Check(TrainingService.CheckStart(s,e,c.Technologies[0])==TrainingResult.Unavailable);
+});
+Test("training rejects duplicate source identities before spending experience",()=>
+{
+    var (s,e,c)=TrainingFixture();s.EmployeeSources.Add(Row(0));s.EmployeeSources.Add(Row(0));
+    Throws<InvalidOperationException>(()=>TrainingService.TryStart(s,e,c.Technologies[0]));
+    Check(e.Experience==100 && e.Office!.Training is null);
+});
+Test("training preserves original fractional cadence and random draw order",()=>
+{
+    var (s,e,c)=TrainingFixture();Check(TrainingService.TryStart(s,e,c.Technologies[0])==TrainingResult.Success);
+    var r=new SequenceRandom(2,4,0);Check(!TrainingService.Tick(s,e,c,r) && e.Office!.Training!.Progress==0 && r.Calls==1);
+    Check(TrainingService.Tick(s,e,c,r) && e.TechnologyLevels![0]==1 && e.Office!.Training is null && r.Calls==3);
+    Check(Math.Abs(e.Stress!.Value-4/30.0)<1e-12 && e.Experience==90);
+    e.DevelopmentSpeed=85;Check(TrainingService.TryStart(s,e,c.Technologies[0])==TrainingResult.Success);
+    for (int i=0;i<3;i++) {TrainingService.Tick(s,e,c,new ConstantRandom(0));Check(e.Office!.Training!.Progress==0);}
+    TrainingService.Tick(s,e,c,new ConstantRandom(0));Check(e.Office!.Training!.Progress==1);
+});
+Test("training pauses while walking resting or exhausted and persists across reload",()=>
+{
+    var (s,e,c)=TrainingFixture();TrainingService.TryStart(s,e,c.Technologies[0]);
+    e.Office!.MovementState=3;e.Office.SeatedAction=0;e.Office.WorkEngaged=false;
+    Check(!TrainingService.Tick(s,e,c,new SequenceRandom()) && e.Stress==0 && e.Office.Training!.Progress==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];
+    Check(e.Office!.Training is not null && e.Experience==90);
+    Check(OfficeAssignmentService.TryAssignDesk(s,e,6)==OfficeAssignmentResult.Success);
+    Check(!TrainingService.Tick(s,e,c,new SequenceRandom()) && e.Office.Training is not null);
+    Check(OfficeAssignmentService.TryAssignStudySeat(s,e,1)==OfficeAssignmentResult.Success);
+    for (int i=0;i<1000 && e.Office.MovementState!=0;i++) OfficeStaffRules.Tick(e,new ConstantRandom(0));
+    Check(e.Office.MovementState==0 && e.Office.SeatedAction==1);
+    e.Stress=100;Check(!TrainingService.Tick(s,e,c,new SequenceRandom()) && e.Office.Training!.Progress==0);
+    e.Stress=99.99;TrainingService.Tick(s,e,c,new ConstantRandom(0));Check(e.Stress==100);
+});
+Test("all five study seats route and reserve independently from development desks",()=>
+{
+    var s=State();var workers=Enumerable.Range(0,5).Select(id=>new EmployeeState {Name="Synthetic "+id,SourceIndex=id,PortraitId=1,Office=new() {SlotIndex=id}}).ToArray();s.Employees.AddRange(workers);
+    for (int i=0;i<5;i++) Check(OfficeAssignmentService.TryAssignStudySeat(s,workers[i],i+1)==OfficeAssignmentResult.Success);
+    Check(OfficeAssignmentService.TryAssignStudySeat(s,workers[1],1)==OfficeAssignmentResult.Occupied);
+    for (int tick=0;tick<2000;tick++) foreach (var e in workers) OfficeStaffRules.Tick(e,new ConstantRandom(0));
+    Check(workers.All(x=>x.Office!.MovementState==0 && x.Office.SeatedAction==x.SourceIndex+1));
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Employees.Count==5);
+});
+Test("learned technologies survive dismissal recruitment cloning and rehiring",()=>
+{
+    var (s,e,c)=TrainingFixture();var row=new RecruitmentSourceRecord {SourceIndex=0,GateValue=1,Employee=new() {Name=e.Name,SourceIndex=0,PortraitId=1,ContractFee=0}};s.EmployeeSources.Add(row);
+    TrainingService.TryStart(s,e,c.Technologies[0]);TrainingService.Tick(s,e,c,new ConstantRandom(0));
+    for (int i=0;i<10 && e.Office!.Training is not null;i++) TrainingService.Tick(s,e,c,new ConstantRandom(0));
+    Check(row.Employee.TechnologyLevels![0]==1 && row.Employee.Experience==90);
+    Check(EmployeeDismissalService.TryDismiss(s,e)==DismissalResult.Success);
+    var applicant=RecruitmentGenerator.BuildRoster(s.EmployeeSources,0,1,new ConstantRandom(0))[0];
+    Check(applicant.TechnologyLevels![0]==1 && HiringService.TryHire(s,applicant,new ConstantRandom(0))==HireResult.Success);
+    s.Employees[0].TechnologyLevels![0]=2;Check(applicant.TechnologyLevels[0]==1 && row.Employee.TechnologyLevels[0]==1);
+});
+Test("unknown old save training data stays unknown and malformed skill saves are rejected",()=>
+{
+    var s=SaveStore.Deserialize(SaveStore.Serialize(State()));Check(s.TechnologyOwnershipLevels is null);
+    s.TechnologyOwnershipLevels=new() {{0,4}};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    var (known,e,c)=TrainingFixture();e.TechnologyLevels![0]=4;Throws<InvalidDataException>(()=>SaveStore.Serialize(known));
+    e.TechnologyLevels[0]=0;e.Office!.Training=new() {TechnologySourceIndex=1,Progress=-1};Throws<InvalidDataException>(()=>SaveStore.Serialize(known));
+    e.Office.Training=null;e.TechnologyLevels=null;Check(TrainingService.CheckStart(known,e,c.Technologies[0])==TrainingResult.StateUnknown);
+});
 Test("review strict thresholds and maximum scores",()=>
 {
     double[] bases=[0,129.99,130,199.99,200,249.99,250,299.99,300,349.99,350,399.99,400,449.99,450,799.99,800];
@@ -1168,13 +1252,23 @@ if (args.Length == 2)
             var a = database.Employees[n]; var b = python.Employees[n];
             Check(a.Name == b.Name && a.GeneratedName == b.GeneratedName && a.ContractFee == b.ContractFee && a.Level == b.Level && a.RawAttributes.SequenceEqual(b.RawAttributes) && a.DefinitionAddress == b.DefinitionAddress &&
                 a.SourceIndex == b.SourceIndex && a.PortraitId == b.PortraitId && a.RawParameter34 == b.RawParameter34 && a.RawParameter3C == b.RawParameter3C && a.RawParameter40 == b.RawParameter40 &&
-                a.InitialGate == b.InitialGate && a.InitialSpecialFlag == b.InitialSpecialFlag);
+                a.InitialGate == b.InitialGate && a.InitialSpecialFlag == b.InitialSpecialFlag &&
+                a.InitialTechnologyLevels!.OrderBy(x=>x.Key).SequenceEqual(b.InitialTechnologyLevels!.OrderBy(x=>x.Key)));
         }
         var catalogPath = Path.Combine(Path.GetDirectoryName(args[1])!, "catalog.json");
         if (File.Exists(catalogPath))
         {
             var catalog = OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
             var expected = System.Text.Json.JsonSerializer.Deserialize<OriginalCatalog>(File.ReadAllText(catalogPath))!;
+            Check(catalog.Technologies.Count==8 && expected.Technologies.Count==8);
+            for (int n=0;n<8;n++)
+            {
+                var a=catalog.Technologies[n];var b=expected.Technologies[n];
+                Check(a.Name==b.Name && a.Description==b.Description && a.Identifier==b.Identifier && a.SourceIndex==b.SourceIndex &&
+                    a.InitialOwnershipLevel==b.InitialOwnershipLevel && a.PurchaseFee==b.PurchaseFee &&
+                    a.RequiredTrainingWork.SequenceEqual(b.RequiredTrainingWork) && a.ExperienceCosts.SequenceEqual(b.ExperienceCosts) &&
+                    a.RawTable158C.SequenceEqual(b.RawTable158C) && a.RawTable1568.SequenceEqual(b.RawTable1568));
+            }
             Check(catalog.Genres.Count == 18);
             for (int n = 0; n < 18; n++)
             {

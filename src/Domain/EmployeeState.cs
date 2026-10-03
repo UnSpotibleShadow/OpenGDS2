@@ -13,6 +13,10 @@ public sealed class EmployeeState
     // Literal order: inspiration, speed, accuracy, music, graphics, novelty, fun.
     public List<int> OriginalAttributes { get; init; } = [];
     public int? RawParameter34 { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public int? MaximumTechnologies => RawParameter34;
+    // Null means unknown in older modern saves; keys are source indices, not identifiers.
+    public Dictionary<int,int>? TechnologyLevels { get; set; }
     public int? RawParameter3C { get; init; }
     public long? RawParameter40 { get; init; }
     public int? SpecialFlag { get; init; }

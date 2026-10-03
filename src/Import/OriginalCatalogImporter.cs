@@ -156,6 +156,27 @@ public static class OriginalCatalogImporter
             pe.Require(pos, 0x0A, 0x4C, 0x01, 0x44, 0x00);
             result.GameTypes.Add(type);
         }
+        // Technology helper 0098BA28: seventeen arguments plus result storage.
+        for (int index=0;index<8;index++)
+        {
+            int pos=pe.Offset(start+0x9D7C+index*0x98);
+            pe.Require(pos,0x3A,0x0C,0xFC);
+            string description=pe.String(pool,pe.U16(pos+3));
+            pe.Require(pos+5,0x4E,0x1C,0xFC,0x04,0x1C,0xFC);pos+=11;
+            int ownership=pe.Literal16(ref pos,0xFC2C);
+            long fee=pe.Literal32(ref pos,0xFD2C);
+            var numeric=new List<int>();
+            foreach (ushort local in new ushort[] {0xFD3C,0xFD5C,0xFD7C,0xFD9C,0xFDBC,0xFDDC,
+                0xFDFC,0xFE1C,0xFE3C,0xFE5C,0xFE7C,0xFEAC}) numeric.Add(pe.Literal16(ref pos,local));
+            numeric.Reverse();
+            pe.Require(pos,0x3A,0x2C,0xFF);string name=pe.String(pool,pe.U16(pos+3));
+            pe.Require(pos+5,0x4E,0xBC,0xFE,0x04,0xBC,0xFE);pos+=11;
+            int identifier=pe.Literal16(ref pos,0xFECC);
+            pe.Require(pos,0x04,0xFC,0xFB,0x0A,0x30,0x02,0x48,0x00);
+            result.Technologies.Add(new() {SourceIndex=index,Identifier=identifier,Name=name,Description=description,
+                InitialOwnershipLevel=ownership,PurchaseFee=fee,RequiredTrainingWork=numeric.GetRange(0,3),
+                ExperienceCosts=numeric.GetRange(3,3),RawTable158C=numeric.GetRange(6,3),RawTable1568=numeric.GetRange(9,3)});
+        }
         return result;
     }
 }
