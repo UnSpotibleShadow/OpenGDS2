@@ -145,10 +145,17 @@ func run() -> void:
     await press("SAVE_GAME")
     var review_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(review_save.State.ReleasedGames[0].ReviewPending,"Pending reviews saved")
+    check(review_save.State.ProductionPerformedThisWeek,"First shipment sets the production flag")
+    # Isolate the budget boundary from variable development duration.
+    review_save.State.CompanyActivityTicks = 0
+    write_json("user://saves/slot1.json",review_save)
+    Engine.time_scale = 1
     await press("LOAD_GAME")
     check(main.find_child("ReviewScore3",true,false) != null,"Load restores review ceremony")
     await press_node("AcknowledgeReviews")
     check(main.find_child("SalesProduct0",true,false) != null,"Review acknowledgement opens sales screen")
+    check(main.find_child("ProduceProduct0",true,false).disabled,"Reprint waits for the next budget week")
+    Engine.time_scale = 100
     for frame in range(100):
         await process_frame
     Engine.time_scale = 1
@@ -166,10 +173,12 @@ func run() -> void:
     check(main.find_child("ProductionCopies",true,false) != null,"Reprint controls")
     main.find_child("ProductionCopies",true,false).value = 1000
     await press_node("ConfirmProduction")
+    check(main.find_child("ProduceProduct0",true,false).disabled,"Reprint consumes the shared weekly allowance")
     await press("BACK_TO_OFFICE")
     await press("SAVE_GAME")
     var reprinted = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(reprinted.State.ReleasedGames[0].ProductionSpending == product.ProductionSpending + 500000,"Reprint costs original band plus packaging")
+    check(reprinted.State.ProductionPerformedThisWeek,"Production allowance persists in saves")
     await press("START_GAME_DEVELOPMENT")
     main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
     await press_node("AcceptPlan")

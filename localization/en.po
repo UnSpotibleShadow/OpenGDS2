@@ -745,3 +745,12 @@ msgstr "Not enough experience."
 
 msgid "TECHNOLOGY_USE_UnresolvedBehavior"
 msgstr "This technology effect is not available in this build."
+
+msgid "PRODUCTION_READY"
+msgstr "Production is available this budget week."
+
+msgid "RELEASE_RESULT_AlreadyProducedThisWeek"
+msgstr "Production has already been used this budget week. Wait for the next week to reprint."
+
+msgid "RELEASE_RESULT_StateUnknown"
+msgstr "The production allowance is unknown in this save. Start a new company."

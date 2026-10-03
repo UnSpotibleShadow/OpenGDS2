@@ -154,13 +154,15 @@ public partial class Main
         if (ShowPendingProductEvent(state)) return;
         ClearContent();AddHeading(Tr("SALES"),28);
         var funds=new Label {Name="SalesFunds"};_content.AddChild(funds);
-        var rows=new List<(ReleasedGameState Product,Label Report)>();
+        var budget=new Label {Name="ProductionAvailability"};_content.AddChild(budget);
+        var rows=new List<(ReleasedGameState Product,Label Report,Button Production)>();
         foreach (var product in state.ReleasedGames.OrderByDescending(x=>x.ProductIndex))
         {
             AddHeading(product.Title,22);
-            var report=new Label {Name=$"SalesProduct{product.ProductIndex}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);rows.Add((product,report));
+            var report=new Label {Name=$"SalesProduct{product.ProductIndex}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
             var button=new Button {Name=$"ProduceProduct{product.ProductIndex}",Text=Tr("PRODUCE_MORE"),Disabled=state.Company.ProductionCapacity is null};
             button.Pressed+=()=>ShowProduction(state,product);_content.AddChild(button);
+            rows.Add((product,report,button));
             if (product.ReviewScores is not null)
             {
                 var reviews=new Button {Name=$"ReviewsProduct{product.ProductIndex}",Text=Tr("MAGAZINE_REVIEWS")};
@@ -173,9 +175,15 @@ public partial class Main
         _refreshCoreStatus=()=>
         {
             funds.Text=$"{Tr("FUNDS")}: ¥{state.Money:N0}";
-            foreach (var (p,label) in rows) label.Text=$"{Tr("RETAIL_PRICE")}: ¥{p.Price:N0} · {Tr("STOCK")}: {p.Stock:N0}\n"+
+            var availability=ReleaseService.CheckProduction(state);
+            budget.Text=availability==ReleaseResult.Success ? Tr("PRODUCTION_READY") : Tr($"RELEASE_RESULT_{availability}");
+            foreach (var (p,label,production) in rows)
+            {
+                production.Disabled=state.Company.ProductionCapacity is null || availability!=ReleaseResult.Success;
+                label.Text=$"{Tr("RETAIL_PRICE")}: ¥{p.Price:N0} · {Tr("STOCK")}: {p.Stock:N0}\n"+
                 $"{Tr("UNITS_SOLD")}: {p.UnitsSold:N0} · {Tr("LAST_SALES_BATCH")}: {p.LastBatchSold:N0}\n"+
                 $"{Tr("NET_SALES_RECEIPTS")}: ¥{p.NetSalesReceipts:N0}\n{Tr("PRODUCTION_COST")}: ¥{p.ProductionSpending:N0}\n{Tr("DEMAND")}: {p.Demand}";
+            }
         };
         _refreshCoreStatus();
     }
@@ -228,6 +236,12 @@ public partial class Main
     }
     private void ShowProduction(GameState state,ReleasedGameState product)
     {
+        var availability=ReleaseService.CheckProduction(state);
+        if (availability!=ReleaseResult.Success)
+        {
+            ClearContent();AddHeading(Tr($"RELEASE_RESULT_{availability}"),20);
+            AddAction("CANCEL",()=>ShowSales(state));return;
+        }
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
         ClearContent();AddHeading(product.Title,28);AddHeading(Tr("PRODUCE_MORE"),22);
         var copies=ProductionQuantity(state,"ProductionCopies");

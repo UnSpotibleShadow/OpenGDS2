@@ -1,4 +1,12 @@
-# Validation — M18 checkpoint
+# Validation — M19 checkpoint
+
+M19 local validation passed: 109 C# checks (107 public), all 18 Python checks
+with the optional original fixture, direct Godot C# compilation, synthetic
+gameplay UI and original-import UI with zero failures. Coverage adds company-wide
+reprint limits, the exact budget reset, modal pauses and saved production state.
+M18 technology-use and M19 production evidence anchors also match the original.
+
+## M18 historical checkpoint
 
 The [M18 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37091862119)
 passed 104 public C# checks, all ten public Python checks (eight original checks
@@ -10,11 +18,12 @@ original random-width differences, flooring, shared-counter timing, save/load,
 desk lifecycle, stress relief and guards for unresolved branches. The UI runs
 active-application save/load and live compression through the actual Godot game.
 
-M18 was authored and verified through GitHub while the local execution workspace
-was disconnected. The optional original-fixture suite has not yet been rerun for
-M18. The last local imported-original validation is M17; new source traces were
-recovered before the interruption. Reconcile the local checkout with remote main
-before continuing reconstruction when execution becomes available.
+M18 was initially authored and verified through GitHub while the local execution
+workspace was disconnected. After recovery on 2026-10-03, the local checkout was
+reconciled with merged M18. All 106 C# checks (including both optional original
+checks), all 18 Python checks with the local original, direct Godot C# compilation,
+the synthetic gameplay UI and the original-import UI passed. Both UI suites
+reported zero failures. Original Windows behavioral comparison remains outstanding.
 
 ## M17 historical checkpoint
 

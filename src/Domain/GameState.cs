@@ -21,6 +21,8 @@ public sealed class GameState
     public int SalesTicks { get; set; }
     public int? CompanyActivityTicks { get; set; }
     public bool? CompanyActivityPerformed { get; set; }
+    // Original global A110EC/member B0: shared by all game production.
+    public bool? ProductionPerformedThisWeek { get; set; }
     public long? SalesFee1 { get; set; }
     public long? SalesFee2 { get; set; }
     // Global member 31A8: shared across type-selection forms, not per project.
