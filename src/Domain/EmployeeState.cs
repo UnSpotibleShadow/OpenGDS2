@@ -19,6 +19,8 @@ public sealed class EmployeeState
     public Dictionary<int,int>? TechnologyLevels { get; set; }
     public int? RawParameter3C { get; init; }
     public long? RawParameter40 { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public long? MonthlySalary => RawParameter40;
     public int? SpecialFlag { get; init; }
     public required string Name { get; init; }
     public int? Level { get; set; }

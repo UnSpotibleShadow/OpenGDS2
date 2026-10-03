@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M18.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M22.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -52,6 +52,10 @@ boundaries are preserved. See [sales-history.md](docs/sales-history.md).
 M21 adds consumer investigations, the original five-week recall countdown,
 refund decisions and reproduction prohibitions. Both event dialogs survive
 save/load without charging twice. See [consumer-recalls.md](docs/consumer-recalls.md).
+
+M22 displays imported monthly salaries and preserves the staff form's shared
+payroll index in saves. Its original-debit preview remains separate from the
+salary total; monthly charging is still disabled. See [payroll-state.md](docs/payroll-state.md).
 
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements

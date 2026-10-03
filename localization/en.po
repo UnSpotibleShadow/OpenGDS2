@@ -799,3 +799,15 @@ msgstr "The investigation closed without a recall."
 
 msgid "RELEASE_RESULT_Recalled"
 msgstr "This game was recalled and cannot be reprinted."
+
+msgid "MONTHLY_SALARY"
+msgstr "Monthly salary"
+
+msgid "MONTHLY_SALARY_TOTAL"
+msgstr "Staff salary total"
+
+msgid "ORIGINAL_PAYROLL_PREVIEW"
+msgstr "Original payroll preview"
+
+msgid "PAYROLL_PREVIEW_NOTE"
+msgstr "Payroll is not charged yet. This preview preserves the original shared-index calculation; the live calendar is still being reconstructed."

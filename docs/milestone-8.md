@@ -59,6 +59,10 @@ entry. Module2 periodic procedure 12 (`009E3830 +1AA7..+1B21`) similarly builds
 an employed-source list using that count. Other employee UI paths also use it.
 There is no assignment to 3018 inside procedure 61 before the payroll read.
 
+The following conclusion describes the M8 checkpoint. M22 later adds the verified
+staff-list writer and a persisted preview; see [payroll-state.md](payroll-state.md).
+Live monthly charges and full scratch emulation remain disabled.
+
 Static evidence therefore suggests state-dependent payroll using a stale count
 as a source index. This is **not dynamically verified** and is not implemented
 as normal per-employee payroll or as an emulated bug. A Windows runtime/save

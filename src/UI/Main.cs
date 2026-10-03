@@ -398,9 +398,29 @@ public partial class Main : Control
     private void ShowStaff(GameState state)
     {
         ClearContent(); AddHeading(Tr("STAFF"), 30);
+        bool completeSources=OriginalPayrollRules.CaptureStaffList(state);
+        long? salaryTotal=null;
+        long? payrollDebit=null;
+        // Malformed large monetary fields must not crash this information screen.
+        try
+        {
+            if (completeSources)
+            {
+                salaryTotal=OriginalPayrollRules.StaffSalaryTotal(state.EmployeeSources);
+                payrollDebit=OriginalPayrollRules.MonthlyDebit(state);
+            }
+        }
+        catch (OverflowException) { salaryTotal=null; payrollDebit=null; }
+        _content.AddChild(new Label {Name="StaffSalaryTotal",
+            Text=$"{Tr("MONTHLY_SALARY_TOTAL")}: {salaryTotal?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
+        _content.AddChild(new Label {Name="OriginalPayrollPreview",
+            Text=$"{Tr("ORIGINAL_PAYROLL_PREVIEW")}: {payrollDebit?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
+        AddHeading(Tr("PAYROLL_PREVIEW_NOTE"),14);
         foreach (var employee in state.Employees)
         {
             var panel = AddEmployeeCard(employee);
+            panel.AddChild(new Label {Name=$"MonthlySalary{employee.SourceIndex}",
+                Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
             var dismiss=new Button {Name=$"DismissEmployee{employee.SourceIndex}",Text=Tr("DISMISS_EMPLOYEE"),Disabled=employee.SourceIndex is null};
             dismiss.Pressed+=()=>ShowDismissEmployee(state,employee);panel.AddChild(dismiss);
             string threshold = employee.Level is >= 1 and <= 10
