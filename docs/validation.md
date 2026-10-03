@@ -2,8 +2,9 @@
 
 M22 adds five public payroll-projection checks and a Godot staff-screen fixture.
 The local execution workspace disconnected after M21; M22 original-fixture and
-local runtime reruns remain pending. Standard SDK/Godot CI results are recorded
-on the milestone pull request.
+local runtime reruns remain pending. The [M22 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37120341700)
+passed 123 public C# checks, ten public Python checks (eight optional original
+checks skipped), zero build warnings/errors and both UI suites with zero failures.
 
 ## M21 historical checkpoint
 
