@@ -17,7 +17,12 @@ public static class SaveStore
     public static string Serialize(GameState state)
     {
         Validate(state);
-        return JsonSerializer.Serialize(new Envelope { Format = "OpenGDS2", SchemaVersion = 1, State = state }, Options);
+        string text = JsonSerializer.Serialize(new Envelope { Format = "OpenGDS2", SchemaVersion = 1, State = state }, Options);
+        // A successful write must remain readable by the same format's loader.
+        // Reject before Save creates a temporary file or replaces an old slot.
+        if (System.Text.Encoding.UTF8.GetByteCount(text) > MaxBytes)
+            throw new InvalidDataException("Save is too large.");
+        return text;
     }
     public static GameState Deserialize(string text)
     {
