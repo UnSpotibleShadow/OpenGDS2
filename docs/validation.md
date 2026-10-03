@@ -1,4 +1,4 @@
-# Validation — M32 local comparison checkpoint
+# Validation — M33 technology cadence checkpoint
 
 M32 restores employee selection in the office and from the staff table. The
 local host has recovered: direct compilation, 140 C# checks (138 public and
@@ -8,7 +8,17 @@ anchors establish inset hit bounds and first-workspace selection. UI coverage
 checks scaling/letterboxing, focused controls, unchanged funds/progression and
 paused management. A full original Windows or desktop-display comparison is
 still outstanding. See [the comparison audit](original-comparison.md).
-Standard SDK/export checks are pending for M32.
+The [M32 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37153643487)
+passed all four jobs: domain, Godot, desktop export and packaged native Windows.
+Both Linux and Windows core-loop fixtures pass. M32 merged as
+`91eed94096c1f88f3b46f20546e1414d9afcb918`.
+
+M33 corrects the missing technology-only counter increment. Local compilation,
+141 C# checks (139 public and two original fixtures) and all 27 Python checks
+pass. Threshold ordering, reloads, even-valued prior saves and exactly-once
+completion are covered; ordinary-work cadence remains unchanged. Both the
+imported-original UI suite and complete core-loop Godot UI suite report zero
+failures. Standard SDK/export checks are pending for M33.
 
 ## M31 desktop checkpoint
 M31 extends the existing modern employee validation to inactive source records.

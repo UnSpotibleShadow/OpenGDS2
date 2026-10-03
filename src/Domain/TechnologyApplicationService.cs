@@ -81,14 +81,21 @@ public static class TechnologyApplicationService
     public static void TickWork(DevelopmentProjectState project,EmployeeState employee,OriginalCatalog catalog,Random random)
     {
         var office=employee.Office!;var application=office.TechnologyApplication;
-        if (application is null || office.WorkTier!=4 || office.WorkTicks<20) return;
-        // Shared work counter resets to 1, then the main loop increments it.
-        // Subsequent units therefore take 19 ticks.
-        office.WorkTicks=1;application.RemainingUnits--;
-        if (application.RemainingUnits>0) return;
-        var technology=catalog.Technologies.Single(x=>x.SourceIndex==application.TechnologySourceIndex);
-        int level=employee.TechnologyLevels![technology.SourceIndex];
-        ApplyCompleted(project,technology,level,random);
-        office.WorkTicks=0;office.TechnologyApplication=null;
+        if (application is null || office.WorkTier!=4) return;
+        if (office.WorkTicks>=20)
+        {
+            office.WorkTicks=1;application.RemainingUnits--;
+            if (application.RemainingUnits==0)
+            {
+                var technology=catalog.Technologies.Single(x=>x.SourceIndex==application.TechnologySourceIndex);
+                int level=employee.TechnologyLevels![technology.SourceIndex];
+                ApplyCompleted(project,technology,level,random);
+                office.WorkTicks=0;office.TechnologyApplication=null;
+            }
+        }
+        // +887F..88AD increments only the eligible technology path. The
+        // ordinary path jumps past it at +66D8. Both paths then reach the
+        // common +9C15..9C43 increment in DevelopmentSimulation.
+        if (office.WorkTicks>=1) office.WorkTicks++;
     }
 }

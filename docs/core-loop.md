@@ -64,6 +64,13 @@ the original double-index points lookup and duplicate-permitting fallback. This
 does not establish original-save import or same-process original company-restart
 semantics; those remain unresolved.
 
+M33 verifies the work-counter control flow: ordinary work bypasses the first
+increment through `+66D8`, tests contributions, then increments at
+`+9C15..9C43`. Its existing timing is retained. Eligible technology tier 4
+instead passes through both increments. See
+[technology application cadence](technology-application.md#work-cadence)
+for the corrected 11/10 eligible-pass schedule and its bounded evidence.
+
 ## Release and production
 
 The source defaults are ¥5,800 and 5,000 copies. The quantity spinner has a
