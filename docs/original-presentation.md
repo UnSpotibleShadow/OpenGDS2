@@ -31,8 +31,9 @@ ascending keys, then applies two raster operations for every visible tile:
 
 White mask/white color preserves background; black mask replaces it with color.
 This is reproduced channel by channel, including clipping. Calendar glyph tiles
-144/145 use the month/week rectangles recovered at `+D5FB..D6AD`. The office is
-displayed with nearest filtering at exactly 2×, within a 1280 × 720 canvas.
+144/145 use the month/week rectangles recovered at `+D5FB..D6AD`. M10 displayed the office at 2×. M25 restores its native 466 × 290 size with
+nearest filtering inside the simultaneous desktop windows; see
+[desktop presentation](desktop-ui-and-music.md).
 Community-authored beveled controls surround the imported scene.
 
 ## Employee entry, sitting and rest

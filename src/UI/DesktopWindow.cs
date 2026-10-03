@@ -1,0 +1,89 @@
+using Godot;
+using System;
+
+namespace OpenGDS2.UI;
+
+/// <summary>Community-written child-window chrome. Coordinates are desktop pixels.</summary>
+public partial class DesktopWindow : PanelContainer
+{
+    public VBoxContainer Body { get; private set; } = null!;
+    public Action? CloseRequested { get; set; }
+    private Control _caption = null!;
+    private Label _title = null!;
+    private Vector2 _dragOrigin;
+    private Vector2 _mouseOrigin;
+    private bool _dragging;
+    private bool _minimized;
+    private Rect2? _restore;
+    private Vector2 _expandedSize;
+
+    public void Initialize(string title, Vector2 position, Vector2 size, bool canMaximize = true)
+    {
+        Position = position; Size = size; _expandedSize = size;
+        AddThemeStyleboxOverride("panel", ClassicTheme.WindowFrame());
+        var layout = new VBoxContainer(); layout.AddThemeConstantOverride("separation", 2); AddChild(layout);
+        _caption = new Control { CustomMinimumSize = new Vector2(0, 22), MouseFilter = MouseFilterEnum.Stop };
+        layout.AddChild(_caption);
+        var tint = new ColorRect { Color = new Color(0.68f, 0.77f, 0.85f), MouseFilter = MouseFilterEnum.Ignore };
+        tint.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); _caption.AddChild(tint);
+        _title = new Label { Text = title, Position = new Vector2(5, 1), MouseFilter = MouseFilterEnum.Ignore };
+        _title.AddThemeFontSizeOverride("font_size", 13); _caption.AddChild(_title);
+        var controls = new HBoxContainer { AnchorLeft = 1, AnchorRight = 1, OffsetLeft = canMaximize ? -66 : -44,
+            OffsetRight = -2, OffsetTop = 2, OffsetBottom = 20 };
+        controls.AddThemeConstantOverride("separation", 2); _caption.AddChild(controls);
+        CaptionButton(controls, "MinimizeWindow", "−", () =>
+        {
+            _minimized = !_minimized;
+            if (_minimized) { _expandedSize = Size; Body.Hide(); CustomMinimumSize = Vector2.Zero; Size = new Vector2(Size.X, 28); }
+            else { Body.Show(); Size = _expandedSize; }
+        });
+        if (canMaximize) CaptionButton(controls, "MaximizeWindow", "□", () =>
+        {
+            if (_minimized) { _minimized = false; Body.Show(); Size = _expandedSize; }
+            if (_restore is Rect2 saved) { Position = saved.Position; Size = saved.Size; _restore = null; }
+            else { _restore = new Rect2(Position, Size); Position = Vector2.Zero; Size = ((Control)GetParent()).Size; }
+        });
+        CaptionButton(controls, "CloseWindow", "×", () => { if (CloseRequested is not null) CloseRequested(); else Hide(); });
+        Body = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsVertical = SizeFlags.ExpandFill };
+        Body.AddThemeConstantOverride("separation", 2); layout.AddChild(Body);
+        _caption.GuiInput += OnCaptionInput;
+        GuiInput += e => { if (e is InputEventMouseButton { Pressed: true }) MoveToFront(); };
+        Resized += () => _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
+        _title.ClipText = true;
+        _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
+    }
+
+    public void SetTitle(string title) => _title.Text = title;
+
+    public void Reopen()
+    {
+        if (_minimized) { _minimized = false; Body.Show(); Size = _expandedSize; }
+        Show(); MoveToFront();
+    }
+
+    private static void CaptionButton(HBoxContainer parent, string name, string text, Action action)
+    {
+        var button = new Button { Name = name, Text = text, CustomMinimumSize = new Vector2(20, 18), FocusMode = FocusModeEnum.None };
+        button.AddThemeFontSizeOverride("font_size", 12);
+        button.AddThemeStyleboxOverride("normal", ClassicTheme.CompactButton());
+        button.AddThemeStyleboxOverride("pressed", ClassicTheme.CompactButton(true));
+        button.Pressed += () => action(); parent.AddChild(button);
+    }
+
+    private void OnCaptionInput(InputEvent input)
+    {
+        if (input is InputEventMouseButton { ButtonIndex: MouseButton.Left } button)
+        {
+            _dragging = button.Pressed; _dragOrigin = Position; _mouseOrigin = GetGlobalMousePosition();
+            if (button.Pressed) MoveToFront();
+        }
+        if (_dragging && input is InputEventMouseMotion && _restore is null)
+        {
+            var requested = _dragOrigin + GetGlobalMousePosition() - _mouseOrigin;
+            var bounds = ((Control)GetParent()).Size;
+            Position = new Vector2(Math.Clamp(requested.X, 0, Math.Max(0, bounds.X - Size.X)),
+                Math.Clamp(requested.Y, 0, Math.Max(0, bounds.Y - 24)));
+            AcceptEvent();
+        }
+    }
+}

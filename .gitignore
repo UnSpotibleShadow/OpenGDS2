@@ -22,6 +22,12 @@ catalog.json
 office.json
 saves/
 private-original/
+asset-overrides/
 
 # Native desktop exports and packaged development builds
 builds/
+
+# User-supplied soundtrack: local use until redistribution is authorized.
+audio/community/*.ogg
+audio/community/*.ogg.import
+music/

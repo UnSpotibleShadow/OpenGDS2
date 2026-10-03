@@ -8,8 +8,8 @@ public static class ClassicTheme
     public static readonly Color Face = new(0.83f, 0.83f, 0.83f);
     public static Theme Create()
     {
-        var theme = new Theme { DefaultFontSize = 16 };
-        foreach (string type in new[] { "Button", "Label", "LineEdit", "OptionButton", "CheckButton", "CheckBox", "PopupMenu" })
+        var theme = new Theme { DefaultFontSize = 13 };
+        foreach (string type in new[] { "Button", "MenuButton", "Label", "LineEdit", "OptionButton", "CheckButton", "CheckBox", "PopupMenu" })
         {
             theme.SetColor("font_color", type, Colors.Black);
             theme.SetColor("font_hover_color", type, Colors.Black);
@@ -27,9 +27,31 @@ public static class ClassicTheme
             focus.SetBorderWidthAll(1);
             theme.SetStylebox("focus", type, focus);
         }
+        theme.SetStylebox("panel", "PopupMenu", Bevel(Face, false));
         theme.SetStylebox("normal", "LineEdit", Bevel(Colors.White, true));
         theme.SetStylebox("panel", "PanelContainer", Bevel(Face, false));
+        theme.SetStylebox("panel", "Tree", Bevel(Colors.White, true));
+        theme.SetColor("font_color", "Tree", Colors.Black);
+        theme.SetColor("title_button_color", "Tree", Colors.Black);
+        theme.SetStylebox("title_button_normal", "Tree", CompactButton());
+        theme.SetStylebox("title_button_hover", "Tree", CompactButton());
+        theme.SetStylebox("title_button_pressed", "Tree", CompactButton(true));
         return theme;
+    }
+
+    public static StyleBoxFlat WindowFrame()
+    {
+        var box = new StyleBoxFlat { BgColor = Face, BorderColor = new Color(0.4f, 0.5f, 0.6f),
+            ContentMarginLeft = 3, ContentMarginRight = 3, ContentMarginTop = 3, ContentMarginBottom = 3 };
+        box.SetBorderWidthAll(1); return box;
+    }
+
+    public static StyleBoxTexture CompactButton(bool pressed = false)
+    {
+        var box = Bevel(Face, pressed);
+        box.ContentMarginLeft = 3; box.ContentMarginRight = 3;
+        box.ContentMarginTop = 1; box.ContentMarginBottom = 1;
+        return box;
     }
 
     private static StyleBoxTexture Bevel(Color color, bool pressed)

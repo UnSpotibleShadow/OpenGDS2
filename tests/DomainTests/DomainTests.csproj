@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="../../src/Domain/*.cs" Link="Domain/%(Filename)%(Extension)" />
     <Compile Include="../../src/Core/GameSession.cs" Link="Core/GameSession.cs" />
+    <Compile Include="../../src/Core/LocalAssetOverlay.cs" Link="Core/LocalAssetOverlay.cs" />
     <Compile Include="../../src/Persistence/*.cs" Link="Persistence/%(Filename)%(Extension)" />
     <Compile Include="../../src/Import/EmployeeDatabaseImporter.cs" Link="Import/EmployeeDatabaseImporter.cs" />
     <Compile Include="../../src/Import/OriginalCatalogImporter.cs" Link="Import/OriginalCatalogImporter.cs" />

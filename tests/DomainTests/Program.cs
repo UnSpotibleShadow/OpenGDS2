@@ -12,6 +12,27 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("local artwork overlays require original assets and cannot replace rule data", () =>
+{
+    string root = Path.Combine(Path.GetTempPath(), "OpenGDS2-overlays-" + Guid.NewGuid());
+    string original = Path.Combine(root, "original"), overlay = Path.Combine(root, "overlays");
+    Directory.CreateDirectory(Path.Combine(original, "Graphic")); Directory.CreateDirectory(Path.Combine(overlay, "Graphic"));
+    try
+    {
+        string source = Path.Combine(original, "Graphic", "Test.bmp");
+        string replacement = Path.Combine(overlay, "Graphic", "Test.png");
+        File.WriteAllText(replacement, "synthetic");
+        Check(LocalAssetOverlay.Resolve(original, overlay, "Graphic/Test.bmp") == source);
+        File.WriteAllText(source, "synthetic");
+        Check(LocalAssetOverlay.Resolve(original, overlay, "Graphic/Test.bmp") == replacement);
+        File.WriteAllText(Path.Combine(overlay, "catalog.json"), "synthetic");
+        Check(LocalAssetOverlay.Resolve(original, overlay, "catalog.json") == Path.Combine(original, "catalog.json"));
+        foreach (string unsafePath in new[] { "../Graphic/Test.bmp", "/Graphic/Test.bmp", "C:/Test.bmp", "Graphic/./Test.bmp", "Graphic//Test.bmp", "Graphic/../Test.bmp" })
+            Throws<ArgumentException>(() => LocalAssetOverlay.Resolve(original, overlay, unsafePath));
+    }
+    finally { Directory.Delete(root, true); }
+});
+
 EmployeeState Candidate(int id, long? fee = 100) => new() { SourceIndex = id, Name = "Synthetic " + id, ContractFee = fee, OriginalAttributes = [1, 2, 3, 4, 5, 6, 7] };
 RecruitmentSourceRecord Row(int id, int gate = 0) => new() { SourceIndex = id, GateValue = gate, Employee = Candidate(id) };
 GameState State(long? money = 100) => new() { Money = money, Company = new() { Name = "Test", PresidentName = "Tester" } };

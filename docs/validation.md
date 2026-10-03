@@ -1,4 +1,23 @@
-# Validation — M24 checkpoint
+# Validation — M25 checkpoint
+
+Local workspace access has been restored. Direct C# compilation passed, with
+126 domain checks including two optional original-fixture checks. All 21 Python
+checks passed with the supplied original executable. The imported-original Godot
+UI suite and the full development/release/sales UI suite reported zero failures.
+M25 adds desktop geometry/window-control checks, required-original local artwork
+overlays, and local soundtrack resource/preferences/playlist checks. Music files remain
+local; public tests generate authored silent WAV fixtures. ZIP conversion tests
+cover path isolation, no-overwrite behavior and failure without partial output.
+Final GitHub SDK
+build and exported Linux/Windows package results are recorded below once complete.
+
+The constrained local host uses a direct Roslyn compiler because Godot's editor
+SDK discovery cannot use the unavailable /proc environment. These local runs do
+not replace the normal SDK/export checks in GitHub Actions. They also do not
+constitute a full graphical or audible comparison with the original game.
+See [M25 presentation and audio scope](desktop-ui-and-music.md).
+
+## M24 historical checkpoint
 
 M24 extends the Godot core-loop fixture with manual pause/resume labels, immediate
 status refresh, paused weekly/sales clocks, screen-rebuild persistence and resumed
@@ -10,8 +29,7 @@ The [M24 workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/371
 passed all 123 public C# checks, ten public Python checks, a build with zero
 warnings/errors, both editor UI suites, both desktop exports and the complete
 core-loop UI fixture against extracted Linux and native Windows packages.
-Both packaged runs reported zero failures. Local original-fixture reruns remain
-pending because the local execution workspace is disconnected.
+Both packaged runs reported zero failures. Local original-fixture reruns were subsequently completed at the M25 checkpoint.
 
 ## M23 historical checkpoint
 
