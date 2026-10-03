@@ -394,6 +394,8 @@ public partial class Main : Control
         foreach (var employee in state.Employees)
         {
             var panel = AddEmployeeCard(employee);
+            var dismiss=new Button {Name=$"DismissEmployee{employee.SourceIndex}",Text=Tr("DISMISS_EMPLOYEE"),Disabled=employee.SourceIndex is null};
+            dismiss.Pressed+=()=>ShowDismissEmployee(state,employee);panel.AddChild(dismiss);
             string threshold = employee.Level is >= 1 and <= 10
                 ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
             panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});

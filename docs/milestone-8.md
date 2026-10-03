@@ -22,7 +22,8 @@ experience, fee or contract-duration reset is present in this handler.
 
 Dismissal helper `009981CC` takes a workspace slot, resolves its employee source
 through member E1C, then clears source gate C84 at `+0399` and stress C68 at
-`+03B5`. It also performs workspace/task cleanup that remains unreconstructed.
+`+03B5`. It also performs workspace/task cleanup. M15 reconstructs the currently supported
+desk/lounge/walking projections; training and external jobs remain unresolved.
 The new ContractRenewalService implements only the current domain's employee
 and financial projection. It is deliberately not exposed as a free office
 action or connected to the calendar inspector. Scheduling, pending-modal state

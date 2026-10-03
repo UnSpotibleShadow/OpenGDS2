@@ -125,6 +125,92 @@ Test("sales batch creates a saved modal milestone and freezes following office t
     g.PendingSalesMilestones=[3];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     g.PendingSalesMilestones=[2,3,4,5];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
+Test("dismissal frees seated or walking desks and permits rehiring without lost progression",()=>
+{
+    foreach (bool walking in new[]{false,true})
+    {
+        var s=State(10000);var e=Worker();e.ContractFee=100;e.Experience=47;e.Stress=60;
+        e.Office!.WorkTicks=16;e.Office.WorkTier=1;s.Employees.Add(e);
+        var source=new RecruitmentSourceRecord {SourceIndex=0,GateValue=1,Employee=Candidate(0)};s.EmployeeSources.Add(source);
+        var p=new DevelopmentProjectState {Title="Synthetic",RequiredPoints=100,Progress=20,Focus=new(25,25,25,25)};s.DevelopmentProjects.Add(p);
+        if (walking) Check(OfficeAssignmentService.TryAssignDesk(s,e,7)==OfficeAssignmentResult.Success);
+        Check(EmployeeDismissalService.TryDismiss(s,e)==DismissalResult.Success);
+        Check(e.Office is null && e.Stress==0 && source.GateValue==0 && source.Employee.Experience==47 && s.Money==10000);
+        Check(p.Progress==20 && s.Employees.Count==0);
+        Check(EmployeeDismissalService.TryDismiss(s,e)==DismissalResult.NotEmployed);
+        var rehire=new EmployeeState {Name=e.Name,SourceIndex=0,PortraitId=1,ContractFee=100,Experience=47};
+        Check(HiringService.TryHire(s,rehire,new SequenceRandom(0))==HireResult.Success);
+        var hired=s.Employees.Single();Check(hired.Office!.SlotIndex==0 && hired.Experience==47 && s.Money==9900 && source.GateValue==1);
+        Check(OfficeAssignmentService.TryAssignDesk(s,hired,walking ? 7 : 6)==OfficeAssignmentResult.Success);
+        Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Employees.Single().Experience==47);
+    }
+});
+Test("dismissal frees lounge reservations without touching another employee or project",()=>
+{
+    var s=State();var e=Worker();e.Office=OfficeStaffRules.CreateHire(s,new SequenceRandom(0));s.Employees.Add(e);
+    var other=Candidate(1);other.Office=OfficeStaffRules.CreateHire(s,new SequenceRandom(1));s.Employees.Add(other);
+    Check(EmployeeDismissalService.TryDismiss(s,e)==DismissalResult.Success);
+    Check(s.Employees.Single()==other && other.Office.LoungeSeat==1);
+    var replacement=OfficeStaffRules.CreateHire(s,new SequenceRandom(0));Check(replacement.LoungeSeat==0 && replacement.SlotIndex==0);
+});
+Test("dismissal corrupt or unknown identities fail before mutation",()=>
+{
+    var s=State();var unknown=new EmployeeState {Name="Unknown",Stress=12};s.Employees.Add(unknown);
+    Check(EmployeeDismissalService.TryDismiss(s,unknown)==DismissalResult.IdentityUnknown && unknown.Stress==12);
+    var e=Worker();s.Employees.Add(e);s.Employees.Add(Worker());
+    Throws<InvalidDataException>(()=>EmployeeDismissalService.TryDismiss(s,e));Check(e.Office is not null && s.Employees.Count==3);
+    s.Employees.RemoveAt(2);s.EmployeeSources.Add(Row(0,1));s.EmployeeSources.Add(Row(0,1));
+    Throws<InvalidOperationException>(()=>EmployeeDismissalService.TryDismiss(s,e));Check(e.Office is not null && s.EmployeeSources.All(x=>x.GateValue==1));
+});
+Test("annual nonrenewal uses dismissal cleanup for active supported workspaces",()=>
+{
+    var s=State(1000);var retained=Worker();retained.ContractFee=100;s.Employees.Add(retained);
+    var removed=new EmployeeState {Name="Synthetic",SourceIndex=1,PortraitId=1,ContractFee=200,Stress=70,Experience=15};
+    removed.Office=OfficeStaffRules.CreateHire(s,new SequenceRandom(0));s.Employees.Add(removed);
+    s.EmployeeSources.Add(Row(0,1));s.EmployeeSources.Add(Row(1,1));
+    Check(ContractRenewalService.TryRenew(s,new HashSet<int>{0})==ContractRenewalResult.Success);
+    Check(s.Money==900 && s.Employees.Single()==retained && removed.Office is null && s.EmployeeSources[1].GateValue==0);
+    Check(retained.Office is not null && s.EmployeeSources[1].Employee.Experience==15);
+});
+Test("payroll preserves stale scratch indexing instead of intended employee salaries",()=>
+{
+    var rows=new List<RecruitmentSourceRecord>
+    {
+        new() {SourceIndex=0,GateValue=0,Employee=new() {Name="Synthetic0",RawParameter40=700}},
+        new() {SourceIndex=1,GateValue=1,Employee=new() {Name="Synthetic1",RawParameter40=100}},
+        new() {SourceIndex=2,GateValue=1,Employee=new() {Name="Synthetic2",RawParameter40=300}}
+    };
+    Check(OriginalPayrollRules.MonthlyDebit(rows,0)==1400);
+    Check(OriginalPayrollRules.MonthlyDebit(rows,1)==200);
+    Check(OriginalPayrollRules.MonthlyDebit(rows,2)==600);
+    Check(OriginalPayrollRules.MonthlyDebit(rows,null) is null && OriginalPayrollRules.MonthlyDebit(rows,99) is null);
+    Throws<ArgumentOutOfRangeException>(()=>OriginalPayrollRules.MonthlyDebit(rows,-1));
+    rows.ForEach(x=>x.GateValue=0);Check(OriginalPayrollRules.MonthlyDebit(rows,null)==0);
+});
+Test("recall bug brackets consume all draws and retain signed random ranges",()=>
+{
+    var r=new DoubleSequenceRandom(1.1/317,0,0);Check(RecallRules.Investigate(0,r) && r.Calls==3);
+    Check(!RecallRules.Investigate(0,new DoubleSequenceRandom(0,.99,.99)));
+    Check(RecallRules.Investigate(1,new DoubleSequenceRandom(0,1.1/25,.99)));
+    Check(RecallRules.Investigate(10,new DoubleSequenceRandom(0,1.1/250,.99)));
+    Check(!RecallRules.Investigate(10,new DoubleSequenceRandom(0,2.1/250,0)));
+    Check(RecallRules.Investigate(11,new DoubleSequenceRandom(0,0,5.9/39)));
+    Check(!RecallRules.Investigate(11,new DoubleSequenceRandom(0,0,6.1/39)));
+    Check(RecallRules.Investigate(50,new DoubleSequenceRandom(0,0,.99)));
+    Check(RecallRules.Investigate(70,new DoubleSequenceRandom(0,0,.99)));
+    Throws<ArgumentOutOfRangeException>(()=>RecallRules.Investigate(-1,new Random()));
+});
+Test("recall eligibility countdown and refunds match original branches",()=>
+{
+    Check(RecallRules.CheckEligible(15,0) && !RecallRules.CheckEligible(16,0) && !RecallRules.CheckEligible(0,1));
+    int countdown=RecallRules.InvestigationWeeks;for (int i=0;i<5;i++) countdown=RecallRules.NextCountdown(countdown);
+    Check(countdown==0 && RecallRules.NextCountdown(0)==0);
+    Check(RecallRules.Refund(120,30,5800,0)==870000);
+    Check(RecallRules.Refund(120,30,5800,1)==150000 && RecallRules.Refund(120,30,5800,2)==150000);
+    Check(RecallRules.Refund(120,30,5800,3)==0);
+    Check(RecallRules.Refund(-20,30,5800,0)==58000);
+    Throws<OverflowException>(()=>RecallRules.Refund(long.MaxValue,1,5800,0));
+});
 Test("production cost uses floored data-size bands plus packaging",()=>
 {
     var h=CoreCatalog().Hardware[0];
@@ -1102,4 +1188,16 @@ sealed class WorkRandom : Random
 {
     public override int Next(int maxValue)=>maxValue switch {130=>1,300=>0,50=>1,_=>0};
     public override double NextDouble()=>.99;
+}
+
+sealed class DoubleSequenceRandom(params double[] values) : Random
+{
+    public int Calls { get; private set; }
+    public override double NextDouble()
+    {
+        if (Calls>=values.Length) throw new Exception("Unexpected recall draw");
+        double value=values[Calls++];
+        if (value<0 || value>=1) throw new Exception("Invalid synthetic recall draw");
+        return value;
+    }
 }

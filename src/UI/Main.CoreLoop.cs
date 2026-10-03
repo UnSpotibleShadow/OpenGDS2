@@ -5,6 +5,19 @@ namespace OpenGDS2.UI;
 
 public partial class Main
 {
+    private void ShowDismissEmployee(GameState state,EmployeeState employee)
+    {
+        ClearContent();AddHeading(Tr("DISMISS_EMPLOYEE"),28);AddHeading(employee.Name,22);
+        AddHeading(Tr("DISMISS_EMPLOYEE_CONFIRM"),18);
+        var confirm=new Button {Name="ConfirmDismissal",Text=Tr("CONFIRM")};_content.AddChild(confirm);
+        confirm.Pressed+=()=>
+        {
+            var result=EmployeeDismissalService.TryDismiss(state,employee);
+            ShowStaff(state);
+            if (result!=DismissalResult.Success) AddHeading(Tr($"DISMISS_RESULT_{result}"),16);
+        };
+        AddAction("CANCEL",()=>ShowStaff(state));
+    }
     private string ProjectSummary(DevelopmentProjectState project)
         =>$"{Tr("DEVELOPMENT_ROOM")} {project.RoomIndex+1}: {project.Title}\n{project.Progress/project.RequiredPoints:P0} · {Tr("BUGS")}: {project.Bugs}";
     private void AddProjectMetrics(DevelopmentProjectState project)

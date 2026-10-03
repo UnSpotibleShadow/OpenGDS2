@@ -8,8 +8,8 @@ company progression and regression coverage. M13 implements the own-game core lo
 | Employee database | 60 definitions and seven named stats imported | C#/Python parity passed; compare original recruitment runtime |
 | Opening company | Mode funds/date, 12% recognition and rank 0 verified statically | Locate initial employee assignment and development power |
 | Hiring | Five-slot generator, gate, fee transaction | Entry/lounge placement implemented; trace hiring capacity guard, failed seat-search behavior and original runtime |
-| Contract renewal | March-end annual trigger; atomic employee/finance projection tested; unchecked gates/stress reset | Integrate workspace cleanup and pending renewal into complete weekly simulation; no individual expiry inferred |
-| Dismissal | Helper start 009981CC, size 1052; clears employed gate at +0399 | Workspace/task cleanup and source/slot lifecycle; avoid treating it as just list removal |
+| Contract renewal | March-end annual trigger; atomic employee/finance projection tested; unchecked gates/stress reset | Supported workspace cleanup implemented in M15; integrate pending renewal into complete weekly simulation; no individual expiry inferred |
+| Dismissal | M15 connects source gate/stress clearing and supported office reservation/work cleanup | Training/external task lifecycle and original runtime comparison remain |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Ordinary work/debugging and checkpoint experience scheduled in M13; complete study/external jobs and source-slot lifecycle |
 | Weekly economics | Calendar verified; monthly payroll loop uses scratch member 3018 instead of loop index | Confirm apparent original defect dynamically; see milestone-8.md before implementing payroll |
 | Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; polishing and external/contract workflows remain; see core-loop.md |
