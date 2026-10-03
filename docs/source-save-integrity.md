@@ -16,3 +16,9 @@ invalid source levels, malformed loaded source progression, refusal before
 overwriting a readable slot, and unchanged nullable legacy values.
 The local execution environment disconnected after M30's local checks; M31 is
 validated using standard SDK/Godot and desktop fixtures in GitHub Actions.
+
+The [M31 workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37146196040)
+passes 134 public C# checks, 19 public Python checks, the normal SDK build and all
+Godot/editor/packaged desktop fixtures. Optional original-data reruns remain
+pending until local execution is restored; full original-save compatibility is
+not established by these modern-format checks.

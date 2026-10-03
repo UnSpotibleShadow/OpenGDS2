@@ -1,10 +1,22 @@
-# Validation — M31 pending / M30 desktop checkpoint
+# Validation — M31 desktop checkpoint
 
 M31 extends the existing modern employee validation to inactive source records.
 Four new public C# checks cover corrupt progression, readable-slot preservation
 and nullable unknowns. See [source-record save integrity](source-save-integrity.md).
-The local command environment is offline, so M31 SDK and runtime checks are
-performed in GitHub Actions and are pending at this source checkpoint.
+The [M31 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37146196040)
+passed all four jobs: 134 public C# checks, 19 public Python checks (eight optional
+original checks skipped), a standard Godot/.NET build with zero warnings/errors,
+both Godot UI suites, Linux/Windows exports and full core-loop fixtures in
+extracted packages on native Linux and Windows. All UI suites reported zero
+failures. The first run caught four test fixtures missing their required source
+gate initializer; the corrected fixtures pass without changing simulation rules.
+Download `OpenGDS2-desktop-development` from the successful M31 run. The artifact
+contains both packages and expires on 2026-10-17 unless retained or rebuilt.
+
+The local command environment disconnected after M30's checks. M31's optional
+private-original checks were not rerun locally. Headless CI does not establish
+full graphical, audible or original-Windows behavioral parity. See the
+[current continuation checkpoint](development-checkpoint.md).
 
 M30 corrects original toolbar-image associations and persists interface language
 outside simulation saves. Local direct compilation and all 27 Python checks pass.
@@ -276,6 +288,7 @@ That scan is not a successful local standard build; GitHub CI verifies that path
 - Original Windows behavior and original RNG sequence reproduction.
 - Whole-window graphical rendering, keyboard/pointer usability and packaging.
 - Original save fixtures for compatibility import.
-- Complete calendar economics, recalls/reviews/awards and company progression.
+- Complete calendar economics, awards and company progression; compare connected reviews/recalls with original runtime.
+- M31 private-original fixtures after local execution is restored.
 
 No original binary, graphics, audio, imported catalog or private save is included.

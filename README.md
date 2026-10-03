@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M29.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M31.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -77,6 +77,12 @@ entry conditions and complete costs/timing are recovered; see
 [weekly economics evidence](docs/weekly-economics-investigation.md).
 M27 prevents oversized modern saves from replacing a readable slot and verifies
 both the exact size boundary and failure without data loss.
+M29 translates 91 catalog labels and replaces toolbar initials with images and
+localized help. M30 corrects original-image associations and preserves language
+selection after restart. M31 validates inactive saved employee progression before
+recruitment can restore it; unknown values remain nullable. See
+[translation coverage](docs/localization-and-toolbar.md) and
+[source-record save integrity](docs/source-save-integrity.md).
 
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements
@@ -100,7 +106,7 @@ the shared budget and automatic production growth. Research unlocks more genres;
 fame increases future project recognition. See [company activity evidence and
 clock scope](docs/company-activities.md).
 See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
-awards and recall effects are still unfinished. Reviews and sales milestones are connected.
+awards and company progression are still unfinished. Reviews and sales milestones are connected.
 
 ## Run
 
@@ -143,9 +149,10 @@ The C# suite has no Godot or third-party test-framework dependency.
 
 [Milestone 7](docs/milestone-7.md) distinguishes recovered facts from gaps.
 [Remaining work](docs/remaining-work.md) lists exact next trace targets.
-[Validation](docs/validation.md) records 130 public C# checks at M28, 19 public
-Python checks at M29, and passing imported-data Godot UI tests. Optional private
-fixtures add two C# checks and eight Python checks.
+[Validation](docs/validation.md) records 134 public C# checks and 19 public
+Python checks at M31, with both packaged desktop core-loop suites passing.
+Optional private fixtures add two C# checks and eight Python checks; their most
+recent local checks predate M31. See the [current continuation checkpoint](docs/development-checkpoint.md).
 The normal SDK build and fixture-free runtime are also tested in GitHub Actions;
 original-fixture checks run locally and do not upload original content.
 
@@ -158,4 +165,7 @@ save compatibility remains unsupported.
 
 ## License
 
-Community-written code and documentation use the [MIT License](LICENSE). See [notice.md](notice.md) for third-party content exclusions and project disclaimers. Original game files and imported data are not distributed with this repository.
+Community-written code and documentation use the [MIT License](LICENSE). The eight
+authorized music recordings have a separate [distribution notice](audio/community/NOTICE.md).
+See [notice.md](notice.md) for third-party content exclusions and project disclaimers.
+Original game files and imported data are not distributed with this repository.
