@@ -1,11 +1,18 @@
-# Validation — M30 local / M29 desktop checkpoint
+# Validation — M31 pending / M30 desktop checkpoint
+
+M31 extends the existing modern employee validation to inactive source records.
+Four new public C# checks cover corrupt progression, readable-slot preservation
+and nullable unknowns. See [source-record save integrity](source-save-integrity.md).
+The local command environment is offline, so M31 SDK and runtime checks are
+performed in GitHub Actions and are pending at this source checkpoint.
 
 M30 corrects original toolbar-image associations and persists interface language
 outside simulation saves. Local direct compilation and all 27 Python checks pass.
 The imported-original UI suite checks language retention after restart and
 pixel equality with the intended local toolbar bitmaps. The speed-technology
 evidence verifier now checks the 50/100/150 eligible-pass countdown and expiry,
-without enabling an unresolved speed effect. M30 desktop checks are pending.
+without enabling an unresolved speed effect. The [M30 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37145484205)
+passed all four jobs, including extracted Linux and Windows core-loop fixtures.
 
 M29 local direct compilation passes, all 27 Python checks pass with the private
 original fixture, and both Godot UI suites report zero failures. Coverage includes
