@@ -80,14 +80,35 @@ Meeting mode 13, `009EFA40 +41A9..4E58`, updates the second per-copy fee
 | 500 | Unchanged | No draw |
 
 Unrecognized current values do not establish another tier.
-Mode 14 (`+4E63..5ABD`) concerns the first per-copy fee A1187C; its complete
-tier/chance flow has **not** been established. Do not assume it mirrors mode 13.
+M26 independently checks mode 14 (`+4E63..5ABD`), which updates the first
+per-copy fee A1187C. It has the same six fee comparisons, five subtract-200
+stores and four outcome ranges. This is established from its own instructions,
+not inferred from mode 13. `FeeNegotiationRules` implements the isolated outcome
+branch for both modes, without charging money or changing live company fees.
+
+| Evidence | Mode 13 offsets | Mode 14 offsets |
+| --- | --- | --- |
+| Fee comparisons: 1500, 1300, 1100, 900, 700, 500 | 41FB, 437F, 45C3, 4807, 4A4B, 4CE4 | 4EB5, 5039, 527D, 54C1, 5705, 5949 |
+| Subtract-200 result stores | 4378, 4515, 4759, 499D, 4C36 | 5032, 51CF, 5413, 5657, 589B |
+| Outcome draw starts: ranges 2, 4, 8, 16 | 4437, 467B, 48BF, 4B03 | 50F1, 5335, 5579, 57BD |
+
+The meeting constant pool at 005FAFCC maps entries 107 and 116 to A1188C and
+A1187C; entry 27 is Rnd. Unsupported current fee values skip all tier bodies,
+retaining the fee. Outcome branches consume no outcome draw at 1500 or 500;
+this does **not** imply that the complete conversation consumes no random draws.
+Its dialogue helper can select speakers separately. Domain tests check exact
+probability boundaries, terminal/unmatched values, draw consumption and the full
+1500-to-500 sequence. Bounded original-evidence checks verify both branches.
 
 The legal-provider form handlers `00987810` and `00987678` route to modes
 14 and 13 respectively, after confirmation and an affordability comparison using
-consultation-fee global A11508. A charge was not established in the inspected
-caller/mode-13 branch; the shared helper at thunk 0060ED80 and form lifecycle still
-need tracing. Provider availability and fee initialization are also unresolved.
+consultation-fee global A11508. M26 resolves thunk 0060ED80 to the 40-byte helper 0097BDB8. It stores its mode
+argument into member 38D0 (A148EC) and opens the meeting form modally; it does not
+call the financial helper. The meeting's 2080-byte load procedure 009A6DDC and
+all five legal-provider procedures were inspected and contain no direct financial
+helper call. The outcome bodies also contain no direct consultation debit. This
+narrows the missing charge investigation; it does not prove that every caller or
+indirect form-lifecycle path is free. Provider availability and fee initialization are also unresolved.
 Do not expose this as a free fee-reduction action.
 
 ## Hardware and calendar targets
@@ -106,12 +127,11 @@ values; modern defaults must not silently stand in for missing original state.
 
 ## Resume and validation
 
-Main contains the clean-room source and completed milestones through M24.
+Main contains the clean-room source and completed UI/audio/patch checkpoint through M25.
 M23/M24 verify exported Linux and native Windows core-loop fixtures; those
 synthetic checks do not verify the original Windows game.
 
-After local execution is restored, preserve the existing private original files
-and traces, reconcile the checkout with main without overwriting private work,
-and rerun the opt-in original-evidence/import suites. Continue with the bounded
+Local execution was restored at M25 and opt-in original-evidence/import suites
+passed. Preserve private original files and traces when reconciling with main. Continue with the bounded
 procedures above, then implement verified calendar transactions and their tests.
 Imported catalogs, original saves and raw traces stay local.

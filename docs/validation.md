@@ -1,4 +1,17 @@
-# Validation — M25 checkpoint
+# Validation — M26 checkpoint
+
+M26 adds four public domain checks for the independently recovered outcome
+branches of both per-copy fee negotiations. Local direct compilation passed with
+130 C# checks (128 public plus two private original fixtures), and all 26 Python
+checks passed including the expanded bounded original-evidence verifier.
+The fee rule is isolated and not connected to live consultations: entry costs,
+eligibility, dialogue RNG and calendar timing remain unresolved.
+
+The execution workspace disconnected after these checks. M25 is merged on
+GitHub, and M26 source and validation are preserved there for continuation.
+Further private binary tracing requires restored access to the supplied files.
+
+## M25 checkpoint
 
 Local workspace access has been restored. Direct C# compilation passed, with
 126 domain checks including two optional original-fixture checks. All 26 Python
@@ -8,8 +21,12 @@ M25 adds desktop geometry/window-control checks, required-original local artwork
 overlays, and local soundtrack resource/preferences/playlist checks. Music files remain
 local; public tests generate authored silent WAV fixtures. ZIP conversion tests
 cover path isolation, no-overwrite behavior and failure without partial output.
-Final GitHub SDK
-build and exported Linux/Windows package results are recorded below once complete.
+The [M25 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37134160088)
+passed all four jobs: 124 public C# checks; 18 public Python checks (eight original
+fixtures skipped); normal SDK build with zero warnings/errors; both Godot UI
+suites; Linux/Windows exports; and the full core loop in extracted packages on
+native Linux and Windows. Both packaged runs reported zero failures.
+The `OpenGDS2-desktop-development` artifact contains both packages.
 The local bitmap patch tool has five additional authored-fixture integrity tests.
 
 The constrained local host uses a direct Roslyn compiler because Godot's editor

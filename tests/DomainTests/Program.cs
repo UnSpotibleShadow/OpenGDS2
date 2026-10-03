@@ -12,6 +12,39 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("negotiation outcome preserves exact probability boundaries for both fee modes", () =>
+{
+    foreach (long fee in new long[] {1300, 1100, 900, 700})
+    {
+        int width = FeeNegotiationRules.OutcomeDrawRange(fee);
+        var success = new DoubleSequenceRandom(Math.BitDecrement(1.0 / width));
+        var failure = new DoubleSequenceRandom(1.0 / width);
+        Check(FeeNegotiationRules.Resolve(fee, success) == fee - 200 && success.Calls == 1);
+        Check(FeeNegotiationRules.Resolve(fee, failure) == fee && failure.Calls == 1);
+    }
+});
+Test("guaranteed first negotiation and terminal or unmatched fees consume no outcome draw", () =>
+{
+    var random = new DoubleSequenceRandom();
+    Check(FeeNegotiationRules.Resolve(1500, random) == 1300);
+    foreach (long fee in new long[] {500, 0, 1250, 1700, -1})
+        Check(FeeNegotiationRules.Resolve(fee, random) == fee);
+    Check(random.Calls == 0);
+});
+Test("successive negotiation outcomes reach five hundred without another reduction", () =>
+{
+    var random = new DoubleSequenceRandom(0, 0, 0, 0);
+    long fee = 1500;
+    foreach (long expected in new long[] {1300, 1100, 900, 700, 500, 500})
+    { fee = FeeNegotiationRules.Resolve(fee, random); Check(fee == expected); }
+    Check(random.Calls == 4);
+});
+Test("negotiation rejects invalid random outcome values", () =>
+{
+    foreach (double draw in new[] {double.NaN, double.PositiveInfinity, -0.01, 1.0})
+        Throws<ArgumentOutOfRangeException>(() => FeeNegotiationRules.Resolve(1300, new UncheckedDoubleRandom(draw)));
+    Throws<ArgumentNullException>(() => FeeNegotiationRules.Resolve(1500, null!));
+});
 Test("local artwork overlays require original assets and cannot replace rule data", () =>
 {
     string root = Path.Combine(Path.GetTempPath(), "OpenGDS2-overlays-" + Guid.NewGuid());
@@ -1696,6 +1729,7 @@ if (args.Length == 2)
 }
 Console.WriteLine($"{passed} tests passed");
 sealed class ConstantRandom(int value) : Random { public override int Next(int maxValue) => value; }
+sealed class UncheckedDoubleRandom(double value) : Random { public override double NextDouble() => value; }
 sealed class RecallSalesRandom : Random
 {
     public List<int> Bounds {get;}=[];

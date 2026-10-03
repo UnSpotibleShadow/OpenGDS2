@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Bounded structural checks for own-game development, release and sales."""
-import argparse,hashlib
+import argparse,hashlib,struct
 from pathlib import Path
 from inspect_vb6 import PeImage,ParseError
 from trace_hiring_pcode import KNOWN_SHA256
@@ -86,6 +86,34 @@ def verify(data):
     require(0x9EFA40,0x4129,'28 6c ff 03 00 05 eb 00 fc 22 05 f9 00 52')
     # The financial helper adds the signed delta; it does not clamp cash at zero.
     require(0x97DD04,0x0000,'07 08 00 20 00 fd 16 10 00 5c ff fb 94 4c ff fd e6 08 00 20 00')
+    # Both negotiation modes have independently checked fee/result branches.
+    # Only outcome Rnd is verified here; dialogue RNG and entry charges are not.
+    pool=0x5FAFCC
+    for index, expected in [(0x7,0xA148EC),(0x27,0x401076),(0x107,0xA1188C),(0x116,0xA1187C)]:
+        if pe.u32(pool+index*4)!=expected:raise ParseError('Negotiation pool mapping changed')
+    require(0x9EFA40,0x419E,'05 07 00 28 6c ff 0d 00 5d fb 33')
+    require(0x9EFA40,0x4E58,'05 07 00 28 6c ff 0e 00 5d fb 33')
+    # Provider dispatch records mode then opens the meeting form. This helper
+    # has no financial call and does not establish a consultation charge.
+    require(0x60ED80,0,'ba e0 bd 97 00')
+    require(0x97BDB8,0,'fd 16 10 00 5c ff fd f0 08 00 d0 38')
+    require(0x97BDB8,0x000C,'27 4c ff 25 28 5c ff 01 00 25 05 22 00 24 23 00 0d b0 02 24 00')
+    require(0x987810,0x010B,'28 6c ff 0e 00 04 4c ff 0a 10 00 08 00')
+    require(0x987678,0x010B,'28 6c ff 0d 00 04 4c ff 0a 10 00 08 00')
+    for mode,index,compares,reductions,draws in [
+        (13,0x107,[0x41FB,0x437F,0x45C3,0x4807,0x4A4B,0x4CE4],
+         [0x436C,0x4509,0x474D,0x4991,0x4C2A],[0x4437,0x467B,0x48BF,0x4B03]),
+        (14,0x116,[0x4EB5,0x5039,0x527D,0x54C1,0x5705,0x5949],
+         [0x5026,0x51C3,0x5407,0x564B,0x588F],[0x50F1,0x5335,0x5579,0x57BD])]:
+        for offset,fee in zip(compares,[1500,1300,1100,900,700,500]):
+            raw=b'\x05'+struct.pack('<H',index)+b'\x28\x6c\xff'+struct.pack('<h',fee)+bytes.fromhex('5d fb 33')
+            require(0x9EFA40,offset,raw.hex())
+        for offset in reductions:
+            raw=b'\x05'+struct.pack('<H',index)+bytes.fromhex('28 6c ff c8 00 fb 9c 5c ff fd b6')+struct.pack('<H',index)
+            require(0x9EFA40,offset,raw.hex())
+        for offset,width in zip(draws,[2,4,8,16]):
+            raw=bytes.fromhex('27 5c ff 0a 27 00 04 00 f4')+bytes([width])+bytes.fromhex('eb b3 fb e6 ea f4 00 eb c8')
+            require(0x9EFA40,offset,raw.hex())
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True
