@@ -62,8 +62,9 @@ office appearance, select Import Original Game and choose your legally obtained
 GameDev2DX.lzh archive. Import happens locally; this package contains no original
 Kairosoft executable, graphics, sounds or game database.
 
-Optional background music uses local files in the music folder shown in Settings.
-No soundtrack recordings are bundled. Original LZH importing is still required.
+Eight owner-supplied background tracks are bundled; Settings can mute or adjust them.
+Local files in the music folder shown in Settings override the bundled playlist.
+Original LZH importing is still required. See licenses/COMMUNITY_MUSIC_NOTICE.md.
 
 Imported files are stored in Godot's user://original directory; saves are in
 user://saves/slot1.json. Do not copy either directory into a public package.

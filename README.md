@@ -64,7 +64,7 @@ platforms. Download **OpenGDS2-desktop-development** from a successful
 M24 fixes immediate pause/resume feedback and clock regression coverage.
 M25 restores the compact desktop with simultaneous office, company, employee
 and product windows, original-size office graphics and locally imported toolbar
-icons/wallpaper. It supports optional local background music,
+icons/wallpaper. It includes eight optional owner-supplied background tracks and supports local music overrides,
 with mute/volume settings and independent audio preferences. Recordings are not
 bundled; see the local conversion instructions below. Required LZH
 importing remains unchanged. Local translated-artwork overrides remain outside

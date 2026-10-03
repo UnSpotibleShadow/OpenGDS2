@@ -41,8 +41,12 @@ func run() -> void:
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
     if DirAccess.get_files_at("user://music").is_empty():
-        check(main.find_child("MusicPlayer",true,false).stream == null,"No local recordings leaves music silent")
-        check(button("NEXT_MUSIC_TRACK").disabled,"Next track disabled without local recordings")
+        check(not main.find_child("MusicPlayer",true,false).playing,"Title does not play background music")
+        check(not button("NEXT_MUSIC_TRACK").disabled,"Bundled playlist enables next track")
+        var durations := [182.0,144.0,64.96,60.6,65.16,151.16,132.28,131.16]
+        for index in range(durations.size()):
+            var track = load("res://audio/community/office-%02d.ogg" % (index+1))
+            check(track != null and abs(track.get_length()-durations[index]) < 0.05,"Bundled music duration %d" % (index+1))
     await press("日本語")
     check(TranslationServer.get_locale() == "ja", "Japanese setting")
     check(tr("DEVELOPMENT_COMPUTERS") == "開発パソコン", "Japanese computer translation loaded")

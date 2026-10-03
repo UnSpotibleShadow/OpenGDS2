@@ -27,7 +27,7 @@ public partial class BackgroundMusic : Node
             VolumePercent = float.IsFinite(value) ? Math.Clamp(value, 0, 100) : 30;
         }
         _player = new AudioStreamPlayer { Name = "MusicPlayer" }; AddChild(_player);
-        // Soundtrack files stay on the user's computer, outside game packs.
+        // A valid local playlist overrides the optional bundled community music.
         DirAccess.MakeDirRecursiveAbsolute(DirectoryPath);
         var filenames = DirAccess.GetFilesAt(DirectoryPath);
         Array.Sort(filenames, StringComparer.Ordinal);
@@ -47,6 +47,17 @@ public partial class BackgroundMusic : Node
             if (track is AudioStreamWav wav) wav.LoopMode = AudioStreamWav.LoopModeEnum.Disabled;
             if (track is AudioStreamMP3 mp3) mp3.Loop = false;
             _tracks.Add(track);
+        }
+        if (_tracks.Count == 0)
+        {
+            for (int index = 1; index <= 8; index++)
+            {
+                var track = GD.Load<AudioStreamOggVorbis>($"res://audio/community/office-{index:00}.ogg");
+                if (track is null) continue;
+                if (track.GetLength() <= 0) { track.Dispose(); continue; }
+                track.Loop = false;
+                _tracks.Add(track);
+            }
         }
         _player.Finished += NextTrack;
         ApplyVolume();
