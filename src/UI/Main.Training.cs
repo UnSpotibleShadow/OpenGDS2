@@ -6,8 +6,7 @@ namespace OpenGDS2.UI;
 public partial class Main
 {
     private string TechnologyName(TechnologyDefinition technology)
-        => TranslationServer.GetLocale().StartsWith("ja",StringComparison.OrdinalIgnoreCase)
-            ? technology.Name.Trim() : Tr($"TECHNOLOGY_NAME_{technology.SourceIndex}");
+        => CatalogName(_activeCatalog,"TECHNOLOGY",technology.SourceIndex,technology.Name);
 
     private void ShowTechnologies(GameState state)
     {

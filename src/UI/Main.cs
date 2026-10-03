@@ -86,9 +86,9 @@ public partial class Main : Control
             FileMode = FileDialog.FileModeEnum.OpenFile,
             Access = FileDialog.AccessEnum.Filesystem,
             UseNativeDialog = true,
-            Title = "Select GameDev2DX.lzh"
+            Title = Tr("IMPORT_DIALOG_TITLE")
         };
-        _fileDialog.Filters = ["*.lzh, *.LZH ; LHA/LZH archives"];
+        _fileDialog.Filters = [$"*.lzh, *.LZH ; {Tr("LZH_ARCHIVES")}"];
         _fileDialog.FileSelected += ImportSelected;
         AddChild(_fileDialog);
     }
@@ -104,7 +104,12 @@ public partial class Main : Control
         var prompt = new Label { Text = Tr("IMPORT_PROMPT"), HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _content.AddChild(prompt);
         _importButton = new Button { Text = Tr("IMPORT_BUTTON"), CustomMinimumSize = new Vector2(0, 52) };
-        _importButton.Pressed += () => _fileDialog.PopupCenteredRatio(0.75f);
+        _importButton.Pressed += () =>
+        {
+            _fileDialog.Title = Tr("IMPORT_DIALOG_TITLE");
+            _fileDialog.Filters = [$"*.lzh, *.LZH ; {Tr("LZH_ARCHIVES")}"];
+            _fileDialog.PopupCenteredRatio(0.75f);
+        };
         _content.AddChild(_importButton);
         _status = new Label { HorizontalAlignment = HorizontalAlignment.Center };
         _content.AddChild(_status);
@@ -117,7 +122,7 @@ public partial class Main : Control
         try
         {
             var result = _importer.ImportArchive(path);
-            _status.Text = $"{Tr("IMPORT_OK")} ({result.FilesImported} files)";
+            _status.Text = $"{Tr("IMPORT_OK")} ({result.FilesImported} {Tr("FILES_IMPORTED")})";
             ShowTitleScreen();
         }
         catch (Exception ex)
@@ -301,7 +306,7 @@ public partial class Main : Control
         if (catalog is not null)
             foreach (var hardware in catalog.Hardware.Where(x => state.AvailableHardware?.Contains(x.SourceIndex) == true))
             {
-                AddHeading($"{hardware.Name} · {hardware.BitWidth} bit · {hardware.LicenseFee:N0}", 18);
+                AddHeading($"{CatalogName(catalog,"HARDWARE",hardware.SourceIndex,hardware.Name)} · {hardware.BitWidth} {Tr("BIT_UNIT")} · {hardware.LicenseFee:N0}", 18);
                 if (state.HardwareLicenses?.Contains(hardware.SourceIndex) == true) AddHeading(Tr("LICENSE_OWNED"), 14);
                 else AddAction("LICENSE_BUY", () =>
                 {
@@ -319,7 +324,7 @@ public partial class Main : Control
         if (catalog is not null)
             foreach (var computer in catalog.DevelopmentComputers)
             {
-                AddHeading($"{computer.Name} · {computer.BitWidth} bit · {computer.PurchasePrice:N0}", 18);
+                AddHeading($"{CatalogName(catalog,"COMPUTER",computer.SourceIndex,computer.Name)} · {computer.BitWidth} {Tr("BIT_UNIT")} · {computer.PurchasePrice:N0}", 18);
                 if (computer.SourceIndex == state.DevelopmentComputerIndex) AddHeading(Tr("COMPUTER_CURRENT"), 14);
                 else AddAction("COMPUTER_BUY", () =>
                 {

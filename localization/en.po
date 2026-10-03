@@ -894,4 +894,297 @@ msgid "MUSIC_DIRECTORY"
 msgstr "Local music folder"
 
 msgid "MUSIC_LOCAL_NOTE"
-msgstr "Place Ogg Vorbis, WAV or MP3 files here, then restart. Files play in filename order."
+msgstr "Eight optional tracks are included. Local Ogg Vorbis, WAV or MP3 files override them after restart, in filename order."
+
+# Display-only catalog names; Japanese names are resolved from the local import.
+
+msgid "CATALOG_GENRE_0"
+msgstr "Simulation"
+
+msgid "CATALOG_GENRE_1"
+msgstr "Role-playing"
+
+msgid "CATALOG_GENRE_2"
+msgstr "Action"
+
+msgid "CATALOG_GENRE_3"
+msgstr "Shooter"
+
+msgid "CATALOG_GENRE_4"
+msgstr "Adventure"
+
+msgid "CATALOG_GENRE_5"
+msgstr "Puzzle"
+
+msgid "CATALOG_GENRE_6"
+msgstr "Action puzzle"
+
+msgid "CATALOG_GENRE_7"
+msgstr "Action RPG"
+
+msgid "CATALOG_GENRE_8"
+msgstr "Action strategy"
+
+msgid "CATALOG_GENRE_9"
+msgstr "Strategy RPG"
+
+msgid "CATALOG_GENRE_10"
+msgstr "Music game"
+
+msgid "CATALOG_GENRE_11"
+msgstr "Racing"
+
+msgid "CATALOG_GENRE_12"
+msgstr "Board game"
+
+msgid "CATALOG_GENRE_13"
+msgstr "Entertainment"
+
+msgid "CATALOG_GENRE_14"
+msgstr "Tabletop game"
+
+msgid "CATALOG_GENRE_15"
+msgstr "Card game"
+
+msgid "CATALOG_GENRE_16"
+msgstr "Fortune-telling"
+
+msgid "CATALOG_GENRE_17"
+msgstr "Database"
+
+msgid "CATALOG_TYPE_0"
+msgstr "Period drama"
+
+msgid "CATALOG_TYPE_1"
+msgstr "Game company"
+
+msgid "CATALOG_TYPE_2"
+msgstr "Toys"
+
+msgid "CATALOG_TYPE_3"
+msgstr "School story: girls"
+
+msgid "CATALOG_TYPE_4"
+msgstr "School story: boys"
+
+msgid "CATALOG_TYPE_5"
+msgstr "School life"
+
+msgid "CATALOG_TYPE_6"
+msgstr "Professional wrestling"
+
+msgid "CATALOG_TYPE_7"
+msgstr "Space"
+
+msgid "CATALOG_TYPE_8"
+msgstr "Courtroom"
+
+msgid "CATALOG_TYPE_9"
+msgstr "Skyscraper construction"
+
+msgid "CATALOG_TYPE_10"
+msgstr "Magic"
+
+msgid "CATALOG_TYPE_11"
+msgstr "Fighting"
+
+msgid "CATALOG_TYPE_12"
+msgstr "Grand adventure"
+
+msgid "CATALOG_TYPE_13"
+msgstr "City building"
+
+msgid "CATALOG_TYPE_14"
+msgstr "Egypt"
+
+msgid "CATALOG_TYPE_15"
+msgstr "Robots"
+
+msgid "CATALOG_TYPE_16"
+msgstr "Convenience store"
+
+msgid "CATALOG_TYPE_17"
+msgstr "Warring States"
+
+msgid "CATALOG_TYPE_18"
+msgstr "Horse racing"
+
+msgid "CATALOG_TYPE_19"
+msgstr "Fantasy"
+
+msgid "CATALOG_TYPE_20"
+msgstr "Dungeon"
+
+msgid "CATALOG_TYPE_21"
+msgstr "Horror"
+
+msgid "CATALOG_TYPE_22"
+msgstr "Trains"
+
+msgid "CATALOG_TYPE_23"
+msgstr "Anime"
+
+msgid "CATALOG_TYPE_24"
+msgstr "American football"
+
+msgid "CATALOG_TYPE_25"
+msgstr "Soccer"
+
+msgid "CATALOG_TYPE_26"
+msgstr "Fishing"
+
+msgid "CATALOG_TYPE_27"
+msgstr "Basketball"
+
+msgid "CATALOG_TYPE_28"
+msgstr "Skiing"
+
+msgid "CATALOG_TYPE_29"
+msgstr "Snowboarding"
+
+msgid "CATALOG_TYPE_30"
+msgstr "Swimming"
+
+msgid "CATALOG_TYPE_31"
+msgstr "Baseball"
+
+msgid "CATALOG_TYPE_32"
+msgstr "Golf"
+
+msgid "CATALOG_TYPE_33"
+msgstr "Sumo"
+
+msgid "CATALOG_TYPE_34"
+msgstr "Skateboarding"
+
+msgid "CATALOG_TYPE_35"
+msgstr "Airplanes"
+
+msgid "CATALOG_TYPE_36"
+msgstr "Education"
+
+msgid "CATALOG_TYPE_37"
+msgstr "Jump rope"
+
+msgid "CATALOG_TYPE_38"
+msgstr "Feng shui"
+
+msgid "CATALOG_TYPE_39"
+msgstr "Formula 1"
+
+msgid "CATALOG_TYPE_40"
+msgstr "Radio-controlled models"
+
+msgid "CATALOG_TYPE_41"
+msgstr "Dance"
+
+msgid "CATALOG_TYPE_42"
+msgstr "Drums"
+
+msgid "CATALOG_TYPE_43"
+msgstr "Shogi"
+
+msgid "CATALOG_TYPE_44"
+msgstr "Go"
+
+msgid "CATALOG_TYPE_45"
+msgstr "Mahjong"
+
+msgid "CATALOG_TYPE_46"
+msgstr "Reversi"
+
+msgid "CATALOG_TYPE_47"
+msgstr "Drill"
+
+msgid "CATALOG_TYPE_48"
+msgstr "Playing cards"
+
+msgid "CATALOG_TYPE_49"
+msgstr "Slot machines"
+
+msgid "CATALOG_TYPE_50"
+msgstr "Pachinko"
+
+msgid "CATALOG_AUDIENCE_0"
+msgstr "All ages"
+
+msgid "CATALOG_AUDIENCE_1"
+msgstr "Elementary school students"
+
+msgid "CATALOG_AUDIENCE_2"
+msgstr "Middle school students"
+
+msgid "CATALOG_AUDIENCE_3"
+msgstr "High school students"
+
+msgid "CATALOG_AUDIENCE_4"
+msgstr "Young adults"
+
+msgid "CATALOG_AUDIENCE_5"
+msgstr "Middle-aged adults"
+
+msgid "CATALOG_AUDIENCE_6"
+msgstr "Seniors"
+
+msgid "CATALOG_HARDWARE_0"
+msgstr "MSG"
+
+msgid "CATALOG_HARDWARE_1"
+msgstr "Wonders On"
+
+msgid "CATALOG_HARDWARE_2"
+msgstr "Familion"
+
+msgid "CATALOG_HARDWARE_3"
+msgstr "Hi Familion"
+
+msgid "CATALOG_HARDWARE_4"
+msgstr "Game Boya"
+
+msgid "CATALOG_HARDWARE_5"
+msgstr "PC-Bonjin"
+
+msgid "CATALOG_HARDWARE_6"
+msgstr "Play Status"
+
+msgid "CATALOG_HARDWARE_7"
+msgstr "Play Status 2"
+
+msgid "CATALOG_HARDWARE_8"
+msgstr "Kilo Drive"
+
+msgid "CATALOG_HARDWARE_9"
+msgstr "Dreamy"
+
+msgid "CATALOG_HARDWARE_10"
+msgstr "Play Gear"
+
+msgid "CATALOG_COMPUTER_0"
+msgstr "Pico Pico Machine"
+
+msgid "CATALOG_COMPUTER_1"
+msgstr "Power Station"
+
+msgid "CATALOG_COMPUTER_2"
+msgstr "Mission Pokopen"
+
+msgid "CATALOG_COMPUTER_3"
+msgstr "Super 64 Blue"
+
+msgid "BIT_UNIT"
+msgstr "bit"
+
+msgid "IMPORT_DIALOG_TITLE"
+msgstr "Select GameDev2DX.lzh"
+
+msgid "LZH_ARCHIVES"
+msgstr "LHA/LZH archives"
+
+msgid "FILES_IMPORTED"
+msgstr "files imported"
+
+msgid "TOOLBAR_ARTWORK_MISSING"
+msgstr "Some original toolbar artwork is missing. Import your LZH again to restore it."
+
+msgid "TOOLBAR_READY"
+msgstr "Choose a toolbar action, or use the menus above."

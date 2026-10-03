@@ -106,6 +106,17 @@ func run() -> void:
     root.add_child(main)
     await process_frame
     await press("LOAD_GAME")
+    var toolbar = main.find_child("DesktopToolbar",true,false)
+    for control in toolbar.get_children():
+        if control is Button:
+            check(control.icon != null,"Toolbar action has an image: " + control.text)
+            check(control.tooltip_text == control.text,"Toolbar action has a localized tooltip: " + control.text)
+            if control.icon != null:
+                check(control.icon.get_size() == Vector2(23,22),"Toolbar image retains native dimensions")
+    var save_action = main.find_child("ToolbarSAVE_GAME",true,false)
+    save_action.mouse_entered.emit()
+    check(main.find_child("OfficeStatus",true,false).text == tr("SAVE_GAME"),"Toolbar hover explains its action in the status bar")
+    save_action.mouse_exited.emit()
     for name in ["OfficeWindow", "CompanyWindow", "EmployeeWindow", "ProductWindow"]:
         var window = main.find_child(name,true,false)
         check(window != null and window.visible,"Simultaneous desktop window: " + name)
@@ -133,6 +144,24 @@ func run() -> void:
     await process_frame
     check(employee_window.visible,"Window menu reopens employee list")
     await press("START_GAME_DEVELOPMENT")
+    var planning_hardware = main.find_child("PlanningHardware",true,false)
+    var planning_audience = main.find_child("PlanningAudience",true,false)
+    check(planning_hardware.get_item_text(0).begins_with(tr("CATALOG_HARDWARE_0")),"English platform label uses the imported source index")
+    check(planning_audience.get_item_text(0) == tr("CATALOG_AUDIENCE_0"),"English audience label is translated")
+    # Changing language changes labels, not the imported data or identifiers.
+    await press("SETTINGS")
+    await press("日本語")
+    await press("BACK_TO_OFFICE")
+    await press("START_GAME_DEVELOPMENT")
+    check(main.find_child("PlanningHardware",true,false).get_item_text(0).begins_with("Synthetic Hardware"),"Japanese mode uses the untouched local platform name")
+    check(main.find_child("PlanningAudience",true,false).get_item_text(0) == "Synthetic Audience","Japanese mode uses the untouched local audience name")
+    await press("SETTINGS")
+    await press("English")
+    await press("BACK_TO_OFFICE")
+    await press("START_GAME_DEVELOPMENT")
+    var unchanged_catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
+    check(unchanged_catalog.Hardware[0].Name == "Synthetic Hardware" and unchanged_catalog.Audiences[0].Name == "Synthetic Audience","Localization never rewrites imported names")
+    office = main.find_child("OfficeWindow",true,false)
     check(main.find_child("OfficeWindow",true,false) == office and office.visible,"Planning retains the office window")
     check(not main.find_child("AcceptPlan",true,false).disabled,"Planning can begin")
     main.find_child("PlanningTitle",true,false).text = "Synthetic UI Game"
@@ -145,6 +174,9 @@ func run() -> void:
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(checkpoint.State.DevelopmentProjects[0].PendingDecision == 0,"Type checkpoint persisted")
+    var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
+    for index in range(offered_types.size()):
+        check(main.find_child("SelectType%d" % index,true,false).text.begins_with(tr("CATALOG_TYPE_%d" % offered_types[index])),"Each randomized type label matches its saved source ID")
     # Reload checkpoint through the actual office controls before selecting.
     await press("LOAD_GAME")
     await await_node("SelectType0")
@@ -152,6 +184,7 @@ func run() -> void:
     if not await await_node("SelectGenre0"):
         quit(1)
         return
+    check(main.find_child("SelectGenre0",true,false).text.begins_with(tr("CATALOG_GENRE_0")),"Genre selection uses English catalog labels")
     await press_node("SelectGenre0")
     var ready := false
     for frame in range(15000):

@@ -42,7 +42,9 @@ These bitmap shapes match the supplied screenshot. The current toolbar maps
 available reconstructed actions to those local icons; exact original click
 handler correspondence remains incomplete. No bank/award mechanic is enabled
 merely because its icon exists. Existing imports can be refreshed from the LZH
-to obtain the toolbar bitmaps; missing icons use community-written text symbols.
+to obtain the toolbar bitmaps. M29 replaces missing-artwork letter fallbacks with
+authored pictograms and adds localized status-bar help; see
+[catalog translations and toolbar images](localization-and-toolbar.md).
 
 The supported executable hash and bitmap header/dimension checks remain required.
 The original executable is read in memory and is never copied into the public

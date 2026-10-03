@@ -19,7 +19,7 @@ company progression and regression coverage. M13 implements the own-game core lo
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
 | Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; recover meeting/work animations, pointer interaction and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
-| Localization | Current usable UI bilingual; M24 removes a bundled original default president-name literal | Recover that default through local import, translate each new screen and validate Japanese glyph rendering across desktops |
+| Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help | Establish employee name readings, translate bitmap text through local patches, recover the original setup default locally, and validate Japanese glyph rendering across desktops |
 | Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 130 public C# checks pass at M27; two local original-fixture checks last passed at M26 | Graphical usability and original Windows behavioral comparison remain |
 
 Unknown mechanics must remain disabled or nullable. The calendar inspector and
