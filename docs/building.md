@@ -46,3 +46,35 @@ XDG_DATA_HOME=/tmp/opengds2-ui-smoke OPENGDS2_UI_TEST_SAVE=1 \
 
 Set `OPENGDS2_ORIGINAL_LZH=/private/GameDev2DX.lzh` to also test import,
 five applicant cards and hiring. Keep the cache outside the repository.
+
+## Desktop development exports (M23)
+
+The Validate workflow exports Linux and Windows x86_64 packages after domain and
+editor checks pass. Its **OpenGDS2-desktop-development** artifact contains both
+ZIPs, with the community game assembly, Godot/.NET runtimes, project notices,
+dependency license texts and SHA-256 manifests. No original files or local caches
+are included. Builds are development checkpoints; the full port is unfinished.
+
+Linux exported startup and the full synthetic development/release/sales UI fixture
+run from outside the source checkout. Windows is cross-exported; native Windows
+launch and graphical testing remain pending.
+
+For a local export, install the matching **Godot 4.4.1 .NET export templates**
+through Editor → Manage Export Templates, then:
+
+```sh
+mkdir -p builds/linux builds/windows
+godot --headless --path . --export-release "Linux Desktop" builds/linux/OpenGDS2.x86_64
+godot --headless --path . --export-release "Windows Desktop" builds/windows/OpenGDS2.exe
+godot --headless --path . --script res://tools/export_licenses.gd -- /tmp/opengds2-notices
+python3 tools/package_desktop.py --export builds/linux --platform linux --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64.zip
+python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64.zip
+```
+
+Extract the complete ZIP and keep the executable, .pck and runtime directory
+together. The title screen starts without imports. Import your legally obtained
+GameDev2DX.lzh locally to enable the reconstructed gameplay and original office.
+
+The packaging helper obtains .NET notices from the actual published NuGet runtime
+pack. The Godot notice script uses the exporting engine's license/copyright APIs;
+these notices are generated into the build, not copied from the original game.

@@ -22,3 +22,6 @@ catalog.json
 office.json
 saves/
 private-original/
+
+# Native desktop exports and packaged development builds
+builds/
