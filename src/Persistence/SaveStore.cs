@@ -120,7 +120,7 @@ public static class SaveStore
         if (state.EmployeeSources.Any(x => x is null || x.Employee is null || x.SourceIndex < 0 ||
                 string.IsNullOrWhiteSpace(x.Employee.Name) || x.Employee.OriginalAttributes is null || x.Employee.ContractFee < 0) ||
             state.EmployeeSources.Select(x => x.SourceIndex).Distinct().Count() != state.EmployeeSources.Count ||
-            state.Employees.Concat(state.Recruitment.Candidates).Any(x => x is null || string.IsNullOrWhiteSpace(x.Name) || x.OriginalAttributes is null || x.ContractFee < 0 || x.Experience < 0 || x.Stress < 0 || (x.Experience.HasValue && !double.IsFinite(x.Experience.Value)) || (x.Stress.HasValue && !double.IsFinite(x.Stress.Value)) || x.Level is < 1 or > 10) ||
+            state.Employees.Concat(state.Recruitment.Candidates).Concat(state.EmployeeSources.Select(x=>x.Employee)).Any(x => x is null || string.IsNullOrWhiteSpace(x.Name) || x.OriginalAttributes is null || x.ContractFee < 0 || x.Experience < 0 || x.Stress < 0 || (x.Experience.HasValue && !double.IsFinite(x.Experience.Value)) || (x.Stress.HasValue && !double.IsFinite(x.Stress.Value)) || x.Level is < 1 or > 10) ||
             state.Employees.Where(x => x.SourceIndex.HasValue).Select(x => x.SourceIndex).Distinct().Count() != state.Employees.Count(x => x.SourceIndex.HasValue))
             throw new InvalidDataException("Invalid employee records.");
         foreach (var employee in state.Employees.Concat(state.EmployeeSources.Select(x=>x.Employee)).Concat(state.Recruitment.Candidates))

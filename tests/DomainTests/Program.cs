@@ -12,6 +12,66 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("modern saves validate progression in inactive source records too", () =>
+{
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    var employee = new EmployeeState { SourceIndex = 0, Name = "Synthetic source", Level = 1, Experience = 5, Stress = 10 };
+    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = employee });
+    foreach (double invalid in new[] { -1d, double.NaN, double.PositiveInfinity, double.NegativeInfinity })
+    {
+        employee.Experience = invalid;
+        Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+        employee.Experience = 5;
+        employee.Stress = invalid;
+        Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+        employee.Stress = 10;
+    }
+    foreach (int invalid in new[] { 0, 11 })
+    {
+        employee.Level = invalid;
+        Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+    }
+});
+Test("modern loads reject corrupt source progression before recruitment", () =>
+{
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    state.EmployeeSources.Add(new() { SourceIndex = 0,
+        Employee = new() { SourceIndex = 0, Name = "Synthetic source", Level = 1, Experience = 5, Stress = 10 } });
+    string text = SaveStore.Serialize(state);
+    foreach (var field in new[] { "Level", "Experience", "Stress" })
+    {
+        var envelope = System.Text.Json.Nodes.JsonNode.Parse(text)!;
+        var employee = envelope["State"]!["EmployeeSources"]![0]!["Employee"]!;
+        employee[field] = field == "Level" ? 0 : -1;
+        Throws<InvalidDataException>(() => SaveStore.Deserialize(envelope.ToJsonString()));
+    }
+});
+Test("invalid source progression cannot replace a readable modern slot", () =>
+{
+    string directory = Path.Combine(Path.GetTempPath(), "OpenGDS2-source-" + Guid.NewGuid());
+    string slot = Path.Combine(directory, "slot1.json");
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    var employee = new EmployeeState { SourceIndex = 0, Name = "Synthetic source", Level = 1 };
+    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = employee });
+    try
+    {
+        SaveStore.Save(slot, state);
+        byte[] original = File.ReadAllBytes(slot);
+        employee.Level = 0;
+        Throws<InvalidDataException>(() => SaveStore.Save(slot, state));
+        Check(File.ReadAllBytes(slot).SequenceEqual(original));
+        Check(SaveStore.Load(slot).EmployeeSources.Single().Employee.Level == 1);
+        Check(Directory.GetFiles(directory).Length == 1);
+    }
+    finally { if (Directory.Exists(directory)) Directory.Delete(directory, true); }
+});
+Test("unknown source progression remains nullable across modern save load", () =>
+{
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    state.EmployeeSources.Add(new() { SourceIndex = 0, Employee = new() { SourceIndex = 0, Name = "Synthetic source" } });
+    var restored = SaveStore.Deserialize(SaveStore.Serialize(state)).EmployeeSources.Single().Employee;
+    Check(restored.Level is null && restored.Experience is null && restored.Stress is null);
+});
 Test("oversized modern saves cannot replace an existing readable slot", () =>
 {
     string directory = Path.Combine(Path.GetTempPath(), "OpenGDS2-size-" + Guid.NewGuid());
