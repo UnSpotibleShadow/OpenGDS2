@@ -1,0 +1,54 @@
+namespace OpenGDS2.Domain;
+
+public enum CompanyActivity { PublicRelations, GenreResearch, ProductionExpansion }
+public enum CompanyActivityResult { Success, AlreadyActed, StateUnknown, InsufficientFunds }
+
+/// <summary>fGMSeisanZ 0099ED68, menu guards and main-loop automatic expansion.</summary>
+public static class CompanyActivityService
+{
+    public const int TicksPerWeek=200;
+    public static CompanyActivityResult TryPerform(GameState state,CompanyActivity activity,Random random)
+    {
+        if (!Enum.IsDefined(activity)) throw new ArgumentOutOfRangeException(nameof(activity));
+        if (state.CompanyActivityPerformed==true) return CompanyActivityResult.AlreadyActed;
+        if (state.CompanyActivityPerformed is null || state.CompanyActivityTicks is null || state.Company.ActivityCost is null || state.Money is null)
+            return CompanyActivityResult.StateUnknown;
+        int? current=activity switch
+        {
+            CompanyActivity.PublicRelations=>state.Company.Fame,
+            CompanyActivity.GenreResearch=>state.Company.OriginalMember90,
+            _=>state.Company.ProductionCapacity
+        };
+        if (current is null) return CompanyActivityResult.StateUnknown;
+        if (current<0 || state.Company.ActivityCost<0) throw new InvalidDataException("Invalid business activity state.");
+        if (state.Money<state.Company.ActivityCost) return CompanyActivityResult.InsufficientFunds;
+        int gain=activity switch
+        {
+            CompanyActivity.PublicRelations=>1+random.Next(3),
+            CompanyActivity.GenreResearch=>2+random.Next(3),
+            _=>random.Next(12)==1 ? 17+random.Next(8) : 4+random.Next(4)
+        };
+        int next=activity==CompanyActivity.ProductionExpansion ? checked(current.Value+gain) : Math.Min(100,checked(current.Value+gain));
+        long money=checked(state.Money.Value-state.Company.ActivityCost.Value);
+        switch (activity)
+        {
+            case CompanyActivity.PublicRelations:state.Company.Fame=next;break;
+            case CompanyActivity.GenreResearch:state.Company.OriginalMember90=next;break;
+            default:state.Company.ProductionCapacity=next;break;
+        }
+        state.Money=money;state.CompanyActivityPerformed=true;
+        return CompanyActivityResult.Success;
+    }
+    public static void Tick(GameState state,Random random)
+    {
+        // This recovered budget phase is separate from the incomplete calendar
+        // economics. Older modern saves leave phase/flag unknown.
+        if (state.CompanyActivityTicks is not int ticks || state.CompanyActivityPerformed is null) return;
+        ticks++;
+        if (ticks>=160 && state.CompanyActivityPerformed==false &&
+            state.Money >= (state.Mode==GameMode.Beginner ? 100_000_000 : 300_000_000))
+            TryPerform(state,CompanyActivity.ProductionExpansion,random);
+        if (ticks==TicksPerWeek) {ticks=0;state.CompanyActivityPerformed=false;}
+        state.CompanyActivityTicks=ticks;
+    }
+}

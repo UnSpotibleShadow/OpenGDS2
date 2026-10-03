@@ -1,9 +1,19 @@
-# Validation — M15 checkpoint
+# Validation — M16 checkpoint
+
+M16 local checks passed: 90 C# checks (88 public), all 17 Python checks with the
+local original, Godot source-generator compilation with zero warnings/errors,
+and the complete synthetic gameplay UI including all company actions and shared
+budget save/load/reset with zero failures. Normal SDK/Godot CI will be recorded
+after publishing.
+
+## M15 historical checkpoint
 
 M15 local checks passed: 85 C# checks (83 public), all 17 Python checks with the
 local original, and the complete synthetic Godot gameplay UI including dismissal
 confirmation/cancellation, reservation release and save persistence with zero
-failures. Normal SDK/Godot CI will be recorded after publishing.
+failures. The [M15 standard SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37088101468)
+passed 83 public domain checks, ten public Python checks, the normal SDK/Godot
+build with zero warnings/errors, and both UI suites with zero failures.
 
 ## M14 historical checkpoint
 

@@ -284,6 +284,8 @@ public partial class Main : Control
         AddMetric(metrics, Tr("STAFF"), state.Employees.Count.ToString());
         AddMetric(metrics, Tr("COMPANY_RANK"), state.Company.Rank is int rank ? Tr($"COMPANY_RANK_{rank}") : Tr("NOT_YET_DECODED"));
         AddMetric(metrics, Tr("COMPANY_FAME"), state.Company.Fame is int fame ? $"{fame}%" : Tr("NOT_YET_DECODED"));
+        AddMetric(metrics,Tr("GENRE_RESEARCH"),state.Company.OriginalMember90?.ToString() ?? Tr("NOT_YET_DECODED"));
+        AddMetric(metrics,Tr("PRODUCTION_CAPACITY"),state.Company.ProductionCapacity?.ToString() ?? Tr("NOT_YET_DECODED"));
         sidebar.AddChild(metrics);
         void OfficeAction(string key, Action action, bool enabled = true)
         {
@@ -293,6 +295,7 @@ public partial class Main : Control
         }
         OfficeAction("HIRE_EMPLOYEES", ShowRecruitment, state.Recruitment.CandidateDatabaseDecoded);
         OfficeAction("STAFF", () => ShowStaff(state));
+        OfficeAction("COMPANY_ACTIVITIES",()=>ShowCompanyActivities(state),state.Company.ActivityCost is not null && state.CompanyActivityPerformed is not null && state.CompanyActivityTicks is not null);
         OfficeAction("DEVELOPMENT_COMPUTERS", () => ShowComputers(state), _importer.LoadCatalog()?.DevelopmentComputers.Count == 4);
         OfficeAction("HARDWARE_LICENSES", () => ShowLicenses(state), state.AvailableHardware is not null && state.HardwareLicenses is not null);
         OfficeAction("SAVE_GAME", () =>
@@ -319,6 +322,9 @@ public partial class Main : Control
         _refreshCoreStatus=()=>
         {
             ((Label)metrics.GetChild(1)).Text=state.Money?.ToString("N0") ?? Tr("NOT_YET_DECODED");
+            ((Label)metrics.GetChild(9)).Text=state.Company.Fame is int currentFame ? $"{currentFame}%" : Tr("NOT_YET_DECODED");
+            ((Label)metrics.GetChild(11)).Text=state.Company.OriginalMember90?.ToString() ?? Tr("NOT_YET_DECODED");
+            ((Label)metrics.GetChild(13)).Text=state.Company.ProductionCapacity?.ToString() ?? Tr("NOT_YET_DECODED");
             _status.Text=string.Join("\n",state.DevelopmentProjects.OrderBy(x=>x.RoomIndex).Select(ProjectSummary));
             if (_paused) _status.Text+="\n"+Tr("PAUSED");
         };

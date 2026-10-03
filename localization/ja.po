@@ -592,3 +592,39 @@ msgstr "この社員はすでに退職しています。"
 
 msgid "DISMISS_RESULT_IdentityUnknown"
 msgstr "元の社員情報が不明です。"
+
+msgid "COMPANY_ACTIVITIES"
+msgstr "会社の活動"
+
+msgid "COMPANY_ACTIVITY_COST"
+msgstr "活動費用"
+
+msgid "GENRE_RESEARCH"
+msgstr "ジャンル開拓"
+
+msgid "PUBLIC_RELATIONS"
+msgstr "広報活動"
+
+msgid "EXPAND_PRODUCTION"
+msgstr "生産力増強"
+
+msgid "PRODUCTION_CAPACITY"
+msgstr "生産能力"
+
+msgid "AVAILABLE_GENRES"
+msgstr "選択可能なジャンル"
+
+msgid "COMPANY_ACTIVITY_ALREADY_USED"
+msgstr "今週の活動は実施済みです。"
+
+msgid "COMPANY_ACTIVITY_RESULT_Success"
+msgstr "活動を実施しました。"
+
+msgid "COMPANY_ACTIVITY_RESULT_AlreadyActed"
+msgstr "次の活動は来週までお待ちください。"
+
+msgid "COMPANY_ACTIVITY_RESULT_StateUnknown"
+msgstr "会社の活動情報が不明です。"
+
+msgid "COMPANY_ACTIVITY_RESULT_InsufficientFunds"
+msgstr "資金が不足しています。"

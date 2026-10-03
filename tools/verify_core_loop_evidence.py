@@ -44,6 +44,14 @@ def verify(data):
     require(0x9EFA40,0x38A0,'28 6c ff 05 00 05 eb 00 fc 22 05 ec 00 52')
     require(0x9EFA40,0x3A58,'f4 04 eb b3 fb e6')
     require(0x9EFA40,0x3D15,'28 6c ff 00 00 05 eb 00 fc 22 05 fc 00 52')
+    # Shared business cost 5m; original menus guard one action per budget week.
+    require(0x9F651C,0x010B,'fe c1 6c ff 40 4b 4c 00 fd e6 08 00 a0 00')
+    require(0x981A78,0x0000,'05 73 00 28 6c ff 01 00 5d fb 33')
+    # Genre research gain starts at 2 and uses a three-value random range.
+    require(0x99ED68,0x026B,'f4 02 eb 6e 48 fe f4 03 eb b3 fb e6 ab')
+    # Original main-loop automatic expansion and complete budget-week cadence.
+    require(0xA0283C,0x009B,'28 6c ff 50 00 05 31 00 fb b4 2c ff')
+    require(0xA0283C,0x0337,'28 6c ff 64 00 05 31 00 fb b4 2c ff')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

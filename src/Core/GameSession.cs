@@ -22,6 +22,7 @@ public sealed class GameSession
             DevelopmentComputerIndex = 0,
             HardwareLicenses = [0],
             SalesFee1 = 1500, SalesFee2 = 1500,
+            CompanyActivityTicks=0,CompanyActivityPerformed=false,
             AvailableHardware = catalog?.Hardware.Where(x => x.RawMembers["0F1C"] == 1).Select(x => x.SourceIndex).ToHashSet(),
         };
         state.Initial.StartingMoney = state.Money;
@@ -32,6 +33,7 @@ public sealed class GameSession
         state.Company.ProductionCapacity = 50;
         state.Company.OriginalMember90 = 23;
         state.Company.HallOfFameCount = 0;
+        state.Company.ActivityCost = 5_000_000;
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)
@@ -64,6 +66,7 @@ public sealed class GameSession
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
+        CompanyActivityService.Tick(state,_random);
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         foreach (var employee in state.Employees)
         {

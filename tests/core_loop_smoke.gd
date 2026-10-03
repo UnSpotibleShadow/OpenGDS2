@@ -83,8 +83,8 @@ func run() -> void:
         "Fun":80,"Novelty":80,"Graphics":80,"Music":80,"Accuracy":80,"DevelopmentSpeed":80,"Inspiration":80,
         "Office":{"Action":6,"SeatedAction":6,"WorkEngaged":true,"MovementState":0,"Facing":1,"Frame":13}}
     var state := {"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
-        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23},
-        "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500}
+        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000},
+        "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
     main = load("res://scenes/Main.tscn").instantiate()
@@ -217,5 +217,35 @@ func run() -> void:
     var dismissal_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(dismissal_save.State.Employees.is_empty(),"Dismissal persists without employee workspace")
     check(dismissal_save.State.DevelopmentProjects.size() == 1,"Dismissal retains active development room")
+    await press("COMPANY_ACTIVITIES")
+    await press_node("CompanyActivity0")
+    check(main.find_child("CompanyActivity1",true,false).disabled,"Business action budget shared across actions")
+    await press("SAVE_GAME")
+    var activity_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(activity_save.State.Company.Fame >= 13 and activity_save.State.Company.Fame <= 15,"Public relations raises fame")
+    check(activity_save.State.Money == dismissal_save.State.Money - 5000000,"Public relations charges shared cost")
+    await press("LOAD_GAME")
+    await press("COMPANY_ACTIVITIES")
+    check(main.find_child("CompanyActivity0",true,false).disabled,"Used budget survives save/load")
+    await press("BACK_TO_OFFICE")
+    Engine.time_scale = 100
+    for frame in range(12):
+        await process_frame
+    Engine.time_scale = 1
+    await press("COMPANY_ACTIVITIES")
+    await press_node("CompanyActivity1")
+    await press("SAVE_GAME")
+    var research_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(research_save.State.Company.OriginalMember90 >= 25 and research_save.State.Company.OriginalMember90 <= 27,"Genre research raises unlock threshold")
+    await press("BACK_TO_OFFICE")
+    Engine.time_scale = 100
+    for frame in range(12):
+        await process_frame
+    Engine.time_scale = 1
+    await press("COMPANY_ACTIVITIES")
+    await press_node("CompanyActivity2")
+    await press("SAVE_GAME")
+    var capacity_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(capacity_save.State.Company.ProductionCapacity >= 54,"Production expansion increases capacity")
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)

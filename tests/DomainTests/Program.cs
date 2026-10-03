@@ -80,7 +80,7 @@ Test("pending reviews survive save/load and pause simulation until acknowledged"
     ReviewService.Generate(g,CoreCatalog(),new SequenceRandom(0,1,0,1,0,1,0,1));
     Check(g.ReviewScores!.Sum()==32 && g.ReviewPending && !g.HallOfFame && s.Company.HallOfFameCount==0);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
-    session.TickOffice(CoreCatalog());Check(s.SalesTicks==0);
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==0 && s.CompanyActivityTicks==0);
     Check(ReviewService.Acknowledge(s,g) && g.HallOfFame && !g.ReviewPending && s.Company.HallOfFameCount==1);
     Check(!ReviewService.Acknowledge(s,g) && s.Company.HallOfFameCount==1);
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
@@ -210,6 +210,70 @@ Test("recall eligibility countdown and refunds match original branches",()=>
     Check(RecallRules.Refund(120,30,5800,3)==0);
     Check(RecallRules.Refund(-20,30,5800,0)==58000);
     Throws<OverflowException>(()=>RecallRules.Refund(long.MaxValue,1,5800,0));
+});
+Test("company activities charge shared cost, increase original fields and cap research/fame",()=>
+{
+    var session=new GameSession();var s=session.StartNewGame("Synthetic","Tester",GameMode.Normal);
+    Check(s.Company.ActivityCost==5000000 && s.CompanyActivityPerformed==false && s.CompanyActivityTicks==0);
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom(2))==CompanyActivityResult.Success);
+    Check(s.Company.Fame==15 && s.Money==445000000 && s.CompanyActivityPerformed==true);
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.GenreResearch,new SequenceRandom())==CompanyActivityResult.AlreadyActed);
+    s.CompanyActivityPerformed=false;s.Company.OriginalMember90=99;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.GenreResearch,new SequenceRandom(2))==CompanyActivityResult.Success);
+    Check(s.Company.OriginalMember90==100 && s.Money==440000000);
+    s.CompanyActivityPerformed=false;s.Company.Fame=99;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom(2))==CompanyActivityResult.Success && s.Company.Fame==100);
+    s.CompanyActivityPerformed=false;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom(0))==CompanyActivityResult.Success && s.Company.Fame==100 && s.Money==430000000);
+});
+Test("production expansion preserves rare and ordinary branches without a cap",()=>
+{
+    foreach (var (roll,growth,expected) in new[]{(1,0,17),(1,7,24),(0,0,4),(11,3,7)})
+    {
+        var s=PlanningState(5000000);s.Company.ActivityCost=5000000;s.CompanyActivityPerformed=false;s.CompanyActivityTicks=0;s.Company.ProductionCapacity=99;
+        var random=new SequenceRandom(roll,growth);
+        Check(CompanyActivityService.TryPerform(s,CompanyActivity.ProductionExpansion,random)==CompanyActivityResult.Success);
+        Check(s.Money==0 && s.Company.ProductionCapacity==99+expected && random.Calls==2);
+    }
+});
+Test("company activity failures and legacy clocks remain atomic and unknown",()=>
+{
+    var s=PlanningState(4999999);s.Company.ActivityCost=5000000;s.CompanyActivityPerformed=false;s.CompanyActivityTicks=0;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom())==CompanyActivityResult.InsufficientFunds && s.Company.Fame==14 && s.CompanyActivityPerformed==false);
+    s.Money=5000000;s.Company.Fame=null;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom())==CompanyActivityResult.StateUnknown && s.Money==5000000);
+    s.CompanyActivityPerformed=null;s.CompanyActivityTicks=null;s.Company.Fame=14;
+    CompanyActivityService.Tick(s,new SequenceRandom());Check(s.CompanyActivityTicks is null);
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom())==CompanyActivityResult.StateUnknown);
+    s.CompanyActivityTicks=200;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    Throws<ArgumentOutOfRangeException>(()=>CompanyActivityService.TryPerform(s,(CompanyActivity)99,new SequenceRandom()));
+});
+Test("business budget resets at two hundred ticks and automatic expansion respects mode thresholds",()=>
+{
+    foreach (var (mode,funds,expands) in new[]{(GameMode.Normal,299999999L,false),(GameMode.Normal,300000000L,true),
+        (GameMode.Beginner,99999999L,false),(GameMode.Beginner,100000000L,true)})
+    {
+        var s=new GameSession().StartNewGame("Synthetic","Tester",mode);s.Money=funds;s.CompanyActivityTicks=158;
+        CompanyActivityService.Tick(s,new SequenceRandom());Check(s.Company.ProductionCapacity==50 && s.CompanyActivityTicks==159);
+        CompanyActivityService.Tick(s,expands ? new SequenceRandom(0,0) : new SequenceRandom());
+        Check(s.CompanyActivityTicks==160 && s.Company.ProductionCapacity==(expands ? 54 : 50) && s.Money==(expands ? funds-5000000 : funds));
+        s.CompanyActivityPerformed=true;s.CompanyActivityTicks=199;
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));CompanyActivityService.Tick(s,new SequenceRandom());
+        Check(s.CompanyActivityTicks==0 && s.CompanyActivityPerformed==false);
+    }
+});
+Test("genre research unlocks a crossed threshold and public relations feeds next project recognition",()=>
+{
+    var s=new GameSession().StartNewGame("Synthetic","Tester",GameMode.Normal);var c=CoreCatalog();
+    c.Genres[0].RawMembers["125C"]=25;
+    Check(!DevelopmentSelectionRules.IsGenreEligible(c.Genres[0],s.Company.OriginalMember90!.Value));
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.GenreResearch,new SequenceRandom(1))==CompanyActivityResult.Success);
+    Check(DevelopmentSelectionRules.IsGenreEligible(c.Genres[0],s.Company.OriginalMember90!.Value));
+    s.CompanyActivityPerformed=false;
+    Check(CompanyActivityService.TryPerform(s,CompanyActivity.PublicRelations,new SequenceRandom(2))==CompanyActivityResult.Success);
+    var p=new DevelopmentProjectState {RequiredPoints=100,Progress=50};
+    s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,s.OriginalTypeRosterMap)==DevelopmentSelectionResult.Success && p.Recognition==5);
 });
 Test("production cost uses floored data-size bands plus packaging",()=>
 {

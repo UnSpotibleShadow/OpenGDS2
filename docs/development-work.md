@@ -132,8 +132,8 @@ Cosmetic example-title RNG after this phase is not modeled.
 
 Genre confirmation 009B00D8 +06C8..0921 charges the selected fee and adds its
 points directly. If audience identifier>1 and its identifier appears in the
-selected type's fifteen-column table, Fun receives +20. Member 90's wider company
-meaning remains unresolved; eligibility takes it explicitly.
+selected type's fifteen-column table, Fun receives +20. M16 identifies member 90
+as genre research and connects its progression; see company-activities.md.
 
 ## Data size is separate from recognition
 
