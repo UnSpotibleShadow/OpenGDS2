@@ -22,4 +22,10 @@ public sealed class ReleasedGameState
     public long NetSalesReceipts {get;set;}
     public long ProductionSpending {get;set;}
     public long LastBatchSold {get;set;}
+    // Older modern saves have unknown reviews; loading must not reroll them.
+    public List<int>? ReviewScores {get;set;}
+    public bool ReviewPending {get;set;}
+    public bool HallOfFame {get;set;}
+    public int? SalesMilestoneStage {get;set;}
+    public List<int> PendingSalesMilestones {get;set;}=[];
 }

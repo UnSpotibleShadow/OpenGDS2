@@ -133,8 +133,11 @@ regression tests cover it instead of silently changing the formula.
 
 - Full calendar economics, payroll defect verification, renewal/event integration.
 - Polishing, sequels, external studios/jobs and their shipping modifiers.
-- Reviews, contests/awards, sales milestone dialogs, recall effects and progression.
-- Genre experience credited by sales, company member 90 progression and research.
+- Contests/awards, recall effects and company progression. M14 adds reviews and
+  sales milestone dialogs; see reviews-and-events.md.
+- Company member 90 progression and research. The earlier claim that sales
+  credited genre experience was incorrect: A1301C is indexed by product. Its
+  history structure still needs reconstruction.
 - Complete meeting, idle-break and burst icon/animation presentation.
 - Original save compatibility, seed-identical RNG and Windows behavioral comparison.
 

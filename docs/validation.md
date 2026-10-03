@@ -1,4 +1,18 @@
-# Validation — M13 checkpoint
+# Validation — M14 checkpoint
+
+M14 local checks passed:
+
+- 78 C# checks, including the optional imported-original full core cycle and parity.
+- All 17 Python checks with the local original fixture.
+- Godot C# source-generator compilation with zero warnings/errors.
+- Synthetic Godot development/release/sales UI: zero failures, now including review
+  save/load and acknowledgement plus all four consecutive sales milestone dialogs.
+
+The public domain suite contains 76 C# checks. Original fixture checks remain
+opt-in and no original content is distributed. Standard SDK/Godot CI validation
+for this checkpoint will be recorded after publishing.
+
+## M13 historical checkpoint
 
 M13 local checks passed:
 

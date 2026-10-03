@@ -31,6 +31,7 @@ public sealed class GameSession
         state.Company.Fame = 12;
         state.Company.ProductionCapacity = 50;
         state.Company.OriginalMember90 = 23;
+        state.Company.HallOfFameCount = 0;
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)
@@ -62,7 +63,7 @@ public sealed class GameSession
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue)) return;
+        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         foreach (var employee in state.Employees)
         {

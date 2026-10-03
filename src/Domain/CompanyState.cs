@@ -13,4 +13,5 @@ public sealed class CompanyState
     public int? ProductionCapacity { get; set; }
     // Genre eligibility reads this member; its broader meaning is unresolved.
     public int? OriginalMember90 { get; set; }
+    public int? HallOfFameCount { get; set; }
 }

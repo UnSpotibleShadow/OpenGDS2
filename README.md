@@ -1,13 +1,14 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M13.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M14.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
 then manage inventory and further production. Hiring, employee inspection,
-manual level-up and modern save/load are also available. Awards, reviews, office
-progression and complete weekly economics remain unfinished.
+manual level-up and modern save/load are also available. Release reviews and sales
+milestone announcements are implemented. Awards, office progression and complete
+weekly economics remain unfinished.
 
 M8 adds verified March-end contract renewal rules and local importing for seven
 audience definitions. See [M8 evidence and limitations](docs/milestone-8.md).
@@ -38,6 +39,11 @@ start a project, choose its type and genre, debug or ship, and produce more copi
 as stock sells. The original sales formula and production size bands drive the
 simulation. Save/load preserves work and selection checkpoints. Reimport your
 original archive and start a new company for this milestone.
+
+M14 adds original review scoring, four-reviewer release results, Hall of Fame
+status and sales milestone announcements. Reviews and pending announcements
+survive save/load and pause the office clock until acknowledged. See
+[review and event evidence](docs/reviews-and-events.md).
 See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
 reviews, awards and recall effects are still unfinished.
 

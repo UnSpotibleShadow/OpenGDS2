@@ -69,7 +69,7 @@ public static class SaveStore
         if (state.OriginalAccuracyCells?.Any(x=>x.Key is <0 or >512 || x.Value is <0 or >99)==true)
             throw new InvalidDataException("Invalid original accuracy cells.");
         if (state.SalesTicks is <0 or >=SalesService.TicksPerBatch || state.SalesFee1<0 || state.SalesFee2<0 ||
-            state.Company.ProductionCapacity<0 || state.Company.OriginalMember90<0 ||
+            state.Company.ProductionCapacity<0 || state.Company.OriginalMember90<0 || state.Company.HallOfFameCount<0 ||
             (state.OriginalTypeRosterMap is not null && (state.OriginalTypeRosterMap.Count!=65 ||
              state.OriginalTypeRosterMap.Any(x=>x.Key is <0 or >64 || x.Value is <0 or >50))))
             throw new InvalidDataException("Invalid core-loop clock or original cells.");
@@ -87,7 +87,19 @@ public static class SaveStore
                 product.Stock<0 || product.ProductionSpending<0)
                 throw new InvalidDataException("Invalid released game.");
             DevelopmentWorkRules.ValidateQuality(product.Quality);
+            if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
+                (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
+                product.PendingSalesMilestones.Count>4 ||
+                !product.PendingSalesMilestones.SequenceEqual(Enumerable.Range((product.SalesMilestoneStage ?? 0)+1,product.PendingSalesMilestones.Count)) ||
+                product.PendingSalesMilestones.Any(x=>x is <1 or >4))
+                throw new InvalidDataException("Invalid sales milestone queue.");
+            if ((product.ReviewScores is not null && (product.ReviewScores.Count!=4 || product.ReviewScores.Any(x=>x is <1 or >10))) ||
+                (product.ReviewPending && (product.ReviewScores is null || product.HallOfFame)) ||
+                (product.HallOfFame && (product.ReviewScores is null || product.ReviewScores.Sum()<32)) ||
+                (!product.ReviewPending && product.ReviewScores?.Sum()>=32 && !product.HallOfFame))
+                throw new InvalidDataException("Invalid magazine reviews.");
         }
+        if (state.ReleasedGames.Count(x=>x.ReviewPending)>1) throw new InvalidDataException("Multiple pending review ceremonies.");
         if (state.DevelopmentProjects.Count>2 ||
             state.DevelopmentProjects.Select(x=>x?.RoomIndex).Distinct().Count()!=state.DevelopmentProjects.Count)
             throw new InvalidDataException("Invalid development rooms.");

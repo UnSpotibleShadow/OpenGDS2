@@ -45,6 +45,86 @@ EmployeeState Worker(int action=6)=>new()
     Fun=50,Novelty=50,Graphics=50,Music=50,Accuracy=50,DevelopmentSpeed=50,Inspiration=50,
     Office=new(){Action=action,SeatedAction=action,WorkEngaged=true,MovementState=0,Facing=1}
 };
+Test("review strict thresholds and maximum scores",()=>
+{
+    double[] bases=[0,129.99,130,199.99,200,249.99,250,299.99,300,349.99,350,399.99,400,449.99,450,799.99,800];
+    int[] low=[1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,8];
+    for (int i=0;i<bases.Length;i++)
+    {
+        Check(ReviewService.Score(bases[i],1,new SequenceRandom(0))==low[i]);
+        int width=bases[i]<400 || bases[i]>=800 ? 3 : 2;
+        Check(ReviewService.Score(bases[i],1,new SequenceRandom(width-1))==low[i]+width-1);
+    }
+    Throws<ArgumentOutOfRangeException>(()=>ReviewService.Score(double.NaN,1,new Random()));
+});
+Test("review market-factor redraw replaces score and consumes initial draw",()=>
+{
+    var r=new SequenceRandom(1,0);Check(ReviewService.Score(450,2,r)==7 && r.Calls==2);
+    Check(ReviewService.Score(400,2,new SequenceRandom(1,2))==9);
+    Check(ReviewService.Score(800,2,new SequenceRandom(2,0))==7);
+    Check(ReviewService.Score(800,2,new SequenceRandom(0,3))==10);
+    var below=new SequenceRandom(2);Check(ReviewService.Score(399.99,20,below)==8 && below.Calls==1);
+    Check(ReviewService.Score(450,1.999,new SequenceRandom(1))==9);
+});
+Test("review basis uses type and market factor but excludes bugs and recognition",()=>
+{
+    var g=new ReleasedGameState {Quality=new(100,200,300,400),MarketFactor=2,Bugs=1000,Recognition=90};
+    Check(ReviewService.Basis(g,CoreCatalog())==2000);
+    var c=CoreCatalog();c.GameTypes[0].RawMembers["12EC"]=8;
+    Check(ReviewService.Basis(g,c)==3000);
+});
+Test("pending reviews survive save/load and pause simulation until acknowledged",()=>
+{
+    var session=new GameSession();var s=session.StartNewGame("Synthetic","Tester",GameMode.Normal);
+    var g=new ReleasedGameState {Title="Synthetic",Quality=new(100,100,100,100),MarketFactor=2};s.ReleasedGames.Add(g);
+    ReviewService.Generate(g,CoreCatalog(),new SequenceRandom(0,1,0,1,0,1,0,1));
+    Check(g.ReviewScores!.Sum()==32 && g.ReviewPending && !g.HallOfFame && s.Company.HallOfFameCount==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==0);
+    Check(ReviewService.Acknowledge(s,g) && g.HallOfFame && !g.ReviewPending && s.Company.HallOfFameCount==1);
+    Check(!ReviewService.Acknowledge(s,g) && s.Company.HallOfFameCount==1);
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames[0].HallOfFame && s.Company.HallOfFameCount==1);
+});
+Test("review validation and legacy unknown values",()=>
+{
+    var s=State();var g=new ReleasedGameState {Title="Legacy"};s.ReleasedGames.Add(g);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
+    Check(g.ReviewScores is null && s.Company.HallOfFameCount is null);
+    g.ReviewPending=true;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));g.ReviewPending=false;
+    g.ReviewScores=[8,8,8];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.ReviewScores=[8,8,8,11];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.ReviewScores=[8,8,8,8];g.ReviewPending=true;
+    Check(ReviewService.Acknowledge(s,g) && s.Company.HallOfFameCount is null && g.HallOfFame);
+    g.ReviewScores=[1,1,1,1];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.HallOfFame=false;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ReviewScores!.Sum()==4);
+});
+Test("sales milestone thresholds queue in order without bonuses or duplicate announcements",()=>
+{
+    var s=State();var g=new ReleasedGameState {Title="Synthetic",SalesMilestoneStage=0,UnitsSold=99999};s.ReleasedGames.Add(g);
+    SalesMilestoneService.QueueReached(g);Check(g.PendingSalesMilestones.Count==0);
+    g.UnitsSold=100000;SalesMilestoneService.QueueReached(g);Check(g.PendingSalesMilestones.SequenceEqual(new[]{1}));
+    SalesMilestoneService.QueueReached(g);Check(g.PendingSalesMilestones.Count==1);
+    g.UnitsSold=1000000;SalesMilestoneService.QueueReached(g);Check(g.PendingSalesMilestones.SequenceEqual(new[]{1,2,3,4}));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
+    for (int stage=1;stage<=4;stage++) {Check(SalesMilestoneService.Acknowledge(s,g));Check(g.SalesMilestoneStage==stage);}
+    Check(!SalesMilestoneService.Acknowledge(s,g) && s.Money==100);
+    g.UnitsSold=-1;SalesMilestoneService.QueueReached(g);Check(g.SalesMilestoneStage==4 && g.PendingSalesMilestones.Count==0);
+    g.SalesMilestoneStage=null;g.UnitsSold=1000000;SalesMilestoneService.QueueReached(g);Check(g.PendingSalesMilestones.Count==0);
+});
+Test("sales batch creates a saved modal milestone and freezes following office ticks",()=>
+{
+    var session=new GameSession();var s=session.StartNewGame("Synthetic","Tester",GameMode.Normal);
+    var g=new ReleasedGameState {Title="Synthetic",SalesMilestoneStage=0,Quality=new(100,100,100,100),MarketFactor=1,
+        Price=5800,Stock=1000,UnitsSold=99999};s.ReleasedGames.Add(g);
+    for (int i=0;i<20;i++) session.TickOffice(CoreCatalog());
+    Check(g.PendingSalesMilestones.SequenceEqual(new[]{1}));
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==0);
+    Check(ReviewService.Acknowledge(s,g)==false && SalesMilestoneService.Acknowledge(s,g));
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
+    g.PendingSalesMilestones=[3];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.PendingSalesMilestones=[2,3,4,5];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("production cost uses floored data-size bands plus packaging",()=>
 {
     var h=CoreCatalog().Hardware[0];
@@ -61,7 +141,7 @@ Test("release charges production, snapshots project and frees room exactly once"
     var p=new DevelopmentProjectState {Title="Synthetic Game",RequiredPoints=100,Progress=100,OriginalStage=3,
         GameTypeSourceIndex=0,GenreSourceIndex=0,Quality=new(10,20,30,40),Bugs=70,Recognition=4,DataSize=16.9};
     s.DevelopmentProjects.Add(p);var e=Worker();e.Office!.WorkTicks=12;s.Employees.Add(e);
-    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6))==ReleaseResult.Success);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
     var g=s.ReleasedGames.Single();
     Check(s.Money==50000 && s.DevelopmentProjects.Count==0 && g.Stock==100 && g.Demand==100 && g.MarketFactor==.9);
     Check(g.Quality==p.Quality && g.Bugs==70 && g.ProductionSpending==50000 && e.Office.WorkTicks==0 && e.Office.WorkEngaged);
@@ -74,7 +154,7 @@ Test("release and reprint failure guards are atomic",()=>
         OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(p);
     Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom())==ReleaseResult.InsufficientFunds);
     Check(s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==0 && s.Money==49999);
-    s.Money=100000;Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6))==ReleaseResult.Success);
+    s.Money=100000;Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
     var g=s.ReleasedGames.Single();
     Check(ReleaseService.TryProduce(s,g,c,101)==ReleaseResult.InsufficientFunds && g.Stock==100 && g.ProductionSpending==50000);
     Check(ReleaseService.TryProduce(s,g,c,100)==ReleaseResult.Success && s.Money==0 && g.Stock==200 && g.ProductionSpending==100000);
@@ -182,8 +262,8 @@ Test("development release sales second production and another project form a rep
         e.Stress=0;
     }
     Check(tick<30000 && p.OriginalStage==3 && p.Progress==p.RequiredPoints);
-    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,5000,new SequenceRandom(6))==ReleaseResult.Success);
-    var g=s.ReleasedGames.Single();long before=s.Money!.Value;
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,5000,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    var g=s.ReleasedGames.Single();Check(ReviewService.Acknowledge(s,g));long before=s.Money!.Value;
     for (int i=0;i<20;i++) session.TickOffice(c);
     Check(g.UnitsSold>0 && g.Stock<5000 && s.Money>before);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
@@ -921,7 +1001,8 @@ if (args.Length == 2)
             }
         }
         Check(ticks<200000 && project.OriginalStage==3 && project.Quality.Fun+project.Quality.Novelty+project.Quality.Graphics+project.Quality.Music>project.Bugs);
-        Check(ReleaseService.TryRelease(state,project,catalog,project.Title,5800,5000,new SequenceRandom(6))==ReleaseResult.Success);
+        Check(ReleaseService.TryRelease(state,project,catalog,project.Title,5800,5000,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+        Check(ReviewService.Acknowledge(state,state.ReleasedGames.Single()));
         long funds=state.Money!.Value;
         for (int i=0;i<20;i++) session.TickOffice(catalog);
         Check(state.ReleasedGames.Single().UnitsSold>0 && state.Money>funds);
