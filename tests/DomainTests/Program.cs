@@ -12,6 +12,36 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("oversized modern saves cannot replace an existing readable slot", () =>
+{
+    string directory = Path.Combine(Path.GetTempPath(), "OpenGDS2-size-" + Guid.NewGuid());
+    string slot = Path.Combine(directory, "slot1.json");
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    try
+    {
+        SaveStore.Save(slot, state);
+        byte[] original = File.ReadAllBytes(slot);
+        state.Company.Name = new string('A', 4 * 1024 * 1024);
+        Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+        Throws<InvalidDataException>(() => SaveStore.Save(slot, state));
+        Check(File.ReadAllBytes(slot).SequenceEqual(original));
+        Check(SaveStore.Load(slot).Company.Name == "Test");
+        Check(Directory.GetFiles(directory).Length == 1);
+    }
+    finally { if (Directory.Exists(directory)) Directory.Delete(directory, true); }
+});
+Test("modern save size boundary includes JSON overhead and accepts an exact-limit round trip", () =>
+{
+    const int limit = 4 * 1024 * 1024;
+    var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };
+    int overhead = System.Text.Encoding.UTF8.GetByteCount(SaveStore.Serialize(state)) - state.Company.Name.Length;
+    state.Company.Name = new string('A', limit - overhead);
+    string text = SaveStore.Serialize(state);
+    Check(System.Text.Encoding.UTF8.GetByteCount(text) == limit);
+    Check(SaveStore.Deserialize(text).Company.Name == state.Company.Name);
+    state.Company.Name += "A";
+    Throws<InvalidDataException>(() => SaveStore.Serialize(state));
+});
 Test("negotiation outcome preserves exact probability boundaries for both fee modes", () =>
 {
     foreach (long fee in new long[] {1300, 1100, 900, 700})
