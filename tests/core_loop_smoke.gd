@@ -407,5 +407,36 @@ func run() -> void:
     await press("SAVE_GAME")
     var capacity_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(capacity_save.State.Company.ProductionCapacity >= 54,"Production expansion increases capacity")
+    # Authored salary fixture: original staff total and shared-index debit differ.
+    var payroll_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    payroll_save.State.MinimumSourceIndex = 0
+    payroll_save.State.SourceUpperBound = 3
+    payroll_save.State.OriginalPayrollScratchIndex = null
+    payroll_save.State.EmployeeSources = []
+    payroll_save.State.Employees = []
+    for index in range(3):
+        var salary_employee = {"Name":"Synthetic Salary "+str(index),"SourceIndex":index,"RawParameter40":[700,100,300][index]}
+        payroll_save.State.EmployeeSources.append({"SourceIndex":index,"GateValue":0 if index == 0 else 1,"Employee":salary_employee})
+        if index > 0:
+            payroll_save.State.Employees.append(salary_employee.duplicate(true))
+    var payroll_money = payroll_save.State.Money
+    write_json("user://saves/slot1.json",payroll_save)
+    await press("BACK_TO_OFFICE")
+    await press("LOAD_GAME")
+    await press("STAFF")
+    check(main.find_child("StaffSalaryTotal",true,false).text.ends_with("400"),"Staff screen sums each employed salary")
+    check(main.find_child("MonthlySalary1",true,false).text.ends_with("100"),"Employee monthly salary is displayed")
+    check(main.find_child("OriginalPayrollPreview",true,false) == null,"Staff screen keeps the reconstruction preview in the inspector")
+    await press("CANCEL")
+    await press("CALENDAR_INSPECTOR")
+    check(main.find_child("OriginalPayrollPreview",true,false).text.ends_with("600"),"Calendar inspector preserves the distinct shared-index payroll preview")
+    await press("CANCEL")
+    await press("SAVE_GAME")
+    var payroll_captured = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(payroll_captured.State.OriginalPayrollScratchIndex == 2,"Staff scratch snapshot survives save")
+    check(payroll_captured.State.Money == payroll_money,"Payroll preview does not charge money")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.OriginalPayrollScratchIndex == 2,"Loading retains the shared salary index")
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)

@@ -11,6 +11,7 @@ public partial class Main
 
     private void ShowTechnologies(GameState state)
     {
+        OriginalPayrollRules.InvalidateScratch(state);
         ClearContent();AddHeading(Tr("TECHNOLOGIES"),28);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
         var catalog=_importer.LoadCatalog();
@@ -35,6 +36,7 @@ public partial class Main
 
     private void ShowTraining(GameState state,EmployeeState employee)
     {
+        OriginalPayrollRules.InvalidateScratch(state);
         ClearContent();AddHeading(Tr("TRAINING"),28);AddEmployeeCard(employee);
         AddHeading($"{Tr("EXPERIENCE")}: {employee.Experience:0.0} / {Tr("MAXIMUM_TECHNOLOGIES")}: {employee.MaximumTechnologies}",18);
         var seats=new HBoxContainer();_content.AddChild(seats);
@@ -80,6 +82,7 @@ public partial class Main
     }
     private void ShowTechnologyUse(GameState state,EmployeeState employee)
     {
+        OriginalPayrollRules.InvalidateScratch(state);
         ClearContent();AddHeading(Tr("USE_TECHNOLOGY"),28);AddEmployeeCard(employee);
         AddHeading($"{Tr("EXPERIENCE")}: {employee.Experience:0.0}",18);
         var catalog=_importer.LoadCatalog();

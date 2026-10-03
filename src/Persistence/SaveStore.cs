@@ -61,6 +61,8 @@ public static class SaveStore
             throw new InvalidDataException("Invalid session state.");
         if (state.Year is < 1 || state.Month is < 1 or > 12 || state.Week is < 1 or > 4)
             throw new InvalidDataException("Invalid calendar.");
+        if (state.OriginalPayrollScratchIndex<0)
+            throw new InvalidDataException("Invalid original payroll scratch index.");
         if (state.DevelopmentComputerIndex is < 0 or > 3)
             throw new InvalidDataException("Invalid development computer.");
         if ((state.HardwareLicenses?.Any(x => x is < 0 or > 10) ?? false) ||

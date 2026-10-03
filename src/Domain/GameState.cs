@@ -10,6 +10,8 @@ public sealed class GameState
     public int? MinimumSourceIndex { get; set; }
     public int? SourceUpperBound { get; set; }
     public int? Month { get; set; }
+    // Shared original scratch A14034/member 3018; not a live employed-count cache.
+    public int? OriginalPayrollScratchIndex { get; set; }
     public long? Money { get; set; }
     public Dictionary<int,int>? TechnologyOwnershipLevels { get; set; }
     public int? DevelopmentComputerIndex { get; set; }

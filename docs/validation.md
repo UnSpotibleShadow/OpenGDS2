@@ -1,10 +1,22 @@
-# Validation — M21 checkpoint
+# Validation — M22 checkpoint
+
+M22 adds five public payroll-projection checks and a Godot staff-screen fixture.
+The local execution workspace disconnected after M21; M22 original-fixture and
+local runtime reruns remain pending. Standard SDK/Godot CI results are recorded
+on the milestone pull request.
+
+## M21 historical checkpoint
 
 M21 local validation passed: 120 C# checks (118 public), all 18 Python checks
 with the local original, Godot C# compilation with zero warnings/errors, and both
 UI suites with zero failures. Coverage includes all recall outcomes, live five-week
 countdowns, refunds alongside ongoing sales, reprint guards, signed/negative
 financial cases, legacy unknowns and both saved event dialogs.
+
+The [M21 SDK/Godot workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37118760081)
+passed 118 public C# checks, ten public Python checks (eight original checks
+skipped), a normal build with zero warnings/errors and both UI suites with zero
+failures.
 
 ## M20 historical checkpoint
 

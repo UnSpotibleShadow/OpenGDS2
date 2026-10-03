@@ -799,3 +799,15 @@ msgstr "回収の必要はないという結果で調査が終了しました。
 
 msgid "RELEASE_RESULT_Recalled"
 msgstr "回収されたゲームは再生産できません。"
+
+msgid "MONTHLY_SALARY"
+msgstr "月給"
+
+msgid "MONTHLY_SALARY_TOTAL"
+msgstr "社員の月給合計"
+
+msgid "ORIGINAL_PAYROLL_PREVIEW"
+msgstr "原作の給与計算プレビュー"
+
+msgid "PAYROLL_PREVIEW_NOTE"
+msgstr "給与の支払いはまだ実行されません。原作の共有インデックスによる計算を表示しています。実際のカレンダー進行は再構築中です。"

@@ -360,6 +360,77 @@ Test("annual nonrenewal uses dismissal cleanup for active supported workspaces",
     Check(s.Money==900 && s.Employees.Single()==retained && removed.Office is null && s.EmployeeSources[1].GateValue==0);
     Check(retained.Office is not null && s.EmployeeSources[1].Employee.Experience==15);
 });
+GameState PayrollFixture()
+{
+    var s=State();s.MinimumSourceIndex=0;s.SourceUpperBound=3;
+    s.EmployeeSources=[
+        new() {SourceIndex=0,GateValue=0,Employee=new() {Name="Synthetic salary 0",SourceIndex=0,RawParameter40=700}},
+        new() {SourceIndex=1,GateValue=1,Employee=new() {Name="Synthetic salary 1",SourceIndex=1,RawParameter40=100}},
+        new() {SourceIndex=2,GateValue=1,Employee=new() {Name="Synthetic salary 2",SourceIndex=2,RawParameter40=300}}];
+    return s;
+}
+Test("staff entry captures the original scratch count and retains the distinct displayed salary total",()=>
+{
+    var s=PayrollFixture();
+    Check(s.OriginalPayrollScratchIndex is null && OriginalPayrollRules.MonthlyDebit(s) is null);
+    Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==2);
+    Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==400);
+    Check(OriginalPayrollRules.MonthlyDebit(s)==600 && s.Money==100);
+    OriginalPayrollRules.InvalidateScratch(s);
+    Check(s.OriginalPayrollScratchIndex is null && OriginalPayrollRules.MonthlyDebit(s) is null);
+    Check(OriginalPayrollRules.CaptureStaffList(s));
+    // A later gate change does not continuously recompute the shared scratch.
+    s.EmployeeSources[2].GateValue=0;
+    Check(s.OriginalPayrollScratchIndex==2 && OriginalPayrollRules.MonthlyDebit(s)==300);
+    Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==1);
+    Check(OriginalPayrollRules.MonthlyDebit(s)==100);
+    s.EmployeeSources[1].GateValue=0;
+    Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==0);
+    Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==0 && OriginalPayrollRules.MonthlyDebit(s)==0);
+});
+Test("partial or duplicate source tables cannot establish a staff scratch snapshot",()=>
+{
+    var s=PayrollFixture();s.OriginalPayrollScratchIndex=2;s.SourceUpperBound=null;
+    Check(!OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex is null);
+    s.SourceUpperBound=3;s.EmployeeSources.RemoveAt(0);s.OriginalPayrollScratchIndex=1;
+    Check(!OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex is null);
+    s=PayrollFixture();s.EmployeeSources[0]=Row(1);
+    Check(!OriginalPayrollRules.CaptureStaffList(s));
+    s=PayrollFixture();s.SourceUpperBound=0;Check(!OriginalPayrollRules.CaptureStaffList(s));
+});
+Test("salary unknowns and count beyond the salary table remain explicit",()=>
+{
+    var s=PayrollFixture();
+    s.EmployeeSources[1]=new() {SourceIndex=1,GateValue=1,Employee=Candidate(1)};
+    Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources) is null);
+    Check(OriginalPayrollRules.CaptureStaffList(s) && OriginalPayrollRules.MonthlyDebit(s)==600);
+    s.EmployeeSources[0].GateValue=1;
+    Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==3);
+    Check(OriginalPayrollRules.MonthlyDebit(s) is null);
+});
+Test("salary projections retain signed values and detect overflowing totals",()=>
+{
+    var s=PayrollFixture();
+    s.EmployeeSources[2]=new() {SourceIndex=2,GateValue=1,Employee=new() {Name="Synthetic signed salary",RawParameter40=-300}};
+    Check(OriginalPayrollRules.CaptureStaffList(s));
+    Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==-200 && OriginalPayrollRules.MonthlyDebit(s)==-600);
+    s.EmployeeSources[2]=new() {SourceIndex=2,GateValue=1,Employee=new() {Name="Synthetic large salary",RawParameter40=long.MaxValue}};
+    Throws<OverflowException>(()=>OriginalPayrollRules.MonthlyDebit(s));
+    Throws<OverflowException>(()=>OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources));
+    Check(s.Money==100 && s.OriginalPayrollScratchIndex==2);
+});
+Test("save preserves stale and absent payroll scratch without serializing salary aliases",()=>
+{
+    var s=PayrollFixture();Check(OriginalPayrollRules.CaptureStaffList(s));
+    s.EmployeeSources[2].GateValue=0;
+    var json=SaveStore.Serialize(s);
+    Check(!json.Contains("\"MonthlySalary\"") && json.Contains("\"RawParameter40\""));
+    var restored=SaveStore.Deserialize(json);
+    Check(restored.OriginalPayrollScratchIndex==2 && OriginalPayrollRules.MonthlyDebit(restored)==300);
+    Check(restored.EmployeeSources[2].Employee.MonthlySalary==300);
+    s.OriginalPayrollScratchIndex=null;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).OriginalPayrollScratchIndex is null);
+    s.OriginalPayrollScratchIndex=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("payroll preserves stale scratch indexing instead of intended employee salaries",()=>
 {
     var rows=new List<RecruitmentSourceRecord>
