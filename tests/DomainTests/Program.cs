@@ -129,6 +129,109 @@ Test("unknown old save training data stays unknown and malformed skill saves are
     e.TechnologyLevels[0]=0;e.Office!.Training=new() {TechnologySourceIndex=1,Progress=-1};Throws<InvalidDataException>(()=>SaveStore.Serialize(known));
     e.Office.Training=null;e.TechnologyLevels=null;Check(TrainingService.CheckStart(known,e,c.Technologies[0])==TrainingResult.StateUnknown);
 });
+TechnologyDefinition UseTechnology(int id=0,int units=2)=>new() {SourceIndex=id,Identifier=id,
+    RawTable1568=[5,10,15],RawTable158C=[units,units,units]};
+(GameState State,EmployeeState Employee,OriginalCatalog Catalog,DevelopmentProjectState Project) UseFixture()
+{
+    var state=State();var employee=Worker();employee.Experience=100;
+    employee.TechnologyLevels=Enumerable.Range(0,8).ToDictionary(x=>x,_=>1);
+    state.Employees.Add(employee);
+    var catalog=CoreCatalog();catalog.Technologies=Enumerable.Range(0,8).Select(x=>UseTechnology(x)).ToList();
+    var project=new DevelopmentProjectState {Title="Synthetic technology project",RequiredPoints=100,
+        OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0,Focus=new(25,25,25,25),
+        Quality=new(100,100,100,100),DataSize=101.9,Bugs=101,
+        TechnologyApplicationCounts=TechnologyApplicationService.NewProjectCounters()};
+    state.DevelopmentProjects.Add(project);return (state,employee,catalog,project);
+}
+Test("technology diminishing returns and original random-width differences",()=>
+{
+    foreach (int id in TechnologyApplicationService.ProjectTechnologyIdentifiers)
+    for (int level=1;level<=3;level++)
+    {
+        int width=id is 1 or 6 or 7 ? 2*level+1 : 3;
+        Check(TechnologyApplicationService.Percentage(id,level,0,new SequenceRandom(0))==10+10*level);
+        Check(TechnologyApplicationService.Percentage(id,level,0,new SequenceRandom(width-1))==10+10*level+width-1);
+        Check(TechnologyApplicationService.Percentage(id,level,1,new SequenceRandom(0))==(level==1 ? 5 : level==2 ? 10 : 20));
+        Check(TechnologyApplicationService.Percentage(id,level,2,new SequenceRandom(width-1))==width-1);
+        Check(TechnologyApplicationService.Percentage(id,level,20,new SequenceRandom(0))==0);
+    }
+    Throws<ArgumentOutOfRangeException>(()=>TechnologyApplicationService.Percentage(4,1,0,new Random()));
+});
+Test("technology completion floors affected values and keeps separate project counters",()=>
+{
+    var (s,e,c,p)=UseFixture();
+    TechnologyApplicationService.ApplyCompleted(p,c.Technologies[0],1,new SequenceRandom(0));Check(p.DataSize==81 && p.TechnologyApplicationCounts![0]==1);
+    TechnologyApplicationService.ApplyCompleted(p,c.Technologies[0],1,new SequenceRandom(0));Check(p.DataSize==76 && p.TechnologyApplicationCounts![0]==2);
+    TechnologyApplicationService.ApplyCompleted(p,c.Technologies[0],1,new SequenceRandom(2));Check(p.DataSize==74 && p.TechnologyApplicationCounts![0]==3);
+    foreach (int id in new[]{1,2,3,6,7}) TechnologyApplicationService.ApplyCompleted(p,c.Technologies[id],1,new SequenceRandom(0));
+    Check(p.Quality==new DevelopmentQuality(120,120,120,120) && p.Bugs==80);
+    Check(p.TechnologyApplicationCounts!.Where(x=>x.Key!=0).All(x=>x.Value==1));
+    p.Quality=new();TechnologyApplicationService.ApplyCompleted(p,c.Technologies[1],3,new SequenceRandom(6));Check(p.Quality.Graphics==0);
+});
+Test("technology use spends experience without requiring company ownership",()=>
+{
+    var (s,e,c,p)=UseFixture();s.TechnologyOwnershipLevels=null;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.Success);
+    Check(e.Experience==95 && e.Office!.TechnologyApplication!.RemainingUnits==2 && s.Money==100);
+    e.TechnologyLevels![1]=0;Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[1])==TechnologyApplicationResult.NotLearned);
+    e.Experience=4;Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.InsufficientExperience && e.Experience==4);
+    e.Experience=100;p.PendingDecision=DevelopmentMilestone.StartDebugging;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.DecisionPending);
+    p.PendingDecision=null;p.TechnologyApplicationCounts=null;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.StateUnknown);
+});
+Test("timed technology uses the shared 20 then 19 tick cadence and survives reload",()=>
+{
+    var (s,e,c,p)=UseFixture();Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.Success);
+    for (int tick=0;tick<19;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office!.WorkTicks==20 && e.Office.WorkTier==4 && e.Office.TechnologyApplication!.RemainingUnits==2 && p.DataSize==101.9);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];p=s.DevelopmentProjects[0];
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office!.WorkTicks==2 && e.Office.TechnologyApplication!.RemainingUnits==1);
+    for (int tick=0;tick<18;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==20 && p.DataSize==101.9);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.TechnologyApplication is null && e.Office.WorkTicks==0 && p.DataSize==81 && e.Experience==95);
+});
+Test("technology waits for an ordinary contribution then replaces further ordinary work",()=>
+{
+    var (s,e,c,p)=UseFixture();p.OriginalStage=0;p.GameTypeSourceIndex=null;p.GenreSourceIndex=null;p.RequiredPoints=1000;
+    e.Office!.WorkTier=1;e.Office.WorkTicks=16;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);double before=p.Quality.Fun;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==0 && p.Quality.Fun>before && e.Office.TechnologyApplication!.RemainingUnits==2);
+    double contributed=p.Quality.Fun;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTier==4 && e.Office.WorkTicks==2);
+    for (int tick=0;tick<38;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.TechnologyApplication is null && p.Quality.Fun==contributed && e.Experience==95);
+});
+Test("technology pauses away from desks and cancels when its room is empty",()=>
+{
+    var (s,e,c,p)=UseFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);
+    OfficeAssignmentService.TryAssignStudySeat(s,e,1);
+    DevelopmentSimulation.TickEmployee(s,e,c,new SequenceRandom());Check(e.Office!.TechnologyApplication!.RemainingUnits==2);
+    e.Office.Action=e.Office.SeatedAction=6;e.Office.WorkEngaged=true;e.Office.MovementState=0;
+    s.DevelopmentProjects.Clear();DevelopmentSimulation.TickEmployee(s,e,c,new SequenceRandom());
+    Check(e.Office.TechnologyApplication is null && e.Experience==95);
+});
+Test("stress relief floors the selected employee stress and leaves unresolved branches untouched",()=>
+{
+    var (s,e,c,p)=UseFixture();e.Stress=99.9;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==49 && e.Experience==95);
+    e.TechnologyLevels![5]=2;e.Stress=99.9;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==19 && e.Experience==85);
+    e.TechnologyLevels[5]=3;e.Stress=100;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.UnresolvedBehavior && e.Stress==100 && e.Experience==85);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.UnresolvedBehavior && e.Experience==85);
+});
+Test("new plans initialize all technology counters while legacy plans remain unknown",()=>
+{
+    var s=PlanningState();var c=PlanningCatalog();
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Synthetic",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    Check(s.DevelopmentProjects[0].TechnologyApplicationCounts!.Count==6 && s.DevelopmentProjects[0].TechnologyApplicationCounts!.Values.All(x=>x==0));
+    s.DevelopmentProjects[0].TechnologyApplicationCounts![0]=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.DevelopmentProjects[0].TechnologyApplicationCounts=null;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects[0].TechnologyApplicationCounts is null);
+});
+
 Test("review strict thresholds and maximum scores",()=>
 {
     double[] bases=[0,129.99,130,199.99,200,249.99,250,299.99,300,349.99,350,399.99,400,449.99,450,799.99,800];

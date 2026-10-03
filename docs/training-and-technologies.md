@@ -76,10 +76,9 @@ cloning and rehiring; workspace courses disappear when employment ends.
 
 ## Scope still incomplete
 
-Technology **application** to development is not enabled in M17. The separate
+Technology **application** was not enabled in M17; M18 connects six timed project effects and stress-relief levels 1–2. See [application evidence](technology-application.md). The separate
 employee use handler `009A98E8` establishes its costs and distinguishes immediate
-stress relief, temporary speed boosts and timed project effects. Its main-loop
-application branches are the next reconstruction target. Buying or studying a
+stress relief, temporary speed boosts and timed project effects. Speed and top-level stress relief remain unresolved. Buying or studying a
 technology does not itself apply a permanent stat bonus.
 
 The original study progress/icon tiles, completion-message timing and Windows

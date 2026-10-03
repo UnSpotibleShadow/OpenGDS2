@@ -243,6 +243,54 @@ func run() -> void:
     check(main.find_child("AssignStudySeat1",true,false).disabled,"Study seat survives reload")
     await press("BACK_TO_OFFICE")
     await press("STAFF")
+    # Authored ready-project fixture isolates application from checkpoint modals.
+    var use_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var use_employee = use_save.State.Employees[0]
+    use_employee.Experience = 100
+    use_employee.Stress = 0
+    use_employee.Office.Action = 6
+    use_employee.Office.SeatedAction = 6
+    use_employee.Office.WorkEngaged = true
+    use_employee.Office.MovementState = 0
+    use_employee.Office.Facing = 4
+    use_employee.Office.X = 208
+    use_employee.Office.Y = 104
+    use_employee.Office.Frame = 22
+    use_employee.Office.OffsetX = -4
+    use_employee.Office.OffsetY = 4
+    use_employee.Office.WorkTicks = 0
+    use_employee.Office.WorkTier = 0
+    use_employee.Office.WorkIdleTicks = 0
+    use_employee.Office.IdleBreak = false
+    var use_project = use_save.State.DevelopmentProjects[0]
+    use_project.OriginalStage = 3
+    use_project.GameTypeSourceIndex = 0
+    use_project.GenreSourceIndex = 0
+    use_project.Progress = use_project.RequiredPoints
+    use_project.PendingDecision = null
+    use_project.DataSize = 101.9
+    use_project.Bugs = 100
+    write_json("user://saves/slot1.json",use_save)
+    await press("LOAD_GAME")
+    await press("STAFF")
+    await press("USE_TECHNOLOGY")
+    await press_node("UseTechnology0")
+    await press("SAVE_GAME")
+    var use_pending = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(use_pending.State.Employees[0].Experience == 99,"Technology use spends its imported experience cost")
+    check(use_pending.State.Employees[0].Office.TechnologyApplication != null,"Active technology is saved")
+    await press("LOAD_GAME")
+    Engine.time_scale = 100
+    for frame in range(5):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var applied = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(applied.State.DevelopmentProjects[0].DataSize >= 79 and applied.State.DevelopmentProjects[0].DataSize <= 81,"Compression changes the live project")
+    check(applied.State.DevelopmentProjects[0].TechnologyApplicationCounts["0"] == 1,"Application history persists")
+    check(applied.State.Employees[0].Office.TechnologyApplication == null,"Completed technology is cleared")
+    await press("LOAD_GAME")
+    await press("STAFF")
     await press_node("DismissEmployee0")
     check(main.find_child("ConfirmDismissal",true,false) != null,"Dismissal confirmation opens")
     await press("CANCEL")

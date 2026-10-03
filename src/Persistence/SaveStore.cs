@@ -118,6 +118,10 @@ public static class SaveStore
         {
             if (employee.TechnologyLevels?.Any(x=>x.Key is <0 or >7 || x.Value is <0 or >3)==true || employee.MaximumTechnologies<0)
                 throw new InvalidDataException("Invalid employee technologies.");
+            if (employee.Office?.TechnologyApplication is TechnologyApplicationState application &&
+                (application.TechnologySourceIndex is <0 or >7 || application.RemainingUnits<=0 ||
+                employee.TechnologyLevels is null || !employee.TechnologyLevels.TryGetValue(application.TechnologySourceIndex,out int learned) || learned is <1 or >3))
+                throw new InvalidDataException("Invalid active technology application.");
             if (employee.Office?.Training is EmployeeTrainingState training && (training.TechnologySourceIndex is <0 or >7 ||
                 training.Progress<0 || employee.TechnologyLevels is null ||
                 !employee.TechnologyLevels.TryGetValue(training.TechnologySourceIndex,out int level) || level>=3))
@@ -151,6 +155,10 @@ public static class SaveStore
             (project.OriginalStage>=1 && project.GameTypeSourceIndex is null) ||
             (project.OriginalStage>=2 && project.GenreSourceIndex is null))
             throw new InvalidDataException("Invalid development project.");
+        if (project.TechnologyApplicationCounts is not null &&
+            (!project.TechnologyApplicationCounts.Keys.Order().SequenceEqual(TechnologyApplicationService.ProjectTechnologyIdentifiers) ||
+                project.TechnologyApplicationCounts.Any(x=>x.Value<0)))
+            throw new InvalidDataException("Invalid project technology counters.");
         DevelopmentWorkRules.ValidateQuality(project.Quality);
         if (project.PendingDecision is DevelopmentMilestone decision &&
             (decision switch
@@ -178,7 +186,7 @@ public static class SaveStore
             office.RouteNode is >= 1 and <= 14 &&
             office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
             office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
-            office.TrainingIdleTicks>=0 && office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=3 &&
+            office.TrainingIdleTicks>=0 && office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=4 &&
             office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && Enum.IsDefined(office.WorkCategory) &&
             office.OffsetY is >= -2 and <= 8 && office.DepthAdjustment is 0 or 2 &&
             (office.Action switch

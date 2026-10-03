@@ -709,3 +709,39 @@ msgstr "楽しさの技術"
 
 msgid "TECHNOLOGY_NAME_7"
 msgstr "独創性の技術"
+
+msgid "USE_TECHNOLOGY"
+msgstr "技術を使う"
+
+msgid "TECHNOLOGY_REMAINING_WORK"
+msgstr "技術作業の残り"
+
+msgid "TECHNOLOGY_USE_NOTE"
+msgstr "開発席から習得済みの技術を使えます。経験値を消費します。同じ企画に繰り返すと効果が小さくなります。"
+
+msgid "TECHNOLOGY_USE_Success"
+msgstr "技術を受け付けました。"
+
+msgid "TECHNOLOGY_USE_NotEmployed"
+msgstr "在職中の社員ではありません。"
+
+msgid "TECHNOLOGY_USE_StateUnknown"
+msgstr "技術または企画のデータが不明です。"
+
+msgid "TECHNOLOGY_USE_NotAtDevelopmentDesk"
+msgstr "開発席を割り当て、社員が着席するまで待ってください。"
+
+msgid "TECHNOLOGY_USE_NoProject"
+msgstr "この開発室で企画を開始してください。"
+
+msgid "TECHNOLOGY_USE_DecisionPending"
+msgstr "先に企画の選択を完了してください。"
+
+msgid "TECHNOLOGY_USE_NotLearned"
+msgstr "この技術は未習得です。"
+
+msgid "TECHNOLOGY_USE_InsufficientExperience"
+msgstr "経験値が不足しています。"
+
+msgid "TECHNOLOGY_USE_UnresolvedBehavior"
+msgstr "この技術の効果は現在のビルドでは利用できません。"

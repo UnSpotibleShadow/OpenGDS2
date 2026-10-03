@@ -28,5 +28,6 @@ public sealed class DevelopmentProjectState
     public double DataSize {get;set;}
     public DevelopmentFocus? Focus {get;set;}
     public DevelopmentMilestone? PendingDecision {get;set;}
+    public Dictionary<int,int>? TechnologyApplicationCounts {get;set;}
     public List<int>? TypeCandidates {get;set;}
 }
