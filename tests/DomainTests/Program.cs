@@ -30,7 +30,8 @@ OriginalCatalog PlanningCatalog()=>new()
 GameState PlanningState(long? money=100)=>new()
 {
     Money=money,Company=new() {Name="Synthetic",PresidentName="Tester",Fame=14},
-    DevelopmentComputerIndex=0,AvailableHardware=[0],HardwareLicenses=[0]
+    DevelopmentComputerIndex=0,AvailableHardware=[0],HardwareLicenses=[0],
+    CompanyActivityTicks=0,CompanyActivityPerformed=false,ProductionPerformedThisWeek=false
 };
 OriginalCatalog CoreCatalog()
 {
@@ -493,10 +494,53 @@ Test("release and reprint failure guards are atomic",()=>
     Check(s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==0 && s.Money==49999);
     s.Money=100000;Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
     var g=s.ReleasedGames.Single();
+    Check(s.ProductionPerformedThisWeek==true);
+    s.ProductionPerformedThisWeek=false; // Authored next-budget-week fixture.
     Check(ReleaseService.TryProduce(s,g,c,101)==ReleaseResult.InsufficientFunds && g.Stock==100 && g.ProductionSpending==50000);
     Check(ReleaseService.TryProduce(s,g,c,100)==ReleaseResult.Success && s.Money==0 && g.Stock==200 && g.ProductionSpending==100000);
     var other=new DevelopmentProjectState {RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(other);
     Check(ReleaseService.TryRelease(s,other,c,"Synthetic",5800,100,new SequenceRandom())==ReleaseResult.DuplicateTitle);
+});
+Test("production budget is shared across products and resets at exactly two hundred ticks",()=>
+{
+    var s=PlanningState(200000);var c=CoreCatalog();
+    var first=new ReleasedGameState {Title="First",Stock=100,ProductionSpending=50000};
+    var second=new ReleasedGameState {ProductIndex=1,Title="Second",Stock=100};
+    s.ReleasedGames.AddRange([first,second]);
+    Check(ReleaseService.TryProduce(s,first,c,100)==ReleaseResult.Success);
+    Check(s.Money==150000 && first.Stock==200 && s.ProductionPerformedThisWeek==true);
+    Check(ReleaseService.TryProduce(s,second,c,100)==ReleaseResult.AlreadyProducedThisWeek && second.Stock==100 && s.Money==150000);
+    for (int i=0;i<199;i++) CompanyActivityService.Tick(s,new SequenceRandom());
+    Check(s.CompanyActivityTicks==199 && ReleaseService.CheckProduction(s)==ReleaseResult.AlreadyProducedThisWeek);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));second=s.ReleasedGames[1];
+    Check(s.ProductionPerformedThisWeek==true && s.CompanyActivityTicks==199);
+    CompanyActivityService.Tick(s,new SequenceRandom());
+    Check(s.CompanyActivityTicks==0 && s.ProductionPerformedThisWeek==false);
+    Check(ReleaseService.TryProduce(s,second,c,100)==ReleaseResult.Success && second.Stock==200 && s.Money==100000);
+});
+Test("first shipments set the production flag without using the reprint guard",()=>
+{
+    var s=PlanningState(100000);s.ProductionPerformedThisWeek=true;var c=CoreCatalog();
+    var p=new DevelopmentProjectState {Title="New Shipment",RequiredPoints=1,Progress=1,OriginalStage=3,
+        GameTypeSourceIndex=0,GenreSourceIndex=0};s.DevelopmentProjects.Add(p);
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    Check(s.ProductionPerformedThisWeek==true && s.Money==50000);
+    Check(ReleaseService.TryProduce(s,s.ReleasedGames[0],c,100)==ReleaseResult.AlreadyProducedThisWeek && s.Money==50000);
+});
+Test("production unknowns remain unknown and checkpoint modals pause the reset",()=>
+{
+    var s=PlanningState(100000);var g=new ReleasedGameState {Title="Synthetic",Stock=100};s.ReleasedGames.Add(g);
+    s.ProductionPerformedThisWeek=null;
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
+    Check(s.ProductionPerformedThisWeek is null && ReleaseService.TryProduce(s,g,CoreCatalog(),100)==ReleaseResult.StateUnknown);
+    Check(s.Money==100000 && g.Stock==100);
+    s.ProductionPerformedThisWeek=true;s.CompanyActivityTicks=199;
+    var p=new DevelopmentProjectState {RequiredPoints=100,Progress=50,PendingDecision=DevelopmentMilestone.SelectType};s.DevelopmentProjects.Add(p);
+    var session=new GameSession(new SequenceRandom());session.Restore(s);session.TickOffice();
+    Check(s.CompanyActivityTicks==199 && s.ProductionPerformedThisWeek==true);
+    p.PendingDecision=null;session.TickOffice();
+    Check(s.CompanyActivityTicks==0 && s.ProductionPerformedThisWeek==false);
+    Check(new GameSession().StartNewGame("New","Tester",GameMode.Normal).ProductionPerformedThisWeek==false);
 });
 Test("market-factor branches preserve first-two penalty and unreachable music tiers",()=>
 {
@@ -604,6 +648,7 @@ Test("development release sales second production and another project form a rep
     for (int i=0;i<20;i++) session.TickOffice(c);
     Check(g.UnitsSold>0 && g.Stock<5000 && s.Money>before);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
+    while (s.ProductionPerformedThisWeek==true) session.TickOffice(c);
     long stock=g.Stock;Check(ReleaseService.TryProduce(s,g,c,1000)==ReleaseResult.Success && g.Stock==stock+1000);
     Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Synthetic Second",new(25,25,25,25))==DevelopmentPlanningResult.Success);
     Check(s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==1);

@@ -59,6 +59,17 @@ def verify(data):
     require(0xA0283C,0x421B,'05 71 00 fc 96 28 6c ff 01 00 fb 94 2c ff')
     # Reset clears employee/source skill cells; no guessed fresh learned skills.
     require(0x9DD234,0x0903,'07 08 00 58 0d a7 02 00 fd 86 00 00')
+    # Accepted technology subtracts table 1568 experience; timed units reset
+    # the shared animation counter to 1 and decrement the application counter.
+    require(0x9A98E8,0x0373,'a7 02 00 06 00 00 fb 9c 3c ff 05 00 00 fc 22 05 05 00 52')
+    require(0xA0283C,0x6A9E,'28 6c ff 01 00 6b 48 ff e7 05 2c 00 52')
+    require(0xA0283C,0x6AAB,'6b 48 ff e7 05 7b 00 fc 96 28 6c ff 01 00 fb 9c 2c ff')
+    # Shared production B0: fresh Empty, both shipments set 1, weekly reset 0.
+    require(0x9DD234,0x005A,'fc 67 6c ff fd e6 08 00 b0 00')
+    require(0x9C9CB8,0x01BC,'28 6c ff 01 00 fd b6 0e 00')
+    require(0x984BB0,0x0064,'28 4c ff 01 00 fd b6 06 00')
+    require(0x9DB4F4,0x000B,'28 6c ff 00 00 fd e6 08 00 b0 00')
+    require(0x984A78,0x006D,'05 05 00 28 6c ff 01 00 5d fb 33 1c cd 00')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

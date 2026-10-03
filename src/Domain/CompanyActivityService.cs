@@ -48,7 +48,12 @@ public static class CompanyActivityService
         if (ticks>=160 && state.CompanyActivityPerformed==false &&
             state.Money >= (state.Mode==GameMode.Beginner ? 100_000_000 : 300_000_000))
             TryPerform(state,CompanyActivity.ProductionExpansion,random);
-        if (ticks==TicksPerWeek) {ticks=0;state.CompanyActivityPerformed=false;}
+        if (ticks==TicksPerWeek)
+        {
+            ticks=0;state.CompanyActivityPerformed=false;
+            // Weekly procedure 009DB4F4 +000B clears the company production flag.
+            state.ProductionPerformedThisWeek=false;
+        }
         state.CompanyActivityTicks=ticks;
     }
 }

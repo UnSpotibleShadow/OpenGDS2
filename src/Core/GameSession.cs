@@ -24,6 +24,7 @@ public sealed class GameSession
             HardwareLicenses = [0],
             SalesFee1 = 1500, SalesFee2 = 1500,
             CompanyActivityTicks=0,CompanyActivityPerformed=false,
+            ProductionPerformedThisWeek=false,
             AvailableHardware = catalog?.Hardware.Where(x => x.RawMembers["0F1C"] == 1).Select(x => x.SourceIndex).ToHashSet(),
         };
         state.Initial.StartingMoney = state.Money;

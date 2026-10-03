@@ -142,5 +142,8 @@ regression tests cover it instead of silently changing the formula.
 - Complete meeting, idle-break and burst icon/animation presentation.
 - Original save compatibility, seed-identical RNG and Windows behavioral comparison.
 
+M19 adds the shared weekly production allowance. First shipments set the flag;
+reprints wait for the next 200-tick budget reset. See [production-budget.md](production-budget.md).
+
 The date display remains at the opening date while this isolated work/sales clock
 runs. M13 is a playable core loop, not a claim that the whole game is complete.

@@ -745,3 +745,12 @@ msgstr "経験値が不足しています。"
 
 msgid "TECHNOLOGY_USE_UnresolvedBehavior"
 msgstr "この技術の効果は現在のビルドでは利用できません。"
+
+msgid "PRODUCTION_READY"
+msgstr "今週は生産できます。"
+
+msgid "RELEASE_RESULT_AlreadyProducedThisWeek"
+msgstr "今週はすでに生産しました。再生産は翌週までお待ちください。"
+
+msgid "RELEASE_RESULT_StateUnknown"
+msgstr "このセーブでは生産の状態が不明です。新しい会社を始めてください。"

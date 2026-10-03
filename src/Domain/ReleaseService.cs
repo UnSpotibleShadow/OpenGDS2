@@ -1,6 +1,6 @@
 namespace OpenGDS2.Domain;
 
-public enum ReleaseResult { Success, NotReady, DuplicateTitle, MoneyUnknown, InsufficientFunds }
+public enum ReleaseResult { Success, NotReady, DuplicateTitle, MoneyUnknown, InsufficientFunds, AlreadyProducedThisWeek, StateUnknown }
 
 /// <summary>fGMSyukka own-game release and fGMSyukkaSai production transactions.</summary>
 public static class ReleaseService
@@ -38,6 +38,8 @@ public static class ReleaseService
         };
         ReviewService.Generate(product,catalog,random);
         state.Money-=cost;
+        // First shipment sets the flag; its handler does not test the reprint guard.
+        state.ProductionPerformedThisWeek=true;
         state.ReleasedGames.Add(product);state.DevelopmentProjects.Remove(project);
         // A new room must not receive an unfinished contribution from the old product.
         foreach (var e in state.Employees.Where(x=>x.Office?.SeatedAction is >=6 and <=17 &&
@@ -48,11 +50,20 @@ public static class ReleaseService
     {
         if (copies<1) throw new ArgumentOutOfRangeException(nameof(copies));
         if (!state.ReleasedGames.Contains(product)) throw new ArgumentException("Product is not in this company.");
+        var availability=CheckProduction(state);
+        if (availability!=ReleaseResult.Success) return availability;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize)*copies);
         long stock=checked(product.Stock+copies),spending=checked(product.ProductionSpending+cost);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
         state.Money-=cost;product.Stock=stock;product.ProductionSpending=spending;
+        state.ProductionPerformedThisWeek=true;
+        return ReleaseResult.Success;
+    }
+    public static ReleaseResult CheckProduction(GameState state)
+    {
+        if (state.ProductionPerformedThisWeek==true) return ReleaseResult.AlreadyProducedThisWeek;
+        if (state.ProductionPerformedThisWeek is null || state.CompanyActivityTicks is null) return ReleaseResult.StateUnknown;
         return ReleaseResult.Success;
     }
     public static double MarketFactor(int productIndex,DevelopmentQuality quality,Random random)

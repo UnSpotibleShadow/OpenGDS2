@@ -40,6 +40,11 @@ as stock sells. The original sales formula and production size bands drive the
 simulation. Save/load preserves work and selection checkpoints. Reimport your
 original archive and start a new company for this milestone.
 
+M19 restores the company-wide weekly production allowance. First shipment and
+reprints consume it; the sales screen re-enables reproduction at the next
+200-tick budget reset. Older saves with an unknown allowance require a new
+company. See [production-budget.md](docs/production-budget.md).
+
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements
 survive save/load and pause the office clock until acknowledged. See
