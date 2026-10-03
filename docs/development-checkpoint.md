@@ -13,7 +13,12 @@ branch trace establishes 11 eligible passes for the first unit and ten thereafte
 ordinary work keeps its existing cadence. Local compilation, 141 C# checks
 (139 public plus two original fixtures) and all 27 Python checks pass.
 Both Godot UI suites pass, including the imported-original office suite.
-Standard SDK/export checks are pending for M33.
+M33 merged as `f8e4f7c1a6803323b9f9f27f4a5cbffe7e0d6bbb` (PR #26); its
+[Validate run 37154482438](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37154482438)
+passed domain, Godot, desktop export and native Windows. The standard build
+has zero warnings/errors; both packaged core-loop fixtures report zero failures.
+The tested PR head is `8e1ea3170ab125d06e655d23e3b0700bf7939d98`. Download
+**OpenGDS2-desktop-development** from this latest run; it expires 2026-10-17.
 See [original-comparison.md](original-comparison.md) and
 [technology-application.md](technology-application.md#work-cadence).
 

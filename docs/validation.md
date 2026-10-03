@@ -18,7 +18,13 @@ M33 corrects the missing technology-only counter increment. Local compilation,
 pass. Threshold ordering, reloads, even-valued prior saves and exactly-once
 completion are covered; ordinary-work cadence remains unchanged. Both the
 imported-original UI suite and complete core-loop Godot UI suite report zero
-failures. Standard SDK/export checks are pending for M33.
+failures. The [M33 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37154482438)
+passed all four jobs: 139 public C# checks, 19 public Python checks (eight
+private original fixtures skipped), zero standard build warnings/errors, both
+Godot UI suites, Linux/Windows exports and the complete core-loop fixture in
+extracted packages on native Linux and Windows. Both packaged fixtures report
+zero failures. M33 merged as `f8e4f7c1a6803323b9f9f27f4a5cbffe7e0d6bbb`.
+Download `OpenGDS2-desktop-development` from the successful run.
 
 ## M31 desktop checkpoint
 M31 extends the existing modern employee validation to inactive source records.

@@ -125,9 +125,41 @@ remaining weekly ordering, modal resumption, payroll scratch writers, loan
 repayment, hardware events and bankruptcy. Source evidence must determine unknown
 values; modern defaults must not silently stand in for missing original state.
 
+## Ordered calendar body — M33 comparison follow-up
+
+The restored local trace confirms the following order in `009DB4F4`. This is
+static execution order, not a complete transaction implementation or a claim
+that every branch runs on every week:
+
+| Order | Bounded source | Established operation |
+| --- | --- | --- |
+| 1 | +0000..0015, +0119..01AD | Reset weekly action/production flags; shift product history and clear its current cell |
+| 2 | +01AE..01C6 | Increment week, then call refresh helper through thunk 0060ED98 |
+| 3 | +04CB..0566 | At March week 5, open the annual renewal form modally before month rollover |
+| 4 | +0672..06B6 | Clear accounting 22C every ordinary weekly pass; at week >=5 set week 1, increment month and clear 23C |
+| 5 | +06B7..0776 | Sum employed payroll through the shared scratch index; if month 13 clear 24C and roll to January/year+1; then debit through the signed helper |
+| 6 | +0777..1471, +147A..153E | Hardware branches precede the pending recall countdown/meeting |
+| 7 | +177F..197E | Visit loan slots and due-date repayment after these event branches |
+
+The reset schedule identifies 22C/23C/24C as weekly/monthly/yearly signed
+accounting projections. Their display units and every money-writer call site
+still need checking. At January rollover payroll is charged after all three
+resets. Renewal can alter employed gates before the same pass sums payroll.
+These are reasons to preserve transaction ordering rather than attaching
+independent monthly timers.
+
+The earlier conditional branch at +01C7..04CA can exit the routine before
+renewal/accounting rollover. Its year/month/week comparisons and additional
+3B0C guard require complete lifecycle tracing; do not treat it as an ordinary
+completed week. Original modal calls resume the procedure. Godot must represent
+pending calendar work explicitly before connecting date advancement, including
+save/reload and refusal/resumption tests. Existing isolated 200-tick services
+must not execute those same transactions a second time.
+
 ## Resume and validation
 
-Main contains the clean-room source and completed UI/audio/patch checkpoint through M25.
+Main contains the clean-room source and completed comparison/interactions/technology
+cadence checkpoint through M33.
 M23/M24 verify exported Linux and native Windows core-loop fixtures; those
 synthetic checks do not verify the original Windows game.
 
