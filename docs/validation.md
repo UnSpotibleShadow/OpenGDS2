@@ -1,11 +1,21 @@
-# Validation — M29 local / M28 desktop checkpoint
+# Validation — M30 local / M29 desktop checkpoint
+
+M30 corrects original toolbar-image associations and persists interface language
+outside simulation saves. Local direct compilation and all 27 Python checks pass.
+The imported-original UI suite checks language retention after restart and
+pixel equality with the intended local toolbar bitmaps. The speed-technology
+evidence verifier now checks the 50/100/150 eligible-pass countdown and expiry,
+without enabling an unresolved speed effect. M30 desktop checks are pending.
 
 M29 local direct compilation passes, all 27 Python checks pass with the private
 original fixture, and both Godot UI suites report zero failures. Coverage includes
 91 new English catalog labels, Japanese fallback to imported names, unchanged
 catalog data, toolbar images/tooltips and localized status help. See
-[localization and toolbar scope](localization-and-toolbar.md). Standard SDK and
-extracted desktop checks for M29 are pending.
+[localization and toolbar scope](localization-and-toolbar.md). The
+[M29 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37143944940)
+passed all four jobs, including both extracted desktop packages. The first CI
+run caught a test assuming the first randomized type was source zero; the check
+now follows each offered candidate's saved source ID. Gameplay RNG is unchanged.
 
 M28 bundles all eight explicitly authorized community recordings with local
 playlist overrides. The final GitHub tree contains no temporary transfer files;

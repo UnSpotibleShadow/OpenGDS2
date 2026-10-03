@@ -80,21 +80,21 @@ public partial class Main
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0, 28) };
         toolbar.AddThemeConstantOverride("separation", 1); layout.AddChild(toolbar);
-        ToolbarAction(toolbar, "BACK_TO_TITLE", ShowTitleScreen, 15);
-        ToolbarAction(toolbar, "SAVE_GAME", SaveDesktop, 4);
+        ToolbarAction(toolbar, "BACK_TO_TITLE", ShowTitleScreen, null);
+        ToolbarAction(toolbar, "SAVE_GAME", SaveDesktop, 15);
         _desktopLoad = ToolbarAction(toolbar, "LOAD_GAME", LoadSession, 14, System.IO.File.Exists(SavePath));
-        ToolbarAction(toolbar, "DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), 2, _activeCatalog is not null);
-        ToolbarAction(toolbar, "COMPANY_ACTIVITIES", () => ShowCompanyActivities(state), 1, state.Company.ActivityCost is not null);
+        ToolbarAction(toolbar, "DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), null, _activeCatalog is not null);
+        ToolbarAction(toolbar, "COMPANY_ACTIVITIES", () => ShowCompanyActivities(state), 8, state.Company.ActivityCost is not null);
         ToolbarAction(toolbar, "HIRE_EMPLOYEES", ShowRecruitment, 13, state.Recruitment.CandidateDatabaseDecoded);
         ToolbarAction(toolbar, "TECHNOLOGIES", () => ShowTechnologies(state), 12, _activeCatalog?.Technologies.Count > 0);
         ToolbarAction(toolbar, "DEVELOPMENT_COMPUTERS", () => ShowComputers(state), 10, _activeCatalog?.DevelopmentComputers.Count == 4);
-        ToolbarAction(toolbar, "START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), 9, _activeCatalog is not null);
-        ToolbarAction(toolbar, "SALES", () => ShowSales(state), 8, _activeCatalog is not null);
+        ToolbarAction(toolbar, "START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), null, _activeCatalog is not null);
+        ToolbarAction(toolbar, "SALES", () => ShowSales(state), 6, _activeCatalog is not null);
         ToolbarAction(toolbar, "STAFF", () => ShowStaff(state), 7);
-        ToolbarAction(toolbar, "HARDWARE_LICENSES", () => ShowLicenses(state), 6, state.AvailableHardware is not null && state.HardwareLicenses is not null);
+        ToolbarAction(toolbar, "HARDWARE_LICENSES", () => ShowLicenses(state), 9, state.AvailableHardware is not null && state.HardwareLicenses is not null);
         ToolbarAction(toolbar, "IMPORT_BUTTON", ShowImporter, null);
         ToolbarAction(toolbar, "SETTINGS", ShowSettings, null);
-        ToolbarAction(toolbar, "CALENDAR_INSPECTOR", () => ShowCalendar(state), 3);
+        ToolbarAction(toolbar, "CALENDAR_INSPECTOR", () => ShowCalendar(state), null);
         _desktopPause = ToolbarAction(toolbar, _paused ? "RESUME" : "PAUSE", () =>
         {
             _paused = !_paused; _desktopPause!.Text = Tr(_paused ? "RESUME" : "PAUSE");

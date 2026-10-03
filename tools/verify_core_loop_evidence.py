@@ -114,6 +114,20 @@ def verify(data):
         for offset,width in zip(draws,[2,4,8,16]):
             raw=bytes.fromhex('27 5c ff 0a 27 00 04 00 f4')+bytes([width])+bytes.fromhex('eb b3 fb e6 ea f4 00 eb c8')
             require(0x9EFA40,offset,raw.hex())
+    # Speed technology duration is a separate workspace countdown, not a
+    # proven multiplier. Verify its writes and end-of-work-block expiry.
+    for pool,index,value in [(0x61190C,0xA4,0xA13A64),(0x5F99AC,0xD5,0xA13A64),
+                             (0x5F99AC,0x7C,0xA139A0),(0x5F99AC,0x7D,0xA13A48),
+                             (0x5F99AC,0x7E,0xA12638),(0x5F99AC,0x19,0xA14530)]:
+        if pe.u32(pool+index*4)!=value:raise ParseError('Speed lifetime pool mapping changed')
+    for offset,ticks in [(0x076B,50),(0x079E,100),(0x07D1,150)]:
+        require(0x9A98E8,offset,(bytes.fromhex('28 4c ff')+struct.pack('<h',ticks)+
+            bytes.fromhex('05 23 00 fc 22 05 a4 00 52')).hex())
+    require(0xA0283C,0xAFAD,'fc 22 05 7e 00 fc 96 28 fc fe 04 00 5d fb 2f 0c ff')
+    require(0xA0283C,0xAFC7,'28 6c ff 04 00 6b 48 ff e7 05 19 00 52')
+    require(0xA0283C,0xAFD4,'6b 48 ff e7 05 d5 00 fc 96 28 6c ff 01 00 fb 9c 2c ff 6b 48 ff e7 05 d5 00 52')
+    require(0xA0283C,0xAFF2,'05 d5 00 fc 96 28 6c ff 00 00 5d fb 4d 1c 1c b0')
+    require(0xA0283C,0xB002,'28 6c ff 00 00 6b 48 ff e7 05 7c 00 52 28 6c ff 00 00 6b 48 ff e7 05 d5 00 52')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

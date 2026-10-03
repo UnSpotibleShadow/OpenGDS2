@@ -50,8 +50,8 @@ public partial class Main : Control
 
     public override void _Ready()
     {
+        LoadInterfaceLanguage();
         BuildShell();
-        TranslationServer.SetLocale("en");
         _music = new BackgroundMusic { Name = "BackgroundMusic" };
         AddChild(_music);
         ShowTitleScreen();
@@ -418,7 +418,7 @@ public partial class Main : Control
         foreach (var (locale, name) in new[] { ("en", "English"), ("ja", "日本語") })
         {
             var button = new Button { Text = name };
-            button.Pressed += () => { TranslationServer.SetLocale(locale); ShowSettings(); };
+            button.Pressed += () => { SaveInterfaceLanguage(locale); ShowSettings(); };
             _content.AddChild(button);
         }
         AddHeading(Tr("MUSIC_SETTINGS"), 18);
