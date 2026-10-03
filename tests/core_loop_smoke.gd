@@ -271,6 +271,7 @@ func run() -> void:
     use_project.DataSize = 101.9
     use_project.Bugs = 100
     write_json("user://saves/slot1.json",use_save)
+    await press("CANCEL")
     await press("LOAD_GAME")
     await press("STAFF")
     await press("USE_TECHNOLOGY")
