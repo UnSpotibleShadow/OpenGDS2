@@ -55,9 +55,11 @@ ZIPs, with the community game assembly, Godot/.NET runtimes, project notices,
 dependency license texts and SHA-256 manifests. No original files or local caches
 are included. Builds are development checkpoints; the full port is unfinished.
 
-Linux exported startup and the full synthetic development/release/sales UI fixture
-run from outside the source checkout. Windows is cross-exported; native Windows
-launch and graphical testing remain pending.
+The Linux and native Windows packages run startup and the full synthetic
+development/release/sales UI fixture outside the source checkout. Whole-window
+graphical testing and original Windows behavioral comparison remain pending.
+The committed solution file is required by Godot's C# exporter; a successful
+editor build alone does not establish a successful native export.
 
 For a local export, install the matching **Godot 4.4.1 .NET export templates**
 through Editor → Manage Export Templates, then:

@@ -48,26 +48,54 @@ jobs:
           cp -a /tmp/templates/templates/. "$HOME/.local/share/godot/export_templates/4.4.1.stable.mono/"
       - name: Export community desktop builds
         run: |
+          set -euo pipefail
           mkdir -p builds/linux builds/windows /tmp/opengds2-notices
           GODOT_EXPORT=/tmp/godot/Godot_v4.4.1-stable_mono_linux_x86_64/Godot_v4.4.1-stable_mono_linux.x86_64
-          "$GODOT_EXPORT" --headless --path . --export-release "Linux Desktop" builds/linux/OpenGDS2.x86_64
-          "$GODOT_EXPORT" --headless --path . --export-release "Windows Desktop" builds/windows/OpenGDS2.exe
+          "$GODOT_EXPORT" --headless --path . --export-release "Linux Desktop" builds/linux/OpenGDS2.x86_64 2>&1 | tee /tmp/linux-export.log
+          if rg '^ERROR:' /tmp/linux-export.log; then exit 1; fi
+          "$GODOT_EXPORT" --headless --path . --export-release "Windows Desktop" builds/windows/OpenGDS2.exe 2>&1 | tee /tmp/windows-export.log
+          if rg '^ERROR:' /tmp/windows-export.log; then exit 1; fi
           "$GODOT_EXPORT" --headless --path . --script res://tools/export_licenses.gd -- /tmp/opengds2-notices
-      - name: Run exported Linux title and full core-loop fixture outside the checkout
-        run: |
-          mkdir -p /tmp/opengds2-export-run
-          cd /tmp/opengds2-export-run
-          "$GITHUB_WORKSPACE/builds/linux/OpenGDS2.x86_64" --headless --quit-after 5
-          "$GITHUB_WORKSPACE/builds/linux/OpenGDS2.x86_64" --headless --fixed-fps 60 --script "$GITHUB_WORKSPACE/tests/core_loop_smoke.gd"
-        env:
-          XDG_DATA_HOME: ${{ runner.temp }}/opengds2-export-smoke
       - name: Package binaries, notices and checksums
         run: |
           python3 tools/package_desktop.py --export builds/linux --platform linux --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64.zip
           python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64.zip
+      - name: Run packaged Linux title and full core-loop fixture outside the checkout
+        run: |
+          mkdir -p /tmp/opengds2-export-run
+          unzip -q builds/OpenGDS2-linux-x86_64.zip -d /tmp/opengds2-export-run
+          cd /tmp/opengds2-export-run
+          ./OpenGDS2-linux-x86_64/OpenGDS2.x86_64 --headless --quit-after 5
+          ./OpenGDS2-linux-x86_64/OpenGDS2.x86_64 --headless --fixed-fps 60 --script "$GITHUB_WORKSPACE/tests/core_loop_smoke.gd"
+        env:
+          XDG_DATA_HOME: ${{ runner.temp }}/opengds2-export-smoke
       - uses: actions/upload-artifact@v4
         with:
           name: OpenGDS2-desktop-development
           path: builds/*.zip
           if-no-files-found: error
           retention-days: 14
+  desktop-windows:
+    runs-on: windows-latest
+    needs: desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: OpenGDS2-desktop-development
+          path: ${{ runner.temp }}/opengds2-desktop
+      - name: Run packaged Windows title and core loop
+        shell: pwsh
+        run: |
+          $packageRoot = Join-Path $env:RUNNER_TEMP "opengds2-desktop"
+          $runRoot = Join-Path $env:RUNNER_TEMP "opengds2-windows-run"
+          Expand-Archive -Path (Join-Path $packageRoot "OpenGDS2-windows-x86_64.zip") -DestinationPath $runRoot
+          $game = Join-Path $runRoot "OpenGDS2-windows-x86_64/OpenGDS2.console.exe"
+          $fixture = Join-Path $env:GITHUB_WORKSPACE "tests/core_loop_smoke.gd"
+          Set-Location $runRoot
+          & $game --headless --quit-after 5
+          if ($LASTEXITCODE -ne 0) { throw "Packaged Windows startup failed: $LASTEXITCODE" }
+          & $game --headless --fixed-fps 60 --script $fixture
+          if ($LASTEXITCODE -ne 0) { throw "Packaged Windows core loop failed: $LASTEXITCODE" }
+        env:
+          XDG_DATA_HOME: ${{ runner.temp }}/opengds2-windows-smoke
