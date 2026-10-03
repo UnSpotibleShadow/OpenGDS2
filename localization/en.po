@@ -628,3 +628,84 @@ msgstr "Company activity state is unavailable."
 
 msgid "COMPANY_ACTIVITY_RESULT_InsufficientFunds"
 msgstr "Not enough funds."
+
+msgid "TECHNOLOGIES"
+msgstr "Technologies"
+
+msgid "PURCHASE_TECHNOLOGY"
+msgstr "Purchase technology"
+
+msgid "TRAINING"
+msgstr "Training"
+
+msgid "MAXIMUM_TECHNOLOGIES"
+msgstr "Technology limit"
+
+msgid "STUDY_SEAT"
+msgstr "Study seat"
+
+msgid "TRAINING_PROGRESS"
+msgstr "Training progress"
+
+msgid "TRAINING_RESUME_NOTE"
+msgstr "Return to the office to continue. Starting a course again spends experience and resets its progress."
+
+msgid "TRAINING_NOTE"
+msgstr "Choose a study seat and a course. Training spends experience up front and stops at maximum stress; a break allows it to resume."
+
+msgid "TECHNOLOGY_PURCHASE_Success"
+msgstr "Technology purchased."
+
+msgid "TECHNOLOGY_PURCHASE_StateUnknown"
+msgstr "Technology ownership is unavailable."
+
+msgid "TECHNOLOGY_PURCHASE_AlreadyOwned"
+msgstr "Technology already owned."
+
+msgid "TECHNOLOGY_PURCHASE_InsufficientFunds"
+msgstr "Not enough funds."
+
+msgid "TRAINING_RESULT_Success"
+msgstr "Training started."
+
+msgid "TRAINING_RESULT_NotEmployed"
+msgstr "Employee is no longer employed."
+
+msgid "TRAINING_RESULT_StateUnknown"
+msgstr "Training data is unavailable."
+
+msgid "TRAINING_RESULT_NotAtStudySeat"
+msgstr "Choose a study seat first."
+
+msgid "TRAINING_RESULT_Unavailable"
+msgstr "This training level is unavailable."
+
+msgid "TRAINING_RESULT_InsufficientExperience"
+msgstr "Not enough experience."
+
+msgid "TRAINING_RESULT_CapacityReached"
+msgstr "Employee has reached their distinct technology limit."
+
+msgid "TECHNOLOGY_NAME_0"
+msgstr "Data compression"
+
+msgid "TECHNOLOGY_NAME_1"
+msgstr "Graphics technique"
+
+msgid "TECHNOLOGY_NAME_2"
+msgstr "Debugging technique"
+
+msgid "TECHNOLOGY_NAME_3"
+msgstr "Sound technique"
+
+msgid "TECHNOLOGY_NAME_4"
+msgstr "Speed boost"
+
+msgid "TECHNOLOGY_NAME_5"
+msgstr "Stress relief"
+
+msgid "TECHNOLOGY_NAME_6"
+msgstr "Fun technique"
+
+msgid "TECHNOLOGY_NAME_7"
+msgstr "Originality technique"

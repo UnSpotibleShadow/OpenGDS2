@@ -24,6 +24,7 @@ public static class EmployeeDismissalService
         {
             source.GateValue=0;source.Employee.Stress=0;
             source.Employee.Experience=employee.Experience;
+            source.Employee.TechnologyLevels=employee.TechnologyLevels is null ? null : new(employee.TechnologyLevels);
         }
         // Reservations, sprites and pending contributions are projections of
         // employed workspaces. Removing this workspace frees both current and

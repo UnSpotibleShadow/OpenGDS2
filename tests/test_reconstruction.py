@@ -84,6 +84,17 @@ class OriginalTests(unittest.TestCase):
         self.assertEqual(rows[59]['Level'],2)
         self.assertEqual(sum(x['InitialSpecialFlag'] for x in rows),11)
         self.assertEqual(rows[48]['InitialSpecialFlag'],0);self.assertEqual(rows[49]['InitialSpecialFlag'],1)
+    def test_initial_technologies_and_training_catalog(self):
+        rows=recover(self.data)['Employees']
+        self.assertTrue(all(len(row['InitialTechnologyLevels'])==8 for row in rows))
+        self.assertEqual(sum(any(row['InitialTechnologyLevels'].values()) for row in rows),6)
+        self.assertTrue(all(not any(row['InitialTechnologyLevels'].values()) for row in rows[:49]))
+        technologies=recover_genres(self.data)['Technologies']
+        self.assertEqual([row['Identifier'] for row in technologies],list(range(8)))
+        self.assertTrue(all(row['InitialOwnershipLevel']==0 and row['PurchaseFee']>0 for row in technologies))
+        for row in technologies:
+            self.assertTrue(all(len(row[field])==3 for field in ['RequiredTrainingWork','ExperienceCosts','RawTable158C','RawTable1568']))
+
     def test_tampered_fixture_rejected(self):
         data=bytearray(self.data);data[-1]^=1
         with self.assertRaises(ParseError):recover(data)

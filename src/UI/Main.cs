@@ -295,6 +295,7 @@ public partial class Main : Control
         }
         OfficeAction("HIRE_EMPLOYEES", ShowRecruitment, state.Recruitment.CandidateDatabaseDecoded);
         OfficeAction("STAFF", () => ShowStaff(state));
+        OfficeAction("TECHNOLOGIES",()=>ShowTechnologies(state),_activeCatalog?.Technologies.Count>0);
         OfficeAction("COMPANY_ACTIVITIES",()=>ShowCompanyActivities(state),state.Company.ActivityCost is not null && state.CompanyActivityPerformed is not null && state.CompanyActivityTicks is not null);
         OfficeAction("DEVELOPMENT_COMPUTERS", () => ShowComputers(state), _importer.LoadCatalog()?.DevelopmentComputers.Count == 4);
         OfficeAction("HARDWARE_LICENSES", () => ShowLicenses(state), state.AvailableHardware is not null && state.HardwareLicenses is not null);
@@ -410,14 +411,15 @@ public partial class Main : Control
             {
                 panel.AddChild(new Label {Text=workspace.Action is >=6 and <=17
                     ? $"{Tr("DEVELOPMENT_ROOM")} {(workspace.Action-6)/6+1} / {Tr("DESK")} {(workspace.Action-6)%6+1}"
-                    : Tr("LOUNGE")});
+                    : workspace.Action is >=1 and <=5 ? $"{Tr("STUDY_SEAT")} {workspace.Action}" : Tr("LOUNGE")});
                 AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
+                AddAction("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _importer.LoadCatalog()?.Technologies.Count>0);
                 AddAction("TAKE_BREAK",()=>
                 {
                     var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());
                     if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
                     else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
-                },workspace.Action is >=6 and <=17);
+                },workspace.Action is >=1 and <=17);
             }
             if (employee.SourceIndex is int source)
                 AddAction("LEVEL_UP", () =>

@@ -11,6 +11,7 @@ public sealed class GameState
     public int? SourceUpperBound { get; set; }
     public int? Month { get; set; }
     public long? Money { get; set; }
+    public Dictionary<int,int>? TechnologyOwnershipLevels { get; set; }
     public int? DevelopmentComputerIndex { get; set; }
     public HashSet<int>? HardwareLicenses { get; set; }
     public HashSet<int>? AvailableHardware { get; set; }

@@ -52,6 +52,13 @@ def verify(data):
     # Original main-loop automatic expansion and complete budget-week cadence.
     require(0xA0283C,0x009B,'28 6c ff 50 00 05 31 00 fb b4 2c ff')
     require(0xA0283C,0x0337,'28 6c ff 64 00 05 31 00 fb b4 2c ff')
+    # Study capacity is employee member D3C; training task state is 2.
+    require(0x993A2C,0x00E3,'05 0a 00 fc 96 fb 5a')
+    require(0x993A2C,0x0253,'28 6c ff 02 00 05 11 00 fc 22 05 14 00 52')
+    # Training increments its independent idle counter before threshold checking.
+    require(0xA0283C,0x421B,'05 71 00 fc 96 28 6c ff 01 00 fb 94 2c ff')
+    # Reset clears employee/source skill cells; no guessed fresh learned skills.
+    require(0x9DD234,0x0903,'07 08 00 58 0d a7 02 00 fd 86 00 00')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

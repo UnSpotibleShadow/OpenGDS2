@@ -628,3 +628,84 @@ msgstr "会社の活動情報が不明です。"
 
 msgid "COMPANY_ACTIVITY_RESULT_InsufficientFunds"
 msgstr "資金が不足しています。"
+
+msgid "TECHNOLOGIES"
+msgstr "テクノロジー"
+
+msgid "PURCHASE_TECHNOLOGY"
+msgstr "技術を購入"
+
+msgid "TRAINING"
+msgstr "訓練"
+
+msgid "MAXIMUM_TECHNOLOGIES"
+msgstr "習得可能な技術数"
+
+msgid "STUDY_SEAT"
+msgstr "学習席"
+
+msgid "TRAINING_PROGRESS"
+msgstr "訓練の進捗"
+
+msgid "TRAINING_RESUME_NOTE"
+msgstr "続けるにはオフィスへ戻ってください。再び訓練を開始すると経験値を消費し、進捗がリセットされます。"
+
+msgid "TRAINING_NOTE"
+msgstr "学習席と技術を選んでください。訓練開始時に経験値を消費します。ストレスが最大になると休憩が必要です。"
+
+msgid "TECHNOLOGY_PURCHASE_Success"
+msgstr "技術を購入しました。"
+
+msgid "TECHNOLOGY_PURCHASE_StateUnknown"
+msgstr "技術の所有状態が不明です。"
+
+msgid "TECHNOLOGY_PURCHASE_AlreadyOwned"
+msgstr "購入済みの技術です。"
+
+msgid "TECHNOLOGY_PURCHASE_InsufficientFunds"
+msgstr "資金が不足しています。"
+
+msgid "TRAINING_RESULT_Success"
+msgstr "訓練を開始しました。"
+
+msgid "TRAINING_RESULT_NotEmployed"
+msgstr "在職中の社員ではありません。"
+
+msgid "TRAINING_RESULT_StateUnknown"
+msgstr "訓練データが不明です。"
+
+msgid "TRAINING_RESULT_NotAtStudySeat"
+msgstr "まず学習席を選んでください。"
+
+msgid "TRAINING_RESULT_Unavailable"
+msgstr "このレベルの訓練は利用できません。"
+
+msgid "TRAINING_RESULT_InsufficientExperience"
+msgstr "経験値が不足しています。"
+
+msgid "TRAINING_RESULT_CapacityReached"
+msgstr "習得可能な技術数の上限に達しています。"
+
+msgid "TECHNOLOGY_NAME_0"
+msgstr "データ圧縮"
+
+msgid "TECHNOLOGY_NAME_1"
+msgstr "グラフィック技術"
+
+msgid "TECHNOLOGY_NAME_2"
+msgstr "バグ修正技術"
+
+msgid "TECHNOLOGY_NAME_3"
+msgstr "音響技術"
+
+msgid "TECHNOLOGY_NAME_4"
+msgstr "開発速度の向上"
+
+msgid "TECHNOLOGY_NAME_5"
+msgstr "ストレス解消"
+
+msgid "TECHNOLOGY_NAME_6"
+msgstr "楽しさの技術"
+
+msgid "TECHNOLOGY_NAME_7"
+msgstr "独創性の技術"

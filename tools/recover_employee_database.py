@@ -46,6 +46,16 @@ def recover(data):
               'DefinitionAddress':f'0x{START+i.offset:08X}',
               'InitialGate':0, 'InitialSpecialFlag':int(len(rows)>=49)})
     if len(rows)!=60 or minimum!=35 or len(name_parts)!=8:raise ParseError('Initializer shape changed')
+    for row in rows:row['InitialTechnologyLevels']={str(n):0 for n in range(8)}
+    for i in instructions:
+        if i.mnemonic!='LitVarI2' or i.raw[1:3]!=bytes.fromhex('2c ff'):continue
+        va=START+i.offset
+        if pe.bytes_at(va+5,5)!=bytes.fromhex('07 08 00 60 0a'):continue
+        if pe.bytes_at(va+10,12)!=bytes.fromhex('28 6c ff 01 00 fb 9c cc fe fc 22 f5') or pe.bytes_at(va+26,12)!=bytes.fromhex('07 08 00 58 0d a7 02 00 fd 86 00 00'):raise ParseError('Initial skill shape changed')
+        level=struct.unpack('<h',i.raw[3:5])[0];technology=pe.u32(va+22)
+        row=next(row for row in reversed(rows) if int(row['DefinitionAddress'],16)<va)
+        if not 0<=technology<8 or not 1<=level<=3:raise ParseError('Initial skill outside supported table')
+        row['InitialTechnologyLevels'][str(technology)]=level
     # Re-resolve the gate global through the known hiring pool and reset evidence.
     if pe.u32(0x60C264+0x33*4)!=0xA11CA0:raise ParseError('Gate map changed')
     return {'SchemaVersion':1,'SourceHash':KNOWN_SHA256,'MinimumSourceIndex':minimum,

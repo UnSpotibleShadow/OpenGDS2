@@ -37,6 +37,7 @@ public static class HiringService
     {
         SourceIndex = source.SourceIndex, PortraitId = source.PortraitId,
         OriginalAttributes = [.. source.OriginalAttributes],
+        TechnologyLevels = source.TechnologyLevels is null ? null : new(source.TechnologyLevels),
         RawParameter34 = source.RawParameter34, RawParameter3C = source.RawParameter3C,
         RawParameter40 = source.RawParameter40, SpecialFlag = source.SpecialFlag,
         Name = source.Name,

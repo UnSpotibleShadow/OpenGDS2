@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M16.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M17.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -49,6 +49,11 @@ M15 adds employee dismissal and supported workspace cleanup for nonrenewal,
 including workers walking to a desk or lounge. Payroll and recall arithmetic
 have isolated regression coverage while their calendar scheduling remains
 unresolved. See [employee dismissal evidence](docs/employee-dismissal.md).
+
+M17 imports the eight technology definitions and initial employee skills, connects
+technology purchasing and study at all five training seats, and preserves learned
+skills through saving, dismissal and rehiring. Applying technologies during
+development remains the next target; see [training evidence](docs/training-and-technologies.md).
 
 M16 connects public relations, genre research and production expansion, including
 the shared budget and automatic production growth. Research unlocks more genres;

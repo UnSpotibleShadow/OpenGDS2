@@ -19,6 +19,7 @@ public sealed class GameSession
             Mode = mode, Rules = GameModeRules.For(mode),
             Money = mode == GameMode.Beginner ? 1_200_000_000L : 450_000_000L,
             Year = date.Year, Month = date.Month, Week = date.Week,
+            TechnologyOwnershipLevels = catalog?.Technologies.Count>0 ? catalog.Technologies.ToDictionary(x=>x.SourceIndex,x=>x.InitialOwnershipLevel) : null,
             DevelopmentComputerIndex = 0,
             HardwareLicenses = [0],
             SalesFee1 = 1500, SalesFee2 = 1500,
@@ -71,7 +72,11 @@ public sealed class GameSession
         foreach (var employee in state.Employees)
         {
             OfficeStaffRules.Tick(employee, _random);
-            if (catalog is not null) DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
+            if (catalog is not null)
+            {
+                TrainingService.Tick(state,employee,catalog,_random);
+                DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
+            }
             // Original employees refer back to the source arrays. Keep the
             // modern employed copy and source projection consistent.
             var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == employee.SourceIndex);

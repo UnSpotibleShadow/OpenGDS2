@@ -115,7 +115,27 @@ def recover(data):
         arguments=list(reversed(table))
         game_types.append({'SourceIndex':index,'Name':strings['12B4'],'ExampleTitles':[strings[m] for m in ['1324','1340','135C']],
             'RawMembers':fields,'RawTable13CC':arguments[:14]+arguments[15:], 'RawUnusedArgument48':arguments[14]})
-    return {'SchemaVersion':1,'SourceHash':KNOWN_SHA256,'Genres':rows,'Audiences':audiences,'DevelopmentComputers':computers,'Hardware':hardware,'GameTypes':game_types}
+    technologies=[]
+    # Setter fields 10..50: identifier/name, four three-level tables, fee/state/description.
+    require(0x98BA28,bytes.fromhex('fd 16 10 00 5c ff 07 08 00 c0 14 fc 22 07 08 00 1c 16 fc b0'))
+    for index in range(8):
+        va=START+0x9D7C+index*0x98
+        require(va,bytes.fromhex('3a 0c fc'));description=bstr(pe,pe.u16(va+3))
+        require(va+5,bytes.fromhex('4e 1c fc 04 1c fc 28 2c fc'))
+        ownership=struct.unpack('<h',pe.bytes_at(va+14,2))[0]
+        require(va+16,bytes.fromhex('fe c1 2c fd'));fee=struct.unpack('<i',pe.bytes_at(va+20,4))[0]
+        numeric=[]
+        for n,local in enumerate([0xFD3C,0xFD5C,0xFD7C,0xFD9C,0xFDBC,0xFDDC,0xFDFC,0xFE1C,0xFE3C,0xFE5C,0xFE7C,0xFEAC]):
+            pos=va+24+n*5;require(pos,b'\x28'+struct.pack('<H',local));numeric.append(struct.unpack('<h',pe.bytes_at(pos+3,2))[0])
+        numeric.reverse()
+        require(va+84,bytes.fromhex('3a 2c ff'));name=bstr(pe,pe.u16(va+87))
+        require(va+89,bytes.fromhex('4e bc fe 04 bc fe 28 cc fe'))
+        identifier=struct.unpack('<h',pe.bytes_at(va+98,2))[0]
+        require(va+100,bytes.fromhex('04 fc fb 0a 30 02 48 00'))
+        technologies.append({'SourceIndex':index,'Identifier':identifier,'Name':name,'Description':description,
+            'InitialOwnershipLevel':ownership,'PurchaseFee':fee,'RequiredTrainingWork':numeric[:3],
+            'ExperienceCosts':numeric[3:6],'RawTable158C':numeric[6:9],'RawTable1568':numeric[9:12]})
+    return {'SchemaVersion':1,'SourceHash':KNOWN_SHA256,'Genres':rows,'Audiences':audiences,'DevelopmentComputers':computers,'Hardware':hardware,'GameTypes':game_types,'Technologies':technologies}
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('exe',type=Path);ap.add_argument('--out',required=True,type=Path);a=ap.parse_args()
