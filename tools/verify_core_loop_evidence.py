@@ -29,6 +29,12 @@ def verify(data):
     require(0x9E3830,0x10D7,'05 57 01 fb 9c 58 ff 05 58 01 fb 9c 34 ff')
     # Production reads the hardware/band table, not hardware planning cost.
     require(0x9B4344,0x0814,'05 92 00 a7 02 00 06 00 00 05 8d 00 fb 94 58 ff fd b6 06 00')
+    # Reviews: four-stat sum, strict first threshold, replacement draw at factor >=2.
+    require(0x9CAFCC,0x070D,'04 c8 fd 28 4c ff 82 00')
+    require(0x9CAFCC,0x0899,'05 1f 00 28 4c ff 01 00')
+    # Hall-of-Fame company counter starts at zero and increments once per ceremony.
+    require(0x9F651C,0x0066,'28 6c ff 00 00 fd e6 08 00 00 01')
+    require(0x986780,0x0124,'05 09 00 28 58 ff 01 00 fb 94 48 ff fd b6 09 00')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

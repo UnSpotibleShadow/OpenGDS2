@@ -553,3 +553,30 @@ msgstr "追加生産"
 
 msgid "NO_RELEASED_GAMES"
 msgstr "発売したゲームはまだありません。"
+
+msgid "MAGAZINE_REVIEWS"
+msgstr "雑誌レビュー"
+
+msgid "REVIEWER"
+msgstr "レビュアー"
+
+msgid "REVIEW_TOTAL"
+msgstr "合計点"
+
+msgid "REVIEW_HALL_OF_FAME"
+msgstr "殿堂入り！このゲームは続編の対象になります。"
+
+msgid "REVIEW_GOOD"
+msgstr "好評を得ました。"
+
+msgid "REVIEW_LOW"
+msgstr "評価は分かれています。"
+
+msgid "REVIEW_POOR"
+msgstr "低い評価となりました。"
+
+msgid "CONTINUE"
+msgstr "続ける"
+
+msgid "SALES_MILESTONE"
+msgstr "販売本数の達成"

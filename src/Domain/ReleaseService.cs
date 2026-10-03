@@ -24,17 +24,19 @@ public static class ReleaseService
             return ReleaseResult.NotReady;
         title=title.Trim();
         if (state.ReleasedGames.Any(x=>x.Title==title)) return ReleaseResult.DuplicateTitle;
+        if (state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return ReleaseResult.NotReady;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize)*copies);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
         var product=new ReleasedGameState
         {
-            ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,
+            ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,
             MarketFactor=MarketFactor(state.ReleasedGames.Count,project.Quality,random)
         };
+        ReviewService.Generate(product,catalog,random);
         state.Money-=cost;
         state.ReleasedGames.Add(product);state.DevelopmentProjects.Remove(project);
         // A new room must not receive an unfinished contribution from the old product.

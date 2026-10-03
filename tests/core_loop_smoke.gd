@@ -30,7 +30,20 @@ func press_node(name: String) -> void:
 func write_json(path: String, value: Variant) -> void:
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
     var file := FileAccess.open(path, FileAccess.WRITE)
-    file.store_string(JSON.stringify(value))
+    file.store_string(JSON.stringify(normalize_numbers(value)))
+
+func normalize_numbers(value: Variant) -> Variant:
+    # Godot parses JSON numbers as doubles; System.Text.Json integer fields
+    # require integer tokens when this fixture is written back.
+    if value is Dictionary:
+        for key in value:
+            value[key] = normalize_numbers(value[key])
+    elif value is Array:
+        for index in range(value.size()):
+            value[index] = normalize_numbers(value[index])
+    elif typeof(value) == TYPE_FLOAT and value == floor(value):
+        return int(value)
+    return value
 
 func await_node(name: String) -> bool:
     for frame in range(15000):
@@ -127,7 +140,14 @@ func run() -> void:
     check(main.find_child("ReleasePrice",true,false).value == 5800,"Original default price")
     check(main.find_child("ReleaseCopies",true,false).value == 5000,"Original default production")
     await press_node("ConfirmRelease")
-    check(main.find_child("SalesProduct0",true,false) != null,"Release opens sales screen")
+    check(main.find_child("ReviewScore3",true,false) != null,"Release opens four magazine reviews")
+    await press("SAVE_GAME")
+    var review_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(review_save.State.ReleasedGames[0].ReviewPending,"Pending reviews saved")
+    await press("LOAD_GAME")
+    check(main.find_child("ReviewScore3",true,false) != null,"Load restores review ceremony")
+    await press_node("AcknowledgeReviews")
+    check(main.find_child("SalesProduct0",true,false) != null,"Review acknowledgement opens sales screen")
     for frame in range(100):
         await process_frame
     Engine.time_scale = 1
@@ -153,5 +173,36 @@ func run() -> void:
     main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Room accepts another project")
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    # Synthetic boundary fixture drives the real modal/event UI without adding
+    # game cheats or waiting for hundreds of thousands of physical copies.
+    var milestone_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var milestone_product = milestone_save.State.ReleasedGames[0]
+    milestone_product.UnitsSold = 1000000
+    milestone_product.Stock = 1000
+    milestone_product.Demand = 100
+    milestone_product.Quality = {"Fun":100,"Novelty":100,"Graphics":100,"Music":100}
+    milestone_product.Bugs = 0
+    milestone_product.MarketFactor = 1
+    milestone_product.SalesMilestoneStage = 0
+    milestone_save.State.SalesTicks = 19
+    write_json("user://saves/slot1.json",milestone_save)
+    await press("LOAD_GAME")
+    if not await await_node("AcknowledgeSalesMilestone"):
+        quit(1)
+        return
+    await press("SAVE_GAME")
+    var pending_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(normalize_numbers(pending_save.State.ReleasedGames[0].PendingSalesMilestones) == [1,2,3,4],"All crossed sales milestones queued")
+    await press("LOAD_GAME")
+    for stage in range(4):
+        check(main.find_child("AcknowledgeSalesMilestone",true,false) != null,"Sequential sales milestone ceremony")
+        await press_node("AcknowledgeSalesMilestone")
+    check(main.find_child("SalesProduct0",true,false) != null,"Sales resume after all milestone acknowledgements")
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    var completed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(completed_save.State.ReleasedGames[0].SalesMilestoneStage == 4,"Acknowledged milestone progress persists")
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)

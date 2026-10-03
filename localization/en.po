@@ -553,3 +553,30 @@ msgstr "Produce More Copies"
 
 msgid "NO_RELEASED_GAMES"
 msgstr "No games released yet."
+
+msgid "MAGAZINE_REVIEWS"
+msgstr "Magazine reviews"
+
+msgid "REVIEWER"
+msgstr "Reviewer"
+
+msgid "REVIEW_TOTAL"
+msgstr "Total score"
+
+msgid "REVIEW_HALL_OF_FAME"
+msgstr "Hall of Fame! This game qualifies for a sequel."
+
+msgid "REVIEW_GOOD"
+msgstr "The reviewers liked this game."
+
+msgid "REVIEW_LOW"
+msgstr "The reviews are mixed."
+
+msgid "REVIEW_POOR"
+msgstr "The reviewers were disappointed."
+
+msgid "CONTINUE"
+msgstr "Continue"
+
+msgid "SALES_MILESTONE"
+msgstr "Sales milestone"

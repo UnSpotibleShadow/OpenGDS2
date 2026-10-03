@@ -36,6 +36,7 @@ public partial class Main : Control
         {
             _session.TickOffice(_activeCatalog);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
+            if (ShowPendingProductEvent(state)) return;
             updated = state.Employees.Any(x => x.Office is not null);
             var pending=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue);
             if (pending is not null) {ShowProjectDecision(state,pending);return;}
@@ -240,6 +241,7 @@ public partial class Main : Control
 
     private void ShowOfficeReconstruction(GameState state)
     {
+        if (ShowPendingProductEvent(state)) return;
         ClearContent();
         _activeCatalog=_importer.LoadCatalog();
         _clockRunning=true;

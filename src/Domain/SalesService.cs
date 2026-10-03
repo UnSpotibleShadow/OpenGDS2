@@ -41,7 +41,8 @@ public static class SalesService
     public static void Tick(GameState state,OriginalCatalog catalog,Random random)
     {
         // Unknown legacy fees must not silently become zero.
-        if (state.Money is null || state.SalesFee1 is null || state.SalesFee2 is null) return;
+        if (state.Money is null || state.SalesFee1 is null || state.SalesFee2 is null ||
+            state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state)) return;
         if (++state.SalesTicks<TicksPerBatch) return;
         state.SalesTicks=0;
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
@@ -54,6 +55,7 @@ public static class SalesService
             int demand=NextDemand(product.Demand,first,first==0 ? null : random.Next(7));
             state.Money=funds;product.Stock=stock;product.UnitsSold=units;
             product.NetSalesReceipts=net;product.LastBatchSold=sales;product.Demand=demand;
+            SalesMilestoneService.QueueReached(product);
         }
     }
 }

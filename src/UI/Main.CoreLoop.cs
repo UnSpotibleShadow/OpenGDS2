@@ -125,7 +125,7 @@ public partial class Main
         confirm.Pressed+=()=>
         {
             var result=ReleaseService.TryRelease(state,project,catalog,title.Text,(long)price.Value,(long)copies.Value,new Random());
-            if (result==ReleaseResult.Success) ShowSales(state);
+            if (result==ReleaseResult.Success) ShowReviews(state,state.ReleasedGames[^1]);
             else _status.Text=Tr($"RELEASE_RESULT_{result}");
         };
         AddAction("CANCEL",()=>ShowProject(state,project));
@@ -138,6 +138,7 @@ public partial class Main
     }
     private void ShowSales(GameState state)
     {
+        if (ShowPendingProductEvent(state)) return;
         ClearContent();AddHeading(Tr("SALES"),28);
         var funds=new Label {Name="SalesFunds"};_content.AddChild(funds);
         var rows=new List<(ReleasedGameState Product,Label Report)>();
@@ -147,6 +148,11 @@ public partial class Main
             var report=new Label {Name=$"SalesProduct{product.ProductIndex}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);rows.Add((product,report));
             var button=new Button {Name=$"ProduceProduct{product.ProductIndex}",Text=Tr("PRODUCE_MORE"),Disabled=state.Company.ProductionCapacity is null};
             button.Pressed+=()=>ShowProduction(state,product);_content.AddChild(button);
+            if (product.ReviewScores is not null)
+            {
+                var reviews=new Button {Name=$"ReviewsProduct{product.ProductIndex}",Text=Tr("MAGAZINE_REVIEWS")};
+                reviews.Pressed+=()=>ShowReviews(state,product);_content.AddChild(reviews);
+            }
         }
         if (rows.Count==0) AddHeading(Tr("NO_RELEASED_GAMES"),18);
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
@@ -159,6 +165,53 @@ public partial class Main
                 $"{Tr("NET_SALES_RECEIPTS")}: ¥{p.NetSalesReceipts:N0}\n{Tr("PRODUCTION_COST")}: ¥{p.ProductionSpending:N0}\n{Tr("DEMAND")}: {p.Demand}";
         };
         _refreshCoreStatus();
+    }
+    private void ShowReviews(GameState state,ReleasedGameState product)
+    {
+        ClearContent();AddHeading(Tr("MAGAZINE_REVIEWS"),28);AddHeading(product.Title,22);
+        var scores=product.ReviewScores ?? throw new InvalidOperationException("Reviews are unknown for this product.");
+        var row=new HBoxContainer();row.AddThemeConstantOverride("separation",24);_content.AddChild(row);
+        for (int i=0;i<scores.Count;i++)
+        {
+            var column=new VBoxContainer();row.AddChild(column);
+            column.AddChild(new Label {Text=$"{Tr("REVIEWER")} {i+1}"});
+            var score=new Label {Name=$"ReviewScore{i}",Text=$"{scores[i]} / 10"};score.AddThemeFontSizeOverride("font_size",32);column.AddChild(score);
+        }
+        int total=scores.Sum();
+        var result=new Label {Name="ReviewTotal",Text=$"{Tr("REVIEW_TOTAL")}: {total} / 40"};_content.AddChild(result);
+        AddHeading(Tr(total>=32 ? "REVIEW_HALL_OF_FAME" : total>=24 ? "REVIEW_GOOD" : total>=12 ? "REVIEW_LOW" : "REVIEW_POOR"),20);
+        _status=new Label();_content.AddChild(_status);
+        AddAction("SAVE_GAME",()=>
+        {
+            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
+            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
+        });
+        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
+        var acknowledge=new Button {Name="AcknowledgeReviews",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
+        acknowledge.Pressed+=()=>{ReviewService.Acknowledge(state,product);ShowSales(state);};
+    }
+    private bool ShowPendingProductEvent(GameState state)
+    {
+        var review=state.ReleasedGames.FirstOrDefault(x=>x.ReviewPending);
+        if (review is not null) {ShowReviews(state,review);return true;}
+        var milestone=state.ReleasedGames.FirstOrDefault(x=>x.PendingSalesMilestones.Count>0);
+        if (milestone is null) return false;
+        ShowSalesMilestone(state,milestone);return true;
+    }
+    private void ShowSalesMilestone(GameState state,ReleasedGameState product)
+    {
+        ClearContent();AddHeading(Tr("SALES_MILESTONE"),28);AddHeading(product.Title,22);
+        int stage=product.PendingSalesMilestones[0];
+        AddHeading($"{Tr("UNITS_SOLD")}: {SalesMilestoneService.Threshold(stage):N0}",24);
+        _status=new Label();_content.AddChild(_status);
+        AddAction("SAVE_GAME",()=>
+        {
+            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
+            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
+        });
+        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
+        var acknowledge=new Button {Name="AcknowledgeSalesMilestone",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
+        acknowledge.Pressed+=()=>{SalesMilestoneService.Acknowledge(state,product);ShowSales(state);};
     }
     private void ShowProduction(GameState state,ReleasedGameState product)
     {
