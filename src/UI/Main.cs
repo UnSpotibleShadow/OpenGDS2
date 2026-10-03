@@ -157,7 +157,8 @@ public partial class Main : Control
 
     /// <summary>
     /// Mirrors the original VB6 fGMGameNew form recovered from the executable:
-    /// Company Name, President Name (default 伊集院 光の助), Confirm, Cancel.
+    /// Company Name, President Name, Confirm, Cancel.
+    /// Original default personal names must come from a local import.
     /// </summary>
     private void ShowCompanySetup()
     {
@@ -165,7 +166,7 @@ public partial class Main : Control
         AddHeading(Tr("NEW_GAME"), 34);
 
         _companyName = AddField(Tr("COMPANY_NAME"), string.Empty, 32);
-        _presidentName = AddField(Tr("PRESIDENT_NAME"), "伊集院 光の助", 32);
+        _presidentName = AddField(Tr("PRESIDENT_NAME"), string.Empty, 32);
 
         var validation = new Label
         {
@@ -309,7 +310,15 @@ public partial class Main : Control
         OfficeAction("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), _importer.LoadCatalog() is not null);
         OfficeAction("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), _activeCatalog is not null);
         OfficeAction("SALES", () => ShowSales(state), _activeCatalog is not null);
-        OfficeAction("PAUSE", () => _paused=!_paused);
+        var pause=new Button {Name="TogglePause",Text=Tr(_paused ? "RESUME" : "PAUSE"),
+            CustomMinimumSize=new Vector2(0,30)};
+        pause.Pressed+=()=>
+        {
+            _paused=!_paused;
+            pause.Text=Tr(_paused ? "RESUME" : "PAUSE");
+            _refreshCoreStatus?.Invoke();
+        };
+        sidebar.AddChild(pause);
         foreach (var project in state.DevelopmentProjects.OrderBy(x=>x.RoomIndex))
         {
             var button=new Button {Name=$"OpenProject{project.RoomIndex}",Text=$"{Tr("DEVELOPMENT_ROOM")} {project.RoomIndex+1}: {project.Title}",
@@ -318,7 +327,7 @@ public partial class Main : Control
         }
         OfficeAction("IMPORT_BUTTON", ShowImporter);
         OfficeAction("BACK_TO_TITLE", ShowTitleScreen);
-        _status = new Label { AutowrapMode = TextServer.AutowrapMode.WordSmart };
+        _status = new Label {Name="OfficeStatus", AutowrapMode = TextServer.AutowrapMode.WordSmart };
         sidebar.AddChild(_status);
         _refreshCoreStatus=()=>
         {

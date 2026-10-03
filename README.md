@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M22.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M24.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -56,6 +56,13 @@ save/load without charging twice. See [consumer-recalls.md](docs/consumer-recall
 M22 displays imported monthly salaries and preserves the staff form's shared
 payroll index in saves. Its original-debit preview remains separate from the
 salary total; monthly charging is still disabled. See [payroll-state.md](docs/payroll-state.md).
+
+M23 adds downloadable Linux/Windows x86_64 development packages, with startup
+and the complete core-loop fixture tested against extracted builds on both
+platforms. Download **OpenGDS2-desktop-development** from a successful
+[Validate workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions).
+M24 fixes immediate pause/resume feedback and clock regression coverage.
+See [desktop build instructions](docs/building.md).
 
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements

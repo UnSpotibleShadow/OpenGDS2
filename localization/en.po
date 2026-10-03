@@ -811,3 +811,6 @@ msgstr "Original payroll preview"
 
 msgid "PAYROLL_PREVIEW_NOTE"
 msgstr "Payroll is not charged yet. This preview preserves the original shared-index calculation; the live calendar is still being reconstructed."
+
+msgid "RESUME"
+msgstr "Resume"

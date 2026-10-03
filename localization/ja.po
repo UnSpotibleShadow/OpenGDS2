@@ -811,3 +811,6 @@ msgstr "原作の給与計算プレビュー"
 
 msgid "PAYROLL_PREVIEW_NOTE"
 msgstr "給与の支払いはまだ実行されません。原作の共有インデックスによる計算を表示しています。実際のカレンダー進行は再構築中です。"
+
+msgid "RESUME"
+msgstr "再開"
