@@ -73,9 +73,21 @@ Immediate stress relief (identifier 5) uses
 
 ## Explicitly unresolved
 
-Speed boost (identifier 4) and stress relief level 3 remain disabled. The speed
-branch writes 50/100/150 to workspace member 2A48, but its scratch-cell behavior,
-lifetime and interaction with ordinary work still need tracing. The level-three
+Speed boost (identifier 4) and stress relief level 3 remain disabled. M30 extends
+the bounded speed trace: the use handler writes 50/100/150 for learned levels
+1/2/3 to workspace member 2A48 / global A13A64, at offsets +076B/+079E/+07D1.
+The main-loop block +AF91..B01C requires active-application A139A0 = 1 and
+technology identifier 4 through A13A48 → definition A12638. It sets work tier
+A14530 to 4, subtracts one from A13A64, and clears both the active flag and duration
+when the result is <= 0. This establishes an eligible-pass countdown, not a
+speed multiplier or a wall-clock duration. Original save/load/reset procedures
+also reference this cell; their complete layouts remain unresolved.
+
+The source-index/scratch mapping and interaction of tier 4 with ordinary work,
+shared work counters, expiry and cancellation still need tracing. The public
+bounded verifier checks the duration writes, pool identities, identifier guard,
+decrement and expiry stores. No guessed multiplier or live speed effect is enabled.
+The level-three
 stress branch uses local 4CFD/workspace-source mapping instead of the selected
 employee index. No assignment to that local was found in this handler; its actual
 runtime target must be established before enabling it.

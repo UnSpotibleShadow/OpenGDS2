@@ -50,6 +50,16 @@ unresolved correspondence between every original icon and VB6 click handler.
 
 ## Validation
 
+M30 additionally persists English/Japanese selection in `user://interface.cfg`.
+This preference is outside the simulation save and cannot alter game rules.
+Restart checks verify that Japanese remains selected. The original artwork was
+reviewed locally to correct earlier associations: Save uses bitmap 15, Load 14,
+Staff 7, License 9, Software/Sales 6 and Management 8. Development, the calendar
+inspector and returning to the title use authored pictograms because an original
+counterpart has not been established. Original click-handler equivalence remains
+unproven. The private UI suite compares displayed pixels against the intended
+locally imported bitmap without publishing any original pixels.
+
 Local direct C# compilation passes. All 27 Python checks pass with the private
 original fixture (19 public checks; eight optional original checks). Public checks
 verify unique/matching localization keys and all 91 new English catalog entries.

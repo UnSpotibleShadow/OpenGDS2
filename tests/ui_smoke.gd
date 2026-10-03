@@ -50,7 +50,14 @@ func run() -> void:
     await press("日本語")
     check(TranslationServer.get_locale() == "ja", "Japanese setting")
     check(tr("DEVELOPMENT_COMPUTERS") == "開発パソコン", "Japanese computer translation loaded")
-    await press("BACK_TO_TITLE")
+    var preferences := ConfigFile.new()
+    check(preferences.load("user://interface.cfg") == OK and preferences.get_value("language","locale") == "ja","Language preference is saved outside simulation state")
+    main.queue_free()
+    await process_frame
+    main = load("res://scenes/Main.tscn").instantiate()
+    root.add_child(main)
+    await process_frame
+    check(TranslationServer.get_locale() == "ja","Japanese language survives restart")
     await press("SETTINGS")
     await press("English")
     check(tr("HARDWARE_LICENSES") == "Hardware Licenses", "English license translation loaded")
@@ -90,6 +97,10 @@ func run() -> void:
         check(main.find_child(name,true,false) != null,"Original desktop window: " + name)
     check(main.find_child("OriginalDesktopWallpaper",true,false) != null,"Imported original desktop wallpaper")
     check(main.find_child("ToolbarSAVE_GAME",true,false).icon != null,"Original toolbar save icon is loaded")
+    for mapping in [["SAVE_GAME",15],["LOAD_GAME",14],["STAFF",7],["HARDWARE_LICENSES",9],["SALES",6],["COMPANY_ACTIVITIES",8]]:
+        var expected = Image.load_from_file("user://original/Graphic/Embedded/Toolbar%d.bmp" % mapping[1])
+        var displayed = main.find_child("Toolbar" + mapping[0],true,false).icon.get_image()
+        check(displayed.get_data() == expected.get_data(),"Toolbar action uses the intended local bitmap: " + mapping[0])
     check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
     check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
