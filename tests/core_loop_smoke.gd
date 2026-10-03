@@ -171,10 +171,12 @@ func run() -> void:
     if not await await_node("SelectType0"):
         quit(1)
         return
-    check(main.find_child("SelectType0",true,false).text.begins_with(tr("CATALOG_TYPE_0")),"Type selection uses English catalog labels")
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(checkpoint.State.DevelopmentProjects[0].PendingDecision == 0,"Type checkpoint persisted")
+    var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
+    for index in range(offered_types.size()):
+        check(main.find_child("SelectType%d" % index,true,false).text.begins_with(tr("CATALOG_TYPE_%d" % offered_types[index])),"Each randomized type label matches its saved source ID")
     # Reload checkpoint through the actual office controls before selecting.
     await press("LOAD_GAME")
     await await_node("SelectType0")
