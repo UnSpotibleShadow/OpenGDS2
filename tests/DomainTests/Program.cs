@@ -367,15 +367,17 @@ Test("technology use spends experience without requiring company ownership",()=>
     p.PendingDecision=null;p.TechnologyApplicationCounts=null;
     Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.StateUnknown);
 });
-Test("timed technology uses the shared 20 then 19 tick cadence and survives reload",()=>
+Test("timed technology uses both source increments: first unit 11 passes, subsequent units 10",()=>
 {
     var (s,e,c,p)=UseFixture();Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[0])==TechnologyApplicationResult.Success);
-    for (int tick=0;tick<19;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
-    Check(e.Office!.WorkTicks==20 && e.Office.WorkTier==4 && e.Office.TechnologyApplication!.RemainingUnits==2 && p.DataSize==101.9);
+    for (int tick=0;tick<9;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office!.WorkTicks==19 && e.Office.WorkTier==4 && e.Office.TechnologyApplication!.RemainingUnits==2);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==21 && e.Office.TechnologyApplication!.RemainingUnits==2 && p.DataSize==101.9);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];p=s.DevelopmentProjects[0];
-    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office!.WorkTicks==2 && e.Office.TechnologyApplication!.RemainingUnits==1);
-    for (int tick=0;tick<18;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
-    Check(e.Office.WorkTicks==20 && p.DataSize==101.9);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office!.WorkTicks==3 && e.Office.TechnologyApplication!.RemainingUnits==1);
+    for (int tick=0;tick<9;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==21 && e.Office.TechnologyApplication!.RemainingUnits==1 && p.DataSize==101.9);
     DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
     Check(e.Office.TechnologyApplication is null && e.Office.WorkTicks==0 && p.DataSize==81 && e.Experience==95);
 });
@@ -387,9 +389,23 @@ Test("technology waits for an ordinary contribution then replaces further ordina
     DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
     Check(e.Office.WorkTicks==0 && p.Quality.Fun>before && e.Office.TechnologyApplication!.RemainingUnits==2);
     double contributed=p.Quality.Fun;
-    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTier==4 && e.Office.WorkTicks==2);
-    for (int tick=0;tick<38;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTier==4 && e.Office.WorkTicks==3);
+    for (int tick=0;tick<19;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.TechnologyApplication!.RemainingUnits==1 && p.Quality.Fun==contributed);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
     Check(e.Office.TechnologyApplication is null && p.Quality.Fun==contributed && e.Experience==95);
+});
+Test("saved even technology counters cross the threshold and apply exactly once",()=>
+{
+    var (s,e,c,p)=UseFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);
+    e.Office!.WorkTier=4;e.Office.WorkTicks=20;
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];p=s.DevelopmentProjects[0];
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office!.WorkTicks==3 && e.Office.TechnologyApplication!.RemainingUnits==1 && p.DataSize==101.9);
+    for (int tick=0;tick<10;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.TechnologyApplication is null && e.Office.WorkTicks==0 && p.DataSize==81);
+    for (int tick=0;tick<10;tick++) DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.DataSize==81 && p.TechnologyApplicationCounts![0]==1 && e.Experience==95);
 });
 Test("technology pauses away from desks and cancels when its room is empty",()=>
 {

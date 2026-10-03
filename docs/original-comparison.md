@@ -1,7 +1,8 @@
-# Original / OpenGDS2 comparison — M32
+# Original / OpenGDS2 comparison — M32–M33
 
 This audit compares the supplied GameDev2DX distribution and original desktop
 screenshot with OpenGDS2 through M31, then records the first correction in M32.
+M33 then corrects timed technology cadence from the same source comparison.
 The executable is the supported hash in `source-hashes.txt`. Original files,
 extracted images, catalog tables and full procedure traces remain local.
 
@@ -80,15 +81,29 @@ field; it is a visual notification. The actual work tier is A138A4. Notification
 speed multiplier. The speed idle-state local also has a bypassed assignment;
 its lifetime still requires tracing. See [technology-application.md](technology-application.md).
 
+## M33 correction: technology work timing
+
+The eligible technology branch increments the shared work counter twice per
+pass. Ordinary work skips its first increment. M18 had implemented only the
+common increment and documented 20/19 passes per unit. The complete branch
+trace establishes 11 passes for the first unit from idle and ten thereafter.
+M33 restores the missing technology-only increment while preserving ordinary
+work and the original pre-increment >=20 threshold. Regression coverage checks
+threshold crossing without early application, reloads, even-valued prior-save
+counters, ordinary-work handoff and exactly-once effect/experience charges.
+See [technology-application.md](technology-application.md#work-cadence).
+
 ## Validation
 
-Local direct compilation, 140 C# checks (138 public, two original fixtures),
+M32 local direct compilation, 140 C# checks (138 public, two original fixtures),
 all 27 Python checks (19 public, eight original fixtures), the imported-original
 UI suite and the complete core-loop UI suite pass. Added coverage includes
 inclusive hit-box edges, overlap order, moving/seated coordinates, unknown
 workspaces, actual office input with image scaling/letterboxing, row activation,
 unchanged funds/progression and management pause behavior. Standard SDK/export
-validation is recorded in [validation.md](validation.md).
+validation is recorded in [validation.md](validation.md). M33 passes local
+compilation, 141 C# checks (139 public plus two original fixtures), all 27
+Python checks and both Godot UI suites.
 
 This audit is a work queue, not a completion claim. Unknown mechanics remain
 explicitly unresolved; imported originals and private QA images are excluded

@@ -1,25 +1,21 @@
-# Development checkpoint — M32 continuation, 2026-10-03
+# Development checkpoint — M33 continuation, 2026-10-03
 
-Local execution has recovered. M31 private-original reruns and M32
-interaction checks pass: 140 C# tests, 27 Python checks and both Godot UI
-suites. M32 connects employee selection and documents the original/current
-comparison; see [original-comparison.md](original-comparison.md).
-Standard SDK/export checks are pending for M32.
-
-## Previously tested source and packages
-
-The M31 checkpoint includes M28–M31. Its implementation commit is
-`c007c45bcd9c97d8a9c70638a90105494fe6167f` (M31, PR #23). The corresponding M31 checkpoint changed
-only documentation. The tested PR head is
-`faaa372e9d35e52feb93c4ce120c24244cf6925d`.
-
-[Validate run 37146196040](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37146196040)
-passed domain, Godot, desktop export and native Windows desktop jobs: 134 public
-C# checks, 19 public Python checks, zero standard-build warnings/errors, and
-zero failures in the UI and complete development/release/sales fixtures.
+Local execution and original-data tracing have recovered. The published M32
+comparison and employee-selection implementation is
+`91eed94096c1f88f3b46f20546e1414d9afcb918` (PR #25). All four jobs passed in
+[Validate run 37153643487](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37153643487).
 Download **OpenGDS2-desktop-development** from that run for Linux/Windows x86_64.
-The artifact expires on 2026-10-17; it can be rebuilt using the committed workflow.
+Its artifact expires on 2026-10-17 and can be rebuilt from the workflow.
 Original LZH importing remains required to start a company.
+
+M33 restores the second, technology-only work-counter increment. Its bounded
+branch trace establishes 11 eligible passes for the first unit and ten thereafter;
+ordinary work keeps its existing cadence. Local compilation, 141 C# checks
+(139 public plus two original fixtures) and all 27 Python checks pass.
+Both Godot UI suites pass, including the imported-original office suite.
+Standard SDK/export checks are pending for M33.
+See [original-comparison.md](original-comparison.md) and
+[technology-application.md](technology-application.md#work-cadence).
 
 ## Delivered changes
 
@@ -51,15 +47,14 @@ fixtures have now passed after execution resumed for M32. Supplied-binary
 tracing is available again. No unknown compatibility mechanic was
 substituted to work around that limitation.
 
-GitHub main is the authoritative published checkpoint. The previous local
-checkout has independent commits and uncommitted M30 changes; M31 was authored
-remotely. Reconcile histories and working changes before the next local build.
+GitHub main is the authoritative published checkpoint. The independent local
+checkout has been reconciled with M30–M32; prior local versions were backed up
+before replacement. Preserve this distinction when synchronizing git histories.
 Do not discard local original files, bounded traces or user imports, and do not
 publish them. No original executables, bitmaps, LZH files, imported catalogs,
 whole disassemblies or private saves were added to the project.
 
-Resume with the pending private-original tests, then targeted original runtime
-comparison and tracing of the periodic calendar body and its shared scratch
-writers. Preserve the established distinction between verified isolated rules
+Continue with targeted original runtime comparison when available, and tracing
+of the periodic calendar body and its shared scratch writers. Preserve the established distinction between verified isolated rules
 and unresolved live scheduling. Translation work should next establish name
 readings and local-only bitmap patch behavior without guessing identities.

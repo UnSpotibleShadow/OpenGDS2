@@ -64,6 +64,20 @@ def verify(data):
     require(0x9A98E8,0x0373,'a7 02 00 06 00 00 fb 9c 3c ff 05 00 00 fc 22 05 05 00 52')
     require(0xA0283C,0x6A9E,'28 6c ff 01 00 6b 48 ff e7 05 2c 00 52')
     require(0xA0283C,0x6AAB,'6b 48 ff e7 05 7b 00 fc 96 28 6c ff 01 00 fb 9c 2c ff')
+    # Timed technology has TWO increments, ordinary work only the common
+    # second one. Verify the branch bypass, threshold, both complete blocks
+    # and tier guard, rather than inferring elapsed time from a reset alone.
+    for index,value in [(0x2C,0xA13888),(0x18,0xA138A4),(0x31,0xA149B8)]:
+        if pe.u32(0x5F99AC+index*4)!=value:raise ParseError('Work cadence pool mapping changed')
+    require(0xA0283C,0x5E4E,'28 6c ff 01 00 6b 48 ff e7 05 2c 00 52 28 6c ff 04 00 6b 48 ff e7 05 18 00 52')
+    require(0xA0283C,0x66D8,'1c b0 88')
+    require(0xA0283C,0x6A84,'6b 48 ff e7 05 2c 00 fc 96 28 6c ff 0a 00 05 31 00 fb b4 2c ff fb 5a 1c 7f 88')
+    require(0xA0283C,0x6B5F,'6b 48 ff e7 05 7b 00 fc 96 28 6c ff 00 00 5d fb 4d 1c 7f 88')
+    require(0xA0283C,0x8865,'28 6c ff 00 00 6b 48 ff e7 05 2c 00 52')
+    for offset,target in [(0x887F,'b0 88'),(0x9C15,'46 9c')]:
+        require(0xA0283C,offset,'6b 48 ff e7 05 2c 00 fc 96 28 6c ff 01 00 5d fb 5a 1c '+target+
+                ' 6b 48 ff e7 05 2c 00 fc 96 28 6c ff 01 00 fb 94 2c ff 6b 48 ff e7 05 2c 00 52 35 2c ff')
+    require(0xA0283C,0x88F3,'1c 15 9c')
     # Shared production B0: fresh Empty, both shipments set 1, weekly reset 0.
     require(0x9DD234,0x005A,'fc 67 6c ff fd e6 08 00 b0 00')
     require(0x9C9CB8,0x01BC,'28 6c ff 01 00 fd b6 0e 00')

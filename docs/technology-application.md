@@ -29,13 +29,24 @@ counter is zero. An existing ordinary contribution can finish before technology
 work begins. Ordinary new contributions are suppressed during supported timed
 applications; ordinary animation, stress and break logic continue.
 
-At shared work tick 20 (`+6A8A..6AC4`), the application counter decreases by one.
-The work counter resets to 1 and then receives the common end-of-block increment.
-The first unit takes 20 ticks and subsequent units take 19 ticks. No ordinary
-contribution or invented experience reward is produced by technology work.
+At shared work counter >=20 (`+6A84..6AC4`, 10 times the original timing
+factor 2), the application counter decreases by one and work resets to 1.
+M33 corrects M18's elapsed-time interpretation: the eligible technology path
+increments work at `+887F..88AD`, then receives a second common increment at
+`+9C15..9C43`. Ordinary work bypasses the first block through `+66D8` and
+retains its existing cadence. Tier 4 skips ordinary contributions at `+88F3`.
+
+Starting from zero, technology sets work to 1, then ends its first pass at 3.
+The tenth pass ends at 21 without consuming a unit, because the threshold is
+checked before both increments. The eleventh consumes the first unit; a
+nonfinal reset ends that pass at 3. Each later unit takes ten eligible passes.
+This replaces the incorrect 20/19-pass schedule. No ordinary contribution or
+invented experience reward is produced by technology work. Existing even-valued
+modern save counters still work because the original comparison is >=, not ==.
 
 At zero remaining units, the effect applies, its project counter increments,
-and the active flag/shared work counter clear (`+881D..88AC`). When a seated
+and the active flag/shared work counter clear (`+881D..887E`), so neither
+increment revives a completed application. When a seated
 worker's room has no project, `+4886..48EA` cancels the pending application.
 Dismissal removes the workspace. Release and subsequent room processing cannot
 carry a canceled application into another project.
