@@ -20,7 +20,7 @@ company progression and regression coverage. M13 implements the own-game core lo
 | Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; recover meeting/work animations, pointer interaction and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
 | Localization | Current usable UI bilingual; M24 removes a bundled original default president-name literal | Recover that default through local import, translate each new screen and validate Japanese glyph rendering across desktops |
-| Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 128 public C# checks plus two local original-fixture checks pass at M26 | Graphical usability and original Windows behavioral comparison remain |
+| Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 130 public C# checks pass at M27; two local original-fixture checks last passed at M26 | Graphical usability and original Windows behavioral comparison remain |
 
 Unknown mechanics must remain disabled or nullable. The calendar inspector and
 modern save validation are modern infrastructure, not replacements for missing
