@@ -351,42 +351,58 @@ public partial class Main : Control
         catch (OverflowException) { salaryTotal=null; }
         _content.AddChild(new Label {Name="StaffSalaryTotal",
             Text=$"{Tr("MONTHLY_SALARY_TOTAL")}: {salaryTotal?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
-        foreach (var employee in state.Employees)
-        {
-            var panel = AddEmployeeCard(employee);
-            panel.AddChild(new Label {Name=$"MonthlySalary{employee.SourceIndex}",
-                Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
-            var dismiss=new Button {Name=$"DismissEmployee{employee.SourceIndex}",Text=Tr("DISMISS_EMPLOYEE"),Disabled=employee.SourceIndex is null};
-            dismiss.Pressed+=()=>ShowDismissEmployee(state,employee);panel.AddChild(dismiss);
-            string threshold = employee.Level is >= 1 and <= 10
-                ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
-            panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});
-            panel.AddChild(new Label {Text=$"{Tr("STRESS")}: {employee.Stress?.ToString("0.0") ?? Tr("NOT_YET_DECODED")}"});
-            if (employee.Office is OfficeEmployeeState workspace)
-            {
-                panel.AddChild(new Label {Text=workspace.Action is >=6 and <=17
-                    ? $"{Tr("DEVELOPMENT_ROOM")} {(workspace.Action-6)/6+1} / {Tr("DESK")} {(workspace.Action-6)%6+1}"
-                    : workspace.Action is >=1 and <=5 ? $"{Tr("STUDY_SEAT")} {workspace.Action}" : Tr("LOUNGE")});
-                AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
-                AddAction("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _importer.LoadCatalog()?.Technologies.Count>0);
-                AddAction("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(x=>x.Value>0)==true);
-                AddAction("TAKE_BREAK",()=>
-                {
-                    var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());
-                    if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
-                    else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
-                },workspace.Action is >=1 and <=17);
-            }
-            if (employee.SourceIndex is int source)
-                AddAction("LEVEL_UP", () =>
-                {
-                    var random = new Random();
-                    var result = EmployeeLevelUpService.TryLevelUp(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
-                    ShowStaff(state);
-                    if (result != LevelUpResult.Success) AddHeading(Tr("LEVEL_UP_FAILED") + " " + Tr($"LEVEL_UP_RESULT_{result}"), 16);
-                }, employee.Level is >= 1 and < 10 && employee.Experience >= EmployeeLevelUpService.RequiredExperience(employee.Level.Value));
-        }
+        foreach (var employee in state.Employees) AddStaffEmployeeControls(state,employee);
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
+    }
+
+    private void ShowEmployeeDetails(GameState state,EmployeeState employee)
+    {
+        if (!state.Employees.Contains(employee)) return;
+        ClearContent();
+        _dialog?.SetTitle(employee.Name);
+        AddHeading(Tr("STAFF"),30);
+        var selected=AddStaffEmployeeControls(state,employee);
+        selected.Name="SelectedEmployee";
+        selected.SetMeta("employee_source",employee.SourceIndex ?? -1);
+        AddAction("STAFF",()=>ShowStaff(state));
+        AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
+    }
+
+    private VBoxContainer AddStaffEmployeeControls(GameState state,EmployeeState employee)
+    {
+        var panel = AddEmployeeCard(employee);
+        panel.AddChild(new Label {Name=$"MonthlySalary{employee.SourceIndex}",
+            Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
+        var dismiss=new Button {Name=$"DismissEmployee{employee.SourceIndex}",Text=Tr("DISMISS_EMPLOYEE"),Disabled=employee.SourceIndex is null};
+        dismiss.Pressed+=()=>ShowDismissEmployee(state,employee);panel.AddChild(dismiss);
+        string threshold = employee.Level is >= 1 and <= 10
+            ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
+        panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});
+        panel.AddChild(new Label {Text=$"{Tr("STRESS")}: {employee.Stress?.ToString("0.0") ?? Tr("NOT_YET_DECODED")}"});
+        if (employee.Office is OfficeEmployeeState workspace)
+        {
+            panel.AddChild(new Label {Text=workspace.Action is >=6 and <=17
+                ? $"{Tr("DEVELOPMENT_ROOM")} {(workspace.Action-6)/6+1} / {Tr("DESK")} {(workspace.Action-6)%6+1}"
+                : workspace.Action is >=1 and <=5 ? $"{Tr("STUDY_SEAT")} {workspace.Action}" : Tr("LOUNGE")});
+            AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
+            AddAction("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _importer.LoadCatalog()?.Technologies.Count>0);
+            AddAction("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(x=>x.Value>0)==true);
+            AddAction("TAKE_BREAK",()=>
+            {
+                var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());
+                if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
+                else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
+            },workspace.Action is >=1 and <=17);
+        }
+        if (employee.SourceIndex is int source)
+            AddAction("LEVEL_UP", () =>
+            {
+                var random = new Random();
+                var result = EmployeeLevelUpService.TryLevelUp(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
+                ShowStaff(state);
+                if (result != LevelUpResult.Success) AddHeading(Tr("LEVEL_UP_FAILED") + " " + Tr($"LEVEL_UP_RESULT_{result}"), 16);
+            }, employee.Level is >= 1 and < 10 && employee.Experience >= EmployeeLevelUpService.RequiredExperience(employee.Level.Value));
+        return panel;
     }
 
     private void ShowCalendar(GameState state)

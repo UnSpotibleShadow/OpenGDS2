@@ -1,9 +1,15 @@
-# Development checkpoint — 2026-10-03
+# Development checkpoint — M32 continuation, 2026-10-03
 
-## Tested source and packages
+Local execution has recovered. M31 private-original reruns and M32
+interaction checks pass: 140 C# tests, 27 Python checks and both Godot UI
+suites. M32 connects employee selection and documents the original/current
+comparison; see [original-comparison.md](original-comparison.md).
+Standard SDK/export checks are pending for M32.
 
-Main includes M28–M31. The final implementation commit is
-`c007c45bcd9c97d8a9c70638a90105494fe6167f` (M31, PR #23). This checkpoint changes
+## Previously tested source and packages
+
+The M31 checkpoint includes M28–M31. Its implementation commit is
+`c007c45bcd9c97d8a9c70638a90105494fe6167f` (M31, PR #23). The corresponding M31 checkpoint changed
 only documentation. The tested PR head is
 `faaa372e9d35e52feb93c4ce120c24244cf6925d`.
 
@@ -37,12 +43,12 @@ events, bankruptcy, awards, office upgrades, polishing and external workflows
 remain incomplete. Consultation entry costs/timing and original-save compatibility
 also require further evidence. See [remaining-work.md](remaining-work.md).
 
-## Execution and safe resumption
+## Historical disconnection and safe resumption
 
 The local execution service disconnected after M30's local compilation,
-original-import UI and Python evidence checks. M31 was tested in GitHub Actions;
-its optional private-original fixtures were not rerun. Further supplied-binary
-tracing needs local execution restored. No unknown compatibility mechanic was
+original-import UI and Python evidence checks. M31 was initially tested in GitHub Actions. Its optional private-original
+fixtures have now passed after execution resumed for M32. Supplied-binary
+tracing is available again. No unknown compatibility mechanic was
 substituted to work around that limitation.
 
 GitHub main is the authoritative published checkpoint. The previous local

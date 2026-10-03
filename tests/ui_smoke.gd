@@ -183,6 +183,39 @@ func run() -> void:
                 check(saved.State.DevelopmentComputerIndex == (1 if not fixture.is_empty() else 0), "Computer upgrade persisted")
                 check(saved.State.HardwareLicenses.size() == (2 if not fixture.is_empty() else 1), "Hardware license persisted")
             await press("LOAD_GAME")
+            if saved != null and saved.State.Employees.size() == 1:
+                # Pause movement before testing actual office-input binding.
+                var pause = main.find_child("TogglePause",true,false)
+                pause.pressed.emit()
+                await press("SAVE_GAME")
+                var frozen = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+                var office_image = main.find_child("OriginalOfficeBackground",true,false)
+                var workspace = frozen.State.Employees[0].Office
+                var pixel = Vector2(workspace.X+workspace.OffsetX+8,workspace.Y+workspace.OffsetY+16)
+                var event := InputEventMouseButton.new()
+                event.button_index = MOUSE_BUTTON_RIGHT
+                event.pressed = true
+                event.position = pixel
+                office_image.gui_input.emit(event)
+                check(main.find_child("SelectedEmployee",true,false) == null,"Unreconstructed right-click assignment remains unavailable")
+                event.button_index = MOUSE_BUTTON_LEFT
+                event.position = Vector2.ZERO
+                office_image.gui_input.emit(event)
+                check(main.find_child("SelectedEmployee",true,false) == null,"Blank office pixels do not open employee controls")
+                # KeepAspectCentered input must account for letterboxing and scale.
+                office_image.size = Vector2(932,600)
+                event.position = pixel*2+Vector2(0,10)
+                office_image.gui_input.emit(event)
+                await process_frame
+                var selected = main.find_child("SelectedEmployee",true,false)
+                check(selected != null and selected.get_meta("employee_source") == saved.State.Employees[0].SourceIndex,"Office click opens the hit employee at scaled coordinates")
+                await press("SAVE_GAME")
+                var focused_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+                check(focused_save.State.CompanyActivityTicks == frozen.State.CompanyActivityTicks,"Selected employee controls pause simulation")
+                check(focused_save.State.Money == frozen.State.Money and focused_save.State.Employees[0].Experience == frozen.State.Employees[0].Experience,"Selecting a visible employee does not charge funds or progression")
+                await press("CANCEL")
+                office_image.size = Vector2(466,290)
+                pause.pressed.emit()
             if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
                 # Dummy headless rendering does not expose texture.Update pixel
                 # changes through get_image. Reload forces fresh composition.

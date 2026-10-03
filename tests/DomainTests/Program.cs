@@ -12,6 +12,48 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("office employee selection uses inclusive original sprite inset", () =>
+{
+    var state=new GameState();
+    var employee=new EmployeeState {Name="Synthetic worker",Office=new() {X=100,Y=50,SlotIndex=0}};
+    state.Employees.Add(employee);
+    foreach (var point in new[] {(102d,52d),(114d,80d),(108d,66d)})
+        Check(ReferenceEquals(OfficeInteractionRules.EmployeeAt(state,point.Item1,point.Item2),employee));
+    foreach (var point in new[] {(101.99,52d),(114.01,80d),(108d,51.99),(108d,80.01)})
+        Check(OfficeInteractionRules.EmployeeAt(state,point.Item1,point.Item2) is null);
+});
+Test("office selection follows workspace order rather than paint depth or roster order", () =>
+{
+    var state=new GameState();
+    var first=new EmployeeState {Name="First workspace",Office=new() {SlotIndex=1,X=100,Y=50}};
+    var last=new EmployeeState {Name="Later workspace",Office=new() {SlotIndex=7,X=100,Y=50,DepthAdjustment=100}};
+    state.Employees.Add(last);state.Employees.Add(first);
+    Check(ReferenceEquals(OfficeInteractionRules.EmployeeAt(state,108,66),first));
+    first.Office.X=200;
+    Check(ReferenceEquals(OfficeInteractionRules.EmployeeAt(state,108,66),last));
+});
+Test("office selection tracks walking coordinates and seated visual offsets without mutation", () =>
+{
+    var state=new GameState();
+    var employee=new EmployeeState {Name="Synthetic worker",Office=new() {SlotIndex=0,X=100,Y=50,OffsetX=-4,OffsetY=2}};
+    state.Employees.Add(employee);
+    Check(ReferenceEquals(OfficeInteractionRules.EmployeeAt(state,98,54),employee));
+    Check(OfficeInteractionRules.EmployeeAt(state,114,66) is null);
+    employee.Office.X=104;employee.Office.Y=52;employee.Office.OffsetX=employee.Office.OffsetY=0;
+    Check(ReferenceEquals(OfficeInteractionRules.EmployeeAt(state,106,54),employee));
+    Check(employee.Office.X==104 && employee.Office.Y==52 && state.Money is null);
+});
+Test("unknown workspaces and nonfinite office pointers cannot select an employee", () =>
+{
+    var state=new GameState();state.Employees.Add(new() {Name="Legacy unknown"});
+    Check(OfficeInteractionRules.EmployeeAt(state,0,0) is null);
+    state.Employees.Add(new() {Name="Synthetic worker",Office=new()});
+    foreach (double value in new[] {double.NaN,double.PositiveInfinity,double.NegativeInfinity})
+    {
+        Check(OfficeInteractionRules.EmployeeAt(state,value,60) is null);
+        Check(OfficeInteractionRules.EmployeeAt(state,135,value) is null);
+    }
+});
 Test("modern saves validate progression in inactive source records too", () =>
 {
     var state = new GameState { Company = new() { Name = "Test", PresidentName = "Tester" } };

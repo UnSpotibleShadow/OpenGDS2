@@ -128,10 +128,12 @@ public partial class Main
         var texture = (Texture2D?)_officeTexture ?? OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
         if (texture is not null)
         {
-            office.Body.AddChild(new TextureRect { Name = "OriginalOfficeBackground", Texture = texture,
+            var officeImage = new TextureRect { Name = "OriginalOfficeBackground", Texture = texture,
                 TextureFilter = TextureFilterEnum.Nearest, ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
                 StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2(466, 290) });
+                CustomMinimumSize = new Vector2(466, 290), TooltipText = Tr("OFFICE_EMPLOYEE_HELP") };
+            officeImage.GuiInput += input => OnOfficeInput(state,officeImage,input);
+            office.Body.AddChild(officeImage);
         }
         else office.Body.AddChild(new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(186, 318));
@@ -159,13 +161,42 @@ public partial class Main
         OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
             "SHORT_MUSIC", "SHORT_ACCURACY", "SHORT_SPEED", "SHORT_INSPIRATION", "SHORT_EXPERIENCE"], [86, 32, 22, 22, 22, 22, 22, 22, 22, 50]);
-        staff.Body.AddChild(_staffTable); _staffTable.ItemActivated += () => ShowStaff(state);
+        staff.Body.AddChild(_staffTable); _staffTable.ItemActivated += () =>
+        {
+            if (_dialog is not null) return;
+            var selected = _staffTable.GetSelected();
+            if (selected is null) return;
+            int index = _staffRows.IndexOf(selected);
+            if (index >= 0 && index < state.Employees.Count) ShowEmployeeDetails(state,state.Employees[index]);
+        };
         var products = ChildWindow("ProductWindow", Tr("PRODUCT_WINDOW"), new Vector2(30, 356), new Vector2(390, 150));
         _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [150, 65, 70, 70]);
         products.Body.AddChild(_productTable); _productTable.ItemActivated += () => ShowSales(state);
         _desktopStatus = new Label { Name = "OfficeStatus", CustomMinimumSize = new Vector2(0, 22), ClipText = true };
         layout.AddChild(_desktopStatus);
         RefreshDesktop();
+    }
+
+    private void OnOfficeInput(GameState state,TextureRect image,InputEvent input)
+    {
+        if (image.Texture is null || _dialog is not null) return;
+        Vector2 position;
+        if (input is InputEventMouseButton button) position = button.Position;
+        else if (input is InputEventMouseMotion motion) position = motion.Position;
+        else return;
+        Vector2 native = image.Texture.GetSize();
+        float scale = Math.Min(image.Size.X/native.X,image.Size.Y/native.Y);
+        if (scale <= 0) return;
+        Vector2 offset = (image.Size-native*scale)/2;
+        Vector2 pixel = (position-offset)/scale;
+        if (pixel.X < 0 || pixel.Y < 0 || pixel.X >= native.X || pixel.Y >= native.Y) return;
+        var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
+        image.MouseDefaultCursorShape = employee is null ? CursorShape.Arrow : CursorShape.PointingHand;
+        if (employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
+        {
+            image.AcceptEvent();
+            ShowEmployeeDetails(state,employee);
+        }
     }
 
     private void Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)

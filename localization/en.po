@@ -5,6 +5,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "OFFICE_EMPLOYEE_HELP"
+msgstr "Click an employee in the office to manage them."
+
 msgid "APP_TITLE"
 msgstr "OpenGDS2"
 

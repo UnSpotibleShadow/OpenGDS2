@@ -1,5 +1,16 @@
-# Validation — M31 desktop checkpoint
+# Validation — M32 local comparison checkpoint
 
+M32 restores employee selection in the office and from the staff table. The
+local host has recovered: direct compilation, 140 C# checks (138 public and
+two original fixtures), all 27 Python checks and both Godot UI suites pass.
+This also closes the pending M31 private-original reruns. The new original
+anchors establish inset hit bounds and first-workspace selection. UI coverage
+checks scaling/letterboxing, focused controls, unchanged funds/progression and
+paused management. A full original Windows or desktop-display comparison is
+still outstanding. See [the comparison audit](original-comparison.md).
+Standard SDK/export checks are pending for M32.
+
+## M31 desktop checkpoint
 M31 extends the existing modern employee validation to inactive source records.
 Four new public C# checks cover corrupt progression, readable-slot preservation
 and nullable unknowns. See [source-record save integrity](source-save-integrity.md).
