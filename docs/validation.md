@@ -1,4 +1,25 @@
-# Validation — M22 checkpoint
+# Validation — M24 checkpoint
+
+M24 extends the Godot core-loop fixture with manual pause/resume labels, immediate
+status refresh, paused weekly/sales clocks, screen-rebuild persistence and resumed
+clock advancement. It also removes an original default personal-name literal
+from the public company-setup screen; that default remains unavailable until a
+local import recovers it.
+
+## M23 historical checkpoint
+
+The [M23 desktop workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37121052813)
+passed 123 public C# checks, ten public Python checks, a build with zero
+warnings/errors, both editor UI suites, Linux/Windows desktop exports, and the
+complete UI fixture against extracted packages on Linux and native Windows.
+Both packaged UI runs reported zero failures. This is headless validation, not
+whole-window visual or original Windows behavioral comparison.
+
+Desktop artifacts include community runtime binaries, project notices, Godot
+license/copyright information, actual .NET runtime-pack notices and checksums.
+Original-game files and imported caches remain excluded.
+
+## M22 historical checkpoint
 
 M22 adds five public payroll-projection checks and a Godot staff-screen fixture.
 The local execution workspace disconnected after M21; M22 original-fixture and

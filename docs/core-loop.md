@@ -133,12 +133,13 @@ regression tests cover it instead of silently changing the formula.
 
 - Full calendar economics, payroll defect verification, renewal/event integration.
 - Polishing, sequels, external studios/jobs and their shipping modifiers.
-- Contests/awards, recall effects and company progression. M14 adds reviews and
-  sales milestone dialogs; see reviews-and-events.md.
+- Contests/awards and full company progression. M14 adds reviews and sales
+  milestone dialogs; M21 adds investigations and recall outcomes. See
+  reviews-and-events.md and consumer-recalls.md.
 - M16 connects company member 90/genre research; see company-activities.md.
   The earlier claim that sales
   credited genre experience was incorrect: A1301C is indexed by product. Its
-  history structure still needs reconstruction.
+  thirteen-cell weekly history and graph are implemented by M20; see sales-history.md.
 - Complete meeting, idle-break and burst icon/animation presentation.
 - Original save compatibility, seed-identical RNG and Windows behavioral comparison.
 
@@ -147,3 +148,13 @@ reprints wait for the next 200-tick budget reset. See [production-budget.md](pro
 
 The date display remains at the opening date while this isolated work/sales clock
 runs. M13 is a playable core loop, not a claim that the whole game is complete.
+
+M23 verifies the complete fixture against extracted Linux and native Windows
+desktop packages. M24 fixes the modern office Pause/Resume control: its label and
+status update immediately, and screen rebuilds retain the correct label. Manual
+pause freezes the weekly budget and sales clocks; resuming restarts them. These
+controls are runtime conveniences, separate from original simulation formulas.
+
+The public setup screen asks for both company and president names. The former
+embedded original default personal-name literal has been removed; its local-import
+recovery remains unresolved rather than substituting an invented original name.

@@ -438,5 +438,29 @@ func run() -> void:
     await press("LOAD_GAME")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.OriginalPayrollScratchIndex == 2,"Loading retains the shared salary index")
+    await press_node("TogglePause")
+    check(main.find_child("TogglePause",true,false).text == tr("RESUME"),"Paused office immediately offers Resume")
+    check(main.find_child("OfficeStatus",true,false).text.contains(tr("PAUSED")),"Pause status appears immediately")
+    await press("SAVE_GAME")
+    var pause_saved = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(main.find_child("TogglePause",true,false).text == tr("RESUME"),"Rebuilding the office retains the correct pause label")
+    Engine.time_scale = 100
+    for frame in range(20):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var pause_after_wait = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(pause_after_wait.State.CompanyActivityTicks == pause_saved.State.CompanyActivityTicks,"Manual pause freezes the shared weekly clock")
+    check(pause_after_wait.State.SalesTicks == pause_saved.State.SalesTicks,"Manual pause freezes sales")
+    await press_node("TogglePause")
+    check(main.find_child("TogglePause",true,false).text == tr("PAUSE"),"Resumed office immediately offers Pause")
+    check(not main.find_child("OfficeStatus",true,false).text.contains(tr("PAUSED")),"Resume clears pause status immediately")
+    Engine.time_scale = 100
+    for frame in range(3):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var resumed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(resumed_save.State.CompanyActivityTicks != pause_saved.State.CompanyActivityTicks,"Resume advances the clock again")
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)
