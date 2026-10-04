@@ -353,12 +353,17 @@ public partial class Main : Control
         catch (OverflowException) { salaryTotal=null; }
         _content.AddChild(new Label {Name="StaffSalaryTotal",
             Text=$"{Tr("MONTHLY_SALARY_TOTAL")}: {salaryTotal?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
-        foreach (var employee in state.Employees) AddStaffEmployeeControls(state,employee);
+        foreach (var employee in state.Employees)
+        {
+            if (CalendarService.HasPending(state)) AddHeading($"{employee.Name}: {employee.MonthlySalary:N0}",18);
+            else AddStaffEmployeeControls(state,employee);
+        }
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
     }
 
     private void ShowEmployeeDetails(GameState state,EmployeeState employee)
     {
+        if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
         if (!state.Employees.Contains(employee)) return;
         ClearContent();
         _dialog?.SetTitle(employee.Name);

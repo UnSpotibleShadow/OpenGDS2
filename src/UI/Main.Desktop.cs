@@ -211,8 +211,14 @@ public partial class Main
         menu.GetPopup().IdPressed += id => { if (DesktopActionEnabled(actions[(int)id].Key)) actions[(int)id].Action(); };
     }
 
-    private bool DesktopActionEnabled(string key) => key switch
+    private bool DesktopActionEnabled(string key)
     {
+        // Original weekly forms are modal. Modern save/load/settings remain
+        // accessible, but another action cannot mutate a suspended transaction.
+        if (_desktopState is GameState current && CalendarService.HasPending(current) &&
+            key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
+        return key switch
+        {
         "LOAD_GAME" => System.IO.File.Exists(SavePath),
         "START_GAME_DEVELOPMENT" or "DEVELOPMENT_PLANNING" or "SALES" => _activeCatalog is not null,
         "HIRE_EMPLOYEES" => _desktopState?.Recruitment.CandidateDatabaseDecoded == true,
@@ -221,7 +227,8 @@ public partial class Main
         "HARDWARE_LICENSES" => _desktopState?.AvailableHardware is not null && _desktopState.HardwareLicenses is not null,
         "COMPANY_ACTIVITIES" => _desktopState?.Company.ActivityCost is not null,
         _ => true
-    };
+        };
+    }
 
     private Button ToolbarAction(HBoxContainer parent, string key, Action action, int? icon, bool enabled = true)
     {
@@ -240,7 +247,8 @@ public partial class Main
         button.MouseExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
         button.FocusEntered += () => { _toolbarHelp = button.Text; RefreshDesktop(); };
         button.FocusExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
-        button.Pressed += () => action(); parent.AddChild(button); return button;
+        button.SetMeta("base_enabled",key=="LOAD_GAME" || enabled);
+        button.Pressed += () => {if (DesktopActionEnabled(key)) action();}; parent.AddChild(button); return button;
     }
 
     private Tree CreateTable(string name, string[] headings, int[] widths)
@@ -260,6 +268,9 @@ public partial class Main
     {
         if (_desktopState is not GameState state || _desktopFunds is null || _desktopStatus is null) return;
         if (_desktopLoad is not null) _desktopLoad.Disabled = !System.IO.File.Exists(SavePath);
+        if (_desktopPause is not null) _desktopPause.Disabled=!DesktopActionEnabled("PAUSE");
+        foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
+            button.Disabled=!button.GetMeta("base_enabled").AsBool() || !DesktopActionEnabled(button.Name.ToString()[7..]);
         _desktopFunds.Text = $"{Tr("FUNDS")}: ¥{state.Money:N0}";
         _companyMetrics["COMPANY_NAME"].Text = state.Company.Name;
         _companyMetrics["FUNDS"].Text = state.Money?.ToString("N0") ?? "?";

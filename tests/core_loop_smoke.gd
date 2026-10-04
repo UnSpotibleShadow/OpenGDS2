@@ -601,6 +601,17 @@ func run() -> void:
     write_json("user://saves/slot1.json",calendar_save)
     await press("LOAD_GAME")
     check(main.find_child("AcknowledgeCalendar",true,false) != null,"Hardware launch news opens after loading its transaction")
+    # Main-window actions cannot replace an original modal weekly decision.
+    for key in ["HIRE_EMPLOYEES","COMPANY_ACTIVITIES","STAFF","DEVELOPMENT_PLANNING"]:
+        var calendar_toolbar = main.find_child("Toolbar"+key,true,false)
+        check(calendar_toolbar.disabled,"Calendar modal disables toolbar action: "+key)
+        calendar_toolbar.pressed.emit()
+        await process_frame
+        check(main.find_child("AcknowledgeCalendar",true,false) != null,"Calendar guards direct action callbacks: "+key)
+    var staff_menu = main.find_child("MENU_STAFF",true,false).get_popup()
+    staff_menu.about_to_popup.emit()
+    check(staff_menu.is_item_disabled(0) and staff_menu.is_item_disabled(1),"Calendar modal disables employee menu actions")
+    check(main.find_child("TogglePause",true,false).disabled,"Calendar modal owns the pause state")
     Engine.time_scale = 100
     for frame in range(20):
         await process_frame
@@ -655,6 +666,29 @@ func run() -> void:
     await press("SAVE_GAME")
     var renewed_reload = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(renewed_reload.State.Money == renewed.State.Money,"Reloading the pending exhibition never repeats annual fees or salary")
+    # The uncertainty guard permits only the verified staff-list scratch writer.
+    var unknown_payroll = payroll_captured.duplicate(true)
+    var ps = unknown_payroll.State
+    ps.Year = 3
+    ps.Month = 5
+    ps.Week = 4
+    ps.CompanyActivityTicks = 0
+    ps.OriginalPayrollScratchIndex = null
+    ps.DevelopmentProjects = []
+    ps.ReleasedGames = []
+    ps.Calendar = launched.State.Calendar.duplicate(true)
+    ps.Calendar.Pending = {"ClosingDate":{"Year":3,"Month":5,"Week":4},"Phase":1,"Index":0,"Block":0}
+    write_json("user://saves/slot1.json",unknown_payroll)
+    await press("LOAD_GAME")
+    await press_node("OpenPayrollStaff")
+    check(main.find_child("StaffSalaryTotal",true,false).text.ends_with("400"),"Uncertain payroll can open the verified staff-list projection")
+    check(main.find_child("DismissEmployee1",true,false) == null and main.find_child("DismissEmployee2",true,false) == null,"Payroll resolution staff list cannot dismiss employees during the suspended transaction")
+    await press("CANCEL")
+    await press_node("RetryCalendar")
+    await press("SAVE_GAME")
+    var resolved_payroll = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(resolved_payroll.State.Calendar.Pending == null and resolved_payroll.State.Money == ps.Money-600,"Verified scratch resolution resumes the saved payroll once")
+    check(resolved_payroll.State.Month == 6 and resolved_payroll.State.Week == 1,"Resolving payroll completes the calendar rollover")
     previous_stream = null
     player = null
     main.queue_free()
