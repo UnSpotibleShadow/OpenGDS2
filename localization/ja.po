@@ -1713,3 +1713,15 @@ msgstr "顔・メッセージをクリックするか、Enterで会話を閉じ�
 
 msgid "HIRE_RESULT_ConversationPending"
 msgstr "現在の会話を閉じてください。"
+
+msgid "PLANNING_MEETING"
+msgstr "企画会議"
+
+msgid "HARDWARE_SHIPMENTS"
+msgstr "出荷台数"
+
+msgid "PLANNING_POINTS_COLUMN"
+msgstr "開発量"
+
+msgid "PLANNING_COST_COLUMN"
+msgstr "費用"
