@@ -70,7 +70,7 @@ The suffixes in this table refer to locally supplied
 | UI-07 | M39 connects verified desk interiors to a compact chooser and carries room identity into planning. Sequel/manga and original busy-window toggling remain unavailable. |
 | LOC-01 | M40 adds display-only unofficial community staff readings; Japanese/save identity retained. Pronunciation remains provisional. |
 | UI-06 | M41 restores normal hire conversations with local Japanese import and resumable modal state. Secretary reminders, event introductions and office bubbles remain open. |
-| UI-08 | M42 restores compact quote tables/totals/license guards and a separate proposal step. Hardware picture mapping and original meeting animation/dialogue remain open. |
+| UI-08 | M42 restores compact quote tables/totals/license guards and a separate proposal step; M43 adds verified local hardware pictures. Original meeting animation/dialogue remain open. |
 | UI-02 | M41 investigation still cannot reproduce the captured line; no speculative pixel changes. See sprite-artifact-investigation.md. |
 
 See [M38 changes](presentation-fixes-m38.md) and [M39 evidence](office-clicks-m39.md).

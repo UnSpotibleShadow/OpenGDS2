@@ -55,3 +55,10 @@ Other event introductions, speaker selection/RNG, secretary settings, office
 speech bubbles, timed notifications and original conversation queue persistence
 remain open. This milestone is the first playable conversation restoration,
 not completion of all original dialogue.
+
+Additional caller tracing finds Module1.46 invoked from `fMainVisual` click
+handler `009C66BC +0741` and `fGMHisyoSet` action `0097743C`.
+The secretary-hire/settings menu entries themselves open separate forms
+(`0097A20C`, `0097A254`); they are not evidence of an automatic reminder date.
+The office click region/coordinate interpretation and selected secretary
+initialization still need complete data-flow verification before wiring advice.

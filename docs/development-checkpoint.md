@@ -1,8 +1,15 @@
-# Development checkpoint — M42, 2026-10-04
+# Development checkpoint — M43, 2026-10-04
+
+M43 restores the locally imported original hardware pictures in development
+quotes, including selection changes. Local C# compilation, 206 domain checks,
+32 Python checks and both Godot suites pass. SDK/export/native Windows validation
+is pending. See [hardware picture evidence](quote-and-meeting-layout.md#m43-hardware-pictures).
+
+## Previous M42 validation
 
 M42 restores compact hardware/audience quote tables and a separate proposal step.
 Local C# compilation, 206 domain checks, 30 Python checks and both Godot suites
-pass. SDK/export/native Windows validation is pending. See
+pass. All four SDK/export/native Windows jobs passed in [run 37235186967](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37235186967). PR #36 merged as `c71552ab3b9557dbdf5efb0fa4dc280d1d6b95b7`; tested head `ce16ad92f9cd1b41ba9db664f8c750937c6553e3`. See
 [quote/meeting evidence and limits](quote-and-meeting-layout.md).
 
 ## Previous M41 validation
