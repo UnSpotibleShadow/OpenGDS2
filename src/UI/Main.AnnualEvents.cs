@@ -76,7 +76,7 @@ public partial class Main
         else AnnualButton("RevealAward","AWARD_REVEAL",()=>
         {
             if (AwardService.Reveal(state,Random.Shared)) ShowOfficeReconstruction(state);
-            else _status.Text=Tr("CALENDAR_BLOCK_PayrollUnknown");
+            else _status.Text=Tr("HIRE_RESULT_MoneyUnknown");
         });
     }
     private void ShowGraduate(GameState state,GraduateEventState graduates)
