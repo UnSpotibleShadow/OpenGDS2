@@ -81,6 +81,11 @@ public static class OriginalCatalogImporter
         {
             int pos = pe.Offset(start + hardwareCalls[index] - 0x59);
             var hardware = new HardwareDefinition { SourceIndex = index };
+            // 009874E8 arguments 48/4C -> members 10A4/10C0. The fourth
+            // record builds a concatenated description, so its prefix differs.
+            int growthPos=pe.Offset(start+hardwareCalls[index]-(index==3 ? 0x6F : 0x6E));
+            hardware.RawMembers["10C0"]=pe.Literal16(ref growthPos,index==3 ? (ushort)0xFBFC : (ushort)0xFC2C);
+            hardware.RawMembers["10A4"]=pe.Literal16(ref growthPos,index==3 ? (ushort)0xFC1C : (ushort)0xFD2C);
             foreach (string member in members)
             {
                 if (member is "1034" or "0EE4")

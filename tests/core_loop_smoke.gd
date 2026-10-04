@@ -77,7 +77,7 @@ func run() -> void:
     var raw_type := {"1378":5,"1308":10,"13B0":1,"12EC":3}
     var catalog := {
         "SchemaVersion":1,"SourceHash":"4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
-        "Hardware":[{"SourceIndex":0,"Name":"Synthetic Hardware","RawMembers":{"0F00":8,"0FE0":20,"0FFC":10,"0EC8":0,"1050":40},
+        "Hardware":[{"SourceIndex":0,"Name":"Synthetic Hardware","RawMembers":{"0F00":8,"0FE0":20,"0FFC":10,"0EC8":0,"1050":40,"0F54":15,"10A4":0,"10C0":0},
             "ProductionBands":[{"SizeThreshold":16,"UnitCost":300},{"SizeThreshold":32,"UnitCost":700},{"SizeThreshold":48,"UnitCost":1200},{"SizeThreshold":64,"UnitCost":1800}]}],
         "Audiences":[{"SourceIndex":0,"Name":"Synthetic Audience","RawMembers":{"14A8":1,"1454":10,"148C":20}}],
         "DevelopmentComputers":[{"SourceIndex":0,"Name":"Synthetic Computer","BitWidth":8}],
@@ -579,6 +579,82 @@ func run() -> void:
     check(player.stream == previous_stream,"Playlist wraps after all eight local tracks")
     await press("BACK_TO_OFFICE")
     check(main.find_child("DesktopEmployeeTable",true,false).get_root().get_child_count() == 2,"Desktop table refreshes after management")
+    # Calendar fixtures exercise actual modal controls, persistence and the
+    # resumed payroll branch. No original records or assets are published.
+    var calendar_save = payroll_captured.duplicate(true)
+    var cs = calendar_save.State
+    cs.Year = 3
+    cs.Month = 5
+    cs.Week = 2
+    cs.CompanyActivityTicks = 0
+    cs.Employees = []
+    cs.EmployeeSources = []
+    cs.DevelopmentProjects = []
+    cs.ReleasedGames = []
+    cs.AvailableHardware = []
+    cs.Calendar = {"HardwareStage":1,"ShipmentsSinceHardwareTrigger":0,
+        "Hardware":[{"SourceIndex":0,"Availability":0,"LaunchWeeks":0,"RetirementWeeks":0,"Market":40,"GrowthWeeks":0,"GrowthBoost":0}],
+        "Loans":[{"OriginalType":0},{"OriginalType":0},{"OriginalType":0}],
+        "Tenants":[{"OriginalState":0,"Weeks":0},{"OriginalState":0,"Weeks":0}],
+        "OriginalSlots0444":[-1,-1,-1],
+        "Pending":{"ClosingDate":{"Year":3,"Month":5,"Week":1},"Phase":4,"Index":0,"PendingEvent":3}}
+    write_json("user://saves/slot1.json",calendar_save)
+    await press("LOAD_GAME")
+    check(main.find_child("AcknowledgeCalendar",true,false) != null,"Hardware launch news opens after loading its transaction")
+    Engine.time_scale = 100
+    for frame in range(20):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var launch_paused = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(launch_paused.State.Calendar.Pending.PendingEvent == 3 and launch_paused.State.SalesTicks == cs.SalesTicks,"Hardware dialog freezes the office and survives saving")
+    check(launch_paused.State.AvailableHardware.is_empty(),"Platform stays unavailable until news acknowledgement")
+    await press("LOAD_GAME")
+    await press_node("AcknowledgeCalendar")
+    Engine.time_scale = 100
+    for frame in range(3):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var launched = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(launched.State.Calendar.Pending == null and launched.State.AvailableHardware.size() == 1 and launched.State.AvailableHardware[0] == 0,"Acknowledged launch resumes the calendar and unlocks its platform")
+    # Renewal mutates the employed roster before the same week's salary debit.
+    var renewal_save = payroll_captured.duplicate(true)
+    var rs = renewal_save.State
+    rs.Year = 3
+    rs.Month = 3
+    rs.Week = 4
+    rs.CompanyActivityTicks = 0
+    rs.DevelopmentProjects = []
+    rs.ReleasedGames = []
+    rs.CompanyActivityPerformed = true
+    rs.Company.WeeklyNet = 0
+    rs.Company.MonthlyNet = 0
+    rs.Company.YearlyNet = 0
+    rs.Employees[0].ContractFee = 10
+    rs.Employees[1].ContractFee = 20
+    rs.Calendar = launched.State.Calendar.duplicate(true)
+    rs.Calendar.Pending = {"ClosingDate":{"Year":3,"Month":3,"Week":4},"Phase":1,"Index":0,"PendingEvent":0}
+    write_json("user://saves/slot1.json",renewal_save)
+    await press("LOAD_GAME")
+    check(main.find_child("RenewEmployee1",true,false).button_pressed,"Renewal initially selects employed staff")
+    main.find_child("RenewEmployee2",true,false).button_pressed = false
+    await press_node("ConfirmContractRenewal")
+    Engine.time_scale = 100
+    if not await await_node("CalendarBlock"):
+        quit(1)
+        return
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var renewed = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(renewed.State.Employees.size() == 1 and renewed.State.EmployeeSources[2].GateValue == 0,"Unchecked annual contract dismisses its source before payroll")
+    check(renewed.State.Money == rs.Money-10-300,"Annual fee and shared-index monthly salary are each charged once")
+    check(renewed.State.Month == 4 and renewed.State.Week == 1 and renewed.State.Company.WeeklyNet == -300,"April rollover resets accounting before payroll")
+    check(renewed.State.Calendar.Pending.Block == 4,"Unreconstructed exhibition explicitly stops later calendar transactions")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    var renewed_reload = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(renewed_reload.State.Money == renewed.State.Money,"Reloading the pending exhibition never repeats annual fees or salary")
     previous_stream = null
     player = null
     main.queue_free()

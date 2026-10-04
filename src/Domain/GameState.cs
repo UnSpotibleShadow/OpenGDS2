@@ -17,6 +17,9 @@ public sealed class GameState
     public int? DevelopmentComputerIndex { get; set; }
     public HashSet<int>? HardwareLicenses { get; set; }
     public HashSet<int>? AvailableHardware { get; set; }
+    // Null in pre-calendar saves: historical countdowns cannot be reconstructed
+    // from lifetime releases or a frozen displayed date.
+    public CompanyCalendarState? Calendar { get; set; }
 
     public List<DevelopmentProjectState> DevelopmentProjects { get; set; } = [];
     public List<ReleasedGameState> ReleasedGames { get; set; } = [];

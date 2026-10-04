@@ -39,8 +39,9 @@ public partial class Main : Control
         {
             _session.TickOffice(_activeCatalog);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
+            if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
-            updated = state.Employees.Any(x => x.Office is not null);
+            updated = true;
             var pending=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue);
             if (pending is not null) {ShowProjectDecision(state,pending);return;}
         }
@@ -265,6 +266,7 @@ public partial class Main : Control
     {
         _activeCatalog = _importer.LoadCatalog();
         EnsureDesktop(state);
+        if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
         CloseDesktopDialog();
         _refreshCoreStatus = null;
@@ -412,6 +414,7 @@ public partial class Main : Control
         var date = new GameDate(state.Year ?? 1, state.Month ?? 4, state.Week ?? 1);
         var label = new Label { Text = $"{date.Year} / {date.Month} / {date.Week}", HorizontalAlignment = HorizontalAlignment.Center };
         _content.AddChild(label); AddHeading(Tr("CALENDAR_INSPECTOR_NOTE"), 14);
+        AddHeading(Tr(state.Calendar is null ? "CALENDAR_LEGACY_SAVE" : "CALENDAR_LIVE"),14);
         long? payrollDebit=null;
         try { payrollDebit=OriginalPayrollRules.MonthlyDebit(state); }
         catch (OverflowException) { }

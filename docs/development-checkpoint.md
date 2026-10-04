@@ -1,4 +1,19 @@
-# Development checkpoint — M34 continuation, 2026-10-04
+# Development checkpoint — M35 calendar, 2026-10-04
+
+M35 advances new supported companies through verified calendar phases. It
+connects payroll/accounting, annual renewal, hardware launch/retirement/markets,
+ordered recalls and saved loan dues, with persistent modal resumption. Original
+LZH importing remains required; old calendar history is never fabricated.
+Seventeen added public regressions bring the public domain count to 163; two
+additional original-import fixtures also pass locally. Local Godot core-loop and original-import UI suites pass with zero failures.
+All 27 Python checks pass. Direct Roslyn builds have zero warnings/errors.
+Standard SDK/native export validation is pending on the M35 pull request.
+
+See [calendar-transactions.md](calendar-transactions.md) for bounded evidence,
+state format, unsupported event stops and validation. Exhibitions, awards,
+ending/graduate branches and borrowing/bankruptcy still require reconstruction.
+
+## Previous M34 validation
 
 
 M34 connects the original signed financial accumulator to supported transactions

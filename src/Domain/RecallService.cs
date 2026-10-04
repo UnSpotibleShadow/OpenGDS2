@@ -29,12 +29,15 @@ public static class RecallService
     public static void AdvanceWeek(GameState state,Random random)
     {
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
-        {
+            AdvanceProductWeek(state,product,random);
+    }
+    internal static void AdvanceProductWeek(GameState state,ReleasedGameState product,Random random)
+    {
             var recall=product.Recall;
-            if (recall is null || recall.OriginalState!=1 || recall.WeeksRemaining<1 || recall.PendingEvent is not null) continue;
+            if (recall is null || recall.OriginalState!=1 || recall.WeeksRemaining<1 || recall.PendingEvent is not null) return;
             int next=RecallRules.NextCountdown(recall.WeeksRemaining);
-            if (next>0) {recall.WeeksRemaining=next;continue;}
-            if (state.Money is null) continue; // Do not invent an unknown financial result.
+            if (next>0) {recall.WeeksRemaining=next;return;}
+            if (state.Money is null) return; // Do not invent an unknown financial result.
             int outcome=random.Next(4);
             long refund=RecallRules.Refund(product.UnitsSold,product.Stock,product.Price,outcome);
             var finance=FinancialRules.Prepare(state,checked(-refund));
@@ -43,7 +46,6 @@ public static class RecallService
             finance.Commit(state);
             if (outcome!=3) product.Stock=0;
             recall.PendingEvent=RecallEvent.Result;
-        }
     }
     public static bool Acknowledge(GameState state,ReleasedGameState product)
     {

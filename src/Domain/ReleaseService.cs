@@ -28,6 +28,7 @@ public static class ReleaseService
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize)*copies);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
+        int? shipments=state.Calendar is not null ? checked(state.Calendar.ShipmentsSinceHardwareTrigger+1) : null;
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
@@ -42,6 +43,7 @@ public static class ReleaseService
         FinancialRules.Apply(state,-cost);
         // First shipment sets the flag; its handler does not test the reprint guard.
         state.ProductionPerformedThisWeek=true;
+        if (shipments is int count) state.Calendar!.ShipmentsSinceHardwareTrigger=count;
         state.ReleasedGames.Add(product);state.DevelopmentProjects.Remove(project);
         // A new room must not receive an unfinished contribution from the old product.
         foreach (var e in state.Employees.Where(x=>x.Office?.SeatedAction is >=6 and <=17 &&

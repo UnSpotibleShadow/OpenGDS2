@@ -40,14 +40,13 @@ In the ordinary weekly routine `009DB4F4`, +0672..067C clears weekly 22C.
 At week >=5, +06AC..06B6 clears monthly 23C. At month 13,
 +0725..072F clears yearly 24C before the year rollover and payroll debit.
 `ResetAtWeekEnd` implements these isolated reset boundaries and validates its
-closing date before mutation. It is not wired to the existing isolated budget
-clock: that clock still does not advance the company date. Ledger periods remain
-attached to the current displayed date until the full calendar transaction is
-implemented. Monthly payroll, renewal scheduling, hardware launches, loan dues,
-early-return events and bankruptcy remain unresolved integration work.
+closing date before mutation. At M35 the resumable calendar integrates the corresponding resets before
+payroll for new supported companies. Renewal, hardware events, loan dues and
+per-product recalls now have saved ordering; unresolved modal branches stop
+explicitly. Pre-calendar saves retain unknown historical state. See
+[calendar-transactions.md](calendar-transactions.md).
 
-The new rows do not add spending categories, invented rent, profit bonuses or
-calendar advancement. Original display rounding/units and complete graphical
+The rows do not add spending categories, invented rent or profit bonuses. Original display rounding/units and complete graphical
 comparison still need checking.
 
 ## Validation
