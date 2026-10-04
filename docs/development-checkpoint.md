@@ -11,8 +11,17 @@ fixtures), 27 Python checks, direct Roslyn domain/app builds, and the expanded
 native Godot core-loop UI fixture. The first expanded UI run caught a reversed
 synthetic mode value in the ending fixture; its corrected rerun passed with
 zero failures. Original-import UI also passes with zero failures. Standard
-Linux/Windows builds and packaged runs are pending GitHub CI validation. School construction/student growth, rival-name/animation
+Linux/Windows builds and packaged runs pass all four CI jobs. School construction/student growth, rival-name/animation
 lifecycle and the original global rankings are documented remaining work.
+
+M36 merged as `74827ba8b441395b8de00491441f42e4a1b370e7` (PR #30).
+The tested head is `b2c3e18b91ef21190f810b110745a2bf121df3d0`. All four jobs
+passed in [Validate run 37196872437](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37196872437):
+181 public domain checks, 19 public Python checks (eight private fixtures skipped),
+zero standard build warnings/errors, and zero UI/core-loop failures in the
+editor, packaged Linux and native Windows. Download
+**OpenGDS2-desktop-development** from this run; it expires 2026-10-18.
+Artifact digest: `sha256:dace169eb91e566ac1c55871112037f39c8c9fcd9c58de29ac9157756a3de74c`.
 
 ## Previous M35 validation
 

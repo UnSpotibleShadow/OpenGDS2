@@ -124,7 +124,7 @@ this limitation. New calendar state and pending cursors are validated on both
 save and load, including availability, finite markets, event-phase consistency
 and post-acknowledgement cursor positions.
 
-## Validation
+## Previous M35 validation
 
 Seventeen added public domain regressions cover payroll uncertainty/negative
 funds/overflow, renewal ordering, hardware gates/countdowns/news/licenses,

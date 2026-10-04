@@ -136,12 +136,16 @@ The source has no lower sales-result clamp. A sufficiently poor, buggy game can
 produce negative units/receipts and increasing stock. M13 retains this defect;
 regression tests cover it instead of silently changing the formula.
 
-## Still unresolved or outside M13
+## Scope after M36
 
-- Full calendar economics, payroll defect verification, renewal/event integration.
+- M35 connects calendar advancement, traced payroll/accounting, renewal, hardware
+  and saved loans. M36 adds annual events. Borrowing/bankruptcy and remaining
+  scratch-index writers still need reconstruction; see calendar-transactions.md.
 - Polishing, sequels, external studios/jobs and their shipping modifiers.
-- Contests/awards and full company progression. M14 adds reviews and sales
-  milestone dialogs; M21 adds investigations and recall outcomes. See
+- M36 connects own-company contest selection/prizes, exhibitions, the Beginner
+  ending and known graduate queues; rival contest presentation, school
+  construction and full company progression remain. M14 adds reviews and sales
+  milestones; M21 adds recall outcomes. See annual-calendar-events.md,
   reviews-and-events.md and consumer-recalls.md.
 - M16 connects company member 90/genre research; see company-activities.md.
   The earlier claim that sales
@@ -153,8 +157,9 @@ regression tests cover it instead of silently changing the formula.
 M19 adds the shared weekly production allowance. First shipments set the flag;
 reprints wait for the next 200-tick budget reset. See [production-budget.md](production-budget.md).
 
-The date display remains at the opening date while this isolated work/sales clock
-runs. M13 is a playable core loop, not a claim that the whole game is complete.
+Supported new companies now advance the calendar through saved transactions.
+Legacy saves without known calendar cells retain the isolated work/sales clock.
+The playable loop does not imply that the whole game is complete.
 
 M23 verifies the complete fixture against extracted Linux and native Windows
 desktop packages. M24 fixes the modern office Pause/Resume control: its label and

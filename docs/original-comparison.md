@@ -1,4 +1,4 @@
-# Original / OpenGDS2 comparison — M32–M34
+# Original / OpenGDS2 comparison — M32–M36
 
 This audit compares the supplied GameDev2DX distribution and original desktop
 screenshot with OpenGDS2 through M31, then records the first correction in M32.
