@@ -1466,3 +1466,6 @@ msgstr "No learned technologies"
 
 msgid "EMPLOYEE_DISMISS_SHORT"
 msgstr "Dismiss"
+
+msgid "LEVEL"
+msgstr "Level"

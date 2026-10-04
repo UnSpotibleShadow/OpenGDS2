@@ -1466,3 +1466,6 @@ msgstr "習得済みの技術はありません"
 
 msgid "EMPLOYEE_DISMISS_SHORT"
 msgstr "解雇"
+
+msgid "LEVEL"
+msgstr "レベル"
