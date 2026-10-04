@@ -100,6 +100,15 @@ def verify(data):
     require(0x9EFA40,0x4129,'28 6c ff 03 00 05 eb 00 fc 22 05 f9 00 52')
     # The financial helper adds the signed delta; it does not clamp cash at zero.
     require(0x97DD04,0x0000,'07 08 00 20 00 fd 16 10 00 5c ff fb 94 4c ff fd e6 08 00 20 00')
+    # Signed money helper accumulates the SAME argument into all three periods.
+    for offset,member in [(0x15,0x22C),(0x2A,0x23C),(0x3F,0x24C)]:
+        load=bytes.fromhex('07 08 00')+struct.pack('<H',member)
+        store=bytes.fromhex('fd e6 08 00')+struct.pack('<H',member)
+        require(0x97DD04,offset,(load+bytes.fromhex('fd 16 10 00 5c ff fb 94 4c ff')+store).hex())
+    for offset,member in [(0x14D,0x22C),(0x157,0x23C),(0x161,0x24C)]:
+        require(0x9DD234,offset,(bytes.fromhex('fc 67 6c ff fd e6 08 00')+struct.pack('<H',member)).hex())
+    for offset,member in [(0x672,0x22C),(0x6AC,0x23C),(0x725,0x24C)]:
+        require(0x9DB4F4,offset,(bytes.fromhex('28 6c ff 00 00 fd e6 08 00')+struct.pack('<H',member)).hex())
     # Both negotiation modes have independently checked fee/result branches.
     # Only outcome Rnd is verified here; dialogue RNG and entry charges are not.
     pool=0x5FAFCC

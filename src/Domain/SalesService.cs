@@ -53,11 +53,12 @@ public static class SalesService
             long sales=product.Stock>0 && product.Demand>0 ? Math.Min(product.Stock,PotentialSales(product,catalog,random.Next(20))) : 0;
             long receipts=checked(checked(product.Price-state.SalesFee1.Value-state.SalesFee2.Value)*sales);
             long stock=checked(product.Stock-sales),units=checked(product.UnitsSold+sales);
-            long funds=checked(state.Money!.Value+receipts),net=checked(product.NetSalesReceipts+receipts);
+            var finance=FinancialRules.Prepare(state,receipts);
+            long net=checked(product.NetSalesReceipts+receipts);
             long? weekly=product.WeeklySalesHistory is not null ? checked(product.WeeklySalesHistory[0]+sales) : null;
             int first=random.Next(50);
             int demand=NextDemand(product.Demand,first,first==0 ? null : random.Next(7));
-            state.Money=funds;product.Stock=stock;product.UnitsSold=units;
+            finance.Commit(state);product.Stock=stock;product.UnitsSold=units;
             product.NetSalesReceipts=net;product.LastBatchSold=sales;product.Demand=demand;
             if (weekly is long unitsThisWeek) product.WeeklySalesHistory![0]=unitsThisWeek;
             SalesMilestoneService.QueueReached(product);

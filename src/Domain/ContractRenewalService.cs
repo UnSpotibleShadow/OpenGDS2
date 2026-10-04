@@ -42,11 +42,12 @@ public static class ContractRenewalService
         if (state.Money is null) return ContractRenewalResult.MoneyUnknown;
         if (state.Money < total) return ContractRenewalResult.InsufficientFunds;
 
+        var finance=FinancialRules.Prepare(state,-total);
         foreach (var employee in roster.Where(x => !selectedSourceIds.Contains(x.SourceIndex!.Value)))
         {
             EmployeeDismissalService.DismissResolved(state,employee,sources[employee.SourceIndex!.Value]);
         }
-        state.Money -= total;
+        finance.Commit(state);
         return ContractRenewalResult.Success;
     }
 }

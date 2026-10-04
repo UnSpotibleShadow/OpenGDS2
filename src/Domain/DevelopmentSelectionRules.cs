@@ -42,7 +42,7 @@ public static class DevelopmentSelectionRules
         if (state.Money<selected.SelectionFee) return DevelopmentSelectionResult.InsufficientFunds;
         double points=project.RequiredPoints+pointsType.SelectionPoints;
         if (!double.IsFinite(points)) throw new InvalidDataException("Invalid development points.");
-        state.Money-=selected.SelectionFee;
+        FinancialRules.Apply(state,-selected.SelectionFee);
         project.GameTypeSourceIndex=selectedSourceIndex;project.RequiredPoints=points;project.OriginalStage=1;
         project.Recognition+=Math.Floor(fame/3.0);
         project.PendingDecision=null;
@@ -68,7 +68,7 @@ public static class DevelopmentSelectionRules
         if (state.Money<selected.SelectionFee) return DevelopmentSelectionResult.InsufficientFunds;
         double points=project.RequiredPoints+selected.SelectionPoints;
         if (!double.IsFinite(points)) throw new InvalidDataException("Invalid development points.");
-        state.Money-=selected.SelectionFee;
+        FinancialRules.Apply(state,-selected.SelectionFee);
         project.GenreSourceIndex=selectedSourceIndex;project.RequiredPoints=points;project.OriginalStage=2;
         if (affinity) project.Quality=project.Quality with {Fun=project.Quality.Fun+20};
         project.PendingDecision=null;

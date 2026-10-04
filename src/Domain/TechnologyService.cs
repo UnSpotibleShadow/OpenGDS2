@@ -12,7 +12,7 @@ public static class TechnologyService
             return TechnologyPurchaseResult.StateUnknown;
         if (level>=1) return TechnologyPurchaseResult.AlreadyOwned;
         if (state.Money<technology.PurchaseFee) return TechnologyPurchaseResult.InsufficientFunds;
-        state.Money-=technology.PurchaseFee;
+        FinancialRules.Apply(state,-technology.PurchaseFee);
         state.TechnologyOwnershipLevels[technology.SourceIndex]=3;
         return TechnologyPurchaseResult.Success;
     }

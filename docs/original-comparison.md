@@ -1,4 +1,4 @@
-# Original / OpenGDS2 comparison — M32–M33
+# Original / OpenGDS2 comparison — M32–M34
 
 This audit compares the supplied GameDev2DX distribution and original desktop
 screenshot with OpenGDS2 through M31, then records the first correction in M32.
@@ -33,7 +33,7 @@ and visible employee are an observed state, not proof of the opening roster.
 | Desktop and office | Supplied screenshot shows simultaneous office, company, staff and product windows; local atlas/tiles recover the office | M25–M30 restore these windows and native scene; chrome is community-authored and complete visual comparison is pending | Compare layout, clipping, fonts and all dialogs on an actual display |
 | Employee selection | `fMainVisual 009C66BC +0758..08CB` scans workspace slots and uses inclusive inset sprite bounds | M31 office artwork had no input; table activation opened the whole roster. M32 selects the clicked/activated employee | Extend remaining original pointer interactions only after tracing their guards |
 | Toolbar | Sixteen original images imported locally; original screenshot uses images | M29–M30 use imported images and fallback pictograms with translated help; some original command associations remain unproven | Recover command binding and local bitmap translations |
-| Company information | Screenshot includes weekly/monthly/yearly financial rows and tenant information | Current company window has funds/fame/research/capacity/rank/date; period accounts and tenants are missing | Map accounting members 22C/23C/24C and their reset ordering |
+| Company information | Screenshot includes weekly/monthly/yearly financial rows and tenant information | M34 connects signed weekly/monthly/yearly totals and company-window rows; tenants and live period resets are still missing | Connect established reset ordering to the complete calendar transaction; verify original display units |
 | Opening staff | Screenshot contains an employee; its displayed stat pattern is a lead for imported source 29 | New companies begin without a proven initial employee assignment | Trace assignment/call sites; do not infer an opening hire from this screenshot |
 | Calendar | Weekly routine advances weeks/months, triggers March-end renewals and further economics | Work/sales/activity ticks run; displayed company date remains at opening | Highest gameplay priority: complete ordered calendar transactions and modal resumption |
 | Payroll/contracts | Isolated renewal formulas and apparent shared-index payroll behavior recovered | Annual renewal projection exists; live payroll and renewal scheduling remain disabled | Establish scratch lifecycle and runtime behavior before enabling charges |

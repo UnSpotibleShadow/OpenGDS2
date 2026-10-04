@@ -39,7 +39,7 @@ public static class ReleaseService
             MarketFactor=MarketFactor(state.ReleasedGames.Count,project.Quality,random)
         };
         ReviewService.Generate(product,catalog,random);
-        state.Money-=cost;
+        FinancialRules.Apply(state,-cost);
         // First shipment sets the flag; its handler does not test the reprint guard.
         state.ProductionPerformedThisWeek=true;
         state.ReleasedGames.Add(product);state.DevelopmentProjects.Remove(project);
@@ -58,7 +58,7 @@ public static class ReleaseService
         long stock=checked(product.Stock+copies),spending=checked(product.ProductionSpending+cost);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
-        state.Money-=cost;product.Stock=stock;product.ProductionSpending=spending;
+        FinancialRules.Apply(state,-cost);product.Stock=stock;product.ProductionSpending=spending;
         state.ProductionPerformedThisWeek=true;
         return ReleaseResult.Success;
     }

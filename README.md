@@ -1,7 +1,7 @@
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M33.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M34.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -88,6 +88,9 @@ M32 restores employee selection directly from the office and staff table.
 M33 corrects the technology-only work-counter increment, restoring the original
 11/10 eligible-pass cadence. See the
 [original/OpenGDS2 comparison](docs/original-comparison.md) for remaining gaps.
+M34 restores signed weekly/monthly/yearly financial totals and the company
+window rows. Live calendar scheduling remains incomplete; see
+[financial accounting](docs/financial-accounting.md).
 
 M14 adds original review scoring, four-reviewer release results, Hall of Fame
 status and sales milestone announcements. Reviews and pending announcements

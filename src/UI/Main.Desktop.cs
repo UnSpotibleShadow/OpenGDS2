@@ -138,7 +138,7 @@ public partial class Main
         else office.Body.AddChild(new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(186, 318));
         foreach (var group in new[] {
-            new[] { "COMPANY_NAME", "FUNDS" }, new[] { "COMPANY_FAME", "PRODUCTION_CAPACITY", "GENRE_RESEARCH" },
+            new[] { "COMPANY_NAME", "FUNDS" }, new[] { "WEEKLY_NET", "MONTHLY_NET", "YEARLY_NET" }, new[] { "COMPANY_FAME", "PRODUCTION_CAPACITY", "GENRE_RESEARCH" },
             new[] { "COMPANY_RANK", "RELEASED_COUNT", "HALL_OF_FAME_COUNT" }, new[] { "DATE", "STAFF" } })
         {
             var panel = new PanelContainer(); company.Body.AddChild(panel);
@@ -153,7 +153,7 @@ public partial class Main
                 var row = new HBoxContainer(); rows.AddChild(row);
                 var name = new Label { Text = Tr(key), SizeFlagsHorizontal = SizeFlags.ExpandFill };
                 name.AddThemeFontSizeOverride("font_size", 11); row.AddChild(name);
-                var value = new Label { HorizontalAlignment = HorizontalAlignment.Right };
+                var value = new Label { Name="CompanyMetric"+key, HorizontalAlignment = HorizontalAlignment.Right };
                 value.AddThemeFontSizeOverride("font_size", 11); row.AddChild(value); _companyMetrics[key] = value;
             }
         }
@@ -263,6 +263,9 @@ public partial class Main
         _desktopFunds.Text = $"{Tr("FUNDS")}: ¥{state.Money:N0}";
         _companyMetrics["COMPANY_NAME"].Text = state.Company.Name;
         _companyMetrics["FUNDS"].Text = state.Money?.ToString("N0") ?? "?";
+        _companyMetrics["WEEKLY_NET"].Text=state.Company.WeeklyNet?.ToString("N0") ?? "?";
+        _companyMetrics["MONTHLY_NET"].Text=state.Company.MonthlyNet?.ToString("N0") ?? "?";
+        _companyMetrics["YEARLY_NET"].Text=state.Company.YearlyNet?.ToString("N0") ?? "?";
         _companyMetrics["COMPANY_FAME"].Text = state.Company.Fame is int fame ? $"{fame}%" : "?";
         _companyMetrics["PRODUCTION_CAPACITY"].Text = state.Company.ProductionCapacity?.ToString() ?? "?";
         _companyMetrics["GENRE_RESEARCH"].Text = state.Company.OriginalMember90?.ToString() ?? "?";

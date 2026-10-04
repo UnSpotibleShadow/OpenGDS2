@@ -12,6 +12,76 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("signed financial helper updates all known periods without clamping negative funds",()=>
+{
+    var s=new GameState {Money=10,Company=new() {WeeklyNet=5,MonthlyNet=20,YearlyNet=30}};
+    FinancialRules.Apply(s,-15);
+    Check(s.Money==-5 && s.Company.WeeklyNet==-10 && s.Company.MonthlyNet==5 && s.Company.YearlyNet==15);
+    FinancialRules.Apply(s,7);
+    Check(s.Money==2 && s.Company.WeeklyNet==-3 && s.Company.MonthlyNet==12 && s.Company.YearlyNet==22);
+});
+Test("financial helper preserves unknown old periods through save load",()=>
+{
+    var s=State(100);s.Company.MonthlyNet=-30;
+    FinancialRules.Apply(s,20);s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(s.Money==120 && s.Company.WeeklyNet is null && s.Company.MonthlyNet==-10 && s.Company.YearlyNet is null);
+});
+Test("financial overflow rejects before any cash or period mutation",()=>
+{
+    foreach (int cell in Enumerable.Range(0,4))
+    {
+        var s=State(0);s.Company.WeeklyNet=s.Company.MonthlyNet=s.Company.YearlyNet=0;
+        if (cell==0) s.Money=long.MaxValue;
+        if (cell==1) s.Company.WeeklyNet=long.MaxValue;
+        if (cell==2) s.Company.MonthlyNet=long.MaxValue;
+        if (cell==3) s.Company.YearlyNet=long.MaxValue;
+        string before=SaveStore.Serialize(s);
+        Throws<OverflowException>(()=>FinancialRules.Apply(s,1));
+        Check(SaveStore.Serialize(s)==before);
+    }
+});
+Test("financial period reset follows weekly monthly and December boundaries before charges",()=>
+{
+    var s=new GameState {Money=100,Company=new() {WeeklyNet=1,MonthlyNet=2,YearlyNet=3}};
+    FinancialRules.ResetAtWeekEnd(s,new(1,4,1));
+    Check(s.Company.WeeklyNet==0 && s.Company.MonthlyNet==2 && s.Company.YearlyNet==3 && s.Money==100);
+    FinancialRules.ResetAtWeekEnd(s,new(1,4,4));
+    Check(s.Company.MonthlyNet==0 && s.Company.YearlyNet==3);
+    FinancialRules.ResetAtWeekEnd(s,new(1,12,4));FinancialRules.Apply(s,-7);
+    Check(s.Money==93 && s.Company.WeeklyNet==-7 && s.Company.MonthlyNet==-7 && s.Company.YearlyNet==-7);
+});
+Test("fresh company accounting starts empty zero without counting opening funds as income",()=>
+{
+    var s=new GameSession().StartNewGame("Synthetic","Tester",GameMode.Normal);
+    Check(s.Money==450000000 && s.Company.WeeklyNet==0 && s.Company.MonthlyNet==0 && s.Company.YearlyNet==0);
+});
+Test("renewal accounting overflow cannot dismiss unchecked employees",()=>
+{
+    var s=State(1000);s.Company.WeeklyNet=long.MinValue;
+    s.Employees.Add(new() {Name="Synthetic zero",SourceIndex=0,ContractFee=1});s.Employees.Add(new() {Name="Synthetic one",SourceIndex=1,ContractFee=1});
+    s.EmployeeSources.Add(new() {SourceIndex=0,GateValue=1,Employee=s.Employees[0]});
+    s.EmployeeSources.Add(new() {SourceIndex=1,GateValue=1,Employee=s.Employees[1]});
+    string before=SaveStore.Serialize(s);
+    Throws<OverflowException>(()=>ContractRenewalService.TryRenew(s,new HashSet<int> {0}));
+    Check(SaveStore.Serialize(s)==before);
+});
+Test("hiring and actual sales feed the same financial periods without duplicate charges",()=>
+{
+    var s=PlanningState(10000);var c=CoreCatalog();
+    s.Company.WeeklyNet=s.Company.MonthlyNet=s.Company.YearlyNet=0;
+    var candidate=new EmployeeState {Name="Synthetic applicant",SourceIndex=0,ContractFee=100};
+    Check(HiringService.TryHire(s,candidate)==HireResult.Success);
+    Check(s.Company.WeeklyNet==-100 && s.Company.MonthlyNet==-100 && s.Company.YearlyNet==-100);
+    Check(HiringService.TryHire(s,candidate)==HireResult.AlreadyEmployed);
+    Check(s.Company.WeeklyNet==-100);
+    s.SalesFee1=s.SalesFee2=1500;s.SalesTicks=19;
+    var product=new ReleasedGameState {Title="Synthetic",Stock=100,Price=5800,Demand=100,MarketFactor=1,
+        Quality=new(10,10,10,10),SalesMilestoneStage=0,Recall=new(),WeeklySalesHistory=SalesHistoryRules.NewHistory()};
+    s.ReleasedGames.Add(product);SalesService.Tick(s,c,new SequenceRandom(0,0));
+    long change=s.Money!.Value-10000;
+    Check(product.UnitsSold>0 && s.Company.WeeklyNet==change && s.Company.MonthlyNet==change && s.Company.YearlyNet==change);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Company.WeeklyNet==change);
+});
 Test("office employee selection uses inclusive original sprite inset", () =>
 {
     var state=new GameState();

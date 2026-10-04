@@ -26,7 +26,7 @@ public static class HiringService
         var employee = CloneEmployee(candidate);
         if (candidate.PortraitId is >= 1 and <= 10)
             employee.Office = OfficeStaffRules.CreateHire(state, random ?? Random.Shared);
-        state.Money -= candidate.ContractFee.Value;
+        FinancialRules.Apply(state,-candidate.ContractFee.Value);
         state.Employees.Add(employee);
         var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == candidate.SourceIndex);
         if (source is not null) source.GateValue = 1;

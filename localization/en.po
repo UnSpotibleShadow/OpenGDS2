@@ -1191,3 +1191,12 @@ msgstr "Some original toolbar artwork is missing. Import your LZH again to resto
 
 msgid "TOOLBAR_READY"
 msgstr "Choose a toolbar action, or use the menus above."
+
+msgid "WEEKLY_NET"
+msgstr "Weekly net"
+
+msgid "MONTHLY_NET"
+msgstr "Monthly net"
+
+msgid "YEARLY_NET"
+msgstr "Yearly net"

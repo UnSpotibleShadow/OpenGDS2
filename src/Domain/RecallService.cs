@@ -37,10 +37,10 @@ public static class RecallService
             if (state.Money is null) continue; // Do not invent an unknown financial result.
             int outcome=random.Next(4);
             long refund=RecallRules.Refund(product.UnitsSold,product.Stock,product.Price,outcome);
-            long funds=checked(state.Money.Value-refund);
+            var finance=FinancialRules.Prepare(state,checked(-refund));
             recall.WeeksRemaining=0;recall.OutcomeRoll=outcome;recall.RefundAmount=refund;
             recall.OriginalState=outcome==3 ? 3 : 2;
-            state.Money=funds;
+            finance.Commit(state);
             if (outcome!=3) product.Stock=0;
             recall.PendingEvent=RecallEvent.Result;
         }

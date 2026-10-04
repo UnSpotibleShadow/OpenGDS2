@@ -26,6 +26,20 @@ extracted packages on native Linux and Windows. Both packaged fixtures report
 zero failures. M33 merged as `f8e4f7c1a6803323b9f9f27f4a5cbffe7e0d6bbb`.
 Download `OpenGDS2-desktop-development` from the successful run.
 
+## M34 local accounting checkpoint
+
+Direct C# compilation and 148 local domain checks (146 public, two original
+fixtures), all 27 Python checks (19 public, eight original fixtures) and the
+core-loop Godot UI suite pass. Seven new regressions exercise signed accounting,
+legacy unknowns, period boundaries, opening cash and atomic failure. The bounded
+original checks establish all three accumulator/reset cells. Standard SDK/export
+checks are pending. The isolated original-import UI rerun with the committed
+soundtrack also passes with zero failures.
+
+A pre-existing local edit to office-01.ogg fails its bundled-duration check.
+That file is preserved separately and left unchanged. Published-soundtrack QA
+uses an isolated copy with the committed track, not an audio change in M34.
+
 ## M31 desktop checkpoint
 M31 extends the existing modern employee validation to inactive source records.
 Four new public C# checks cover corrupt progression, readable-slot preservation
