@@ -65,17 +65,33 @@ public sealed class GameSession
     public RecruitmentState OpenRecruitment()
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
+        if (state.PendingHireGreeting is not null) throw new InvalidOperationException("A hire conversation is pending.");
         state.Recruitment.Candidates.Clear();
         if (state.MinimumSourceIndex is int minimum && state.SourceUpperBound is int upper)
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
         return state.Recruitment;
     }
     public HireResult Hire(EmployeeState candidate)
-        => HiringService.TryHire(Current ?? throw new InvalidOperationException("No current session."), candidate, _random);
+    {
+        var state = Current ?? throw new InvalidOperationException("No current session.");
+        if (state.PendingHireGreeting is not null) return HireResult.ConversationPending;
+        var result = HiringService.TryHire(state, candidate, _random);
+        if (result == HireResult.Success && candidate.SourceIndex is int source && source is >=0 and <=59 && candidate.PortraitId is >=1 and <=10)
+            state.PendingHireGreeting = new() {EmployeeSourceIndex=source,Variant=(int)Math.Floor(_random.NextSingle()*10)};
+        return result;
+    }
+
+    public bool AcknowledgeHireGreeting()
+    {
+        if (Current?.PendingHireGreeting is null) return false;
+        Current.PendingHireGreeting = null;
+        return true;
+    }
 
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
+        if (state.PendingHireGreeting is not null) return;
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (CalendarService.HasPending(state))
         {

@@ -64,6 +64,11 @@ public static class SaveStore
             state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null || state.DevelopmentProjects is null || state.ReleasedGames is null ||
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
             throw new InvalidDataException("Invalid session state.");
+        if (state.PendingHireGreeting is HireGreetingState greeting &&
+            (greeting.Variant is <0 or >9 || greeting.EmployeeSourceIndex is <0 or >59 ||
+             !state.Employees.Any(e => e is not null && e.SourceIndex == greeting.EmployeeSourceIndex && e.PortraitId is >=1 and <=10)))
+            throw new InvalidDataException("Invalid pending hire greeting.");
+
         if (state.Year is < 1 || state.Month is < 1 or > 12 || state.Week is < 1 or > 4)
             throw new InvalidDataException("Invalid calendar.");
         if (state.OriginalPayrollScratchIndex<0)

@@ -9,4 +9,5 @@ public enum HireResult
     MoneyUnknown,
     ContractFeeUnknown,
     InsufficientFunds,
+    ConversationPending,
 }

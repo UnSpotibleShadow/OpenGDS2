@@ -45,4 +45,5 @@ public sealed class GameState
     public CompanyState Company { get; set; } = new();
     public List<EmployeeState> Employees { get; set; } = [];
     public RecruitmentState Recruitment { get; set; } = new();
+    public HireGreetingState? PendingHireGreeting { get; set; }
 }

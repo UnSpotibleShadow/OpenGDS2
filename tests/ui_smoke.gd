@@ -72,6 +72,7 @@ func run() -> void:
         nodes_of_type("FileDialog")[0].file_selected.emit(fixture)
         await process_frame
         check(FileAccess.file_exists("user://original/employees.json"), "Database import")
+        check(FileAccess.file_exists("user://original/dialogue.json"),"Original Japanese dialogue imported locally")
         var catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
         check(catalog != null and catalog.Genres.size() == 18, "Genre catalog import")
         check(catalog != null and catalog.Audiences.size() == 7, "Audience catalog import")
@@ -223,6 +224,25 @@ func run() -> void:
         if hire_buttons.size() == 1:
             hire_buttons[0].pressed.emit()
             await process_frame
+            var conversation = main.find_child("ConversationWindow",true,false)
+            check(conversation != null and conversation.size.x <= 350 and conversation.size.y <= 165,"Hire opens compact conversation")
+            check(main.find_child("ConversationNameStrip",true,false) != null and main.find_child("ConversationPortrait",true,false) != null,"Conversation has name strip and imported portrait")
+            await press("SAVE_GAME")
+            var greeting_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            check(greeting_save.State.PendingHireGreeting != null,"Pending greeting survives save")
+            await create_timer(0.2).timeout
+            await press("SAVE_GAME")
+            var greeting_wait = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            check(greeting_wait.State.CompanyActivityTicks == greeting_save.State.CompanyActivityTicks and greeting_wait.State.Money == greeting_save.State.Money,"Greeting suspends time and never repeats hire fee")
+            await press("LOAD_GAME")
+            check(main.find_child("ConversationWindow",true,false) != null,"Loading resumes pending notification")
+            var message = main.find_child("ConversationMessage",true,false)
+            if message != null:
+                var click := InputEventMouseButton.new()
+                click.button_index=MOUSE_BUTTON_LEFT;click.pressed=true
+                message.gui_input.emit(click)
+                await process_frame
+            check(main.find_child("ConversationWindow",true,false) == null,"Clicking message dismisses conversation")
             # Exercise the actual Godot clock and compositor, rather than only
             # testing a domain update detached from the running scene.
             await create_timer(4.5).timeout

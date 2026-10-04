@@ -1669,3 +1669,47 @@ msgstr "EMPLOYEE_GIVEN_6"
 
 msgid "EMPLOYEE_GIVEN_7"
 msgstr "EMPLOYEE_GIVEN_7"
+
+# Original Japanese greeting bodies are imported locally.
+
+msgid "HIRE_GREETING_0"
+msgstr "HIRE_GREETING_0"
+
+msgid "HIRE_GREETING_1"
+msgstr "HIRE_GREETING_1"
+
+msgid "HIRE_GREETING_2"
+msgstr "HIRE_GREETING_2"
+
+msgid "HIRE_GREETING_3"
+msgstr "HIRE_GREETING_3"
+
+msgid "HIRE_GREETING_4"
+msgstr "HIRE_GREETING_4"
+
+msgid "HIRE_GREETING_5"
+msgstr "HIRE_GREETING_5"
+
+msgid "HIRE_GREETING_6"
+msgstr "HIRE_GREETING_6"
+
+msgid "HIRE_GREETING_7"
+msgstr "HIRE_GREETING_7"
+
+msgid "HIRE_GREETING_8"
+msgstr "HIRE_GREETING_8"
+
+msgid "HIRE_GREETING_9"
+msgstr "HIRE_GREETING_9"
+
+msgid "NEW_EMPLOYEE"
+msgstr "新入社員"
+
+msgid "DIALOGUE_IMPORT_REQUIRED"
+msgstr "日本語の会話を読み込むには元のLZHを再インポートしてください。"
+
+msgid "CONVERSATION_DISMISS_HELP"
+msgstr "顔・メッセージをクリックするか、Enterで会話を閉じます。"
+
+msgid "HIRE_RESULT_ConversationPending"
+msgstr "現在の会話を閉じてください。"

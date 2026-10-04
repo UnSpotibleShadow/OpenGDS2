@@ -175,7 +175,7 @@ public partial class Main
         };
         var products = ChildWindow("ProductWindow", Tr("PRODUCT_WINDOW"), new Vector2(30, 356), new Vector2(390, 150));
         _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [150, 65, 70, 70]);
-        products.Body.AddChild(_productTable); _productTable.ItemActivated += () => ShowSales(state);
+        products.Body.AddChild(_productTable); _productTable.ItemActivated += () => {if (DesktopActionEnabled("SALES")) ShowSales(state);};
         _desktopStatus = new Label { Name = "OfficeStatus", CustomMinimumSize = new Vector2(0, 22), ClipText = true };
         layout.AddChild(_desktopStatus);
         RefreshDesktop();
@@ -230,7 +230,7 @@ public partial class Main
     {
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && CalendarService.HasPending(current) &&
+        if (_desktopState is GameState current && (CalendarService.HasPending(current) || current.PendingHireGreeting is not null) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {
@@ -312,7 +312,7 @@ public partial class Main
             foreach (var project in state.DevelopmentProjects.OrderBy(x => x.RoomIndex))
             {
                 var button = new Button { Name = $"OpenProject{project.RoomIndex}", Text = $"{Tr("DEVELOPMENT_ROOM")} {project.RoomIndex + 1}: {project.Title}" };
-                button.Pressed += () => ShowProject(state, project); _projectButtons.AddChild(button);
+                button.Pressed += () => {if (DesktopActionEnabled("START_GAME_DEVELOPMENT")) ShowProject(state, project);}; _projectButtons.AddChild(button);
             }
         }
         if (_staffTable is null || _productTable is null) return;

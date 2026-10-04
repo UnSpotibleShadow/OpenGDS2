@@ -1669,3 +1669,47 @@ msgstr "Daisuke"
 
 msgid "EMPLOYEE_GIVEN_7"
 msgstr "Yoshihito"
+
+# Original Japanese greeting bodies are imported locally.
+
+msgid "HIRE_GREETING_0"
+msgstr "I’ll work hard to be useful. I look forward to working with you!"
+
+msgid "HIRE_GREETING_1"
+msgstr "Now that I’m here, you can move your projects ahead with confidence."
+
+msgid "HIRE_GREETING_2"
+msgstr "I’ll do my best to contribute to the company!"
+
+msgid "HIRE_GREETING_3"
+msgstr "With me here, we’ll make some really fun games!"
+
+msgid "HIRE_GREETING_4"
+msgstr "Good eye, boss! You made a great choice hiring me."
+
+msgid "HIRE_GREETING_5"
+msgstr "I look forward to working with you."
+
+msgid "HIRE_GREETING_6"
+msgstr "Actually, I wanted a job at an advertising agency… but I’ll do my best here."
+
+msgid "HIRE_GREETING_7"
+msgstr "What an honor… I’ll give everything I have to making great games. Count on me!"
+
+msgid "HIRE_GREETING_8"
+msgstr "I’ll help grow this company until we sell a million copies!"
+
+msgid "HIRE_GREETING_9"
+msgstr "Hooray! I’ve always wanted to join {company}. Let’s do this!"
+
+msgid "NEW_EMPLOYEE"
+msgstr "New Employee"
+
+msgid "DIALOGUE_IMPORT_REQUIRED"
+msgstr "Reimport your original LZH to load Japanese dialogue."
+
+msgid "CONVERSATION_DISMISS_HELP"
+msgstr "Click the portrait/message, press Enter, or close the conversation to continue."
+
+msgid "HIRE_RESULT_ConversationPending"
+msgstr "Close the current conversation first."
