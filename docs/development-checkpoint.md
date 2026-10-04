@@ -6,7 +6,12 @@ and restores the three company-window period rows. Seven new public regressions
 pass; local domain total is 148 (146 public plus two original fixtures), all
 27 Python checks pass and the complete core-loop UI suite passes. Original UI
 QA with the committed soundtrack passes with zero failures. Standard SDK/export
-checks are pending.
+checks passed in all four jobs of
+[Validate run 37186347364](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37186347364).
+M34 merged as `593dc3f3abd86421f7a654d6b3834db39a68754e` (PR #27); the tested
+PR head is `66b41d3ca919ba58c94d3d4e741c6adc29fc5146`. Standard build warnings
+and errors are zero. Linux/Windows packaged core-loop failures are zero.
+Download **OpenGDS2-desktop-development** from that run; it expires 2026-10-18.
 See [financial-accounting.md](financial-accounting.md). The calendar remains
 unconnected; no payroll value or event schedule was invented.
 
@@ -28,7 +33,7 @@ M33 merged as `f8e4f7c1a6803323b9f9f27f4a5cbffe7e0d6bbb` (PR #26); its
 passed domain, Godot, desktop export and native Windows. The standard build
 has zero warnings/errors; both packaged core-loop fixtures report zero failures.
 The tested PR head is `8e1ea3170ab125d06e655d23e3b0700bf7939d98`. Download
-**OpenGDS2-desktop-development** from this latest run; it expires 2026-10-17.
+**OpenGDS2-desktop-development** from that historical run; it expires 2026-10-17.
 See [original-comparison.md](original-comparison.md) and
 [technology-application.md](technology-application.md#work-cadence).
 

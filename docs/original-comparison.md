@@ -103,7 +103,9 @@ workspaces, actual office input with image scaling/letterboxing, row activation,
 unchanged funds/progression and management pause behavior. Standard SDK/export
 validation is recorded in [validation.md](validation.md). M33 passes local
 compilation, 141 C# checks (139 public plus two original fixtures), all 27
-Python checks and both Godot UI suites.
+Python checks and both Godot UI suites. M34 passes 148 local C# checks
+(146 public plus two original fixtures), all 27 Python checks, both Godot UI
+suites against the committed soundtrack, and all four SDK/export jobs.
 
 This audit is a work queue, not a completion claim. Unknown mechanics remain
 explicitly unresolved; imported originals and private QA images are excluded

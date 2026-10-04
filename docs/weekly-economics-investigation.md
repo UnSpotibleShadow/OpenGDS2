@@ -115,8 +115,9 @@ Do not expose this as a free fee-reduction action.
 
 Weekly hardware code is bounded to `009DB4F4 +0806..1471`. It includes a
 comparison of member 1B98 against 4 and availability transitions 0 → 1 → 2.
-The full identity/meaning of 1B98, counters involving constants 24/14/17,
-launch/retirement eligibility, and market-table lifecycles remain unresolved.
+M34 tracing resolves 1B98 as a release counter; see below. Counters involving
+constants 24/14/17, complete launch/retirement eligibility, and market-table
+lifecycles remain unresolved.
 Do not infer their units or replace them with a conventional release schedule.
 
 March-end annual renewal and subsequent month rollover are documented in
@@ -155,6 +156,25 @@ completed week. Original modal calls resume the procedure. Godot must represent
 pending calendar work explicitly before connecting date advancement, including
 save/reload and refusal/resumption tests. Existing isolated 200-tick services
 must not execute those same transactions a second time.
+
+## Hardware release gate — M34 tracing follow-up
+
+Member 1B98 / A12BB4 is not an elapsed-week counter. Reset
+`009DD234 +12CE..12D7` writes Empty. First shipment `009C9CB8
++102F..103E` increments it by one. A targeted reference scan finds no weekly
+increment. The weekly hardware eligibility branches compare it against >=4,
+then clear it when starting an eligible platform countdown (for example
+`009DB4F4 +0801..081B`). Reprinting uses a separate handler and does not write
+this counter. Thus the source gate counts first shipments since the last
+hardware trigger; it must not be substituted with the total lifetime release
+count after triggers begin resetting it.
+
+Identifier membership, current-stage member EB4, funds and zero launch countdown
+are additional predicates. The launch loop decrements the new countdown in the
+same weekly pass, after the trigger loop. This narrows the remaining calendar
+work; neither the counter nor live platform events is connected yet. Stage
+transitions, retirement side effects, modal news/licensing and save fields need
+complete reconstruction before enabling them.
 
 ## Resume and validation
 

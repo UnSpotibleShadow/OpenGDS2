@@ -1,4 +1,4 @@
-# Validation — M33 technology cadence checkpoint
+# Validation — M34 company accounting checkpoint
 
 M32 restores employee selection in the office and from the staff table. The
 local host has recovered: direct compilation, 140 C# checks (138 public and
@@ -32,8 +32,12 @@ Direct C# compilation and 148 local domain checks (146 public, two original
 fixtures), all 27 Python checks (19 public, eight original fixtures) and the
 core-loop Godot UI suite pass. Seven new regressions exercise signed accounting,
 legacy unknowns, period boundaries, opening cash and atomic failure. The bounded
-original checks establish all three accumulator/reset cells. Standard SDK/export
-checks are pending. The isolated original-import UI rerun with the committed
+original checks establish all three accumulator/reset cells. The [M34 SDK/export workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37186347364)
+passed all four jobs: 146 public C# checks, 19 public Python checks (eight
+original fixtures skipped), zero standard build warnings/errors, both Godot UI
+suites, Linux/Windows exports and complete core-loop fixtures in extracted
+packages on native Linux and Windows. Both packaged runs have zero failures.
+M34 merged as `593dc3f3abd86421f7a654d6b3834db39a68754e` (PR #27). The isolated original-import UI rerun with the committed
 soundtrack also passes with zero failures.
 
 A pre-existing local edit to office-01.ogg fails its bundled-duration check.
