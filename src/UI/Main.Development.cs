@@ -21,7 +21,7 @@ public partial class Main
                 CustomMinimumSize=new Vector2(64,64)
             });
         var details=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};row.AddChild(details);
-        details.AddChild(new Label {Text=$"{employee.Name}   {Tr("LEVEL")} {employee.Level}"});
+        details.AddChild(new Label {Text=$"{EmployeeName(employee)}   {Tr("LEVEL")} {employee.Level}"});
         details.AddChild(new Label {Text=$"{Tr("CONTRACT_FEE")}: ¥{employee.ContractFee:N0}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_FUN")}: {employee.Fun}   {Tr("STAT_NOVELTY")}: {employee.Novelty}   {Tr("STAT_ACCURACY")}: {employee.Accuracy}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_GRAPHICS")}: {employee.Graphics}   {Tr("STAT_MUSIC")}: {employee.Music}   {Tr("STAT_DEVELOPMENT_SPEED")}: {employee.DevelopmentSpeed}   {Tr("STAT_INSPIRATION")}: {employee.Inspiration}"});

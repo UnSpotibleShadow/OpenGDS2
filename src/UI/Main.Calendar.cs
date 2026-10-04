@@ -33,7 +33,7 @@ public partial class Main
             {
                 int id=employee.SourceIndex ?? throw new InvalidOperationException("Unknown employee identity.");
                 var checkbox=new CheckBox {Name=$"RenewEmployee{id}",ButtonPressed=true,
-                    Text=$"{employee.Name} — ¥{employee.ContractFee:N0}"};
+                    Text=$"{EmployeeName(employee)} — ¥{employee.ContractFee:N0}"};
                 selection.Add(id,checkbox);_content.AddChild(checkbox);
             }
             var confirm=new Button {Name="ConfirmContractRenewal",Text=Tr("CONFIRM_CONTRACT_RENEWAL")};_content.AddChild(confirm);

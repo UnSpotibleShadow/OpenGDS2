@@ -1481,3 +1481,191 @@ msgstr "続編を開発する"
 
 msgid "MANGA_ADAPTATION"
 msgstr "漫画をゲーム化する"
+
+# Unofficial community name readings; Japanese mode displays imported names.
+
+msgid "EMPLOYEE_NAME_0"
+msgstr "EMPLOYEE_NAME_0"
+
+msgid "EMPLOYEE_NAME_1"
+msgstr "EMPLOYEE_NAME_1"
+
+msgid "EMPLOYEE_NAME_2"
+msgstr "EMPLOYEE_NAME_2"
+
+msgid "EMPLOYEE_NAME_3"
+msgstr "EMPLOYEE_NAME_3"
+
+msgid "EMPLOYEE_NAME_4"
+msgstr "EMPLOYEE_NAME_4"
+
+msgid "EMPLOYEE_NAME_5"
+msgstr "EMPLOYEE_NAME_5"
+
+msgid "EMPLOYEE_NAME_6"
+msgstr "EMPLOYEE_NAME_6"
+
+msgid "EMPLOYEE_NAME_7"
+msgstr "EMPLOYEE_NAME_7"
+
+msgid "EMPLOYEE_NAME_8"
+msgstr "EMPLOYEE_NAME_8"
+
+msgid "EMPLOYEE_NAME_9"
+msgstr "EMPLOYEE_NAME_9"
+
+msgid "EMPLOYEE_NAME_10"
+msgstr "EMPLOYEE_NAME_10"
+
+msgid "EMPLOYEE_NAME_11"
+msgstr "EMPLOYEE_NAME_11"
+
+msgid "EMPLOYEE_NAME_12"
+msgstr "EMPLOYEE_NAME_12"
+
+msgid "EMPLOYEE_NAME_13"
+msgstr "EMPLOYEE_NAME_13"
+
+msgid "EMPLOYEE_NAME_14"
+msgstr "EMPLOYEE_NAME_14"
+
+msgid "EMPLOYEE_NAME_15"
+msgstr "EMPLOYEE_NAME_15"
+
+msgid "EMPLOYEE_NAME_16"
+msgstr "EMPLOYEE_NAME_16"
+
+msgid "EMPLOYEE_NAME_17"
+msgstr "EMPLOYEE_NAME_17"
+
+msgid "EMPLOYEE_NAME_18"
+msgstr "EMPLOYEE_NAME_18"
+
+msgid "EMPLOYEE_NAME_19"
+msgstr "EMPLOYEE_NAME_19"
+
+msgid "EMPLOYEE_NAME_20"
+msgstr "EMPLOYEE_NAME_20"
+
+msgid "EMPLOYEE_NAME_21"
+msgstr "EMPLOYEE_NAME_21"
+
+msgid "EMPLOYEE_NAME_22"
+msgstr "EMPLOYEE_NAME_22"
+
+msgid "EMPLOYEE_NAME_23"
+msgstr "EMPLOYEE_NAME_23"
+
+msgid "EMPLOYEE_NAME_24"
+msgstr "EMPLOYEE_NAME_24"
+
+msgid "EMPLOYEE_NAME_25"
+msgstr "EMPLOYEE_NAME_25"
+
+msgid "EMPLOYEE_NAME_26"
+msgstr "EMPLOYEE_NAME_26"
+
+msgid "EMPLOYEE_NAME_27"
+msgstr "EMPLOYEE_NAME_27"
+
+msgid "EMPLOYEE_NAME_28"
+msgstr "EMPLOYEE_NAME_28"
+
+msgid "EMPLOYEE_NAME_29"
+msgstr "EMPLOYEE_NAME_29"
+
+msgid "EMPLOYEE_NAME_30"
+msgstr "EMPLOYEE_NAME_30"
+
+msgid "EMPLOYEE_NAME_31"
+msgstr "EMPLOYEE_NAME_31"
+
+msgid "EMPLOYEE_NAME_32"
+msgstr "EMPLOYEE_NAME_32"
+
+msgid "EMPLOYEE_NAME_33"
+msgstr "EMPLOYEE_NAME_33"
+
+msgid "EMPLOYEE_NAME_34"
+msgstr "EMPLOYEE_NAME_34"
+
+msgid "EMPLOYEE_NAME_49"
+msgstr "EMPLOYEE_NAME_49"
+
+msgid "EMPLOYEE_NAME_50"
+msgstr "EMPLOYEE_NAME_50"
+
+msgid "EMPLOYEE_NAME_51"
+msgstr "EMPLOYEE_NAME_51"
+
+msgid "EMPLOYEE_NAME_52"
+msgstr "EMPLOYEE_NAME_52"
+
+msgid "EMPLOYEE_NAME_53"
+msgstr "EMPLOYEE_NAME_53"
+
+msgid "EMPLOYEE_NAME_54"
+msgstr "EMPLOYEE_NAME_54"
+
+msgid "EMPLOYEE_NAME_55"
+msgstr "EMPLOYEE_NAME_55"
+
+msgid "EMPLOYEE_NAME_56"
+msgstr "EMPLOYEE_NAME_56"
+
+msgid "EMPLOYEE_NAME_57"
+msgstr "EMPLOYEE_NAME_57"
+
+msgid "EMPLOYEE_NAME_58"
+msgstr "EMPLOYEE_NAME_58"
+
+msgid "EMPLOYEE_NAME_59"
+msgstr "EMPLOYEE_NAME_59"
+
+msgid "EMPLOYEE_FAMILY_0"
+msgstr "EMPLOYEE_FAMILY_0"
+
+msgid "EMPLOYEE_FAMILY_1"
+msgstr "EMPLOYEE_FAMILY_1"
+
+msgid "EMPLOYEE_FAMILY_2"
+msgstr "EMPLOYEE_FAMILY_2"
+
+msgid "EMPLOYEE_FAMILY_3"
+msgstr "EMPLOYEE_FAMILY_3"
+
+msgid "EMPLOYEE_FAMILY_4"
+msgstr "EMPLOYEE_FAMILY_4"
+
+msgid "EMPLOYEE_FAMILY_5"
+msgstr "EMPLOYEE_FAMILY_5"
+
+msgid "EMPLOYEE_FAMILY_6"
+msgstr "EMPLOYEE_FAMILY_6"
+
+msgid "EMPLOYEE_FAMILY_7"
+msgstr "EMPLOYEE_FAMILY_7"
+
+msgid "EMPLOYEE_GIVEN_0"
+msgstr "EMPLOYEE_GIVEN_0"
+
+msgid "EMPLOYEE_GIVEN_1"
+msgstr "EMPLOYEE_GIVEN_1"
+
+msgid "EMPLOYEE_GIVEN_2"
+msgstr "EMPLOYEE_GIVEN_2"
+
+msgid "EMPLOYEE_GIVEN_3"
+msgstr "EMPLOYEE_GIVEN_3"
+
+msgid "EMPLOYEE_GIVEN_4"
+msgstr "EMPLOYEE_GIVEN_4"
+
+msgid "EMPLOYEE_GIVEN_5"
+msgstr "EMPLOYEE_GIVEN_5"
+
+msgid "EMPLOYEE_GIVEN_6"
+msgstr "EMPLOYEE_GIVEN_6"
+
+msgid "EMPLOYEE_GIVEN_7"
+msgstr "EMPLOYEE_GIVEN_7"

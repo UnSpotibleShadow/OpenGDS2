@@ -68,7 +68,8 @@ The suffixes in this table refer to locally supplied
 | UI-05 | Candidate table, selected portrait/chart/bars/technologies and one hire action implemented/tested in M38; graphical parity remains. |
 | UI-03 | M39 connects verified plot hits to focused school management; other facilities, occupied-plot artwork and the overlapping hit strip remain unresolved. |
 | UI-07 | M39 connects verified desk interiors to a compact chooser and carries room identity into planning. Sequel/manga and original busy-window toggling remain unavailable. |
-| UI-08, UI-06, LOC-01 | Original quote/meeting separation, conversations and English staff-name readings remain pending. |
+| LOC-01 | M40 adds display-only unofficial community staff readings; Japanese/save identity retained. Pronunciation remains provisional. |
+| UI-08, UI-06 | Original quote/meeting separation and conversations remain pending. |
 | UI-02 | Artifact remains open; inspected reception atlas rectangles do not explain the captured red line. |
 
 See [M38 changes](presentation-fixes-m38.md) and [M39 evidence](office-clicks-m39.md).
@@ -91,3 +92,8 @@ See [remaining work](remaining-work.md),
 [original desktop and music](desktop-ui-and-music.md),
 [school facilities](school-rivals-and-rankings.md), and
 [employee inspection](compact-employee-presentation.md).
+
+## Owner milestone order
+
+Staff names → sprite artifact investigation/fix → conversations → quote/meeting layout.
+This explicit order supersedes the earlier suggested presentation ordering.

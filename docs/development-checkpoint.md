@@ -1,4 +1,12 @@
-# Development checkpoint — M39, 2026-10-04
+# Development checkpoint — M40, 2026-10-04
+
+M40 adds display-only English staff-name readings while preserving Japanese
+and saved employee identity. Local direct C# compilation, 202 domain checks
+(including two private original checks), 28 Python checks and both Godot suites
+pass. Standard SDK/export/native Windows validation is pending publication.
+See [staff-name evidence and limits](staff-name-localization.md).
+
+## Previous M39 validation
 
 M39 connects desk-interior development actions and focused tenant-slot school
 management using recovered original hit regions. It also restores the sales

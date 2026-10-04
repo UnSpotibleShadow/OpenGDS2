@@ -7,7 +7,7 @@ public partial class Main
 {
     private void ShowDismissEmployee(GameState state,EmployeeState employee)
     {
-        ClearContent();AddHeading(Tr("DISMISS_EMPLOYEE"),28);AddHeading(employee.Name,22);
+        ClearContent();AddHeading(Tr("DISMISS_EMPLOYEE"),28);AddHeading(EmployeeName(employee),22);
         AddHeading(Tr("DISMISS_EMPLOYEE_CONFIRM"),18);
         var confirm=new Button {Name="ConfirmDismissal",Text=Tr("CONFIRM")};_content.AddChild(confirm);
         confirm.Pressed+=()=>
@@ -50,7 +50,7 @@ public partial class Main
                 $"{Tr("STAT_GRAPHICS")}: {q.Graphics:N0} · {Tr("STAT_MUSIC")}: {q.Music:N0}\n"+
                 $"{Tr("BUGS")}: {project.Bugs}\n"+
                 string.Join("\n",state.Employees.Where(x=>x.Office?.Action is >=6 and <=17 && (x.Office.Action-6)/6==project.RoomIndex)
-                    .Select(x=>$"{x.Name} · {Tr("STRESS")}: {x.Stress:N0}%"));
+                    .Select(x=>$"{EmployeeName(x)} · {Tr("STRESS")}: {x.Stress:N0}%"));
         };
         _refreshCoreStatus();
     }

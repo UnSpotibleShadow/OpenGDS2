@@ -204,6 +204,11 @@ func run() -> void:
         check(recruitment != null and recruitment.get_root().get_child_count() == 5,"Five candidates in compact recruitment table")
         check(hire_buttons.size() == 1, "One selected-candidate hire action")
         if recruitment != null:
+            for row_index in range(recruitment.get_root().get_child_count()):
+                var display_name: String = recruitment.get_root().get_child(row_index).get_text(0)
+                check(display_name.to_ascii_buffer().get_string_from_ascii() == display_name,"Recruitment names have English community readings")
+
+        if recruitment != null:
             await press("SAVE_GAME")
             var before_selection = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
             recruitment.get_root().get_child(1).select(0)

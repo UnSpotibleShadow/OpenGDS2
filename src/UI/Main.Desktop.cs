@@ -320,7 +320,7 @@ public partial class Main
         for (int index = 0; index < state.Employees.Count; index++)
         {
             var employee = state.Employees[index];
-            string[] values = [employee.Name, employee.Level?.ToString() ?? "?", employee.Fun?.ToString() ?? "?",
+            string[] values = [EmployeeName(employee), employee.Level?.ToString() ?? "?", employee.Fun?.ToString() ?? "?",
                 employee.Novelty?.ToString() ?? "?", employee.Graphics?.ToString() ?? "?", employee.Music?.ToString() ?? "?",
                 employee.Accuracy?.ToString() ?? "?", employee.DevelopmentSpeed?.ToString() ?? "?", employee.Inspiration?.ToString() ?? "?",
                 employee.Experience?.ToString("N0") ?? "?"];
