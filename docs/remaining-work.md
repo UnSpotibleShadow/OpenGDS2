@@ -26,7 +26,7 @@ their execution rules and defaults remain unresolved. See
 M38 implements the supplied title theme, contrasting input caret/selection,
 native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
-Sprite artifact diagnosis, remaining conversations, hardware picture mapping/original meeting animation and
+Sprite artifact diagnosis, remaining conversations, original meeting animation and
 M40 supplies provisional display-only English staff-name readings; pronunciation review remains.
 
 M39 connects verified desk-interior hits to a contextual room chooser and

@@ -82,6 +82,9 @@ func run() -> void:
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
         for index in range(16):
             check(FileAccess.file_exists("user://original/Graphic/Embedded/Toolbar%d.bmp" % index),"Original toolbar bitmap imported locally: %d" % index)
+        for index in range(15):
+            check(FileAccess.file_exists("user://original/Graphic/Embedded/Hardware%d.bmp" % index),"Original hardware picture imported locally: %d" % index)
+
     await press("NEW_GAME")
     if fixture.is_empty():
         check(nodes_of_type("LineEdit").is_empty(), "New game requires local original data")
@@ -122,6 +125,15 @@ func run() -> void:
     check(hardware_rows.get_child(0).get_text(3) == "150,000","Quote shipment display uses floor(original market) times 10000")
     check(main.find_child("PlanningQuote", true, false).text.contains("20,000,000"), "Initial planning cost")
     check(main.find_child("PlanningQuote", true, false).text.contains("400"), "Initial planning points")
+    var planning_picture = main.find_child("PlanningHardwarePicture",true,false)
+    var expected_picture = Image.load_from_file(ProjectSettings.globalize_path("user://original/Graphic/Embedded/Hardware0.bmp"))
+    expected_picture.convert(Image.FORMAT_RGB8)
+    check(planning_picture.texture != null and planning_picture.texture.get_width() == 64 and planning_picture.texture.get_height() == 64,"Quote shows original 64-pixel hardware picture")
+    if planning_picture.texture != null:
+        var displayed_picture = planning_picture.texture.get_image()
+        displayed_picture.convert(Image.FORMAT_RGB8)
+        check(displayed_picture.get_data() == expected_picture.get_data(),"Opening quote picture matches imported source index zero")
+
     await press("PLANNING_MEETING")
     await press("PLANNING_NEW_PROPOSAL")
     var focus_total := 0
@@ -198,6 +210,19 @@ func run() -> void:
         if buy_buttons.size() == 3:
             buy_buttons[0].pressed.emit()
             await process_frame
+        await press("CANCEL")
+        await press("DEVELOPMENT_PLANNING")
+        var selected_hardware = main.find_child("PlanningHardware",true,false)
+        var owned_row = selected_hardware.get_root().get_child(2)
+        check(owned_row.is_selectable(0),"Purchased license enables quote selection")
+        owned_row.select(0)
+        await process_frame
+        var selected_picture = main.find_child("PlanningHardwarePicture",true,false)
+        var selected_expected = Image.load_from_file(ProjectSettings.globalize_path("user://original/Graphic/Embedded/Hardware%d.bmp" % owned_row.get_metadata(0)))
+        selected_expected.convert(Image.FORMAT_RGB8)
+        var displayed_selected = selected_picture.texture.get_image()
+        displayed_selected.convert(Image.FORMAT_RGB8)
+        check(displayed_selected.get_data() == selected_expected.get_data(),"Quote selection switches to matching local hardware picture")
         await press("CANCEL")
         await press("HIRE_EMPLOYEES")
         var portraits = main.find_children("EmployeePortrait", "TextureRect", true, false)

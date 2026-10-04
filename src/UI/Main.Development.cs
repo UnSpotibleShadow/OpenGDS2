@@ -40,7 +40,9 @@ public partial class Main
         var hardware=CreateTable("PlanningHardware",["TARGET_HARDWARE","PLANNING_POINTS_COLUMN","PLANNING_COST_COLUMN","HARDWARE_SHIPMENTS"],[104,45,75,62]);
         hardware.CustomMinimumSize=new Vector2(320,100);top.AddChild(hardware);
         var hardwareDetails=new VBoxContainer {CustomMinimumSize=new Vector2(68,0)};top.AddChild(hardwareDetails);
-        hardwareDetails.AddChild(new Control {CustomMinimumSize=new Vector2(64,64)});
+        var picture=new TextureRect {Name="PlanningHardwarePicture",CustomMinimumSize=new Vector2(64,64),
+            ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,
+            TextureFilter=TextureFilterEnum.Nearest};hardwareDetails.AddChild(picture);
         var bits=new Label {Name="PlanningHardwareBits",HorizontalAlignment=HorizontalAlignment.Center};hardwareDetails.AddChild(bits);
         var lower=new HBoxContainer();_content.AddChild(lower);
         var audience=CreateTable("PlanningAudience",["TARGET_AUDIENCE","PLANNING_POINTS_COLUMN","PLANNING_COST_COLUMN"],[105,65,85]);
@@ -82,6 +84,7 @@ public partial class Main
             var result=DevelopmentProjectService.CheckNewPlan(state,catalog,room.GetSelectedId(),hardwareId,audienceId,out var value);
             quote.Text=$"{Tr("DEVELOPMENT_POINTS")}\n{value.Points:N0}\n{Tr("PLANNING_COST")}\n¥{value.Cost:N0}";
             bits.Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}";
+            picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{hardwareId}.bmp");
             gate.Text=result==DevelopmentPlanningResult.Success ? "" : Tr($"PLANNING_RESULT_{result}");meeting.Disabled=result!=DevelopmentPlanningResult.Success;
         }
         hardware.ItemSelected+=()=> {var row=hardware.GetSelected();if (row is not null && state.HardwareLicenses?.Contains(row.GetMetadata(0).AsInt32())==true) hardwareId=row.GetMetadata(0).AsInt32();RefreshQuote();};

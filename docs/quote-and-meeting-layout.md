@@ -28,8 +28,8 @@ No cost/quality/sales formula is changed by this presentation milestone.
 
 ## Presentation limits
 
-Hardware picture resource-to-source mapping is unresolved; the layout reserves
-its space and shows the verified selected bit width without a fabricated image.
+M43 resolves hardware picture mapping and shows the locally imported 64 × 64
+image beside its bit width. Older caches can reimport the original LZH.
 The following meeting is the existing simplified title/focus proposal UI in a
 separate compact window. Original animated meeting portraits, dialogue, voting,
 proposal/title sequencing and all decision modes are not claimed restored.
@@ -45,3 +45,21 @@ release/sales regressions. Private original UI checks verify three opening
 hardware rows, seven audience rows, grey license guards, ¥20,000,000 / 400-point
 opening quote, 150,000 opening shipment units and both office room contexts.
 SDK/export/native Windows validation is tracked in the checkpoint.
+
+## M43 hardware pictures
+
+`MDIForm1.ImageHard` contains fifteen serialized 64 × 64 pictures. Bitmap file
+offsets start at 1A9F3E with stride 3069; the stored array index descends 14..0.
+The control name and repeated index immediately before each bitmap establish
+identity independently of visual similarity. Source 0 is at 1D44FC.
+`009940B8 +009B..00E8` accesses the MDI array with the selected hardware source
+index for 0..10. Other array entries are imported but are not used to invent a
+new own-hardware workflow.
+
+The importer validates control name/index and dimensions and writes only to the
+user's local cache. No image bytes or reference contact sheet are public.
+`tools/verify_hardware_picture_evidence.py` checks source-selection and resource
+anchors. The private UI fixture compares normalized RGB pixels for the opening
+platform and a newly licensed platform after changing selection. Public tests
+continue to run without original artwork. M43 has 32 Python checks (22 public,
+ten private) and 206 domain checks; both Godot suites pass.

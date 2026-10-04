@@ -17,6 +17,17 @@ public static class EmbeddedGraphicsImporter
             0x4F97, 0x5630, 0x5CC9, 0x6362, 0x69FB, 0x7094, 0x772D, 0x7DC6];
         for (int index = 0; index < toolbar.Length; index++)
             WriteBitmap(executable, toolbar[index], 23, 22, destination, $"Toolbar{index}.bmp");
+        // MDIForm1.ImageHard is serialized in descending array-index order.
+        // The quote accesses this array by selected source index (009940B8+B0).
+        for (int index = 0; index < 15; index++)
+        {
+            int offset = 0x1A9F3E + (14-index)*0x3069;
+            if (offset > executable.Length-54 ||
+                !executable.AsSpan(offset-27,12).SequenceEqual(System.Text.Encoding.ASCII.GetBytes("ImageHard\0\x18\x01")) ||
+                BinaryPrimitives.ReadUInt16LittleEndian(executable.AsSpan(offset-15,2)) != index)
+                throw new InvalidDataException("Unsupported embedded hardware picture array.");
+            WriteBitmap(executable, offset, 64, 64, destination, $"Hardware{index}.bmp");
+        }
     }
 
     private static void WriteBitmap(byte[] bytes, int offset, int width, int height, string destination, string name)
