@@ -269,6 +269,7 @@ public partial class Main : Control
     private void ShowOfficeReconstruction(GameState state)
     {
         _activeCatalog = _importer.LoadCatalog();
+        _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
         PersistPendingRankings(state);
         EnsureDesktop(state);
         // M35 persisted these two stops before their form behavior was mapped.
@@ -305,7 +306,7 @@ public partial class Main : Control
         for (int i=0;i<roster.Candidates.Count;i++)
         {
             var candidate=roster.Candidates[i];var row=table.CreateItem(root);row.SetMetadata(0,i);
-            string[] values=[candidate.Name,candidate.Level?.ToString() ?? "?",candidate.Fun?.ToString() ?? "?",
+            string[] values=[EmployeeName(candidate),candidate.Level?.ToString() ?? "?",candidate.Fun?.ToString() ?? "?",
                 candidate.Graphics?.ToString() ?? "?",candidate.Novelty?.ToString() ?? "?",candidate.Music?.ToString() ?? "?",
                 candidate.Accuracy?.ToString() ?? "?",candidate.ContractFee?.ToString("N0") ?? "?"];
             for (int col=0;col<values.Length;col++) {row.SetText(col,values[col]);if (col>0) row.SetTextAlignment(col,HorizontalAlignment.Right);}
@@ -414,7 +415,7 @@ public partial class Main : Control
             Text=$"{Tr("MONTHLY_SALARY_TOTAL")}: {salaryTotal?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
         foreach (var employee in state.Employees)
         {
-            if (CalendarService.HasPending(state)) AddHeading($"{employee.Name}: {employee.MonthlySalary:N0}",18);
+            if (CalendarService.HasPending(state)) AddHeading($"{EmployeeName(employee)}: {employee.MonthlySalary:N0}",18);
             else AddStaffEmployeeControls(state,employee);
         }
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));

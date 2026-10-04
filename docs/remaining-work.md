@@ -27,7 +27,7 @@ M38 implements the supplied title theme, contrasting input caret/selection,
 native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
 Sprite artifact diagnosis, conversations, original quote/meeting structure and
-English staff-name readings remain pending.
+M40 supplies provisional display-only English staff-name readings; pronunciation review remains.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
@@ -51,7 +51,7 @@ See [office click evidence and validation](office-clicks-m39.md).
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
 | Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; M32 connects employee hit-testing; M37 restores compact inspection, arrow, ability chart and bars; recover remaining right-click/room interactions, meeting/work animations and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
-| Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help; M30 corrects image associations and persists language | Establish employee name readings, translate bitmap text through local patches, recover the original setup default locally, and validate Japanese glyph rendering across desktops |
+| Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help; M30 corrects image associations and persists language | Verify provisional employee name readings, translate bitmap text through local patches, recover the original setup default locally, and validate Japanese glyph rendering across desktops |
 | Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 196 public C# checks at M37; M37 passed all four SDK/export jobs with zero UI/core-loop failures; native validation and build downloads are recorded in development-checkpoint.md; private-original reruns and all 27 Python checks now pass | Graphical usability and original Windows behavioral comparison remain |
 
 See [the original/OpenGDS2 comparison](original-comparison.md) for a prioritized

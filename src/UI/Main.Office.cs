@@ -22,7 +22,7 @@ public partial class Main
     {
         ClearContent(); AddHeading(Tr("ASSIGN_DESK"),18);
         CompactManagementWindow("DeskAssignmentWindow",new Vector2(410,340),390);
-        _content.AddChild(new Label {Text=employee.Name,ClipText=true,HorizontalAlignment=HorizontalAlignment.Center});
+        _content.AddChild(new Label {Text=EmployeeName(employee),ClipText=true,HorizontalAlignment=HorizontalAlignment.Center});
         _content.AddChild(new Label {Text=Tr("DESK_ASSIGNMENT_NOTE"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
         var grid=new GridContainer {Name="DeskAssignments",Columns=2};
         grid.AddThemeConstantOverride("h_separation",8);
@@ -38,9 +38,9 @@ public partial class Main
             var button=new Button
             {
                 Name=$"AssignDesk{action}",
-                Text=$"{Tr("DESK")} {desk+1}"+(occupant is null ? "" : $" — {occupant.Name}"),
+                Text=$"{Tr("DESK")} {desk+1}"+(occupant is null ? "" : $" — {EmployeeName(occupant)}"),
                 TooltipText=$"{Tr("DEVELOPMENT_ROOM")} {room+1} / {Tr("DESK")} {desk+1}"+
-                    (occupant is null ? "" : $" — {occupant.Name}"),
+                    (occupant is null ? "" : $" — {EmployeeName(occupant)}"),
                 TextOverrunBehavior=TextServer.OverrunBehavior.TrimEllipsis,
                 CustomMinimumSize=new Vector2(185,26),SizeFlagsHorizontal=SizeFlags.ExpandFill,
                 Disabled=occupant is not null

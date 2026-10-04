@@ -67,6 +67,16 @@ class PublicTests(unittest.TestCase):
                 self.assertIn(key,entries,key)
                 self.assertTrue(entries[key],key+' missing English label')
                 self.assertFalse(any('\u3040' <= c <= '\u30ff' or '\u4e00' <= c <= '\u9fff' for c in entries[key]),key)
+    def test_english_employee_reading_coverage(self):
+        import re
+        text=(ROOT/'localization'/'en.po').read_text()
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',text,re.M))
+        keys=[f'EMPLOYEE_NAME_{i}' for i in list(range(35))+list(range(49,60))]
+        keys += [f'EMPLOYEE_{part}_{i}' for part in ['FAMILY','GIVEN'] for i in range(8)]
+        for key in keys:
+            self.assertIn(key,entries)
+            self.assertTrue(entries[key] and entries[key] != key)
+            self.assertTrue(entries[key].isascii(),key)
     def test_public_tree_no_original_files(self):
         for path in ROOT.rglob('*'):
             if any(part in ['.git','.godot','bin','obj','__pycache__'] for part in path.parts):continue

@@ -69,3 +69,5 @@ The complete core-loop fixture reports zero failures, checks every toolbar image
 and tooltip, status help, type/genre labels, English/Japanese switching, and that
 catalog names are unchanged on disk. Extracted desktop validation is tracked in
 `validation.md`. Full graphical comparison remains outstanding.
+
+M40 adds display-only employee readings. See [staff-name localization](staff-name-localization.md) for provisional pronunciations, identity matching, generated names and fallbacks.

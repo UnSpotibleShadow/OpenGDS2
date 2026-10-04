@@ -1481,3 +1481,191 @@ msgstr "Develop a Sequel"
 
 msgid "MANGA_ADAPTATION"
 msgstr "Adapt Manga"
+
+# Unofficial community name readings; Japanese mode displays imported names.
+
+msgid "EMPLOYEE_NAME_0"
+msgstr "Yamamoto Haro"
+
+msgid "EMPLOYEE_NAME_1"
+msgstr "Goto Koji"
+
+msgid "EMPLOYEE_NAME_2"
+msgstr "Oda Setsuei"
+
+msgid "EMPLOYEE_NAME_3"
+msgstr "Murata Yasunori"
+
+msgid "EMPLOYEE_NAME_4"
+msgstr "Takeda Shimasuke"
+
+msgid "EMPLOYEE_NAME_5"
+msgstr "Miyamoto Shimokichi"
+
+msgid "EMPLOYEE_NAME_6"
+msgstr "Akatsuka Keiko"
+
+msgid "EMPLOYEE_NAME_7"
+msgstr "Ibe Mimiko"
+
+msgid "EMPLOYEE_NAME_8"
+msgstr "Miyamura Amon"
+
+msgid "EMPLOYEE_NAME_9"
+msgstr "Sakashita Kinro"
+
+msgid "EMPLOYEE_NAME_10"
+msgstr "Tanaka Goro"
+
+msgid "EMPLOYEE_NAME_11"
+msgstr "Sakamoto Sando"
+
+msgid "EMPLOYEE_NAME_12"
+msgstr "Aida Takafumi"
+
+msgid "EMPLOYEE_NAME_13"
+msgstr "Ando Juro"
+
+msgid "EMPLOYEE_NAME_14"
+msgstr "Nakamura Taichi"
+
+msgid "EMPLOYEE_NAME_15"
+msgstr "Komiya Ryoko"
+
+msgid "EMPLOYEE_NAME_16"
+msgstr "Francoise Hana"
+
+msgid "EMPLOYEE_NAME_17"
+msgstr "Mori Motoya"
+
+msgid "EMPLOYEE_NAME_18"
+msgstr "Kawakami Nobuaki"
+
+msgid "EMPLOYEE_NAME_19"
+msgstr "Hashimoto Ryujiro"
+
+msgid "EMPLOYEE_NAME_20"
+msgstr "Hojo Tokimune"
+
+msgid "EMPLOYEE_NAME_21"
+msgstr "Takahashi Hashio"
+
+msgid "EMPLOYEE_NAME_22"
+msgstr "Yamakawa Jin"
+
+msgid "EMPLOYEE_NAME_23"
+msgstr "Kimi Yoshimi"
+
+msgid "EMPLOYEE_NAME_24"
+msgstr "Misawa Yoshiko"
+
+msgid "EMPLOYEE_NAME_25"
+msgstr "Arisaka Osamu"
+
+msgid "EMPLOYEE_NAME_26"
+msgstr "Akimoto Yoshiyuki"
+
+msgid "EMPLOYEE_NAME_27"
+msgstr "Tajima Akitoshi"
+
+msgid "EMPLOYEE_NAME_28"
+msgstr "Sasada Daisuke"
+
+msgid "EMPLOYEE_NAME_29"
+msgstr "Yoshinaga Kimiko"
+
+msgid "EMPLOYEE_NAME_30"
+msgstr "Ichigeki Yuko"
+
+msgid "EMPLOYEE_NAME_31"
+msgstr "Tsubaki Gihei"
+
+msgid "EMPLOYEE_NAME_32"
+msgstr "Arakawa Geitsu"
+
+msgid "EMPLOYEE_NAME_33"
+msgstr "Minobe Akujiro"
+
+msgid "EMPLOYEE_NAME_34"
+msgstr "Tashano Hito"
+
+msgid "EMPLOYEE_NAME_49"
+msgstr "Nohara Kazuhiro"
+
+msgid "EMPLOYEE_NAME_50"
+msgstr "Iwaaki Yuzo"
+
+msgid "EMPLOYEE_NAME_51"
+msgstr "Mitsuhiro Shinpei"
+
+msgid "EMPLOYEE_NAME_52"
+msgstr "Shirai Taro"
+
+msgid "EMPLOYEE_NAME_53"
+msgstr "Wada Enpitsu"
+
+msgid "EMPLOYEE_NAME_54"
+msgstr "Ishizaka Ureo"
+
+msgid "EMPLOYEE_NAME_55"
+msgstr "Iwaki Iwako"
+
+msgid "EMPLOYEE_NAME_56"
+msgstr "Yamada Queenko"
+
+msgid "EMPLOYEE_NAME_57"
+msgstr "Pan Chirako"
+
+msgid "EMPLOYEE_NAME_58"
+msgstr "Kinugawa Onsen"
+
+msgid "EMPLOYEE_NAME_59"
+msgstr "Oana Ataro"
+
+msgid "EMPLOYEE_FAMILY_0"
+msgstr "Yamada"
+
+msgid "EMPLOYEE_FAMILY_1"
+msgstr "Yokoshita"
+
+msgid "EMPLOYEE_FAMILY_2"
+msgstr "Takeshita"
+
+msgid "EMPLOYEE_FAMILY_3"
+msgstr "Tanaka"
+
+msgid "EMPLOYEE_FAMILY_4"
+msgstr "Kimura"
+
+msgid "EMPLOYEE_FAMILY_5"
+msgstr "Honda"
+
+msgid "EMPLOYEE_FAMILY_6"
+msgstr "Okada"
+
+msgid "EMPLOYEE_FAMILY_7"
+msgstr "Yamazaki"
+
+msgid "EMPLOYEE_GIVEN_0"
+msgstr "Taijiro"
+
+msgid "EMPLOYEE_GIVEN_1"
+msgstr "Maruo"
+
+msgid "EMPLOYEE_GIVEN_2"
+msgstr "Noburo"
+
+msgid "EMPLOYEE_GIVEN_3"
+msgstr "Eikaku"
+
+msgid "EMPLOYEE_GIVEN_4"
+msgstr "Toshiyuki"
+
+msgid "EMPLOYEE_GIVEN_5"
+msgstr "Ryusuke"
+
+msgid "EMPLOYEE_GIVEN_6"
+msgstr "Daisuke"
+
+msgid "EMPLOYEE_GIVEN_7"
+msgstr "Yoshihito"

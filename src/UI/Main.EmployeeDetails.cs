@@ -33,7 +33,7 @@ public partial class Main
         _selectedEmployee=employee;
         _employeeDetails=new DesktopWindow {Name="EmployeeDetailsWindow"};_workspace!.AddChild(_employeeDetails);
         var position=_windows["CompanyWindow"].Position;
-        _employeeDetails.Initialize(employee.Name,position,new Vector2(224,376),false);
+        _employeeDetails.Initialize(EmployeeName(employee),position,new Vector2(224,376),false);
         _employeeDetails.CloseRequested=CloseEmployeeDetails;
         _windows["CompanyWindow"].Hide();
         _employeeDetails.Theme=ClassicTheme.Create();_employeeDetails.Theme.DefaultFontSize=11;
@@ -55,7 +55,7 @@ public partial class Main
             ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,CustomMinimumSize=new Vector2(64,64)});
         AddEmployeeDetailLabel(picture,"Level","",true);
         var financials=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};financials.AddThemeConstantOverride("separation",0);header.AddChild(financials);
-        AddEmployeeDetailLabel(financials,"Name",employee.Name,true);
+        AddEmployeeDetailLabel(financials,"Name",EmployeeName(employee),true);
         financials.AddChild(new Label {Text=Tr("MONTHLY_SALARY")});AddEmployeeDetailLabel(financials,"Salary","",false,$"MonthlySalary{employee.SourceIndex}");
         financials.AddChild(new Label {Text=Tr("CONTRACT_FEE")});AddEmployeeDetailLabel(financials,"Fee","",false);
         var tabs=new HBoxContainer();tabs.AddThemeConstantOverride("separation",2);selected.AddChild(tabs);
@@ -137,7 +137,7 @@ public partial class Main
     {
         var e=_selectedEmployee;if (e is null || _desktopState is null) return;
         if (!_desktopState.Employees.Contains(e)) {CloseEmployeeDetails();return;}
-        _employeeDetailsLabels["Name"].Text=e.Name;_employeeDetailsLabels["Level"].Text=$"{Tr("LEVEL")} {e.Level?.ToString() ?? "?"}/10";
+        _employeeDetailsLabels["Name"].Text=EmployeeName(e);_employeeDetailsLabels["Level"].Text=$"{Tr("LEVEL")} {e.Level?.ToString() ?? "?"}/10";
         _employeeDetailsLabels["Salary"].Text=e.MonthlySalary?.ToString("N0") ?? "?";_employeeDetailsLabels["Fee"].Text=e.ContractFee?.ToString("N0") ?? "?";
         _employeeDetailsLabels["Experience"].Text=$"{(e.Experience is double exp ? Math.Floor(exp).ToString() : "?")}/{(e.Level is >=1 and <=10 ? EmployeeLevelUpService.RequiredExperience(e.Level.Value).ToString() : "?")}";
         foreach (var (key,value) in new (string,double?)[] {("Speed",e.DevelopmentSpeed),("Inspiration",e.Inspiration),("Stress",e.Stress)})

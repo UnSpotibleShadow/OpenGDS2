@@ -33,6 +33,37 @@ void Throws<T>(Action action) where T : Exception
     c.RivalCompanies=["Synthetic company A","Synthetic company B"];
     s.Competition=CompetitionService.Opening(c);return (s,c);
 }
+Test("employee display readings preserve saved identity and custom names",()=>
+{
+    var db=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,
+        Employees=[new() {SourceIndex=7,Name="Synthetic Family  Synthetic Given"},new() {SourceIndex=35,GeneratedName=true}],
+        NameComponents=Enumerable.Range(0,8).Select(i=>new NameComponents {Family=$"Family{i}",Given=$"Given{i}"}).ToList()};
+    string Translate(string key)=>"English:"+key;
+    var e=new EmployeeState {SourceIndex=7,Name="Synthetic Family\u3000Synthetic Given"};
+    var state=new GameState {Company=new() {Name="Synthetic Company",PresidentName="Synthetic President"},Employees=[e]};string saved=SaveStore.Serialize(state);
+    Check(EmployeeNameLocalization.Display(e,db,true,Translate)=="English:EMPLOYEE_NAME_7");
+    Check(EmployeeNameLocalization.Display(e,db,false,Translate)==e.Name);
+    Check(EmployeeNameLocalization.Display(e,db,true,key=>key)==e.Name);
+    Check(EmployeeNameLocalization.Display(e,db,true,key=>"")==e.Name);
+    Check(EmployeeNameLocalization.Display(e,null,true,Translate)==e.Name);
+    Check(EmployeeNameLocalization.Display(new() {SourceIndex=7,Name="Custom"},db,true,Translate)=="Custom");
+    Check(EmployeeNameLocalization.Display(new() {SourceIndex=99,Name="Custom"},db,true,Translate)=="Custom");
+    Check(SaveStore.Serialize(state)==saved && SaveStore.Deserialize(saved).Employees.Single().Name==e.Name);
+    db.SourceHash="unsupported";Check(EmployeeNameLocalization.Display(e,db,true,Translate)==e.Name);
+});
+Test("generated employee readings follow all independent saved name combinations",()=>
+{
+    var db=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,
+        Employees=[new() {SourceIndex=35,GeneratedName=true}],
+        NameComponents=Enumerable.Range(0,8).Select(i=>new NameComponents {Family=$"F{i}",Given=$"G{i}"}).ToList()};
+    for (int family=0;family<8;family++) for (int given=0;given<8;given++)
+    {
+        var e=new EmployeeState {SourceIndex=35,Name=$"F{family} G{given}"};
+        Check(EmployeeNameLocalization.Display(e,db,true,key=>"English:"+key)==$"English:EMPLOYEE_FAMILY_{family} English:EMPLOYEE_GIVEN_{given}");
+        Check(EmployeeNameLocalization.Display(e,db,true,key=>key.StartsWith("EMPLOYEE_GIVEN") ? key : "Family")==e.Name);
+    }
+    Check(EmployeeNameLocalization.Display(new() {SourceIndex=35,Name="Custom"},db,true,key=>"English")=="Custom");
+});
 Test("office room interiors use original strict transformed bounds",()=>
 {
     Check(OfficeInteractionRules.DevelopmentRoomAt(192,148)==0);

@@ -1,12 +1,18 @@
 using Godot;
 using OpenGDS2.Domain;
 using OpenGDS2.Import;
+using OpenGDS2.Core;
 
 namespace OpenGDS2.UI;
 
 public partial class Main
 {
     private const string InterfaceSettingsPath = "user://interface.cfg";
+    private EmployeeDatabase? _activeEmployeeDatabase;
+
+    private string EmployeeName(EmployeeState employee) => EmployeeNameLocalization.Display(employee,
+        _activeEmployeeDatabase, TranslationServer.GetLocale().StartsWith("en", StringComparison.OrdinalIgnoreCase),
+        key => Tr(key));
 
     private void LoadInterfaceLanguage()
     {
