@@ -12,7 +12,11 @@ closure without refund; named rival award reels and reloads; independent Grand
 Prize record persistence; and compact employee tabs and marker cleanup. The
 first runs exposed layout expansion under the headless font metrics and test
 comparisons between JSON numeric types. These were corrected before publication.
-Standard SDK, Linux/Windows export and packaged checks are pending for M37.
+The [M37 standard workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37219588973)
+passes all four SDK/export jobs, with zero build warnings/errors and zero
+Godot UI and packaged Linux/Windows core-loop failures. The tested head is
+`d20ea082e900f57d5ff85c0add0857d6662aa296`; PR #31 merged as
+`08318cdf8e71f71913cd444710253be811d1b54b`.
 No complete rendered original-Windows comparison is claimed.
 
 ## Historical M34 validation

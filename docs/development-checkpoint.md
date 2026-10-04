@@ -10,11 +10,20 @@ known rival history; earlier missing history is never fabricated.
 Local checks pass: 198 domain checks (196 public plus two private originals),
 all 27 Python checks, direct C# builds with zero warnings/errors, and core-loop
 and original-import Godot suites with zero failures. Standard SDK/export and
-packaged Linux/Windows runs are pending. Own-hardware development, other
+packaged Linux/Windows runs pass all four jobs. Own-hardware development, other
 facilities, student growth, office progression, remaining economics and exact
 original RNG/presentation parity remain unfinished. See
 [school/rival/ranking evidence](school-rivals-and-rankings.md) and
 [employee presentation](compact-employee-presentation.md).
+
+M37 merged as `08318cdf8e71f71913cd444710253be811d1b54b` (PR #31).
+The tested head is `d20ea082e900f57d5ff85c0add0857d6662aa296`. All four jobs
+passed in [Validate run 37219588973](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37219588973):
+196 public domain checks, 19 public Python checks (eight original fixtures
+skipped), zero standard build warnings/errors and zero Godot/editor, packaged
+Linux and native Windows core-loop failures. Download
+**OpenGDS2-desktop-development** from that run; it expires 2026-10-18.
+Artifact digest: `sha256:5da4edc2620fc3e702c35b01c509743d2a1ec9f285335ac398dc3c015ac35520`.
 
 ## Previous M36 validation
 
