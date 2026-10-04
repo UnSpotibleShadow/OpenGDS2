@@ -28,3 +28,11 @@ separate creation identifiers and their durations differ.
 | office-08.ogg | Office Loop.wav |
 
 Music is optional and can be disabled in Settings without changing game rules.
+
+`title-theme.ogg` is the additional recording supplied as
+`ゲームのテーマ(2).mp3` on 2026-10-04, explicitly requested for the main-title
+screen. Its metadata also identifies Suno as the creation tool. It is distributed
+with OpenGDS2 under the same owner authorization and audio notice above, and is
+not covered by the source-code MIT grant. The conversion keeps stereo 48 kHz
+audio and removes the MP3's embedded cover art. It loops on the title separately
+from the office playlist and uses the same mute/volume settings.

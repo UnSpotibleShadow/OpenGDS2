@@ -860,6 +860,9 @@ msgstr "Hall of Fame"
 msgid "SHORT_FUN"
 msgstr "Fun"
 
+msgid "SHORT_CONTRACT_FEE"
+msgstr "Fee"
+
 msgid "SHORT_NOVELTY"
 msgstr "New"
 

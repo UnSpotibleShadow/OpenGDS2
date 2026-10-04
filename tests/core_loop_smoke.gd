@@ -70,6 +70,8 @@ func create_music_fixture() -> void:
         check(track.save_to_wav("user://music/office-%02d.wav" % (index+1)) == OK,"Write local music fixture")
 
 func run() -> void:
+    # Set after display initialization: the dummy window otherwise starts at 64².
+    root.size = Vector2i(1280,720)
     if OS.get_environment("XDG_DATA_HOME").is_empty():
         push_error("core_loop_smoke requires disposable XDG_DATA_HOME")
         quit(1)
@@ -105,6 +107,15 @@ func run() -> void:
     create_music_fixture()
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
+    await process_frame
+    var title_player = main.find_child("MusicPlayer",true,false)
+    check(title_player.stream != null and title_player.stream.resource_path.ends_with("title-theme.ogg") and title_player.stream.loop,"Dedicated title theme selected even with a local office playlist")
+    var original_viewport_size = root.size
+    root.size = Vector2i(1920,1080)
+    await process_frame
+    await process_frame
+    check(main.get_viewport_rect().size == Vector2(1920,1080),"Larger window adds native desktop workspace rather than stretching 1280 pixels")
+    root.size = original_viewport_size
     await process_frame
     await press("LOAD_GAME")
     var toolbar = main.find_child("DesktopToolbar",true,false)
@@ -160,6 +171,13 @@ func run() -> void:
     main.find_child("MENU_WINDOWS",true,false).get_popup().id_pressed.emit(2)
     await process_frame
     check(employee_window.visible,"Window menu reopens employee list")
+    root.size = Vector2i(1920,1080)
+    await process_frame
+    employee_window.position = Vector2(1500,700)
+    root.size = original_viewport_size
+    await process_frame
+    await process_frame
+    check(employee_window.position.x + employee_window.size.x <= main.find_child("DesktopWorkspace",true,false).size.x,"Window stays reachable after reducing desktop width")
     await press("START_GAME_DEVELOPMENT")
     var planning_hardware = main.find_child("PlanningHardware",true,false)
     var planning_audience = main.find_child("PlanningAudience",true,false)
@@ -182,6 +200,9 @@ func run() -> void:
     check(main.find_child("OfficeWindow",true,false) == office and office.visible,"Planning retains the office window")
     check(not main.find_child("AcceptPlan",true,false).disabled,"Planning can begin")
     main.find_child("PlanningTitle",true,false).text = "Synthetic UI Game"
+    var title_input = main.find_child("PlanningTitle",true,false)
+    check(title_input.get_theme_color("caret_color") == Color.BLACK,"Text fields have a contrasting black caret")
+    check(title_input.get_theme_color("font_selected_color") == Color.WHITE,"Selected input text remains legible")
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
     Engine.time_scale = 100

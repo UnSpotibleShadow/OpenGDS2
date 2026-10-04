@@ -14,6 +14,8 @@ public partial class BackgroundMusic : Node
     private readonly List<AudioStream> _tracks = new();
     private AudioStreamPlayer _player = null!;
     private bool _gameplayActive;
+    private bool _titleActive;
+    private AudioStreamOggVorbis? _titleTheme;
     private const string SettingsPath = "user://audio.cfg";
     public const string DirectoryPath = "user://music";
 
@@ -27,6 +29,8 @@ public partial class BackgroundMusic : Node
             VolumePercent = float.IsFinite(value) ? Math.Clamp(value, 0, 100) : 30;
         }
         _player = new AudioStreamPlayer { Name = "MusicPlayer" }; AddChild(_player);
+        _titleTheme = GD.Load<AudioStreamOggVorbis>("res://audio/community/title-theme.ogg");
+        if (_titleTheme is not null) _titleTheme.Loop = true;
         // A valid local playlist overrides the optional bundled community music.
         DirAccess.MakeDirRecursiveAbsolute(DirectoryPath);
         var filenames = DirAccess.GetFilesAt(DirectoryPath);
@@ -68,11 +72,20 @@ public partial class BackgroundMusic : Node
         _player.Stop(); _player.Stream = null;
         foreach (var track in _tracks) track.Dispose();
         _tracks.Clear();
+        _titleTheme?.Dispose(); _titleTheme = null;
     }
 
     public void SetGameplayActive(bool active)
     {
         _gameplayActive = active;
+        _titleActive = false;
+        UpdatePlayback();
+    }
+
+    public void SetTitleActive()
+    {
+        _gameplayActive = false;
+        _titleActive = true;
         UpdatePlayback();
     }
 
@@ -91,17 +104,19 @@ public partial class BackgroundMusic : Node
     {
         if (_tracks.Count == 0) return;
         TrackIndex = (TrackIndex + 1) % _tracks.Count;
-        _player.Stop(); _player.Stream = _tracks[TrackIndex]; UpdatePlayback();
+        // Advancing the office playlist never replaces the title theme.
+        if (_gameplayActive) { _player.Stop(); _player.Stream = _tracks[TrackIndex]; UpdatePlayback(); }
     }
 
     private void UpdatePlayback()
     {
-        if (_tracks.Count == 0) return;
-        _player.Stream ??= _tracks[TrackIndex];
-        _player.StreamPaused = !Enabled || !_gameplayActive;
+        AudioStream? desired = _titleActive ? _titleTheme :
+            _gameplayActive && _tracks.Count > 0 ? _tracks[TrackIndex] : null;
+        if (_player.Stream != desired) { _player.Stop(); _player.Stream = desired; }
+        _player.StreamPaused = !Enabled || desired is null;
         // Headless validation has no audible output. Avoid starting asynchronous
         // dummy-driver playback during accelerated simulation fixtures.
-        if (Enabled && _gameplayActive && !_player.Playing && DisplayServer.GetName() != "headless") _player.Play();
+        if (Enabled && desired is not null && !_player.Playing && DisplayServer.GetName() != "headless") _player.Play();
     }
 
     private void ApplyVolume() => _player.VolumeDb = VolumePercent <= 0 ? -80 : Mathf.LinearToDb(VolumePercent / 100);

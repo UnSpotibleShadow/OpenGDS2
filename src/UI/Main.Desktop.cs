@@ -357,4 +357,15 @@ public partial class Main
         _content = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, CustomMinimumSize = new Vector2(620, 0) };
         _content.AddThemeConstantOverride("separation", 5); scroll.AddChild(_content);
     }
+
+    private void CompactManagementWindow(string name, Vector2 size, float contentWidth)
+    {
+        _content.CustomMinimumSize = new Vector2(contentWidth, 0);
+        if (_dialog is null || _workspace is null) return;
+        _dialog.Name = name;
+        _dialog.Size = size;
+        // Prefer the free space beside the office, keeping the office visible.
+        _dialog.Position = new Vector2(Math.Min(480, Math.Max(0, _workspace.Size.X - size.X)),
+            Math.Min(36, Math.Max(0, _workspace.Size.Y - size.Y)));
+    }
 }

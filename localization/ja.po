@@ -860,6 +860,9 @@ msgstr "殿堂入り"
 msgid "SHORT_FUN"
 msgstr "面白"
 
+msgid "SHORT_CONTRACT_FEE"
+msgstr "契約金"
+
 msgid "SHORT_NOVELTY"
 msgstr "意外"
 
