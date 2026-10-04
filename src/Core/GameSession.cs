@@ -47,6 +47,8 @@ public sealed class GameSession
         {
             state.EmployeeSources = database.CreateSources(_random);
             state.MinimumSourceIndex = database.MinimumSourceIndex; state.SourceUpperBound = database.SourceUpperBound;
+            if (database.SourceHash==EmployeeDatabaseImporter.ExpectedHash)
+                state.MaximumSourceIndex=database.SourceUpperBound-1;
             state.Recruitment.CandidateDatabaseDecoded = true;
             if (database.SourceHash == EmployeeDatabaseImporter.ExpectedHash && database.SourceUpperBound == 60 &&
                 state.EmployeeSources.Select(x=>x.SourceIndex).Order().SequenceEqual(Enumerable.Range(0,60)))

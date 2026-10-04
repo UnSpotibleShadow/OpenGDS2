@@ -66,7 +66,6 @@ public static class SaveStore
             throw new InvalidDataException("Invalid session state.");
         if (state.Year is < 1 || state.Month is < 1 or > 12 || state.Week is < 1 or > 4)
             throw new InvalidDataException("Invalid calendar.");
-        CalendarService.Validate(state);
         if (state.OriginalPayrollScratchIndex<0)
             throw new InvalidDataException("Invalid original payroll scratch index.");
         if (state.DevelopmentComputerIndex is < 0 or > 3)
@@ -99,6 +98,8 @@ public static class SaveStore
                 product.Stock<0 || product.ProductionSpending<0)
                 throw new InvalidDataException("Invalid released game.");
             DevelopmentWorkRules.ValidateQuality(product.Quality);
+            if (product.ReleasedOn is GameDate released) AnnualCalendarValidation.Date(released);
+            if (product.OriginalAwardCode is <0 or >5) throw new InvalidDataException("Invalid original award marker.");
             if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
             RecallService.Validate(product);
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
@@ -146,9 +147,12 @@ public static class SaveStore
                 workspaces.Count(x => x.Office!.Action is >=1 and <=17))
             throw new InvalidDataException("Invalid office workspaces.");
         if (state.MinimumSourceIndex < 0 || state.SourceUpperBound < state.MinimumSourceIndex ||
+            state.MaximumSourceIndex<state.MinimumSourceIndex || state.MaximumSourceIndex>=state.SourceUpperBound ||
+            state.MaximumSourceIndex is not null && (state.MinimumSourceIndex is null || state.SourceUpperBound is null) ||
             (state.Recruitment.CandidateDatabaseDecoded && (state.MinimumSourceIndex is null || state.SourceUpperBound is null ||
              state.EmployeeSources.Count == 0 || state.EmployeeSources.Any(x => x.SourceIndex >= state.SourceUpperBound))))
             throw new InvalidDataException("Invalid recruitment bounds.");
+        CalendarService.Validate(state);
     }
 
     private static void ValidateProject(DevelopmentProjectState project)

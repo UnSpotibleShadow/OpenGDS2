@@ -1,6 +1,7 @@
 # Weekly-economics investigation checkpoint
 
-M35 integrates the verified branches into the resumable calendar. The older
+M35 integrates the verified branches into the resumable calendar. M36 now
+connects annual forms; see [annual-calendar-events.md](annual-calendar-events.md). The older
 findings below record the investigation progression; current implementation and
 remaining stops are in [calendar-transactions.md](calendar-transactions.md).
 

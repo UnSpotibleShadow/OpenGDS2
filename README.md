@@ -113,8 +113,10 @@ M16 connects public relations, genre research and production expansion, includin
 the shared budget and automatic production growth. Research unlocks more genres;
 fame increases future project recognition. See [company activity evidence and
 clock scope](docs/company-activities.md).
-See [the playable loop, evidence and limits](docs/core-loop.md). Calendar economics,
-awards and company progression are still unfinished. Reviews and sales milestones are connected.
+See [the playable loop, evidence and limits](docs/core-loop.md). M35 connects calendar economics;
+M36 adds exhibitions, own-company contest prizes, the Beginner ending and known
+graduate-event queues. School construction, rival contest presentation and full
+company progression remain unfinished. See [annual event evidence](docs/annual-calendar-events.md).
 
 M32 audits the original and current implementation and restores employee selection
 from office clicks and staff-table activation. See the

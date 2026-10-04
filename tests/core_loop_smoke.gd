@@ -652,7 +652,7 @@ func run() -> void:
     main.find_child("RenewEmployee2",true,false).button_pressed = false
     await press_node("ConfirmContractRenewal")
     Engine.time_scale = 100
-    if not await await_node("CalendarBlock"):
+    if not await await_node("ExhibitionSelection"):
         quit(1)
         return
     Engine.time_scale = 1
@@ -661,11 +661,120 @@ func run() -> void:
     check(renewed.State.Employees.size() == 1 and renewed.State.EmployeeSources[2].GateValue == 0,"Unchecked annual contract dismisses its source before payroll")
     check(renewed.State.Money == rs.Money-10-300,"Annual fee and shared-index monthly salary are each charged once")
     check(renewed.State.Month == 4 and renewed.State.Week == 1 and renewed.State.Company.WeeklyNet == -300,"April rollover resets accounting before payroll")
-    check(renewed.State.Calendar.Pending.Block == 4,"Unreconstructed exhibition explicitly stops later calendar transactions")
+    check(renewed.State.Calendar.Pending.PendingEvent == 7,"Spring exhibition pauses later calendar transactions")
     await press("LOAD_GAME")
     await press("SAVE_GAME")
     var renewed_reload = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(renewed_reload.State.Money == renewed.State.Money,"Reloading the pending exhibition never repeats annual fees or salary")
+    # Participate in an exhibition using a wholly synthetic product.
+    var exhibition_save = renewed_reload.duplicate(true)
+    var es = exhibition_save.State
+    es.Employees = []
+    es.EmployeeSources = []
+    es.Recruitment.CandidateDatabaseDecoded = false
+    es.DevelopmentProjects = []
+    es.ReleasedGames = [released.State.ReleasedGames[0].duplicate(true)]
+    es.ReleasedGames[0].Recognition = 95
+    es.ReleasedGames[0].Demand = 0
+    es.ReleasedGames[0].Stock = 0
+    es.ReleasedGames[0].ReleasedOn = {"Year":3,"Month":3,"Week":1}
+    es.Calendar.Pending.Exhibition = {"EligibleProducts":[0],"SelectedProducts":[]}
+    es.Calendar.ExhibitionVisitorRecord = 0
+    write_json("user://saves/slot1.json",exhibition_save)
+    await press("LOAD_GAME")
+    check(main.find_child("ExhibitionSelection",true,false) != null,"Exhibition selection survives loading")
+    main.find_child("ExhibitProduct0",true,false).button_pressed = true
+    check(main.find_child("ExhibitionFee",true,false).text.ends_with("10,000,000"),"Exhibition checkbox displays the proven fee")
+    await press_node("ParticipateExhibition")
+    await press("SAVE_GAME")
+    var exhibited = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var attendance = exhibited.State.Calendar.Pending.Exhibition.Visitors
+    check(attendance >= 9900 and attendance <= 17578,"Exhibition attendance stays within original timer bounds")
+    check(exhibited.State.Money == es.Money-10000000 and exhibited.State.ReleasedGames[0].Recognition == 95+floor(attendance/500),"Exhibition fee and uncapped product awareness commit together")
+    await press("LOAD_GAME")
+    check(main.find_child("ExhibitionResult",true,false) != null,"Exhibition result survives loading without another fee")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == exhibited.State.Money,"Loading exhibition result never repeats payment")
+    await press_node("CloseExhibition")
+    # Award categories with no own entries require no invented rival names.
+    var awards_save = exhibition_save.duplicate(true)
+    var aws = awards_save.State
+    aws.Month = 12
+    aws.Week = 4
+    aws.ReleasedGames = []
+    aws.Calendar.Pending = {"ClosingDate":{"Year":3,"Month":12,"Week":3},"Phase":0,"Index":0,"PendingEvent":8,
+        "Awards":{"Year":3,"Entries":[],"CategoryIndex":0}}
+    write_json("user://saves/slot1.json",awards_save)
+    await press("LOAD_GAME")
+    for category in range(5):
+        check(main.find_child("RevealAward",true,false) != null,"Award category awaits announcement")
+        await press_node("RevealAward")
+        await press("SAVE_GAME")
+        var announced = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(announced.State.Calendar.Pending.Awards.CategoryIndex == category and announced.State.Calendar.Pending.Awards.ResultReady,"Award result and cursor persist")
+        check(announced.State.Money == aws.Money,"Competitor result never invents a company payout")
+        await press("LOAD_GAME")
+        check(main.find_child("AwardResult",true,false) != null,"Saved award result reopens without rerolling")
+        await press_node("ContinueAwards")
+    # Force only a proven sales override for a deterministic grand prize.
+    var grand_save = awards_save.duplicate(true)
+    grand_save.State.ReleasedGames = [exhibition_save.State.ReleasedGames[0].duplicate(true)]
+    grand_save.State.ReleasedGames[0].UnitsSold = 1000000
+    grand_save.State.ReleasedGames[0].Quality = {"Fun":0,"Novelty":0,"Graphics":0,"Music":0}
+    grand_save.State.Calendar.Pending.Awards.Entries = [0]
+    grand_save.State.Calendar.Pending.Awards.CategoryIndex = 4
+    write_json("user://saves/slot1.json",grand_save)
+    await press("LOAD_GAME")
+    await press_node("RevealAward")
+    await press("SAVE_GAME")
+    var grand = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(grand.State.Money == grand_save.State.Money+500000000 and grand.State.ReleasedGames[0].OriginalAwardCode == 5,"Grand prize credits the proven reward and product marker")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == grand.State.Money,"Grand prize reload does not duplicate its payout")
+    await press_node("ContinueAwards")
+    # Graduate forms use source employees and one hire-or-decline per candidate.
+    var graduates_save = payroll_captured.duplicate(true)
+    var gs = graduates_save.State
+    gs.Year = 3
+    gs.Month = 4
+    gs.Week = 2
+    gs.CompanyActivityTicks = 0
+    gs.DevelopmentProjects = []
+    gs.ReleasedGames = []
+    gs.Employees = []
+    gs.MinimumSourceIndex = 0
+    gs.MaximumSourceIndex = 2
+    for row in gs.EmployeeSources:
+        row.GateValue = 0
+        row.Employee.ContractFee = 100
+    gs.Calendar = launched.State.Calendar.duplicate(true)
+    gs.Calendar.OriginalSlots0444 = [0,-1,-1]
+    gs.Calendar.Pending = {"ClosingDate":{"Year":3,"Month":4,"Week":1},"Phase":9,"Index":0,"PendingEvent":9,
+        "Graduates":{"Candidates":[0,2],"CandidateIndex":0}}
+    write_json("user://saves/slot1.json",graduates_save)
+    await press("LOAD_GAME")
+    check(main.find_child("GraduatePosition",true,false) != null,"Graduate prompt opens from its saved source queue")
+    await press_node("HireGraduate")
+    await press("SAVE_GAME")
+    var hired_graduate = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(hired_graduate.State.Money == gs.Money-100 and hired_graduate.State.Employees.size() == 1,"Graduate hiring charges the displayed source contract fee")
+    check(hired_graduate.State.Calendar.Pending.Graduates.CandidateIndex == 1,"Hiring advances exactly one graduate")
+    await press("LOAD_GAME")
+    await press_node("DeclineGraduate")
+    await press("SAVE_GAME")
+    var graduates_done = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(graduates_done.State.Employees.size() == 1 and graduates_done.State.Money == hired_graduate.State.Money,"Declining another graduate preserves the first hire")
+    # Beginner ending is terminal; Normal mode can load another save afterwards.
+    var ending_save = awards_save.duplicate(true)
+    ending_save.State.Mode = 0
+    ending_save.State.Year = 2
+    ending_save.State.Calendar.Pending = {"ClosingDate":{"Year":2,"Month":12,"Week":4},"Phase":0,"Index":0,"PendingEvent":10}
+    write_json("user://saves/slot1.json",ending_save)
+    await press("LOAD_GAME")
+    check(main.find_child("BeginnerEnding",true,false) != null,"Beginner ending opens its title-return message")
+    await press("BACK_TO_TITLE")
+    check(main.find_child("BeginnerEnding",true,false) == null,"Ending returns to the title screen")
     # The uncertainty guard permits only the verified staff-list scratch writer.
     var unknown_payroll = payroll_captured.duplicate(true)
     var ps = unknown_payroll.State

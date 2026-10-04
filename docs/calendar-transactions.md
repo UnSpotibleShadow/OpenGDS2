@@ -1,4 +1,4 @@
-# Calendar transactions — M35
+# Calendar transactions — M35/M36
 
 New companies using the supported locally imported catalog now advance the
 company date on the recovered 200-tick office boundary. Four weeks make a month;
@@ -16,16 +16,16 @@ not original dialogs, catalogs, binaries or procedure dumps.
 | Phase | Source offsets | Implemented behavior |
 | --- | --- | --- |
 | Boundary | +0000..01C6 | Clear company action/production flags; shift product history once; increment week |
-| Early events | +01C7..05F7 | Preserve the ending/award guards; March-end contract renewal pauses before rollover |
+| Early events | +01C7..05F7 | Beginner terminal ending and annual contest pause before payroll; March-end renewal precedes rollover |
 | Tenants | +05F8..0671 | Decrement the two structural tenant countdowns; clear member 1A70 at zero |
 | Accounting/payroll | +0672..0776 | Clear weekly net; at month rollover clear monthly net and debit recovered payroll; January clears yearly net first |
 | Hardware triggers | +0777..1103 | Visit source records in order; test shipment counter, stage, funds and zero launch countdown |
 | Hardware countdowns | +1104..1479 | Visit each source's launch then retirement branch, pausing at its news |
 | Recalls | +147A..1547 | Advance each product in order; a result pauses before later products |
 | Hardware market | +1548..1668 | Grow saved market cells and decrement growth counters |
-| Exhibitions | +1669..177E | Stop explicitly at April/October week 1 until participation/effects are reconstructed |
+| Exhibitions | +1669..177E | April/October week 1 selection, fee and awareness results; see annual-calendar-events.md |
 | Loans | +177F..197E | Visit three saved loan slots, announce exact due-date repayments, then debit and clear the type |
-| Graduates | +197F..1C0A | Preserve April week 2 and zero-slot eligibility; eligible recruitment remains an explicit stop |
+| Graduates | +197F..1C0A | April week 2 school gate, bounded lottery and individual hire/decline prompts |
 
 `CalendarTransaction` saves its closing date, phase, record cursor and pending
 news/decision. Original temporary week 5 is represented by a pending closing
@@ -110,13 +110,12 @@ debit; there is no affordability guard in this repayment block. Borrowing UI,
 eligibility/refusal, original save import and bankruptcy remain unimplemented.
 Fresh initialization establishes all three loan types zero.
 
-The December week 4 awards form, second-year December rollover ending branch,
-April/October exhibitions and eligible graduate recruitment stop at their source
-phase. They cannot be dismissed with a fabricated no-op result. The ending
-guard compares 3B0C **>= 0**, not == 0; its complete mode/lifecycle still needs
-tracing. Initial member 444 slots are all -1, so the graduate branch does not run
-without a later writer establishing a zero. School/tenant semantics beyond the
-proven structural expiry remain unresolved.
+M36 connects annual events using the verified forms. See
+[annual-calendar-events.md](annual-calendar-events.md) for exact award defects,
+exhibition fees/awareness, the Beginner terminal branch, graduate lotteries and
+remaining school/rival-presentation work. Missing old release dates or graduate
+bounds pause those events instead of inventing eligibility. Facility slots begin
+at −1; school construction remains a separate unresolved subsystem.
 
 Pre-M35 saves keep `Calendar = null` and their previous isolated budget behavior.
 Their historical countdowns, growth and loans cannot be inferred from a frozen

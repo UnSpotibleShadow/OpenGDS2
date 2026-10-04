@@ -29,6 +29,8 @@ public sealed class ReleasedGameState
     public List<int>? ReviewScores {get;set;}
     public bool ReviewPending {get;set;}
     public bool HallOfFame {get;set;}
+    public GameDate? ReleasedOn {get;set;}
+    public int? OriginalAwardCode {get;set;}
     public int? SalesMilestoneStage {get;set;}
     public List<int> PendingSalesMilestones {get;set;}=[];
 }

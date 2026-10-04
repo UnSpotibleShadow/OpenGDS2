@@ -10,7 +10,7 @@ public enum CalendarPhase
 public enum CalendarEvent
 {
     ContractRenewal, HardwareDevelopment, HardwareSoon, HardwareLaunch,
-    HardwareRetiring, HardwareRetired, LoanRepayment
+    HardwareRetiring, HardwareRetired, LoanRepayment, Exhibition, Awards, Graduates, BeginnerEnding
 }
 public enum CalendarBlock { PayrollUnknown, CatalogUnknown, BeginnerEnding, Awards, Exhibition, Graduates }
 
@@ -56,6 +56,9 @@ public sealed class CalendarTransaction
     public CalendarEvent? PendingEvent { get; set; }
     public CalendarBlock? Block { get; set; }
     public long? Amount { get; set; }
+    public ExhibitionState? Exhibition { get; set; }
+    public AwardCeremonyState? Awards { get; set; }
+    public GraduateEventState? Graduates { get; set; }
 }
 public sealed class CompanyCalendarState
 {
@@ -74,4 +77,7 @@ public sealed class CompanyCalendarState
     [JsonRequired]
     public List<int> OriginalSlots0444 { get; set; } = [];
     public CalendarTransaction? Pending { get; set; }
+    // Unknown in older saves; do not manufacture their previous records.
+    public int? ExhibitionVisitorRecord { get; set; }
+    public GameDate? FirstGrandPrizeDate { get; set; }
 }

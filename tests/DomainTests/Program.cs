@@ -23,6 +23,179 @@ void Throws<T>(Action action) where T : Exception
     s.Company.WeeklyNet=11;s.Company.MonthlyNet=22;s.Company.YearlyNet=33;
     s.Calendar=CalendarService.CreateOpening(c);return (s,c);
 }
+Test("exhibitions reject invalid selections without payment or visitor rolls",()=>
+{
+    var (s,c)=CalendarFixture(new(3,9,4),9_999_999);
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic product"}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(ExhibitionService.Participate(s,new HashSet<int>(),new SequenceRandom())==ExhibitionResult.NoSelection);
+    Check(ExhibitionService.Participate(s,new HashSet<int> {6},new SequenceRandom())==ExhibitionResult.InvalidSelection);
+    Check(ExhibitionService.Participate(s,new HashSet<int> {0},new SequenceRandom())==ExhibitionResult.InsufficientFunds);
+    Check(s.Money==9_999_999 && s.Calendar!.Pending!.Exhibition!.Visitors is null);
+    Check(ExhibitionService.Close(s) && !ExhibitionService.Close(s));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Month==10 && s.Week==1);
+});
+Test("exhibition charges each item once and preserves source order shared cap defect",()=>
+{
+    var (s,c)=CalendarFixture(new(3,9,4),100_000_000);
+    var p=new DevelopmentProjectState {Title="Synthetic room",RequiredPoints=100,Focus=new(25,25,25,25),Recognition=99.5};s.DevelopmentProjects=[p];
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Older",Recognition=20},new() {ProductIndex=1,Title="Newer",Recognition=110}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    var rng=new SequenceRandom(Enumerable.Repeat(0,22).ToArray());
+    Check(ExhibitionService.Participate(s,new HashSet<int> {0,1,-1},rng)==ExhibitionResult.Success && rng.Calls==22);
+    var e=s.Calendar!.Pending!.Exhibition!;
+    Check(e.SelectedProducts.SequenceEqual(new[] {-1,1,0}) && e.Visitors==9900 && e.ReportedAwarenessGain==.5);
+    Check(p.Recognition==100 && s.ReleasedGames[0].Recognition==20.5 && s.ReleasedGames[1].Recognition==110.5);
+    Check(s.Money==70_000_000 && s.Company.MonthlyNet==-30_000_000 && s.Calendar.ExhibitionVisitorRecord==9900);
+    string before=SaveStore.Serialize(s);s=SaveStore.Deserialize(before);
+    Check(ExhibitionService.Participate(s,new HashSet<int> {0},new SequenceRandom())==ExhibitionResult.NotPending && SaveStore.Serialize(s)==before);
+    Check(ExhibitionService.Close(s) && CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Money==70_000_000);
+});
+Test("exhibition visitor maximum and uncapped product awareness are preserved",()=>
+{
+    var (s,c)=CalendarFixture(new(3,3,4),100_000_000);
+    // The annual renewal resolves before the spring exhibition.
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(CalendarService.RenewContracts(s,new HashSet<int>())==ContractRenewalResult.Success);
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic",Recognition=95}];
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(ExhibitionService.Participate(s,new HashSet<int> {0},new SequenceRandom(Enumerable.Repeat(349,22).ToArray()))==ExhibitionResult.Success);
+    Check(s.Calendar!.Pending!.Exhibition!.Visitors==17578 && s.ReleasedGames[0].Recognition==130);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));s.Calendar!.ExhibitionVisitorRecord=null;
+    Check(ExhibitionService.Close(s) && CalendarService.Resume(s,c,new SequenceRandom()));
+});
+Test("exhibition rejects more than five and corrupt or detached saved selections",()=>
+{
+    var (s,c)=CalendarFixture(new(3,9,4));
+    s.ReleasedGames=Enumerable.Range(0,6).Select(i=>new ReleasedGameState {ProductIndex=i,Title=$"Synthetic {i}"}).ToList();
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(ExhibitionService.Participate(s,Enumerable.Range(0,6).ToHashSet(),new SequenceRandom())==ExhibitionResult.TooManyProducts);
+    s.Calendar!.Pending!.Exhibition!.EligibleProducts.RemoveAt(0);
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.Calendar.Pending.Exhibition.EligibleProducts=ExhibitionService.Eligible(s);s.Calendar.Pending.PendingEvent=null;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("award music graphics and design use the first threshold and the last successful entry",()=>
+{
+    var entries=new[] {new ReleasedGameState {ProductIndex=0,Quality=new(300,300,300,300)},
+        new ReleasedGameState {ProductIndex=1,Quality=new(80,80,70,70)},new ReleasedGameState {ProductIndex=2,Quality=new(0,0,0,0)}};
+    foreach (var award in new[] {GameAward.Music,GameAward.Graphics,GameAward.Design})
+    {
+        var rng=new SequenceRandom(1,1);
+        Check(AwardService.DrawWinner(award,entries,rng)==1 && rng.Calls==2);
+        Check(AwardService.DrawWinner(award,entries,new SequenceRandom(0,0)) is null);
+    }
+});
+Test("worst award discards first pass and draws even for high fun entries",()=>
+{
+    var entries=new[] {new ReleasedGameState {ProductIndex=0,Quality=new(40,0,0,0)},
+        new ReleasedGameState {ProductIndex=1,Quality=new(30,100,0,0)},new ReleasedGameState {ProductIndex=2,Quality=new(0,100,0,0)}};
+    // First pass hits entries 0 and 2; second pass consumes one draw per entry.
+    var rng=new SequenceRandom(1,1,0,0,0);
+    Check(AwardService.DrawWinner(GameAward.Worst,entries,rng)==2 && rng.Calls==5);
+    rng=new SequenceRandom(1,1,0,1,1);
+    Check(AwardService.DrawWinner(GameAward.Worst,entries,rng) is null && rng.Calls==5);
+});
+Test("grand prize sales override quality roll while preserving its random draw",()=>
+{
+    var entries=new[] {new ReleasedGameState {ProductIndex=0,Quality=new(300,300,300,300),UnitsSold=1_000_000},
+        new ReleasedGameState {ProductIndex=1,Quality=new(),UnitsSold=1_000_000}};
+    var rng=new SequenceRandom(0);Check(AwardService.DrawWinner(GameAward.GrandPrize,entries,rng)==1 && rng.Calls==1);
+    entries[1].UnitsSold=999_999;Check(AwardService.DrawWinner(GameAward.GrandPrize,entries,new SequenceRandom(0))==0);
+});
+Test("award ceremony tracks release year and serializes each signed payout without replay",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3),1_000_000);
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Previous year",ReleasedOn=new(2,12,1),Quality=new(300,300,300,300)},
+        new() {ProductIndex=1,Title="This year",ReleasedOn=new(3,6,1),Quality=new(30,140,70,70),OriginalAwardCode=0,UnitsSold=1_000_000}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Pending!.Awards!.Entries.SequenceEqual(new[] {1}) && s.Month==12 && s.Week==4);
+    foreach (var award in AwardService.Order)
+    {
+        long money=s.Money!.Value;
+        var rng=award==GameAward.Worst ? new SequenceRandom(0) : award==GameAward.GrandPrize ? new SequenceRandom() : new SequenceRandom(1);
+        Check(AwardService.Reveal(s,rng));
+        Check(s.Money==money+AwardService.Prize(award) && s.ReleasedGames[1].OriginalAwardCode==AwardService.OriginalCode(award));
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(!AwardService.Reveal(s,new SequenceRandom()) && s.Money==money+AwardService.Prize(award));
+        Check(AwardService.Continue(s) && !AwardService.Continue(s));
+    }
+    Check(s.Calendar!.FirstGrandPrizeDate==new GameDate(3,12,4));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==801_000_000);
+    Check(s.Company.MonthlyNet==800_000_022 && s.Company.WeeklyNet==0 && s.Company.YearlyNet==800_000_033);
+});
+Test("no award entry produces competitor results without invented payouts",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3),1000);Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    foreach (var award in AwardService.Order)
+    {
+        Check(AwardService.Reveal(s,new SequenceRandom()));
+        Check(s.Calendar!.Pending!.Awards!.WinningProduct is null && s.Money==1000);
+        Check(AwardService.Continue(s));
+    }
+    Check(CalendarService.Resume(s,c,new SequenceRandom()));
+});
+Test("unknown original release dates stop awards instead of inventing eligibility",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3));s.ReleasedGames=[new() {Title="Legacy product"}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar!.Pending!.Block==CalendarBlock.Awards);
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    s.ReleasedGames[0].ReleasedOn=new(3,5,1);Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Awards);
+});
+Test("normal mode crosses the beginner deadline and beginner ending skips all later transactions",()=>
+{
+    var (s,c)=CalendarFixture(new(2,12,4),1000);Check(CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Year==3 && s.Month==1);
+    (s,c)=CalendarFixture(new(2,12,4),1000);s.Mode=GameMode.Beginner;s.Rules=GameModeRules.For(s.Mode);
+    s.Calendar!.Tenants[0]=new() {OriginalState=1,Weeks=1};s.CompanyActivityTicks=199;s.CompanyActivityPerformed=true;
+    CompanyActivityService.Tick(s,new SequenceRandom(),c);
+    Check(s.Calendar.Pending!.PendingEvent==CalendarEvent.BeginnerEnding && s.Year==2 && s.Month==12 && s.Week==4 && s.Calendar.Tenants[0].Weeks==1);
+    string snapshot=SaveStore.Serialize(s);Check(!CalendarService.Resume(s,c,new SequenceRandom()) && !CalendarService.Acknowledge(s));
+    Check(SaveStore.Serialize(SaveStore.Deserialize(snapshot))==snapshot && s.Money==1000);
+});
+GameState GraduateFixture(int count=4)
+{
+    var (s,c)=CalendarFixture(new(3,4,1));s.MinimumSourceIndex=0;s.MaximumSourceIndex=count-1;s.SourceUpperBound=count;
+    s.EmployeeSources=Enumerable.Range(0,count).Select(i=>new RecruitmentSourceRecord {SourceIndex=i,GateValue=0,
+        Employee=new() {SourceIndex=i,Name=$"Synthetic graduate {i}",ContractFee=100,Level=1}}).ToList();
+    s.Calendar!.OriginalSlots0444[0]=0;return s;
+}
+Test("graduate lottery uses inclusive bounds and consumes employed source rolls",()=>
+{
+    var s=GraduateFixture();s.MinimumSourceIndex=1;s.MaximumSourceIndex=3;s.EmployeeSources[2].GateValue=1;
+    var rng=new SequenceRandom(0,0,0);
+    Check(GraduateService.DrawCandidates(s,rng).SequenceEqual(new[] {1,3}) && rng.Calls==3);
+});
+Test("graduate lottery repeats complete passes until two and does not cap accepted roster",()=>
+{
+    var s=GraduateFixture();var rng=new SequenceRandom(0,1,1,1,0,0,0,0);
+    Check(GraduateService.DrawCandidates(s,rng).SequenceEqual(new[] {0,1,2,3}) && rng.Calls==8);
+    s=GraduateFixture(2);Check(GraduateService.DrawCandidates(s,new SequenceRandom(1,1)).Count==0);
+});
+Test("graduate prompts survive reload and hire decline each advance one candidate",()=>
+{
+    var s=GraduateFixture(2);var (_,c)=CalendarFixture();s.Money=150;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom(0,0)) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Graduates);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(GraduateService.Hire(s,new SequenceRandom(1))==HireResult.Success);
+    Check(s.Money==50 && s.EmployeeSources[0].GateValue==1 && s.Calendar!.Pending!.Graduates!.CandidateIndex==1);
+    Check(GraduateService.Hire(s,new SequenceRandom())==HireResult.InsufficientFunds && s.Money==50);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(GraduateService.Decline(s) && !GraduateService.Decline(s));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Month==4 && s.Week==2 && s.Employees.Count==1);
+});
+Test("graduate school gate absence and empty lottery never pause the calendar",()=>
+{
+    var s=GraduateFixture(2);var (_,c)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=-1;
+    Check(CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    s=GraduateFixture(2);Check(CalendarService.BeginWeek(s,c,new SequenceRandom(1,1)));
+});
+Test("annual saves reject forged awards graduates and missing required payload cells",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3));Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    string json=SaveStore.Serialize(s);Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"CategoryIndex\": 0","\"CategoryIndex\": 6")));
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"CategoryIndex\": 0,","")));
+    s=GraduateFixture(2);Check(!CalendarService.BeginWeek(s,c,new SequenceRandom(0,0)));
+    s.Calendar!.Pending!.Graduates!.Candidates=[0,0];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("live calendar boundary shifts history once and resumes monthly signed payroll after load",()=>
 {
     var (s,c)=CalendarFixture(new(3,5,4),100);s.CompanyActivityTicks=199;s.CompanyActivityPerformed=true;
@@ -60,7 +233,7 @@ Test("annual renewal pauses before payroll and rejected selection cannot advance
     Check(CalendarService.RenewContracts(s,new HashSet<int> {0})==ContractRenewalResult.Success);
     Check(s.Money==930 && s.Employees.Count==1 && s.EmployeeSources[1].GateValue==0);
     Check(!CalendarService.Resume(s,c,new SequenceRandom()));
-    Check(s.Calendar!.Pending!.Block==CalendarBlock.Exhibition && s.Month==4 && s.Week==1 && s.Money==840);
+    Check(s.Calendar!.Pending!.PendingEvent==CalendarEvent.Exhibition && s.Month==4 && s.Week==1 && s.Money==840);
     Check(s.Company.WeeklyNet==-90 && s.Company.MonthlyNet==-90 && s.Company.YearlyNet==-127);
     Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==840);
 });
@@ -178,17 +351,38 @@ Test("calendar recall results stop before later product countdowns market growth
     RecallService.Acknowledge(s,s.ReleasedGames[1]);Check(!CalendarService.Resume(s,c,new SequenceRandom()));
     Check(s.Calendar!.Hardware[0].GrowthWeeks==0 && s.Calendar.Pending!.PendingEvent==CalendarEvent.LoanRepayment);
 });
-Test("unreconstructed calendar branches stop at source phase without skipping transactions",()=>
+Test("annual events stop at source phases and unknown graduate bounds remain explicit",()=>
 {
-    foreach (var (date,block) in new[] {(new GameDate(2,12,4),CalendarBlock.BeginnerEnding),
-        (new GameDate(3,12,3),CalendarBlock.Awards),(new GameDate(3,9,4),CalendarBlock.Exhibition)})
+    foreach (var (date,kind) in new[] {(new GameDate(2,12,4),CalendarEvent.BeginnerEnding),
+        (new GameDate(3,12,3),CalendarEvent.Awards),(new GameDate(3,9,4),CalendarEvent.Exhibition)})
     {
-        var (s,c)=CalendarFixture(date);Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
-        Check(s.Calendar!.Pending!.Block==block);string before=SaveStore.Serialize(s);
+        var (s,c)=CalendarFixture(date);if (kind==CalendarEvent.BeginnerEnding) {s.Mode=GameMode.Beginner;s.Rules=GameModeRules.For(s.Mode);}
+        Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+        Check(s.Calendar!.Pending!.PendingEvent==kind);string before=SaveStore.Serialize(s);
         Check(!CalendarService.Resume(s,c,new SequenceRandom()) && SaveStore.Serialize(s)==before);
+        Check(!CalendarService.Acknowledge(s));
     }
     var (g,gc)=CalendarFixture(new(3,4,1));g.Calendar!.OriginalSlots0444[0]=0;
     Check(!CalendarService.BeginWeek(g,gc,new SequenceRandom()) && g.Calendar.Pending!.Block==CalendarBlock.Graduates);
+});
+Test("M35 exhibition and normal ending stops resume their existing cursors",()=>
+{
+    var (s,c)=CalendarFixture(new(3,3,4));
+    s.Month=4;s.Week=1;s.Calendar!.Pending=new() {ClosingDate=new(3,3,4),Phase=CalendarPhase.Exhibition,Block=CalendarBlock.Exhibition};
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Exhibition);
+    Check(ExhibitionService.Close(s) && CalendarService.Resume(s,c,new SequenceRandom()));
+    (s,c)=CalendarFixture(new(2,12,4));
+    s.Calendar!.Pending=new() {ClosingDate=new(2,12,4),Phase=CalendarPhase.EarlyEvents,Block=CalendarBlock.BeginnerEnding};
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Year==3 && s.Month==1);
+});
+Test("award financial overflow cannot commit a winner marker or partial payment",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3),long.MaxValue);
+    s.ReleasedGames=[new() {Title="Synthetic",ReleasedOn=new(3,5,1),OriginalAwardCode=0,Quality=new(0,0,0,70)}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Throws<OverflowException>(()=>AwardService.Reveal(s,new SequenceRandom(1)));
+    Check(s.Money==long.MaxValue && s.ReleasedGames[0].OriginalAwardCode==0 && s.Calendar!.Pending!.Awards!.ResultReady is null);
 });
 Test("calendar modals pause office clocks and completing a boundary resumes its sales batch once",()=>
 {
