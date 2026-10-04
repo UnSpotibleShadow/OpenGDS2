@@ -1343,3 +1343,126 @@ msgstr "卒業生 {0}人目／{1}人。雇用には表示された契約金が�
 
 msgid "GRADUATE_DECLINE"
 msgstr "雇用しない"
+
+msgid "COMPANY_FACILITIES"
+msgstr "会社施設"
+
+msgid "SCHOOL_DESCRIPTION"
+msgstr "空き施設にゲーム開発学校を開設すると、4月に卒業生の応募が届きます。"
+
+msgid "FACILITY_SLOT"
+msgstr "施設 {0}"
+
+msgid "OPEN_GAME_SCHOOL"
+msgstr "ゲーム開発学校を開設"
+
+msgid "CLOSE_GAME_SCHOOL"
+msgstr "ゲーム開発学校を閉鎖"
+
+msgid "GAME_SCHOOL"
+msgstr "ゲーム開発学校"
+
+msgid "FACILITY_EMPTY"
+msgstr "空き"
+
+msgid "FACILITY_OTHER"
+msgstr "読み込んだ施設 #{0}"
+
+msgid "SCHOOL_CLOSE_CONFIRMATION"
+msgstr "学校を閉鎖しますか？施設は空きになります。購入費用は返金されません。"
+
+msgid "SCHOOL_RESULT_Success"
+msgstr "施設を更新しました。"
+
+msgid "SCHOOL_RESULT_CalendarUnknown"
+msgstr "このセーブには確認済みの施設状態がありません。"
+
+msgid "SCHOOL_RESULT_EventPending"
+msgstr "先に現在のカレンダーイベントを完了してください。"
+
+msgid "SCHOOL_RESULT_InvalidSlot"
+msgstr "施設の位置が無効です。"
+
+msgid "SCHOOL_RESULT_SlotOccupied"
+msgstr "この施設は使用中です。"
+
+msgid "SCHOOL_RESULT_AlreadyOwned"
+msgstr "すでに学校を所有しています。"
+
+msgid "SCHOOL_RESULT_MoneyUnknown"
+msgstr "このセーブの資金は不明です。"
+
+msgid "SCHOOL_RESULT_InsufficientFunds"
+msgstr "学校を開設する資金が不足しています。"
+
+msgid "SCHOOL_RESULT_NotOwned"
+msgstr "この位置には学校がありません。"
+
+msgid "GLOBAL_RANKINGS"
+msgstr "世界ランキング"
+
+msgid "RANKINGS_SCOPE"
+msgstr "このコンピューターでプレイした会社の最速達成記録です。会社のセーブとは別に保存されます。"
+
+msgid "RANKING_Sales250000"
+msgstr "25万本販売"
+
+msgid "RANKING_Sales500000"
+msgstr "50万本販売"
+
+msgid "RANKING_Sales1000000"
+msgstr "100万本販売"
+
+msgid "RANKING_OwnHardware"
+msgstr "自社ハード発売"
+
+msgid "RANKING_GrandPrize"
+msgstr "大賞受賞"
+
+msgid "RANKING_NumberOneSales"
+msgstr "売上ランキング1位"
+
+msgid "RANKING_DATE"
+msgstr "{0}年 {1}月 第{2}週"
+
+msgid "RANKING_NOT_REACHED"
+msgstr "未達成"
+
+msgid "IMPORT_ORIGINAL_RANKINGS"
+msgstr "オリジナルのGameRank.GDSを読み込む"
+
+msgid "RANKINGS_IMPORTED"
+msgstr "ランキングを読み込みました。既存の最速記録は保持されます。"
+
+msgid "RANKINGS_LOAD_FAILED"
+msgstr "ランキングを読み込めませんでした"
+
+msgid "RANKINGS_SAVE_FAILED"
+msgstr "ランキングを保存できませんでした"
+
+msgid "RANKINGS_IMPORT_FAILED"
+msgstr "ランキングの取り込みに失敗しました"
+
+msgid "SALES_CHART"
+msgstr "売上ランキング"
+
+msgid "COMPETITION_UNKNOWN"
+msgstr "このセーブには確認済みの他社作品一覧がありません。オリジナルの書庫を再読み込みし、新しい会社を始めると他社ランキングが有効になります。"
+
+msgid "AWARD_RIVAL_RESULT"
+msgstr "{1}の「{0}」が受賞しました。"
+
+msgid "AWARD_REEL_ENTRY"
+msgstr "「{0}」 — {1}"
+
+msgid "ABILITIES"
+msgstr "能力"
+
+msgid "EMPLOYEE_ACTIONS"
+msgstr "行動"
+
+msgid "EMPLOYEE_NO_TECHNOLOGIES"
+msgstr "習得済みの技術はありません"
+
+msgid "EMPLOYEE_DISMISS_SHORT"
+msgstr "解雇"

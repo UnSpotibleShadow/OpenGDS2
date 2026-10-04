@@ -182,6 +182,7 @@ public static class OriginalCatalogImporter
                 InitialOwnershipLevel=ownership,PurchaseFee=fee,RequiredTrainingWork=numeric.GetRange(0,3),
                 ExperienceCosts=numeric.GetRange(3,3),RawTable158C=numeric.GetRange(6,3),RawTable1568=numeric.GetRange(9,3)});
         }
+        CompetitionCatalogImporter.Extract(pe,result);
         return result;
     }
 }

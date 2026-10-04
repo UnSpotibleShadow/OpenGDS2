@@ -118,23 +118,13 @@ consumes one of four greeting draws. Declining only closes this candidate's
 prompt. No unproven flat school discount is added. The persisted queue resumes
 at the same candidate after load and cannot hire or charge an accepted one twice.
 
-Additional facility evidence for the next reconstruction pass: initialization
-`009F651C +9963..9979` defines school cost ¥600,000,000. The purchase handler
-`00988F78 +0000..0143` checks funds, rejects a duplicate across all three slots,
-subtracts directly from cash (not through the signed financial accumulator),
-and writes the chosen facility into the selected slot. Company-info label
-indices 21–23 map to facility slots 0–2 in `0098D21C +0000..0042`; an empty slot
-opens selection at +01E7..020E. The school close handler `00984480` writes −1 to the
-selected slot after confirmation (+0098..00B3). Availability/visibility
-of those company-info controls still needs tracing. No separate student-growth
-formula was found in the inspected school form; this does not prove its absence
-elsewhere.
-
-**Remaining school work:** facility selection, purchase availability, school
-construction/closure, student growth and office/rank progression have not been
-connected to normal play. The graduate calendar branch works for a known saved
-school slot and source bounds; automated fixtures exercise those known states.
-It does not fabricate a school or expose an unverified construction shortcut.
+M37 connects the school to ordinary company management: the inspected default
+company page exposes the three slots without a rank gate, purchase directly
+subtracts ¥600,000,000 and confirmed closure gives no refund. This replaces the
+M36 construction/UI uncertainty. No separate student-growth formula is invented.
+See [school-rivals-and-rankings.md](school-rivals-and-rankings.md), which also
+supersedes the earlier unresolved rival catalog/presentation and global-ranking
+notes. Other facilities and office progression remain unfinished.
 
 ## Saves and validation
 

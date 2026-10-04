@@ -19,8 +19,12 @@ public sealed class AwardCeremonyState
     [JsonRequired] public int CategoryIndex { get; set; }
     public int? WinningProduct { get; set; }
     // Null before the current category's draw; true afterwards. A null winning
-    // product then means a competitor won. Rival names/animation are unresolved.
+    // product then means a competitor won. Null RivalEntries preserves legacy
+    // saves whose original competitor catalog is unknown.
     public bool? ResultReady { get; set; }
+    public List<int>? RivalEntries {get;set;}
+    public int? WinningRival {get;set;}
+    public List<int>? AnimationProducts {get;set;}
 }
 public sealed class GraduateEventState
 {
@@ -133,7 +137,10 @@ public static class AwardService
         var t=state.Calendar?.Pending;var a=t?.Awards;
         if (t?.PendingEvent!=CalendarEvent.Awards || a is null || a.ResultReady is not null || a.CategoryIndex>=Order.Count || state.Money is null) return false;
         var entries=a.Entries.Select(id=>state.ReleasedGames.Single(p=>p.ProductIndex==id)).ToList();
+        // Thirteen name-animation draws precede selection in 009BD6F8.
+        var animation=a.RivalEntries is null ? null : Enumerable.Range(0,13).Select(_=>a.RivalEntries[random.Next(31)]).ToList();
         var category=Order[a.CategoryIndex];int? winner=DrawWinner(category,entries,random);
+        int? rival=winner is null && a.RivalEntries is not null ? a.RivalEntries[random.Next(31)] : null;
         FinancialRules.Change? finance=winner is not null ? FinancialRules.Prepare(state,Prize(category)) : null;
         if (winner is int id)
         {
@@ -141,14 +148,15 @@ public static class AwardService
             if (category==GameAward.GrandPrize && state.Calendar!.FirstGrandPrizeDate is null)
                 state.Calendar.FirstGrandPrizeDate=new(a.Year,12,4);
         }
-        finance?.Commit(state);a.WinningProduct=winner;a.ResultReady=true;
+        finance?.Commit(state);a.WinningProduct=winner;a.WinningRival=rival;a.AnimationProducts=animation;a.ResultReady=true;
+        if (winner is not null && category==GameAward.GrandPrize) RankingService.Queue(state,RankingKind.GrandPrize);
         return true;
     }
     public static bool Continue(GameState state)
     {
         var t=state.Calendar?.Pending;var a=t?.Awards;
         if (t?.PendingEvent!=CalendarEvent.Awards || a?.ResultReady!=true) return false;
-        a.CategoryIndex++;a.ResultReady=null;a.WinningProduct=null;
+        a.CategoryIndex++;a.ResultReady=null;a.WinningProduct=null;a.WinningRival=null;a.AnimationProducts=null;
         if (a.CategoryIndex==Order.Count)
         {t.Awards=null;t.PendingEvent=null;t.Phase=CalendarPhase.TenantsAndPayroll;}
         return true;
@@ -222,6 +230,13 @@ internal static class AnnualCalendarValidation
         }
         if (t.Awards is AwardCeremonyState a)
         {
+            var products=state.Competition?.Products;
+            if (a.RivalEntries is not null && (products is null || a.RivalEntries.Count!=31 ||
+                a.RivalEntries.Any(id=>id<0 || id>=products.Count || products[id].Owner<0)) ||
+                a.WinningRival is int rival && (a.ResultReady!=true || a.WinningProduct is not null || a.RivalEntries?.Contains(rival)!=true) ||
+                a.AnimationProducts is not null && (a.ResultReady!=true || a.AnimationProducts.Count!=13 || a.AnimationProducts.Any(id=>a.RivalEntries?.Contains(id)!=true)) ||
+                a.RivalEntries is not null && a.ResultReady==true && (a.AnimationProducts is null || a.WinningProduct is null && a.WinningRival is null))
+                throw new InvalidDataException("Invalid rival award entries or animation.");
             if (a.Year!=t.ClosingDate.Year || a.Entries is null || a.CategoryIndex is <0 or >4 || a.ResultReady==false ||
                 state.ReleasedGames.Any(p=>p.ReleasedOn is null) ||
                 !a.Entries.SequenceEqual(state.ReleasedGames.Where(p=>p.ReleasedOn!.Value.Year==a.Year).OrderBy(p=>p.ProductIndex).Select(p=>p.ProductIndex)) ||

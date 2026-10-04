@@ -22,6 +22,8 @@ public sealed class GameState
     // Null in pre-calendar saves: historical countdowns cannot be reconstructed
     // from lifetime releases or a frozen displayed date.
     public CompanyCalendarState? Calendar { get; set; }
+    public CompetitionState? Competition {get;set;}
+    public List<RankingAchievement> PendingRankings {get;set;}=[];
 
     public List<DevelopmentProjectState> DevelopmentProjects { get; set; } = [];
     public List<ReleasedGameState> ReleasedGames { get; set; } = [];

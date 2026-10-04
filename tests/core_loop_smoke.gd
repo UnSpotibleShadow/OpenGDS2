@@ -84,6 +84,7 @@ func run() -> void:
         "GameTypes":[{"SourceIndex":0,"Name":"Synthetic Type A","RawMembers":raw_type,"RawTable13CC":[]},
             {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
         "Technologies":[{"SourceIndex":0,"Identifier":0,"Name":"Synthetic Technology","PurchaseFee":50,"InitialOwnershipLevel":0,"RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable158C":[1,2,3],"RawTable1568":[1,2,3]}],
+        "RivalCompanies":["Synthetic rival company A","Synthetic rival company B"],
         "Genres":[{"SourceIndex":0,"Name":"Synthetic Genre","RawMembers":{"1224":7,"1208":10,"1240":1,"125C":0}}]
     }
     # Genre helper validates its fifteen-column table even for broad audience.
@@ -130,7 +131,16 @@ func run() -> void:
     var selected_employee = main.find_child("SelectedEmployee",true,false)
     check(selected_employee != null and selected_employee.get_meta("employee_source") == 0,"Activating an employee row opens that employee's controls")
     check(main.find_child("DismissEmployee0",true,false) != null,"Selected employee supports existing management actions")
+    var details = main.find_child("EmployeeDetailsWindow",true,false)
+    print("Employee pane size: ",details.size)
+    check(details != null and details.size.x <= 240 and details.size.y <= 410,"Employee details use a compact pane beside the office")
+    check(main.find_child("ManagementWindow",true,false) == null,"Selecting an employee avoids the large management dialog")
+    check(main.find_child("EmployeeAbilityChart",true,false) != null and main.find_child("EmployeeBarSpeed",true,false).max_value == 99,"Compact pane displays the original ability chart and bar scale")
+    await press_node("EmployeeTechnologies")
+    check(main.find_child("EmployeeTechnologiesPage",true,false).visible and not main.find_child("EmployeeAbilitiesPage",true,false).visible,"Compact technology tab switches pages")
+    await press_node("EmployeeAbilities")
     await press("CANCEL")
+    check(main.find_child("EmployeeDetailsWindow",true,false) == null and main.find_child("CompanyWindow",true,false).visible,"Closing employee details restores company information")
     var employee_window = main.find_child("EmployeeWindow",true,false)
     var original_position = employee_window.position
     employee_window.find_child("MinimizeWindow",true,false).pressed.emit()
@@ -696,6 +706,30 @@ func run() -> void:
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == exhibited.State.Money,"Loading exhibition result never repeats payment")
     await press_node("CloseExhibition")
+    # Purchase and close an actual school through the company facility screen.
+    var school_save = exhibited.duplicate(true)
+    school_save.State.Calendar.Pending = null
+    school_save.State.Calendar.OriginalSlots0444 = [-1,-1,-1]
+    school_save.State.CompanyActivityTicks = 0
+    school_save.State.Money = 600000000
+    write_json("user://saves/slot1.json",school_save)
+    await press("LOAD_GAME")
+    await press_node("CompanyFacilities")
+    await press_node("OpenSchool1")
+    check(main.find_child("CloseSchool1",true,false) != null and main.find_child("OpenSchool0",true,false).disabled,"School occupies selected slot and prevents duplicate construction")
+    await press("SAVE_GAME")
+    var bought_school = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(bought_school.State.Money == 0 and int(bought_school.State.Calendar.OriginalSlots0444[1]) == 0,"School construction debits exactly six hundred million")
+    check(bought_school.State.Company.MonthlyNet == school_save.State.Company.MonthlyNet,"School's direct cash debit preserves original period accounting")
+    await press_node("CloseSchool1")
+    await press("CANCEL")
+    check(main.find_child("CloseSchool1",true,false) != null,"Cancelled closure retains school")
+    await press_node("CloseSchool1")
+    await press_node("ConfirmSchoolClosure")
+    await press("SAVE_GAME")
+    var closed_school = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(closed_school.State.Money == 0 and closed_school.State.Calendar.OriginalSlots0444.all(func(slot): return int(slot) == -1),"Closing school frees slot without refund")
+    await press("BACK_TO_OFFICE")
     # Award categories with no own entries require no invented rival names.
     var awards_save = exhibition_save.duplicate(true)
     var aws = awards_save.State
@@ -716,6 +750,27 @@ func run() -> void:
         await press("LOAD_GAME")
         check(main.find_child("AwardResult",true,false) != null,"Saved award result reopens without rerolling")
         await press_node("ContinueAwards")
+    # Real rival presentation uses imported catalog strings and saved reel picks.
+    var rival_awards_save = awards_save.duplicate(true)
+    var competitor_rows = [{"Title":"Synthetic rival A","Owner":0,"Hardware":0,"Demand":0,"SalesPower":0,"UnitsSold":100},
+        {"Title":"Synthetic rival B","Owner":1,"Hardware":0,"Demand":0,"SalesPower":0,"UnitsSold":50}]
+    rival_awards_save.State.Competition = {"Products":competitor_rows,"PlatformAges":[0,0,0,0,0,0,0,0]}
+    rival_awards_save.State.Calendar.Pending.Awards.RivalEntries = []
+    for i in range(31):
+        rival_awards_save.State.Calendar.Pending.Awards.RivalEntries.append(i%2)
+    write_json("user://saves/slot1.json",rival_awards_save)
+    await press("LOAD_GAME")
+    await press_node("RevealAward")
+    check(main.find_child("ContinueAwards",true,false).disabled and not main.find_child("AwardResult",true,false).visible,"Rival reel precedes winner presentation")
+    await create_timer(1.3).timeout
+    check(not main.find_child("ContinueAwards",true,false).disabled and main.find_child("AwardResult",true,false).visible,"Rival reel reveals winner and continuation")
+    check(main.find_child("AwardResult",true,false).text.contains("Synthetic rival") and main.find_child("AwardResult",true,false).text.contains("Synthetic rival company"),"Award presents actual rival game and company")
+    await press("SAVE_GAME")
+    var rival_award = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(rival_award.State.Calendar.Pending.Awards.AnimationProducts.size() == 13 and rival_award.State.Money == rival_awards_save.State.Money,"Rival award persists all thirteen draws without payment")
+    await press("LOAD_GAME")
+    check(not main.find_child("ContinueAwards",true,false).disabled and main.find_child("AwardResult",true,false).text.contains("Synthetic rival"),"Saved rival result opens immediately without replaying reel")
+    await press_node("ContinueAwards")
     # Force only a proven sales override for a deterministic grand prize.
     var grand_save = awards_save.duplicate(true)
     grand_save.State.ReleasedGames = [exhibition_save.State.ReleasedGames[0].duplicate(true)]
@@ -732,7 +787,18 @@ func run() -> void:
     await press("LOAD_GAME")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == grand.State.Money,"Grand prize reload does not duplicate its payout")
+    var rankings = JSON.parse_string(FileAccess.get_file_as_string("user://rankings.json"))
+    check(rankings != null and int(rankings.Records[4].AchievedOn.Year) == 3 and int(rankings.Records[4].AchievedOn.Month) == 12 and int(rankings.Records[4].AchievedOn.Week) == 4,"Grand prize persists independent global ranking date")
     await press_node("ContinueAwards")
+    for frame in range(8):
+        await process_frame
+    var help_menu = main.find_child("MENU_HELP",true,false).get_popup()
+    help_menu.id_pressed.emit(1)
+    await process_frame
+    check(main.find_child("RankingRecord4",true,false).text.contains("Synthetic UI Company"),"Global rankings display winning company")
+    await press("SALES_CHART")
+    check(main.find_child("CompetitionUnknown",true,false) != null,"Legacy rival data stays explicitly unknown")
+    await press("BACK_TO_OFFICE")
     # Graduate forms use source employees and one hire-or-decline per candidate.
     var graduates_save = payroll_captured.duplicate(true)
     var gs = graduates_save.State

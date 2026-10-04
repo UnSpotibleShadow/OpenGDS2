@@ -46,7 +46,7 @@ public static class ReleaseService
         // First shipment sets the flag; its handler does not test the reprint guard.
         state.ProductionPerformedThisWeek=true;
         if (shipments is int count) state.Calendar!.ShipmentsSinceHardwareTrigger=count;
-        state.ReleasedGames.Add(product);state.DevelopmentProjects.Remove(project);
+        state.ReleasedGames.Add(product);CompetitionService.AppendOwn(state,product);state.DevelopmentProjects.Remove(project);
         // A new room must not receive an unfinished contribution from the old product.
         foreach (var e in state.Employees.Where(x=>x.Office?.SeatedAction is >=6 and <=17 &&
             (x.Office.SeatedAction-6)/6==project.RoomIndex)) ResetWork(e.Office!);

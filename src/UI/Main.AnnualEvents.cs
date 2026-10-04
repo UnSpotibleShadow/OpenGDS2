@@ -70,14 +70,42 @@ public partial class Main
                 string title=state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
                 AnnualMessage("AwardResult",string.Format(Tr("AWARD_OWN_RESULT"),title,AwardService.Prize(category)));
             }
+            else if (awards.WinningRival is int rival && state.Competition is CompetitionState competition)
+            {
+                var product=competition.Products[rival];string company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner) ?? Tr("NOT_YET_DECODED");
+                AnnualMessage("AwardResult",string.Format(Tr("AWARD_RIVAL_RESULT"),product.Title,company));
+            }
             else AnnualMessage("AwardResult",Tr("AWARD_OTHER_COMPANY"));
             AnnualButton("ContinueAwards","CONTINUE",()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
         }
         else AnnualButton("RevealAward","AWARD_REVEAL",()=>
         {
-            if (AwardService.Reveal(state,Random.Shared)) ShowOfficeReconstruction(state);
+            if (AwardService.Reveal(state,Random.Shared))
+            {
+                ShowOfficeReconstruction(state);
+                if (awards.AnimationProducts is not null) _=AnimateAwardReveal(state,awards);
+            }
             else _status.Text=Tr("HIRE_RESULT_MoneyUnknown");
         });
+    }
+    private async System.Threading.Tasks.Task AnimateAwardReveal(GameState state,AwardCeremonyState awards)
+    {
+        var reel=_content.FindChild("AwardEntries",true,false) as Label;
+        var result=_content.FindChild("AwardResult",true,false) as Label;
+        var next=_content.FindChild("ContinueAwards",true,false) as Button;
+        if (reel is null || result is null || next is null || state.Competition is null) return;
+        result.Visible=false;next.Disabled=true;
+        foreach (int id in awards.AnimationProducts!)
+        {
+            if (!GodotObject.IsInstanceValid(reel) || !reel.IsInsideTree()) return;
+            var product=state.Competition.Products[id];
+            reel.Text=string.Format(Tr("AWARD_REEL_ENTRY"),product.Title,_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner) ?? Tr("NOT_YET_DECODED"));
+            // Modern display pacing. The thirteen catalog selections and final
+            // winner are already persisted; loading never repeats the lottery.
+            await ToSignal(GetTree().CreateTimer(.08),SceneTreeTimer.SignalName.Timeout);
+        }
+        if (!GodotObject.IsInstanceValid(result) || !result.IsInsideTree()) return;
+        reel.Text=string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count);result.Visible=true;next.Disabled=false;
     }
     private void ShowGraduate(GameState state,GraduateEventState graduates)
     {

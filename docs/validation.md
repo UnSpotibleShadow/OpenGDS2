@@ -1,4 +1,22 @@
-# Validation — M34 company accounting checkpoint
+# Validation — M37 facilities, rivals, rankings and employee presentation
+
+M37 local checks pass: 198 domain checks (196 public plus two private original
+fixtures), all 27 Python checks, direct Roslyn domain/application compilation
+with zero warnings/errors, and native Godot core-loop and imported-original UI
+suites with zero failures. The compact employee pane measures 226×376 in the
+headless fixture, including its scrollbar; the content scrolls when fallback
+fonts need extra space. Selection-arrow scale/letterboxing checks pass.
+
+New UI coverage includes school purchase, duplicate rejection, cancellation and
+closure without refund; named rival award reels and reloads; independent Grand
+Prize record persistence; and compact employee tabs and marker cleanup. The
+first runs exposed layout expansion under the headless font metrics and test
+comparisons between JSON numeric types. These were corrected before publication.
+Standard SDK, Linux/Windows export and packaged checks are pending for M37.
+No complete rendered original-Windows comparison is claimed.
+
+## Historical M34 validation
+
 
 M32 restores employee selection in the office and from the staff table. The
 local host has recovered: direct compilation, 140 C# checks (138 public and

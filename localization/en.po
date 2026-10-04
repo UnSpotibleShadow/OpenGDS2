@@ -1343,3 +1343,126 @@ msgstr "Graduate {0} of {1}. The displayed contract fee is required to hire."
 
 msgid "GRADUATE_DECLINE"
 msgstr "Do not hire"
+
+msgid "COMPANY_FACILITIES"
+msgstr "Company facilities"
+
+msgid "SCHOOL_DESCRIPTION"
+msgstr "Open a game development school to receive graduate applicants in April. The purchase uses an empty facility slot."
+
+msgid "FACILITY_SLOT"
+msgstr "Facility {0}"
+
+msgid "OPEN_GAME_SCHOOL"
+msgstr "Open game development school"
+
+msgid "CLOSE_GAME_SCHOOL"
+msgstr "Close game development school"
+
+msgid "GAME_SCHOOL"
+msgstr "Game development school"
+
+msgid "FACILITY_EMPTY"
+msgstr "Empty"
+
+msgid "FACILITY_OTHER"
+msgstr "Imported facility #{0}"
+
+msgid "SCHOOL_CLOSE_CONFIRMATION"
+msgstr "Close this school? The facility slot becomes empty. The purchase cost is not refunded."
+
+msgid "SCHOOL_RESULT_Success"
+msgstr "Facility updated."
+
+msgid "SCHOOL_RESULT_CalendarUnknown"
+msgstr "This save has no verified facility state."
+
+msgid "SCHOOL_RESULT_EventPending"
+msgstr "Finish the current calendar event first."
+
+msgid "SCHOOL_RESULT_InvalidSlot"
+msgstr "Invalid facility slot."
+
+msgid "SCHOOL_RESULT_SlotOccupied"
+msgstr "This facility slot is occupied."
+
+msgid "SCHOOL_RESULT_AlreadyOwned"
+msgstr "Your company already owns a school."
+
+msgid "SCHOOL_RESULT_MoneyUnknown"
+msgstr "Funds are unknown in this save."
+
+msgid "SCHOOL_RESULT_InsufficientFunds"
+msgstr "Not enough funds to open the school."
+
+msgid "SCHOOL_RESULT_NotOwned"
+msgstr "There is no school in this slot."
+
+msgid "GLOBAL_RANKINGS"
+msgstr "Global rankings"
+
+msgid "RANKINGS_SCOPE"
+msgstr "Earliest achievements across companies played on this computer. These records are kept separately from company saves."
+
+msgid "RANKING_Sales250000"
+msgstr "250,000 sales"
+
+msgid "RANKING_Sales500000"
+msgstr "500,000 sales"
+
+msgid "RANKING_Sales1000000"
+msgstr "1,000,000 sales"
+
+msgid "RANKING_OwnHardware"
+msgstr "Release own hardware"
+
+msgid "RANKING_GrandPrize"
+msgstr "Win the Grand Prize"
+
+msgid "RANKING_NumberOneSales"
+msgstr "Reach number one on the sales chart"
+
+msgid "RANKING_DATE"
+msgstr "Year {0}, month {1}, week {2}"
+
+msgid "RANKING_NOT_REACHED"
+msgstr "Not achieved"
+
+msgid "IMPORT_ORIGINAL_RANKINGS"
+msgstr "Import original GameRank.GDS"
+
+msgid "RANKINGS_IMPORTED"
+msgstr "Ranking records imported. Earlier local records were retained."
+
+msgid "RANKINGS_LOAD_FAILED"
+msgstr "Could not load ranking records"
+
+msgid "RANKINGS_SAVE_FAILED"
+msgstr "Could not save ranking records"
+
+msgid "RANKINGS_IMPORT_FAILED"
+msgstr "Could not import ranking records"
+
+msgid "SALES_CHART"
+msgstr "Sales rankings"
+
+msgid "COMPETITION_UNKNOWN"
+msgstr "This save has no verified rival catalog. Reimport the original archive and start a new company to enable rival rankings."
+
+msgid "AWARD_RIVAL_RESULT"
+msgstr "“{0}” by {1} won this award."
+
+msgid "AWARD_REEL_ENTRY"
+msgstr "“{0}” — {1}"
+
+msgid "ABILITIES"
+msgstr "Abilities"
+
+msgid "EMPLOYEE_ACTIONS"
+msgstr "Actions"
+
+msgid "EMPLOYEE_NO_TECHNOLOGIES"
+msgstr "No learned technologies"
+
+msgid "EMPLOYEE_DISMISS_SHORT"
+msgstr "Dismiss"
