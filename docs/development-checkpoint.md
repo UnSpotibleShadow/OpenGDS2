@@ -2,8 +2,12 @@
 
 M43 restores the locally imported original hardware pictures in development
 quotes, including selection changes. Local C# compilation, 206 domain checks,
-32 Python checks and both Godot suites pass. SDK/export/native Windows validation
-is pending. See [hardware picture evidence](quote-and-meeting-layout.md#m43-hardware-pictures).
+32 Python checks and both Godot suites pass. All four SDK/export/native Windows
+jobs passed in [run 37235810413](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37235810413).
+PR #37 merged as `80a498a98e611049d549cf5a475fefe51eaa5e5d`; tested head
+`f37e30dac139e5ea80356ee80b7ba3cb76a326ad`. Download
+**OpenGDS2-desktop-development** from that run; it expires 2026-10-18.
+Artifact digest: `sha256:0d15630ea065dbf8478b8ad4d7bde80b5f9fb2952da2c09686cfa6c9acc79175`. See [hardware picture evidence](quote-and-meeting-layout.md#m43-hardware-pictures).
 
 ## Previous M42 validation
 
@@ -199,15 +203,18 @@ See [original-comparison.md](original-comparison.md) and
 
 ## Remaining translation and fidelity gaps
 
-Employee proper names and generated name readings have not been established.
+M40 supplies provisional English readings for fixed and generated employee names.
+Their official pronunciations have not been established.
 Original bitmap text requires locally generated artwork patches; original pixels
 are not bundled. Full graphical/audible comparison, keyboard/pointer usability
 and original Windows behavioral comparison remain outstanding.
 
-The playable own-game loop does not constitute a complete port. Company-calendar
-economics, opening staff/power, payroll scheduling, loan repayment, hardware
-events, bankruptcy, awards, office upgrades, polishing and external workflows
-remain incomplete. Consultation entry costs/timing and original-save compatibility
+The playable own-game loop does not constitute a complete port. M35–M37 connect
+verified calendar accounting, payroll, saved loan dues, hardware events, awards,
+exhibitions, ending and graduates. Borrowing/bankruptcy, office upgrades,
+remaining economics and external workflows remain incomplete. M41–M43 restore
+normal-hire conversations and development quotes; secretary advice, other
+conversation callers and original meeting sequencing remain unresolved. Consultation entry costs/timing and original-save compatibility
 also require further evidence. See [remaining-work.md](remaining-work.md).
 
 ## Historical disconnection and safe resumption
