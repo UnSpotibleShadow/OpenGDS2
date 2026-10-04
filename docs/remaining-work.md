@@ -9,6 +9,14 @@ plots and missing occupied-plot presentation, scaling above 1280 × 720,
 original-style recruitment, and a dedicated supplied main-title theme.
 Compact secretary/event conversation popups, new-hire greetings and office
 speech bubbles also need original-style presentation and verified lifecycles.
+Two further original screenshots establish a desk-cluster development action
+chooser (original game, sequel, manga/comic adaptation) and the compact
+hardware/audience quote screen leading to a planning meeting. Recover contextual
+room interaction and the separate quote/meeting presentation; manga adaptation
+joins sequels, polishing and external/contract work as an unresolved workflow.
+English-mode staff names still show Japanese and need verified display-name
+localization without changing imported/save identity. The owner also reports a
+nearly invisible typing caret; input contrast belongs in the scaling/theme pass.
 The readable original screenshots also establish screen-layout references for
 licenses, activities, technology/computer purchase, bank, employee arrival and
 sales rankings. Secretary automation policies now have visible option evidence;
