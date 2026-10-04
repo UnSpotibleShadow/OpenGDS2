@@ -19,8 +19,13 @@ in editor, packaged Linux and native Windows. Download
 The modal follow-up also guards toolbar/menu callbacks and employee-table
 activation while a calendar transaction is pending. Its payroll resolution
 screen runs the proven staff-list writer with management controls disabled.
-The enlarged local core-loop UI fixture passes; native validation of this
-follow-up is pending.
+The follow-up merged as `4278181cb43b5c1d06bb51d0c045b24656c91795`
+(PR #29), tested head `8275386708f865c8ca934904408f17140fca7691`.
+All four jobs passed in [Validate run 37193608886](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37193608886),
+including the enlarged core-loop UI fixture in the editor, packaged Linux and
+native Windows. Standard build warnings/errors and all UI failures are zero.
+The latest **OpenGDS2-desktop-development** artifact is on this run and expires
+2026-10-18.
 
 See [calendar-transactions.md](calendar-transactions.md) for bounded evidence,
 state format, unsupported event stops and validation. Exhibitions, awards,

@@ -140,4 +140,9 @@ initial cells, trigger predicates, warning values, arithmetic and loan terms.
 M35 standard builds and native Linux/Windows packages passed all four jobs of
 [Validate run 37192745866](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37192745866).
 The modal follow-up extends the UI suite with blocked menu/toolbar callbacks
-and read-only payroll resolution; it passes locally.
+and read-only payroll resolution. All four SDK/export jobs also pass for
+[the follow-up run 37193608886](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37193608886),
+including the packaged Linux and native Windows core-loop fixtures. Standard
+builds report zero warnings/errors; both local original-import UI suites also
+pass. These headless checks do not substitute for original Windows behavioral
+comparison or full graphical usability testing.
