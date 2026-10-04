@@ -52,6 +52,22 @@ def verify(data):
     # fMainVisual left-click scans workspace slots in ascending order. Its
     # inclusive 16x32 hit box omits the outer two pixels on each side.
     select = 0x9C66BC
+    # Original native-pixel diamonds: y+x/2 and y-x/2, narrowed to Single.
+    # Strict comparisons precede each room or tenant dispatch.
+    require(select, 0x00D1, 'f3 be 00')  # first tenant sum lower: 190
+    require(select, 0x00E2, 'f3 12 01')  # sum upper: 274
+    require(select, 0x0142, 'f3 0e 01')  # second sum lower: 270
+    require(select, 0x0153, 'f3 62 01')  # sum upper: 354
+    require(select, 0x01B3, 'f3 8e 01')  # third sum lower: 398
+    require(select, 0x01C4, 'f3 e2 01')  # sum upper: 482
+    require(select, 0x0223, 'f3 e4 00')  # room zero sum lower: 228
+    require(select, 0x0234, 'f3 04 01')  # sum upper: 260
+    require(select, 0x0246, 'f4 22')     # difference lower: 34
+    require(select, 0x0257, 'f4 45')     # difference upper: 69
+    require(select, 0x026B, '28 6c ff 00 00 fd b6 0c 00')  # selected room 0
+    require(select, 0x0470, 'f3 44 01')  # room one sum lower: 324
+    require(select, 0x0481, 'f3 64 01')  # sum upper: 356
+    require(select, 0x04B8, '28 6c ff 01 00 fd b6 0c 00')  # selected room 1
     require(select, 0x0758, '28 08 ff 00 00 04 18 ff 05 25 00')
     require(select, 0x07BE, '28 4c ff 02 00 fb 94 3c ff fb 56 b8 fe')
     require(select, 0x07E6, '28 88 fe 10 00 fb 94 78 fe 28 68 fe 02 00 fb 9c 58 fe fb 49 38 fe')

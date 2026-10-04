@@ -132,6 +132,44 @@ func run() -> void:
             check(office_background.size == Vector2(466,290), "Office uses original-size pixels")
             check(office_background.get_global_rect().end.x <= main.get_viewport_rect().end.x, "Office fits the viewport")
             check(button("BACK_TO_TITLE").get_global_rect().end.x <= main.get_viewport_rect().end.x, "Toolbar fits the viewport")
+            for room in range(2):
+                var scale = 1.0 if room == 0 else 2.0
+                office_background.size = Vector2(466,290) if room == 0 else Vector2(932,600)
+                var event = InputEventMouseButton.new()
+                event.button_index = MOUSE_BUTTON_LEFT
+                event.pressed = true
+                event.position = (Vector2(192,148) if room == 0 else Vector2(288,196))*scale + Vector2(0,0 if room == 0 else 10)
+                office_background.gui_input.emit(event)
+                await process_frame
+                check(main.find_child("DevelopmentRoomActions",true,false) != null,"Desk interior opens room action chooser: %d" % room)
+                check(main.find_child("RoomSequel",true,false).disabled and main.find_child("RoomManga",true,false).disabled,"Unreconstructed workflows are visibly unavailable")
+                main.find_child("RoomOriginalGame",true,false).pressed.emit()
+                await process_frame
+                var selected_room = main.find_child("PlanningRoom",true,false)
+                check(selected_room.get_selected_id() == room and not selected_room.visible,"Office-selected room is carried into planning: %d" % room)
+                await press("CANCEL")
+            office_background.size = Vector2(466,290)
+            var tenant_pixels = [Vector2(66,199),Vector2(146,239),Vector2(401,239)]
+            for slot in range(3):
+                var event = InputEventMouseButton.new()
+                event.button_index = MOUSE_BUTTON_LEFT
+                event.pressed = true
+                event.position = tenant_pixels[slot]
+                office_background.gui_input.emit(event)
+                await process_frame
+                check(main.find_child("TenantFacilityWindow",true,false) != null,"Tenant plot opens focused facility window: %d" % slot)
+                check(main.find_child("OpenSchool%d" % slot,true,false) != null,"Clicked plot carries matching school slot: %d" % slot)
+                var other_slot = (slot+1)%3
+                check(main.find_child("OpenSchool%d" % other_slot,true,false) == null,"Focused facility chooser excludes other slots")
+                await press("BACK_TO_OFFICE")
+            await press("SAVE_GAME")
+            var after_room_clicks = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            check(after_room_clicks.State.DevelopmentProjects.is_empty() and after_room_clicks.State.Money == 450000000,"Office action previews do not start work or spend funds")
+            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
+            await process_frame
+            var sales_ranking = main.find_child("SalesRankingTable",true,false)
+            check(sales_ranking != null and sales_ranking.get_column_title(2) == tr("UNITS_SOLD") and sales_ranking.get_column_title(3) == tr("COMPANY_NAME"),"Sales rankings follow original units-before-company columns")
+            await press("BACK_TO_OFFICE")
         check(FileAccess.file_exists("user://original/Graphic/Embedded/OfficeSprites.bmp"), "Embedded sprite sheet imported locally")
         await press("HARDWARE_LICENSES")
         var license_buttons: Array[Node] = []

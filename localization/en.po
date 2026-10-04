@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "OFFICE_EMPLOYEE_HELP"
-msgstr "Click an employee in the office to manage them."
+msgstr "Click staff, desk interiors or tenant plots to open their controls."
 
 msgid "APP_TITLE"
 msgstr "OpenGDS2"
@@ -1472,3 +1472,12 @@ msgstr "Dismiss"
 
 msgid "LEVEL"
 msgstr "Level"
+
+msgid "ORIGINAL_GAME_DEVELOPMENT"
+msgstr "Original Game"
+
+msgid "SEQUEL_DEVELOPMENT"
+msgstr "Develop a Sequel"
+
+msgid "MANGA_ADAPTATION"
+msgstr "Adapt Manga"

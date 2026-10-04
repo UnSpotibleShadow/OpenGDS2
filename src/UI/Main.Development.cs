@@ -27,13 +27,14 @@ public partial class Main
         details.AddChild(new Label {Text=$"{Tr("STAT_GRAPHICS")}: {employee.Graphics}   {Tr("STAT_MUSIC")}: {employee.Music}   {Tr("STAT_DEVELOPMENT_SPEED")}: {employee.DevelopmentSpeed}   {Tr("STAT_INSPIRATION")}: {employee.Inspiration}"});
         return card;
     }
-    private void ShowPlanningPreview(GameState state)
+    private void ShowPlanningPreview(GameState state,int? selectedRoom=null)
     {
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog.");
         ClearContent();AddHeading(Tr("DEVELOPMENT_PLANNING"),28);
         var title=AddField(Tr("GAME_TITLE"),Tr("NEW_PROJECT_TITLE"),128);title.Name="PlanningTitle";
         var room=new OptionButton {Name="PlanningRoom"};
         for (int i=0;i<2;i++) room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
+        if (selectedRoom is int chosen) {room.Select(chosen);room.Visible=false;}
         _content.AddChild(room);
         AddHeading(Tr("TARGET_HARDWARE"),18);
         var hardware=new OptionButton {Name="PlanningHardware"};

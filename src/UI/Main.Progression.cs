@@ -20,21 +20,23 @@ public partial class Main
         }
         catch (Exception ex) {_status.Text=$"{Tr("RANKINGS_SAVE_FAILED")}: {ex.Message}";}
     }
-    private void ShowFacilities(GameState state)
+    private void ShowFacilities(GameState state,int? selectedSlot=null)
     {
         ClearContent();AddHeading(Tr("COMPANY_FACILITIES"),26);
+        if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(350,330),330);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
         AnnualMessage("SchoolDescription",Tr("SCHOOL_DESCRIPTION"));
         if (state.Calendar is null) AnnualMessage("FacilitiesUnknown",Tr("CALENDAR_LEGACY_SAVE"));
         else for (int slot=0;slot<3;slot++)
         {
+            if (selectedSlot is int chosen && slot!=chosen) continue;
             int index=slot,value=state.Calendar.OriginalSlots0444[slot];
             AddHeading(string.Format(Tr("FACILITY_SLOT"),slot+1)+": "+FacilityName(value),18);
             if (value==-1)
             {
                 var buy=new Button {Name=$"OpenSchool{slot}",Text=$"{Tr("OPEN_GAME_SCHOOL")} — ¥{SchoolService.PurchasePrice:N0}",Disabled=state.Calendar.OriginalSlots0444.Contains(0)};
                 _content.AddChild(buy);buy.Pressed+=()=>
-                {var result=SchoolService.Open(state,index);ShowFacilities(state);_status.Text=Tr($"SCHOOL_RESULT_{result}");};
+                {var result=SchoolService.Open(state,index);ShowFacilities(state,selectedSlot);_status.Text=Tr($"SCHOOL_RESULT_{result}");};
             }
             else if (value==0)
                 AnnualButton($"CloseSchool{slot}","CLOSE_GAME_SCHOOL",()=>ShowSchoolClosure(state,index));
@@ -90,12 +92,13 @@ public partial class Main
         if (state.Competition is null) AnnualMessage("CompetitionUnknown",Tr("COMPETITION_UNKNOWN"));
         else
         {
-            var table=CreateTable("SalesRankingTable",["COMPANY_RANK","GAME_TITLE","COMPANY_NAME","UNITS_SOLD"],[40,220,150,100]);_content.AddChild(table);
+            var table=CreateTable("SalesRankingTable",["COMPANY_RANK","GAME_TITLE","UNITS_SOLD","COMPANY_NAME"],[40,220,100,150]);_content.AddChild(table);
             var root=table.CreateItem();int rank=1;
             foreach (int id in CompetitionService.Chart(state))
             {
                 var p=state.Competition.Products[id];var row=table.CreateItem(root);row.SetText(0,(rank++).ToString());row.SetText(1,p.Title);
-                row.SetText(2,p.Owner==-1 ? state.Company.Name : _activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner) ?? Tr("NOT_YET_DECODED"));row.SetText(3,p.UnitsSold.ToString("N0"));
+                row.SetText(2,p.UnitsSold.ToString("N0"));row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
+                row.SetText(3,p.Owner==-1 ? state.Company.Name : _activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner) ?? Tr("NOT_YET_DECODED"));
             }
         }
         AddAction("GLOBAL_RANKINGS",()=>ShowRankings(state));AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));

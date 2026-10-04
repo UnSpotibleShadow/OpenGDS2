@@ -33,6 +33,26 @@ void Throws<T>(Action action) where T : Exception
     c.RivalCompanies=["Synthetic company A","Synthetic company B"];
     s.Competition=CompetitionService.Opening(c);return (s,c);
 }
+Test("office room interiors use original strict transformed bounds",()=>
+{
+    Check(OfficeInteractionRules.DevelopmentRoomAt(192,148)==0);
+    Check(OfficeInteractionRules.DevelopmentRoomAt(288,196)==1);
+    foreach (var (sum,diff) in new[] {(228d,52d),(260d,52d),(244d,34d),(244d,69d),(324d,52d),(356d,52d)})
+        Check(OfficeInteractionRules.DevelopmentRoomAt(sum-diff,(sum+diff)/2) is null);
+    Check(OfficeInteractionRules.DevelopmentRoomAt(0,0) is null);
+    Check(OfficeInteractionRules.DevelopmentRoomAt(double.NaN,148) is null);
+    Check(OfficeInteractionRules.DevelopmentRoomAt(192,double.PositiveInfinity) is null);
+});
+Test("office tenant hit regions map three slots without inventing overlap order",()=>
+{
+    Check(OfficeInteractionRules.TenantSlotAt(66,199)==0);
+    Check(OfficeInteractionRules.TenantSlotAt(146,239)==1);
+    Check(OfficeInteractionRules.TenantSlotAt(401,239)==2);
+    foreach (var (sum,diff) in new[] {(190d,166d),(232d,124d),(232d,208d),(354d,166d),(398d,39d),(482d,39d),(440d,-2d),(440d,80d),(272d,166d)})
+        Check(OfficeInteractionRules.TenantSlotAt(sum-diff,(sum+diff)/2) is null);
+    Check(OfficeInteractionRules.TenantSlotAt(double.NaN,0) is null);
+    Check(OfficeInteractionRules.TenantSlotAt(0,double.NegativeInfinity) is null);
+});
 Test("school purchase uses empty slots and exact cash without changing period accounting",()=>
 {
     var (s,c)=CalendarFixture(money:SchoolService.PurchasePrice);s.Company.Rank=null;

@@ -57,6 +57,22 @@ The suffixes in this table refer to locally supplied
 | 174919 | Owner reports a development-desk interior click opens a compact chooser: original game, sequel, manga/comic adaptation, cancel. | Primary UI-07 reference. Establish room hit regions and contextual guards statically or through observed interaction; the image does not establish all busy-room states or the mouse button. Manga adaptation is a distinct missing workflow whose rules remain unresolved. |
 | 174944 | Development quote with hardware and audience tables, selected hardware image/8-bit label, and a planning-meeting action. The captured selections show hardware 100 points plus audience 300, total 400; each costs ¥10 million, total ¥20 million. | Primary UI-08 reference. This one state corroborates the already recovered additive quote, not every platform/audience value or grey-row eligibility. Restore the original quote/meeting separation; title/focus controls are absent from this screenshot, which does not establish their complete later ordering. |
 
+## Implementation status after M38–M39
+
+| Feedback | Status |
+| --- | --- |
+| AUDIO-01 | Implemented and packaged in M38: dedicated looping title theme, shared mute/volume, independent office playlist. |
+| UI-09 | Explicit caret/selection/focus contrast implemented in M38; actual desktop/DPI comparison remains. |
+| UI-04 | Native-size desktop workspace and window clamping implemented/tested in M38; broader graphical/DPI checks remain. |
+| UI-01 | Smaller room-column/desk-row selector implemented/tested in M38; exact original assignment gesture remains unresolved. |
+| UI-05 | Candidate table, selected portrait/chart/bars/technologies and one hire action implemented/tested in M38; graphical parity remains. |
+| UI-03 | M39 connects verified plot hits to focused school management; other facilities, occupied-plot artwork and the overlapping hit strip remain unresolved. |
+| UI-07 | M39 connects verified desk interiors to a compact chooser and carries room identity into planning. Sequel/manga and original busy-window toggling remain unavailable. |
+| UI-08, UI-06, LOC-01 | Original quote/meeting separation, conversations and English staff-name readings remain pending. |
+| UI-02 | Artifact remains open; inspected reception atlas rectangles do not explain the captured red line. |
+
+See [M38 changes](presentation-fixes-m38.md) and [M39 evidence](office-clicks-m39.md).
+
 ## Verification and release boundaries
 
 - Original screenshots provide stronger presentation/localization evidence now

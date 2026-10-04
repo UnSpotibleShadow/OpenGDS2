@@ -195,7 +195,17 @@ public partial class Main
         Vector2 pixel = (position-offset)/scale;
         if (pixel.X < 0 || pixel.Y < 0 || pixel.X >= native.X || pixel.Y >= native.Y) return;
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
-        image.MouseDefaultCursorShape = employee is null ? CursorShape.Arrow : CursorShape.PointingHand;
+        var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
+        var tenant=OfficeInteractionRules.TenantSlotAt(pixel.X,pixel.Y);
+        image.MouseDefaultCursorShape = employee is null && room is null && tenant is null ? CursorShape.Arrow : CursorShape.PointingHand;
+        if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} && (room is not null || tenant is not null))
+        {
+            image.AcceptEvent();
+            if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
+            if (tenant is int slot) ShowFacilities(state,slot);
+            else if (room is int index) ShowDevelopmentRoomActions(state,index);
+            return;
+        }
         if (employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();
