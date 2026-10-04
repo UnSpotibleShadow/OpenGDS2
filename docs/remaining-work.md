@@ -3,6 +3,18 @@
 Completion means a verified development/release/sales loop, calendar economics,
 company progression and regression coverage. M13 implements the own-game core loop; M35–M37 connect verified calendar economics and annual events. Remaining economics and company progression are incomplete.
 
+Owner feedback received on 2026-10-04 adds a prioritized presentation pass:
+oversized desk assignment, staff-sprite edge artifacts, non-clickable tenant
+plots and missing occupied-plot presentation, scaling above 1280 × 720,
+original-style recruitment, and a dedicated supplied main-title theme.
+Compact secretary/event conversation popups, new-hire greetings and office
+speech bubbles also need original-style presentation and verified lifecycles.
+The readable original screenshots also establish screen-layout references for
+licenses, activities, technology/computer purchase, bank, employee arrival and
+sales rankings. Secretary automation policies now have visible option evidence;
+their execution rules and defaults remain unresolved. See
+[the screenshot analysis and acceptance checks](user-feedback-2026-10-04.md).
+
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |
 | Employee database | 60 definitions, seven named stats and initial learned technologies imported | C#/Python parity passed; compare original recruitment runtime |
