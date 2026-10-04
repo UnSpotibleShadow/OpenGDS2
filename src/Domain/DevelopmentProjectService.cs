@@ -41,8 +41,9 @@ public static class DevelopmentProjectService
             RoomIndex=roomIndex,HardwareSourceIndex=hardwareSourceIndex,
             AudienceSourceIndex=audienceSourceIndex,Title=title.Trim(),RequiredPoints=quote.Points,Focus=focus
         };
-        state.Money-=quote.Cost;
+        FinancialRules.Apply(state,-quote.Cost);
         state.DevelopmentProjects.Add(project);
         return DevelopmentPlanningResult.Success;
     }
 }
+

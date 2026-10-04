@@ -97,7 +97,7 @@ func run() -> void:
         "Fun":80,"Novelty":80,"Graphics":80,"Music":80,"Accuracy":80,"DevelopmentSpeed":80,"Inspiration":80,
         "Office":{"Action":6,"SeatedAction":6,"WorkEngaged":true,"MovementState":0,"Facing":1,"Frame":13}}
     var state := {"TechnologyOwnershipLevels":{"0":0},"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
-        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000},
+        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000,"WeeklyNet":0,"MonthlyNet":0,"YearlyNet":0},
         "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
@@ -180,6 +180,11 @@ func run() -> void:
         return
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    for period in ["WeeklyNet","MonthlyNet","YearlyNet"]:
+        check(checkpoint.State.Company[period] == checkpoint.State.Money-10000000,"Planning expense feeds financial period: " + period)
+    var financial_row = main.find_child("CompanyMetricWEEKLY_NET",true,false)
+    check(financial_row != null and financial_row.text != "?","Company window displays recorded weekly finances")
+
     check(checkpoint.State.DevelopmentProjects[0].PendingDecision == 0,"Type checkpoint persisted")
     var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
     for index in range(offered_types.size()):

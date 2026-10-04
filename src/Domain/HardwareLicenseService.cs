@@ -16,7 +16,7 @@ public static class HardwareLicenseService
         if (hardware.LicenseFee < 0) throw new InvalidDataException("Invalid license fee.");
         if (state.Money is null) return LicensePurchaseResult.MoneyUnknown;
         if (state.Money < hardware.LicenseFee) return LicensePurchaseResult.InsufficientFunds;
-        state.Money -= hardware.LicenseFee;
+        FinancialRules.Apply(state,-hardware.LicenseFee);
         state.HardwareLicenses.Add(sourceIndex);
         return LicensePurchaseResult.Success;
     }

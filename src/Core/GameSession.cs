@@ -36,6 +36,8 @@ public sealed class GameSession
         state.Company.OriginalMember90 = 23;
         state.Company.HallOfFameCount = 0;
         state.Company.ActivityCost = 5_000_000;
+        // Reset 009DD234 +014D..016A writes Empty, numerically zero.
+        state.Company.WeeklyNet=state.Company.MonthlyNet=state.Company.YearlyNet=0;
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)

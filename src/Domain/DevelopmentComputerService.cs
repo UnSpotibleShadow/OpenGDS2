@@ -18,7 +18,7 @@ public static class DevelopmentComputerService
         if (target.BitWidth < current.BitWidth) return ComputerPurchaseResult.Downgrade;
         if (state.Money is null) return ComputerPurchaseResult.MoneyUnknown;
         if (state.Money < target.PurchasePrice) return ComputerPurchaseResult.InsufficientFunds;
-        state.Money -= target.PurchasePrice;
+        FinancialRules.Apply(state,-target.PurchasePrice);
         state.DevelopmentComputerIndex = sourceIndex;
         return ComputerPurchaseResult.Success;
     }

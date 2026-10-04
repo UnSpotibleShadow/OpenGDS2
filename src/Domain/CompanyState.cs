@@ -15,4 +15,9 @@ public sealed class CompanyState
     public int? OriginalMember90 { get; set; }
     public int? HallOfFameCount { get; set; }
     public long? ActivityCost { get; set; }
+    // Original signed financial accumulators 22C, 23C and 24C. Missing older
+    // save totals stay unknown; they cannot be reconstructed from current cash.
+    public long? WeeklyNet { get; set; }
+    public long? MonthlyNet { get; set; }
+    public long? YearlyNet { get; set; }
 }

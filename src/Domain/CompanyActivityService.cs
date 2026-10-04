@@ -29,14 +29,14 @@ public static class CompanyActivityService
             _=>random.Next(12)==1 ? 17+random.Next(8) : 4+random.Next(4)
         };
         int next=activity==CompanyActivity.ProductionExpansion ? checked(current.Value+gain) : Math.Min(100,checked(current.Value+gain));
-        long money=checked(state.Money.Value-state.Company.ActivityCost.Value);
+        var finance=FinancialRules.Prepare(state,-state.Company.ActivityCost.Value);
         switch (activity)
         {
             case CompanyActivity.PublicRelations:state.Company.Fame=next;break;
             case CompanyActivity.GenreResearch:state.Company.OriginalMember90=next;break;
             default:state.Company.ProductionCapacity=next;break;
         }
-        state.Money=money;state.CompanyActivityPerformed=true;
+        finance.Commit(state);state.CompanyActivityPerformed=true;
         return CompanyActivityResult.Success;
     }
     public static void Tick(GameState state,Random random)

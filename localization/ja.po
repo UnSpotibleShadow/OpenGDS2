@@ -1191,3 +1191,12 @@ msgstr "ツールバーの画像が不足しています。LZH を再読み込�
 
 msgid "TOOLBAR_READY"
 msgstr "ツールバーまたは上のメニューから操作を選んでください。"
+
+msgid "WEEKLY_NET"
+msgstr "週間収支"
+
+msgid "MONTHLY_NET"
+msgstr "月間収支"
+
+msgid "YEARLY_NET"
+msgstr "年間収支"

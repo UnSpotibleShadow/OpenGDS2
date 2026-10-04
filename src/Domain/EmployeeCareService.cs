@@ -15,7 +15,7 @@ public static class EmployeeCareService
         if (state.Employees.Count == 0) return EmployeeCareResult.NoEmployees;
         if (state.Money is null) return EmployeeCareResult.MoneyUnknown;
         if (state.Money < HotSpringCost) return EmployeeCareResult.InsufficientFunds;
-        state.Money -= HotSpringCost;
+        FinancialRules.Apply(state,-HotSpringCost);
         foreach (var employee in state.Employees) employee.Stress = 0;
         foreach (var source in state.EmployeeSources.Where(x => x.GateValue == 1)) source.Employee.Stress = 0;
         return EmployeeCareResult.Success;

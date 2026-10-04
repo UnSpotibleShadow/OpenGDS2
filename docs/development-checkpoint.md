@@ -1,4 +1,14 @@
-# Development checkpoint — M33 continuation, 2026-10-03
+# Development checkpoint — M34 continuation, 2026-10-04
+
+
+M34 connects the original signed financial accumulator to supported transactions
+and restores the three company-window period rows. Seven new public regressions
+pass; local domain total is 148 (146 public plus two original fixtures), all
+27 Python checks pass and the complete core-loop UI suite passes. Original UI
+QA with the committed soundtrack passes with zero failures. Standard SDK/export
+checks are pending.
+See [financial-accounting.md](financial-accounting.md). The calendar remains
+unconnected; no payroll value or event schedule was invented.
 
 Local execution and original-data tracing have recovered. The published M32
 comparison and employee-selection implementation is
