@@ -6,7 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "OFFICE_EMPLOYEE_HELP"
-msgstr "オフィスの社員をクリックすると、その社員を管理できます。"
+msgstr "社員・開発机の内側・テナント用地をクリックすると、操作画面が開きます。"
 
 msgid "APP_TITLE"
 msgstr "OpenGDS2"
@@ -1472,3 +1472,12 @@ msgstr "解雇"
 
 msgid "LEVEL"
 msgstr "レベル"
+
+msgid "ORIGINAL_GAME_DEVELOPMENT"
+msgstr "オリジナルゲーム開発"
+
+msgid "SEQUEL_DEVELOPMENT"
+msgstr "続編を開発する"
+
+msgid "MANGA_ADAPTATION"
+msgstr "漫画をゲーム化する"

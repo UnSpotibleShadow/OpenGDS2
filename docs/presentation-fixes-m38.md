@@ -46,8 +46,10 @@ window reachability after shrinking, and the existing full campaign workflows.
 Headless tests set their native window size explicitly after initialization;
 the dummy display otherwise starts at 64 × 64 with stretch disabled.
 
-Standard SDK builds, exported Linux/Windows packages and native Windows CI are
-checked on the published PR; do not interpret local compilation as those results.
+Standard SDK builds, exported Linux/Windows packages and native Windows CI all
+pass in [Validate run 37223533010](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37223533010).
+PR #32 is merged; the SDK build reports zero warnings/errors, and public Godot
+plus packaged Linux/native Windows core-loop suites report zero failures.
 This host has no graphical desktop, so actual caret visibility, DPI appearance,
 recruitment chart text and pixel quality still require graphical comparison.
 

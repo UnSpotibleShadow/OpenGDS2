@@ -1,12 +1,28 @@
-# Development checkpoint — M38 work, 2026-10-04
+# Development checkpoint — M39 work, 2026-10-04
+
+M39 connects desk-interior development actions and focused tenant-slot school
+management using recovered original hit regions. It also restores the sales
+ranking column order. Local compilation, all 200 domain checks, all 27 Python
+checks and both Godot suites pass. Published SDK/export/native Windows checks
+are pending. See [M39 evidence and limits](office-clicks-m39.md).
+
+## Previous M38 validation
 
 M38 implements the first screenshot-feedback presentation fixes: dedicated title
 music, contrasting caret/selection, native-pixel desktop resizing, compact
 recruitment and a smaller desk selector. Local C# compilation, all 198 domain
 checks, all 27 Python checks, and core-loop/original-import UI suites pass.
-Published SDK/export/native Windows validation is pending. See
+M38 passed all four SDK/export/native Windows jobs and merged in PR #32. See
 [M38 scope and limits](presentation-fixes-m38.md) and
 [the remaining screenshot tasks](user-feedback-2026-10-04.md).
+
+M38 merged as `2c0a01075a1025573731b4551d334c91422ea8fa`. The tested head is
+`9e1adf0c0ed429a16e06f8c7ca8468f2635243a8`. All four jobs passed in
+[Validate run 37223533010](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37223533010):
+zero SDK build warnings/errors and zero public UI/core-loop or packaged
+Linux/native Windows failures. Download **OpenGDS2-desktop-development** from
+that run; it expires 2026-10-18. Artifact digest:
+`sha256:480be0feed47fa0195337eb4a2c2561b86552664e9c72726bf1ab4f1071e2893`.
 
 ## Previous M37 validation
 

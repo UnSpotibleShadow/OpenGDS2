@@ -26,8 +26,14 @@ their execution rules and defaults remain unresolved. See
 M38 implements the supplied title theme, contrasting input caret/selection,
 native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
-Room/tenant interactions, sprite artifact diagnosis, conversations, original
-quote/meeting structure and English staff-name readings remain pending.
+Sprite artifact diagnosis, conversations, original quote/meeting structure and
+English staff-name readings remain pending.
+
+M39 connects verified desk-interior hits to a contextual room chooser and
+original-game planning, and tenant-plot hits to focused school management.
+Sequel/manga modes remain disabled; the overlapping tenant strip, other facility
+workflows, occupied artwork and original busy-window toggling remain unresolved.
+See [office click evidence and validation](office-clicks-m39.md).
 
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |

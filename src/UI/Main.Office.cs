@@ -5,6 +5,19 @@ namespace OpenGDS2.UI;
 
 public partial class Main
 {
+    private void ShowDevelopmentRoomActions(GameState state,int room)
+    {
+        var project=state.DevelopmentProjects.SingleOrDefault(p=>p.RoomIndex==room);
+        if (project is not null) {ShowProject(state,project);return;}
+        ClearContent();AddHeading($"{Tr("DEVELOPMENT_ROOM")} {room+1}",16);
+        CompactManagementWindow("DevelopmentRoomActions",new Vector2(235,210),215);
+        var start=new Button {Name="RoomOriginalGame",Text=Tr("ORIGINAL_GAME_DEVELOPMENT")};_content.AddChild(start);
+        start.Pressed+=()=>ShowPlanningPreview(state,room);
+        foreach (var (name,key) in new[] {("RoomSequel","SEQUEL_DEVELOPMENT"),("RoomManga","MANGA_ADAPTATION")})
+            _content.AddChild(new Button {Name=name,Text=Tr(key),Disabled=true,TooltipText=Tr("NOT_YET_DECODED")});
+        AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
+    }
+
     private void ShowDeskAssignment(GameState state, EmployeeState employee)
     {
         ClearContent(); AddHeading(Tr("ASSIGN_DESK"),18);
