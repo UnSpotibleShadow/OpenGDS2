@@ -109,6 +109,36 @@ def verify(data):
         require(0x9DD234,offset,(bytes.fromhex('fc 67 6c ff fd e6 08 00')+struct.pack('<H',member)).hex())
     for offset,member in [(0x672,0x22C),(0x6AC,0x23C),(0x725,0x24C)]:
         require(0x9DB4F4,offset,(bytes.fromhex('28 6c ff 00 00 fd e6 08 00')+struct.pack('<H',member)).hex())
+    # Ordered weekly calendar: first shipments count, zero initialization and
+    # hardware predicates. Bounded instruction structures only, no dialog text.
+    require(0x9DD234,0x12CE,'fc 67 6c ff fd e6 08 00 98 1b')
+    require(0x9C9CB8,0x102F,'05 60 00 28 6c ff 01 00 fb 94 5c ff fd b6 60 00')
+    require(0x9F651C,0x0196,'28 6c ff 00 00 fd e6 08 00 b4 0e')
+    for offset,slot in [(0x00BA,0),(0x00CA,1),(0x00DA,2)]:
+        require(0x9F651C,offset,(bytes.fromhex('28 6c ff ff ff f5')+struct.pack('<i',slot)+bytes.fromhex('07 08 00 44 04 52')).hex())
+    for offset,member in [(0xB2C,0x106C),(0xB4A,0x10A4),(0xB59,0x10C0),(0xB68,0x10DC),
+                           (0x1220,0x1A70),(0x122F,0x1A8C)]:
+        require(0x9DD234,offset,(bytes.fromhex('fc 67 6c ff 04 5c ff fc 22 07 08 00')+struct.pack('<H',member)+b'\x52').hex())
+    for offset,member in [(0x1F9,0x2FC),(0x208,0x318),(0x217,0x334),(0x226,0x350)]:
+        require(0x9DD234,offset,(bytes.fromhex('fc 67 6c ff 04 5c ff fc 22 07 08 00')+struct.pack('<H',member)+b'\x52').hex())
+    for offset,identifier,stage,funds in [(0x793,3,0,150000000),(0x887,4,1,300000000),
+        (0x9C7,2,2,450000000),(0xB07,10,3,70000000),(0xBFB,5,4,1000000000),
+        (0xD3B,9,5,1200000000),(0xE7B,6,6,1400000000),(0x1007,7,6,1600000000)]:
+        require(0x9DB4F4,offset,'07 08 00 98 1b 28 6c ff 04 00 5d fb 5a')
+        require(0x9DB4F4,offset+0x10,(bytes.fromhex('04 3c ff fc 22 07 08 00 c8 0e fc 96 28 6c ff')+struct.pack('<h',identifier)+bytes.fromhex('5d fb 2f 4c ff 07 08 00 b4 0e 28 2c ff')+struct.pack('<h',stage)).hex())
+        require(0x9DB4F4,offset+0x39,(bytes.fromhex('07 08 00 20 00 fe c1 1c ff')+struct.pack('<i',funds)+bytes.fromhex('5d fb 56 9c fe')).hex())
+        require(0x9DB4F4,offset+0x4F,'04 3c ff fc 22 07 08 00 6c 10 fc 96 28 7c fe 00 00 5d fb 2f 6c fe')
+    require(0x9DB4F4,0x1143,'28 6c ff 01 00 fb 9c 4c ff')
+    require(0x9DB4F4,0x1163,'28 6c ff 04 00 5d fb 33')
+    require(0x9DB4F4,0x1275,'28 6c ff 0c 00 5d fb 33')
+    require(0x9DB4F4,0x1222,'28 6c ff 01 00 04 3c ff fc 22 07 08 00 1c 0f 52')
+    require(0x9DB4F4,0x1374,'28 6c ff 02 00 04 3c ff fc 22 07 08 00 1c 0f 52 28 6c ff 00 00 04 3c ff fc 22 07 08 00 8c 0f 52')
+    require(0x9DB4F4,0x1593,'04 3c ff fc 22 07 08 00 c0 10 fc 96 fb b4 4c ff')
+    require(0x9DB4F4,0x15BF,'fe c4 6c ff 00 00 00 00 00 00 f8 3f fb bc ac fe fb b4 9c fe 28 2c ff 84 03 fb bc 8c fe')
+    for offset,principal in [(0x1818,10000000),(0x183B,50000000),(0x185E,100000000),(0x1881,200000000)]:
+        require(0x9DB4F4,offset,(bytes.fromhex('fe c1 6c ff')+struct.pack('<i',principal)).hex())
+    require(0x9DB4F4,0x1939,'04 f8 fb fe c4 6c ff cd cc cc cc cc cc f4 3f fb b4 4c ff fb cc bc fe')
+    require(0x9DB4F4,0x1966,'28 6c ff 00 00 04 3c ff fc 22 07 08 00 fc 02 52')
     # Both negotiation modes have independently checked fee/result branches.
     # Only outcome Rnd is verified here; dialogue RNG and entry charges are not.
     pool=0x5FAFCC

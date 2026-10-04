@@ -1200,3 +1200,63 @@ msgstr "Monthly net"
 
 msgid "YEARLY_NET"
 msgstr "Yearly net"
+
+msgid "CALENDAR_TRANSACTIONS"
+msgstr "Calendar transactions"
+
+msgid "ANNUAL_CONTRACT_RENEWAL"
+msgstr "Annual contract renewal"
+
+msgid "CONFIRM_CONTRACT_RENEWAL"
+msgstr "Renew selected contracts"
+
+msgid "CONTRACT_RENEWAL_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "CONTRACT_RENEWAL_FeeUnknown"
+msgstr "An employee contract fee is unknown."
+
+msgid "CONTRACT_RENEWAL_InsufficientFunds"
+msgstr "Insufficient funds. Uncheck contracts you cannot renew."
+
+msgid "CALENDAR_EVENT_HardwareDevelopment"
+msgstr "A new platform is in development."
+
+msgid "CALENDAR_EVENT_HardwareSoon"
+msgstr "A new platform will launch soon."
+
+msgid "CALENDAR_EVENT_HardwareLaunch"
+msgstr "A new platform has launched."
+
+msgid "CALENDAR_EVENT_HardwareRetiring"
+msgstr "This platform will leave the market in three months."
+
+msgid "CALENDAR_EVENT_HardwareRetired"
+msgstr "This platform has left the market. New development is unavailable."
+
+msgid "CALENDAR_EVENT_LoanRepayment"
+msgstr "A loan is due for repayment, including interest."
+
+msgid "CALENDAR_BLOCK_PayrollUnknown"
+msgstr "Calendar paused: the original payroll scratch value is unknown. Open Staff to rebuild the verified staff-list projection, then retry."
+
+msgid "CALENDAR_BLOCK_CatalogUnknown"
+msgstr "Calendar paused: matching platform data is unavailable. Reimport your original LZH distribution."
+
+msgid "CALENDAR_BLOCK_BeginnerEnding"
+msgstr "Calendar paused at the original second-year ending branch. Its mode and continuation behavior still require reconstruction."
+
+msgid "CALENDAR_BLOCK_Awards"
+msgstr "Calendar paused at the annual awards. Award selection and rewards still require reconstruction."
+
+msgid "CALENDAR_BLOCK_Exhibition"
+msgstr "Calendar paused at the spring or autumn exhibition. Participation and its effects still require reconstruction."
+
+msgid "CALENDAR_BLOCK_Graduates"
+msgstr "Calendar paused at graduate recruitment. The school-slot state and candidate dialogs still require reconstruction."
+
+msgid "CALENDAR_LEGACY_SAVE"
+msgstr "This save predates calendar transactions. Its historical payroll and platform countdowns remain unknown; start a new company after reimporting your LZH to use the live calendar."
+
+msgid "CALENDAR_LIVE"
+msgstr "The company calendar advances with the office clock. Unreconstructed event branches pause explicitly."

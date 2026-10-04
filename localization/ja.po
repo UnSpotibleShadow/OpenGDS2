@@ -1200,3 +1200,63 @@ msgstr "月間収支"
 
 msgid "YEARLY_NET"
 msgstr "年間収支"
+
+msgid "CALENDAR_TRANSACTIONS"
+msgstr "カレンダー処理"
+
+msgid "ANNUAL_CONTRACT_RENEWAL"
+msgstr "年間契約の更新"
+
+msgid "CONFIRM_CONTRACT_RENEWAL"
+msgstr "選択した契約を更新"
+
+msgid "CONTRACT_RENEWAL_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "CONTRACT_RENEWAL_FeeUnknown"
+msgstr "社員の契約金が不明です。"
+
+msgid "CONTRACT_RENEWAL_InsufficientFunds"
+msgstr "資金不足です。更新しない契約のチェックを外してください。"
+
+msgid "CALENDAR_EVENT_HardwareDevelopment"
+msgstr "新しいゲーム機が開発中です。"
+
+msgid "CALENDAR_EVENT_HardwareSoon"
+msgstr "新しいゲーム機の発売が近づいています。"
+
+msgid "CALENDAR_EVENT_HardwareLaunch"
+msgstr "新しいゲーム機が発売されました。"
+
+msgid "CALENDAR_EVENT_HardwareRetiring"
+msgstr "このゲーム機は３ヶ月後に販売終了予定です。"
+
+msgid "CALENDAR_EVENT_HardwareRetired"
+msgstr "このゲーム機の販売が終了しました。新規開発はできません。"
+
+msgid "CALENDAR_EVENT_LoanRepayment"
+msgstr "借入金の返済日です。利息を含めて返済します。"
+
+msgid "CALENDAR_BLOCK_PayrollUnknown"
+msgstr "給与計算に必要な原作の値が不明なため停止しています。社員一覧を開いてから再試行してください。"
+
+msgid "CALENDAR_BLOCK_CatalogUnknown"
+msgstr "対応するゲーム機データがないため停止しています。原作のLZHを再インポートしてください。"
+
+msgid "CALENDAR_BLOCK_BeginnerEnding"
+msgstr "原作の２年目終了処理で停止しています。モード判定と継続動作は調査中です。"
+
+msgid "CALENDAR_BLOCK_Awards"
+msgstr "年間表彰の処理で停止しています。選考と賞金は調査中です。"
+
+msgid "CALENDAR_BLOCK_Exhibition"
+msgstr "春・秋の展示会処理で停止しています。参加と効果は調査中です。"
+
+msgid "CALENDAR_BLOCK_Graduates"
+msgstr "卒業生採用の処理で停止しています。学校の状態と候補者画面は調査中です。"
+
+msgid "CALENDAR_LEGACY_SAVE"
+msgstr "このセーブにはカレンダー処理の履歴がありません。給与とゲーム機の残り期間は不明です。LZHを再インポートして新しい会社を始めると日付が進みます。"
+
+msgid "CALENDAR_LIVE"
+msgstr "会社の日付はオフィスの時計と共に進みます。未解明のイベントでは停止します。"

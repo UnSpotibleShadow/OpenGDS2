@@ -1,5 +1,9 @@
 # Weekly-economics investigation checkpoint
 
+M35 integrates the verified branches into the resumable calendar. The older
+findings below record the investigation progression; current implementation and
+remaining stops are in [calendar-transactions.md](calendar-transactions.md).
+
 These are targeted static/data-flow findings from the supported executable whose
 hash is recorded in source-hashes.txt. The private traces were examined locally
 before the execution workspace disconnected. They are **not original Windows
@@ -55,8 +59,9 @@ map to these principal amounts:
 | 3 | 100,000,000 |
 | 4 | 200,000,000 |
 
-It writes the selected type and borrowing year/month/week to globals A11318,
-A11334, A11350 and A1136C, and credits principal through the signed money helper.
+Members 2FC/318/334/350 correspond to those four globals.
+It writes the selected type and borrowing year/month/week to globals A11318 (type),
+A11334 (year), A11350 (month) and A1136C (week), and credits principal through the signed money helper.
 The weekly repayment block `009DB4F4 +178C..1975` tests borrowing year + 1
 and the same month/week, charges principal × 1.3, and clears the loan type.
 

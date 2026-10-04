@@ -38,6 +38,9 @@ public sealed class GameSession
         state.Company.ActivityCost = 5_000_000;
         // Reset 009DD234 +014D..016A writes Empty, numerically zero.
         state.Company.WeeklyNet=state.Company.MonthlyNet=state.Company.YearlyNet=0;
+        if (catalog?.SourceHash==EmployeeDatabaseImporter.ExpectedHash && catalog.Hardware.Count==11 &&
+            catalog.Hardware.All(x=>x.RawMembers.ContainsKey("10A4") && x.RawMembers.ContainsKey("10C0")))
+            state.Calendar=CalendarService.CreateOpening(catalog);
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)
@@ -70,8 +73,12 @@ public sealed class GameSession
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
-        CompanyActivityService.Tick(state,_random);
-        if (RecallService.HasPending(state)) return;
+        if (CalendarService.HasPending(state))
+        {
+            if (!CalendarService.Resume(state,catalog,_random)) return;
+        }
+        else CompanyActivityService.Tick(state,_random,catalog);
+        if (CalendarService.HasPending(state) || RecallService.HasPending(state)) return;
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         if (SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         foreach (var employee in state.Employees)

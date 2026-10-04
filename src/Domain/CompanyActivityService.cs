@@ -39,8 +39,9 @@ public static class CompanyActivityService
         finance.Commit(state);state.CompanyActivityPerformed=true;
         return CompanyActivityResult.Success;
     }
-    public static void Tick(GameState state,Random random)
+    public static void Tick(GameState state,Random random,OriginalCatalog? catalog=null)
     {
+        if (CalendarService.HasPending(state)) return;
         // This recovered budget phase is separate from the incomplete calendar
         // economics. Older modern saves leave phase/flag unknown.
         if (state.CompanyActivityTicks is not int ticks || state.CompanyActivityPerformed is null) return;
@@ -50,6 +51,11 @@ public static class CompanyActivityService
             TryPerform(state,CompanyActivity.ProductionExpansion,random);
         if (ticks==TicksPerWeek)
         {
+            if (state.Calendar is not null)
+            {
+                CalendarService.BeginWeek(state,catalog,random);
+                return;
+            }
             // Weekly procedure +0119..01A5 shifts the history before the
             // periodic sales call; a boundary batch enters the new week.
             SalesHistoryRules.AdvanceWeek(state);

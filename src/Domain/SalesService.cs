@@ -9,7 +9,7 @@ public static class SalesService
         <3000=>2,<4000=>1.5,<5000=>1.2,<6000=>1,<7000=>.7,
         <8000=>.5,<9000=>.2,<10000=>.1,<20000=>.05,_=>0
     };
-    public static long PotentialSales(ReleasedGameState product,OriginalCatalog catalog,int noise)
+    public static long PotentialSales(ReleasedGameState product,OriginalCatalog catalog,int noise,double? hardwareMarket=null)
     {
         if (noise is <0 or >19) throw new ArgumentOutOfRangeException(nameof(noise));
         DevelopmentWorkRules.ValidateQuality(product.Quality);
@@ -21,7 +21,9 @@ public static class SalesService
         var q=product.Quality;
         double sales=Math.Floor((q.Fun*1.6+q.Novelty*1.2+q.Music*.8+q.Graphics*.7-product.Bugs)/2*
             ((double)product.Demand*product.Demand/800))+noise;
-        sales*=1+hardware.RawMembers["1050"]/80.0;
+        double market=hardwareMarket ?? hardware.RawMembers["1050"];
+        if (!double.IsFinite(market) || market<0) throw new InvalidDataException("Invalid hardware market.");
+        sales*=1+market/80.0;
         sales*=1+product.Recognition/40;
         sales*=product.MarketFactor;
         sales*=audienceFactor;
@@ -50,7 +52,8 @@ public static class SalesService
         state.SalesTicks=0;
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
         {
-            long sales=product.Stock>0 && product.Demand>0 ? Math.Min(product.Stock,PotentialSales(product,catalog,random.Next(20))) : 0;
+            double? market=state.Calendar?.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex).Market;
+            long sales=product.Stock>0 && product.Demand>0 ? Math.Min(product.Stock,PotentialSales(product,catalog,random.Next(20),market)) : 0;
             long receipts=checked(checked(product.Price-state.SalesFee1.Value-state.SalesFee2.Value)*sales);
             long stock=checked(product.Stock-sales),units=checked(product.UnitsSold+sales);
             var finance=FinancialRules.Prepare(state,receipts);

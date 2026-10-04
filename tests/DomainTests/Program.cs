@@ -12,6 +12,232 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+(GameState State,OriginalCatalog Catalog) CalendarFixture(GameDate? date=null,long money=2_000_000_000)
+{
+    var c=CoreCatalog();c.Hardware.Clear();
+    for (int id=0;id<=10;id++) c.Hardware.Add(new() {SourceIndex=id,Name=$"Synthetic platform {id}",
+        RawMembers=new() {{"0EC8",id},{"0F1C",id<3 ? 1 : 0},{"1050",40},{"0F54",15},{"10A4",0},{"10C0",0}},
+        ProductionBands=[new(16,300),new(32,700),new(48,1200),new(64,1800)]});
+    var d=date ?? new GameDate(3,5,1);var s=PlanningState(money);
+    s.Year=d.Year;s.Month=d.Month;s.Week=d.Week;s.AvailableHardware=[0,1,2];
+    s.Company.WeeklyNet=11;s.Company.MonthlyNet=22;s.Company.YearlyNet=33;
+    s.Calendar=CalendarService.CreateOpening(c);return (s,c);
+}
+Test("live calendar boundary shifts history once and resumes monthly signed payroll after load",()=>
+{
+    var (s,c)=CalendarFixture(new(3,5,4),100);s.CompanyActivityTicks=199;s.CompanyActivityPerformed=true;
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=new() {Name="Synthetic worker",RawParameter40=80}}];
+    s.SourceUpperBound=1;
+    var g=new ReleasedGameState {Title="Synthetic history",WeeklySalesHistory=SalesHistoryRules.NewHistory()};s.ReleasedGames.Add(g);
+    g.WeeklySalesHistory[0]=12;
+    CompanyActivityService.Tick(s,new SequenceRandom(),c);
+    Check(s.Calendar!.Pending!.Block==CalendarBlock.PayrollUnknown && s.Month==5 && s.Week==4 && s.Money==100);
+    Check(g.WeeklySalesHistory[0]==0 && g.WeeklySalesHistory[1]==12 && s.CompanyActivityTicks==0);
+    CompanyActivityService.Tick(s,new SequenceRandom(),c);Check(g.WeeklySalesHistory[1]==12);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(OriginalPayrollRules.CaptureStaffList(s));
+    // Scratch becomes 1: this source is missing. No invented salary zero.
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==100);
+    s.EmployeeSources.Add(new() {SourceIndex=1,GateValue=0,Employee=new() {Name="Synthetic salary row",RawParameter40=120}});
+    s.SourceUpperBound=2;Check(OriginalPayrollRules.CaptureStaffList(s));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Money==-20 && s.Year==3 && s.Month==6 && s.Week==1);
+    Check(s.Company.WeeklyNet==-120 && s.Company.MonthlyNet==-120 && s.Company.YearlyNet==-87);
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==-20 && s.ReleasedGames[0].WeeklySalesHistory![1]==12);
+});
+Test("annual renewal pauses before payroll and rejected selection cannot advance date",()=>
+{
+    var (s,c)=CalendarFixture(new(3,3,4),1000);
+    s.Employees=[new() {Name="Synthetic A",SourceIndex=0,ContractFee=70},new() {Name="Synthetic B",SourceIndex=1,ContractFee=80}];
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=new() {Name="Synthetic A",RawParameter40=30}},
+        new() {SourceIndex=1,GateValue=1,Employee=new() {Name="Synthetic B",RawParameter40=90}}];
+    s.SourceUpperBound=2;s.OriginalPayrollScratchIndex=1;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.ContractRenewal);
+    Check(s.Month==3 && s.Week==4 && s.Company.MonthlyNet==22 && s.Money==1000);
+    s.Employees[0].ContractFee=2000;
+    Check(CalendarService.RenewContracts(s,new HashSet<int> {0})==ContractRenewalResult.InsufficientFunds);
+    Check(s.Employees.Count==2 && s.Month==3 && s.Calendar!.Pending!.PendingEvent==CalendarEvent.ContractRenewal);
+    s.Employees[0].ContractFee=70;s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(CalendarService.RenewContracts(s,new HashSet<int> {0})==ContractRenewalResult.Success);
+    Check(s.Money==930 && s.Employees.Count==1 && s.EmployeeSources[1].GateValue==0);
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Pending!.Block==CalendarBlock.Exhibition && s.Month==4 && s.Week==1 && s.Money==840);
+    Check(s.Company.WeeklyNet==-90 && s.Company.MonthlyNet==-90 && s.Company.YearlyNet==-127);
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==840);
+});
+Test("January payroll follows every accounting reset and tenant expiry occurs once",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,4),1000);
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=new() {Name="Synthetic",RawParameter40=7}}];s.OriginalPayrollScratchIndex=0;s.SourceUpperBound=1;
+    s.Calendar!.Tenants[0]=new() {OriginalState=1,Weeks=1};s.Calendar.Tenants[1]=new() {OriginalState=1,Weeks=2};
+    Check(CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Year==4 && s.Month==1 && s.Week==1 && s.Money==993);
+    Check(s.Company.WeeklyNet==-7 && s.Company.MonthlyNet==-7 && s.Company.YearlyNet==-7);
+    Check(s.Calendar.Tenants[0].OriginalState==0 && s.Calendar.Tenants[1].Weeks==1);
+});
+Test("calendar payroll overflow leaves the pending rollover retryable without a partial debit",()=>
+{
+    var (s,c)=CalendarFixture(new(3,5,4),0);s.Company.YearlyNet=long.MinValue;
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=new() {Name="Synthetic",RawParameter40=1}}];s.OriginalPayrollScratchIndex=0;s.SourceUpperBound=1;
+    Throws<OverflowException>(()=>CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Month==5 && s.Week==4 && s.Money==0 && s.Company.YearlyNet==long.MinValue && s.Calendar!.Pending!.Phase==CalendarPhase.TenantsAndPayroll);
+    s.Company.YearlyNet=0;Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==-1);
+});
+Test("hardware trigger requires four first shipments stage funds and zero countdown",()=>
+{
+    foreach (var (count,stage,funds,countdown,triggered) in new[]
+        {(3,0,150000000L,0,false),(4,1,150000000L,0,false),(4,0,149999999L,0,false),
+         (4,0,150000000L,1,false),(4,0,150000000L,0,true)})
+    {
+        var (s,c)=CalendarFixture(money:funds);s.Calendar!.ShipmentsSinceHardwareTrigger=count;s.Calendar.HardwareStage=stage;
+        var h=s.Calendar.Hardware[3];h.LaunchWeeks=countdown;
+        Check(HardwareCalendarRules.TryTrigger(s,c,h)==triggered);
+        Check(s.Money==funds && h.LaunchWeeks==(triggered ? 24 : countdown));
+    }
+});
+Test("hardware trigger news saves before same-pass decrement and consumes the shipment gate",()=>
+{
+    var (s,c)=CalendarFixture();s.Calendar!.ShipmentsSinceHardwareTrigger=4;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar.Pending!.PendingEvent==CalendarEvent.HardwareDevelopment && s.Calendar.Hardware[3].LaunchWeeks==24);
+    long money=s.Money!.Value;s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(CalendarService.Acknowledge(s) && !CalendarService.Acknowledge(s));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Hardware[3].LaunchWeeks==23 && s.Calendar.ShipmentsSinceHardwareTrigger==0 && s.Money==money);
+});
+Test("hardware launch availability changes after acknowledgement and retirement removes licenses before news",()=>
+{
+    var (s,c)=CalendarFixture();s.Calendar!.Hardware[3].LaunchWeeks=1;s.Calendar.Hardware[0].RetirementWeeks=1;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar.Pending!.PendingEvent==CalendarEvent.HardwareRetired && !s.AvailableHardware!.Contains(0) && !s.HardwareLicenses!.Contains(0));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CalendarService.Acknowledge(s));
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Pending!.PendingEvent==CalendarEvent.HardwareLaunch && s.Calendar.HardwareStage==1 && !s.AvailableHardware!.Contains(3));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CalendarService.Acknowledge(s) && s.AvailableHardware!.Contains(3));
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Calendar!.Hardware[0].RetirementWeeks==0);
+});
+Test("hardware advance preserves original warning thresholds and retirement assignment",()=>
+{
+    var (s,c)=CalendarFixture();s.Calendar!.HardwareStage=1;s.Calendar.ShipmentsSinceHardwareTrigger=4;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar.Hardware[0].RetirementWeeks==14 && s.Calendar.Hardware[4].LaunchWeeks==24);
+    CalendarService.Acknowledge(s);Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar.Hardware[0].RetirementWeeks==13 && s.Calendar.Hardware[4].LaunchWeeks==23);
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar.Pending!.PendingEvent==CalendarEvent.HardwareRetiring);
+    Check(s.Calendar.Hardware[0].RetirementWeeks==12);CalendarService.Acknowledge(s);Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    s.Calendar.Hardware[4].LaunchWeeks=5;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar.Pending!.PendingEvent==CalendarEvent.HardwareSoon);
+    Check(s.Calendar.Hardware[4].LaunchWeeks==4);
+});
+Test("hardware stage-six alternatives retain source order rather than an invented generation eight",()=>
+{
+    var (s,c)=CalendarFixture();s.Calendar!.HardwareStage=6;s.Calendar.ShipmentsSinceHardwareTrigger=4;
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar.Hardware[6].LaunchWeeks==24 && s.Calendar.Hardware[7].LaunchWeeks==0);
+    CalendarService.Acknowledge(s);Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar.Hardware[4].RetirementWeeks==13 && s.Calendar.Hardware[2].RetirementWeeks==16);
+});
+Test("hardware market growth updates saved cells and actual sales without modifying catalog",()=>
+{
+    var (s,c)=CalendarFixture();var h=s.Calendar!.Hardware[0];h.GrowthWeeks=2;h.GrowthBoost=1;
+    double expected=40+3*10.0/900;
+    Check(CalendarService.BeginWeek(s,c,new SequenceRandom()) && Math.Abs(h.Market-expected)<1e-10);
+    Check(h.GrowthWeeks==1 && h.GrowthBoost==0 && c.Hardware[0].RawMembers["1050"]==40);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    var g=new ReleasedGameState {Title="Synthetic",Price=5800,Stock=10000,Demand=100,MarketFactor=1,Quality=new(100,100,100,100)};
+    s.Calendar!.Hardware[0].Market=120;s.ReleasedGames.Add(g);s.SalesFee1=s.SalesFee2=1500;s.SalesTicks=19;
+    long predicted=SalesService.PotentialSales(g,c,0,120);SalesService.Tick(s,c,new SequenceRandom(0,0));
+    Check(g.UnitsSold==predicted && predicted>SalesService.PotentialSales(g,c,0));
+    Check(HardwareCalendarRules.NextMarket(40,0,9,15)==40);
+});
+Test("loan slots pause in order before signed repayment and cannot charge twice after reload",()=>
+{
+    var (s,c)=CalendarFixture(new(2,5,1),200000000);
+    s.Calendar!.Loans[0]=new() {OriginalType=1,BorrowedOn=new(1,5,2)};
+    s.Calendar.Loans[1]=new() {OriginalType=2,BorrowedOn=new(1,5,2)};
+    s.Calendar.Loans[2]=new() {OriginalType=3,BorrowedOn=new(1,5,3)};
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar.Pending!.PendingEvent==CalendarEvent.LoanRepayment && s.Money==200000000);
+    Check(s.Calendar!.Pending!.Amount==13000000);s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(CalendarService.Acknowledge(s) && s.Money==187000000 && !CalendarService.Acknowledge(s));
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Calendar!.Pending!.Amount==65000000);
+    Check(CalendarService.Acknowledge(s) && s.Money==122000000);Check(CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Loans[0].OriginalType==0 && s.Calendar.Loans[1].OriginalType==0 && s.Calendar!.Loans[2].OriginalType==3);
+    Check(s.Company.WeeklyNet==-78000000 && s.Company.MonthlyNet==22-78000000);
+    Check(CalendarService.LoanRepayment(3)==130000000 && CalendarService.LoanRepayment(4)==260000000);
+});
+Test("calendar recall results stop before later product countdowns market growth and loan debt",()=>
+{
+    var (s,c)=CalendarFixture(new(2,5,1),200000000);
+    s.Calendar!.Hardware[0].GrowthWeeks=1;s.Calendar.Loans[0]=new() {OriginalType=1,BorrowedOn=new(1,5,2)};
+    for (int i=0;i<2;i++) s.ReleasedGames.Add(new() {ProductIndex=i,Title=$"Synthetic {i}",
+        Recall=new() {OriginalState=1,WeeksRemaining=1}});
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom(3)));
+    Check(s.ReleasedGames[0].Recall!.PendingEvent==RecallEvent.Result && s.ReleasedGames[1].Recall!.WeeksRemaining==1 && s.Calendar.Hardware[0].GrowthWeeks==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));RecallService.Acknowledge(s,s.ReleasedGames[0]);
+    Check(!CalendarService.Resume(s,c,new SequenceRandom(3)) && s.ReleasedGames[1].Recall!.PendingEvent==RecallEvent.Result);
+    RecallService.Acknowledge(s,s.ReleasedGames[1]);Check(!CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(s.Calendar!.Hardware[0].GrowthWeeks==0 && s.Calendar.Pending!.PendingEvent==CalendarEvent.LoanRepayment);
+});
+Test("unreconstructed calendar branches stop at source phase without skipping transactions",()=>
+{
+    foreach (var (date,block) in new[] {(new GameDate(2,12,4),CalendarBlock.BeginnerEnding),
+        (new GameDate(3,12,3),CalendarBlock.Awards),(new GameDate(3,9,4),CalendarBlock.Exhibition)})
+    {
+        var (s,c)=CalendarFixture(date);Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+        Check(s.Calendar!.Pending!.Block==block);string before=SaveStore.Serialize(s);
+        Check(!CalendarService.Resume(s,c,new SequenceRandom()) && SaveStore.Serialize(s)==before);
+    }
+    var (g,gc)=CalendarFixture(new(3,4,1));g.Calendar!.OriginalSlots0444[0]=0;
+    Check(!CalendarService.BeginWeek(g,gc,new SequenceRandom()) && g.Calendar.Pending!.Block==CalendarBlock.Graduates);
+});
+Test("calendar modals pause office clocks and completing a boundary resumes its sales batch once",()=>
+{
+    var (s,c)=CalendarFixture();s.CompanyActivityTicks=199;s.CompanyActivityPerformed=true;s.SalesTicks=19;
+    s.Calendar!.Hardware[3].LaunchWeeks=5;s.SalesFee1=s.SalesFee2=1500;
+    var g=new ReleasedGameState {Title="Synthetic",Stock=10000,Price=5800,Demand=100,MarketFactor=1,Quality=new(100,100,100,100),WeeklySalesHistory=SalesHistoryRules.NewHistory()};
+    s.ReleasedGames.Add(g);g.WeeklySalesHistory[0]=12;
+    var session=new GameSession(new SequenceRandom(0,0));session.Restore(s);session.TickOffice(c);
+    Check(s.Calendar.Pending!.PendingEvent==CalendarEvent.HardwareSoon && s.SalesTicks==19 && g.UnitsSold==0);
+    session.TickOffice(c);Check(s.CompanyActivityTicks==0 && s.SalesTicks==19);
+    CalendarService.Acknowledge(s);session.TickOffice(c);
+    Check(s.Calendar.Pending is null && s.CompanyActivityTicks==0 && s.SalesTicks==0 && g.UnitsSold>0 && g.WeeklySalesHistory[1]==12);
+    long units=g.UnitsSold;session.TickOffice(c);Check(s.CompanyActivityTicks==1 && g.UnitsSold==units);
+});
+Test("old modern saves do not fabricate calendar countdowns and malformed cursors are rejected",()=>
+{
+    var old=SaveStore.Deserialize(SaveStore.Serialize(State()));Check(old.Calendar is null);
+    var (complete,_)=CalendarFixture();
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(complete).Replace("\"GrowthWeeks\": 0,","")));
+    var (s,c)=CalendarFixture();s.Calendar!.Hardware[3].LaunchWeeks=5;
+    CalendarService.BeginWeek(s,c,new SequenceRandom());
+    s.Calendar.Pending!.Index=11;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.Calendar.Pending.Index=3;s.Calendar.Hardware[3].Market=double.NaN;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.Calendar.Hardware[3].Market=40;s.Calendar.Pending.ClosingDate=new(3,5,3);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("only successful first shipments increment the resettable hardware gate and reprints do not",()=>
+{
+    var (s,c)=CalendarFixture();s.Calendar!.ShipmentsSinceHardwareTrigger=3;
+    var project=new DevelopmentProjectState {Title="Synthetic release",RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0};
+    s.DevelopmentProjects.Add(project);long opening=s.Money!.Value;
+    s.Calendar.ShipmentsSinceHardwareTrigger=int.MaxValue;
+    Throws<OverflowException>(()=>ReleaseService.TryRelease(s,project,c,project.Title,5800,100,new SequenceRandom()));
+    Check(s.Money==opening && s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==0);
+    s.Calendar.ShipmentsSinceHardwareTrigger=3;
+    Check(ReleaseService.TryRelease(s,project,c,project.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    Check(s.Calendar.ShipmentsSinceHardwareTrigger==4);ReviewService.Acknowledge(s,s.ReleasedGames[0]);
+    s.ProductionPerformedThisWeek=false;
+    Check(ReleaseService.TryProduce(s,s.ReleasedGames[0],c,100)==ReleaseResult.Success && s.Calendar.ShipmentsSinceHardwareTrigger==4);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Calendar!.ShipmentsSinceHardwareTrigger==4);
+});
+Test("third loan acknowledgement remains saveable before final calendar resumption",()=>
+{
+    var (s,c)=CalendarFixture(new(2,5,1),1);
+    s.Calendar!.Loans[2]=new() {OriginalType=4,BorrowedOn=new(1,5,2)};
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar.Pending!.Index==2);
+    Check(CalendarService.Acknowledge(s) && s.Money==-259999999);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Calendar!.Pending!.Index==3 && s.Calendar.Pending.PendingEvent is null);
+    Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==-259999999 && s.Calendar.Pending is null);
+});
 Test("signed financial helper updates all known periods without clamping negative funds",()=>
 {
     var s=new GameState {Money=10,Company=new() {WeeklyNet=5,MonthlyNet=20,YearlyNet=30}};
@@ -699,7 +925,7 @@ Test("save preserves stale and absent payroll scratch without serializing salary
     Check(!json.Contains("\"MonthlySalary\"") && json.Contains("\"RawParameter40\""));
     var restored=SaveStore.Deserialize(json);
     Check(restored.OriginalPayrollScratchIndex==2 && OriginalPayrollRules.MonthlyDebit(restored)==300);
-    Check(restored.EmployeeSources[2].Employee.MonthlySalary==300);
+    Check(restored.EmployeeSources[2].Employee.RawParameter40==300);
     s.OriginalPayrollScratchIndex=null;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).OriginalPayrollScratchIndex is null);
     s.OriginalPayrollScratchIndex=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
@@ -1823,6 +2049,9 @@ if (args.Length == 2)
         foreach (var candidate in session.OpenRecruitment().Candidates.ToArray().Take(3))
             Check(session.Hire(candidate)==HireResult.Success);
         Check(state.Employees.Count==3);
+        // The live desktop enters the staff list on construction. This
+        // headless domain fixture must perform the same proven scratch writer.
+        Check(OriginalPayrollRules.CaptureStaffList(state));
         var desks=new Dictionary<int,int>();
         for (int i=0;i<3;i++)
         {

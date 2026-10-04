@@ -70,6 +70,11 @@ def recover(data):
         require(helper+index*0x14,bytes.fromhex('fd 16')+struct.pack('<H',0x10+index*4)+bytes.fromhex('5c ff 07 08 00 94 0e fc 22 07 08 00')+struct.pack('<H',member)+bytes.fromhex('fc b0'))
     for index,call in enumerate(calls):
         pos=START+call-0x59;fields={};strings={}
+        gp=START+call-(0x6f if index==3 else 0x6e)
+        require(gp,bytes.fromhex('28 fc fb' if index==3 else '28 2c fc'))
+        require(gp+5,bytes.fromhex('28 1c fc' if index==3 else '28 2c fd'))
+        fields['10C0']=struct.unpack('<h',pe.bytes_at(gp+3,2))[0]
+        fields['10A4']=struct.unpack('<h',pe.bytes_at(gp+8,2))[0]
         for member in members:
             if member in ['1034','0EE4']:
                 require(pos,b'\x3a');strings[member]=bstr(pe,pe.u16(pos+3))

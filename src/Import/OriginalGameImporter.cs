@@ -22,6 +22,7 @@ public sealed class OriginalGameImporter
         if (catalog is null || catalog.SchemaVersion != 1 || catalog.SourceHash != EmployeeDatabaseImporter.ExpectedHash)
             throw new InvalidDataException("Unsupported local catalog.");
         if (catalog.Hardware.Any(x=>x.ProductionBands.Count!=4)) return null; // Reimport pre-M13 catalog caches.
+        if (catalog.Hardware.Any(x=>!x.RawMembers.ContainsKey("10A4") || !x.RawMembers.ContainsKey("10C0"))) return null;
         return catalog;
     }
 
