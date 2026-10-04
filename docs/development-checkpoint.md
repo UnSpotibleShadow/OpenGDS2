@@ -1,4 +1,23 @@
-# Development checkpoint — M36 annual events, 2026-10-04
+# Development checkpoint — M37, 2026-10-04
+
+M37 connects school construction/closure, locally imported rival releases/sales,
+rival award names and thirteen-pick presentation, six independent earliest-date
+records and read-only GameRank.GDS import. The requested compact employee pane
+includes imported portrait, ability chart, status bars and a tracking red arrow.
+Original LZH importing remains required. Reimport and start a new company for
+known rival history; earlier missing history is never fabricated.
+
+Local checks pass: 198 domain checks (196 public plus two private originals),
+all 27 Python checks, direct C# builds with zero warnings/errors, and core-loop
+and original-import Godot suites with zero failures. Standard SDK/export and
+packaged Linux/Windows runs are pending. Own-hardware development, other
+facilities, student growth, office progression, remaining economics and exact
+original RNG/presentation parity remain unfinished. See
+[school/rival/ranking evidence](school-rivals-and-rankings.md) and
+[employee presentation](compact-employee-presentation.md).
+
+## Previous M36 validation
+
 
 
 M36 implements exhibition participation/results, the five own-company award

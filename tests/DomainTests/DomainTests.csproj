@@ -9,6 +9,7 @@
     <Compile Include="../../src/Core/LocalAssetOverlay.cs" Link="Core/LocalAssetOverlay.cs" />
     <Compile Include="../../src/Persistence/*.cs" Link="Persistence/%(Filename)%(Extension)" />
     <Compile Include="../../src/Import/EmployeeDatabaseImporter.cs" Link="Import/EmployeeDatabaseImporter.cs" />
+    <Compile Include="../../src/Import/CompetitionCatalogImporter.cs" Link="Import/CompetitionCatalogImporter.cs" />
     <Compile Include="../../src/Import/OriginalCatalogImporter.cs" Link="Import/OriginalCatalogImporter.cs" />
     <Compile Include="../../src/Import/LhaArchive.cs" Link="Import/LhaArchive.cs" />
     <Compile Include="../../src/Import/OfficeSceneImporter.cs" Link="Import/OfficeSceneImporter.cs" />

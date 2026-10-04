@@ -152,6 +152,9 @@ public static class SaveStore
             (state.Recruitment.CandidateDatabaseDecoded && (state.MinimumSourceIndex is null || state.SourceUpperBound is null ||
              state.EmployeeSources.Count == 0 || state.EmployeeSources.Any(x => x.SourceIndex >= state.SourceUpperBound))))
             throw new InvalidDataException("Invalid recruitment bounds.");
+        CompetitionService.Validate(state);
+        if (state.PendingRankings is null || state.PendingRankings.Select(p=>p?.Kind).Distinct().Count()!=state.PendingRankings.Count) throw new InvalidDataException("Invalid ranking queue.");
+        foreach (var achievement in state.PendingRankings) RankingService.Validate(achievement);
         CalendarService.Validate(state);
     }
 

@@ -41,6 +41,8 @@ public sealed class GameSession
         if (catalog?.SourceHash==EmployeeDatabaseImporter.ExpectedHash && catalog.Hardware.Count==11 &&
             catalog.Hardware.All(x=>x.RawMembers.ContainsKey("10A4") && x.RawMembers.ContainsKey("10C0")))
             state.Calendar=CalendarService.CreateOpening(catalog);
+        if (catalog?.SourceHash==EmployeeDatabaseImporter.ExpectedHash && catalog.InitialRivalProducts.Count==30 && catalog.StagedRivalProducts.Count==35 && catalog.RivalCompanies.Count==10)
+            state.Competition=CompetitionService.Opening(catalog);
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)

@@ -238,6 +238,36 @@ def verify(data):
     require(0x999858,0x0260,'05 06 00 28 5c ff 01 00 5d fb 33 1c 3d 04 05 01 00 04 6c ff 0a 11 00 08 00')
     # Exhibition attendance record starts Empty.
     require(0x9DD234,0x01A7,'fc 67 6c ff fd e6 08 00 bc 02')
+    # M37 school price, duplicate-slot scan, direct debit and confirmed closure.
+    require(0x9F651C,0x9963,'fe c1 bc fe 00 46 c3 23')
+    require(0x988F78,0x0073,'28 2c ff 00 00 04 5c fe 28 4c ff 02 00')
+    require(0x988F78,0x0123,'05 02 00 05 00 00 fc 22 05 01 00 fc 96 fb 9c 6c ff fd b6 02 00')
+    require(0x984480,0x00A6,'28 6c ff ff ff 05 06 00 fc 22 05 07 00 52')
+    # Weekly rival refresh precedes early events. Writer argument/member map.
+    require(0x9DB4F4,0x01C2,'0a 75 00 00 00')
+    require(0x60ED98,0,'ba 3c 68 9b 00')
+    for offset,argument,member in [(0,0x10,0x2034),(0x14,0x14,0x2050),(0x28,0x18,0x206C),
+                                 (0x3C,0x1C,0x20C0),(0x50,0x20,0x20A4),(0x64,0x24,0x2088)]:
+        require(0x981B4C,offset,(bytes.fromhex('fd 16')+struct.pack('<H',argument)+
+            bytes.fromhex('5c ff 07 08 00 20 20 fc 22 07 08 00')+struct.pack('<H',member)).hex())
+    # Trigger platform and product sales market are separate, even in later eras.
+    require(0x9B5BE0,0x08ED,'07 08 00 b4 0e 28 6c ff 05 00 5d fb 5a')
+    require(0x9B5BE0,0x0925,'28 ec fe 00 00')
+    require(0x9E3830,0x09AA,'28 68 ff 02 00 fb bc 58 ff')
+    require(0x9E3830,0x0A32,'6b 7a ff e7 05 3f 01 fc 96 28 68 ff 02 00 fb 9c 58 ff')
+    # 31 draws with replacement exclude newest row and reject own-company rows.
+    require(0x996CB8,0x02D0,'28 0c ff 00 00 04 3c ff 28 1c ff 1e 00')
+    require(0x996CB8,0x02EF,'05 0e 00 28 1c ff 01 00 fb 9c dc fe fb b4 cc fe fb e9 bc fe')
+    require(0x996CB8,0x030A,'04 ac fe fc 22 05 0f 00 fc 96 28 2c ff 00 00 5d fb 5a')
+    require(0x9BD6F8,0,'05 09 00 28 6c ff 0d 00 5d fb 67 1c 48 00')
+    # Four rows of six ranking fields, then three rows of six numeric date fields.
+    require(0x986BD8,0x001D,'28 28 ff 00 00 04 48 ff 28 38 ff 03 00')
+    require(0x986BD8,0x008A,'28 28 ff 00 00 04 48 ff 28 38 ff 02 00')
+    require(0x986BD8,0x007B,'ff 0f 14 00 20 00')
+    require(0x986BD8,0x00E8,'ff 0f 14 00 20 00')
+    # Employee chart baseline and status-bar denominator, without imported stats.
+    require(0x9DF294,0x056C,'28 6c ff f0 ff fc f6 c4 fe 28 6c ff f8 ff fc f6 b4 fe')
+    require(0x9DF294,0x0280,'6e 0c ff f4 63 eb b6 fd 6a 6c ff')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

@@ -34,6 +34,7 @@ public partial class Main
 
     private void DestroyDesktop()
     {
+        CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
         _desktopFunds = null; _desktopStatus = null; _desktopPause = null; _desktopLoad = null;
@@ -76,7 +77,7 @@ public partial class Main
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
             ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
-        Menu(menus, "MENU_HELP", [("CALENDAR_INSPECTOR", () => ShowCalendar(state))]);
+        Menu(menus, "MENU_HELP", [("CALENDAR_INSPECTOR", () => ShowCalendar(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0, 28) };
         toolbar.AddThemeConstantOverride("separation", 1); layout.AddChild(toolbar);
@@ -157,6 +158,9 @@ public partial class Main
                 value.AddThemeFontSizeOverride("font_size", 11); row.AddChild(value); _companyMetrics[key] = value;
             }
         }
+        var facilities=new Button {Name="CompanyFacilities",Text=Tr("COMPANY_FACILITIES")};
+        facilities.AddThemeFontSizeOverride("font_size",11);company.Body.AddChild(facilities);
+        facilities.Pressed+=()=>{if (_dialog is null) ShowFacilities(state);};
         var staff = ChildWindow("EmployeeWindow", Tr("EMPLOYEE_WINDOW"), new Vector2(720, 130), new Vector2(390, 150));
         OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
@@ -197,6 +201,7 @@ public partial class Main
             image.AcceptEvent();
             ShowEmployeeDetails(state,employee);
         }
+        else if (employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true}) CloseEmployeeDetails();
     }
 
     private void Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)
@@ -341,6 +346,7 @@ public partial class Main
 
     private void PrepareDesktopDialog()
     {
+        CloseEmployeeDetails();
         CloseDesktopDialog();
         _dialog = new DesktopWindow { Name = "ManagementWindow" }; _workspace!.AddChild(_dialog);
         _dialog.Initialize(Tr("APP_TITLE"), new Vector2(430, 36), new Vector2(670, 520));

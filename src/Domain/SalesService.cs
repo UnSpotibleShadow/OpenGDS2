@@ -50,6 +50,7 @@ public static class SalesService
                 if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
         if (++state.SalesTicks<TicksPerBatch) return;
         state.SalesTicks=0;
+        CompetitionService.SellRivals(state,catalog,random);
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
         {
             double? market=state.Calendar?.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex).Market;
@@ -67,5 +68,6 @@ public static class SalesService
             SalesMilestoneService.QueueReached(product);
             RecallService.CheckAfterSales(product,random);
         }
+        CompetitionService.UpdateOwnChart(state);
     }
 }

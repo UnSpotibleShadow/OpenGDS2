@@ -23,6 +23,163 @@ void Throws<T>(Action action) where T : Exception
     s.Company.WeeklyNet=11;s.Company.MonthlyNet=22;s.Company.YearlyNet=33;
     s.Calendar=CalendarService.CreateOpening(c);return (s,c);
 }
+(GameState State,OriginalCatalog Catalog) CompetitionFixture(GameDate? date=null)
+{
+    var (s,c)=CalendarFixture(date);c.InitialRivalProducts=[
+        new() {Title="Synthetic rival A",Owner=0,Hardware=0,UnitsSold=100,Demand=10,SalesPower=140},
+        new() {Title="Synthetic rival B",Owner=1,Hardware=0,UnitsSold=100,Demand=1,SalesPower=140},
+        new() {Title="Synthetic newest rival",Owner=0,Hardware=0,UnitsSold=50,Demand=0,SalesPower=0}];
+    c.StagedRivalProducts=[new() {Age=0,Product=new() {Title="Synthetic launch rival",Owner=1,Hardware=0,UnitsSold=0,Demand=10,SalesPower=70}}];
+    c.RivalCompanies=["Synthetic company A","Synthetic company B"];
+    s.Competition=CompetitionService.Opening(c);return (s,c);
+}
+Test("school purchase uses empty slots and exact cash without changing period accounting",()=>
+{
+    var (s,c)=CalendarFixture(money:SchoolService.PurchasePrice);s.Company.Rank=null;
+    Check(SchoolService.Open(s,2)==SchoolResult.Success && s.Money==0 && s.Calendar!.OriginalSlots0444.SequenceEqual(new[] {-1,-1,0}));
+    Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(SchoolService.Open(s,1)==SchoolResult.AlreadyOwned && s.Money==0);
+    Check(SchoolService.Close(s,2)==SchoolResult.Success && s.Money==0 && s.Calendar!.OriginalSlots0444[2]==-1);
+    Check(SchoolService.Close(s,2)==SchoolResult.NotOwned);
+});
+Test("school rejection does not mutate cash slots or accounting",()=>
+{
+    var (s,c)=CalendarFixture(money:SchoolService.PurchasePrice-1);string before=SaveStore.Serialize(s);
+    Check(SchoolService.Open(s,0)==SchoolResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    Check(SchoolService.Open(s,-1)==SchoolResult.InvalidSlot && SchoolService.Close(s,3)==SchoolResult.InvalidSlot);
+    s.Calendar!.OriginalSlots0444[0]=1;Check(SchoolService.Open(s,0)==SchoolResult.SlotOccupied);
+    s.Money=null;Check(SchoolService.Open(s,1)==SchoolResult.MoneyUnknown);
+    s.Calendar.Pending=new() {ClosingDate=new(3,5,1)};Check(SchoolService.Open(s,1)==SchoolResult.EventPending && SchoolService.Close(s,0)==SchoolResult.EventPending);
+    s.Calendar=null;Check(SchoolService.Open(s,0)==SchoolResult.CalendarUnknown);
+});
+Test("buying school through service enables April graduates and closing prevents them",()=>
+{
+    var s=GraduateFixture(2);s.Calendar!.OriginalSlots0444[0]=-1;var (_,c)=CalendarFixture();
+    Check(SchoolService.Open(s,1)==SchoolResult.Success);
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom(0,0)) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Graduates);
+    Check(SchoolService.Close(s,1)==SchoolResult.EventPending);
+    Check(GraduateService.Decline(s) && GraduateService.Decline(s) && CalendarService.Resume(s,c,new SequenceRandom()));
+    Check(SchoolService.Close(s,1)==SchoolResult.Success);
+    s.Year=4;s.Month=4;s.Week=1;Check(CalendarService.BeginWeek(s,c,new SequenceRandom()));
+});
+Test("rival opening copies imported values and staged releases advance once across pauses",()=>
+{
+    var (s,c)=CompetitionFixture(new(3,12,3));s.Competition!.Products[0].Demand=1;
+    Check(c.InitialRivalProducts[0].Demand==10);
+    Check(!CalendarService.BeginWeek(s,c,new ConstantRandom(0)));
+    Check(s.Competition.Products.Count==4 && s.Competition.PlatformAges[0]==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Competition!.Products.Count==4 && s.Competition.PlatformAges[0]==1);
+    Check(s.Calendar!.Pending!.Awards!.RivalEntries!.Count==31);
+});
+Test("staged rival trigger follows hardware age independently of the product market",()=>
+{
+    var (s,c)=CompetitionFixture();s.Calendar!.HardwareStage=1;
+    c.StagedRivalProducts=[new() {TriggerPlatform=2,Age=0,Product=new() {Title="Synthetic older-market launch",Owner=0,Hardware=0}}];
+    CompetitionService.AdvanceWeek(s,c);Check(s.Competition!.Products.Count==3 && s.Competition.PlatformAges[2]==0);
+    s.Calendar.HardwareStage=2;CompetitionService.AdvanceWeek(s,c);
+    Check(s.Competition.Products.Count==4 && s.Competition.Products[3].Hardware==0 && s.Competition.PlatformAges[2]==1);
+});
+Test("rival batch floors twice uses market noise and reduces demand by two",()=>
+{
+    var (s,c)=CompetitionFixture();var p=s.Competition!.Products[0];
+    Check(CompetitionService.RivalSales(p,40,3)==19);
+    Check(CompetitionService.RivalSales(s.Competition.Products[1],40,19)==28);
+    Throws<ArgumentOutOfRangeException>(()=>CompetitionService.RivalSales(p,40,20));
+    var rng=new SequenceRandom(3,19);CompetitionService.SellRivals(s,c,rng);
+    Check(rng.Calls==2 && p.UnitsSold==119 && p.Demand==8 && s.Competition.Products[1].UnitsSold==128 && s.Competition.Products[1].Demand==0);
+});
+Test("sales chart keeps append order for ties limits one hundred and queues own number one",()=>
+{
+    var (s,c)=CompetitionFixture();Check(CompetitionService.Chart(s).SequenceEqual(new[] {0,1,2}));
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic own",UnitsSold=101}];CompetitionService.AppendOwn(s,s.ReleasedGames[0]);
+    CompetitionService.UpdateOwnChart(s);Check(CompetitionService.Chart(s)[0]==3 && s.PendingRankings.Single().Kind==RankingKind.NumberOneSales);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Competition!.Products[3].OwnProduct==0);
+    s.Competition.Products.AddRange(Enumerable.Range(0,110).Select(i=>new RivalProduct {Title=$"Synthetic {i}",Owner=0,Hardware=0}));
+    Check(CompetitionService.Chart(s).Count==100);
+});
+Test("contest replacement lottery rejects own entries and excludes newest catalog row",()=>
+{
+    var (s,c)=CompetitionFixture();s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic own"}];CompetitionService.AppendOwn(s,s.ReleasedGames[0]);
+    s.Competition!.Products.Add(new() {Title="Synthetic excluded newest",Owner=1,Hardware=0});
+    var rng=new SequenceRandom(new[] {3}.Concat(Enumerable.Repeat(0,31)).ToArray());
+    Check(CompetitionService.DrawContestEntries(s,rng).SequenceEqual(Enumerable.Repeat(0,31)) && rng.Calls==32);
+    s.Competition.Products.RemoveRange(0,3);Throws<InvalidOperationException>(()=>CompetitionService.DrawContestEntries(s,new SequenceRandom()));
+});
+Test("rival award stores thirteen reel draws and fallback winner without payment or reroll",()=>
+{
+    var (s,c)=CompetitionFixture(new(3,12,3));Check(!CalendarService.BeginWeek(s,c,new ConstantRandom(0)));
+    var a=s.Calendar!.Pending!.Awards!;a.RivalEntries=Enumerable.Range(0,31).Select(i=>i%2).ToList();long cash=s.Money!.Value;
+    var rng=new SequenceRandom(Enumerable.Range(0,14).ToArray());Check(AwardService.Reveal(s,rng) && rng.Calls==14);
+    Check(a.AnimationProducts!.SequenceEqual(Enumerable.Range(0,13).Select(i=>i%2)) && a.WinningRival==1 && a.WinningProduct is null && s.Money==cash);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(!AwardService.Reveal(s,new SequenceRandom()) && s.Calendar!.Pending!.Awards!.WinningRival==1);
+    Check(AwardService.Continue(s) && s.Calendar!.Pending!.Awards!.AnimationProducts is null && s.Calendar.Pending.Awards.RivalEntries!.Count==31);
+});
+Test("own award draws follow reel and grand prize queues its dated global achievement",()=>
+{
+    var (s,c)=CompetitionFixture(new(3,12,3));s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic own",ReleasedOn=new(3,1,1),UnitsSold=1_000_000}];
+    CompetitionService.AppendOwn(s,s.ReleasedGames[0]);Check(!CalendarService.BeginWeek(s,c,new ConstantRandom(0)));
+    s.Calendar!.Pending!.Awards!.CategoryIndex=4;var rng=new SequenceRandom(Enumerable.Repeat(0,13).ToArray());
+    Check(AwardService.Reveal(s,rng) && rng.Calls==13 && s.Calendar.Pending.Awards.WinningProduct==0 && s.Calendar.Pending.Awards.WinningRival is null);
+    Check(s.PendingRankings.Single().Kind==RankingKind.GrandPrize && s.PendingRankings[0].AchievedOn==new GameDate(3,12,4));
+});
+Test("save rejects missing rival fields broken own links and forged rival award results",()=>
+{
+    var (s,c)=CompetitionFixture(new(3,12,3));string json=SaveStore.Serialize(s);
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"PlatformAges\":","\"MissingPlatformAges\":")));
+    s.Competition!.Products[0].Owner=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.Competition.Products[0].Owner=0;
+    Check(!CalendarService.BeginWeek(s,c,new ConstantRandom(0)) && AwardService.Reveal(s,new ConstantRandom(0)));
+    s.Calendar!.Pending!.Awards!.WinningRival=200;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.Calendar.Pending.Awards.WinningRival=0;s.Calendar.Pending.Awards.AnimationProducts!.RemoveAt(0);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("global rankings replace only strictly earlier dates for each independent category",()=>
+{
+    var book=new RankingBook();var a=new RankingAchievement {Kind=RankingKind.Sales250000,Company="Synthetic A",AchievedOn=new(3,2,2)};
+    Check(RankingService.Record(book,a,"2030/01/01"));a.Company="Synthetic B";
+    Check(!RankingService.Record(book,a,"2030/01/02") && book.Records[0].Company=="Synthetic A");
+    foreach (var date in new[] {new GameDate(3,2,3),new(3,3,1),new(4,1,1)}) {a.AchievedOn=date;Check(!RankingService.Record(book,a,"ignored"));}
+    foreach (var date in new[] {new GameDate(3,2,1),new(3,1,4),new(2,12,4)}) {a.AchievedOn=date;Check(RankingService.Record(book,a,"earlier"));}
+    Check(book.Records.Skip(1).All(r=>r.AchievedOn is null) && book.Records[0].AchievedOn==new GameDate(2,12,4));
+});
+Test("sales milestone rankings begin at quarter million and queue earliest dates once",()=>
+{
+    var (s,c)=CalendarFixture();var g=new ReleasedGameState {Title="Synthetic milestones",UnitsSold=1_000_000,SalesMilestoneStage=0};s.ReleasedGames.Add(g);
+    SalesMilestoneService.QueueReached(g);Check(SalesMilestoneService.Acknowledge(s,g) && s.PendingRankings.Count==0);
+    for (int i=0;i<3;i++) Check(SalesMilestoneService.Acknowledge(s,g));
+    Check(s.PendingRankings.Select(p=>p.Kind).SequenceEqual(new[] {RankingKind.Sales250000,RankingKind.Sales500000,RankingKind.Sales1000000}));
+    s.Month=6;RankingService.Queue(s,RankingKind.Sales250000);Check(s.PendingRankings[0].AchievedOn==new GameDate(3,5,1));
+    s.Month=4;RankingService.Queue(s,RankingKind.Sales250000);Check(s.PendingRankings.Single(p=>p.Kind==RankingKind.Sales250000).AchievedOn==new GameDate(3,4,1));
+    s.Year=null;RankingService.Queue(s,RankingKind.OwnHardware);Check(s.PendingRankings.Count==3);
+    s.Year=3;s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.PendingRankings.Count==3);
+});
+Test("ranking profile persists independently and rejects corrupt schema and dates",()=>
+{
+    string path=Path.Combine(Path.GetTempPath(),Guid.NewGuid()+"-rankings.json");
+    try
+    {
+        var book=RankingStore.Load(path);Check(book.Records.Count==6 && !File.Exists(path));
+        RankingService.Record(book,new() {Kind=RankingKind.GrandPrize,Company="Synthetic \"A\"",AchievedOn=new(2,12,4)},"2030/01/01");
+        RankingStore.Save(path,book);Check(!File.Exists(path+".tmp"));
+        Check(RankingStore.Load(path).Records[4].Company=="Synthetic \"A\"");
+        File.WriteAllText(path,"{}");Throws<System.Text.Json.JsonException>(()=>RankingStore.Load(path));
+        book.Records[4].AchievedOn=new(2,13,1);Throws<InvalidDataException>(()=>RankingStore.Save(path,book));
+        Check(File.ReadAllText(path)=="{}");
+    }
+    finally {File.Delete(path);File.Delete(path+".tmp");}
+});
+Test("original ranking importer reads CP932 seven CSV rows and preserves quoted names",()=>
+{
+    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+    string text="1,-1,-1,-1,-1,-1\r\n\"合成,会社\"\"A\"\"\",,,,,\r\n\"合成日付\",,,,,\r\n\"2030/01/01\",,,,,\r\n2,,,,,\r\n4,,,,,\r\n1,,,,,\r\n";
+    var book=RankingStore.ImportOriginal(System.Text.Encoding.GetEncoding(932).GetBytes(text));
+    Check(book.Records[0].Company=="合成,会社\"A\"" && book.Records[0].OriginalGameDateText=="合成日付" && book.Records[0].AchievedOn==new GameDate(2,4,1));
+    Check(book.Records.Skip(1).All(r=>r.AchievedOn is null));
+    Throws<InvalidDataException>(()=>RankingStore.ImportOriginal(System.Text.Encoding.ASCII.GetBytes(text.Replace("1,-1","0,-1"))));
+    Throws<InvalidDataException>(()=>RankingStore.ImportOriginal(System.Text.Encoding.ASCII.GetBytes(text.Replace("2,,,,,","2,,"))));
+    Throws<InvalidDataException>(()=>RankingStore.ImportOriginal(System.Text.Encoding.ASCII.GetBytes(text.Replace("4,,,,,","13,,,,,"))));
+    Throws<InvalidDataException>(()=>RankingStore.ImportOriginal(System.Text.Encoding.ASCII.GetBytes("\"unterminated")));
+});
 Test("exhibitions reject invalid selections without payment or visitor rolls",()=>
 {
     var (s,c)=CalendarFixture(new(3,9,4),9_999_999);
@@ -2238,8 +2395,13 @@ if (args.Length == 2)
     {
         var db=EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));
         var catalog=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        Check(catalog.InitialRivalProducts.Count==30 && catalog.StagedRivalProducts.Count==35 && catalog.RivalCompanies.Count==10);
+        Check(catalog.StagedRivalProducts.Select(p=>p.TriggerPlatform).Distinct().Order().SequenceEqual(Enumerable.Range(0,8)));
+        Check(catalog.StagedRivalProducts.Where(p=>p.TriggerPlatform>=4).All(p=>p.Product.Hardware==0));
+        Check(catalog.InitialRivalProducts.All(p=>p.Owner is >=0 and <=9 && p.Demand>=0 && p.SalesPower>=0));
         var session=new GameSession(new Random(123));
         var state=session.StartNewGame("Compatibility test","Tester",GameMode.Beginner,db,catalog);
+        Check(state.Competition?.Products.Count==30 && state.Competition.PlatformAges.All(a=>a==0));
         foreach (var candidate in session.OpenRecruitment().Candidates.ToArray().Take(3))
             Check(session.Hire(candidate)==HireResult.Success);
         Check(state.Employees.Count==3);

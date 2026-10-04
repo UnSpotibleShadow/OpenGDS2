@@ -29,7 +29,8 @@ public partial class Main : Control
 
     public override void _Process(double delta)
     {
-        if (++_desktopRefreshFrame % 6 == 0) RefreshDesktop();
+        if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
+        RefreshEmployeeSelectionArrow();
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
         _officeElapsed += delta;
         // Keep at most one second of backlog after a suspended window.
@@ -38,6 +39,7 @@ public partial class Main : Control
         while (_officeElapsed >= OfficeStaffRules.TickSeconds)
         {
             _session.TickOffice(_activeCatalog);
+            PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
             if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
@@ -46,6 +48,7 @@ public partial class Main : Control
             if (pending is not null) {ShowProjectDecision(state,pending);return;}
         }
         if (updated && _officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture, state);
+        RefreshEmployeeSelectionArrow();
         _refreshCoreStatus?.Invoke();
     }
 
@@ -166,6 +169,7 @@ public partial class Main : Control
             if (key == "SETTINGS") button.Pressed += ShowSettings;
             _content.AddChild(button);
         }
+        AddAction("GLOBAL_RANKINGS",()=>ShowRankings());
         var import = new Button { Text = Tr("IMPORT_BUTTON"), CustomMinimumSize = new Vector2(0, 46) };
         import.Pressed += ShowImporter;
         _content.AddChild(import);
@@ -265,11 +269,15 @@ public partial class Main : Control
     private void ShowOfficeReconstruction(GameState state)
     {
         _activeCatalog = _importer.LoadCatalog();
+        PersistPendingRankings(state);
         EnsureDesktop(state);
         // M35 persisted these two stops before their form behavior was mapped.
         // Resume the existing cursor, without replaying a week boundary.
         if (state.Calendar?.Pending?.Block is CalendarBlock.Exhibition or CalendarBlock.BeginnerEnding)
+        {
             _session.TickOffice(_activeCatalog);
+            PersistPendingRankings(state);
+        }
         if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
         CloseDesktopDialog();
@@ -363,20 +371,6 @@ public partial class Main : Control
             else AddStaffEmployeeControls(state,employee);
         }
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
-    }
-
-    private void ShowEmployeeDetails(GameState state,EmployeeState employee)
-    {
-        if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
-        if (!state.Employees.Contains(employee)) return;
-        ClearContent();
-        _dialog?.SetTitle(employee.Name);
-        AddHeading(Tr("STAFF"),30);
-        var selected=AddStaffEmployeeControls(state,employee);
-        selected.Name="SelectedEmployee";
-        selected.SetMeta("employee_source",employee.SourceIndex ?? -1);
-        AddAction("STAFF",()=>ShowStaff(state));
-        AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
     }
 
     private VBoxContainer AddStaffEmployeeControls(GameState state,EmployeeState employee)

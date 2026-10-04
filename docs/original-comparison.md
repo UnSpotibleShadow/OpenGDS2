@@ -110,3 +110,15 @@ suites against the committed soundtrack, and all four SDK/export jobs.
 This audit is a work queue, not a completion claim. Unknown mechanics remain
 explicitly unresolved; imported originals and private QA images are excluded
 from the repository and downloadable builds.
+
+## M37 update
+
+School construction/closure, imported rival scheduling and sales, named rival
+award presentation and all six local cross-company ranking records now have
+connected implementations. Own-hardware release remains an unfinished upstream
+workflow; imported records can still be displayed. The requested employee
+inspection now uses a compact pane, portrait/chart/bars and selection arrow.
+See [school/rival/ranking evidence](school-rivals-and-rankings.md) and
+[compact employee presentation](compact-employee-presentation.md). Exact original
+animation intervals, RNG stream parity and a rendered Windows comparison remain
+unverified.

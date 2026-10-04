@@ -11,6 +11,9 @@ public sealed class OriginalCatalog
     public List<HardwareDefinition> Hardware { get; set; } = [];
     public List<GameTypeDefinition> GameTypes { get; set; } = [];
     public List<TechnologyDefinition> Technologies { get; set; } = [];
+    public List<RivalProduct> InitialRivalProducts {get;set;}=[];
+    public List<RivalReleaseDefinition> StagedRivalProducts {get;set;}=[];
+    public List<string> RivalCompanies {get;set;}=[];
 }
 
 public sealed class GameTypeDefinition
