@@ -181,6 +181,63 @@ def verify(data):
     require(0xA0283C,0xAFD4,'6b 48 ff e7 05 d5 00 fc 96 28 6c ff 01 00 fb 9c 2c ff 6b 48 ff e7 05 d5 00 52')
     require(0xA0283C,0xAFF2,'05 d5 00 fc 96 28 6c ff 00 00 5d fb 4d 1c 1c b0')
     require(0xA0283C,0xB002,'28 6c ff 00 00 6b 48 ff e7 05 7c 00 52 28 6c ff 00 00 6b 48 ff e7 05 d5 00 52')
+    # Annual calendar forms: bounded branch checks, with no game text or assets.
+    # Normal tutorial marker is -1.
+    require(0x9886C4,0x001E,'28 68 ff ff ff fd b6 03 00')
+    # Beginner marker starts nonnegative.
+    require(0x9886C4,0x0048,'28 68 ff 00 00 fd b6 03 00')
+    # Beginner ending checks marker >=0.
+    require(0x9DB4F4,0x01FC,'07 08 00 0c 3b 28 7c fe 00 00 5d fb 56 6c fe fb 27 5c fe ff 1b')
+    # Ending exits before renewal and payroll.
+    require(0x9DB4F4,0x04CA,'14')
+    # Five-product exhibition cap.
+    require(0x98FBA8,0x0014,'05 00 00 28 6c ff 05 00 5d fb 5a 1c 7a 00')
+    # Exhibition fee is ten million per item.
+    require(0x98FBA8,0x01BA,'fe c1 6c ff 80 96 98 00 fd b6 05 00')
+    # Visitor increment every fourth tick.
+    require(0x99AB50,0x0084,'05 12 00 28 6c ff 04 00 5d fb 5a 1c 0c 01')
+    # Visitor draw width 350 plus 450.
+    require(0x99AB50,0x0098,'0a 17 00 04 00 f3 5e 01 eb b3 fb e6 f3 c2 01 eb ab fd 6a 4c ff fb')
+    # Exhibition completes at ninety ticks.
+    require(0x99AB50,0x010C,'05 0b 00 28 6c ff 5a 00 5d fb 5a 1c 66 04')
+    # Awareness gain floors visitors divided by 500.
+    require(0x99AB50,0x02B8,'05 0c 00 28 6c ff f4 01 fb bc 5c ff fb e9 3c ff')
+    # Room cap mutates the shared gain.
+    require(0x99AB50,0x0305,'04 f0 fd fb 94 5c ff 28 6c ff 64 00 5d fb 74 35 5c ff 1c 31 03 28 6c ff 64 00 f5 00 00 00 00 05 22 00')
+    # Music first threshold seventy.
+    require(0x9BD6F8,0x0098,'28 6c ff 46 00 5d fb 5a 1c d6 00')
+    # Music draw denominator ten followed by next branch.
+    require(0x9BD6F8,0x00A3,'27 5c ff 0a 0a 00 04 00 f4 0a eb b3 fb e6 ea f4 01 eb c8 35 5c ff')
+    # Music first threshold bypasses higher thresholds.
+    require(0x9BD6F8,0x00D3,'1e 58 01 04 34 ff fc 22 05 10 00 fc 96 fc 22 05 11 00 fc 96 28 6c ff 64 00 5d fb')
+    # Graphics first threshold seventy.
+    require(0x9BD6F8,0x0335,'28 6c ff 46 00 5d fb 5a 1c 73 03')
+    # Design first threshold eighty.
+    require(0x9BD6F8,0x05F7,'04 80 fe 28 6c ff 50 00 5d fb 5a 1c 38 06')
+    # Worst category clears the first-pass winner.
+    require(0x9BD6F8,0x0900,'28 6c ff 00 00 fc f6 44 ff')
+    # Worst second pass draws unconditionally.
+    require(0x9BD6F8,0x093E,'27 90 fe 0a 0a 00 04 00 f4 02 eb b3 fb e6 ea f4 00 eb c8 fd f8 14 ff fb 27 30 fe ff 1b')
+    # Grand prize first threshold 120.
+    require(0x9BD6F8,0x0BAE,'04 80 fe 28 6c ff 78 00 5d fb 5a 1c ef 0b')
+    # Million-unit sales overrides grand prize lottery.
+    require(0x9BD6F8,0x0C73,'05 10 00 fc 96 fc 22 05 24 00 fc 96 fe c1 6c ff 40 42 0f 00 5d fb 5a 1c a4 0c 28 6c ff 01 00 fc')
+    # Worst-game payment is signed negative two hundred million.
+    require(0x9CEE10,0x0DCA,'fe c1 4c ff 00 3e 14 f4')
+    # Grand prize payment is five hundred million.
+    require(0x9CEE10,0x1146,'fe c1 4c ff 00 65 cd 1d')
+    # Graduate minimum and maximum are inclusive.
+    require(0x9DB4F4,0x1A96,'07 08 00 70 0a 04 3c ff fb 49 4c ff 07 08 00 80 0a 04 3c ff fb 56 bc fe fb 27 ac fe ff 1b 1c 19')
+    # Graduate gate does not skip the random draw.
+    require(0x9DB4F4,0x1ACD,'27 bc fe 0a 55 00 04 00 f4 05 eb b3 fb e6 ea f4 00 eb c8 fd f8 1c ff fb 27 ac fe ff 1b 36 04')
+    # More than two eligible sources repeats the whole pass.
+    require(0x9DB4F4,0x1B22,'04 68 fb 28 6c ff 02 00 5d fb 4d 1c 33 1b 1e 46 1b 07 08 00 4c 35 28 6c ff 02 00 5d fb 67 1c 46 1b 1e 6f 1a')
+    # Graduate maximum is source upper bound minus one.
+    require(0x9F651C,0x1CDB,'07 08 00 60 0a 28 6c ff 01 00 fb 9c cc fe fd e6 08 00 80 0a')
+    # Graduate acceptance calls the shared employee copy helper.
+    require(0x999858,0x0260,'05 06 00 28 5c ff 01 00 5d fb 33 1c 3d 04 05 01 00 04 6c ff 0a 11 00 08 00')
+    # Exhibition attendance record starts Empty.
+    require(0x9DD234,0x01A7,'fc 67 6c ff fd e6 08 00 bc 02')
     catalog=recover(data)
     if not all(len(x['ProductionBands'])==4 for x in catalog['Hardware']):raise ParseError('Incomplete production bands')
     return True

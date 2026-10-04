@@ -8,6 +8,8 @@ public sealed class GameState
     public int? Week { get; set; }
     public List<RecruitmentSourceRecord> EmployeeSources { get; set; } = [];
     public int? MinimumSourceIndex { get; set; }
+    // Original member A80, initialized to A60 - 1. Graduate bounds are inclusive.
+    public int? MaximumSourceIndex { get; set; }
     public int? SourceUpperBound { get; set; }
     public int? Month { get; set; }
     // Shared original scratch A14034/member 3018; not a live employed-count cache.

@@ -24,6 +24,7 @@ public partial class Main
                 retry.Pressed+=()=>{_session.TickOffice(_activeCatalog);ShowOfficeReconstruction(state);};
             }
         }
+        else if (ShowAnnualCalendarEvent(state,pending)) { }
         else if (pending.PendingEvent==CalendarEvent.ContractRenewal)
         {
             AddHeading(Tr("ANNUAL_CONTRACT_RENEWAL"),22);

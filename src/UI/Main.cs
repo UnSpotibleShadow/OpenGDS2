@@ -266,6 +266,10 @@ public partial class Main : Control
     {
         _activeCatalog = _importer.LoadCatalog();
         EnsureDesktop(state);
+        // M35 persisted these two stops before their form behavior was mapped.
+        // Resume the existing cursor, without replaying a week boundary.
+        if (state.Calendar?.Pending?.Block is CalendarBlock.Exhibition or CalendarBlock.BeginnerEnding)
+            _session.TickOffice(_activeCatalog);
         if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
         CloseDesktopDialog();

@@ -1247,16 +1247,99 @@ msgid "CALENDAR_BLOCK_BeginnerEnding"
 msgstr "Calendar paused at the original second-year ending branch. Its mode and continuation behavior still require reconstruction."
 
 msgid "CALENDAR_BLOCK_Awards"
-msgstr "Calendar paused at the annual awards. Award selection and rewards still require reconstruction."
+msgstr "Awards are paused because this older save has unknown release dates. Eligibility cannot be reconstructed safely."
 
 msgid "CALENDAR_BLOCK_Exhibition"
 msgstr "Calendar paused at the spring or autumn exhibition. Participation and its effects still require reconstruction."
 
 msgid "CALENDAR_BLOCK_Graduates"
-msgstr "Calendar paused at graduate recruitment. The school-slot state and candidate dialogs still require reconstruction."
+msgstr "Graduate recruitment is paused because the saved employee selection bounds are unknown."
 
 msgid "CALENDAR_LEGACY_SAVE"
 msgstr "This save predates calendar transactions. Its historical payroll and platform countdowns remain unknown; start a new company after reimporting your LZH to use the live calendar."
 
 msgid "CALENDAR_LIVE"
 msgstr "The company calendar advances with the office clock. Unreconstructed event branches pause explicitly."
+
+# Annual calendar events (community-authored interface text).
+
+msgid "BEGINNER_ENDING_TITLE"
+msgstr "Beginner mode complete"
+
+msgid "BEGINNER_ENDING_MESSAGE"
+msgstr "Beginner mode has ended. Start a new company in Normal mode to keep playing."
+
+msgid "GAME_EXHIBITION"
+msgstr "Game exhibition"
+
+msgid "EXHIBITION_SELECTION"
+msgstr "Choose up to five products to exhibit. Each costs ¥10,000,000. Games in development can also participate."
+
+msgid "EXHIBITION_FEE"
+msgstr "Exhibition fee"
+
+msgid "EXHIBITION_RESULT"
+msgstr "{0:N0} visitors attended your booth. Reported awareness increase: {1:N1} points."
+
+msgid "EXHIBITION_PARTICIPATE"
+msgstr "Participate"
+
+msgid "EXHIBITION_SKIP"
+msgstr "Skip this exhibition"
+
+msgid "EXHIBITION_NoSelection"
+msgstr "Choose at least one product."
+
+msgid "EXHIBITION_TooManyProducts"
+msgstr "You can exhibit at most five products."
+
+msgid "EXHIBITION_InvalidSelection"
+msgstr "The selected products are no longer available."
+
+msgid "EXHIBITION_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "EXHIBITION_InsufficientFunds"
+msgstr "You do not have enough money for this exhibition."
+
+msgid "EXHIBITION_NotPending"
+msgstr "This exhibition has already been handled."
+
+msgid "ANNUAL_GAME_AWARDS"
+msgstr "Annual game contest"
+
+msgid "AWARD_Music"
+msgstr "Music award"
+
+msgid "AWARD_Graphics"
+msgstr "Graphics award"
+
+msgid "AWARD_Design"
+msgstr "Game design award"
+
+msgid "AWARD_Worst"
+msgstr "Worst game award"
+
+msgid "AWARD_GrandPrize"
+msgstr "Grand prize"
+
+msgid "AWARD_ENTRIES"
+msgstr "{0} of your games released this year are entered."
+
+msgid "AWARD_OWN_RESULT"
+msgstr "Your game “{0}” won! Funds change: ¥{1:N0}."
+
+msgid "AWARD_OTHER_COMPANY"
+msgstr "Another company won this category."
+
+msgid "AWARD_REVEAL"
+msgstr "Announce the winner"
+
+msgid "GRADUATE_RECRUITMENT"
+msgstr "Game school graduates"
+
+msgid "GRADUATE_POSITION"
+msgstr "Graduate {0} of {1}. The displayed contract fee is required to hire."
+
+msgid "GRADUATE_DECLINE"
+msgstr "Do not hire"

@@ -34,6 +34,8 @@ public static class ReleaseService
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
             WeeklySalesHistory=SalesHistoryRules.NewHistory(),
             Recall=new(),
+            ReleasedOn=state.Year is int year && state.Month is int month && state.Week is int week ? new(year,month,week) : null,
+            OriginalAwardCode=0,
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,

@@ -1247,16 +1247,99 @@ msgid "CALENDAR_BLOCK_BeginnerEnding"
 msgstr "原作の２年目終了処理で停止しています。モード判定と継続動作は調査中です。"
 
 msgid "CALENDAR_BLOCK_Awards"
-msgstr "年間表彰の処理で停止しています。選考と賞金は調査中です。"
+msgstr "古いセーブに発売日が記録されていないため表彰を停止しています。参加条件は推測できません。"
 
 msgid "CALENDAR_BLOCK_Exhibition"
 msgstr "春・秋の展示会処理で停止しています。参加と効果は調査中です。"
 
 msgid "CALENDAR_BLOCK_Graduates"
-msgstr "卒業生採用の処理で停止しています。学校の状態と候補者画面は調査中です。"
+msgstr "社員候補の選択範囲がセーブに記録されていないため卒業生採用を停止しています。"
 
 msgid "CALENDAR_LEGACY_SAVE"
 msgstr "このセーブにはカレンダー処理の履歴がありません。給与とゲーム機の残り期間は不明です。LZHを再インポートして新しい会社を始めると日付が進みます。"
 
 msgid "CALENDAR_LIVE"
 msgstr "会社の日付はオフィスの時計と共に進みます。未解明のイベントでは停止します。"
+
+# Annual calendar events (community-authored interface text).
+
+msgid "BEGINNER_ENDING_TITLE"
+msgstr "初心者モード終了"
+
+msgid "BEGINNER_ENDING_MESSAGE"
+msgstr "初心者モードは終了しました。通常モードで新しい会社を始めてください。"
+
+msgid "GAME_EXHIBITION"
+msgstr "ゲームデックス"
+
+msgid "EXHIBITION_SELECTION"
+msgstr "展示する商品を５個まで選んでください。１個につき1,000万円です。開発中のゲームも出展できます。"
+
+msgid "EXHIBITION_FEE"
+msgstr "出展費用"
+
+msgid "EXHIBITION_RESULT"
+msgstr "来場者数：{0:N0}人。知名度の報告値：{1:N1}ポイント。"
+
+msgid "EXHIBITION_PARTICIPATE"
+msgstr "出展する"
+
+msgid "EXHIBITION_SKIP"
+msgstr "今回は出展しない"
+
+msgid "EXHIBITION_NoSelection"
+msgstr "商品を１個以上選んでください。"
+
+msgid "EXHIBITION_TooManyProducts"
+msgstr "展示できる商品は５個までです。"
+
+msgid "EXHIBITION_InvalidSelection"
+msgstr "選択した商品は出展できません。"
+
+msgid "EXHIBITION_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "EXHIBITION_InsufficientFunds"
+msgstr "出展するための資金が足りません。"
+
+msgid "EXHIBITION_NotPending"
+msgstr "この出展はすでに処理されています。"
+
+msgid "ANNUAL_GAME_AWARDS"
+msgstr "全日本ゲームコンテスト"
+
+msgid "AWARD_Music"
+msgstr "音楽賞"
+
+msgid "AWARD_Graphics"
+msgstr "グラフィック賞"
+
+msgid "AWARD_Design"
+msgstr "ゲームデザイン賞"
+
+msgid "AWARD_Worst"
+msgstr "クソゲー賞"
+
+msgid "AWARD_GrandPrize"
+msgstr "グランプリ"
+
+msgid "AWARD_ENTRIES"
+msgstr "今年発売した自社ゲーム{0}本が参加しています。"
+
+msgid "AWARD_OWN_RESULT"
+msgstr "自社ゲーム「{0}」が受賞しました！資金の増減：{1:N0}円。"
+
+msgid "AWARD_OTHER_COMPANY"
+msgstr "この部門は他社が受賞しました。"
+
+msgid "AWARD_REVEAL"
+msgstr "結果を発表する"
+
+msgid "GRADUATE_RECRUITMENT"
+msgstr "ゲーム専門学校の卒業生"
+
+msgid "GRADUATE_POSITION"
+msgstr "卒業生 {0}人目／{1}人。雇用には表示された契約金が必要です。"
+
+msgid "GRADUATE_DECLINE"
+msgstr "雇用しない"

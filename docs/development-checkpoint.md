@@ -1,4 +1,20 @@
-# Development checkpoint — M35 calendar, 2026-10-04
+# Development checkpoint — M36 annual events, 2026-10-04
+
+
+M36 implements exhibition participation/results, the five own-company award
+categories, the terminal Beginner branch and source-ordered graduate prompts.
+M35 exhibition/ending stops resume their existing cursors; unknown legacy dates
+and graduate bounds remain explicit stops. The original LZH is still required.
+
+Local verification: 183 domain checks (181 public plus two private original
+fixtures), 27 Python checks, direct Roslyn domain/app builds, and the expanded
+native Godot core-loop UI fixture. The first expanded UI run caught a reversed
+synthetic mode value in the ending fixture; its corrected rerun passed with
+zero failures. Original-import UI also passes with zero failures. Standard
+Linux/Windows builds and packaged runs are pending GitHub CI validation. School construction/student growth, rival-name/animation
+lifecycle and the original global rankings are documented remaining work.
+
+## Previous M35 validation
 
 M35 advances new supported companies through verified calendar phases. It
 connects payroll/accounting, annual renewal, hardware launch/retirement/markets,
@@ -27,9 +43,9 @@ native Windows. Standard build warnings/errors and all UI failures are zero.
 The latest **OpenGDS2-desktop-development** artifact is on this run and expires
 2026-10-18.
 
-See [calendar-transactions.md](calendar-transactions.md) for bounded evidence,
-state format, unsupported event stops and validation. Exhibitions, awards,
-ending/graduate branches and borrowing/bankruptcy still require reconstruction.
+See [annual-calendar-events.md](annual-calendar-events.md) for M36 evidence,
+modeled event transactions, save compatibility and remaining school/rival gaps.
+Borrowing/bankruptcy, facility progression and dynamic original comparison remain.
 
 ## Previous M34 validation
 

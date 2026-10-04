@@ -14,7 +14,7 @@ public static class CalendarService
                 SourceIndex=h.SourceIndex,Availability=checked((int)h.RawMembers["0F1C"]),Market=h.RawMembers["1050"],
                 GrowthWeeks=checked((int)h.RawMembers["10A4"]),GrowthBoost=checked((int)h.RawMembers["10C0"])
             }).ToList(),
-            Loans=[new(),new(),new()],Tenants=[new(),new()],OriginalSlots0444=[-1,-1,-1]
+            Loans=[new(),new(),new()],Tenants=[new(),new()],OriginalSlots0444=[-1,-1,-1],ExhibitionVisitorRecord=0
         };
     }
     public static bool HasPending(GameState state)=>state.Calendar?.Pending is not null;
@@ -49,10 +49,16 @@ public static class CalendarService
             switch (t.Phase)
             {
                 case CalendarPhase.EarlyEvents:
-                    // 3B0C >= 0 controls the original early exit. Its complete
-                    // lifecycle is unresolved, so neither mode skips this guard.
-                    if (t.ClosingDate==new GameDate(2,12,4)) return Block(CalendarBlock.BeginnerEnding);
-                    if (t.ClosingDate.Month==12 && t.ClosingDate.Week==3) return Block(CalendarBlock.Awards);
+                    // fGMGameKaishi writes -1 for Normal; every Beginner
+                    // tutorial step remains >= 0, which selects the early exit.
+                    if (state.Mode==GameMode.Beginner && t.ClosingDate==new GameDate(2,12,4)) return Event(CalendarEvent.BeginnerEnding);
+                    if (t.ClosingDate.Month==12 && t.ClosingDate.Week==3)
+                    {
+                        if (state.ReleasedGames.Any(p=>p.ReleasedOn is null)) return Block(CalendarBlock.Awards);
+                        t.Awards=new() {Year=t.ClosingDate.Year,Entries=state.ReleasedGames
+                            .Where(p=>p.ReleasedOn!.Value.Year==t.ClosingDate.Year).OrderBy(p=>p.ProductIndex).Select(p=>p.ProductIndex).ToList()};
+                        return Event(CalendarEvent.Awards);
+                    }
                     t.Phase=CalendarPhase.TenantsAndPayroll;
                     if (ContractRenewalService.IsDueAtEndOfWeek(t.ClosingDate)) return Event(CalendarEvent.ContractRenewal);
                     break;
@@ -127,7 +133,8 @@ public static class CalendarService
                     t.Index++;
                     break;
                 case CalendarPhase.Exhibition:
-                    if (state.Week==1 && state.Month is 4 or 10) return Block(CalendarBlock.Exhibition);
+                    if (state.Week==1 && state.Month is 4 or 10)
+                    {t.Exhibition=new() {EligibleProducts=ExhibitionService.Eligible(state)};return Event(CalendarEvent.Exhibition);}
                     t.Phase=CalendarPhase.Loans;t.Index=0;break;
                 case CalendarPhase.Loans:
                     if (t.Index==c.Loans.Count) {t.Phase=CalendarPhase.Graduates;t.Index=0;break;}
@@ -137,7 +144,14 @@ public static class CalendarService
                     {t.Amount=LoanRepayment(loan.OriginalType);return Event(CalendarEvent.LoanRepayment);}
                     t.Index++;break;
                 case CalendarPhase.Graduates:
-                    if (state.Month==4 && state.Week==2 && c.OriginalSlots0444.Contains(0)) return Block(CalendarBlock.Graduates);
+                    if (state.Month==4 && state.Week==2 && c.OriginalSlots0444.Contains(0))
+                    {
+                        if (state.MinimumSourceIndex is null || state.MaximumSourceIndex is null || state.SourceUpperBound is not int sourceCount ||
+                            !state.EmployeeSources.Select(p=>p.SourceIndex).Order().SequenceEqual(Enumerable.Range(0,sourceCount))) return Block(CalendarBlock.Graduates);
+                        var candidates=GraduateService.DrawCandidates(state,random);
+                        if (candidates.Count>0)
+                        {t.Graduates=new() {Candidates=candidates};return Event(CalendarEvent.Graduates);}
+                    }
                     t.Phase=CalendarPhase.Complete;break;
                 case CalendarPhase.Complete:
                     c.Pending=null;return true;
@@ -155,7 +169,8 @@ public static class CalendarService
     public static bool Acknowledge(GameState state)
     {
         var c=state.Calendar;var t=c?.Pending;
-        if (t?.PendingEvent is not CalendarEvent kind || kind==CalendarEvent.ContractRenewal) return false;
+        if (t?.PendingEvent is not CalendarEvent kind || kind is CalendarEvent.ContractRenewal or CalendarEvent.Exhibition or
+            CalendarEvent.Awards or CalendarEvent.Graduates or CalendarEvent.BeginnerEnding) return false;
         if (kind==CalendarEvent.HardwareLaunch)
         {
             var hardware=c!.Hardware[t.Index];hardware.Availability=1;state.AvailableHardware?.Add(hardware.SourceIndex);
@@ -193,6 +208,7 @@ public static class CalendarService
         foreach (var loan in c.Loans)
             if (loan.BorrowedOn is GameDate borrowed)
                 try {CalendarRules.Validate(borrowed);} catch (ArgumentOutOfRangeException ex) {throw new InvalidDataException("Invalid borrowing date.",ex);}
+        AnnualCalendarValidation.Validate(state);
         var p=c.Pending;if (p is null) return;
         try {CalendarRules.Validate(p.ClosingDate);} catch (ArgumentOutOfRangeException ex) {throw new InvalidDataException("Invalid closing date.",ex);}
         if (!Enum.IsDefined(p.Phase) || p.PendingEvent is not null && !Enum.IsDefined(p.PendingEvent.Value) ||
@@ -219,6 +235,10 @@ public static class CalendarService
             CalendarEvent.HardwareRetired=>p.Phase==CalendarPhase.HardwareLaunch && p.Index>0 && c.Hardware[p.Index-1].RetirementWeeks==0 && c.Hardware[p.Index-1].Availability==2,
             CalendarEvent.LoanRepayment=>p.Phase==CalendarPhase.Loans && p.Index<c.Loans.Count && p.Amount==LoanRepayment(c.Loans[p.Index].OriginalType) &&
                 c.Loans[p.Index].BorrowedOn is GameDate date && displayed.Year==(long)date.Year+1 && displayed.Month==date.Month && displayed.Week==date.Week,
+            CalendarEvent.BeginnerEnding=>p.Phase==CalendarPhase.EarlyEvents && state.Mode==GameMode.Beginner && p.ClosingDate==new GameDate(2,12,4),
+            CalendarEvent.Awards=>p.Phase==CalendarPhase.EarlyEvents && p.ClosingDate.Month==12 && p.ClosingDate.Week==3 && p.Awards is not null,
+            CalendarEvent.Exhibition=>p.Phase==CalendarPhase.Exhibition && displayed.Month is 4 or 10 && displayed.Week==1 && p.Exhibition is not null,
+            CalendarEvent.Graduates=>p.Phase==CalendarPhase.Graduates && displayed.Month==4 && displayed.Week==2 && c.OriginalSlots0444.Contains(0) && p.Graduates is not null,
             _=>false
         };
         if (!validEvent || p.PendingEvent!=CalendarEvent.LoanRepayment && p.Amount is not null)
