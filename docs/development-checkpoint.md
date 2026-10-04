@@ -1,8 +1,15 @@
-# Development checkpoint — M41, 2026-10-04
+# Development checkpoint — M42, 2026-10-04
+
+M42 restores compact hardware/audience quote tables and a separate proposal step.
+Local C# compilation, 206 domain checks, 30 Python checks and both Godot suites
+pass. SDK/export/native Windows validation is pending. See
+[quote/meeting evidence and limits](quote-and-meeting-layout.md).
+
+## Previous M41 validation
 
 M41 adds compact, resumable normal-hire conversations and local Japanese dialogue
 import. Local C# compilation, 206 domain checks and 30 Python checks pass; both
-Godot suites report zero failures. SDK/export/native Windows checks are pending.
+Godot suites report zero failures. All four SDK/export/native Windows jobs passed in [run 37234730728](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37234730728). Tested head: `82a80a475d49e7f169f4aaa96428b424992c3d72`.
 See [conversation evidence and remaining gaps](conversations.md) and the
 [unresolved sprite artifact](sprite-artifact-investigation.md).
 

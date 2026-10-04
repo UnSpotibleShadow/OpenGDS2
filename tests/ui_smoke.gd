@@ -107,15 +107,22 @@ func run() -> void:
         check(displayed.get_data() == expected.get_data(),"Toolbar action uses the intended local bitmap: " + mapping[0])
     check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
-    check(main.find_child("PlanningHardware", true, false).item_count == 3, "Planning hardware availability")
-    check(main.find_child("PlanningAudience", true, false).item_count == 7, "Planning audience catalog")
+    check(main.find_child("PlanningHardware", true, false).get_root().get_child_count() == 3, "Planning hardware availability")
+    check(main.find_child("PlanningAudience", true, false).get_root().get_child_count() == 7, "Planning audience catalog")
     for dropdown_name in ["PlanningHardware", "PlanningAudience"]:
         var dropdown = main.find_child(dropdown_name,true,false)
         var category = "HARDWARE" if dropdown_name == "PlanningHardware" else "AUDIENCE"
-        for index in range(dropdown.item_count):
-            check(dropdown.get_item_text(index).begins_with(tr("CATALOG_%s_%d" % [category,dropdown.get_item_id(index)])),"Original catalog label translated: " + dropdown_name)
+        for index in range(dropdown.get_root().get_child_count()):
+            var row = dropdown.get_root().get_child(index)
+            check(row.get_text(0).begins_with(tr("CATALOG_%s_%d" % [category,row.get_metadata(0)])),"Original catalog label translated: " + dropdown_name)
+    check(main.find_child("PlanningQuoteWindow",true,false).size.x <= 450,"Quote uses a compact child window")
+    check(main.find_child("PlanningTitle",true,false) == null and main.find_child("PlanningFocus",true,false) == null,"Quote precedes title/focus proposal controls")
+    var hardware_rows = main.find_child("PlanningHardware",true,false).get_root()
+    check(hardware_rows.get_child(0).is_selectable(0) and not hardware_rows.get_child(1).is_selectable(0) and not hardware_rows.get_child(2).is_selectable(0),"Available unlicensed hardware is grey and not selectable")
+    check(hardware_rows.get_child(0).get_text(3) == "150,000","Quote shipment display uses floor(original market) times 10000")
     check(main.find_child("PlanningQuote", true, false).text.contains("20,000,000"), "Initial planning cost")
     check(main.find_child("PlanningQuote", true, false).text.contains("400"), "Initial planning points")
+    await press("PLANNING_MEETING")
     await press("PLANNING_NEW_PROPOSAL")
     var focus_total := 0
     for label in main.find_child("PlanningFocus", true, false).get_children():

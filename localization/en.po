@@ -1713,3 +1713,15 @@ msgstr "Click the portrait/message, press Enter, or close the conversation to co
 
 msgid "HIRE_RESULT_ConversationPending"
 msgstr "Close the current conversation first."
+
+msgid "PLANNING_MEETING"
+msgstr "Planning Meeting"
+
+msgid "HARDWARE_SHIPMENTS"
+msgstr "Shipments"
+
+msgid "PLANNING_POINTS_COLUMN"
+msgstr "Points"
+
+msgid "PLANNING_COST_COLUMN"
+msgstr "Cost"
