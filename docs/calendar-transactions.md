@@ -35,7 +35,11 @@ removes its license **before** news. Acknowledging a loan debits before clearing
 its type; a second acknowledgement cannot debit again. Completing a suspended
 boundary resumes that office tick's sales/work without adding another budget
 clock tick. The old isolated history/recall boundary is not executed alongside
-the new calendar.
+the new calendar. Calendar modals disable desktop management menus/toolbars,
+including their direct callbacks and employee-table activation. Save, load,
+settings and return-to-title are modern escape/preferences actions; they remain
+available. The uncertain-payroll Staff entry captures its verified scratch
+projection in a read-only list, then the pending Continue retries the boundary.
 
 ## Payroll and accounting
 
@@ -132,3 +136,8 @@ loads/saves hardware news, acknowledges a launch, renews selected staff and
 checks the subsequent payroll and exhibition stop. All fixture names/data are
 community-authored. Bounded original-evidence checks independently verify the
 initial cells, trigger predicates, warning values, arithmetic and loan terms.
+
+M35 standard builds and native Linux/Windows packages passed all four jobs of
+[Validate run 37192745866](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37192745866).
+The modal follow-up extends the UI suite with blocked menu/toolbar callbacks
+and read-only payroll resolution; it passes locally.

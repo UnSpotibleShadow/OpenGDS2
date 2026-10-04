@@ -5,9 +5,22 @@ connects payroll/accounting, annual renewal, hardware launch/retirement/markets,
 ordered recalls and saved loan dues, with persistent modal resumption. Original
 LZH importing remains required; old calendar history is never fabricated.
 Seventeen added public regressions bring the public domain count to 163; two
-additional original-import fixtures also pass locally. Local Godot core-loop and original-import UI suites pass with zero failures.
+additional original-import fixtures also pass locally. Local Godot core-loop
+and original-import UI suites pass with zero failures.
 All 27 Python checks pass. Direct Roslyn builds have zero warnings/errors.
-Standard SDK/native export validation is pending on the M35 pull request.
+M35 merged as `05cd2275f9d77173c40cc8ace35180489d9fac3f` (PR #28).
+Its tested head is `6dc1199266e0f445c17270cdd8cc157969b5bd6f`. All four
+jobs passed in [Validate run 37192745866](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37192745866):
+163 public domain checks, 19 public Python checks (eight original fixtures
+skipped), zero standard build warnings/errors and zero UI/core-loop failures
+in editor, packaged Linux and native Windows. Download
+**OpenGDS2-desktop-development** from that run; it expires 2026-10-18.
+
+The modal follow-up also guards toolbar/menu callbacks and employee-table
+activation while a calendar transaction is pending. Its payroll resolution
+screen runs the proven staff-list writer with management controls disabled.
+The enlarged local core-loop UI fixture passes; native validation of this
+follow-up is pending.
 
 See [calendar-transactions.md](calendar-transactions.md) for bounded evidence,
 state format, unsupported event stops and validation. Exhibitions, awards,

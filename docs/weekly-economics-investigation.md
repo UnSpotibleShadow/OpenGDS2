@@ -192,3 +192,30 @@ Local execution was restored at M25 and opt-in original-evidence/import suites
 passed. Preserve private original files and traces when reconciling with main. Continue with the bounded
 procedures above, then implement verified calendar transactions and their tests.
 Imported catalogs, original saves and raw traces stay local.
+
+## Calendar follow-up: bank entry and information form
+
+After M35 validation, targeted local traces narrow these next targets:
+
+- `MDIForm1.mKoudouBank`, `0097A3BC` (24 bytes), opens the bank form
+  modally without a local funds/rank predicate. This does not establish every
+  menu-enabled writer or original availability state.
+- `fGMBank.Command1`, `00992DA0 +0000..0098`, refuses when all three
+  loan types are >=1. Otherwise +009B..028B scans slots 0..2 and uses the
+  first type-zero slot, then leaves the loop after the transaction.
+- +01D3..0205 writes type and current borrowing date; +020D credits principal
+  through the financial helper. Its post-transaction dialog precedes form close.
+  The four principal choices are the terms already documented above.
+- Bank `Form_Load`, `00994AFC`, displays existing records; `Form_Unload`,
+  `00977E4C`, invokes the 28-byte helper at `0097B410`. The helper has no
+  direct global or financial writes in its bounded body.
+- All six `fGMGameHardInfo` procedures were inspected locally. Its load builds
+  a display scratch map at global A1431C/A14330. No direct financial helper
+  call or platform market/countdown/license write was found in these bodies.
+  This supports M35's news pause projection; it does not establish all indirect
+  UI or graphics behavior.
+
+Raw traces/dialogs remain local. Borrowing stays disabled until the menu-state
+lifecycle is checked and the original refusal/confirmation paths are connected
+to the already working due-date transaction. Bankruptcy remains a separate
+periodic-procedure target.

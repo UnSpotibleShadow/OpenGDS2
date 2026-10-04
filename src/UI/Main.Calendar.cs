@@ -18,7 +18,8 @@ public partial class Main
             _content.AddChild(message);
             if (block==CalendarBlock.PayrollUnknown)
             {
-                AddAction("STAFF",()=>ShowStaff(state));
+                var staff=new Button {Name="OpenPayrollStaff",Text=Tr("STAFF")};_content.AddChild(staff);
+                staff.Pressed+=()=>ShowStaff(state);
                 var retry=new Button {Name="RetryCalendar",Text=Tr("CONTINUE")};_content.AddChild(retry);
                 retry.Pressed+=()=>{_session.TickOffice(_activeCatalog);ShowOfficeReconstruction(state);};
             }
