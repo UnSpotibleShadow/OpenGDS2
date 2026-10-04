@@ -35,13 +35,16 @@ func press(key: String) -> void:
     await process_frame
 
 func run() -> void:
+    root.size = Vector2i(1280,720)
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
     if DirAccess.get_files_at("user://music").is_empty():
-        check(not main.find_child("MusicPlayer",true,false).playing,"Title does not play background music")
+        var music = main.find_child("MusicPlayer",true,false)
+        check(music.stream != null and music.stream.resource_path.ends_with("title-theme.ogg"),"Title selects dedicated community theme")
+        check(music.stream.loop,"Title theme loops")
         check(not button("NEXT_MUSIC_TRACK").disabled,"Bundled playlist enables next track")
         var durations := [182.0,144.0,64.96,60.6,65.16,151.16,132.28,131.16]
         for index in range(durations.size()):
@@ -152,15 +155,29 @@ func run() -> void:
         await press("CANCEL")
         await press("HIRE_EMPLOYEES")
         var portraits = main.find_children("EmployeePortrait", "TextureRect", true, false)
-        check(portraits.size() == 5, "Five imported applicant portraits")
+        check(portraits.size() == 1, "Selected applicant has one imported portrait")
         for portrait in portraits:
             check(portrait.texture.get_width() == 64 and portrait.texture.get_height() == 64, "Original portrait dimensions")
         var hire_buttons: Array[Node] = []
         for node in nodes_of_type("Button"):
             if node.text == tr("HIRE_CONFIRM"):
                 hire_buttons.append(node)
-        check(hire_buttons.size() == 5, "Five applicant cards")
-        if hire_buttons.size() == 5:
+        var recruitment = main.find_child("RecruitmentTable",true,false)
+        check(recruitment != null and recruitment.get_root().get_child_count() == 5,"Five candidates in compact recruitment table")
+        check(hire_buttons.size() == 1, "One selected-candidate hire action")
+        if recruitment != null:
+            await press("SAVE_GAME")
+            var before_selection = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            recruitment.get_root().get_child(1).select(0)
+            await process_frame
+            await press("SAVE_GAME")
+            var after_selection = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            check(before_selection.State.Money == after_selection.State.Money,"Candidate selection never charges funds")
+            check(before_selection.State.Recruitment.Candidates == after_selection.State.Recruitment.Candidates,"Candidate selection never regenerates roster")
+            check(main.find_child("RecruitmentAbilityChart",true,false) != null,"Selected candidate chart shown")
+            recruitment.get_root().get_child(0).select(0)
+            await process_frame
+        if hire_buttons.size() == 1:
             hire_buttons[0].pressed.emit()
             await process_frame
             # Exercise the actual Godot clock and compositor, rather than only
@@ -232,6 +249,8 @@ func run() -> void:
     await press("STAFF")
     check(main.find_children("EmployeePortrait", "TextureRect", true, false).size() == 1, "Imported staff portrait")
     await press("ASSIGN_DESK")
+    var assignment = main.find_child("DeskAssignmentWindow",true,false)
+    check(assignment != null and assignment.size.x <= 430 and assignment.size.y <= 370,"Desk assignment stays compact")
     var desk = main.find_child("AssignDesk6", true, false)
     check(desk != null and not desk.disabled, "Empty development desk can be selected")
     if desk != null:

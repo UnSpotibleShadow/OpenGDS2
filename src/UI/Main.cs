@@ -140,7 +140,7 @@ public partial class Main : Control
     private void ShowTitleScreen()
     {
         DestroyDesktop();
-        _music?.SetGameplayActive(false);
+        _music?.SetTitleActive();
         ClearContent();
         var titleTexture = OriginalAssetStore.LoadTexture("Graphic/Title.bmp");
         if (titleTexture is not null)
@@ -294,23 +294,70 @@ public partial class Main : Control
         var state = _session.Current ?? throw new InvalidOperationException("No session.");
         var roster = _session.OpenRecruitment();
         ClearContent();
-        AddHeading(Tr("HIRE_EMPLOYEES"), 30);
-        _status = new Label { HorizontalAlignment = HorizontalAlignment.Center };
-        _content.AddChild(_status);
-        foreach (var candidate in roster.Candidates)
+        AddHeading(Tr("HIRE_EMPLOYEES"), 18);
+        CompactManagementWindow("RecruitmentWindow", new Vector2(500,440), 480);
+        _content.AddChild(new Label { Name="RecruitmentFunds",Text=$"{Tr("FUNDS")}: ¥{state.Money:N0}" });
+        var table=CreateTable("RecruitmentTable",
+            ["EMPLOYEE_NAME","EMPLOYEE_LEVEL","SHORT_FUN","SHORT_GRAPHICS","SHORT_NOVELTY","SHORT_MUSIC","SHORT_ACCURACY","SHORT_CONTRACT_FEE"],
+            [105,35,28,28,28,28,28,110]);
+        table.CustomMinimumSize=new Vector2(0,140);_content.AddChild(table);
+        var root=table.GetRoot();
+        for (int i=0;i<roster.Candidates.Count;i++)
         {
-            var panel = AddEmployeeCard(candidate);
-            var hire = new Button { Text = Tr("HIRE_CONFIRM"), Disabled = state.Money < candidate.ContractFee };
-            hire.Pressed += () =>
-            {
-                var result = _session.Hire(candidate);
-                if (result == HireResult.Success) ShowOfficeReconstruction(state);
-                else _status.Text = Tr("HIRE_FAILED") + " " + Tr($"HIRE_RESULT_{result}");
-            };
-            panel.AddChild(hire);
+            var candidate=roster.Candidates[i];var row=table.CreateItem(root);row.SetMetadata(0,i);
+            string[] values=[candidate.Name,candidate.Level?.ToString() ?? "?",candidate.Fun?.ToString() ?? "?",
+                candidate.Graphics?.ToString() ?? "?",candidate.Novelty?.ToString() ?? "?",candidate.Music?.ToString() ?? "?",
+                candidate.Accuracy?.ToString() ?? "?",candidate.ContractFee?.ToString("N0") ?? "?"];
+            for (int col=0;col<values.Length;col++) {row.SetText(col,values[col]);if (col>0) row.SetTextAlignment(col,HorizontalAlignment.Right);}
         }
+        var details=new HBoxContainer {Name="RecruitmentDetails"};details.AddThemeConstantOverride("separation",5);_content.AddChild(details);
+        _status = new Label { Name="RecruitmentStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart };
+        _content.AddChild(_status);
+        var actions=new HBoxContainer();_content.AddChild(actions);
+        var hire=new Button {Name="HireSelectedCandidate",Text=Tr("HIRE_CONFIRM"),Disabled=true,SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(hire);
+        var cancel=new Button {Text=Tr("CANCEL"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(cancel);
+        cancel.Pressed+=()=>ShowOfficeReconstruction(state);
+        EmployeeState? selected=null;
+        void SelectCandidate()
+        {
+            var row=table.GetSelected();if (row is null) return;
+            int index=row.GetMetadata(0).AsInt32();if (index<0 || index>=roster.Candidates.Count) return;
+            selected=roster.Candidates[index];
+            foreach (Node child in details.GetChildren()) {details.RemoveChild(child);child.QueueFree();}
+            var picture=new VBoxContainer();details.AddChild(picture);
+            picture.AddChild(new TextureRect {Name="EmployeePortrait",Texture=OriginalAssetStore.LoadEmployeePortrait(selected.PortraitId),
+                TextureFilter=TextureFilterEnum.Nearest,ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,
+                StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,CustomMinimumSize=new Vector2(64,64)});
+            picture.AddChild(new Label {Text=$"{Tr("LEVEL")} {selected.Level}/10"});
+            details.AddChild(new EmployeeAbilityChart {Name="RecruitmentAbilityChart",Employee=selected,
+                CustomMinimumSize=new Vector2(210,144),ClipContents=true,MouseFilter=MouseFilterEnum.Ignore});
+            var skills=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};details.AddChild(skills);
+            AddRecruitmentBar(skills,"STAT_DEVELOPMENT_SPEED",selected.DevelopmentSpeed);
+            AddRecruitmentBar(skills,"STAT_INSPIRATION",selected.Inspiration);
+            var technology=new Label {Name="RecruitmentTechnologies",AutowrapMode=TextServer.AutowrapMode.WordSmart};skills.AddChild(technology);
+            var learned=selected.TechnologyLevels?.Where(x=>x.Value>0).OrderBy(x=>x.Key).ToList();
+            technology.Text=learned is null ? Tr("NOT_YET_DECODED") : learned.Count==0 ? Tr("EMPLOYEE_NO_TECHNOLOGIES") :
+                string.Join("\n",learned.Select(x=>CatalogName(_activeCatalog,"TECHNOLOGY",x.Key,_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==x.Key)?.Name ?? "?")));
+            hire.Disabled=selected.ContractFee is not long fee || state.Money is not long money || money<fee;
+        }
+        table.ItemSelected+=SelectCandidate;
+        hire.Pressed+=()=>
+        {
+            if (selected is null) return;
+            var result=_session.Hire(selected);
+            if (result==HireResult.Success) ShowOfficeReconstruction(state);
+            else _status.Text=Tr("HIRE_FAILED")+" "+Tr($"HIRE_RESULT_{result}");
+        };
+        root.GetFirstChild()?.Select(0);
         if (roster.Candidates.Count == 0) AddHeading(Tr("NO_APPLICANTS"), 18);
-        AddAction("CANCEL", () => ShowOfficeReconstruction(state));
+    }
+
+    private void AddRecruitmentBar(VBoxContainer parent,string caption,int? value)
+    {
+        parent.AddChild(new Label {Text=$"{Tr(caption)}: {value?.ToString() ?? "?"}",AutowrapMode=TextServer.AutowrapMode.WordSmart});
+        var bar=new ProgressBar {MaxValue=99,Value=value ?? 0,ShowPercentage=false,CustomMinimumSize=new Vector2(140,9)};
+        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=new Color(0,0,.7f)});
+        bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new Color(0,1,0)});parent.AddChild(bar);
     }
 
     private void ShowLicenses(GameState state)

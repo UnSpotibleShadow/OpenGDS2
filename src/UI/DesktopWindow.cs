@@ -16,6 +16,7 @@ public partial class DesktopWindow : PanelContainer
     private bool _minimized;
     private Rect2? _restore;
     private Vector2 _expandedSize;
+    private Control? _bounds;
 
     public void Initialize(string title, Vector2 position, Vector2 size, bool canMaximize = true)
     {
@@ -40,7 +41,7 @@ public partial class DesktopWindow : PanelContainer
         if (canMaximize) CaptionButton(controls, "MaximizeWindow", "□", () =>
         {
             if (_minimized) { _minimized = false; Body.Show(); Size = _expandedSize; }
-            if (_restore is Rect2 saved) { Position = saved.Position; Size = saved.Size; _restore = null; }
+            if (_restore is Rect2 saved) { Position = saved.Position; Size = saved.Size; _restore = null; FitInsideWorkspace(); }
             else { _restore = new Rect2(Position, Size); Position = Vector2.Zero; Size = ((Control)GetParent()).Size; }
         });
         CaptionButton(controls, "CloseWindow", "×", () => { if (CloseRequested is not null) CloseRequested(); else Hide(); });
@@ -51,6 +52,23 @@ public partial class DesktopWindow : PanelContainer
         Resized += () => _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
         _title.ClipText = true;
         _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
+        _bounds = GetParent() as Control;
+        if (_bounds is not null) _bounds.Resized += FitInsideWorkspace;
+        FitInsideWorkspace();
+    }
+
+    public override void _ExitTree()
+    {
+        if (_bounds is not null && GodotObject.IsInstanceValid(_bounds)) _bounds.Resized -= FitInsideWorkspace;
+        _bounds = null;
+    }
+
+    private void FitInsideWorkspace()
+    {
+        if (_bounds is null || _bounds.Size.X <= 0 || _bounds.Size.Y <= 0) return;
+        if (_restore is not null) { Position = Vector2.Zero; Size = _bounds.Size; }
+        else Position = new Vector2(Math.Clamp(Position.X, 0, Math.Max(0, _bounds.Size.X - Size.X)),
+            Math.Clamp(Position.Y, 0, Math.Max(0, _bounds.Size.Y - 24)));
     }
 
     public void SetTitle(string title) => _title.Text = title;
@@ -58,6 +76,7 @@ public partial class DesktopWindow : PanelContainer
     public void Reopen()
     {
         if (_minimized) { _minimized = false; Body.Show(); Size = _expandedSize; }
+        FitInsideWorkspace();
         Show(); MoveToFront();
     }
 

@@ -23,6 +23,12 @@ sales rankings. Secretary automation policies now have visible option evidence;
 their execution rules and defaults remain unresolved. See
 [the screenshot analysis and acceptance checks](user-feedback-2026-10-04.md).
 
+M38 implements the supplied title theme, contrasting input caret/selection,
+native-size desktop resizing with window clamping, compact recruitment and a
+smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
+Room/tenant interactions, sprite artifact diagnosis, conversations, original
+quote/meeting structure and English staff-name readings remain pending.
+
 | System | Current evidence | Next concrete target |
 | --- | --- | --- |
 | Employee database | 60 definitions, seven named stats and initial learned technologies imported | C#/Python parity passed; compare original recruitment runtime |

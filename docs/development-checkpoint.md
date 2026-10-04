@@ -1,4 +1,14 @@
-# Development checkpoint — M37, 2026-10-04
+# Development checkpoint — M38 work, 2026-10-04
+
+M38 implements the first screenshot-feedback presentation fixes: dedicated title
+music, contrasting caret/selection, native-pixel desktop resizing, compact
+recruitment and a smaller desk selector. Local C# compilation, all 198 domain
+checks, all 27 Python checks, and core-loop/original-import UI suites pass.
+Published SDK/export/native Windows validation is pending. See
+[M38 scope and limits](presentation-fixes-m38.md) and
+[the remaining screenshot tasks](user-feedback-2026-10-04.md).
+
+## Previous M37 validation
 
 M37 connects school construction/closure, locally imported rival releases/sales,
 rival award names and thirteen-pick presentation, six independent earliest-date

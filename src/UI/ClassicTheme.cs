@@ -29,9 +29,22 @@ public static class ClassicTheme
         }
         theme.SetStylebox("panel", "PopupMenu", Bevel(Face, false));
         theme.SetStylebox("normal", "LineEdit", Bevel(Colors.White, true));
+        // The engine's default caret is pale against this classic white input.
+        foreach (string type in new[] { "LineEdit", "TextEdit" })
+        {
+            theme.SetColor("caret_color", type, Colors.Black);
+            theme.SetColor("selection_color", type, new Color(0.12f, 0.24f, 0.48f));
+            theme.SetColor("font_selected_color", type, Colors.White);
+        }
+        var inputFocus = new StyleBoxFlat { BgColor = Colors.Transparent, BorderColor = new Color(0.12f, 0.24f, 0.48f) };
+        inputFocus.SetBorderWidthAll(2);
+        theme.SetStylebox("focus", "LineEdit", inputFocus);
         theme.SetStylebox("panel", "PanelContainer", Bevel(Face, false));
         theme.SetStylebox("panel", "Tree", Bevel(Colors.White, true));
         theme.SetColor("font_color", "Tree", Colors.Black);
+        theme.SetColor("font_selected_color", "Tree", Colors.Black);
+        foreach (string state in new[] { "selected", "selected_focus" })
+            theme.SetStylebox(state, "Tree", new StyleBoxFlat { BgColor = new Color(.68f, 1, .68f) });
         theme.SetColor("title_button_color", "Tree", Colors.Black);
         theme.SetStylebox("title_button_normal", "Tree", CompactButton());
         theme.SetStylebox("title_button_hover", "Tree", CompactButton());
