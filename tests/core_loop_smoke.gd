@@ -885,6 +885,32 @@ func run() -> void:
     var resolved_payroll = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(resolved_payroll.State.Calendar.Pending == null and resolved_payroll.State.Money == ps.Money-600,"Verified scratch resolution resumes the saved payroll once")
     check(resolved_payroll.State.Month == 6 and resolved_payroll.State.Week == 1,"Resolving payroll completes the calendar rollover")
+    # Saved modal hire notifications require no original artwork in public CI.
+    for variant in range(10):
+        var greeting_fixture = {"Format":"OpenGDS2","SchemaVersion":1,"State":state.duplicate(true)}
+        greeting_fixture.State.PendingHireGreeting={"EmployeeSourceIndex":0,"Variant":variant}
+        write_json("user://saves/slot1.json",greeting_fixture)
+        await press("LOAD_GAME")
+        var greeting_window = main.find_child("ConversationWindow",true,false)
+        var greeting_message = main.find_child("ConversationMessage",true,false)
+        check(greeting_window != null and greeting_window.size.x <= 350 and greeting_window.size.y <= 165,"Compact saved hire conversation")
+        var expected_greeting = tr("HIRE_GREETING_%d" % variant).replace("{company}",state.Company.Name)
+        check(greeting_message != null and greeting_message.text == expected_greeting,"English greeting branch %d" % variant)
+        check(main.find_child("ConversationSpeaker",true,false).text == worker.Name,"Synthetic/custom employee names remain unchanged")
+        await press("SAVE_GAME")
+        var greeting_before = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        await create_timer(0.2).timeout
+        await press("SAVE_GAME")
+        var greeting_after = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(greeting_after.State.PendingHireGreeting == greeting_before.State.PendingHireGreeting and greeting_after.State.Money == greeting_before.State.Money and greeting_after.State.CompanyActivityTicks == greeting_before.State.CompanyActivityTicks,"Conversation freezes simulation and persists once")
+        var accept := InputEventKey.new()
+        accept.keycode=KEY_ENTER;accept.pressed=true
+        greeting_message.gui_input.emit(accept)
+        await process_frame
+        check(main.find_child("ConversationWindow",true,false) == null,"Enter closes the conversation")
+        await press("SAVE_GAME")
+        var acknowledged = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(acknowledged.State.PendingHireGreeting == null and acknowledged.State.Employees.size() == 1 and acknowledged.State.Money == greeting_before.State.Money,"Acknowledgment does not rehire or charge")
     previous_stream = null
     player = null
     main.queue_free()

@@ -33,6 +33,40 @@ void Throws<T>(Action action) where T : Exception
     c.RivalCompanies=["Synthetic company A","Synthetic company B"];
     s.Competition=CompetitionService.Opening(c);return (s,c);
 }
+Test("hire conversation persists once and blocks the clock without repeating the fee",()=>
+{
+    for (int variant=0;variant<10;variant++)
+    {
+        var random=new GreetingRandom((variant+.5f)/10);var session=new GameSession(random);
+        var state=PlanningState(100);session.Restore(state);
+        var candidate=new EmployeeState {SourceIndex=0,Name="Synthetic applicant",PortraitId=1,ContractFee=100};
+        Check(session.Hire(candidate)==HireResult.Success && state.Money==0);
+        Check(state.PendingHireGreeting?.Variant==variant && random.GreetingCalls==1);
+        string saved=SaveStore.Serialize(state);
+        for (int tick=0;tick<20;tick++) session.TickOffice(CoreCatalog());
+        Check(SaveStore.Serialize(state)==saved);
+        Check(session.Hire(candidate)==HireResult.ConversationPending && random.GreetingCalls==1);
+        Throws<InvalidOperationException>(()=>session.OpenRecruitment());
+        session.Restore(SaveStore.Deserialize(saved));
+        Check(session.AcknowledgeHireGreeting() && !session.AcknowledgeHireGreeting());
+        Check(session.Current!.Money==0 && session.Current.Employees.Count==1 && random.GreetingCalls==1);
+        Check(session.Hire(candidate)==HireResult.AlreadyEmployed && random.GreetingCalls==1);
+    }
+});
+Test("rejected hire never creates a greeting or consumes its lottery",()=>
+{
+    var random=new GreetingRandom(.5f);var session=new GameSession(random);var state=PlanningState(99);session.Restore(state);
+    Check(session.Hire(new() {SourceIndex=0,Name="Synthetic",PortraitId=1,ContractFee=100})==HireResult.InsufficientFunds);
+    Check(state.PendingHireGreeting is null && random.GreetingCalls==0 && state.Employees.Count==0);
+});
+Test("save rejects invalid pending greeting identities and variants",()=>
+{
+    var state=PlanningState();state.PendingHireGreeting=new() {EmployeeSourceIndex=0,Variant=0};
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.Employees=[new() {SourceIndex=0,PortraitId=1,Name="Synthetic"}];state.PendingHireGreeting.Variant=10;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.PendingHireGreeting.Variant=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+});
 Test("employee display readings preserve saved identity and custom names",()=>
 {
     var db=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,
@@ -2454,7 +2488,10 @@ if (args.Length == 2)
         var state=session.StartNewGame("Compatibility test","Tester",GameMode.Beginner,db,catalog);
         Check(state.Competition?.Products.Count==30 && state.Competition.PlatformAges.All(a=>a==0));
         foreach (var candidate in session.OpenRecruitment().Candidates.ToArray().Take(3))
+        {
             Check(session.Hire(candidate)==HireResult.Success);
+            Check(session.AcknowledgeHireGreeting());
+        }
         Check(state.Employees.Count==3);
         // The live desktop enters the staff list on construction. This
         // headless domain fixture must perform the same proven scratch writer.
@@ -2495,6 +2532,13 @@ if (args.Length == 2)
         for (int i=0;i<20;i++) session.TickOffice(catalog);
         Check(state.ReleasedGames.Single().UnitsSold>0 && state.Money>funds);
         Check(SaveStore.Deserialize(SaveStore.Serialize(state)).ReleasedGames.Count==1);
+    });
+    Test("optional original hire dialogue imports locally with ten branches",()=>
+    {
+        var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
+        Check(dialogue.Entries.Count==11 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
+        Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });
     Test("optional local original database parity", () =>
     {
@@ -2620,4 +2664,11 @@ sealed class DoubleSequenceRandom(params double[] values) : Random
         if (value<0 || value>=1) throw new Exception("Invalid synthetic recall draw");
         return value;
     }
+}
+
+sealed class GreetingRandom(float value) : Random
+{
+    public int GreetingCalls {get;private set;}
+    public override int Next(int maxValue)=>0;
+    public override float NextSingle() {GreetingCalls++;return value;}
 }

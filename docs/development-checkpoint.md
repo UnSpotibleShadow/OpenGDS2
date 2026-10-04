@@ -1,9 +1,17 @@
-# Development checkpoint — M40, 2026-10-04
+# Development checkpoint — M41, 2026-10-04
+
+M41 adds compact, resumable normal-hire conversations and local Japanese dialogue
+import. Local C# compilation, 206 domain checks and 30 Python checks pass; both
+Godot suites report zero failures. SDK/export/native Windows checks are pending.
+See [conversation evidence and remaining gaps](conversations.md) and the
+[unresolved sprite artifact](sprite-artifact-investigation.md).
+
+## Previous M40 validation
 
 M40 adds display-only English staff-name readings while preserving Japanese
 and saved employee identity. Local direct C# compilation, 202 domain checks
 (including two private original checks), 28 Python checks and both Godot suites
-pass. Standard SDK/export/native Windows validation is pending publication.
+pass. All four SDK/export/native Windows jobs passed in [run 37233639154](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37233639154). PR #34 merged as `716aceef7561becab3f43ac15fab450d6a257cfb`; tested head `0a228235b69707d1eab7055382370c63ad23b340`.
 See [staff-name evidence and limits](staff-name-localization.md).
 
 ## Previous M39 validation

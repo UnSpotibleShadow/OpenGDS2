@@ -67,6 +67,9 @@ class PublicTests(unittest.TestCase):
                 self.assertIn(key,entries,key)
                 self.assertTrue(entries[key],key+' missing English label')
                 self.assertFalse(any('\u3040' <= c <= '\u30ff' or '\u4e00' <= c <= '\u9fff' for c in entries[key]),key)
+    def test_dialogue_rejects_unsupported_source(self):
+        from verify_dialogue_evidence import verify as verify_dialogue
+        with self.assertRaises(ParseError): verify_dialogue(b'MZ'+bytes(200))
     def test_english_employee_reading_coverage(self):
         import re
         text=(ROOT/'localization'/'en.po').read_text()
@@ -84,6 +87,11 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_dialogue_anchors(self):
+        from verify_dialogue_evidence import verify as verify_dialogue
+        result=verify_dialogue(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())
+        self.assertEqual(result['hire_variants'],10)
+
     @classmethod
     def setUpClass(cls):cls.data=Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes();cls.database=verify(cls.data)
     def test_database_shape(self):

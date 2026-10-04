@@ -43,6 +43,7 @@ public sealed class OriginalGameImporter
         var database = EmployeeDatabaseImporter.Extract(bytes);
         var catalog = OriginalCatalogImporter.Extract(bytes);
         var office = OfficeSceneImporter.Extract(bytes);
+        var dialogue = OriginalDialogueImporter.Extract(bytes);
         string cache = ProjectSettings.GlobalizePath(CacheRoot);
         string staging = cache + ".staging-" + Guid.NewGuid().ToString("N");
         Directory.CreateDirectory(staging);
@@ -65,6 +66,7 @@ public sealed class OriginalGameImporter
             EmbeddedGraphicsImporter.Extract(bytes, Path.Combine(staging, "Graphic", "Embedded"));
             File.WriteAllText(Path.Combine(staging, "office.json"), JsonSerializer.Serialize(office));
             File.WriteAllText(Path.Combine(staging, "catalog.json"), JsonSerializer.Serialize(catalog));
+            File.WriteAllText(Path.Combine(staging, "dialogue.json"), JsonSerializer.Serialize(dialogue));
             File.WriteAllText(Path.Combine(staging, ".imported"), $"OpenGDS2 original asset import\nfiles={count}\n");
             string backup = cache + ".previous";
             if (Directory.Exists(backup)) Directory.Delete(backup, true);
@@ -97,6 +99,18 @@ public sealed class OriginalGameImporter
             !data.Employees.Select(x => x.SourceIndex).SequenceEqual(Enumerable.Range(0, 60)))
             throw new InvalidDataException("Unsupported or corrupt employee database. Reimport your original archive.");
         return data;
+    }
+
+    public OriginalDialogueCatalog? LoadDialogue()
+    {
+        string path = Path.Combine(ProjectSettings.GlobalizePath(CacheRoot), "dialogue.json");
+        if (!File.Exists(path)) return null; // Older caches can be refreshed by reimporting.
+        var result = JsonSerializer.Deserialize<OriginalDialogueCatalog>(File.ReadAllText(path));
+        if (result?.SchemaVersion != 1 || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
+            result.Entries is null || result.Entries.Count != 11 || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
+            !result.Entries.ContainsKey("NEW_EMPLOYEE") || Enumerable.Range(0,10).Any(i=>!result.Entries.ContainsKey($"HIRE_GREETING_{i}")))
+            throw new InvalidDataException("Unsupported or corrupt local dialogue. Reimport your original archive.");
+        return result;
     }
 
     private static string Sanitize(string path)

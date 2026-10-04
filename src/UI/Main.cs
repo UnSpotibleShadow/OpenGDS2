@@ -279,6 +279,7 @@ public partial class Main : Control
             _session.TickOffice(_activeCatalog);
             PersistPendingRankings(state);
         }
+        if (ShowPendingHireGreeting(state)) return;
         if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
         CloseDesktopDialog();

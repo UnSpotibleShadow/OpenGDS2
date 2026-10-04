@@ -69,8 +69,9 @@ The suffixes in this table refer to locally supplied
 | UI-03 | M39 connects verified plot hits to focused school management; other facilities, occupied-plot artwork and the overlapping hit strip remain unresolved. |
 | UI-07 | M39 connects verified desk interiors to a compact chooser and carries room identity into planning. Sequel/manga and original busy-window toggling remain unavailable. |
 | LOC-01 | M40 adds display-only unofficial community staff readings; Japanese/save identity retained. Pronunciation remains provisional. |
-| UI-08, UI-06 | Original quote/meeting separation and conversations remain pending. |
-| UI-02 | Artifact remains open; inspected reception atlas rectangles do not explain the captured red line. |
+| UI-06 | M41 restores normal hire conversations with local Japanese import and resumable modal state. Secretary reminders, event introductions and office bubbles remain open. |
+| UI-08 | Original quote/meeting separation remains pending. |
+| UI-02 | M41 investigation still cannot reproduce the captured line; no speculative pixel changes. See sprite-artifact-investigation.md. |
 
 See [M38 changes](presentation-fixes-m38.md) and [M39 evidence](office-clicks-m39.md).
 
