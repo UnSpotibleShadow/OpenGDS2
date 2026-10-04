@@ -1,10 +1,19 @@
-# Development checkpoint — M39 work, 2026-10-04
+# Development checkpoint — M39, 2026-10-04
 
 M39 connects desk-interior development actions and focused tenant-slot school
 management using recovered original hit regions. It also restores the sales
 ranking column order. Local compilation, all 200 domain checks, all 27 Python
 checks and both Godot suites pass. Published SDK/export/native Windows checks
-are pending. See [M39 evidence and limits](office-clicks-m39.md).
+passed all four CI jobs. See [M39 evidence and limits](office-clicks-m39.md).
+
+M39 merged as `897867e72355d81d815f699ec42368dd2fe75d50` (PR #33).
+The tested head is `2ca2d08bd038b173522e0e74d0148e694cd436de`. All four jobs
+passed in [Validate run 37224787621](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37224787621):
+198 public domain checks, 19 public Python checks (eight private fixtures skipped),
+zero standard SDK warnings/errors and zero public Godot, packaged Linux or
+native Windows core-loop failures. Download **OpenGDS2-desktop-development**
+from that run; it expires 2026-10-18. Artifact digest:
+`sha256:c18c24b1ef770cc3e39847df3233cc2f802e3d8f5c62d9b394a076858a60c957`.
 
 ## Previous M38 validation
 

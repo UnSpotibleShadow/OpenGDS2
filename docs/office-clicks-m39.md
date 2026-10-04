@@ -62,8 +62,10 @@ All 27 Python checks pass, including the expanded original anchors. Godot's full
 core-loop and original-import UI suites report zero failures. Private UI checks
 exercise both room clicks (one at 2× with letterboxing), carried room identity,
 disabled unreconstructed modes, all three tenant slots and zero preview charges.
-Standard SDK/export/native Windows checks are recorded at the checkpoint once
-the published PR completes.
+Standard SDK/export/native Windows checks all pass in
+[Validate run 37224787621](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37224787621);
+PR #33 is merged. The SDK build has zero warnings/errors and public Godot plus
+packaged Linux/native Windows fixtures have zero failures.
 
 The reported sprite-edge artifact remains unresolved. The inspected original
 reception employee/computer/chair rectangles contain no pure red line or
