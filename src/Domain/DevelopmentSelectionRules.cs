@@ -26,7 +26,7 @@ public static class DevelopmentSelectionRules
         // +0795 uses points[rosterMap[selectedSourceIndex]], after the source was
         // already mapped by the list handler. Require the actual original map.
         ArgumentNullException.ThrowIfNull(originalRosterMap);
-        if (DevelopmentWorkRules.PendingMilestone(project)!=DevelopmentMilestone.SelectType)
+        if (project.OriginalMode!=0 || DevelopmentWorkRules.PendingMilestone(project)!=DevelopmentMilestone.SelectType)
             return DevelopmentSelectionResult.WrongStage;
         var selected=catalog.GameTypes.SingleOrDefault(x=>x.SourceIndex==selectedSourceIndex)
             ?? throw new ArgumentOutOfRangeException(nameof(selectedSourceIndex));
@@ -52,7 +52,7 @@ public static class DevelopmentSelectionRules
         OriginalCatalog catalog,int selectedSourceIndex)
     {
         // Original eligibility is checked while constructing the selection list.
-        if (DevelopmentWorkRules.PendingMilestone(project)!=DevelopmentMilestone.SelectGenre)
+        if (project.OriginalMode!=0 || DevelopmentWorkRules.PendingMilestone(project)!=DevelopmentMilestone.SelectGenre)
             return DevelopmentSelectionResult.WrongStage;
         var selected=catalog.Genres.SingleOrDefault(x=>x.SourceIndex==selectedSourceIndex)
             ?? throw new ArgumentOutOfRangeException(nameof(selectedSourceIndex));

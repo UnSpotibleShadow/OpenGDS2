@@ -13,8 +13,9 @@ public partial class Main
         CompactManagementWindow("DevelopmentRoomActions",new Vector2(235,210),215);
         var start=new Button {Name="RoomOriginalGame",Text=Tr("ORIGINAL_GAME_DEVELOPMENT")};_content.AddChild(start);
         start.Pressed+=()=>ShowPlanningPreview(state,room);
-        foreach (var (name,key) in new[] {("RoomSequel","SEQUEL_DEVELOPMENT"),("RoomManga","MANGA_ADAPTATION")})
-            _content.AddChild(new Button {Name=name,Text=Tr(key),Disabled=true,TooltipText=Tr("NOT_YET_DECODED")});
+        var sequel=new Button {Name="RoomSequel",Text=Tr("SEQUEL_DEVELOPMENT")};_content.AddChild(sequel);
+        sequel.Pressed+=()=>ShowSequelSelection(state,room);
+        _content.AddChild(new Button {Name="RoomManga",Text=Tr("MANGA_ADAPTATION"),Disabled=true,TooltipText=Tr("NOT_YET_DECODED")});
         AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
     }
 

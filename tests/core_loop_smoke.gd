@@ -118,6 +118,33 @@ func run() -> void:
         "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
+    # Authored flat 24-bit BMP exercises actual office hit handling in CI.
+    # Keep all source pixels synthetic; no original graphics are distributed.
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://original/Graphic/Embedded"))
+    var office_width := 466
+    var office_height := 290
+    var row_stride := int(ceil(office_width*3.0/4.0))*4
+    var bmp := PackedByteArray()
+    bmp.resize(54+row_stride*office_height)
+    bmp[0]=66
+    bmp[1]=77
+    bmp.encode_u32(2,bmp.size())
+    bmp.encode_u32(10,54)
+    bmp.encode_u32(14,40)
+    bmp.encode_u32(18,office_width)
+    bmp.encode_u32(22,office_height)
+    bmp.encode_u16(26,1)
+    bmp.encode_u16(28,24)
+    bmp.encode_u32(34,row_stride*office_height)
+    for y in range(office_height):
+        for x in range(office_width):
+            var pixel_offset := 54+y*row_stride+x*3
+            bmp[pixel_offset]=178
+            bmp[pixel_offset+1]=204
+            bmp[pixel_offset+2]=178
+    var office_file := FileAccess.open("user://original/Graphic/Embedded/OfficeBase.bmp",FileAccess.WRITE)
+    office_file.store_buffer(bmp)
+    office_file.close()
     create_music_fixture()
     var fresh_audio := ConfigFile.new()
     fresh_audio.set_value("music", "enabled", true)
@@ -1002,6 +1029,121 @@ func run() -> void:
     var resolved_payroll = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(resolved_payroll.State.Calendar.Pending == null and resolved_payroll.State.Money == ps.Money-600,"Verified scratch resolution resumes the saved payroll once")
     check(resolved_payroll.State.Month == 6 and resolved_payroll.State.Week == 1,"Resolving payroll completes the calendar rollover")
+    # Sequel boundary fixture: a known Hall of Fame parent feeds the actual
+    # room chooser, quote, meeting, work, release, review and sales screens.
+    var sequel_save = released.duplicate(true)
+    var sequel_state = sequel_save.State
+    sequel_state.DevelopmentProjects = []
+    sequel_state.Calendar = null
+    sequel_state.CompanyActivityTicks = 0
+    sequel_state.SalesTicks = 0
+    sequel_state.Company.HallOfFameCount = 1
+    var predecessor = sequel_state.ReleasedGames[0]
+    predecessor.ReviewScores = [8,8,8,8]
+    predecessor.ReviewPending = false
+    predecessor.HallOfFame = true
+    predecessor.HasReleasedSequel = false
+    predecessor.Quality = {"Fun":101.9,"Novelty":99.9,"Graphics":33.4,"Music":6.6}
+    predecessor.Recognition = 99.9
+    predecessor.Stock = 0
+    predecessor.Demand = 0
+    predecessor.Recall = {"OriginalState":1,"WeeksRemaining":0,"PendingEvent":null,"OutcomeRoll":null,"RefundAmount":null}
+    for sequel_worker in sequel_state.Employees:
+        sequel_worker.Stress = 0
+    write_json("user://saves/slot1.json",sequel_save)
+    await press("LOAD_GAME")
+    var sequel_office = main.find_child("OriginalOfficeBackground",true,false)
+    var room_click = InputEventMouseButton.new()
+    room_click.button_index = MOUSE_BUTTON_LEFT
+    room_click.pressed = true
+    room_click.position = Vector2(192,148)
+    sequel_office.gui_input.emit(room_click)
+    await process_frame
+    await press_node("RoomSequel")
+    var predecessor_table = main.find_child("SequelPredecessors",true,false)
+    check(predecessor_table != null and predecessor_table.get_root().get_first_child().get_text(0) == predecessor.Title,"Hall of Fame predecessor appears in organized sequel table")
+    await press("CANCEL")
+    await press("CANCEL")
+    await press("SAVE_GAME")
+    var cancelled_sequel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(cancelled_sequel.State.Money == sequel_state.Money and not cancelled_sequel.State.ReleasedGames[0].HasReleasedSequel,"Cancelling predecessor selection has no transaction")
+    sequel_office.gui_input.emit(room_click)
+    await process_frame
+    await press_node("RoomSequel")
+    await press_node("ConfirmSequelPredecessor")
+    check(main.find_child("PlanningRoom",true,false).get_selected_id() == 0,"Sequel carries selected development room")
+    await press_node("PlanningMeeting")
+    check(main.find_child("PlanningTitle",true,false).text == predecessor.Title + "2","Original series-based sequel title is suggested")
+    await press_node("AcceptPlan")
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    var accepted_sequel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var sequel_project = accepted_sequel.State.DevelopmentProjects[0]
+    check(sequel_project.OriginalMode == 1 and sequel_project.PredecessorProductIndex == 0,"Sequel mode and lineage survive real UI acceptance")
+    # The real clock can contribute between acceptance and opening Save.
+    check(sequel_project.Quality.Fun >= 30 and sequel_project.Quality.Novelty >= 29 and sequel_project.Quality.Graphics >= 10 and sequel_project.Quality.Music >= 1 and sequel_project.Recognition == 29,"Sequel begins with inherited quality and recognition")
+    check(accepted_sequel.State.Money == sequel_state.Money-30 and not accepted_sequel.State.ReleasedGames[0].HasReleasedSequel,"Only quote is charged before shipment")
+    await press("LOAD_GAME")
+    sequel_office = main.find_child("OriginalOfficeBackground",true,false)
+    sequel_office.gui_input.emit(room_click)
+    await process_frame
+    Engine.time_scale = 100
+    if not await await_node("DevelopmentReport"):
+        quit(1)
+        return
+    var sequel_ready := false
+    for frame in range(15000):
+        check(main.find_child("SelectType0",true,false) == null and main.find_child("SelectGenre0",true,false) == null,"Sequel checkpoints do not offer new type or genre")
+        for button in main.find_children("*","Button",true,false):
+            if button.text == tr("RELEASE_GAME") and button.is_visible_in_tree():
+                sequel_ready = true
+                break
+        if sequel_ready:
+            break
+        await process_frame
+    Engine.time_scale = 1
+    check(sequel_ready,"Sequel automatic checkpoints reach debugging")
+    if not sequel_ready:
+        quit(1)
+        return
+    await press("SAVE_GAME")
+    var complete_sequel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var completed_project = complete_sequel.State.DevelopmentProjects[0]
+    check(completed_project.GameTypeSourceIndex == predecessor.GameTypeSourceIndex and completed_project.GenreSourceIndex == predecessor.GenreSourceIndex,"Sequel inherits parent's type and genre")
+    check(completed_project.RequiredPoints == 50 and complete_sequel.State.Money == accepted_sequel.State.Money,"Inherited checkpoints add points without selection fees")
+    await press("LOAD_GAME")
+    sequel_office = main.find_child("OriginalOfficeBackground",true,false)
+    sequel_office.gui_input.emit(room_click)
+    await process_frame
+    await press("RELEASE_GAME")
+    var sequel_release_title = main.find_child("ReleaseTitle",true,false)
+    if sequel_release_title == null:
+        check(false,"Sequel release form opens after reload")
+        quit(1)
+        return
+    check(sequel_release_title.text == predecessor.Title + "2","Shipment suggests the original sequel name")
+    main.find_child("ReleaseCopies",true,false).value = 1000
+    await press_node("ConfirmRelease")
+    check(main.find_child("ReviewScore3",true,false) != null,"Sequel uses the standard review ceremony")
+    await press("SAVE_GAME")
+    var shipped_sequel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(shipped_sequel.State.DevelopmentProjects.is_empty() and shipped_sequel.State.ReleasedGames[0].HasReleasedSequel,"Sequel shipment frees room and consumes parent eligibility")
+    var shipped_child = shipped_sequel.State.ReleasedGames[1]
+    check(shipped_child.OriginalMode == 1 and shipped_child.PredecessorProductIndex == 0 and shipped_child.SeriesBaseTitle == predecessor.Title and shipped_child.OriginalSequelCounter == 1,"Shipment records original lineage and fresh-slot counter")
+    shipped_child.Recall = {"OriginalState":1,"WeeksRemaining":0,"PendingEvent":null,"OutcomeRoll":null,"RefundAmount":null}
+    write_json("user://saves/slot1.json",shipped_sequel)
+    await press("LOAD_GAME")
+    await press_node("AcknowledgeReviews")
+    check(main.find_child("SalesProduct1",true,false) != null,"Sequel joins normal sales screen")
+    Engine.time_scale = 100
+    for frame in range(100):
+        await process_frame
+    Engine.time_scale = 1
+    await press("BACK_TO_OFFICE")
+    await press("SAVE_GAME")
+    var sequel_sales = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(sequel_sales.State.ReleasedGames[1].UnitsSold > 0 and sequel_sales.State.ReleasedGames[1].Stock < 1000,"Sequel sales consume stock after save/reload")
+    check(sequel_sales.State.ReleasedGames[1].NetSalesReceipts == sequel_sales.State.ReleasedGames[1].UnitsSold*2800,"Sequel uses original sales receipts")
     # Saved modal hire notifications require no original artwork in public CI.
     for variant in range(10):
         var greeting_fixture = {"Format":"OpenGDS2","SchemaVersion":1,"State":state.duplicate(true)}

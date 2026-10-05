@@ -5,6 +5,12 @@ public sealed class ReleasedGameState
 {
     public int ProductIndex {get;set;}
     public string Title {get;set;}=string.Empty;
+    // Older modern saves could only create original games: zero/null are known defaults.
+    public int OriginalMode {get;set;}
+    public int? PredecessorProductIndex {get;set;}
+    public bool HasReleasedSequel {get;set;}
+    public int OriginalSequelCounter {get;set;}
+    public string? SeriesBaseTitle {get;set;}
     public int HardwareSourceIndex {get;set;}
     public int AudienceSourceIndex {get;set;}
     public int GameTypeSourceIndex {get;set;}

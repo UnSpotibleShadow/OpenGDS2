@@ -73,6 +73,10 @@ class PublicTests(unittest.TestCase):
     def test_dialogue_rejects_unsupported_source(self):
         from verify_dialogue_evidence import verify as verify_dialogue
         with self.assertRaises(ParseError): verify_dialogue(b'MZ'+bytes(200))
+    def test_sequel_evidence_rejects_unsupported_source(self):
+        from verify_sequel_evidence import verify as verify_sequel
+        with self.assertRaises(ParseError):verify_sequel(b'MZ'+bytes(200))
+
     def test_english_employee_reading_coverage(self):
         import re
         text=(ROOT/'localization'/'en.po').read_text()
@@ -98,6 +102,11 @@ class OriginalTests(unittest.TestCase):
         from verify_dialogue_evidence import verify as verify_dialogue
         result=verify_dialogue(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())
         self.assertEqual(result['hire_variants'],10)
+
+    def test_sequel_evidence_anchors(self):
+        from verify_sequel_evidence import verify as verify_sequel
+        self.assertEqual(verify_sequel(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),
+            {"carry_fraction":0.3,"hall_of_fame_total":32,"fresh_sequel_counter":1})
 
     @classmethod
     def setUpClass(cls):cls.data=Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes();cls.database=verify(cls.data)

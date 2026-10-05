@@ -1,4 +1,19 @@
-# Development checkpoint — M47, 2026-10-05
+# Development checkpoint — M48, 2026-10-05
+
+M48 connects verified sequel development through the room chooser, Hall of Fame
+predecessor selection, quote/meeting, inherited quality/recognition, automatic
+type/genre checkpoints, debugging, release, reviews and sales. Modern saves
+preserve and validate series lineage. See [source evidence and compatibility
+boundaries](sequel-development.md). Manga, polishing and external jobs remain
+unavailable; exact conversations and original Windows parity remain open.
+
+Local direct C# compilation and 225 domain checks pass (three private original
+fixtures). All 28 public Python checks and 11 opt-in original checks pass.
+Headless Godot original-asset UI and synthetic core-loop suites pass, including
+the sequel lifecycle across save/reload. Full SDK/native package verification is
+pending the M48 CI run.
+
+## Previous M47 validation
 
 M47 integrates twelve supplied seasonal recordings as compressed Ogg Vorbis;
 spring, autumn and winter each have four tracks, while summer uses all eight

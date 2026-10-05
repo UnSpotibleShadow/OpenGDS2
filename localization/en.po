@@ -1731,3 +1731,27 @@ msgstr "Points"
 
 msgid "PLANNING_COST_COLUMN"
 msgstr "Cost"
+
+msgid "SEQUEL_ELIGIBILITY_NOTE"
+msgstr "Hall of Fame games can receive a sequel until that sequel is released."
+
+msgid "SEQUEL_NO_CANDIDATES"
+msgstr "No eligible Hall of Fame games yet."
+
+msgid "SEQUEL_INHERITANCE_NOTE"
+msgstr "Carry over 30% of quality and recognition, rounded down. Type and genre are inherited during development."
+
+msgid "PLANNING_RESULT_PredecessorUnavailable"
+msgstr "This game is not eligible for a sequel."
+
+msgid "PLANNING_RESULT_SequelAlreadyDeveloping"
+msgstr "A sequel to this game is already being developed in another room."
+
+msgid "SERIES_INSTALLMENT"
+msgstr "Entry"
+
+msgid "SEQUEL_UNLOCKED"
+msgstr "A sequel can be developed after these reviews are acknowledged."
+
+msgid "SEQUEL_SERIES_ENDED"
+msgstr "This entry missed the Hall of Fame. This series cannot continue."

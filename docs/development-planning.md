@@ -114,3 +114,10 @@ The planning form (`0099BA80`) also contains sequel carry-over arithmetic,
 project initialization and two-room state. Those paths are traced privately but
 are not implemented until field meanings and scheduling are verified. Source
 trace dumps, original strings and copied assets are excluded from the source archive.
+
+## M48 sequel continuation
+
+The mode-1 acceptance and automatic checkpoint branches are now connected.
+See [sequel reconstruction](sequel-development.md) for eligibility, exact 30%
+carry-over, inherited type/genre points and the shipment counter quirk. Mode 2
+remains unresolved and unavailable.

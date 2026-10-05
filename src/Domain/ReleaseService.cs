@@ -25,6 +25,15 @@ public static class ReleaseService
         title=title.Trim();
         if (state.ReleasedGames.Any(x=>x.Title==title)) return ReleaseResult.DuplicateTitle;
         if (state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return ReleaseResult.NotReady;
+        ReleasedGameState? predecessor=null;
+        if (project.OriginalMode==1)
+        {
+            predecessor=state.ReleasedGames.SingleOrDefault(x=>x.ProductIndex==project.PredecessorProductIndex);
+            if (predecessor is null || !predecessor.HallOfFame || predecessor.HasReleasedSequel ||
+                project.GameTypeSourceIndex!=predecessor.GameTypeSourceIndex || project.GenreSourceIndex!=predecessor.GenreSourceIndex)
+                return ReleaseResult.NotReady;
+        }
+        else if (project.OriginalMode!=0 || project.PredecessorProductIndex.HasValue) return ReleaseResult.NotReady;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize)*copies);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
@@ -32,6 +41,10 @@ public static class ReleaseService
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
+            OriginalMode=project.OriginalMode,PredecessorProductIndex=project.PredecessorProductIndex,
+            // The original increments the fresh product's counter, not its parent's.
+            OriginalSequelCounter=predecessor is null ? 0 : 1,
+            SeriesBaseTitle=predecessor is null ? title : predecessor.SeriesBaseTitle ?? predecessor.Title,
             WeeklySalesHistory=SalesHistoryRules.NewHistory(),
             Recall=new(),
             ReleasedOn=state.Year is int year && state.Month is int month && state.Week is int week ? new(year,month,week) : null,
@@ -43,6 +56,7 @@ public static class ReleaseService
         };
         ReviewService.Generate(product,catalog,random);
         FinancialRules.Apply(state,-cost);
+        if (predecessor is not null) predecessor.HasReleasedSequel=true;
         // First shipment sets the flag; its handler does not test the reprint guard.
         state.ProductionPerformedThisWeek=true;
         if (shipments is int count) state.Calendar!.ShipmentsSinceHardwareTrigger=count;
