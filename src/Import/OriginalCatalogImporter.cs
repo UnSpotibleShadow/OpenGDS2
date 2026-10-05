@@ -183,6 +183,29 @@ public static class OriginalCatalogImporter
                 ExperienceCosts=numeric.GetRange(3,3),RawTable158C=numeric.GetRange(6,3),RawTable1568=numeric.GetRange(9,3)});
         }
         CompetitionCatalogImporter.Extract(pe,result);
+        // 31 fixed-width calls to 0060ECA8, whose thunk points to the
+        // code-info for Module1 helper 20 (0098128C).
+        pe.Require(pe.Offset(0x60ECA8),0xBA,0x1C,0x13,0x98,0);
+        for (int index=0;index<31;index++)
+        {
+            int pos=pe.Offset(start+0xA481+index*0x57);
+            long fee=pe.Literal32(ref pos,0xFE3C);
+            string ReadString(ushort local)
+            {
+                pe.Require(pos,0x3A,(byte)local,(byte)(local>>8));
+                string value=pe.String(pool,pe.U16(pos+3));
+                pe.Require(pos+5,0x4E);ushort stored=pe.U16(pos+6);
+                pe.Require(pos+8,0x04,(byte)stored,(byte)(stored>>8));pos+=11;
+                return value;
+            }
+            string publisher=ReadString(0xFE6C);
+            int popularity=pe.Literal16(ref pos,0xFE7C);
+            string description=ReadString(0xFF1C),author=ReadString(0xFF2C),title=ReadString(0xFF6C);
+            pe.Require(pos,0x04,0x1C,0xFE,0x0A,0x57,0x02,0x1C,0);
+            if (fee<0 || popularity<0) throw new InvalidDataException("Invalid original manga record.");
+            result.Manga.Add(new() {SourceIndex=index,Title=title,Author=author,
+                PopularityDescription=description,Popularity=popularity,Publisher=publisher,RightsFee=fee});
+        }
         return result;
     }
 }

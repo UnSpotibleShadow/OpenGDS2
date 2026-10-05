@@ -106,8 +106,8 @@ public sealed class OriginalGameImporter
         string path = Path.Combine(ProjectSettings.GlobalizePath(CacheRoot), "dialogue.json");
         if (!File.Exists(path)) return null; // Older caches can be refreshed by reimporting.
         var result = JsonSerializer.Deserialize<OriginalDialogueCatalog>(File.ReadAllText(path));
-        if (result?.SchemaVersion != 1 || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
-            result.Entries is null || result.Entries.Count != 11 || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
+        if (result?.SchemaVersion is not (1 or 2) || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
+            result.Entries is null || result.Entries.Count != (result.SchemaVersion==1 ? 11 : 50) || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
             !result.Entries.ContainsKey("NEW_EMPLOYEE") || Enumerable.Range(0,10).Any(i=>!result.Entries.ContainsKey($"HIRE_GREETING_{i}")))
             throw new InvalidDataException("Unsupported or corrupt local dialogue. Reimport your original archive.");
         return result;

@@ -1,4 +1,30 @@
-# Development checkpoint — M48, 2026-10-05
+# Development checkpoint — M49, 2026-10-05
+
+M49 enables 31 locally imported manga/comic adaptations through publisher rights,
+combined planning cost, ordinary development, release, reviews and sales. It
+restores 20 ms conversation reveal/mouth frames, seven planning discussions,
+supported work/burst effects and office bubbles, and fourteen English bitmap
+patches generated only on the player's computer. Provisional staff readings were
+reviewed; unresolved kanji pronunciations remain provisional and support local
+corrections. See [adaptation evidence](manga-adaptations.md),
+[conversations](conversations.md), [effects/local patches](office-effects-and-local-patches.md)
+and [staff-name review](staff-name-localization.md).
+
+Local direct C# compilation and 237 domain checks pass (233 public, four private
+original fixtures). All 30 public Python checks and twelve opt-in original checks
+pass. Headless Godot original-asset UI and synthetic core-loop suites both report
+zero failures. The root workspace also launches headlessly with the current
+compiled assembly. Checks include adaptation development/release/sales/reload, typing
+acknowledgment and pixel preservation outside translated captions.
+
+Automatic GitHub Actions runs are paused at the owner's request to conserve
+storage. The workflow is manual-only and must not be dispatched without renewed
+authorization. M49 has no new CI run or Windows/Linux export artifact. These
+results are local C# compilation and Linux headless scene tests; current clean
+SDK/export/native Windows verification remains outstanding. The M48 package
+links below are historical and do not include M49 changes.
+
+## Previous M48 validation
 
 M48 connects verified sequel development through the room chooser, Hall of Fame
 predecessor selection, quote/meeting, inherited quality/recognition, automatic

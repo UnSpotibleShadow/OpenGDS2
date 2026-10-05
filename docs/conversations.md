@@ -1,67 +1,68 @@
-# Conversation reconstruction — M41
+# Conversation reconstruction — M49
 
-Implemented: the normal recruitment hire greeting, using the small original
-portrait/name-strip/message layout seen in private reference 173559. The
-portrait is imported from the required original LZH. English uses ten unofficial
-community translations. Japanese greeting bodies are extracted to local
-`original/dialogue.json`; old imports must reimport to obtain them.
-No original text table, artwork or executable is included in the repository.
+Normal hire greetings, ordinary planning discussions and manga rights meetings
+now share the compact portrait/name-strip/message window. Portraits and Japanese
+bodies come from the required local original import. Reimport the LZH to refresh
+`original/dialogue.json` with the planning and rights sequences. English uses
+unofficial community translations; no original text table or artwork is shipped.
 
 ## Verified source
 
 | Behavior | Supported executable anchor |
 | --- | --- |
-| Copy employee/charge fee before greeting lottery | `0099FFC8 +00D6..00E1` |
+| Copy employee and charge fee before greeting lottery | `0099FFC8 +00D6..00E1` |
 | Ten variants selected by floor(Rnd × 10) | `0099FFC8 +00E4..00F5` |
-| Nine fixed bodies; tenth inserts company name | `fGMSKoyou` pool entries 11–19, 1A/1C |
-| Hire passes employee portrait/name, new-hire caption and modal flag 1 | `0099FFC8 +0102..0154` and subsequent arms |
-| Module1 helper 62 opens fGMKaiwa with Show(1) | `009933DC +02AA..02BF`; pool B4 points to object `005EF954` |
-| Portrait/name/message/form key handlers share the advance method | fGMKaiwa control event links; `00977864`, `0097789C`, `00977D6C`, `00977A24`, `00977C54` |
-| First advance reveals remaining text; later advance moves queue or unloads | `00981674 +0009..008A` |
-| Separate helper 63 can use text length × 3 as close countdown | `009930BC +0122..0165`; fGMKaiwa2 timer `00998F30` |
+| Hire passes portrait/name, caption and modal flag 1 | `0099FFC8 +0102..0154` and subsequent arms |
+| Shared click/key advance handler | `00981674 +0009..008A` |
+| Timer1 interval of 20 milliseconds | Serialized fGMKaiwa property at file offset `248EAC` |
+| Mouth cycle branches at 2, 4, 6, 8, 10 | `00998AB0 +0032/+00CD/+0168/+0203/+029E` |
+| Seven planning profiles and their dialogue | fGMKikakuKaigi `009EFA40 +00BB..0D86`, pool `005FAFCC` |
+| Publisher rights meeting (mode 16) | Same procedure `+60C7..639E`; see manga-adaptations.md |
+| Separate timed presenter | Module1 helper 63 `009930BC +0122..0165`, fGMKaiwa2 timer `00998F30` |
 
-`tools/verify_dialogue_evidence.py` verifies concise byte anchors privately.
-It exports no dialogue. Static analysis does not establish original desktop
-behavior under every focus, window-position or timer configuration.
+`tools/verify_dialogue_evidence.py` checks bounded hire/timer anchors privately.
+The source advances its text cursor in UTF-16 units; Godot displays complete
+Unicode characters so a surrogate pair is never split. The first click while
+text is typing reveals the remaining message. The next timer pass marks it
+complete, and a later click/Enter advances to the next page. Employee portraits
+cycle through locally imported closed/half/open/half mouth frames and settle
+closed. Modal typing continues while the simulation clock is paused.
 
-## Modern persistence and presentation
+## Meetings and persistence
 
-The accepted hire stores source identity and selected variant in a pending
-notification. Simulation ticks stop until acknowledgment. Save/load restores the
-notification without repeating a financial transaction or drawing another
-variant. Closing, clicking the portrait/name/message or pressing Enter dismisses
-it. The full text is immediately visible: typewriter speed/mouth animation are
-unresolved, so no original timing is claimed. This is an isolated presentation
-simplification. Original message queue and automatic presenter are not enabled.
+Planning generates one of seven profiles and its 100-point focus with the
+existing recovered random sequence. The discussion uses that same profile;
+it does not draw a second proposal. The introduction is included for released
+product counts ≤3; selected explanatory lines appear only for counts ≤2.
+Profile 3's final line and all four profile 6 lines remain unconditional, matching
+the branches. The source speaker is the named secretary; invented staff voting
+or random speaker changes are not added. A new proposal replays its new profile's
+discussion. Closing the proposal discussion cancels the reversible proposal.
 
-The pending state is additive to the modern save schema; old saves have none.
-Normal hiring uses the recovered greeting lottery. Graduate hiring is unchanged
-until its caller's dialogue sequence is independently mapped. Domain checks
-cover all ten variants, failed hires, clock blocking, invalid state, idempotent
-acknowledgment and save round trips. Public Godot checks exercise all ten saved
-notifications with synthetic staff; private UI checks import actual dialogue,
-hire once, save, reload and click to continue.
+Accepted hires persist the source identity and greeting variant. Save/load
+restarts their reveal without repeating the fee or drawing another variant.
+Simulation waits until acknowledgment. The close button uses the same advance
+behavior. Rights/planning discussions before project acceptance are UI state;
+loading a company cancels them without charging. The original queue is not
+serialized into modern saves. All 50 locally imported entries are guarded by
+the supported executable hash; older hire-only imports still support hiring.
 
-## Unresolved conversations
+## Remaining conversations
 
-The screenshot's secretary reminder is not yet implemented. Module1.46 has a
-December/weeks ≤3 contest message (`009B15F0 +0430..04A6`), plus February/March
-renewal advice; its invocation schedule and secretary identity/policy state
-remain to be established. The calendar routine also introduces the actual
-December/week 4 contest (`009DB4F4 +0567..05F8`). These are different callers.
-Do not infer the reminder date or periodic repetition from the screenshot alone.
+This is partial conversation restoration. Secretary advice/hiring/automation,
+checkpoint and shipment introductions, graduate-hire callers, remaining event
+speakers and the automatic timed presenter require further tracing. The original
+meeting illustration and automatic queue/window sequencing are not yet rendered.
 
-Other event introductions, speaker selection/RNG, secretary settings, office
-speech bubbles, timed notifications and original conversation queue persistence
-remain open. This milestone is the first playable conversation restoration,
-not completion of all original dialogue.
+Module1.46 has a December/weeks ≤3 contest reminder (`009B15F0 +0430..04A6`)
+and February/March renewal advice. Its invocation schedule and policy state are
+not established. The actual December/week 4 contest comes from a different
+calendar caller (`009DB4F4 +0567..05F8`). Module1.46 also has verified manual
+callers in `fMainVisual` (`009C66BC +0741`) and `fGMHisyoSet` (`0097743C`).
+The secretary click rectangle and initial portrait are known, but the full advice
+queue must be mapped before enabling it. See secretary-initialization.md.
 
-Additional caller tracing finds Module1.46 invoked from `fMainVisual` click
-handler `009C66BC +0741` and `fGMHisyoSet` action `0097743C`.
-The secretary-hire/settings menu entries themselves open separate forms
-(`0097A20C`, `0097A254`); they are not evidence of an automatic reminder date.
-M44 establishes the inclusive native-pixel office hit rectangle
-104..114 × 80..104 and the initializer's final secretary selection (record 1,
-portrait 2). It fixes the initial office tile. The full advice queue/state
-mapping still needs verification before wiring the click.
-See [secretary initialization](secretary-initialization.md).
+Domain tests cover reveal/click/mouth transitions, Unicode, all seven meeting
+branches and persisted hires. Headless Godot checks cover save/reload and modal
+clock blocking, multiple discussions, proposal cancellation and the manga loop.
+Original Windows focus/timer behavior and graphical comparison remain untested.

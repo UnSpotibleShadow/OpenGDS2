@@ -29,6 +29,7 @@ public partial class Main : Control
 
     public override void _Process(double delta)
     {
+        TickConversation(delta);
         if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
         RefreshEmployeeSelectionArrow();
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
@@ -553,6 +554,7 @@ public partial class Main : Control
 
     private void ClearContent()
     {
+        _conversationReveal=null;_conversationElapsed=0;
         _clockRunning=false;
         _refreshCoreStatus=null;
         if (_desktop is null)

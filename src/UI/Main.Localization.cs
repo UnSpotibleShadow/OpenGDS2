@@ -9,10 +9,11 @@ public partial class Main
 {
     private const string InterfaceSettingsPath = "user://interface.cfg";
     private EmployeeDatabase? _activeEmployeeDatabase;
+    private IReadOnlyDictionary<int,EmployeeNameReadingOverride>? _employeeNameReadings;
 
     private string EmployeeName(EmployeeState employee) => EmployeeNameLocalization.Display(employee,
         _activeEmployeeDatabase, TranslationServer.GetLocale().StartsWith("en", StringComparison.OrdinalIgnoreCase),
-        key => Tr(key));
+        key => Tr(key),_employeeNameReadings);
 
     private void LoadInterfaceLanguage()
     {
@@ -20,6 +21,12 @@ public partial class Main
         string locale = settings.Load(InterfaceSettingsPath) == Error.Ok
             ? settings.GetValue("language", "locale", "en").AsString() : "en";
         TranslationServer.SetLocale(locale is "en" or "ja" ? locale : "en");
+        string readings=ProjectSettings.GlobalizePath("user://employee-name-readings.json");
+        if (File.Exists(readings))
+        {
+            try {_employeeNameReadings=EmployeeNameLocalization.ReadOverrides(File.ReadAllText(readings));}
+            catch (Exception error) {GD.PushWarning("Local employee-name readings could not be loaded: "+error.Message);}
+        }
     }
 
     private void SaveInterfaceLanguage(string locale)

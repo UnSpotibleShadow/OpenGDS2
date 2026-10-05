@@ -1755,3 +1755,552 @@ msgstr "The Hall of Fame result unlocks sequel development."
 
 msgid "SEQUEL_SERIES_ENDED"
 msgstr "This entry missed the Hall of Fame. This series cannot continue."
+
+msgid "MEETING_SECRETARY"
+msgstr "Secretary Yamashita"
+
+msgid "MEETING_INTRO"
+msgstr "So, {hardware} hardware and {audience} as our target audience..."
+
+msgid "MANGA_REPRESENTATIVE"
+msgstr "{publisher} representative"
+
+msgid "MANGA_MEETING_0"
+msgstr "Hello. I represent {publisher}."
+
+msgid "MANGA_MEETING_1"
+msgstr "You would like to adapt our comic, {title}, into a game..."
+
+msgid "MANGA_MEETING_2"
+msgstr "Let me think... Hmm... Well..."
+
+msgid "MANGA_MEETING_3"
+msgstr "Hmm... All right. You have our approval."
+
+msgid "MANGA_RIGHTS_QUESTION"
+msgstr "Agree to the rights fee of ¥{fee} for {title}?"
+
+msgid "MANGA_NO_MONEY"
+msgstr "We do not have enough money!"
+
+msgid "MANGA_RIGHTS_APPROVED"
+msgstr "Please make it an entertaining game."
+
+msgid "MANGA_BEGIN_DEVELOPMENT"
+msgstr "We have permission. Let us begin development at our company."
+
+msgid "MANGA_RIGHTS_DECLINED"
+msgstr "I see... That is a shame."
+
+msgid "MANGA_REIMPORT_REQUIRED"
+msgstr "Reimport your original LZH archive to load the comic adaptation catalog."
+
+msgid "MANGA_RIGHTS_MEETING"
+msgstr "Comic rights meeting"
+
+msgid "AUTHOR"
+msgstr "Author"
+
+msgid "PUBLISHER"
+msgstr "Publisher"
+
+msgid "POPULARITY"
+msgstr "Popularity"
+
+msgid "PLANNING_RESULT_MangaUnavailable"
+msgstr "The original comic record is unavailable. Reimport your archive."
+
+msgid "MEETING_LINE_0"
+msgstr "Fun is the most important part of a game, after all."
+
+msgid "MEETING_LINE_1"
+msgstr "We could focus on fun, even if the other aspects suffer a little."
+
+msgid "MEETING_LINE_2"
+msgstr "Let us emphasize fun in this game."
+
+msgid "MEETING_LINE_3"
+msgstr "How about focusing on originality?"
+
+msgid "MEETING_LINE_4"
+msgstr "If it is too original, players might not accept it."
+
+msgid "MEETING_LINE_5"
+msgstr "Even so, let us try to break new ground."
+
+msgid "MEETING_LINE_6"
+msgstr "Let us emphasize originality in this game."
+
+msgid "MEETING_LINE_7"
+msgstr "Graphics are important in a game."
+
+msgid "MEETING_LINE_8"
+msgstr "The graphics shape its image in magazines and on the packaging."
+
+msgid "MEETING_LINE_9"
+msgstr "Let us emphasize graphics this time."
+
+msgid "MEETING_LINE_10"
+msgstr "How about focusing on music?"
+
+msgid "MEETING_LINE_11"
+msgstr "Good music alone will not sell a game if everything else is poor."
+
+msgid "MEETING_LINE_12"
+msgstr "Music enthusiasts might buy it, though."
+
+msgid "MEETING_LINE_13"
+msgstr "Let us emphasize music, anyway."
+
+msgid "MEETING_LINE_14"
+msgstr "It might not sell..."
+
+msgid "MEETING_LINE_15"
+msgstr "Balance matters in everything."
+
+msgid "MEETING_LINE_16"
+msgstr "Let us develop all aspects evenly."
+
+msgid "MEETING_LINE_17"
+msgstr "That should appeal to everyone."
+
+msgid "MEETING_LINE_18"
+msgstr "Let us take a balanced approach."
+
+msgid "MEETING_LINE_19"
+msgstr "Let us emphasize both fun and originality."
+
+msgid "MEETING_LINE_20"
+msgstr "That sounds like the makings of a good game."
+
+msgid "MEETING_LINE_21"
+msgstr "Graphics and music matter, but the content matters most."
+
+msgid "MEETING_LINE_22"
+msgstr "Let us emphasize fun and originality, then."
+
+msgid "MEETING_LINE_23"
+msgstr "How about focusing on both graphics and music?"
+
+msgid "MEETING_LINE_24"
+msgstr "That has nothing to do with whether it is fun! I doubt it will sell..."
+
+msgid "MEETING_LINE_25"
+msgstr "Graphics and music are important! We might open up something new."
+
+msgid "MEETING_LINE_26"
+msgstr "But surely fun and originality matter too..."
+
+msgid "CATALOG_MANGA_TITLE_0"
+msgstr "Mochi Turtle"
+
+msgid "CATALOG_MANGA_AUTHOR_0"
+msgstr "Osamushi Akiyama"
+
+msgid "CATALOG_MANGA_POPULARITY_0"
+msgstr "Excellent"
+
+msgid "CATALOG_MANGA_PUBLISHER_0"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_1"
+msgstr "Comic Journey to the Deep North"
+
+msgid "CATALOG_MANGA_AUTHOR_1"
+msgstr "Kairo Oyama"
+
+msgid "CATALOG_MANGA_POPULARITY_1"
+msgstr "Excellent"
+
+msgid "CATALOG_MANGA_PUBLISHER_1"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_2"
+msgstr "Toot That Tigger"
+
+msgid "CATALOG_MANGA_AUTHOR_2"
+msgstr "Kyosuke Kimura"
+
+msgid "CATALOG_MANGA_POPULARITY_2"
+msgstr "Excellent"
+
+msgid "CATALOG_MANGA_PUBLISHER_2"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_3"
+msgstr "Go, Bean Sprout Man!"
+
+msgid "CATALOG_MANGA_AUTHOR_3"
+msgstr "Bentaro Wada"
+
+msgid "CATALOG_MANGA_POPULARITY_3"
+msgstr "Average"
+
+msgid "CATALOG_MANGA_PUBLISHER_3"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_4"
+msgstr "Shameless School"
+
+msgid "CATALOG_MANGA_AUTHOR_4"
+msgstr "Go!! Nagai"
+
+msgid "CATALOG_MANGA_POPULARITY_4"
+msgstr "Quite good"
+
+msgid "CATALOG_MANGA_PUBLISHER_4"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_5"
+msgstr "Northern Capital Province"
+
+msgid "CATALOG_MANGA_AUTHOR_5"
+msgstr "Kentaro"
+
+msgid "CATALOG_MANGA_POPULARITY_5"
+msgstr "Excellent"
+
+msgid "CATALOG_MANGA_PUBLISHER_5"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_6"
+msgstr "Skipping Paradise"
+
+msgid "CATALOG_MANGA_AUTHOR_6"
+msgstr "Skip Taro"
+
+msgid "CATALOG_MANGA_POPULARITY_6"
+msgstr "Terrible"
+
+msgid "CATALOG_MANGA_PUBLISHER_6"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_7"
+msgstr "Tale of a Recluse"
+
+msgid "CATALOG_MANGA_AUTHOR_7"
+msgstr "Michael"
+
+msgid "CATALOG_MANGA_POPULARITY_7"
+msgstr "Unknown"
+
+msgid "CATALOG_MANGA_PUBLISHER_7"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_8"
+msgstr "Bababa Zone"
+
+msgid "CATALOG_MANGA_AUTHOR_8"
+msgstr "Manga Jiro"
+
+msgid "CATALOG_MANGA_POPULARITY_8"
+msgstr "A fine line"
+
+msgid "CATALOG_MANGA_PUBLISHER_8"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_9"
+msgstr "One Piecey"
+
+msgid "CATALOG_MANGA_AUTHOR_9"
+msgstr "Momoko"
+
+msgid "CATALOG_MANGA_POPULARITY_9"
+msgstr "Very popular"
+
+msgid "CATALOG_MANGA_PUBLISHER_9"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_10"
+msgstr "Zazanna Eyes"
+
+msgid "CATALOG_MANGA_AUTHOR_10"
+msgstr "Yu3 Takaguchi"
+
+msgid "CATALOG_MANGA_POPULARITY_10"
+msgstr "Amazing"
+
+msgid "CATALOG_MANGA_PUBLISHER_10"
+msgstr "Shueisha"
+
+msgid "CATALOG_MANGA_TITLE_11"
+msgstr "Gobo-chaman"
+
+msgid "CATALOG_MANGA_AUTHOR_11"
+msgstr "Taro Kobayashi"
+
+msgid "CATALOG_MANGA_POPULARITY_11"
+msgstr "Wonderful"
+
+msgid "CATALOG_MANGA_PUBLISHER_11"
+msgstr "Shogakukan"
+
+msgid "CATALOG_MANGA_TITLE_12"
+msgstr "Ryusuke Kida: Short Stories"
+
+msgid "CATALOG_MANGA_AUTHOR_12"
+msgstr "Ryusuke Kida"
+
+msgid "CATALOG_MANGA_POPULARITY_12"
+msgstr "A fine line"
+
+msgid "CATALOG_MANGA_PUBLISHER_12"
+msgstr "Shogakukan"
+
+msgid "CATALOG_MANGA_TITLE_13"
+msgstr "After Zone"
+
+msgid "CATALOG_MANGA_AUTHOR_13"
+msgstr "Shintaro Mitsunobu"
+
+msgid "CATALOG_MANGA_POPULARITY_13"
+msgstr "Wonderful"
+
+msgid "CATALOG_MANGA_PUBLISHER_13"
+msgstr "Shogakukan"
+
+msgid "CATALOG_MANGA_TITLE_14"
+msgstr "Let Loose!"
+
+msgid "CATALOG_MANGA_AUTHOR_14"
+msgstr "Kana Yoi-no"
+
+msgid "CATALOG_MANGA_POPULARITY_14"
+msgstr "Uncertain"
+
+msgid "CATALOG_MANGA_PUBLISHER_14"
+msgstr "Shogakukan"
+
+msgid "CATALOG_MANGA_TITLE_15"
+msgstr "Toshuki Motomura: Short Stories"
+
+msgid "CATALOG_MANGA_AUTHOR_15"
+msgstr "Toshuki Motomura"
+
+msgid "CATALOG_MANGA_POPULARITY_15"
+msgstr "Uncertain"
+
+msgid "CATALOG_MANGA_PUBLISHER_15"
+msgstr "Shogakukan"
+
+msgid "CATALOG_MANGA_TITLE_16"
+msgstr "Otokojuku"
+
+msgid "CATALOG_MANGA_AUTHOR_16"
+msgstr "Akirao Miyakami"
+
+msgid "CATALOG_MANGA_POPULARITY_16"
+msgstr "Lovely"
+
+msgid "CATALOG_MANGA_PUBLISHER_16"
+msgstr "Suteki Publishing"
+
+msgid "CATALOG_MANGA_TITLE_17"
+msgstr "The Great Lamp King"
+
+msgid "CATALOG_MANGA_AUTHOR_17"
+msgstr "Tajiro Nakamura"
+
+msgid "CATALOG_MANGA_POPULARITY_17"
+msgstr "Terrible"
+
+msgid "CATALOG_MANGA_PUBLISHER_17"
+msgstr "Suteki Publishing"
+
+msgid "CATALOG_MANGA_TITLE_18"
+msgstr "Mystery Street in Wonder Town"
+
+msgid "CATALOG_MANGA_AUTHOR_18"
+msgstr "Fujiko @ Fujio"
+
+msgid "CATALOG_MANGA_POPULARITY_18"
+msgstr "Uncertain"
+
+msgid "CATALOG_MANGA_PUBLISHER_18"
+msgstr "Suteki Publishing"
+
+msgid "CATALOG_MANGA_TITLE_19"
+msgstr "Hiradol"
+
+msgid "CATALOG_MANGA_AUTHOR_19"
+msgstr "J-Goro Fujisaki"
+
+msgid "CATALOG_MANGA_POPULARITY_19"
+msgstr "Poor"
+
+msgid "CATALOG_MANGA_PUBLISHER_19"
+msgstr "Suteki Publishing"
+
+msgid "CATALOG_MANGA_TITLE_20"
+msgstr "Dragon Baba Z"
+
+msgid "CATALOG_MANGA_AUTHOR_20"
+msgstr "Picasso Karasuyama"
+
+msgid "CATALOG_MANGA_POPULARITY_20"
+msgstr "Quite good"
+
+msgid "CATALOG_MANGA_PUBLISHER_20"
+msgstr "Suteki Publishing"
+
+msgid "CATALOG_MANGA_TITLE_21"
+msgstr "Comic Guide to Hula Hoops"
+
+msgid "CATALOG_MANGA_AUTHOR_21"
+msgstr "Hula Hoop Taro"
+
+msgid "CATALOG_MANGA_POPULARITY_21"
+msgstr "Unknown"
+
+msgid "CATALOG_MANGA_PUBLISHER_21"
+msgstr "Boom Publishing"
+
+msgid "CATALOG_MANGA_TITLE_22"
+msgstr "Comic Guide to Feng Shui"
+
+msgid "CATALOG_MANGA_AUTHOR_22"
+msgstr "Feng Shui Taro"
+
+msgid "CATALOG_MANGA_POPULARITY_22"
+msgstr "Unknown"
+
+msgid "CATALOG_MANGA_PUBLISHER_22"
+msgstr "Boom Publishing"
+
+msgid "CATALOG_MANGA_TITLE_23"
+msgstr "Comic Guide to Aikido"
+
+msgid "CATALOG_MANGA_AUTHOR_23"
+msgstr "Aikido Jiro"
+
+msgid "CATALOG_MANGA_POPULARITY_23"
+msgstr "Unknown"
+
+msgid "CATALOG_MANGA_PUBLISHER_23"
+msgstr "Boom Publishing"
+
+msgid "CATALOG_MANGA_TITLE_24"
+msgstr "Manga de Karaoke"
+
+msgid "CATALOG_MANGA_AUTHOR_24"
+msgstr "Saburo Karaoke"
+
+msgid "CATALOG_MANGA_POPULARITY_24"
+msgstr "Unknown"
+
+msgid "CATALOG_MANGA_PUBLISHER_24"
+msgstr "Boom Publishing"
+
+msgid "CATALOG_MANGA_TITLE_25"
+msgstr "Three Generations of Karate Babo"
+
+msgid "CATALOG_MANGA_AUTHOR_25"
+msgstr "Masutatsu"
+
+msgid "CATALOG_MANGA_POPULARITY_25"
+msgstr "A must for enthusiasts"
+
+msgid "CATALOG_MANGA_PUBLISHER_25"
+msgstr "Pop Press"
+
+msgid "CATALOG_MANGA_TITLE_26"
+msgstr "Latest Tales of Japan"
+
+msgid "CATALOG_MANGA_AUTHOR_26"
+msgstr "Old Sushi"
+
+msgid "CATALOG_MANGA_POPULARITY_26"
+msgstr "Fanatical"
+
+msgid "CATALOG_MANGA_PUBLISHER_26"
+msgstr "Pop Press"
+
+msgid "CATALOG_MANGA_TITLE_27"
+msgstr "The Flying Wig"
+
+msgid "CATALOG_MANGA_AUTHOR_27"
+msgstr "Mr. Ogura"
+
+msgid "CATALOG_MANGA_POPULARITY_27"
+msgstr "Uncertain"
+
+msgid "CATALOG_MANGA_PUBLISHER_27"
+msgstr "Pop Press"
+
+msgid "CATALOG_MANGA_TITLE_28"
+msgstr "Riko-chan"
+
+msgid "CATALOG_MANGA_AUTHOR_28"
+msgstr "Hikojiro Nagareyama"
+
+msgid "CATALOG_MANGA_POPULARITY_28"
+msgstr "Uncertain"
+
+msgid "CATALOG_MANGA_PUBLISHER_28"
+msgstr "Pop Press"
+
+msgid "CATALOG_MANGA_TITLE_29"
+msgstr "Poo-poop-poop"
+
+msgid "CATALOG_MANGA_AUTHOR_29"
+msgstr "Poo Taro"
+
+msgid "CATALOG_MANGA_POPULARITY_29"
+msgstr "Terrible"
+
+msgid "CATALOG_MANGA_PUBLISHER_29"
+msgstr "Pop Press"
+
+msgid "CATALOG_MANGA_TITLE_30"
+msgstr "Curry Story"
+
+msgid "CATALOG_MANGA_AUTHOR_30"
+msgstr "Curry Hayashi"
+
+msgid "CATALOG_MANGA_POPULARITY_30"
+msgstr "Terrible"
+
+msgid "CATALOG_MANGA_PUBLISHER_30"
+msgstr "Pop Press"
+
+msgid "BITMAP_BUBBLE_1"
+msgstr "TIRED!"
+
+msgid "BITMAP_BUBBLE_2"
+msgstr "BORED!"
+
+msgid "BITMAP_BUBBLE_3"
+msgstr "REST?"
+
+msgid "BITMAP_BUBBLE_4"
+msgstr "SPEED!"
+
+msgid "BITMAP_BUBBLE_5"
+msgstr "CHAIR!"
+
+msgid "BITMAP_BUBBLE_6"
+msgstr "OH NO!"
+
+msgid "BITMAP_BUBBLE_7"
+msgstr "WORK!"
+
+msgid "BITMAP_BUBBLE_8"
+msgstr "BUILD!"
+
+msgid "BITMAP_BUBBLE_9"
+msgstr "NICE!"
+
+msgid "BITMAP_BUBBLE_10"
+msgstr "HEAVE!"
+
+msgid "BITMAP_BUBBLE_11"
+msgstr "GOOD!"
+
+msgid "BITMAP_BUBBLE_12"
+msgstr "DONE!"
+
+msgid "BITMAP_BUBBLE_15"
+msgstr "OOPS!"
+
+msgid "BITMAP_BUBBLE_16"
+msgstr "STUCK!"

@@ -35,3 +35,25 @@ Private imported-original UI checks require Latin recruitment names while
 retaining the original database and original employee/save strings.
 
 Graphical Japanese-font/IME and pronunciation review remain outstanding.
+
+
+## M49 reading review and local corrections
+
+The supported database supplies personal-name strings, not furigana or a unique
+reading table. Records 16, 56 and 57 contain phonetic kana components; that is
+reading evidence for those components, not proof of every full-name reading.
+Kanji-only fixed names and generated components remain provisional. No uncertain
+Latin reading was replaced with a new guess during this review.
+
+A local `user://employee-name-readings.json` can correct a reading without
+editing the repository or save. The JSON has `SchemaVersion: 1`, the supported
+`SourceHash` from source-hashes.txt, and a `Readings` array. Each entry has
+`SourceIndex` (0–59), `OriginalName` (copied from the user's imported employee or
+saved generated name) and `EnglishName` (the chosen reading). This document does
+not reproduce the Japanese name table. At most sixty unique entries are accepted;
+malformed files are rejected with a warning. Restart after editing.
+
+Corrections apply only when both the supported source identity and original
+name match. This also prevents a generated source slot from applying an old
+reading after it rolls a different name. Custom/renamed names are preserved;
+Japanese bypasses the overrides. Tests cover these guards and invalid files.

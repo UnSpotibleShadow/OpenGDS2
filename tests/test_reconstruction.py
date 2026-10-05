@@ -77,6 +77,19 @@ class PublicTests(unittest.TestCase):
         from verify_sequel_evidence import verify as verify_sequel
         with self.assertRaises(ParseError):verify_sequel(b'MZ'+bytes(200))
 
+    def test_manga_evidence_rejects_unsupported_source(self):
+        from verify_manga_evidence import verify as verify_manga
+        with self.assertRaises(ParseError):verify_manga(b'MZ'+bytes(200))
+
+    def test_english_manga_and_meeting_coverage(self):
+        import re
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        keys=[f'CATALOG_MANGA_{field}_{index}' for field in ['TITLE','AUTHOR','PUBLISHER','POPULARITY'] for index in range(31)]
+        keys += [f'MEETING_LINE_{index}' for index in range(27)]
+        for key in keys:
+            self.assertTrue(entries.get(key),key)
+            self.assertFalse(any('\u3040' <= c <= '\u30ff' or '\u4e00' <= c <= '\u9fff' for c in entries[key]),key)
+
     def test_english_employee_reading_coverage(self):
         import re
         text=(ROOT/'localization'/'en.po').read_text()
@@ -102,6 +115,12 @@ class OriginalTests(unittest.TestCase):
         from verify_dialogue_evidence import verify as verify_dialogue
         result=verify_dialogue(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())
         self.assertEqual(result['hire_variants'],10)
+        self.assertEqual(result['typing_interval_ms'],20)
+
+    def test_manga_evidence_anchors(self):
+        from verify_manga_evidence import verify as verify_manga
+        self.assertEqual(verify_manga(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),
+            {"catalog_records":31,"mode":2,"market_thresholds":[10,6,3,2],"quality_bonus":"graphics"})
 
     def test_sequel_evidence_anchors(self):
         from verify_sequel_evidence import verify as verify_sequel

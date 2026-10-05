@@ -8,6 +8,7 @@ public sealed class ReleasedGameState
     // Older modern saves could only create original games: zero/null are known defaults.
     public int OriginalMode {get;set;}
     public int? PredecessorProductIndex {get;set;}
+    public int? MangaSourceIndex {get;set;}
     public bool HasReleasedSequel {get;set;}
     public int OriginalSequelCounter {get;set;}
     public string? SeriesBaseTitle {get;set;}

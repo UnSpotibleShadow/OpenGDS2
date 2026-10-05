@@ -15,7 +15,8 @@ public partial class Main
         start.Pressed+=()=>ShowPlanningPreview(state,room);
         var sequel=new Button {Name="RoomSequel",Text=Tr("SEQUEL_DEVELOPMENT")};_content.AddChild(sequel);
         sequel.Pressed+=()=>ShowSequelSelection(state,room);
-        _content.AddChild(new Button {Name="RoomManga",Text=Tr("MANGA_ADAPTATION"),Disabled=true,TooltipText=Tr("NOT_YET_DECODED")});
+        var manga=new Button {Name="RoomManga",Text=Tr("MANGA_ADAPTATION")};_content.AddChild(manga);
+        manga.Pressed+=()=>ShowMangaSelection(state,room);
         AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
     }
 

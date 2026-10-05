@@ -109,6 +109,7 @@ public sealed class GameSession
                 TrainingService.Tick(state,employee,catalog,_random);
                 DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
             }
+            if (employee.Office is not null) OfficeVisualRules.TickBubble(employee.Office);
             // Original employees refer back to the source arrays. Keep the
             // modern employed copy and source projection consistent.
             var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == employee.SourceIndex);

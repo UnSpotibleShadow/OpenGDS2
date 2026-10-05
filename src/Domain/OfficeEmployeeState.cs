@@ -34,5 +34,9 @@ public sealed class OfficeEmployeeState
     public DevelopmentWorkCategory WorkCategory { get; set; }
     public int BurstTicks { get; set; }
     public int BurstCount { get; set; }
+    public int? BurstDisplayCount {get;set;}
     public bool IdleBreak { get; set; }
+    public int PendingSpeechBubble {get;set;}
+    public int SpeechBubble {get;set;}
+    public int SpeechBubbleTicks {get;set;}
 }

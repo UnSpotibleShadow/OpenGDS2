@@ -11,9 +11,15 @@ namespace OpenGDS2.Core;
 public static class OriginalAssetStore
 {
     public const string OverlayRoot = "user://asset-overrides";
+    private static string? _englishArtworkRoot;
     public static string PathFor(string relative)
-        => LocalAssetOverlay.Resolve(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot),
-            ProjectSettings.GlobalizePath(OverlayRoot), relative);
+    {
+        string original=ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot);
+        string path=LocalAssetOverlay.Resolve(original,ProjectSettings.GlobalizePath(OverlayRoot),relative);
+        string imported=System.IO.Path.Combine(original,relative.Replace('/',System.IO.Path.DirectorySeparatorChar));
+        if (path!=imported || _englishArtworkRoot is null || !TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase)) return path;
+        return LocalAssetOverlay.Resolve(original,_englishArtworkRoot,relative);
+    }
 
     public static Texture2D? LoadTexture(string relative)
     {
@@ -21,7 +27,7 @@ public static class OriginalAssetStore
         if (!File.Exists(path)) return null;
         using var image = new Image();
         if (image.Load(path) != Error.Ok) return null;
-        if (path.StartsWith(ProjectSettings.GlobalizePath(OverlayRoot) + System.IO.Path.DirectorySeparatorChar, StringComparison.Ordinal))
+        if (path != System.IO.Path.Combine(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot), relative.Replace('/', System.IO.Path.DirectorySeparatorChar)))
         {
             using var original = new Image();
             string imported = System.IO.Path.Combine(ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot), relative.Replace('/', System.IO.Path.DirectorySeparatorChar));
@@ -38,11 +44,14 @@ public static class OriginalAssetStore
     public static Texture2D? LoadOpeningOffice(GameState state)
         => LoadOfficeRenderer()?.CreateTexture(state) ?? LoadTexture("Graphic/Embedded/OfficeBase.bmp");
 
-    public static Texture2D? LoadEmployeePortrait(int? portraitId)
-        => portraitId is >=1 and <=10 ? LoadTexture($"Graphic/Human/Human{portraitId}.bmp") : null;
+    public static Texture2D? LoadEmployeePortrait(int? portraitId,int frame=0)
+        => portraitId is >=1 and <=10 && frame is >=0 and <=2
+            ? LoadTexture($"Graphic/Human/Human{portraitId}{(frame==0 ? "" : "."+frame)}.bmp") : null;
 
     public static OriginalOfficeRenderer? LoadOfficeRenderer()
     {
+        try {_englishArtworkRoot=LocalOfficeArtworkPatches.EnsureEnglishPatch();}
+        catch (Exception error) {GD.PushWarning("Local English artwork patch could not be generated: "+error.Message);_englishArtworkRoot=null;}
         string scenePath = PathFor("office.json");
         if (!File.Exists(scenePath)) return null;
         var scene = JsonSerializer.Deserialize<OfficeSceneData>(File.ReadAllText(scenePath));

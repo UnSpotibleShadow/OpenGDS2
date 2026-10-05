@@ -81,8 +81,10 @@ records are imported locally; hardware member 0F70 is not this production cost.
 
 Own-game market factor starts at 1. A roll in 0..19 adds 1.5 for 0, .5 for 1/2,
 −.5 for 3/4/5, otherwise zero. The first two releases subtract .1. Subsequent
-releases have the recovered novelty/fun/music random bonuses. The music >100
-branch shadows the later >150/>200 branches; M13 preserves that source quirk.
+releases have the recovered novelty/fun/graphics random bonuses. The graphics >100
+branch shadows the later >150/>200 branches. M49 corrected the variable mapping:
+the source announcement says music but the tested array is graphics. See
+[manga/shipment evidence](manga-adaptations.md).
 A negative market factor becomes .1, while exact zero stays zero.
 
 M13 copies quality, bugs, recognition, data size and selected catalog identifiers
