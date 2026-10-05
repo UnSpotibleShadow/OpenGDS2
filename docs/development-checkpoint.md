@@ -2,8 +2,12 @@
 
 M44 applies the original initializer's final secretary portrait selection to
 local office imports. Direct C# compilation, 206 domain checks and 32 Python
-checks pass. The original-import Godot cache check passes with zero failures.
-SDK/export/native Windows checks are pending.
+checks pass. Both Godot suites pass with zero failures. All four SDK/export/native
+Windows jobs passed in [run 37262835613](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37262835613).
+PR #38 merged as `b0bf7c4f36bb98ee92e77963ee142a1a6f07aa03`; tested head
+`6d6e275373594091e7320cf10a9bace10dc1f7de`. Download
+**OpenGDS2-desktop-development** from that run; it expires 2026-10-19.
+Artifact digest: `sha256:e150f7a230241dd6c9eab59f19fc6c842f0e4e50813716a29e5a12510f9dbbf1`.
 See [secretary initialization](secretary-initialization.md).
 
 ## Previous M43 validation

@@ -14,8 +14,9 @@ chooser (original game, sequel, manga/comic adaptation) and the compact
 hardware/audience quote screen leading to a planning meeting. Recover contextual
 room interaction and the separate quote/meeting presentation; manga adaptation
 joins sequels, polishing and external/contract work as an unresolved workflow.
-English-mode staff names still show Japanese and need verified display-name
-localization without changing imported/save identity. The owner also reports a
+The initial feedback identified Japanese staff names in English mode;
+M40 now supplies provisional display-name readings without changing imported/save
+identity. The owner also reports a
 nearly invisible typing caret; input contrast belongs in the scaling/theme pass.
 The readable original screenshots also establish screen-layout references for
 licenses, activities, technology/computer purchase, bank, employee arrival and
@@ -26,8 +27,12 @@ their execution rules and defaults remain unresolved. See
 M38 implements the supplied title theme, contrasting input caret/selection,
 native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
-Sprite artifact diagnosis, remaining conversations, original meeting animation and
-M40 supplies provisional display-only English staff-name readings; pronunciation review remains.
+Sprite artifact diagnosis, remaining conversations and original meeting animation
+remain open. M40 supplies provisional display-only English staff-name readings;
+pronunciation review remains. M41 restores normal-hire conversations; M42–M43
+restore compact development quotes with locally imported hardware pictures.
+M44 corrects the initializer's final secretary portrait selection; secretary
+advice, hiring and automation remain unconnected.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
