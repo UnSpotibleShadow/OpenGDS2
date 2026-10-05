@@ -54,6 +54,7 @@ public partial class Main
 
     private void EnsureDesktop(GameState state)
     {
+        _music.SetMonth(state.Month ?? 0);
         if (_desktop is not null && ReferenceEquals(state, _desktopState) && _desktopLocale == TranslationServer.GetLocale()) return;
         DestroyDesktop();
         foreach (Node child in _screenContent.GetChildren()) { _screenContent.RemoveChild(child); child.QueueFree(); }

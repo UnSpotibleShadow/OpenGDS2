@@ -902,6 +902,12 @@ msgstr "Local music folder"
 msgid "MUSIC_LOCAL_NOTE"
 msgstr "Eight optional tracks are included. Local Ogg Vorbis, WAV or MP3 files override them after restart, in filename order."
 
+msgid "MUSIC_SEASONAL_ENABLED"
+msgstr "Change office music with the seasons"
+
+msgid "MUSIC_SEASONAL_NOTE"
+msgstr "Spring: Mar–May; summer: Jun–Aug; autumn: Sep–Nov; winter: Dec–Feb. Add local seasonal tracks in the music folder's spring, summer, autumn or winter subfolders, then restart."
+
 # Display-only catalog names; Japanese names are resolved from the local import.
 
 msgid "CATALOG_GENRE_0"

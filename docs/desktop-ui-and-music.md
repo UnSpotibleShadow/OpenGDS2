@@ -122,10 +122,12 @@ repository and game-build distribution on 2026-10-03; the recordings are not
 covered by the source-code MIT license.
 See `audio/community/NOTICE.md` for source provenance.
 
-The playlist starts during gameplay, advances on the audio player's finished
-signal, wraps after the last recording and pauses on the title screen. With no
-valid local tracks, the bundled playlist is used. Settings expose
-an enable toggle, volume and Next Track. Preferences use `user://audio.cfg` and
+The office playlist starts during gameplay, advances on the audio player's finished
+signal and wraps after the last recording. The title screen uses its dedicated
+theme. M46 adds optional [seasonal playlists](seasonal-music.md), enabled by default,
+with three-month seasons and local seasonal subfolders. With no valid local tracks,
+the bundled recordings are used. Settings expose music and seasonal toggles,
+volume and Next Track. Preferences use `user://audio.cfg` and
 do not alter saved simulation state, RNG calls or clocks. Manual simulation pause
 and decision dialogs do not change the soundtrack. Headless tests load and inspect
 resources but do not start dummy-driver playback.

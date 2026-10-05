@@ -12,6 +12,16 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("community seasons cover all twelve months with winter across New Year",()=>
+{
+    MusicSeason[] expected=[MusicSeason.Winter,MusicSeason.Winter,MusicSeason.Spring,MusicSeason.Spring,MusicSeason.Spring,
+        MusicSeason.Summer,MusicSeason.Summer,MusicSeason.Summer,MusicSeason.Autumn,MusicSeason.Autumn,MusicSeason.Autumn,MusicSeason.Winter];
+    for (int month=1;month<=12;month++) Check(SeasonalMusicRules.ForMonth(month)==expected[month-1]);
+    foreach (var season in Enum.GetValues<MusicSeason>()) Check(expected.Count(x=>x==season)==3);
+    foreach (int? month in new int?[] {null,0,-1,13}) Check(SeasonalMusicRules.ForMonth(month) is null);
+    Check(Enum.GetValues<MusicSeason>().SelectMany(s=>Enumerable.Range(SeasonalMusicRules.FirstBundledTrack(s),2)).SequenceEqual(Enumerable.Range(1,8)));
+    Check(SeasonalMusicRules.Folder(MusicSeason.Autumn)=="autumn");
+});
 (GameState State,OriginalCatalog Catalog) CalendarFixture(GameDate? date=null,long money=2_000_000_000)
 {
     var c=CoreCatalog();c.Hardware.Clear();

@@ -39,6 +39,7 @@ public partial class Main : Control
         while (_officeElapsed >= OfficeStaffRules.TickSeconds)
         {
             _session.TickOffice(_activeCatalog);
+            _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
             if (ShowPendingCalendarEvent(state)) return;
@@ -497,6 +498,9 @@ public partial class Main : Control
         _content.AddChild(new Label { Text = Tr("MUSIC_LOCAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var enabled = new CheckButton { Name = "MusicEnabled", Text = Tr("MUSIC_ENABLED"), ButtonPressed = _music.Enabled };
         enabled.Toggled += value => _music.SetEnabled(value); _content.AddChild(enabled);
+        var seasonal = new CheckButton { Name = "SeasonalMusicEnabled", Text = Tr("MUSIC_SEASONAL_ENABLED"), ButtonPressed = _music.SeasonalEnabled };
+        seasonal.Toggled += value => _music.SetSeasonalEnabled(value); _content.AddChild(seasonal);
+        _content.AddChild(new Label { Text = Tr("MUSIC_SEASONAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var volumeLabel = new Label { Text = $"{Tr("MUSIC_VOLUME")}: {_music.VolumePercent:N0}%" }; _content.AddChild(volumeLabel);
         var volume = new HSlider { Name = "MusicVolume", MinValue = 0, MaxValue = 100, Step = 1, Value = _music.VolumePercent };
         volume.ValueChanged += value => { _music.SetVolume((float)value); volumeLabel.Text = $"{Tr("MUSIC_VOLUME")}: {value:N0}%"; }; _content.AddChild(volume);

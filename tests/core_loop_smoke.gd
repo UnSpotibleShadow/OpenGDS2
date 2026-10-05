@@ -68,6 +68,17 @@ func create_music_fixture() -> void:
         samples.resize(16000 * (index + 1))
         track.data = samples
         check(track.save_to_wav("user://music/office-%02d.wav" % (index+1)) == OK,"Write local music fixture")
+    # Autumn deliberately has no local seasonal tracks: exercise generic fallback.
+    for season in ["spring", "summer", "winter"]:
+        DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://music/" + season))
+        for index in range(2):
+            var track := AudioStreamWAV.new()
+            track.format = AudioStreamWAV.FORMAT_16_BITS
+            track.mix_rate = 8000
+            var samples := PackedByteArray()
+            samples.resize(16000 * (11 + index + ["spring", "summer", "winter"].find(season) * 2))
+            track.data = samples
+            check(track.save_to_wav("user://music/%s/track-%d.wav" % [season,index]) == OK,"Write seasonal fixture")
 
 func run() -> void:
     var expected_debug := OS.get_environment("OPENGDS2_EXPECT_DEBUG")
@@ -108,6 +119,11 @@ func run() -> void:
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
     create_music_fixture()
+    var fresh_audio := ConfigFile.new()
+    fresh_audio.set_value("music", "enabled", true)
+    fresh_audio.set_value("music", "volume", 30)
+    fresh_audio.set_value("music", "seasonal", true)
+    check(fresh_audio.save("user://audio.cfg") == OK,"Reset audio fixture for repeated release/debug runs")
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
@@ -121,6 +137,39 @@ func run() -> void:
     root.size = original_viewport_size
     await process_frame
     await press("LOAD_GAME")
+    var seasonal_player = main.find_child("MusicPlayer",true,false)
+    check(abs(seasonal_player.stream.get_length()-11.0) < 0.01,"April save immediately selects spring music")
+    var soundtrack = main.find_child("BackgroundMusic",true,false)
+    soundtrack.call("SetMonth", 5)
+    var spring_stream = seasonal_player.stream
+    soundtrack.call("SetMonth", 5)
+    check(seasonal_player.stream == spring_stream,"Same-season date refresh preserves the recording")
+    soundtrack.call("SetMonth", 6)
+    check(abs(seasonal_player.stream.get_length()-13.0) < 0.01,"June switches to summer")
+    seasonal_player.finished.emit()
+    check(abs(seasonal_player.stream.get_length()-14.0) < 0.01,"Seasonal playlist advances")
+    seasonal_player.finished.emit()
+    check(abs(seasonal_player.stream.get_length()-13.0) < 0.01,"Seasonal playlist wraps")
+    soundtrack.call("SetMonth", 9)
+    check(abs(seasonal_player.stream.get_length()-1.0) < 0.01,"Absent autumn playlist falls back to local office music")
+    soundtrack.call("SetEnabled", false)
+    soundtrack.call("SetMonth", 12)
+    var muted_audio := ConfigFile.new()
+    check(muted_audio.load("user://audio.cfg") == OK and not muted_audio.get_value("music","enabled"),"Season transition preserves saved mute setting")
+    check(abs(seasonal_player.stream.get_length()-15.0) < 0.01 and (seasonal_player.stream_paused or not seasonal_player.playing),"Muted season transition selects winter without starting playback")
+    var winter_stream = seasonal_player.stream
+    soundtrack.call("SetMonth", 1)
+    check(seasonal_player.stream == winter_stream,"December to January preserves winter recording")
+    soundtrack.call("SetMonth", 3)
+    check(abs(seasonal_player.stream.get_length()-11.0) < 0.01,"March returns to spring")
+    soundtrack.call("SetTitleActive")
+    soundtrack.call("SetMonth", 6)
+    check(seasonal_player.stream.resource_path.ends_with("title-theme.ogg"),"Season changes never replace the title theme")
+    soundtrack.call("SetMonth", 0)
+    soundtrack.call("SetGameplayActive", true)
+    check(abs(seasonal_player.stream.get_length()-1.0) < 0.01,"Unknown month safely selects ordinary office music")
+    soundtrack.call("SetSeasonalEnabled", false)
+    soundtrack.call("SetEnabled", true)
     var toolbar = main.find_child("DesktopToolbar",true,false)
     for control in toolbar.get_children():
         if control is Button:
@@ -599,6 +648,7 @@ func run() -> void:
         check(track != null and abs(track.get_length()-(index+1)) < 0.01,"Local music duration %d" % (index+1))
     await press("SETTINGS")
     var enabled = main.find_child("MusicEnabled",true,false)
+    var seasonal = main.find_child("SeasonalMusicEnabled",true,false)
     var volume = main.find_child("MusicVolume",true,false)
     enabled.button_pressed = false
     volume.value = 42
@@ -607,6 +657,7 @@ func run() -> void:
     var config = ConfigFile.new()
     check(config.load("user://audio.cfg") == OK,"Audio preferences saved")
     check(config.get_value("music","enabled") == false and config.get_value("music","volume") == 42,"Mute and volume survive configuration save")
+    check(config.get_value("music","seasonal") == false and not seasonal.button_pressed,"Seasonal setting saved independently of game saves")
     enabled.button_pressed = true
     var previous_stream = player.stream
     await press("NEXT_MUSIC_TRACK")
@@ -673,6 +724,24 @@ func run() -> void:
     await press("SAVE_GAME")
     var launched = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(launched.State.Calendar.Pending == null and launched.State.AvailableHardware.size() == 1 and launched.State.AvailableHardware[0] == 0,"Acknowledged launch resumes the calendar and unlocks its platform")
+    # A real calendar tick crosses May/June and switches audio before any new modal.
+    var season_save = launched.duplicate(true)
+    season_save.State.Year = 3
+    season_save.State.Month = 5
+    season_save.State.Week = 4
+    season_save.State.CompanyActivityTicks = 199
+    season_save.State.Calendar.Pending = null
+    soundtrack.call("SetSeasonalEnabled", true)
+    write_json("user://saves/slot1.json",season_save)
+    await press("LOAD_GAME")
+    check(abs(player.stream.get_length()-11.0) < 0.01,"Loading a May save restores spring while seasonal music is enabled")
+    Engine.time_scale = 100
+    for frame in range(3):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var season_advanced = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(season_advanced.State.Month == 6 and abs(player.stream.get_length()-13.0) < 0.01,"Actual May-to-June calendar advancement switches to summer music")
     # Renewal mutates the employed roster before the same week's salary debit.
     var renewal_save = payroll_captured.duplicate(true)
     var rs = renewal_save.State
