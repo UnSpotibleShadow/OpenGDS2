@@ -15,6 +15,12 @@ ordinary/sequel/manga workflows and checkpoint/shipment save/load. Checks run
 locally. No Actions, new desktop exports or native Windows runs were started.
 Original Windows audiovisual/timer comparison remains outstanding.
 
+M51 merged in [PR #45](https://github.com/UnSpotibleShadow/OpenGDS2/pull/45),
+commit `db121a35d9800cd4a44c824920bc105fdce078b8`; locally tested source head
+`0017a1e24b4595f48a788fe119652c627ed24b9d`. The root project also launches
+headlessly with the current compiled assembly. The historical M48 download
+packages do not contain this milestone.
+
 ## Previous M50 validation
 
 M50 imports the verified 256×160 planning illustration locally and displays it
