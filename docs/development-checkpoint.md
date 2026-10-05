@@ -1,4 +1,12 @@
-# Development checkpoint — M43, 2026-10-04
+# Development checkpoint — M44, 2026-10-05
+
+M44 applies the original initializer's final secretary portrait selection to
+local office imports. Direct C# compilation, 206 domain checks and 32 Python
+checks pass. The original-import Godot cache check passes with zero failures.
+SDK/export/native Windows checks are pending.
+See [secretary initialization](secretary-initialization.md).
+
+## Previous M43 validation
 
 M43 restores the locally imported original hardware pictures in development
 quotes, including selection changes. Local C# compilation, 206 domain checks,

@@ -43,6 +43,19 @@ def verify(data):
     # The locally imported twelve computer allocations map actions 6..17.
     require(0x9F651C, 0x42A9, '07 08 00 88 23 f5 06 00 00 00 07 08 00 34 22 fc b0')
     require(0x9F651C, 0x49E1, '07 08 00 88 23 f5 11 00 00 00 07 08 00 34 22 fc b0')
+    # Final secretary selection overrides the temporary portrait-1 tile.
+    # Setter argument 20 writes portrait array 0938, indexed by append count.
+    require(0x9814E4, 0x50, 'fd 16 20 00 5c ff 07 08 00 80 08 fc 22 07 08 00 38 09 fc b0')
+    for index, portrait in enumerate([1, 2, 4, 5, 6]):
+        require(0x9F651C, 0x2516 + index * 0x4E, f'28 5c fe {portrait:02x} 00')
+        require(0x9F651C, 0x253E + index * 0x4E, '0a ff 00 1c 00')
+    if pe.u32(0x60DF28 + 0xFF * 4) != 0x60ECF0:
+        raise ParseError('Secretary setter mapping changed')
+    require(0x9F651C, 0x5142, '07 08 00 88 23 fd f0 08 00 a0 08')
+    require(0x9F651C, 0xC0F9, '28 6c ff 01 00 fd e6 08 00 90 08')
+    require(0x9F651C, 0xC104, '28 1c ff 30 00 07 08 00 90 08 fc 22 07 08 00 38 09 fc 96')
+    require(0x9F651C, 0xC117, '28 6c ff 01 00 fb 9c cc fe 28 2c ff 98 00 fb b4 bc fe fb 94 ac fe')
+    require(0x9F651C, 0xC12D, '55 07 08 00 a0 08 fc 22 07 08 00 bc 24 a2')
     require(tick, 0x247D, '28 6c ff b8 00 fc f6 6c fc 28 6c ff 6b 00 fc f6 5c fc')
     require(tick, 0x3FA1, 'fe c4 6c ff 33 33 33 33 33 33 d3 3f')
     require(tick, 0xDCE7, '1c 13 dd 28 6c ff 28 00')

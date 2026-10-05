@@ -80,6 +80,10 @@ func run() -> void:
         check(catalog != null and catalog.Hardware.size() == 11, "Hardware catalog import")
         check(catalog != null and catalog.GameTypes.size() == 51, "Game type catalog import")
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
+        var office_scene = JSON.parse_string(FileAccess.get_file_as_string("user://original/office.json"))
+        var secretary_tiles = office_scene.Sprites.filter(func(sprite): return sprite.Id == 141)
+        check(secretary_tiles.size() == 1 and secretary_tiles[0].SourceX == 200 and secretary_tiles[0].SourceY == 32,
+            "Local office import applies final secretary portrait selection")
         for index in range(16):
             check(FileAccess.file_exists("user://original/Graphic/Embedded/Toolbar%d.bmp" % index),"Original toolbar bitmap imported locally: %d" % index)
         for index in range(15):
