@@ -1751,7 +1751,7 @@ msgid "SERIES_INSTALLMENT"
 msgstr "Entry"
 
 msgid "SEQUEL_UNLOCKED"
-msgstr "A sequel can be developed after these reviews are acknowledged."
+msgstr "The Hall of Fame result unlocks sequel development."
 
 msgid "SEQUEL_SERIES_ENDED"
 msgstr "This entry missed the Hall of Fame. This series cannot continue."

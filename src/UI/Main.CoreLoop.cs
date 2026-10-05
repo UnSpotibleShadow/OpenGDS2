@@ -215,8 +215,8 @@ public partial class Main
         int total=scores.Sum();
         var result=new Label {Name="ReviewTotal",Text=$"{Tr("REVIEW_TOTAL")}: {total} / 40"};_content.AddChild(result);
         AddHeading(Tr(total>=32 ? "REVIEW_HALL_OF_FAME" : total>=24 ? "REVIEW_GOOD" : total>=12 ? "REVIEW_LOW" : "REVIEW_POOR"),20);
-        if (total>=32) AddHeading(Tr("SEQUEL_UNLOCKED"),16);
-        else if (product.OriginalMode==1) AddHeading(Tr("SEQUEL_SERIES_ENDED"),16);
+        if (total>=32 && !product.HasReleasedSequel) AddHeading(Tr("SEQUEL_UNLOCKED"),16);
+        else if (total<32 && product.OriginalMode==1) AddHeading(Tr("SEQUEL_SERIES_ENDED"),16);
         _status=new Label();_content.AddChild(_status);
         AddAction("SAVE_GAME",()=>
         {

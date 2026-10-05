@@ -1751,7 +1751,7 @@ msgid "SERIES_INSTALLMENT"
 msgstr "作品番号"
 
 msgid "SEQUEL_UNLOCKED"
-msgstr "評価を確認すると、この作品の続編を開発できます。"
+msgstr "殿堂入りすると、この作品の続編を開発できます。"
 
 msgid "SEQUEL_SERIES_ENDED"
 msgstr "この作品は殿堂入りしませんでした。このシリーズの続編は開発できません。"
