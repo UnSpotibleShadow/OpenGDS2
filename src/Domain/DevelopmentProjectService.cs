@@ -2,11 +2,35 @@ namespace OpenGDS2.Domain;
 
 public enum DevelopmentPlanningResult { Success, RoomOccupied, ComputerUnknown, HardwareStateUnknown,
     HardwareUnavailable, LicenseRequired, ComputerTooSmall, MoneyUnknown, InsufficientFunds,
-    PredecessorUnavailable, SequelAlreadyDeveloping }
+    PredecessorUnavailable, SequelAlreadyDeveloping, MangaUnavailable }
 
 /// <summary>New-project, already-licensed acceptance branch of fGMKikakusyo.</summary>
 public static class DevelopmentProjectService
 {
+    // Rights meeting 16 only verifies willingness and the rights fee. The
+    // full fee is paid once by the later mode-2 acceptance transaction.
+    public static DevelopmentPlanningResult CheckMangaRights(GameState state,OriginalCatalog catalog,int mangaSourceIndex)
+    {
+        var manga=catalog.Manga.SingleOrDefault(x=>x.SourceIndex==mangaSourceIndex);
+        if (manga is null) return DevelopmentPlanningResult.MangaUnavailable;
+        if (manga.RightsFee<0) throw new InvalidDataException("Invalid manga rights fee.");
+        if (state.Money is null) return DevelopmentPlanningResult.MoneyUnknown;
+        return state.Money<manga.RightsFee ? DevelopmentPlanningResult.InsufficientFunds : DevelopmentPlanningResult.Success;
+    }
+    public static DevelopmentPlanningResult CheckMangaPlan(GameState state,OriginalCatalog catalog,int roomIndex,
+        int hardwareSourceIndex,int audienceSourceIndex,int mangaSourceIndex,out DevelopmentQuote quote)
+    {
+        var result=CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out quote);
+        var manga=catalog.Manga.SingleOrDefault(x=>x.SourceIndex==mangaSourceIndex);
+        if (manga is null) return DevelopmentPlanningResult.MangaUnavailable;
+        quote=DevelopmentPlanningRules.Quote(catalog.Hardware.Single(x=>x.SourceIndex==hardwareSourceIndex),
+            catalog.Audiences.Single(x=>x.SourceIndex==audienceSourceIndex),2,manga.RightsFee);
+        if (result is not (DevelopmentPlanningResult.Success or DevelopmentPlanningResult.InsufficientFunds)) return result;
+        return state.Money<quote.Cost ? DevelopmentPlanningResult.InsufficientFunds : DevelopmentPlanningResult.Success;
+    }
+    public static DevelopmentPlanningResult TryAcceptMangaPlan(GameState state,OriginalCatalog catalog,int roomIndex,
+        int hardwareSourceIndex,int audienceSourceIndex,int mangaSourceIndex,string title,DevelopmentFocus focus)
+        =>TryAcceptPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,title,focus,null,mangaSourceIndex);
     public static DevelopmentPlanningResult CheckSequelPlan(GameState state,OriginalCatalog catalog,int roomIndex,
         int hardwareSourceIndex,int audienceSourceIndex,int predecessorProductIndex,out DevelopmentQuote quote)
     {
@@ -43,13 +67,14 @@ public static class DevelopmentProjectService
         int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus)
         =>TryAcceptPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,title,focus,null);
     private static DevelopmentPlanningResult TryAcceptPlan(GameState state,OriginalCatalog catalog,int roomIndex,
-        int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus,int? predecessorProductIndex)
+        int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus,int? predecessorProductIndex,int? mangaSourceIndex=null)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length>128) throw new ArgumentException("A project label of at most 128 characters is required.");
         DevelopmentWorkRules.SelectCategory(focus,0);
         DevelopmentQuote quote;
         var result=predecessorProductIndex is int parent
             ? CheckSequelPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,parent,out quote)
+            : mangaSourceIndex is int manga ? CheckMangaPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,manga,out quote)
             : CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out quote);
         if (result!=DevelopmentPlanningResult.Success) return result;
         var project=new DevelopmentProjectState
@@ -60,6 +85,7 @@ public static class DevelopmentProjectService
         };
         if (predecessorProductIndex is int predecessor)
             SequelDevelopmentRules.Initialize(project,state.ReleasedGames.Single(x=>x.ProductIndex==predecessor));
+        if (mangaSourceIndex.HasValue) {project.OriginalMode=2;project.MangaSourceIndex=mangaSourceIndex;}
         FinancialRules.Apply(state,-quote.Cost);
         state.DevelopmentProjects.Add(project);
         return DevelopmentPlanningResult.Success;

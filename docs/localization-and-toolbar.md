@@ -25,11 +25,12 @@ The supported executable hash gates the index mapping. Unmapped entries fall
 back to their local names. The Japanese PO includes matching catalog keys with
 empty translations because their names come from the user's import.
 
-Employee proper names and names generated from the imported family/given-name
-pool remain local Japanese names. Their readings have not been established.
-No guessed employee identities or original name tables are bundled. Text embedded
-in original bitmaps also remains untranslated unless the user supplies a local
-artwork override. This milestone does not claim complete localization.
+M40 adds provisional display-only employee readings; M49 reviews their evidence
+and permits guarded local corrections. Original Japanese name tables remain
+local. M49 translates the 31 adaptation labels and recovered planning/rights
+dialogue, and generates fourteen English office-bubble captions through local
+bitmap patches. Other embedded text remains unresolved. These milestones do not
+claim complete localization; see [local patch scope](office-effects-and-local-patches.md).
 
 The import dialog, bit-width labels and employee level labels are localized too.
 The music settings explain bundled tracks and local playlist precedence.

@@ -12,9 +12,8 @@ speech bubbles also need original-style presentation and verified lifecycles.
 Two further original screenshots establish a desk-cluster development action
 chooser (original game, sequel, manga/comic adaptation) and the compact
 hardware/audience quote screen leading to a planning meeting. Recover contextual
-room interaction and the separate quote/meeting presentation; manga adaptation
-joins polishing and external/contract work as an unresolved workflow; M48 now
-connects the verified sequel lifecycle.
+room interaction and the separate quote/meeting presentation; M48 connects the verified sequel lifecycle; M49 connects manga adaptations.
+Polishing and external/contract work remain unresolved workflows.
 The initial feedback identified Japanese staff names in English mode;
 M40 now supplies provisional display-name readings without changing imported/save
 identity. The owner also reports a
@@ -28,8 +27,9 @@ their execution rules and defaults remain unresolved. See
 M38 implements the supplied title theme, contrasting input caret/selection,
 native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
-Sprite artifact diagnosis, remaining conversations and original meeting animation
-remain open. M40 supplies provisional display-only English staff-name readings;
+M49 restores supported work/burst particles and office bubbles, 20 ms
+conversation reveal/mouth frames and seven ordinary planning discussions.
+Remaining bubble writers, flame artwork and original meeting backdrops remain open. M40 supplies provisional display-only English staff-name readings;
 pronunciation review remains. M41 restores normal-hire conversations; M42–M43
 restore compact development quotes with locally imported hardware pictures.
 M44 corrects the initializer's final secretary portrait selection; secretary
@@ -37,7 +37,8 @@ advice, hiring and automation remain unconnected.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
-M48 enables sequels from Hall of Fame predecessors. Manga remains disabled; the
+M48 enables sequels from Hall of Fame predecessors; M49 enables the 31-title
+manga rights/development/release lifecycle. The
 overlapping tenant strip, other facility
 workflows, occupied artwork and original busy-window toggling remain unresolved.
 See [office click evidence and validation](office-clicks-m39.md).
@@ -51,14 +52,14 @@ See [office click evidence and validation](office-clicks-m39.md).
 | Dismissal | M15 connects source gate/stress clearing and supported office reservation/work cleanup | M17 clears active study on dismissal and retains learned skills; external tasks and runtime comparison remain |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Ordinary work/debugging and checkpoint experience scheduled in M13; M17 connects study and M18 connects six project technologies; M30 establishes the speed technology's eligible-pass lifetime but not its live effect; resolve that effect, top-level stress relief and external jobs; M31 validates saved source progression |
 | Weekly economics | M35 connects date advancement, ordered resumable calendar transactions, annual renewal, scratch-index payroll, hardware news/markets, recalls and saved loan repayments | M36 connects annual exhibition/contest/Beginner-ending/known graduate branches; M37 connects school purchase/closure, rival awards and global records; resolve student growth, remaining payroll scratch writers, borrowing and bankruptcy; see annual-calendar-events.md and calendar-transactions.md |
-| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; M48 connects sequel eligibility, inheritance, automatic checkpoints, shipment and series save/load; polishing and external/contract workflows remain; see core-loop.md and sequel-development.md |
+| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; M48 connects sequel eligibility, inheritance, automatic checkpoints, shipment and series save/load; M49 connects manga rights, fees, normal checkpoints and popularity shipment modifiers; polishing and external/contract workflows remain; see core-loop.md, sequel-development.md and manga-adaptations.md |
 | Events/progression | Module2 periodic body identified; M16 business growth/actions connected | Module2 ordinal 12 start 009E3830, size 10216; separate event eligibility and effects |
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; M16 identifies genre research/member 90 and connects genre unlocks; M17 imports eight technologies and connects purchase/study; M18 connects project effects/stress relief levels 1–2; M33 corrects the technology-only increment and 11/10-pass cadence; M35 connects platform trigger/countdown/retirement and mutable market cells; resolve speed/top-level relief, polishing application and own-hardware progression |
 | Reviews/sales/awards | M14 implements reviews/Hall of Fame/milestones; M19 production budget; M20 weekly sales graph; M21 investigations/recalls | M26 verifies isolated outcomes for both sales-fee negotiations; M36 connects own-company award selection and signed prizes; M37 connects imported rival pool/presentation and sales/global rankings; recover consultation entry costs/timing, bankruptcy and company progression; see reviews-and-events.md, production-budget.md, sales-history.md and consumer-recalls.md |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
-| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; M32 connects employee hit-testing; M37 restores compact inspection, arrow, ability chart and bars; recover remaining right-click/room interactions, meeting/work animations and compare original runtime |
+| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; M32 connects employee hit-testing; M37 restores compact inspection, arrow, ability chart and bars; recover remaining right-click/room interactions, remaining meeting scenes, work flames and bubble writers, and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
-| Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help; M30 corrects image associations and persists language | Verify provisional employee name readings, translate bitmap text through local patches, recover the original setup default locally, and validate Japanese glyph rendering across desktops |
+| Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help; M30 corrects image associations and persists language | M49 reviews readings and supports local corrections, adds planning/rights translations and fourteen local bubble patches; remaining ambiguous readings, two bubble captions and other bitmap text need evidence; recover the original setup default locally and validate Japanese glyphs across desktops |
 | Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 196 public C# checks at M37; M37 passed all four SDK/export jobs with zero UI/core-loop failures; native validation and build downloads are recorded in development-checkpoint.md; private-original reruns and all 27 Python checks now pass | Graphical usability and original Windows behavioral comparison remain |
 
 See [the original/OpenGDS2 comparison](original-comparison.md) for a prioritized
@@ -76,3 +77,13 @@ M48 completes the verified sequel lifecycle, including Hall of Fame eligibility,
 30% carry-over, automatic type/genre inheritance and consumed-parent lineage.
 See [behavior, source quirk and validation](sequel-development.md). Exact sequel
 conversations and original Windows comparison remain open.
+
+
+M49 is locally tested with 233 public C# checks plus four private fixtures, 30
+public Python checks plus twelve original checks, and zero failures in both
+headless Godot suites. Automatic Actions are paused by owner request; no M49
+export or native Windows validation was run. Next conversation targets are
+secretary advice/policies, checkpoint and shipment introductions, graduate
+callers and the timed presenter. These require traced callers and queue behavior,
+not invented reminder schedules. See [conversation scope](conversations.md) and
+[office effect/patch boundaries](office-effects-and-local-patches.md).

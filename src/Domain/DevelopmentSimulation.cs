@@ -60,6 +60,7 @@ public static class DevelopmentSimulation
         if (office.WorkTier is 1 or 2 && office.WorkTicks==16) complete=true;
         if (office.WorkTier==3 && office.WorkTicks>=32)
         {
+            office.BurstDisplayCount=office.BurstCount;
             office.BurstTicks++;
             if (office.BurstCount<50 && office.BurstTicks<=100 &&
                 DevelopmentWorkRules.IncreasesBurstCounter(office.WorkCategory,Stat(office.WorkCategory),office.BurstCount,office.BurstTicks,random.NextDouble()))
@@ -113,18 +114,19 @@ public static class DevelopmentSimulation
                 accuracy=value;
             }
             office.WorkCategory=category;office.WorkTicks=1;office.WorkIdleTicks=0;
-            office.BurstTicks=0;office.BurstCount=0;office.WorkTier=0;
+            office.BurstTicks=0;office.BurstCount=0;office.BurstDisplayCount=0;office.WorkTier=0;
             // Ordinary work sets tier zero at stress 100; debugging has its own branch.
             if (employee.Stress<100)
             {
                 office.WorkTier=(int)DevelopmentWorkRules.Classify(category,Stat(category),inspiration,random.NextDouble(),accuracy);
                 employee.Experience=EmployeeProgressionRules.AccrueExperience(employee.Experience!.Value,3.7,employee.Level!.Value);
+                OfficeVisualRules.StartWork(office,random);
             }
         }
     }
     public static IReadOnlyList<int> PrepareTypeCandidates(GameState state,DevelopmentProjectState project,OriginalCatalog catalog,Random random)
     {
-        if (project.OriginalMode!=0 || project.PendingDecision!=DevelopmentMilestone.SelectType) throw new InvalidOperationException("No pending type selection.");
+        if (project.OriginalMode is not (0 or 2) || project.PendingDecision!=DevelopmentMilestone.SelectType) throw new InvalidOperationException("No pending type selection.");
         if (state.OriginalTypeRosterMap is null) throw new InvalidOperationException("Original roster cells are unknown in this legacy save. Start a new company.");
         if (project.TypeCandidates is null)
         {

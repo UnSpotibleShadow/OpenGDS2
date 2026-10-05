@@ -53,6 +53,22 @@ func await_node(name: String) -> bool:
     check(false, "Timed out waiting for " + name)
     return false
 
+func finish_conversation() -> void:
+    var pages := 0
+    while main.find_child("ConversationWindow",true,false) != null and pages < 12:
+        var message = main.find_child("ConversationMessage",true,false)
+        var accept := InputEventKey.new()
+        accept.keycode = KEY_ENTER
+        accept.pressed = true
+        message.gui_input.emit(accept)
+        await process_frame
+        await process_frame
+        if is_instance_valid(message) and message.is_inside_tree():
+            message.gui_input.emit(accept)
+        await process_frame
+        pages += 1
+    check(main.find_child("ConversationWindow",true,false) == null,"Conversation sequence finishes within its verified page bound")
+
 func _initialize() -> void:
     call_deferred("run")
 
@@ -101,6 +117,7 @@ func run() -> void:
             {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
         "Technologies":[{"SourceIndex":0,"Identifier":0,"Name":"Synthetic Technology","PurchaseFee":50,"InitialOwnershipLevel":0,"RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable158C":[1,2,3],"RawTable1568":[1,2,3]}],
         "RivalCompanies":["Synthetic rival company A","Synthetic rival company B"],
+        "Manga":[{"SourceIndex":0,"Title":"Synthetic Comic","Author":"Synthetic Author","Publisher":"Synthetic Publisher","PopularityDescription":"Synthetic Popularity","Popularity":10,"RightsFee":100}],
         "Genres":[{"SourceIndex":0,"Name":"Synthetic Genre","RawMembers":{"1224":7,"1208":10,"1240":1,"125C":0}}]
     }
     # Genre helper validates its fifteen-column table even for broad audience.
@@ -317,6 +334,8 @@ func run() -> void:
     var quoted_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(quoted_state.State.Money == state.Money and quoted_state.State.DevelopmentProjects.is_empty(),"Opening quote does not spend or create a project")
     await press_node("PlanningMeeting")
+    check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
+    await finish_conversation()
     check(main.find_child("PlanningMeetingWindow",true,false) != null and main.find_child("PlanningQuoteWindow",true,false) == null,"Quote advances to a separate proposal step")
     await press("SAVE_GAME")
     var meeting_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -428,6 +447,8 @@ func run() -> void:
     check(reprinted.State.ReleasedGames[0].WeeklySalesHistory.size() == 13,"Sales history persists all thirteen cells")
     await press("START_GAME_DEVELOPMENT")
     await press_node("PlanningMeeting")
+    check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
+    await finish_conversation()
     main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Room accepts another project")
@@ -1073,6 +1094,8 @@ func run() -> void:
     await press_node("ConfirmSequelPredecessor")
     check(main.find_child("PlanningRoom",true,false).get_selected_id() == 0,"Sequel carries selected development room")
     await press_node("PlanningMeeting")
+    check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
+    await finish_conversation()
     check(main.find_child("PlanningTitle",true,false).text == predecessor.Title + "2","Original series-based sequel title is suggested")
     await press_node("AcceptPlan")
     await press("BACK_TO_OFFICE")
@@ -1144,6 +1167,82 @@ func run() -> void:
     var sequel_sales = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(sequel_sales.State.ReleasedGames[1].UnitsSold > 0 and sequel_sales.State.ReleasedGames[1].Stock < 1000,"Sequel sales consume stock after save/reload")
     check(sequel_sales.State.ReleasedGames[1].NetSalesReceipts == sequel_sales.State.ReleasedGames[1].UnitsSold*2800,"Sequel uses original sales receipts")
+    # Manga adaptation uses the real room selector, rights meeting, quote,
+    # ordinary type/genre checkpoints, shipment/reviews and sales.
+    var manga_fixture = released.duplicate(true)
+    manga_fixture.State.DevelopmentProjects = []
+    manga_fixture.State.ReleasedGames = []
+    manga_fixture.State.Calendar = null
+    manga_fixture.State.CompanyActivityTicks = 0
+    manga_fixture.State.Company.HallOfFameCount = 0
+    manga_fixture.State.Money = 10000000
+    for manga_worker in manga_fixture.State.Employees:
+        manga_worker.Stress = 0
+        manga_worker.Office.WorkTicks = 0
+    write_json("user://saves/slot1.json",manga_fixture)
+    await press("LOAD_GAME")
+    var manga_office = main.find_child("OriginalOfficeBackground",true,false)
+    manga_office.gui_input.emit(room_click)
+    await process_frame
+    await press_node("RoomManga")
+    var manga_table = main.find_child("MangaTitles",true,false)
+    check(manga_table != null and manga_table.get_root().get_child_count() == 1,"Manga selector loads local records")
+    check(manga_table.get_root().get_first_child().get_text(0) == tr("CATALOG_MANGA_TITLE_0"),"Manga title has an English display translation")
+    await press_node("ConfirmManga")
+    check(main.find_child("ConversationMessage",true,false).text == tr("MANGA_MEETING_0").replace("{publisher}",tr("CATALOG_MANGA_PUBLISHER_0")),"Rights meeting begins with publisher introduction")
+    await finish_conversation()
+    await press("SAVE_GAME")
+    var rights_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(rights_preview.State.Money == 10000000 and rights_preview.State.DevelopmentProjects.is_empty(),"Rights conversation has no transaction")
+    await press_node("AgreeMangaRights")
+    await finish_conversation()
+    check(main.find_child("PlanningQuote",true,false).text.contains("130"),"Manga quote includes the rights fee")
+    await press_node("PlanningMeeting")
+    await finish_conversation()
+    main.find_child("PlanningTitle",true,false).text = "Synthetic Manga Game"
+    await press_node("AcceptPlan")
+    await press("SAVE_GAME")
+    var accepted_manga = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(accepted_manga.State.Money == 9999870 and accepted_manga.State.DevelopmentProjects[0].OriginalMode == 2 and accepted_manga.State.DevelopmentProjects[0].MangaSourceIndex == 0,"Manga acceptance records the source and charges the combined fee once")
+    await press("LOAD_GAME")
+    Engine.time_scale = 100
+    if not await await_node("SelectType0"):
+        quit(1)
+        return
+    await press_node("SelectType0")
+    if not await await_node("SelectGenre0"):
+        quit(1)
+        return
+    await press_node("SelectGenre0")
+    var manga_ready := false
+    for frame in range(15000):
+        for release_button in main.find_children("*","Button",true,false):
+            if release_button.text == tr("RELEASE_GAME"):
+                manga_ready = true
+                break
+        if manga_ready:
+            break
+        await process_frame
+    check(manga_ready,"Manga development reaches the original debugging/release checkpoint")
+    if not manga_ready:
+        quit(1)
+        return
+    await press("RELEASE_GAME")
+    main.find_child("ReleaseCopies",true,false).value = 1000
+    await press_node("ConfirmRelease")
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var manga_shipment = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(manga_shipment.State.ReleasedGames[0].OriginalMode == 2 and manga_shipment.State.ReleasedGames[0].MangaSourceIndex == 0 and manga_shipment.State.DevelopmentProjects.is_empty(),"Manga shipment preserves adaptation identity and frees the room")
+    await press("LOAD_GAME")
+    await press_node("AcknowledgeReviews")
+    Engine.time_scale = 100
+    for frame in range(100):
+        await process_frame
+    Engine.time_scale = 1
+    await press("SAVE_GAME")
+    var manga_sales = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(manga_sales.State.ReleasedGames[0].UnitsSold > 0,"Manga release enters the normal sales simulation")
     # Saved modal hire notifications require no original artwork in public CI.
     for variant in range(10):
         var greeting_fixture = {"Format":"OpenGDS2","SchemaVersion":1,"State":state.duplicate(true)}
@@ -1166,7 +1265,11 @@ func run() -> void:
         accept.keycode=KEY_ENTER;accept.pressed=true
         greeting_message.gui_input.emit(accept)
         await process_frame
-        check(main.find_child("ConversationWindow",true,false) == null,"Enter closes the conversation")
+        await process_frame
+        check(main.find_child("ConversationWindow",true,false) != null and greeting_message.visible_characters == expected_greeting.length(),"First Enter reveals the current page")
+        greeting_message.gui_input.emit(accept)
+        await process_frame
+        check(main.find_child("ConversationWindow",true,false) == null,"Second Enter advances the completed page")
         await press("SAVE_GAME")
         var acknowledged = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
         check(acknowledged.State.PendingHireGreeting == null and acknowledged.State.Employees.size() == 1 and acknowledged.State.Money == greeting_before.State.Money,"Acknowledgment does not rehire or charge")

@@ -26,6 +26,7 @@ public sealed class OriginalOfficeRenderer(OfficeSceneData scene, byte[] backgro
         var pixels = (byte[])background.Clone();
         var sprites = OfficePresentationRules.ForState(scene,state);
         sprites = sprites.Concat(state.Employees.Where(x => x.Office is not null).Select(OfficeStaffRules.Sprite));
+        sprites = sprites.Concat(state.Employees.SelectMany(OfficeVisualRules.Sprites));
         foreach (var sprite in sprites.OrderBy(x => x.SortKey))
             OriginalBitmapCompositor.Blit(pixels, width, height, colors, masks, atlasWidth, atlasHeight, sprite);
         return Image.CreateFromData(width, height, false, Image.Format.Rgb8, pixels);

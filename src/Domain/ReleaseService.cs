@@ -33,7 +33,15 @@ public static class ReleaseService
                 project.GameTypeSourceIndex!=predecessor.GameTypeSourceIndex || project.GenreSourceIndex!=predecessor.GenreSourceIndex)
                 return ReleaseResult.NotReady;
         }
-        else if (project.OriginalMode!=0 || project.PredecessorProductIndex.HasValue) return ReleaseResult.NotReady;
+        else if (project.OriginalMode is not (0 or 2) || project.PredecessorProductIndex.HasValue) return ReleaseResult.NotReady;
+        double adaptationModifier=0;
+        if (project.OriginalMode==2)
+        {
+            var manga=catalog.Manga.SingleOrDefault(x=>x.SourceIndex==project.MangaSourceIndex);
+            if (manga is null) return ReleaseResult.NotReady;
+            adaptationModifier=MangaDevelopmentRules.MarketModifier(manga.Popularity);
+        }
+        else if (project.MangaSourceIndex.HasValue) return ReleaseResult.NotReady;
         long cost=checked(UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize)*copies);
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
@@ -41,7 +49,7 @@ public static class ReleaseService
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
-            OriginalMode=project.OriginalMode,PredecessorProductIndex=project.PredecessorProductIndex,
+            OriginalMode=project.OriginalMode,PredecessorProductIndex=project.PredecessorProductIndex,MangaSourceIndex=project.MangaSourceIndex,
             // The original increments the fresh product's counter, not its parent's.
             OriginalSequelCounter=predecessor is null ? 0 : 1,
             SeriesBaseTitle=predecessor is null ? title : predecessor.SeriesBaseTitle ?? predecessor.Title,
@@ -52,7 +60,7 @@ public static class ReleaseService
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,
-            MarketFactor=MarketFactor(state.ReleasedGames.Count,project.Quality,random)
+            MarketFactor=MarketFactor(state.ReleasedGames.Count,project.Quality,random,adaptationModifier)
         };
         ReviewService.Generate(product,catalog,random);
         FinancialRules.Apply(state,-cost);
@@ -92,12 +100,13 @@ public static class ReleaseService
         if (state.ProductionPerformedThisWeek is null || state.CompanyActivityTicks is null) return ReleaseResult.StateUnknown;
         return ReleaseResult.Success;
     }
-    public static double MarketFactor(int productIndex,DevelopmentQuality quality,Random random)
+    public static double MarketFactor(int productIndex,DevelopmentQuality quality,Random random,double adaptationModifier=0)
     {
         DevelopmentWorkRules.ValidateQuality(quality);
         if (productIndex<0) throw new ArgumentOutOfRangeException(nameof(productIndex));
         int roll=random.Next(20);
-        double factor=1+(roll switch {0=>1.5,1 or 2=>.5,3 or 4 or 5=>-.5,_=>0});
+        if (!double.IsFinite(adaptationModifier)) throw new ArgumentOutOfRangeException(nameof(adaptationModifier));
+        double factor=1+adaptationModifier+(roll switch {0=>1.5,1 or 2=>.5,3 or 4 or 5=>-.5,_=>0});
         if (productIndex<2) factor-=.1;
         else
         {
@@ -106,7 +115,7 @@ public static class ReleaseService
             if (quality.Fun>200) {if (random.Next(3)==0) factor+=1.1;}
             else if (quality.Fun>100 && random.Next(2)==0) factor+=.6;
             // The subsequent >150 and >200 branches are unreachable in the source.
-            if (quality.Music>100 && random.Next(10)==1) factor+=.5;
+            if (quality.Graphics>100 && random.Next(10)==1) factor+=.5;
         }
         return factor<0 ? .1 : factor;
     }

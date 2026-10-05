@@ -20,4 +20,7 @@ def verify(data):
     require(0x981674+0x18,'05 02 00 fb eb 5c ff fd b6 01 00') # reveal remaining text
     require(0x981674+0x6C,'28 6c ff 00 00 fd b6 04 00') # clear queue then unload
     require(0x9930BC+0x141,'07 08 00 58 3c 28 5c ff 01 00 fb 9c 4c ff fc 22 07 08 00 fc 3c fc 96 fb eb ec fe 28 3c ff 03 00 fb b4 dc fe')
-    return {"hire_variants":10,"modal_helper":"Module1.62","timed_helper":"Module1.63","text_length_countdown_factor":3}
+    require(0x648EAC,'06 00 54 69 6d 65 72 31 00 0b 03 14 00 00 00') # 20 ms timer property
+    for offset,step in [(0x32,2),(0xCD,4),(0x168,6),(0x203,8),(0x29E,10)]:
+        require(0x998AB0+offset,f'28 4c ff {step:02x} 00') # mouth cycle branches
+    return {"hire_variants":10,"modal_helper":"Module1.62","timed_helper":"Module1.63","text_length_countdown_factor":3,"typing_interval_ms":20}

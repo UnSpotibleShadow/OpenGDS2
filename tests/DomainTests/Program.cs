@@ -12,6 +12,76 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("conversation timer reveals UTF-16 text and restores the four-step mouth cycle",()=>
+{
+    var c=new ConversationRevealState(new string('x',30));
+    int[] expected=[0,0,0,1,1,2,2,1,1,1,1,0];
+    for (int tick=0;tick<expected.Length;tick++) {c.Tick();Check(c.Cursor==tick+1 && c.PortraitFrame==expected[tick]);}
+    Check(!c.Advance() && c.Cursor==30 && !c.Finished);c.Tick();Check(c.Finished && c.Advance());
+    c.Tick();Check(c.PortraitFrame==0 && c.VisibleCharacters==30);
+    c=new("A😀B");c.Tick();Check(c.VisibleCharacters==1);c.Tick();Check(c.VisibleCharacters==1);
+    c.Tick();Check(c.VisibleCharacters==2);c.Tick();Check(c.VisibleCharacters==3);
+});
+Test("meeting dialogue follows all seven profiles and original early-company branches",()=>
+{
+    int[] early=[4,5,4,6,5,5,5],late=[2,3,2,4,3,3,4];
+    for (int profile=0;profile<7;profile++)
+    {
+        Check(DevelopmentFocusRules.DialogueKeys(profile,0).Count()==early[profile]);
+        Check(DevelopmentFocusRules.DialogueKeys(profile,4).Count()==late[profile]);
+        var a=DevelopmentFocusRules.GenerateProposal(new Random(profile));
+        var b=DevelopmentFocusRules.Generate(new Random(profile));Check(a.Focus==b);
+        Check(DevelopmentFocusRules.DialogueKeys(profile,3).First()=="MEETING_INTRO");
+    }
+});
+Test("speech bubble requests persist once, drop replacements and expire after thirty ticks",()=>
+{
+    var s=PlanningState();var e=Worker();s.Employees.Add(e);var o=e.Office!;
+    o.PendingSpeechBubble=10;OfficeVisualRules.TickBubble(o);Check(o.SpeechBubble==10 && o.SpeechBubbleTicks==1 && o.PendingSpeechBubble==0);
+    o.PendingSpeechBubble=15;OfficeVisualRules.TickBubble(o);Check(o.SpeechBubble==10 && o.PendingSpeechBubble==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));o=s.Employees[0].Office!;
+    for (int tick=2;tick<30;tick++) OfficeVisualRules.TickBubble(o);
+    Check(o.SpeechBubble==10 && o.SpeechBubbleTicks==30);OfficeVisualRules.TickBubble(o);Check(o.SpeechBubble==0 && o.SpeechBubbleTicks==0);
+    o.PendingSpeechBubble=17;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("office work particles rise, expand and show the recovered burst counter cells",()=>
+{
+    var e=Worker();var o=e.Office!;o.WorkTier=3;o.WorkCategory=DevelopmentWorkCategory.Graphics;
+    o.WorkTicks=2;var first=OfficeVisualRules.Sprites(e).Single();Check(first.X==193 && first.Y==112 && first.SourceX==182 && first.SourceY==359 && first.Width==5 && first.SortKey==2000);
+    o.WorkTicks=12;Check(OfficeVisualRules.Sprites(e).Single().Y==99);
+    o.WorkTicks=21;var expanded=OfficeVisualRules.Sprites(e).Single();Check(expanded.X==190 && expanded.Y==93 && expanded.SourceX==179 && expanded.SourceY==374 && expanded.Width==12);
+    o.WorkTicks=33;o.BurstCount=27;var number=OfficeVisualRules.Sprites(e).Last();Check(number.SourceX==417 && number.SourceY==310 && number.X==187 && number.Y==94);
+    o.WorkTicks=0;Check(!OfficeVisualRules.Sprites(e).Any());
+    o.PendingSpeechBubble=0;OfficeVisualRules.StartWork(o,new SequenceRandom());Check(o.PendingSpeechBubble==10);
+    o.WorkCategory=DevelopmentWorkCategory.Bugs;OfficeVisualRules.StartWork(o,new SequenceRandom());Check(o.PendingSpeechBubble==15);
+    o.WorkCategory=DevelopmentWorkCategory.Debugging;OfficeVisualRules.StartWork(o,new SequenceRandom(1));Check(o.PendingSpeechBubble==11);
+});
+Test("English bitmap lettering alters only opaque local caption interiors",()=>
+{
+    var colors=Enumerable.Repeat((byte)80,1600*530*3).ToArray();var masks=new byte[colors.Length];
+    var original=(byte[])colors.Clone();var patched=LocalBitmapLetteringRules.PatchOfficeCaptions(colors,masks,1600,530,new Dictionary<int,string>{{1,"TIRED!"},{10,"HEAVE!"}});
+    Check(colors.SequenceEqual(original) && !patched.SequenceEqual(original));
+    for (int pixel=0;pixel<1600*530;pixel++)
+    {
+        int x=pixel%1600,y=pixel/1600;
+        if (x is >=5 and <40 && y is >=369 and <377 || x is >=630 and <676 && y is >=373 and <381) continue;
+        for (int channel=0;channel<3;channel++) Check(patched[pixel*3+channel]==colors[pixel*3+channel]);
+    }
+    var bad=new Dictionary<int,string>{{1,"THIS IS TOO LONG"}};Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchOfficeCaptions(colors,masks,1600,530,bad));
+    masks[(369*1600+5)*3]=255;Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchOfficeCaptions(colors,masks,1600,530,new Dictionary<int,string>{{1,"TIRED!"}}));
+});
+Test("local name-reading corrections require matching saved names and a supported source",()=>
+{
+    var d=new EmployeeDatabase {SourceHash=EmployeeDatabaseImporter.ExpectedHash,Employees=[new() {SourceIndex=0,Name="Synthetic kanji name"}]};
+    var e=new EmployeeState {SourceIndex=0,Name="Synthetic kanji name"};
+    var file=new EmployeeNameReadingFile {SourceHash=d.SourceHash,Readings=[new() {SourceIndex=0,OriginalName=e.Name,EnglishName="Reviewed Reading"}]};
+    var readings=EmployeeNameLocalization.ReadOverrides(System.Text.Json.JsonSerializer.Serialize(file));
+    Check(EmployeeNameLocalization.Display(e,d,true,k=>k,readings)=="Reviewed Reading");
+    Check(EmployeeNameLocalization.Display(e,d,false,k=>k,readings)==e.Name);
+    e=new EmployeeState {SourceIndex=0,Name="Custom name"};Check(EmployeeNameLocalization.Display(e,d,true,k=>k,readings)==e.Name);
+    file.SourceHash="unknown";Throws<InvalidDataException>(()=>EmployeeNameLocalization.ReadOverrides(System.Text.Json.JsonSerializer.Serialize(file)));
+    Check(EmployeeNameLocalization.HasKanaReadingEvidence(16) && !EmployeeNameLocalization.HasKanaReadingEvidence(0));
+});
 Test("community seasons cover all twelve months with winter across New Year",()=>
 {
     MusicSeason[] expected=[MusicSeason.Winter,MusicSeason.Winter,MusicSeason.Spring,MusicSeason.Spring,MusicSeason.Spring,
@@ -1704,11 +1774,11 @@ Test("production unknowns remain unknown and checkpoint modals pause the reset",
     Check(s.CompanyActivityTicks==0 && s.ProductionPerformedThisWeek==false);
     Check(new GameSession().StartNewGame("New","Tester",GameMode.Normal).ProductionPerformedThisWeek==false);
 });
-Test("market-factor branches preserve first-two penalty and unreachable music tiers",()=>
+Test("market-factor branches preserve first-two penalty and unreachable graphics tiers",()=>
 {
     Check(ReleaseService.MarketFactor(0,new(1000,1000,0,1000),new SequenceRandom(0))==2.4);
     Check(ReleaseService.MarketFactor(1,new(),new SequenceRandom(3))==.4);
-    Check(Math.Abs(ReleaseService.MarketFactor(2,new(201,201,0,201),new SequenceRandom(6,0,0,1))-5.1)<1e-12);
+    Check(Math.Abs(ReleaseService.MarketFactor(2,new(201,201,201,0),new SequenceRandom(6,0,0,1))-5.1)<1e-12);
     Check(ReleaseService.MarketFactor(2,new(0,201,0,0),new SequenceRandom(3,1))==0);
 });
 Test("sales formula, audience, recognition, jitter and all price boundaries",()=>
@@ -1824,6 +1894,71 @@ Test("core-loop save rejects corrupt stocks, checkpoints, cells and counters",()
     var e=Worker();s.Employees.Add(e);e.Office!.BurstCount=51;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
 
+(GameState State,OriginalCatalog Catalog) MangaFixture(long money=1000000)
+{
+    var s=PlanningState(money);s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);var c=CoreCatalog();c.Manga=[new() {SourceIndex=0,Title="Synthetic comic",Author="Synthetic author",Publisher="Synthetic publisher",Popularity=10,RightsFee=100}];
+    return (s,c);
+}
+Test("manga rights meeting and quote are read-only; acceptance pays rights exactly once",()=>
+{
+    var(s,c)=MangaFixture();string before=SaveStore.Serialize(s);
+    Check(DevelopmentProjectService.CheckMangaRights(s,c,0)==DevelopmentPlanningResult.Success);
+    Check(DevelopmentProjectService.CheckMangaPlan(s,c,0,0,0,0,out var q)==DevelopmentPlanningResult.Success && q==new DevelopmentQuote(130,400));
+    Check(SaveStore.Serialize(s)==before);
+    Check(DevelopmentProjectService.TryAcceptMangaPlan(s,c,0,0,0,0,"Adaptation",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    var p=s.DevelopmentProjects.Single();Check(p.OriginalMode==2 && p.MangaSourceIndex==0 && p.PredecessorProductIndex is null && p.Quality==new DevelopmentQuality() && p.Recognition==0 && p.DataSize==0);
+    Check(s.Money==999870 && p.TypeCandidates is null && p.RequiredPoints==400);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.DevelopmentProjects.Single().MangaSourceIndex==0);
+    Check(DevelopmentProjectService.TryAcceptMangaPlan(s,c,1,0,0,0,"Second adaptation",p.Focus!)==DevelopmentPlanningResult.Success);
+    Check(s.Money==999740); // The original selector does not consume the title.
+});
+Test("manga quote includes rights, computer and licensing gates and insufficient funds",()=>
+{
+    var(s,c)=MangaFixture(100);
+    Check(DevelopmentProjectService.CheckMangaRights(s,c,0)==DevelopmentPlanningResult.Success);
+    Check(DevelopmentProjectService.CheckMangaPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.InsufficientFunds);
+    string before=SaveStore.Serialize(s);
+    Check(DevelopmentProjectService.TryAcceptMangaPlan(s,c,0,0,0,0,"Adaptation",new(25,25,25,25))==DevelopmentPlanningResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    Check(DevelopmentProjectService.CheckMangaRights(s,c,99)==DevelopmentPlanningResult.MangaUnavailable);
+    s.HardwareLicenses!.Clear();Check(DevelopmentProjectService.CheckMangaPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.LicenseRequired);
+    s.HardwareLicenses.Add(0);c.DevelopmentComputers[0].BitWidth=7;Check(DevelopmentProjectService.CheckMangaPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.ComputerTooSmall);
+});
+Test("manga uses ordinary type and genre choices and can become a sequel parent",()=>
+{
+    var(s,c)=MangaFixture();DevelopmentProjectService.TryAcceptMangaPlan(s,c,0,0,0,0,"Adaptation",new(25,25,25,25));var p=s.DevelopmentProjects[0];
+    p.Progress=p.RequiredPoints*.5;p.PendingDecision=DevelopmentMilestone.SelectType;
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,1,s.OriginalTypeRosterMap!)==DevelopmentSelectionResult.Success);
+    p.Progress=p.RequiredPoints*.81;p.PendingDecision=DevelopmentMilestone.SelectGenre;
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+    p.OriginalStage=3;p.PendingDecision=null;p.Progress=p.RequiredPoints;p.Quality=new(300,300,300,300);
+    Check(ReleaseService.TryRelease(s,p,c,"Adapted game",5800,1,new SequenceRandom(6,0,0,1,0,0,0,0))==ReleaseResult.Success);
+    var g=s.ReleasedGames[0];Check(g.OriginalMode==2 && g.MangaSourceIndex==0 && g.PredecessorProductIndex is null && g.SeriesBaseTitle==g.Title && g.OriginalSequelCounter==0);
+    g.ReviewScores=[8,8,8,8];g.ReviewPending=false;g.HallOfFame=true;
+    Check(SequelDevelopmentRules.Candidates(s).Single()==g);
+    Check(DevelopmentProjectService.TryAcceptSequelPlan(s,c,0,0,0,0,"Adaptation sequel",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    var sequel=s.DevelopmentProjects.Single();Check(sequel.OriginalMode==1 && sequel.MangaSourceIndex is null && sequel.PredecessorProductIndex==0);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].MangaSourceIndex==0);
+});
+Test("manga popularity boundaries apply before the market-factor clamp without extra rolls",()=>
+{
+    int[] popularity=[0,1,2,3,5,6,9,10,14];double[] expected=[-.2,-.2,-.2,.2,.2,.5,.5,.7,.7];
+    for (int i=0;i<popularity.Length;i++)
+    {
+        double modifier=MangaDevelopmentRules.MarketModifier(popularity[i]);Check(modifier==expected[i]);
+        var random=new SequenceRandom(6);Check(Math.Abs(ReleaseService.MarketFactor(0,new(),random,modifier)-(.9+modifier))<1e-12 && random.Calls==1);
+    }
+    // Common novelty penalty makes the pre-modifier factor zero. Applying
+    // -.2 before the clamp gives .1, never a negative market factor.
+    Check(ReleaseService.MarketFactor(2,new(0,201,0,0),new SequenceRandom(3,1),-.2)==.1);
+    Check(ReleaseService.MarketFactor(2,new(0,0,101,0),new SequenceRandom(6,1))==1.5);
+    var musicOnly=new SequenceRandom(6);Check(ReleaseService.MarketFactor(2,new(0,0,0,999),musicOnly)==1 && musicOnly.Calls==1);
+});
+Test("save rejects manga lineage mismatches and missing source references",()=>
+{
+    var(s,c)=MangaFixture();DevelopmentProjectService.TryAcceptMangaPlan(s,c,0,0,0,0,"Adaptation",new(25,25,25,25));var p=s.DevelopmentProjects[0];
+    p.MangaSourceIndex=null;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.MangaSourceIndex=31;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.MangaSourceIndex=0;p.OriginalMode=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.OriginalMode=2;p.PredecessorProductIndex=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 (GameState State,OriginalCatalog Catalog,ReleasedGameState Parent) SequelFixture(long money=10_000_000)
 {
     var state=PlanningState(money);state.Company.HallOfFameCount=1;state.SalesFee1=state.SalesFee2=1500;
@@ -2758,10 +2893,18 @@ if (args.Length == 2)
         Check(state.ReleasedGames.Single().UnitsSold>0 && state.Money>funds);
         Check(SaveStore.Deserialize(SaveStore.Serialize(state)).ReleasedGames.Count==1);
     });
+    Test("optional original manga helper and all 31 initializer records match local extraction",()=>
+    {
+        var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        Check(c.Manga.Count==31 && c.Manga.Select(x=>x.SourceIndex).SequenceEqual(Enumerable.Range(0,31)));
+        Check(c.Manga[0].RightsFee==150000000 && c.Manga[1].RightsFee==100000000 && c.Manga[30].RightsFee==30000000);
+        Check(c.Manga[0].Popularity==8 && c.Manga[1].Popularity==10 && c.Manga[28].Popularity==14);
+        Check(c.Manga.All(x=>!string.IsNullOrWhiteSpace(x.Title) && !string.IsNullOrWhiteSpace(x.Author) && !string.IsNullOrWhiteSpace(x.Publisher)));
+    });
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==11 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==50 && dialogue.SchemaVersion==2 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

@@ -14,6 +14,19 @@ public sealed class OriginalCatalog
     public List<RivalProduct> InitialRivalProducts {get;set;}=[];
     public List<RivalReleaseDefinition> StagedRivalProducts {get;set;}=[];
     public List<string> RivalCompanies {get;set;}=[];
+    public List<MangaDefinition> Manga {get;set;}=[];
+}
+
+/// <summary>Six columns written by Module1 helper 0098128C; loaded locally.</summary>
+public sealed class MangaDefinition
+{
+    public int SourceIndex {get;set;}
+    public string Title {get;set;}=string.Empty;
+    public string Author {get;set;}=string.Empty;
+    public string PopularityDescription {get;set;}=string.Empty;
+    public int Popularity {get;set;}
+    public string Publisher {get;set;}=string.Empty;
+    public long RightsFee {get;set;}
 }
 
 public sealed class GameTypeDefinition

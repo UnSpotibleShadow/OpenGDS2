@@ -23,9 +23,10 @@ save slot 1 under `user://saves/slot1.json`. No save compatibility with the
 original is claimed. Existing game names and nullable unresolved values are
 preserved in the JSON format.
 
-The supplied GitHub Actions workflow runs public Python/C# tests plus Godot
-build and headless import/launch checks. It needs no copyrighted fixture. Local
-original-data parity testing is optional:
+Automatic GitHub Actions runs are paused at the owner's request to conserve
+storage. The retained workflow is manual-only; do not dispatch it without renewed
+authorization. Run builds and tests locally. The workflow's public fixtures need
+no copyrighted files. Local original-data parity testing is optional:
 
 ```sh
 python3 tools/recover_employee_database.py /private/GameDev2DX.exe --out /private/employees.json

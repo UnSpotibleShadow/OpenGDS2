@@ -3,8 +3,49 @@ extends SceneTree
 var main: Node
 var failures := 0
 
+func finish_conversation() -> void:
+    var pages := 0
+    while main.find_child("ConversationWindow",true,false) != null and pages < 12:
+        var message = main.find_child("ConversationMessage",true,false)
+        var accept := InputEventKey.new()
+        accept.keycode = KEY_ENTER
+        accept.pressed = true
+        message.gui_input.emit(accept)
+        await process_frame
+        await process_frame
+        if is_instance_valid(message) and message.is_inside_tree():
+            message.gui_input.emit(accept)
+        await process_frame
+        pages += 1
+    check(main.find_child("ConversationWindow",true,false) == null,"Conversation sequence finishes within its verified page bound")
+
 func _initialize() -> void:
     call_deferred("run")
+
+func check_local_artwork_patch() -> void:
+    var patches := DirAccess.get_directories_at("user://localized-artwork/en")
+    check(patches.size() == 1,"English lettering is generated only in local user data")
+    if patches.size() != 1:
+        return
+    var original := Image.load_from_file("user://original/Graphic/Embedded/OfficeSprites.bmp")
+    var patched := Image.load_from_file("user://localized-artwork/en/%s/Graphic/Embedded/OfficeSprites.png" % patches[0])
+    original.convert(Image.FORMAT_RGB8)
+    patched.convert(Image.FORMAT_RGB8)
+    check(patched.get_size() == original.get_size(),"Local lettering preserves atlas dimensions")
+    var restored := patched.get_data()
+    var source := original.get_data()
+    check(restored != source,"English captions change the local atlas")
+    var regions := [[2,367,41],[2,381,43],[2,395,52],[55,395,51],[516,357,52],[516,372,52],[516,386,52],[569,379,52],[627,357,52],[627,371,52],[627,385,52],[680,357,52],[680,371,52],[680,385,52],[733,385,52],[792,355,52]]
+    for index in range(regions.size()):
+        if index == 12 or index == 13:
+            continue # Unresolved captions are not patched.
+        var region: Array = regions[index]
+        for y in range(region[1]+2,region[1]+10):
+            var first: int = (y*1600+region[0]+3)*3
+            var last: int = first+(region[2]-6)*3
+            for offset in range(first,last):
+                restored[offset] = source[offset]
+    check(restored == source,"Every pixel outside the fourteen caption interiors stays original")
 
 func nodes_of_type(type_name: String, parent: Node = main) -> Array[Node]:
     var found: Array[Node] = []
@@ -94,6 +135,7 @@ func run() -> void:
         check(catalog != null and catalog.DevelopmentComputers.size() == 4, "Computer catalog import")
         check(catalog != null and catalog.Hardware.size() == 11, "Hardware catalog import")
         check(catalog != null and catalog.GameTypes.size() == 51, "Game type catalog import")
+        check(catalog != null and catalog.Manga.size() == 31,"Manga catalog is imported from the original locally")
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
         var office_scene = JSON.parse_string(FileAccess.get_file_as_string("user://original/office.json"))
         var secretary_tiles = office_scene.Sprites.filter(func(sprite): return sprite.Id == 141)
@@ -119,6 +161,7 @@ func run() -> void:
         fields[1].text = "Smoke President"
     await press("CONFIRM")
     await press("NORMAL_MODE")
+    check_local_artwork_patch()
     for name in ["OfficeWindow", "CompanyWindow", "EmployeeWindow", "ProductWindow"]:
         check(main.find_child(name,true,false) != null,"Original desktop window: " + name)
     check(main.find_child("OriginalDesktopWallpaper",true,false) != null,"Imported original desktop wallpaper")
@@ -154,7 +197,10 @@ func run() -> void:
         check(displayed_picture.get_data() == expected_picture.get_data(),"Opening quote picture matches imported source index zero")
 
     await press("PLANNING_MEETING")
+    check(main.find_child("ConversationWindow",true,false) != null,"Planning discussion precedes the proposal")
+    await finish_conversation()
     await press("PLANNING_NEW_PROPOSAL")
+    await finish_conversation()
     var focus_total := 0
     for label in main.find_child("PlanningFocus", true, false).get_children():
         if label.text.ends_with("%"):
@@ -181,10 +227,16 @@ func run() -> void:
                 office_background.gui_input.emit(event)
                 await process_frame
                 check(main.find_child("DevelopmentRoomActions",true,false) != null,"Desk interior opens room action chooser: %d" % room)
-                check(not main.find_child("RoomSequel",true,false).disabled and main.find_child("RoomManga",true,false).disabled,"Sequel chooser is available; unresolved manga stays disabled")
+                check(not main.find_child("RoomSequel",true,false).disabled and not main.find_child("RoomManga",true,false).disabled,"Sequel and verified manga workflows are available")
                 main.find_child("RoomSequel",true,false).pressed.emit()
                 check(main.find_child("SequelSelectionWindow",true,false) != null,"Compact sequel chooser opens")
                 check(main.find_child("ConfirmSequelPredecessor",true,false).disabled,"No Hall of Fame predecessor at opening")
+                await press("CANCEL")
+                main.find_child("RoomManga",true,false).pressed.emit()
+                var manga_rows = main.find_child("MangaTitles",true,false).get_root()
+                check(manga_rows.get_child_count() == 31,"Manga chooser includes all original records")
+                for index in range(31):
+                    check(manga_rows.get_child(index).get_text(0) == tr("CATALOG_MANGA_TITLE_%d" % index),"Manga title uses guarded English translation")
                 await press("CANCEL")
                 main.find_child("RoomOriginalGame",true,false).pressed.emit()
                 await process_frame
@@ -297,7 +349,12 @@ func run() -> void:
                 click.button_index=MOUSE_BUTTON_LEFT;click.pressed=true
                 message.gui_input.emit(click)
                 await process_frame
-            check(main.find_child("ConversationWindow",true,false) == null,"Clicking message dismisses conversation")
+                await process_frame
+                check(main.find_child("ConversationWindow",true,false) != null,"First click reveals the remaining greeting")
+                check(message.visible_characters == -1 or message.visible_characters >= message.text.length(),"Greeting text is completely revealed")
+                message.gui_input.emit(click)
+                await process_frame
+            check(main.find_child("ConversationWindow",true,false) == null,"Second click dismisses the revealed greeting")
             # Exercise the actual Godot clock and compositor, rather than only
             # testing a domain update detached from the running scene.
             await create_timer(4.5).timeout

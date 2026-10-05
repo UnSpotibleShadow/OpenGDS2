@@ -1755,3 +1755,552 @@ msgstr "殿堂入りすると、この作品の続編を開発できます。"
 
 msgid "SEQUEL_SERIES_ENDED"
 msgstr "この作品は殿堂入りしませんでした。このシリーズの続編は開発できません。"
+
+msgid "MANGA_REIMPORT_REQUIRED"
+msgstr "漫画データを読み込むには元のLZHを再インポートしてください。"
+
+msgid "MANGA_RIGHTS_MEETING"
+msgstr "漫画の契約会議"
+
+msgid "AUTHOR"
+msgstr "作者"
+
+msgid "PUBLISHER"
+msgstr "出版社"
+
+msgid "POPULARITY"
+msgstr "人気"
+
+msgid "PLANNING_RESULT_MangaUnavailable"
+msgstr "漫画データがありません。元のLZHを再インポートしてください。"
+
+msgid "MEETING_SECRETARY"
+msgstr ""
+
+msgid "MEETING_INTRO"
+msgstr ""
+
+msgid "MANGA_REPRESENTATIVE"
+msgstr ""
+
+msgid "MANGA_MEETING_0"
+msgstr ""
+
+msgid "MANGA_MEETING_1"
+msgstr ""
+
+msgid "MANGA_MEETING_2"
+msgstr ""
+
+msgid "MANGA_MEETING_3"
+msgstr ""
+
+msgid "MANGA_RIGHTS_QUESTION"
+msgstr ""
+
+msgid "MANGA_NO_MONEY"
+msgstr ""
+
+msgid "MANGA_RIGHTS_APPROVED"
+msgstr ""
+
+msgid "MANGA_BEGIN_DEVELOPMENT"
+msgstr ""
+
+msgid "MANGA_RIGHTS_DECLINED"
+msgstr ""
+
+msgid "MEETING_LINE_0"
+msgstr ""
+
+msgid "MEETING_LINE_1"
+msgstr ""
+
+msgid "MEETING_LINE_2"
+msgstr ""
+
+msgid "MEETING_LINE_3"
+msgstr ""
+
+msgid "MEETING_LINE_4"
+msgstr ""
+
+msgid "MEETING_LINE_5"
+msgstr ""
+
+msgid "MEETING_LINE_6"
+msgstr ""
+
+msgid "MEETING_LINE_7"
+msgstr ""
+
+msgid "MEETING_LINE_8"
+msgstr ""
+
+msgid "MEETING_LINE_9"
+msgstr ""
+
+msgid "MEETING_LINE_10"
+msgstr ""
+
+msgid "MEETING_LINE_11"
+msgstr ""
+
+msgid "MEETING_LINE_12"
+msgstr ""
+
+msgid "MEETING_LINE_13"
+msgstr ""
+
+msgid "MEETING_LINE_14"
+msgstr ""
+
+msgid "MEETING_LINE_15"
+msgstr ""
+
+msgid "MEETING_LINE_16"
+msgstr ""
+
+msgid "MEETING_LINE_17"
+msgstr ""
+
+msgid "MEETING_LINE_18"
+msgstr ""
+
+msgid "MEETING_LINE_19"
+msgstr ""
+
+msgid "MEETING_LINE_20"
+msgstr ""
+
+msgid "MEETING_LINE_21"
+msgstr ""
+
+msgid "MEETING_LINE_22"
+msgstr ""
+
+msgid "MEETING_LINE_23"
+msgstr ""
+
+msgid "MEETING_LINE_24"
+msgstr ""
+
+msgid "MEETING_LINE_25"
+msgstr ""
+
+msgid "MEETING_LINE_26"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_0"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_0"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_0"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_0"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_1"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_1"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_1"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_1"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_2"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_2"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_2"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_2"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_3"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_3"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_3"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_3"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_4"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_4"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_4"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_4"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_5"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_5"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_5"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_5"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_6"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_6"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_6"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_6"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_7"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_7"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_7"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_7"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_8"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_8"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_8"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_8"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_9"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_9"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_9"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_9"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_10"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_10"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_10"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_10"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_11"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_11"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_11"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_11"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_12"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_12"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_12"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_12"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_13"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_13"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_13"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_13"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_14"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_14"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_14"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_14"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_15"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_15"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_15"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_15"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_16"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_16"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_16"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_16"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_17"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_17"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_17"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_17"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_18"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_18"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_18"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_18"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_19"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_19"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_19"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_19"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_20"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_20"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_20"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_20"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_21"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_21"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_21"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_21"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_22"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_22"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_22"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_22"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_23"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_23"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_23"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_23"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_24"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_24"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_24"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_24"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_25"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_25"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_25"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_25"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_26"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_26"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_26"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_26"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_27"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_27"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_27"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_27"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_28"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_28"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_28"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_28"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_29"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_29"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_29"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_29"
+msgstr ""
+
+msgid "CATALOG_MANGA_TITLE_30"
+msgstr ""
+
+msgid "CATALOG_MANGA_AUTHOR_30"
+msgstr ""
+
+msgid "CATALOG_MANGA_POPULARITY_30"
+msgstr ""
+
+msgid "CATALOG_MANGA_PUBLISHER_30"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_1"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_2"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_3"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_4"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_5"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_6"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_7"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_8"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_9"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_10"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_11"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_12"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_15"
+msgstr ""
+
+msgid "BITMAP_BUBBLE_16"
+msgstr ""

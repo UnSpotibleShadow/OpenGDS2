@@ -5,7 +5,7 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M48.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M49.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -15,6 +15,19 @@ milestone announcements, calendar transactions, exhibitions and own-company
 awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
 and persistent global records are implemented. Office progression, own-hardware
 development and remaining weekly economics are unfinished.
+
+M49 adds manga/comic adaptations: choose one of 31 locally imported titles,
+discuss rights, accept the combined quote, then develop, release and sell the
+game. It also restores conversation typing/mouth frames, planning discussions,
+supported work/burst effects and office bubbles. English mode generates fourteen
+caption patches locally from the required original import. Uncertain name
+readings remain provisional and can be corrected locally. Reimport the LZH for
+the new catalog/dialogue. See [adaptations](docs/manga-adaptations.md),
+[conversations](docs/conversations.md) and [local patches](docs/office-effects-and-local-patches.md).
+
+Automatic GitHub Actions are paused at the owner's request. Current checks run
+locally; existing M48 download packages do not include M49 changes. See the
+[validation checkpoint](docs/development-checkpoint.md) and [local build instructions](docs/building.md).
 
 M48 adds sequel development from Hall of Fame predecessors. Open a free desk
 room and choose Sequel; the new project carries 30% of predecessor quality and
@@ -163,8 +176,10 @@ debug or release → Sales → Produce More Copies. Use the lounge for tired sta
 Reopening recruitment rebuilds its five slots. Save/load preserves funds, staff,
 source gates, projects, decisions and released products.
 English translates all imported genre, type, audience, hardware, computer and
-technology labels. Imported character names retain their local Japanese readings;
-bitmap text can use local artwork overrides. Change language under Settings.
+technology labels, plus the adaptation catalog and recovered meeting dialogue.
+English staff readings are provisional; Japanese retains imported names. Office
+bubble captions are patched locally in English, and other bitmap text can use
+local artwork overrides. Change language under Settings.
 Toolbar images have translated tooltips and status-bar help; older imports can
 be refreshed from the LZH to obtain the original icons.
 See [translation coverage and remaining work](docs/localization-and-toolbar.md).
@@ -190,8 +205,9 @@ The C# suite has no Godot or third-party test-framework dependency.
 Python checks at M31, with both packaged desktop core-loop suites passing.
 Optional private fixtures add two C# checks and eight Python checks; their most
 recent local checks predate M31. See the [current continuation checkpoint](docs/development-checkpoint.md).
-The normal SDK build and fixture-free runtime are also tested in GitHub Actions;
-original-fixture checks run locally and do not upload original content.
+Earlier SDK/export checks were tested in GitHub Actions. Automatic runs are now
+paused; M49 validation is local. Original-fixture checks never upload original
+content.
 
 ## Copyright boundary
 

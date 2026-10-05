@@ -54,11 +54,12 @@ public static class SequelDevelopmentRules
     {
         foreach (var product in state.ReleasedGames)
         {
-            if (product.OriginalMode is not (0 or 1) || product.OriginalSequelCounter!=(product.OriginalMode==1 ? 1 : 0) ||
+            if (product.OriginalMode is not (0 or 1 or 2) || product.OriginalSequelCounter!=(product.OriginalMode==1 ? 1 : 0) ||
                 product.SeriesBaseTitle is not null && (string.IsNullOrWhiteSpace(product.SeriesBaseTitle) || product.SeriesBaseTitle.Length>128))
                 throw new InvalidDataException("Invalid series record.");
-            if (product.OriginalMode==0 && (product.PredecessorProductIndex.HasValue || product.SeriesBaseTitle is not null && product.SeriesBaseTitle!=product.Title))
+            if (product.OriginalMode!=1 && (product.PredecessorProductIndex.HasValue || product.SeriesBaseTitle is not null && product.SeriesBaseTitle!=product.Title))
                 throw new InvalidDataException("Original game has a predecessor.");
+            ValidateManga(product.OriginalMode,product.MangaSourceIndex);
             if (product.OriginalMode==1)
             {
                 if (product.PredecessorProductIndex is not int index || index<0 || index>=product.ProductIndex)
@@ -73,7 +74,8 @@ public static class SequelDevelopmentRules
         }
         foreach (var project in state.DevelopmentProjects)
         {
-            if (project.OriginalMode==0 && project.PredecessorProductIndex.HasValue)
+            ValidateManga(project.OriginalMode,project.MangaSourceIndex);
+            if (project.OriginalMode!=1 && project.PredecessorProductIndex.HasValue)
                 throw new InvalidDataException("Original project has a predecessor.");
             if (project.OriginalMode!=1) continue;
             var parent=state.ReleasedGames.SingleOrDefault(x=>x.ProductIndex==project.PredecessorProductIndex);
@@ -85,5 +87,10 @@ public static class SequelDevelopmentRules
                 state.DevelopmentProjects.Count(x=>x.OriginalMode==1 && x.PredecessorProductIndex==project.PredecessorProductIndex)!=1)
                 throw new InvalidDataException("Invalid active sequel lineage.");
         }
+    }
+    private static void ValidateManga(int mode,int? source)
+    {
+        if (mode==2 ? source is null or <0 or >30 : source.HasValue)
+            throw new InvalidDataException("Invalid manga lineage.");
     }
 }

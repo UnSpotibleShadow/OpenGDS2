@@ -28,8 +28,9 @@ public partial class Main
         return card;
     }
     private static DevelopmentPlanningResult CheckPlanning(GameState state,OriginalCatalog catalog,int room,int hardware,int audience,
-        int? predecessor,out DevelopmentQuote quote)
+        int? predecessor,out DevelopmentQuote quote,int? mangaSourceIndex=null)
         =>predecessor is int parent ? DevelopmentProjectService.CheckSequelPlan(state,catalog,room,hardware,audience,parent,out quote)
+            : mangaSourceIndex is int manga ? DevelopmentProjectService.CheckMangaPlan(state,catalog,room,hardware,audience,manga,out quote)
             : DevelopmentProjectService.CheckNewPlan(state,catalog,room,hardware,audience,out quote);
 
     private void ShowSequelSelection(GameState state,int room)
@@ -65,7 +66,7 @@ public partial class Main
         AddAction("CANCEL",()=>ShowDevelopmentRoomActions(state,room));
     }
 
-    private void ShowPlanningPreview(GameState state,int? selectedRoom=null,int? predecessorProductIndex=null)
+    private void ShowPlanningPreview(GameState state,int? selectedRoom=null,int? predecessorProductIndex=null,int? mangaSourceIndex=null)
     {
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog.");
         ClearContent();CompactManagementWindow("PlanningQuoteWindow",new Vector2(430,360),410);
@@ -119,7 +120,7 @@ public partial class Main
         void RefreshQuote()
         {
             if (hardwareId<0 || audienceId<0) {quote.Text=Tr("PLANNING_NO_HARDWARE");meeting.Disabled=true;return;}
-            var result=CheckPlanning(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex,out var value);
+            var result=CheckPlanning(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
             quote.Text=$"{Tr("DEVELOPMENT_POINTS")}\n{value.Points:N0}\n{Tr("PLANNING_COST")}\n¥{value.Cost:N0}";
             bits.Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}";
             picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{hardwareId}.bmp");
@@ -128,43 +129,53 @@ public partial class Main
         hardware.ItemSelected+=()=> {var row=hardware.GetSelected();if (row is not null && state.HardwareLicenses?.Contains(row.GetMetadata(0).AsInt32())==true) hardwareId=row.GetMetadata(0).AsInt32();RefreshQuote();};
         audience.ItemSelected+=()=> {audienceId=audience.GetSelected().GetMetadata(0).AsInt32();RefreshQuote();};
         room.ItemSelected+=_=>RefreshQuote();RefreshQuote();
-        meeting.Pressed+=()=> {if (!meeting.Disabled) ShowPlanningMeeting(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex);};
+        meeting.Pressed+=()=> {if (!meeting.Disabled) ShowPlanningMeeting(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex);};
     }
-    private void ShowPlanningMeeting(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,int? predecessorProductIndex=null)
+    private void ShowPlanningMeeting(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,
+        int? predecessorProductIndex=null,int? mangaSourceIndex=null)
+    {
+        var proposal=DevelopmentFocusRules.GenerateProposal(new Random());
+        string hardware=CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name);
+        string audience=CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name);
+        var pages=DevelopmentFocusRules.DialogueKeys(proposal.Profile,state.ReleasedGames.Count).Select(key=>new ConversationPage(
+            DialogueText("MEETING_SECRETARY"),DialogueText(key).Replace("{hardware}",hardware).Replace("{audience}",audience))).ToList();
+        ShowConversation(Tr("PLANNING_MEETING"),pages,
+            ()=>ShowPlanningProposal(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex,proposal.Focus),
+            ()=>ShowOfficeReconstruction(state));
+    }
+    private void ShowPlanningProposal(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,int? predecessorProductIndex,int? mangaSourceIndex,DevelopmentFocus focus)
     {
         ClearContent();CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,350),410);
         _dialog!.SetTitle(Tr("PLANNING_MEETING"));
-        var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : Tr("NEW_PROJECT_TITLE");
+        var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : mangaSourceIndex is int manga ? MangaText(catalog,manga,"TITLE") : Tr("NEW_PROJECT_TITLE");
         var title=AddField(Tr("GAME_TITLE"),defaultTitle,128);title.Name="PlanningTitle";
         AddHeading(CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),16);
         AddHeading(CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name),16);
         var quote=new Label {Name="PlanningQuote",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(quote);
         var gate=new Label {Name="PlanningGate",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(gate);
         var grid=new GridContainer {Name="PlanningFocus",Columns=2};_content.AddChild(grid);
-        var random=new Random();
-        DevelopmentFocus focus=new(25,25,25,25);
         var start=new Button {Name="AcceptPlan",Text=Tr("START_GAME_DEVELOPMENT"),CustomMinimumSize=new Vector2(0,42)};
         void ShowFocus()
         {
             foreach (Node child in grid.GetChildren()) {grid.RemoveChild(child);child.QueueFree();}
-            focus=DevelopmentFocusRules.Generate(random);
             foreach (var item in new[] {("STAT_FUN",focus.Fun),("STAT_NOVELTY",focus.Novelty),("STAT_GRAPHICS",focus.Graphics),("STAT_MUSIC",focus.Music)})
                 AddMetric(grid,Tr(item.Item1),$"{item.Item2}%");
         }
         void RefreshQuote()
         {
-            var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value);
+            var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
             quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}   {Tr("DEVELOPMENT_POINTS")}: {value.Points}";
             gate.Text=Tr($"PLANNING_RESULT_{result}");
             start.Disabled=result!=DevelopmentPlanningResult.Success || string.IsNullOrWhiteSpace(title.Text);
         }
         title.TextChanged+=_=>RefreshQuote();
         RefreshQuote();ShowFocus();
-        AddAction("PLANNING_NEW_PROPOSAL",ShowFocus);
+        AddAction("PLANNING_NEW_PROPOSAL",()=>ShowPlanningMeeting(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex));
         start.Pressed+=()=>
         {
             var result=predecessorProductIndex is int predecessor
                 ? DevelopmentProjectService.TryAcceptSequelPlan(state,catalog,roomIndex,hardwareId,audienceId,predecessor,title.Text,focus)
+                : mangaSourceIndex is int manga ? DevelopmentProjectService.TryAcceptMangaPlan(state,catalog,roomIndex,hardwareId,audienceId,manga,title.Text,focus)
                 : DevelopmentProjectService.TryAcceptNewPlan(state,catalog,roomIndex,hardwareId,audienceId,title.Text,focus);
             if (result==DevelopmentPlanningResult.Success) ShowProject(state,state.DevelopmentProjects.Single(x=>x.RoomIndex==roomIndex));
             else gate.Text=Tr($"PLANNING_RESULT_{result}");

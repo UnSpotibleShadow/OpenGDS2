@@ -168,7 +168,7 @@ public static class SaveStore
     {
         if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >10 ||
             project.AudienceSourceIndex is <0 or >6 || project.GameTypeSourceIndex is <0 or >50 ||
-            project.GenreSourceIndex is <0 or >17 || project.OriginalMode is not (0 or 1) ||
+            project.GenreSourceIndex is <0 or >17 || project.OriginalMode is not (0 or 1 or 2) ||
             project.OriginalRoomState is not (1 or 2) || project.OriginalStage is <0 or >3 ||
             string.IsNullOrWhiteSpace(project.Title) || project.Title.Length>128 ||
             !double.IsFinite(project.RequiredPoints) || project.RequiredPoints<=0 ||
@@ -210,7 +210,10 @@ public static class SaveStore
             office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
             office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
             office.TrainingIdleTicks>=0 && office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=4 &&
-            office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && Enum.IsDefined(office.WorkCategory) &&
+            office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && office.BurstDisplayCount is not (<0 or >50) && Enum.IsDefined(office.WorkCategory) &&
+            office.PendingSpeechBubble is >=0 and <=16 && office.SpeechBubble is >=0 and <=16 &&
+            office.SpeechBubbleTicks is >=0 and <=OfficeVisualRules.BubbleLifetime &&
+            (office.SpeechBubble>0 || office.SpeechBubbleTicks==0) &&
             office.OffsetY is >= -2 and <= 8 && office.DepthAdjustment is 0 or 2 &&
             (office.Action switch
             {

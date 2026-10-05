@@ -7,7 +7,7 @@ namespace OpenGDS2.Domain;
 public static class OfficeStaffRules
 {
     public const double TickSeconds = 0.040; // Main loop +DCE7..DD0D.
-    private const int TimingFactor = 2;      // Main loop +0000..0005.
+    public const int TimingFactor = 2;      // Main loop +0000..0005.
 
     public static OfficeEmployeeState CreateHire(GameState state, Random random)
     {
@@ -110,6 +110,8 @@ public static class OfficeStaffRules
             if (employee.Stress is double stress) employee.Stress = Math.Max(0, stress - 0.3 / TimingFactor);
             office.ActionTicks++;
         }
+        if (office.MovementState==6 && random.Next(50*TimingFactor)==0)
+            office.PendingSpeechBubble=random.Next(3)==0 ? 5 : 3;
     }
 
     private static void TickDesk(OfficeEmployeeState office, Random random)

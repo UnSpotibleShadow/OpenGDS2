@@ -36,7 +36,7 @@ selection's second roster lookup, selection fees, company-fame/3 addition and
 genre audience-affinity Fun+20 are absent from the sequel branches. The hardware
 and audience quote has the same cost/points for modes 0 and 1. No sequel-only
 market-factor bonus occurs in the shipment branch; the manga mode-2 bonus is a
-separate unsupported path. Technologies and normal work remain unchanged.
+separate path, now implemented in M49. Technologies and normal work remain unchanged.
 
 Selecting or cancelling a predecessor does not spend money or consume it.
 Accepting a plan charges its quote, but only successful shipment consumes the
@@ -69,7 +69,7 @@ Exact original selection-pane layout, checkpoint conversation timing, meeting
 animation, release dialogue and RNG stream equivalence remain unverified or
 unimplemented. Automatic sequel checkpoints do not introduce new decision
 pauses; the port still pauses for the already-supported debugging decision.
-Manga adaptation, polishing and external/contract workflows remain unavailable.
+M49 implements manga adaptations; polishing and external/contract workflows remain unavailable.
 
 ## Validation
 

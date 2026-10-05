@@ -23,6 +23,9 @@ office.json
 saves/
 private-original/
 asset-overrides/
+localized-artwork/
+employee-name-readings.json
+dialogue.json
 
 # Native desktop exports and packaged development builds
 builds/
