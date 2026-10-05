@@ -70,7 +70,7 @@ public partial class Main
             ("SETTINGS", ShowSettings), ("IMPORT_BUTTON", ShowImporter), ("BACK_TO_TITLE", ShowTitleScreen)]);
         Menu(menus, "MENU_COMPANY", [("COMPANY_ACTIVITIES", () => ShowCompanyActivities(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
-            ("TECHNOLOGIES", () => ShowTechnologies(state))]);
+            ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state))]);
         Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
         Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state)),
             ("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state))]);
@@ -199,7 +199,12 @@ public partial class Main
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
         var tenant=OfficeInteractionRules.TenantSlotAt(pixel.X,pixel.Y);
-        image.MouseDefaultCursorShape = employee is null && room is null && tenant is null ? CursorShape.Arrow : CursorShape.PointingHand;
+        bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
+        image.MouseDefaultCursorShape = employee is null && room is null && tenant is null && !secretary ? CursorShape.Arrow : CursorShape.PointingHand;
+        if (secretary && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
+        {
+            image.AcceptEvent();ShowSecretaryAdvice(state);return;
+        }
         if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} && (room is not null || tenant is not null))
         {
             image.AcceptEvent();
@@ -232,7 +237,7 @@ public partial class Main
     {
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (CalendarService.HasPending(current) || current.PendingHireGreeting is not null) &&
+        if (_desktopState is GameState current && (CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {

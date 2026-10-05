@@ -192,6 +192,54 @@ func run() -> void:
     await process_frame
     await press("LOAD_GAME")
     await press_node("TogglePause")
+    # Manual secretary advice: synthetic company cells, no original data.
+    var secretary_office = main.find_child("OriginalOfficeBackground",true,false)
+    check(secretary_office != null,"Office surface exists for secretary click")
+    var secretary_scale = min(secretary_office.size.x/466.0,secretary_office.size.y/290.0)
+    var secretary_offset = (secretary_office.size-Vector2(466,290)*secretary_scale)/2.0
+    var secretary_click := InputEventMouseButton.new()
+    secretary_click.button_index = MOUSE_BUTTON_LEFT
+    secretary_click.pressed = true
+    secretary_click.position = secretary_offset+Vector2(109,92)*secretary_scale
+    secretary_office.gui_input.emit(secretary_click)
+    await process_frame
+    check(main.find_child("SecretaryAdviceWindow",true,false) != null,"Unknown legacy calendar/fees produce an explicit advice notice")
+    await press("BACK_TO_OFFICE")
+    await press_node("ToolbarSAVE_GAME")
+    var before_advice = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var advice_fixture = before_advice.duplicate(true)
+    advice_fixture.State.Month = 2
+    advice_fixture.State.Employees[0].ContractFee = 100
+    advice_fixture.State.Calendar = {"HardwareStage":0,"ShipmentsSinceHardwareTrigger":0,
+        "Hardware":[{"SourceIndex":0,"Availability":1,"LaunchWeeks":0,"RetirementWeeks":0,"Market":40,"GrowthWeeks":0,"GrowthBoost":0}],
+        "Loans":[{"OriginalType":0},{"OriginalType":0},{"OriginalType":0}],
+        "Tenants":[{"OriginalState":0,"Weeks":0},{"OriginalState":0,"Weeks":0}],"OriginalSlots0444":[-1,-1,-1]}
+    write_json("user://saves/slot1.json",advice_fixture)
+    await press("LOAD_GAME")
+    secretary_office = main.find_child("OriginalOfficeBackground",true,false)
+    secretary_office.gui_input.emit(secretary_click)
+    await process_frame
+    check(main.find_child("ConversationWindow",true,false) != null,"Secretary native hit opens compact conversation")
+    check(main.find_child("ConversationMessage",true,false).text == tr("SECRETARY_ADVICE_DevelopGame"),"Idle rooms prompt game development first")
+    await press_node("ToolbarSAVE_GAME")
+    var queued_advice = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(queued_advice.State.PendingSecretaryAdvice.MessageIndex == 0 and queued_advice.State.PendingSecretaryAdvice.Messages.size() >= 3,"Manual advice outcome is saved before reading")
+    check(main.find_child("ToolbarHIRE_EMPLOYEES",true,false).disabled,"Advice blocks other company transactions")
+    await advance_conversation_page()
+    check(main.find_child("ConversationMessage",true,false).text == tr("SECRETARY_ADVICE_ContractsNextMonth"),"February contract reminder follows room advice")
+    await press_node("ToolbarSAVE_GAME")
+    var midway_advice = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(midway_advice.State.PendingSecretaryAdvice.MessageIndex == 1,"Read page advances exactly one saved advice cursor")
+    await press("LOAD_GAME")
+    check(main.find_child("ConversationMessage",true,false).text == tr("SECRETARY_ADVICE_ContractsNextMonth"),"Loading resumes the unread advice page even while paused")
+    await finish_conversation()
+    await press_node("ToolbarSAVE_GAME")
+    var completed_advice = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(completed_advice.State.PendingSecretaryAdvice == null and completed_advice.State.Money == queued_advice.State.Money,"Advice completion clears the queue without charging fees")
+    check(completed_advice.State.CompanyActivityTicks == queued_advice.State.CompanyActivityTicks and completed_advice.State.SalesTicks == queued_advice.State.SalesTicks,"Office and sales clocks stay frozen during advice")
+    check(seen_dialogue.has(tr("SECRETARY_ADVICE_FundsLow")),"Funds assessment ends the advice sequence")
+    write_json("user://saves/slot1.json",before_advice)
+    await press("LOAD_GAME")
     var seasonal_player = main.find_child("MusicPlayer",true,false)
     check(abs(seasonal_player.stream.get_length()-11.0) < 0.01,"April save immediately selects spring music")
     var soundtrack = main.find_child("BackgroundMusic",true,false)

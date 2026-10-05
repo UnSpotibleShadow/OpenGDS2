@@ -20,6 +20,20 @@ def synthetic_pe():
     return data
 
 class PublicTests(unittest.TestCase):
+    def test_secretary_advice_rejects_unknown_source(self):
+        from verify_secretary_advice_evidence import verify as verify_advice
+        with self.assertRaises(ParseError):verify_advice(bytes(synthetic_pe()))
+
+    def test_secretary_advice_translation_coverage(self):
+        import re
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        japanese=set(re.findall(r'^msgid "([^"\n]+)"$',(ROOT/'localization'/'ja.po').read_text(),re.M))
+        messages=['DevelopGame','HotSpring','BuyTechnology','ContractsNextMonth','ContractsThisMonth','Contest','LicenseUrgent','MoreLicenses','AnotherLicense','UpgradeComputer','ExcessStock','FundsLow','FundsContracts','FundsHealthy']
+        for key in ['SECRETARY_ADVICE','SECRETARY_ADVICE_UNKNOWN']+[f'SECRETARY_ADVICE_{message}' for message in messages]:
+            self.assertTrue(entries.get(key),key)
+            self.assertTrue(entries[key].isascii(),key)
+            self.assertIn(key,japanese)
+
     def test_checkpoint_meeting_rejects_unknown_source(self):
         from verify_checkpoint_meeting_evidence import verify as verify_meeting
         with self.assertRaises(ParseError):verify_meeting(bytes(synthetic_pe()))
@@ -138,6 +152,13 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_secretary_advice_anchors(self):
+        from verify_secretary_advice_evidence import verify as verify_advice
+        self.assertEqual(verify_advice(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),
+            {"messages":14,"hot_spring_funds":120000000,"technology_funds":[150000000,250000000,350000000],
+             "computer_bits":[8,16,32],"computer_stages":[1,3,5],"stock_threshold":200000,
+             "low_funds_max":50000000,"manual_only":True})
+
     def test_checkpoint_meeting_anchors(self):
         from verify_checkpoint_meeting_evidence import verify as verify_meeting
         self.assertEqual(verify_meeting(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),

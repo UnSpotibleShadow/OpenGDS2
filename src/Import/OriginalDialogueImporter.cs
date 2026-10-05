@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=4,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=5,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
@@ -62,6 +62,8 @@ public static class OriginalDialogueImporter
         Meeting(CheckpointMeetingMessage.GenreMatch,pe.String(betaPool,0x2F)+"{genre}"+pe.String(betaPool,0x31)+"{type}"+pe.String(betaPool,0x33));
         Meeting(CheckpointMeetingMessage.GenreChosen,pe.String(betaPool,0x2F)+"{genre}"+pe.String(betaPool,0x31)+"{type}"+pe.String(betaPool,0x36));
         Meeting(CheckpointMeetingMessage.FunBonus,pe.String(betaPool,0x34));
+        foreach (var message in Enum.GetValues<SecretaryAdviceMessage>())
+            result.Entries.Add(SecretaryAdviceRules.MessageKey(message),pe.String(0x60DF28,0x5B+(int)message));
         // Serialized fGMKaiwa Timer1 interval property: 20 milliseconds.
         pe.Require(0x248EAC,6,0,(byte)'T',(byte)'i',(byte)'m',(byte)'e',(byte)'r',(byte)'1',0,0x0B,3,20,0,0,0);
         return result;

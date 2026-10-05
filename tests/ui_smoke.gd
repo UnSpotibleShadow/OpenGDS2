@@ -140,6 +140,10 @@ func run() -> void:
         await process_frame
         check(FileAccess.file_exists("user://original/employees.json"), "Database import")
         check(FileAccess.file_exists("user://original/dialogue.json"),"Original Japanese dialogue imported locally")
+        var secretary_dialogue = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
+        check(secretary_dialogue.SchemaVersion == 5 and secretary_dialogue.Entries.size() == 106,"Advice text is imported only into the local cache")
+        for message in ["DevelopGame","HotSpring","BuyTechnology","ContractsNextMonth","ContractsThisMonth","Contest","LicenseUrgent","MoreLicenses","AnotherLicense","UpgradeComputer","ExcessStock","FundsLow","FundsContracts","FundsHealthy"]:
+            check(not secretary_dialogue.Entries["SECRETARY_ADVICE_"+message].is_empty(),"Original secretary message extracted locally: "+message)
         var catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
         check(catalog != null and catalog.Genres.size() == 18, "Genre catalog import")
         check(catalog != null and catalog.Audiences.size() == 7, "Audience catalog import")
@@ -181,6 +185,26 @@ func run() -> void:
         var expected = Image.load_from_file("user://original/Graphic/Embedded/Toolbar%d.bmp" % mapping[1])
         var displayed = main.find_child("Toolbar" + mapping[0],true,false).icon.get_image()
         check(displayed.get_data() == expected.get_data(),"Toolbar action uses the intended local bitmap: " + mapping[0])
+    await press("SETTINGS")
+    await press("日本語")
+    await press("SECRETARY_ADVICE")
+    var local_advice = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
+    check(main.find_child("ConversationMessage",true,false).text == local_advice.Entries.SECRETARY_ADVICE_DevelopGame,"Japanese advice uses locally imported source text")
+    var secretary_portrait = main.find_child("ConversationPortrait",true,false)
+    check(secretary_portrait.visible and secretary_portrait.texture != null,"Fresh campaign advice has a portrait")
+    if secretary_portrait.texture != null:
+        var secretary_pixels = secretary_portrait.texture.get_image()
+        secretary_pixels.convert(Image.FORMAT_RGB8)
+        var matched_secretary_frame := false
+        for frame_suffix in ["",".1",".2"]:
+            var expected_secretary = Image.load_from_file("user://original/Graphic/Human/Human2%s.bmp" % frame_suffix)
+            expected_secretary.convert(Image.FORMAT_RGB8)
+            matched_secretary_frame = matched_secretary_frame or secretary_pixels.get_data() == expected_secretary.get_data()
+        check(matched_secretary_frame,"Secretary conversation uses the verified record-1 portrait and mouth frames")
+    await finish_conversation()
+    await press("SETTINGS")
+    await press("English")
+    await press("BACK_TO_OFFICE")
     check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
     await press("DEVELOPMENT_PLANNING")
     check(main.find_child("PlanningHardware", true, false).get_root().get_child_count() == 3, "Planning hardware availability")

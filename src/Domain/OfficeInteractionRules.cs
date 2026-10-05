@@ -3,6 +3,9 @@ namespace OpenGDS2.Domain;
 /// <summary>fMainVisual 009C66BC +0758..08CB: select the first workspace hit.</summary>
 public static class OfficeInteractionRules
 {
+    /// <summary>009C66BC +071F..0741: inclusive secretary advice hit.</summary>
+    public static bool SecretaryAt(double x,double y)=>double.IsFinite(x) && double.IsFinite(y) &&
+        x>=104 && x<=114 && y>=80 && y<=104;
     /// <summary>009C66BC +0223..0268 and +0470..04B5, native office pixels.</summary>
     public static int? DevelopmentRoomAt(double x, double y)
     {

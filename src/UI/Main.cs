@@ -283,6 +283,7 @@ public partial class Main : Control
             PersistPendingRankings(state);
         }
         if (ShowPendingHireGreeting(state)) return;
+        if (ShowPendingSecretaryAdvice(state)) return;
         if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
         var pendingProject=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x));
@@ -509,6 +510,7 @@ public partial class Main : Control
         var volume = new HSlider { Name = "MusicVolume", MinValue = 0, MaxValue = 100, Step = 1, Value = _music.VolumePercent };
         volume.ValueChanged += value => { _music.SetVolume((float)value); volumeLabel.Text = $"{Tr("MUSIC_VOLUME")}: {value:N0}%"; }; _content.AddChild(volume);
         AddAction("NEXT_MUSIC_TRACK", _music.NextTrack, _music.TrackCount > 0);
+        if (_desktopState is GameState adviceState) AddAction("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(adviceState),DesktopActionEnabled("SECRETARY_ADVICE"));
         if (_desktopState is GameState state) AddAction("BACK_TO_OFFICE", () => ShowOfficeReconstruction(state));
         AddAction("BACK_TO_TITLE", ShowTitleScreen);
     }
