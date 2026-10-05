@@ -9,6 +9,17 @@ fixtures), 25 public Python checks and both Godot suites pass. The local editor'
 SDK discovery remains unavailable in this sandbox; full SDK builds and desktop
 exports are verified separately by the published CI workflow.
 
+All four jobs passed in [run 37274798922](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37274798922): 204 public domain checks, 25 public Python checks
+(10 private fixtures skipped), a clean SDK build and zero editor or packaged
+Linux/Windows release/debug core-loop failures. PR #40 merged as
+`5088ef5e26ea8fc2ba915f1caac888f8f25597b4`; tested head
+`2d38d432426fd23a52a4895dd7ef75d05cc05f59`.
+
+[Download the M46 debug packages](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37274798922/artifacts/11329208861).
+The artifact contains both platform ZIPs, expires 2026-10-19 and has digest
+`sha256:b95a8d5047bce0e8d963a81326796e314739b3e8c5c58f9050acc81ead723f38`.
+
+
 ## Previous M45 validation
 
 M45 adds genuine Windows/Linux x86_64 debug exports with managed game symbols,
