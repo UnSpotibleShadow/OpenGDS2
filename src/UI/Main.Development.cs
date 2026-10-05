@@ -141,7 +141,7 @@ public partial class Main
             DialogueText("MEETING_SECRETARY"),DialogueText(key).Replace("{hardware}",hardware).Replace("{audience}",audience))).ToList();
         ShowConversation(Tr("PLANNING_MEETING"),pages,
             ()=>ShowPlanningProposal(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex,proposal.Focus),
-            ()=>ShowOfficeReconstruction(state));
+            ()=>ShowOfficeReconstruction(state),OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"));
     }
     private void ShowPlanningProposal(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,int? predecessorProductIndex,int? mangaSourceIndex,DevelopmentFocus focus)
     {

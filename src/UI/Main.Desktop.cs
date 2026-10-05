@@ -34,6 +34,7 @@ public partial class Main
 
     private void DestroyDesktop()
     {
+        CloseConversationScene();
         CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
@@ -351,6 +352,7 @@ public partial class Main
 
     private void CloseDesktopDialog()
     {
+        _conversationReveal=null;_conversationElapsed=0;
         if (_dialog is null) return;
         _workspace!.RemoveChild(_dialog); _dialog.QueueFree(); _dialog = null;
     }

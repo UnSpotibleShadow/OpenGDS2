@@ -12,6 +12,7 @@ public partial class Main
     private TextureRect? _conversationPortrait;
     private int? _conversationPortraitId;
     private int _conversationPortraitFrame=-1;
+    private DesktopWindow? _conversationScene;
     private sealed record ConversationPage(string Speaker,string Text,int? PortraitId=null);
 
     private string DialogueText(string key)
@@ -37,13 +38,20 @@ public partial class Main
         _conversationPortraitFrame=_conversationReveal.PortraitFrame;
         _conversationPortrait!.Texture=OriginalAssetStore.LoadEmployeePortrait(_conversationPortraitId,_conversationPortraitFrame);
     }
-    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null)
+    private void CloseConversationScene()
     {
+        if (_conversationScene is null) return;
+        _conversationScene.GetParent()?.RemoveChild(_conversationScene);
+        _conversationScene.QueueFree();_conversationScene=null;
+    }
+    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null)
+    {
+        CloseConversationScene();
         if (pages.Count==0) {completed();return;}
         int pageIndex=0;
         void ShowPage()
         {
-            ClearContent();
+            ClearContent(keepConversationScene:true);
             CompactManagementWindow("ConversationWindow",new Vector2(330,142),314);
             _content.AddThemeConstantOverride("separation",0);
             _dialog!.SetTitle(heading);
@@ -74,7 +82,7 @@ public partial class Main
                 if (!_conversationReveal.Advance()) {RefreshConversation();return;}
                 _conversationReveal=null;
                 if (++pageIndex<pages.Count) ShowPage();
-                else { _toolbarHelp=string.Empty;completed(); }
+                else { CloseConversationScene();_toolbarHelp=string.Empty;completed(); }
             }
             void Input(InputEvent input)
             {
@@ -84,7 +92,23 @@ public partial class Main
             portrait.GuiInput+=Input;name.GuiInput+=Input;message.GuiInput+=Input;
             // Planning is a reversible proposal. Closing cancels it; a persisted
             // hire greeting is acknowledged only after its page has been read.
-            _dialog.CloseRequested=cancelled ?? Advance;
+            void Close()
+            {
+                if (cancelled is null) {Advance();return;}
+                CloseConversationScene();_conversationReveal=null;cancelled();
+            }
+            _dialog.CloseRequested=Close;
+            if (scene is not null && _conversationScene is null && _workspace is not null)
+            {
+                _conversationScene=new DesktopWindow {Name="PlanningDiscussionScene"};_workspace.AddChild(_conversationScene);
+                _conversationScene.Initialize(heading,_dialog.Position-new Vector2(270,0),new Vector2(262,190),false);
+                _conversationScene.FindChild("MinimizeWindow",true,false)?.QueueFree();
+                _conversationScene.CloseRequested=Close;
+                _conversationScene.Body.AddChild(new TextureRect {Name="PlanningDiscussionPicture",Texture=scene,
+                    CustomMinimumSize=new Vector2(256,160),TextureFilter=TextureFilterEnum.Nearest,
+                    ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepCentered});
+                _dialog.MoveToFront();
+            }
             message.GrabFocus();_toolbarHelp=Tr("CONVERSATION_DISMISS_HELP");RefreshDesktop();
         }
         ShowPage();

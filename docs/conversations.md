@@ -1,4 +1,4 @@
-# Conversation reconstruction — M49
+# Conversation reconstruction — M49/M50
 
 Normal hire greetings, ordinary planning discussions and manga rights meetings
 now share the compact portrait/name-strip/message window. Portraits and Japanese
@@ -51,8 +51,8 @@ the supported executable hash; older hire-only imports still support hiring.
 
 This is partial conversation restoration. Secretary advice/hiring/automation,
 checkpoint and shipment introductions, graduate-hire callers, remaining event
-speakers and the automatic timed presenter require further tracing. The original
-meeting illustration and automatic queue/window sequencing are not yet rendered.
+speakers and the automatic timed presenter require further tracing. M50 restores the original planning illustration; other meeting scenes and the
+automatic timed queue/window sequencing remain unresolved.
 
 Module1.46 has a December/weeks ≤3 contest reminder (`009B15F0 +0430..04A6`)
 and February/March renewal advice. Its invocation schedule and policy state are
@@ -66,3 +66,29 @@ Domain tests cover reveal/click/mouth transitions, Unicode, all seven meeting
 branches and persisted hires. Headless Godot checks cover save/reload and modal
 clock blocking, multiple discussions, proposal cancellation and the manga loop.
 Original Windows focus/timer behavior and graphical comparison remain untested.
+
+
+## M50 planning illustration and cancellation
+
+The ordinary planning form loads MDIForm1.ImageFormG[0] through getter `032C`
+(`009A6DDC +00A0..00CB`). Control metadata identifies ImageFormG as member 13;
+the serialized array record at file offset `18B188` is a 256×160 BMP, preceded
+by its checked control name/index. The importer writes it only to the user's
+`original/Graphic/Embedded/PlanningMeeting.bmp`. No illustration is published.
+
+A separate classic child window shows that original image at native size beside
+the compact conversation. It remains present across discussion pages, then closes
+before the proposal. Window placement and reversible close behavior are authored
+Godot presentation; original desktop positioning/focus parity is not claimed.
+Older caches lacking the image still allow discussion; reimport restores it.
+Local dimension-preserving artwork overrides apply through the existing loader.
+Other source meeting modes use different images and are not inferred from this
+one mapping.
+
+Cancelling through either window, loading or changing screens removes the scene
+and stops the typing timer before its controls are removed. This fixes a stale
+control reference found during the presentation pass. Private headless UI checks
+compare the actual texture with the local import, cancel during typing, wait
+through multiple timer intervals, verify no fee/project was created, then run a
+fresh complete discussion/proposal. The fixture-free core loop still works
+without the private illustration.

@@ -29,7 +29,8 @@ native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
 M49 restores supported work/burst particles and office bubbles, 20 ms
 conversation reveal/mouth frames and seven ordinary planning discussions.
-Remaining bubble writers, flame artwork and original meeting backdrops remain open. M40 supplies provisional display-only English staff-name readings;
+Remaining bubble writers, flame artwork and other meeting illustrations remain open; M50 imports and displays the ordinary
+planning illustration beside its conversation. M40 supplies provisional display-only English staff-name readings;
 pronunciation review remains. M41 restores normal-hire conversations; M42–M43
 restore compact development quotes with locally imported hardware pictures.
 M44 corrects the initializer's final secretary portrait selection; secretary
@@ -87,3 +88,9 @@ secretary advice/policies, checkpoint and shipment introductions, graduate
 callers and the timed presenter. These require traced callers and queue behavior,
 not invented reminder schedules. See [conversation scope](conversations.md) and
 [office effect/patch boundaries](office-effects-and-local-patches.md).
+
+
+M50 restores the ordinary planning illustration from ImageFormG[0] and fixes
+cancellation during typing. Both headless Godot suites pass locally; Actions
+remain paused. Other meeting modes, automatic event conversations and source
+window-position/focus parity still need separate mapping.

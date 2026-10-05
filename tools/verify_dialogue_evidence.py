@@ -23,4 +23,6 @@ def verify(data):
     require(0x648EAC,'06 00 54 69 6d 65 72 31 00 0b 03 14 00 00 00') # 20 ms timer property
     for offset,step in [(0x32,2),(0xCD,4),(0x168,6),(0x203,8),(0x29E,10)]:
         require(0x998AB0+offset,f'28 4c ff {step:02x} 00') # mouth cycle branches
+    require(0x9A6DDC+0xA0,'04 48 ff f4 00 05 00 00 24 01 00 0f 2c 03') # MDI ImageFormG[0] getter
+    require(0x58B16C,'49 6d 61 67 65 46 6f 72 6d 47 00 18 01 00 00') # serialized array identity/index
     return {"hire_variants":10,"modal_helper":"Module1.62","timed_helper":"Module1.63","text_length_countdown_factor":3,"typing_interval_ms":20}

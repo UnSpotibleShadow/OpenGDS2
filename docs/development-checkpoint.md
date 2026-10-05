@@ -1,4 +1,18 @@
-# Development checkpoint — M49, 2026-10-05
+# Development checkpoint — M50, 2026-10-05
+
+M50 imports the verified 256×160 planning illustration locally and displays it
+in a separate classic window throughout the discussion. Finishing, cancelling,
+loading or changing screens removes it. Conversation cancellation now also stops
+the reveal timer before its controls are removed. See
+[illustration evidence and cancellation tests](conversations.md#m50-planning-illustration-and-cancellation).
+
+Local direct C# compilation and all 237 domain checks pass (four private). All
+42 Python checks pass with the local original fixture (30 public, twelve private).
+Headless Godot original-asset UI and fixture-free core-loop suites report zero
+failures. The root project launches with the current compiled assembly. Automatic
+Actions remain paused; no new Windows/Linux export or CI run was started.
+
+## Previous M49 validation
 
 M49 enables 31 locally imported manga/comic adaptations through publisher rights,
 combined planning cost, ordinary development, release, reviews and sales. It
@@ -23,6 +37,10 @@ authorization. M49 has no new CI run or Windows/Linux export artifact. These
 results are local C# compilation and Linux headless scene tests; current clean
 SDK/export/native Windows verification remains outstanding. The M48 package
 links below are historical and do not include M49 changes.
+
+M49 merged in [PR #43](https://github.com/UnSpotibleShadow/OpenGDS2/pull/43),
+commit `b6a72f1d058430b789747630917e62e05b98398a`; locally tested source head
+`d8b2092e59dc8b845b6cebec100a5b01291bd05c`.
 
 ## Previous M48 validation
 
