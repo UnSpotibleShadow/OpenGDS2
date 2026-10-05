@@ -5,7 +5,7 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M37.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M48.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -15,6 +15,13 @@ milestone announcements, calendar transactions, exhibitions and own-company
 awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
 and persistent global records are implemented. Office progression, own-hardware
 development and remaining weekly economics are unfinished.
+
+M48 adds sequel development from Hall of Fame predecessors. Open a free desk
+room and choose Sequel; the new project carries 30% of predecessor quality and
+recognition (rounded down), then inherits its type and genre automatically.
+Shipment consumes the predecessor, and the child must earn Hall of Fame reviews
+to continue the series. Save/load preserves the lineage and the original counter
+quirk. See [sequel evidence and limitations](docs/sequel-development.md).
 
 M37 adds school purchase/closure, imported rival releases and sales, actual rival
 award winners and the six earliest-achievement records. It also restores compact

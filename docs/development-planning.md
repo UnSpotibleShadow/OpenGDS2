@@ -111,9 +111,9 @@ the planning meeting rather than charging immediately. Acceptance is a separate
 invented development timer.
 
 The planning form (`0099BA80`) also contains sequel carry-over arithmetic,
-project initialization and two-room state. Those paths are traced privately but
-are not implemented until field meanings and scheduling are verified. Source
-trace dumps, original strings and copied assets are excluded from the source archive.
+project initialization and two-room state. M13 connects ordinary project state,
+and M48 connects the verified sequel branch. Source trace dumps, original
+strings and copied assets are excluded from the source archive.
 
 ## M48 sequel continuation
 

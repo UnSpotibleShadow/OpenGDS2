@@ -38,8 +38,9 @@ the work engine's room-state fields; their meanings must not be conflated.
   enters the existing verified own-game planner with the clicked room retained;
   the room dropdown is hidden on this contextual path. Toolbar/menu planning
   remains available with its room selector.
-- Sequel and manga entries are displayed but disabled with an unresolved-behavior
-  tooltip. They are not aliases for ordinary new-game development.
+- M48 connects Sequel to Hall of Fame predecessor selection and the verified
+  sequel lifecycle; see [source evidence](sequel-development.md). Manga remains
+  disabled with an unresolved-behavior tooltip.
 - Clicking a supported active own-game room opens its existing project screen.
   Original window visibility toggling and own-hardware room forms are not yet
   reproduced.

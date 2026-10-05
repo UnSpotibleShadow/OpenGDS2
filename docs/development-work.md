@@ -42,10 +42,10 @@ is 100. These are ordinary development focus weights, not review scores.
 New-project acceptance, fGMKikakusyo 0099BA80 +0025..03BC, charges the planning
 quote and initializes room state 1, points, zero progress, four zero quality fields,
 zero bugs, recognition and data size, hardware/audience selection and stage 0.
-Room indices are 0 and 1. The API models the already-licensed, mode-0 branch;
-licensing conversations and room availability scheduling remain
-separate. A modern project label is metadata, not a recovered original title-entry
-stage. The project API is not exposed as a playable simulation.
+Room indices are 0 and 1. The API models already-licensed original-game and M48 sequel branches;
+licensing conversations and room availability scheduling remain separate. A modern project label is metadata, not a recovered original title-entry
+stage. M13 connects this API to playable ordinary development; M48 extends that loop
+with automatic sequel inheritance.
 
 ## Ordinary work
 

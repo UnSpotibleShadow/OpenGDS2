@@ -10,8 +10,19 @@ unavailable; exact conversations and original Windows parity remain open.
 Local direct C# compilation and 225 domain checks pass (three private original
 fixtures). All 28 public Python checks and 11 opt-in original checks pass.
 Headless Godot original-asset UI and synthetic core-loop suites pass, including
-the sequel lifecycle across save/reload. Full SDK/native package verification is
-pending the M48 CI run.
+the sequel lifecycle across save/reload. All four jobs passed in [run 37286978229](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37286978229):
+222 public C# checks, 28 public Python checks (11 private checks skipped), a clean
+SDK build, and zero editor or packaged Linux/Windows release/debug core-loop
+failures. PR #42 merged as `0dbffe49cc00a7a2631cefe5a17e45e6352b2e8b`; tested head
+`64aa38f7cb480ce6d5578d04539b2f59116c7434`. The root workspace also launches
+headlessly with the latest compiled assembly.
+
+[Download the M48 debug packages](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37286978229/artifacts/11335300598).
+The artifact includes both platform ZIPs, expires 2026-10-19, and has digest
+`sha256:4e259f18a2f653e838cd2812f90efcaf96291bf4ae0257d1dbd6c812861c6d13`.
+[Release packages](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37286978229/artifacts/11334881626)
+passed the same native core-loop checks. All packages still require local import
+of the original distribution for normal play.
 
 ## Previous M47 validation
 
