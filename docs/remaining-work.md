@@ -20,8 +20,9 @@ identity. The owner also reports a
 nearly invisible typing caret; input contrast belongs in the scaling/theme pass.
 The readable original screenshots also establish screen-layout references for
 licenses, activities, technology/computer purchase, bank, employee arrival and
-sales rankings. Secretary automation policies now have visible option evidence;
-their execution rules and defaults remain unresolved. See
+sales rankings. M54 connects secretary hiring, production/rest policies and their
+verified consumers. Salary/renewal callers, original timed presentation and exact
+form fidelity remain unresolved. See
 [the screenshot analysis and acceptance checks](user-feedback-2026-10-04.md).
 
 M38 implements the supplied title theme, contrasting input caret/selection,
@@ -33,8 +34,8 @@ Remaining bubble writers, flame artwork and other meeting illustrations remain o
 planning illustration beside its conversation. M40 supplies provisional display-only English staff-name readings;
 pronunciation review remains. M41 restores normal-hire conversations; M42–M43
 restore compact development quotes with locally imported hardware pictures.
-M44 corrects the initializer's final secretary portrait selection; secretary
-M53 connects manual advice; hiring and automation remain unconnected.
+M44 corrects the initializer's final secretary portrait selection. M53 connects
+manual advice; M54 adds paid replacement, named captions and automation policies.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
@@ -83,8 +84,8 @@ conversations and original Windows comparison remain open.
 M49 is locally tested with 233 public C# checks plus four private fixtures, 30
 public Python checks plus twelve original checks, and zero failures in both
 headless Godot suites. Automatic Actions are paused by owner request; no M49
-export or native Windows validation was run. Next conversation targets are
-secretary advice/policies, remaining checkpoint presentation, graduate
+export or native Windows validation was run. M49 identified secretary/checkpoint
+conversations subsequently connected in M51–M54. Remaining targets are graduate
 callers and the timed presenter. These require traced callers and queue behavior,
 not invented reminder schedules. See [conversation scope](conversations.md) and
 [office effect/patch boundaries](office-effects-and-local-patches.md).
@@ -99,8 +100,8 @@ M51 connects the three checkpoint introductions and shipment commentary before
 reviews, using the existing market draws and modern saved message cursors.
 Local validation passes 246 C# checks, 45 Python checks and both headless Godot
 suites; Actions remain paused. At M51, detailed checkpoint meetings were still
-open; M52 connects their discussion/confirmation flow. Secretary advice/policies,
-graduate/event callers and the timed presenter remain open.
+open; M52 connects their discussion/confirmation flow. M53–M54 connect secretary
+advice and policies. Graduate/event callers and the timed presenter remain open.
 Shipment's optional summary reads the next unused product slot; original-save
 dirty-slot behavior is unresolved and is not replaced with an invented remark.
 See [caller evidence and save boundaries](conversations.md#m51-development-and-shipment-conversations).
@@ -117,8 +118,8 @@ M53 connects manual secretary advice, its fourteen original conditional messages
 English/Japanese presentation, opening portrait and resumable saved queue. Local
 validation passes 271 C# checks (267 public/four private), 51 Python checks
 (36 public/fifteen private) and both headless Godot suites. Secretary hiring,
-contracts and automation policies, actual secretary name captions, event speakers
-and the automatic timed presenter remain open. Actions stay paused. See
+contracts, policies and name captions were open at M53 and are connected in M54.
+Event speakers and the automatic timed presenter remain open. Actions stay paused. See
 [the source conditions and compatibility boundaries](secretary-advice.md).
 
 
