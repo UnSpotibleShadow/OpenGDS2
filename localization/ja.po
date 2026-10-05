@@ -2483,3 +2483,114 @@ msgstr ""
 
 msgid "SECRETARY_ADVICE_FundsHealthy"
 msgstr ""
+
+msgid "HIRE_SECRETARY"
+msgstr "秘書の雇用"
+
+msgid "SECRETARY_POLICIES"
+msgstr "秘書の設定"
+
+msgid "SECRETARY_RANK"
+msgstr "ランク"
+
+msgid "SECRETARY_CATALOG_REQUIRED"
+msgstr "元のLZHを再インポートしてください。現在の秘書が不明なセーブでは交代できません。"
+
+msgid "SECRETARY_HIRE_UNAVAILABLE"
+msgstr "契約金が不足しているか、会話が進行中です。"
+
+msgid "SECRETARY_HIRE_FEE_HELP"
+msgstr "契約金を支払い、秘書を交代します。"
+
+msgid "SECRETARY_HIRE_StateUnknown"
+msgstr "秘書または会社の情報が不明です。"
+
+msgid "SECRETARY_HIRE_AlreadyEmployed"
+msgstr "すでに雇用している秘書です。"
+
+msgid "SECRETARY_HIRE_InsufficientFunds"
+msgstr "契約金が不足しています。"
+
+msgid "SECRETARY_HIRE_EventPending"
+msgstr "進行中の会話を終えてください。"
+
+msgid "SECRETARY_POLICIES_UNKNOWN"
+msgstr "このセーブには設定がありません。三つの設定を選択してください。"
+
+msgid "SECRETARY_BREAK_ENTRY"
+msgstr "休憩開始"
+
+msgid "SECRETARY_BREAK_RETURN"
+msgstr "仕事に戻る"
+
+msgid "SECRETARY_POLICY_Production_0"
+msgstr "所持金3億円以上"
+
+msgid "SECRETARY_POLICY_Production_1"
+msgstr "所持金1億円以上"
+
+msgid "SECRETARY_POLICY_Production_2"
+msgstr "手動"
+
+msgid "SECRETARY_POLICY_Break_0"
+msgstr "自由"
+
+msgid "SECRETARY_POLICY_Break_1"
+msgstr "ストレス100"
+
+msgid "SECRETARY_POLICY_Break_2"
+msgstr "ストレス80"
+
+msgid "SECRETARY_POLICY_Break_3"
+msgstr "ストレス60"
+
+msgid "SECRETARY_POLICY_Return_0"
+msgstr "ストレス40"
+
+msgid "SECRETARY_POLICY_Return_1"
+msgstr "ストレス20"
+
+msgid "SECRETARY_POLICY_Return_2"
+msgstr "ストレス0"
+
+msgid "SECRETARY_FAREWELL"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_GREETING"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_NAME_0"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_NAME_1"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_NAME_2"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_NAME_3"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_NAME_4"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_DESCRIPTION_0"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_DESCRIPTION_1"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_DESCRIPTION_2"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_DESCRIPTION_3"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "SECRETARY_DESCRIPTION_4"
+msgstr "ローカルデータを再インポートしてください。"
+
+msgid "ASSIGNMENT_RESULT_RestRequired"
+msgstr "設定したストレス値を超えています。社員を休ませてください。"
+
+msgid "SECRETARY_NAMED"
+msgstr "ローカルデータを再インポートしてください。"

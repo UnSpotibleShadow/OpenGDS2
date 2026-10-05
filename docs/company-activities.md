@@ -18,7 +18,7 @@ results are bilingual. Imported genre names remain local original data.
 | Same +0252..03F4 | Genre research: 2+floor(Rnd×3), research capped at 100; detect crossed genre thresholds |
 | Same +0406..0565 | Production: floor(Rnd×12)=1 gives 17+floor(Rnd×8), otherwise 4+floor(Rnd×4); no 100 cap |
 | Same +0569..0573 | Subtract the shared activity cost once |
-| Module2 00A0283C +0098..0351 | At phase ≥80×2, an unused budget automatically expands production if Normal funds ≥300m or Beginner funds ≥100m; week routine called at phase ≥100×2 |
+| Module2 00A0283C +0098..0351 | At phase ≥80×2, an unused budget reads secretary policy 08D0: 0 at funds ≥300m, 1 at ≥100m, 2 manual; week routine called at phase ≥100×2 (M54 corrects the earlier mode attribution) |
 | Weekly routine 009DB4F4 +000B..0010 | Reset member B0 =0 |
 
 Company member 90 (A110AC) is now identified as **genre research**, rather than
@@ -57,3 +57,7 @@ save/load, genre threshold crossings and subsequent project recognition. The
 synthetic Godot UI completes development/release/sales, reviews, all milestones,
 dismissal, all three business actions and budget/save restoration with zero
 failures. All 17 Python checks pass with private original evidence anchors.
+
+M54 connects editable production/rest policies and replaces the earlier mode-based
+automatic threshold. Old unknown policies do not auto-expand until selected. See
+[secretary management](secretary-management.md).

@@ -146,3 +146,15 @@ The serialized designer blocks distinguish two similarly named forms:
 The hiring form directly exposes the PC game's employee stat labels: level, fun, novelty, accuracy,
 graphics, music, development speed, inspiration and contract fee. See `docs/milestone-4.md` and the
 reproducible output under `generated/vb6/`.
+
+## M54 secretary management
+
+Seven-argument Module1.26 records feed secretary recruitment; fGMHisyoK charges
+a contract once, presents old farewell, updates current index/office crop and
+presents the new greeting. fGMHisyoSet stores production/break/return globals.
+Main-loop policy consumers prove 300m/100m/manual production, 100/80/60 or
+voluntary rest, and 40/20/0 return. This corrects M16's mode-based threshold
+attribution. Salary remains a display column with no recurring debit proven.
+See [procedure anchors, persistence model and unresolved behavior](secretary-management.md)
+and `tools/verify_secretary_management_evidence.py`. Private full traces and
+original names/biographies remain outside the repository.

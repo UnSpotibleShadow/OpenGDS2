@@ -18,6 +18,144 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+OriginalCatalog SecretaryCatalog()=>new() {Secretaries=Enumerable.Range(0,5).Select(i=>new SecretaryDefinition
+    {SourceIndex=i,Name=$"Test secretary {i}",RankCode=Math.Min(i,3),ContractFee=100+i,AdvertisedSalary=10+i,
+     PortraitId=SecretaryAdviceRules.PortraitId(i)!.Value,Description=$"Authored biography {i}"}).ToList()};
+Test("secretary replacement charges once and changes identity between persisted conversations",()=>
+{
+    var s=new GameState {SecretarySourceIndex=1,Money=1000,Company=new() {Name="Synthetic company",PresidentName="Tester",WeeklyNet=3,MonthlyNet=4,YearlyNet=5}};
+    var c=SecretaryCatalog();Check(SecretaryManagementRules.TryHire(s,c,2)==SecretaryHireResult.Success);
+    Check(s.Money==898 && s.Company.WeeklyNet==-99 && s.Company.MonthlyNet==-98 && s.Company.YearlyNet==-97);
+    Check(s.SecretarySourceIndex==1 && s.PendingSecretaryReplacement!.Phase==SecretaryReplacementPhase.Farewell);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(SecretaryManagementRules.TryHire(s,c,3)==SecretaryHireResult.EventPending && s.Money==898);
+    Check(SecretaryManagementRules.Acknowledge(s));Check(s.SecretarySourceIndex==2 && s.PendingSecretaryReplacement!.Phase==SecretaryReplacementPhase.Greeting);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Money==898 && SecretaryManagementRules.Acknowledge(s));
+    Check(s.PendingSecretaryReplacement is null && !SecretaryManagementRules.Acknowledge(s) && s.SecretarySourceIndex==2);
+    Check(SecretaryManagementRules.TryHire(s,c,1)==SecretaryHireResult.Success && s.Money==797);
+});
+Test("secretary hiring rejects unknown catalogs identities insufficient funds and current secretary without mutation",()=>
+{
+    var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},SecretarySourceIndex=1,Money=102};var c=SecretaryCatalog();
+    Check(SecretaryManagementRules.CheckHire(s,c,1)==SecretaryHireResult.AlreadyEmployed);
+    Check(SecretaryManagementRules.TryHire(s,c,3)==SecretaryHireResult.InsufficientFunds && s.Money==102 && s.PendingSecretaryReplacement is null);
+    c.Secretaries.RemoveAt(4);Check(SecretaryManagementRules.TryHire(s,c,2)==SecretaryHireResult.StateUnknown);
+    c=SecretaryCatalog();s.SecretarySourceIndex=null;Check(SecretaryManagementRules.TryHire(s,c,2)==SecretaryHireResult.StateUnknown);
+    s.SecretarySourceIndex=1;s.PendingHireGreeting=new();Check(SecretaryManagementRules.TryHire(s,c,2)==SecretaryHireResult.EventPending);
+    Throws<ArgumentOutOfRangeException>(()=>SecretaryManagementRules.TryHire(s,c,5));
+});
+Test("pending secretary replacement pauses simulation recruitment advice and policy mutations",()=>
+{
+    var(s,c)=AdviceFixture();s.SecretarySourceIndex=1;c.Secretaries=SecretaryCatalog().Secretaries;
+    Check(SecretaryManagementRules.TryHire(s,c,2)==SecretaryHireResult.Success);
+    var session=new GameSession(new SequenceRandom());session.Restore(s);long? money=s.Money;int? ticks=s.CompanyActivityTicks;
+    session.TickOffice(c);Check(s.Money==money && s.CompanyActivityTicks==ticks);
+    Throws<InvalidOperationException>(()=>session.OpenRecruitment());Check(session.Hire(Candidate(0,100))==HireResult.ConversationPending);
+    Check(session.AskSecretary(c)==SecretaryAdviceResult.EventPending && !SecretaryPolicyRules.TrySet(s,new()));
+});
+Test("invalid replacement phases identities and overlapping events are rejected by saves",()=>
+{
+    Action<GameState>[] changes=[s=>s.SecretarySourceIndex=2,s=>s.PendingSecretaryReplacement!.NextSourceIndex=1,
+        s=>s.PendingSecretaryReplacement!.Phase=(SecretaryReplacementPhase)9,s=>s.PendingSecretaryReplacement!.NextSourceIndex=5,
+        s=>s.PendingSecretaryAdvice=new() {Messages=[SecretaryAdviceMessage.FundsHealthy]}];
+    foreach(var change in changes)
+    {
+        var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},SecretarySourceIndex=1,Money=1000};SecretaryManagementRules.TryHire(s,SecretaryCatalog(),2);
+        change(s);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    }
+});
+Test("secretary transaction arithmetic fails before charging or queueing",()=>
+{
+    var s=new GameState {SecretarySourceIndex=1,Money=1000,Company=new() {Name="Synthetic company",PresidentName="Tester",WeeklyNet=long.MinValue}};
+    Throws<OverflowException>(()=>SecretaryManagementRules.TryHire(s,SecretaryCatalog(),2));
+    Check(s.Money==1000 && s.SecretarySourceIndex==1 && s.PendingSecretaryReplacement is null);
+});
+Test("secretary production policy overrides difficulty and manual or unknown policy consumes no random draws",()=>
+{
+    foreach (var mode in Enum.GetValues<GameMode>())
+    foreach (var policy in new SecretaryPolicyState?[]{null,new() {Production=ProductionPolicy.Manual},new() {Production=ProductionPolicy.Funds100Million},new()})
+    {
+        var s=new GameSession().StartNewGame("Policy","Tester",mode);s.Money=150000000;s.SecretaryPolicies=policy;s.CompanyActivityTicks=159;
+        bool expands=policy?.Production==ProductionPolicy.Funds100Million;
+        var rng=expands ? new SequenceRandom(0,0) : new SequenceRandom();CompanyActivityService.Tick(s,rng);
+        Check(s.Money==(expands ? 145000000 : 150000000) && rng.Calls==(expands ? 2 : 0));
+    }
+});
+Test("new imported policies use verified break defaults and retain existing production selection",()=>
+{
+    var c=SecretaryCatalog();c.SourceHash=EmployeeDatabaseImporter.ExpectedHash;
+    var session=new GameSession();var s=session.StartNewGame("Policies","Tester",GameMode.Beginner,null,c);
+    Check(s.SecretaryPolicies!.Production==ProductionPolicy.Funds300Million && s.SecretaryPolicies.Break==BreakPolicy.Stress80 && s.SecretaryPolicies.Return==ReturnPolicy.Stress0);
+    Check(SecretaryPolicyRules.TrySet(s,new() {Production=ProductionPolicy.Manual,Break=BreakPolicy.Voluntary,Return=ReturnPolicy.Stress40}));
+    var next=session.StartNewGame("Next","Tester",GameMode.Normal,null,c);Check(next.SecretaryPolicies!.Production==ProductionPolicy.Manual && next.SecretaryPolicies.Break==BreakPolicy.Stress80);
+});
+Test("automatic stress thresholds are inclusive and voluntary never routes staff",()=>
+{
+    foreach (var policy in Enum.GetValues<BreakPolicy>())
+    {
+        int threshold=SecretaryPolicyRules.BreakThreshold(policy) ?? 100;
+        foreach (double stress in new[]{threshold-0.001,(double)threshold})
+        {
+            var e=Worker();e.Office!.AutomaticBreak=false;e.Office.BeforeAutomaticBreakAction=0;e.Stress=stress;
+            var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},Employees=[e],SecretaryPolicies=new() {Break=policy}};
+            bool enters=policy!=BreakPolicy.Voluntary && stress>=threshold;
+            var rng=enters ? new SequenceRandom(0) : new SequenceRandom();SecretaryPolicyRules.TickEmployee(s,e,rng);
+            Check(e.Office.AutomaticBreak==enters && e.Office.Action==(enters ? 18 : 6) && rng.Calls==(enters ? 1 : 0));
+            if(enters) Check(e.Office.BeforeAutomaticBreakAction==6 && e.Office.LoungeSeat==0);
+        }
+    }
+});
+Test("automatic returns use 40 20 or 0 stress and resume the remembered chair",()=>
+{
+    foreach(var policy in Enum.GetValues<ReturnPolicy>())
+    {
+        int threshold=SecretaryPolicyRules.ReturnThreshold(policy);
+        var e=Worker();e.Office!.AutomaticBreak=false;e.Stress=80;
+        var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},Employees=[e],SecretaryPolicies=new() {Return=policy}};
+        SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom(0));e.Stress=threshold+.001;
+        SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office.AutomaticBreak==true && e.Office.Action==18);
+        e.Stress=threshold;s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];
+        SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office!.AutomaticBreak==false && e.Office!.Action==6 && e.Office!.MovementState==3 && e.Office!.LoungeSeat is null);
+    }
+});
+Test("full lounges mark the automatic attempt once without retrying or stealing another chair",()=>
+{
+    var e=Worker();e.Office!.AutomaticBreak=false;e.Stress=80;
+    var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},Employees=[e],SecretaryPolicies=new()};
+    for (int seat=0;seat<12;seat++) s.Employees.Add(new() {Name=$"Synthetic lounge {seat}",Office=new() {SlotIndex=seat+1,LoungeSeat=seat,Action=18+seat/4}});
+    SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office.AutomaticBreak==true && e.Office.Action==6);
+    SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office.Action==6);
+    e.Stress=0;SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office.AutomaticBreak==false && e.Office.Action==6);
+});
+Test("an occupied former desk is left occupied when returning and unknown legacy rest fields remain inert",()=>
+{
+    var e=Worker();e.Office!.AutomaticBreak=false;e.Stress=80;
+    var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},Employees=[e],SecretaryPolicies=new()};SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom(0));
+    s.Employees.Add(new() {Name="Synthetic occupant",Office=new() {Action=6}});e.Stress=0;SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());
+    Check(e.Office.Action==18 && e.Office.AutomaticBreak==false);
+    e.Office.AutomaticBreak=null;e.Stress=100;SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom());Check(e.Office.AutomaticBreak is null);
+});
+Test("manual assignment respects the entry stress threshold and clears automatic return intent",()=>
+{
+    var e=Worker();e.Office!.AutomaticBreak=false;e.Stress=80;var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},Employees=[e],SecretaryPolicies=new()};
+    SecretaryPolicyRules.TickEmployee(s,e,new SequenceRandom(0));e.Stress=80.001;
+    Check(OfficeAssignmentService.TryAssignDesk(s,e,7)==OfficeAssignmentResult.RestRequired && e.Office.AutomaticBreak==true);
+    e.Stress=80;Check(OfficeAssignmentService.TryAssignDesk(s,e,7)==OfficeAssignmentResult.Success && e.Office.AutomaticBreak==false);
+    e.Stress=100;s.SecretaryPolicies.Break=BreakPolicy.Voluntary;
+    Check(OfficeAssignmentService.TryAssignDesk(s,e,8)==OfficeAssignmentResult.Success);
+});
+Test("policy validation and save omission preserve unknown projections",()=>
+{
+    var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"}};Check(SaveStore.Deserialize(SaveStore.Serialize(s)).SecretaryPolicies is null);
+    s.SecretaryPolicies=new() {Break=(BreakPolicy)8};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.SecretaryPolicies=null;s.Employees=[Worker()];s.Employees[0].Office!.AutomaticBreak=true;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("office secretary sprite follows the active identity and changes only its source crop",()=>
+{
+    var scene=new OfficeSceneData {Sprites=[new(141,101,79,200,32,16,32,26)]};var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"},SecretarySourceIndex=4};
+    var sprite=OfficePresentationRules.ForState(scene,s).Single();Check(sprite.SourceX==808 && sprite.X==101 && sprite.Y==79 && sprite.SourceY==32);
+});
+
 (GameState State,OriginalCatalog Catalog) AdviceFixture(long money=150_000_000)
 {
     var (s,c)=CalendarFixture(new(3,5,1),money);
@@ -1960,12 +2098,12 @@ Test("company activity failures and legacy clocks remain atomic and unknown",()=
     s.CompanyActivityTicks=200;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     Throws<ArgumentOutOfRangeException>(()=>CompanyActivityService.TryPerform(s,(CompanyActivity)99,new SequenceRandom()));
 });
-Test("business budget resets at two hundred ticks and automatic expansion respects mode thresholds",()=>
+Test("business budget resets at two hundred ticks and automatic expansion respects explicit secretary thresholds",()=>
 {
     foreach (var (mode,funds,expands) in new[]{(GameMode.Normal,299999999L,false),(GameMode.Normal,300000000L,true),
         (GameMode.Beginner,99999999L,false),(GameMode.Beginner,100000000L,true)})
     {
-        var s=new GameSession().StartNewGame("Synthetic","Tester",mode);s.Money=funds;s.CompanyActivityTicks=158;
+        var s=new GameSession().StartNewGame("Synthetic","Tester",mode);s.Money=funds;s.CompanyActivityTicks=158;s.SecretaryPolicies=new() {Production=mode==GameMode.Beginner ? ProductionPolicy.Funds100Million : ProductionPolicy.Funds300Million};
         CompanyActivityService.Tick(s,new SequenceRandom());Check(s.Company.ProductionCapacity==50 && s.CompanyActivityTicks==159);
         CompanyActivityService.Tick(s,expands ? new SequenceRandom(0,0) : new SequenceRandom());
         Check(s.CompanyActivityTicks==160 && s.Company.ProductionCapacity==(expands ? 54 : 50) && s.Money==(expands ? funds-5000000 : funds));
@@ -3241,10 +3379,19 @@ if (args.Length == 2)
         Check(c.Manga[0].Popularity==8 && c.Manga[1].Popularity==10 && c.Manga[28].Popularity==14);
         Check(c.Manga.All(x=>!string.IsNullOrWhiteSpace(x.Title) && !string.IsNullOrWhiteSpace(x.Author) && !string.IsNullOrWhiteSpace(x.Publisher)));
     });
+    Test("optional original secretary definitions recover local names biographies rank salary fee and portrait",()=>
+    {
+        var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));Check(SecretaryManagementRules.HasCatalog(c));
+        Check(c.Secretaries.Select(x=>x.ContractFee).SequenceEqual(new long[]{200000000,200000000,100000000,5000000,2000000}));
+        Check(c.Secretaries.Select(x=>x.AdvertisedSalary).SequenceEqual(new long[]{2000000,2000000,1000000,400000,200000}));
+        Check(c.Secretaries.Select(x=>x.Rank).SequenceEqual(new[]{"S","S","A","B","C"}));
+        Check(c.Secretaries.Select(x=>x.PortraitId).SequenceEqual(new[]{1,2,4,5,6}));
+        var d=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));Check(d.Entries["SECRETARY_GREETING"].Contains("{name}") && !string.IsNullOrWhiteSpace(d.Entries["SECRETARY_FAREWELL"]));
+    });
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==106 && dialogue.SchemaVersion==5 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==109 && dialogue.SchemaVersion==6 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

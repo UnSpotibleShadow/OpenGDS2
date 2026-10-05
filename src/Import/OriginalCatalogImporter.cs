@@ -182,6 +182,24 @@ public static class OriginalCatalogImporter
                 InitialOwnershipLevel=ownership,PurchaseFee=fee,RequiredTrainingWork=numeric.GetRange(0,3),
                 ExperienceCosts=numeric.GetRange(3,3),RawTable158C=numeric.GetRange(6,3),RawTable1568=numeric.GetRange(9,3)});
         }
+        // Module1.26: seven arguments -> name/rank/contract/salary/portrait/description.
+        for (int index=0;index<5;index++)
+        {
+            int pos=pe.Offset(start+0x250B+index*0x4E);
+            pe.Require(pos,0x3A,0x4C,0xFE);
+            string description=pe.String(pool,pe.U16(pos+3));
+            pe.Require(pos+5,0x4E,0x3C,0xFE,0x04,0x3C,0xFE);pos+=11;
+            int portrait=pe.Literal16(ref pos,0xFE5C);
+            long salary=pe.Literal32(ref pos,0xFE7C);
+            long fee=pe.Literal32(ref pos,0xFEAC);
+            int rank=pe.Literal16(ref pos,0xFEBC);
+            pe.Require(pos,0x3A,0x6C,0xFF);
+            string name=pe.String(pool,pe.U16(pos+3));
+            pe.Require(pos+5,0x4E,0xCC,0xFE,0x04,0xCC,0xFE,0x04,0x1C,0xFE,0x0A,0xFF,0,0x1C,0);
+            result.Secretaries.Add(new() {SourceIndex=index,Name=name,RankCode=rank,ContractFee=fee,
+                AdvertisedSalary=salary,PortraitId=portrait,Description=description});
+        }
+        if (!SecretaryManagementRules.HasCatalog(result)) throw new InvalidDataException("Incomplete secretary catalog.");
         CompetitionCatalogImporter.Extract(pe,result);
         // 31 fixed-width calls to 0060ECA8, whose thunk points to the
         // code-info for Module1 helper 20 (0098128C).

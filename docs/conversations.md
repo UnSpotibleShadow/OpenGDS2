@@ -236,3 +236,13 @@ or running office/sales/calendar ticks. Recommendations do not perform or unlock
 purchases. See [exact conditions, queue order, source mappings and remaining
 presentation limits](secretary-advice.md). Secretary recruitment/policies, actual
 name captions, event speakers and automatic timed presentation remain unresolved.
+
+## M54: secretary replacement and named captions
+
+Secretary replacement charges before a modal farewell, changes the identity and
+office tile before the modal greeting, and persists both phases. Advice and
+replacement use the current secretary's locally imported Japanese name or
+provisional English reading. Original generic window captions and named strips
+are distinct. The local dialogue cache is now schema 6, 109 entries. Automatic
+timed dismissal, original focus and exact placement remain unresolved. See
+[secretary management](secretary-management.md).

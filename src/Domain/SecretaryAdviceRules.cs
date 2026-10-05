@@ -27,7 +27,7 @@ public static class SecretaryAdviceRules
     {
         ArgumentNullException.ThrowIfNull(state);ArgumentNullException.ThrowIfNull(random);
         if (state.PendingSecretaryAdvice is not null) return SecretaryAdviceResult.Success;
-        if (state.PendingHireGreeting is not null || CalendarService.HasPending(state) ||
+        if (state.PendingSecretaryReplacement is not null || state.PendingHireGreeting is not null || CalendarService.HasPending(state) ||
             state.DevelopmentProjects.Any(p=>p.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(p)) ||
             state.ReleasedGames.Any(p=>p.ReviewPending) || RecallService.HasPending(state) || SalesMilestoneService.HasPending(state))
             return SecretaryAdviceResult.EventPending;

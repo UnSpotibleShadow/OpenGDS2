@@ -20,6 +20,23 @@ def synthetic_pe():
     return data
 
 class PublicTests(unittest.TestCase):
+    def test_secretary_management_rejects_unknown_source(self):
+        from verify_secretary_management_evidence import verify as verify_secretary
+        with self.assertRaises(ParseError):verify_secretary(bytes(synthetic_pe()))
+
+    def test_secretary_management_translation_coverage(self):
+        import re
+        english=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        japanese=set(re.findall(r'^msgid "([^"\n]+)"$',(ROOT/'localization'/'ja.po').read_text(),re.M))
+        keys=['HIRE_SECRETARY','SECRETARY_POLICIES','SECRETARY_FAREWELL','SECRETARY_GREETING','ASSIGNMENT_RESULT_RestRequired']
+        keys += [f'SECRETARY_NAME_{i}' for i in range(5)]+[f'SECRETARY_DESCRIPTION_{i}' for i in range(5)]
+        keys += [f'SECRETARY_POLICY_{kind}_{i}' for kind,count in [('Production',3),('Break',4),('Return',3)] for i in range(count)]
+        for key in keys:
+            self.assertTrue(english.get(key),key)
+            self.assertTrue(english[key].isascii(),key)
+            self.assertIn(key,japanese)
+        self.assertIn('{name}',english['SECRETARY_GREETING'])
+
     def test_secretary_advice_rejects_unknown_source(self):
         from verify_secretary_advice_evidence import verify as verify_advice
         with self.assertRaises(ParseError):verify_advice(bytes(synthetic_pe()))
@@ -152,6 +169,14 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_secretary_management_anchors(self):
+        from verify_secretary_management_evidence import verify as verify_secretary
+        result=verify_secretary(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())
+        self.assertEqual(result['records'],5)
+        self.assertEqual(result['replacement_order'],['charge','farewell','identity','greeting'])
+        self.assertEqual(result['entry_thresholds'],[None,100,80,60])
+        self.assertEqual(result['return_thresholds'],[40,20,0])
+
     def test_secretary_advice_anchors(self):
         from verify_secretary_advice_evidence import verify as verify_advice
         self.assertEqual(verify_advice(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),

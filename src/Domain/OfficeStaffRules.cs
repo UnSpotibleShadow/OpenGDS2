@@ -14,7 +14,7 @@ public static class OfficeStaffRules
         var occupiedSlots = state.Employees.Where(x => x.Office is not null).Select(x => x.Office!.SlotIndex).ToHashSet();
         int slot = 0;
         while (occupiedSlots.Contains(slot)) slot++;
-        var office = new OfficeEmployeeState { SlotIndex = slot, MovementState = 0 };
+        var office = new OfficeEmployeeState { SlotIndex = slot, MovementState = 0, AutomaticBreak=false, BeforeAutomaticBreakAction=0 };
         var occupiedSeats = state.Employees.Where(x => x.Office?.LoungeSeat is not null)
             .Select(x => x.Office!.LoungeSeat!.Value).ToHashSet();
         if (occupiedSeats.Count == 12) return office;

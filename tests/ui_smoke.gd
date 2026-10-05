@@ -141,7 +141,7 @@ func run() -> void:
         check(FileAccess.file_exists("user://original/employees.json"), "Database import")
         check(FileAccess.file_exists("user://original/dialogue.json"),"Original Japanese dialogue imported locally")
         var secretary_dialogue = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
-        check(secretary_dialogue.SchemaVersion == 5 and secretary_dialogue.Entries.size() == 106,"Advice text is imported only into the local cache")
+        check(secretary_dialogue.SchemaVersion == 6 and secretary_dialogue.Entries.size() == 109,"Advice text is imported only into the local cache")
         for message in ["DevelopGame","HotSpring","BuyTechnology","ContractsNextMonth","ContractsThisMonth","Contest","LicenseUrgent","MoreLicenses","AnotherLicense","UpgradeComputer","ExcessStock","FundsLow","FundsContracts","FundsHealthy"]:
             check(not secretary_dialogue.Entries["SECRETARY_ADVICE_"+message].is_empty(),"Original secretary message extracted locally: "+message)
         var catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
@@ -150,6 +150,7 @@ func run() -> void:
         check(catalog != null and catalog.DevelopmentComputers.size() == 4, "Computer catalog import")
         check(catalog != null and catalog.Hardware.size() == 11, "Hardware catalog import")
         check(catalog != null and catalog.GameTypes.size() == 51, "Game type catalog import")
+        check(catalog != null and catalog.Secretaries.size() == 5,"Five secretary definitions are imported locally")
         check(catalog != null and catalog.Manga.size() == 31,"Manga catalog is imported from the original locally")
         check(not FileAccess.file_exists("user://original/GameDev2DX.exe"), "Executable excluded from cache")
         var office_scene = JSON.parse_string(FileAccess.get_file_as_string("user://original/office.json"))
@@ -190,6 +191,7 @@ func run() -> void:
     await press("SECRETARY_ADVICE")
     var local_advice = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
     check(main.find_child("ConversationMessage",true,false).text == local_advice.Entries.SECRETARY_ADVICE_DevelopGame,"Japanese advice uses locally imported source text")
+    check(main.find_child("ConversationSpeaker",true,false).text == local_advice.Entries.SECRETARY_NAMED.replace("{name}",JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json")).Secretaries[1].Name),"Japanese secretary caption uses the imported current name")
     var secretary_portrait = main.find_child("ConversationPortrait",true,false)
     check(secretary_portrait.visible and secretary_portrait.texture != null,"Fresh campaign advice has a portrait")
     if secretary_portrait.texture != null:
