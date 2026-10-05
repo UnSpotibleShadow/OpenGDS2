@@ -2,6 +2,7 @@ extends SceneTree
 # Author-created synthetic data only. Always use disposable XDG_DATA_HOME.
 var main: Node
 var failures := 0
+var seen_dialogue: Dictionary = {}
 
 func check(condition: bool, message: String) -> void:
     if not condition:
@@ -49,23 +50,32 @@ func await_node(name: String) -> bool:
     for frame in range(15000):
         if main.find_child(name, true, false) != null:
             return true
+        if main.find_child("ConversationWindow",true,false) != null:
+            await finish_conversation()
         await process_frame
     check(false, "Timed out waiting for " + name)
     return false
 
+func advance_conversation_page() -> void:
+    var message = main.find_child("ConversationMessage",true,false)
+    check(message != null,"Conversation page exists")
+    if message == null:
+        return
+    seen_dialogue[message.text] = int(seen_dialogue.get(message.text,0)) + 1
+    var accept := InputEventKey.new()
+    accept.keycode = KEY_ENTER
+    accept.pressed = true
+    message.gui_input.emit(accept)
+    await process_frame
+    await process_frame
+    if is_instance_valid(message) and message.is_inside_tree():
+        message.gui_input.emit(accept)
+    await process_frame
+
 func finish_conversation() -> void:
     var pages := 0
     while main.find_child("ConversationWindow",true,false) != null and pages < 12:
-        var message = main.find_child("ConversationMessage",true,false)
-        var accept := InputEventKey.new()
-        accept.keycode = KEY_ENTER
-        accept.pressed = true
-        message.gui_input.emit(accept)
-        await process_frame
-        await process_frame
-        if is_instance_valid(message) and message.is_inside_tree():
-            message.gui_input.emit(accept)
-        await process_frame
+        await advance_conversation_page()
         pages += 1
     check(main.find_child("ConversationWindow",true,false) == null,"Conversation sequence finishes within its verified page bound")
 
@@ -359,12 +369,15 @@ func run() -> void:
     check(financial_row != null and financial_row.text != "?","Company window displays recorded weekly finances")
 
     check(checkpoint.State.DevelopmentProjects[0].PendingDecision == 0,"Type checkpoint persisted")
+    check(checkpoint.State.DevelopmentProjects[0].DecisionIntroductionAcknowledged == 0,"Reading the type introduction persists its acknowledgment")
+    check(seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Type introduction precedes selection exactly once")
     var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
     for index in range(offered_types.size()):
         check(main.find_child("SelectType%d" % index,true,false).text.begins_with(tr("CATALOG_TYPE_%d" % offered_types[index])),"Each randomized type label matches its saved source ID")
     # Reload checkpoint through the actual office controls before selecting.
     await press("LOAD_GAME")
     await await_node("SelectType0")
+    check(main.find_child("ConversationWindow",true,false) == null and seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Loading a read checkpoint does not repeat its introduction")
     await press_node("SelectType0")
     if not await await_node("SelectGenre0"):
         quit(1)
@@ -373,6 +386,8 @@ func run() -> void:
     await press_node("SelectGenre0")
     var ready := false
     for frame in range(15000):
+        if main.find_child("ConversationWindow",true,false) != null:
+            await finish_conversation()
         for button in main.find_children("*", "Button", true, false):
             if button.text == tr("RELEASE_GAME"):
                 ready = true
@@ -381,6 +396,7 @@ func run() -> void:
             break
         await process_frame
     check(ready,"Development reaches completion")
+    check(seen_dialogue.has(tr("CHECKPOINT_GENRE_INTRO")) and seen_dialogue.has(tr("CHECKPOINT_COMPLETE_INTRO").replace("{room}","1")),"Genre and completion announcements precede their decision panels")
     if not ready:
         quit(1)
         return
@@ -400,7 +416,25 @@ func run() -> void:
     check(main.find_child("ReleasePrice",true,false).value == 5800,"Original default price")
     check(main.find_child("ReleaseCopies",true,false).value == 5000,"Original default production")
     await press_node("ConfirmRelease")
+    check(main.find_child("ConversationWindow",true,false) != null,"Shipment commentary precedes reviews")
+    await press("SAVE_GAME")
+    var shipment_start = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(shipment_start.State.ReleasedGames[0].ShipmentMessageIndex == 0,"First shipment page is saved unread")
+    await create_timer(0.2).timeout
+    await press("SAVE_GAME")
+    var shipment_paused = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(shipment_paused.State.Money == shipment_start.State.Money and shipment_paused.State.SalesTicks == shipment_start.State.SalesTicks and shipment_paused.State.CompanyActivityTicks == shipment_start.State.CompanyActivityTicks,"Shipment conversations freeze accounting and sales")
+    await advance_conversation_page()
+    await press("SAVE_GAME")
+    var shipment_midway = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(shipment_midway.State.ReleasedGames[0].ShipmentMessageIndex == 1,"Only a completed page advances the saved shipment cursor")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    var shipment_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(shipment_reloaded.State.Money == shipment_start.State.Money and shipment_reloaded.State.ReleasedGames[0].ReviewScores == shipment_start.State.ReleasedGames[0].ReviewScores and shipment_reloaded.State.ReleasedGames[0].MarketFactor == shipment_start.State.ReleasedGames[0].MarketFactor and shipment_reloaded.State.ReleasedGames[0].ShipmentMessageIndex == 1,"Loading shipment dialogue neither charges nor rerolls its market/reviews")
+    await finish_conversation()
     check(main.find_child("ReviewScore3",true,false) != null,"Release opens four magazine reviews")
+    check(seen_dialogue.has(tr("SHIPMENT_Reviews")),"Magazine introduction precedes review scores")
     await press("SAVE_GAME")
     var review_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(review_save.State.ReleasedGames[0].ReviewPending,"Pending reviews saved")
@@ -1117,6 +1151,8 @@ func run() -> void:
     var sequel_ready := false
     for frame in range(15000):
         check(main.find_child("SelectType0",true,false) == null and main.find_child("SelectGenre0",true,false) == null,"Sequel checkpoints do not offer new type or genre")
+        if main.find_child("ConversationWindow",true,false) != null:
+            await finish_conversation()
         for button in main.find_children("*","Button",true,false):
             if button.text == tr("RELEASE_GAME") and button.is_visible_in_tree():
                 sequel_ready = true
@@ -1147,6 +1183,7 @@ func run() -> void:
     check(sequel_release_title.text == predecessor.Title + "2","Shipment suggests the original sequel name")
     main.find_child("ReleaseCopies",true,false).value = 1000
     await press_node("ConfirmRelease")
+    await finish_conversation()
     check(main.find_child("ReviewScore3",true,false) != null,"Sequel uses the standard review ceremony")
     await press("SAVE_GAME")
     var shipped_sequel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1216,6 +1253,8 @@ func run() -> void:
     await press_node("SelectGenre0")
     var manga_ready := false
     for frame in range(15000):
+        if main.find_child("ConversationWindow",true,false) != null:
+            await finish_conversation()
         for release_button in main.find_children("*","Button",true,false):
             if release_button.text == tr("RELEASE_GAME"):
                 manga_ready = true
@@ -1234,7 +1273,9 @@ func run() -> void:
     await press("SAVE_GAME")
     var manga_shipment = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(manga_shipment.State.ReleasedGames[0].OriginalMode == 2 and manga_shipment.State.ReleasedGames[0].MangaSourceIndex == 0 and manga_shipment.State.DevelopmentProjects.is_empty(),"Manga shipment preserves adaptation identity and frees the room")
+    check(manga_shipment.State.ReleasedGames[0].ShipmentMessages[0] == 0,"Popular comic commentary is the first adaptation shipment page")
     await press("LOAD_GAME")
+    await finish_conversation()
     await press_node("AcknowledgeReviews")
     Engine.time_scale = 100
     for frame in range(100):

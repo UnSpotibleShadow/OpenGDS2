@@ -106,9 +106,11 @@ public sealed class OriginalGameImporter
         string path = Path.Combine(ProjectSettings.GlobalizePath(CacheRoot), "dialogue.json");
         if (!File.Exists(path)) return null; // Older caches can be refreshed by reimporting.
         var result = JsonSerializer.Deserialize<OriginalDialogueCatalog>(File.ReadAllText(path));
-        if (result?.SchemaVersion is not (1 or 2) || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
-            result.Entries is null || result.Entries.Count != (result.SchemaVersion==1 ? 11 : 50) || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
-            !result.Entries.ContainsKey("NEW_EMPLOYEE") || Enumerable.Range(0,10).Any(i=>!result.Entries.ContainsKey($"HIRE_GREETING_{i}")))
+        if (result?.SchemaVersion is not (1 or 2 or 3) || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
+            result.Entries is null || result.Entries.Count != (result.SchemaVersion switch {1=>11,2=>50,_=>73}) || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
+            !result.Entries.ContainsKey("NEW_EMPLOYEE") || Enumerable.Range(0,10).Any(i=>!result.Entries.ContainsKey($"HIRE_GREETING_{i}")) ||
+            result.SchemaVersion==3 && (new[]{"CORE_SECRETARY","CHECKPOINT_TYPE_INTRO","CHECKPOINT_GENRE_INTRO","CHECKPOINT_COMPLETE_INTRO"}
+                .Concat(Enum.GetValues<ShipmentMessage>().Select(ShipmentDialogueRules.MessageKey)).Any(key=>!result.Entries.ContainsKey(key))))
             throw new InvalidDataException("Unsupported or corrupt local dialogue. Reimport your original archive.");
         return result;
     }

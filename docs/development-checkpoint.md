@@ -1,4 +1,21 @@
-# Development checkpoint — M50, 2026-10-05
+# Development checkpoint — M51, 2026-10-05
+
+M51 restores three development checkpoint introductions and nineteen possible
+shipment remarks, sequenced before review scores. Remarks share the existing
+market rolls and preserve original branch quirks. Modern saves retain read
+checkpoint acknowledgments and shipment cursors; loading cannot repeat shipment
+costs or reroll the market/reviews. Old release saves do not invent lost lottery
+history. Reimport the LZH for the 73-entry local Japanese dialogue cache.
+See [source anchors and compatibility boundaries](conversations.md#m51-development-and-shipment-conversations).
+
+Local direct C# compilation and 246 domain checks pass (242 public, four private).
+All 45 Python checks pass with the original fixture (32 public, thirteen private).
+Both headless Godot suites report zero failures, including original-asset imports,
+ordinary/sequel/manga workflows and checkpoint/shipment save/load. Checks run
+locally. No Actions, new desktop exports or native Windows runs were started.
+Original Windows audiovisual/timer comparison remains outstanding.
+
+## Previous M50 validation
 
 M50 imports the verified 256×160 planning illustration locally and displays it
 in a separate classic window throughout the discussion. Finishing, cancelling,

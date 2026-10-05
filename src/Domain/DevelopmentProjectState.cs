@@ -30,6 +30,8 @@ public sealed class DevelopmentProjectState
     public double DataSize {get;set;}
     public DevelopmentFocus? Focus {get;set;}
     public DevelopmentMilestone? PendingDecision {get;set;}
+    // Additive modern notification state; does not alter stage or rewards.
+    public DevelopmentMilestone? DecisionIntroductionAcknowledged {get;set;}
     public Dictionary<int,int>? TechnologyApplicationCounts {get;set;}
     public List<int>? TypeCandidates {get;set;}
 }

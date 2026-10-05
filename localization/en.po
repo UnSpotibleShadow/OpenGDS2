@@ -2304,3 +2304,74 @@ msgstr "OOPS!"
 
 msgid "BITMAP_BUBBLE_16"
 msgstr "STUCK!"
+
+# M51: authored core-loop translations; Japanese is imported locally.
+
+msgid "CORE_SECRETARY"
+msgstr "Secretary"
+
+msgid "CHECKPOINT_TYPE_INTRO"
+msgstr "We'll hold a planning meeting to decide the game's content."
+
+msgid "CHECKPOINT_GENRE_INTRO"
+msgstr "We'll hold a planning meeting to decide the game's genre."
+
+msgid "CHECKPOINT_COMPLETE_INTRO"
+msgstr "The game in development room {room} is complete."
+
+msgid "SHIPMENT_AdaptationHuge"
+msgstr "This hugely popular comic should attract plenty of readers to the game."
+
+msgid "SHIPMENT_AdaptationPopular"
+msgstr "This popular comic should sell quite well to its readers."
+
+msgid "SHIPMENT_AdaptationReaders"
+msgstr "Adapting this comic should make the game popular with its readers."
+
+msgid "SHIPMENT_AdaptationUnpopular"
+msgstr "The comic isn't very popular, so it's hard to say how well the game will sell."
+
+msgid "SHIPMENT_BalanceHuge"
+msgstr "The game's balance seems to have worked beautifully. I sense a huge hit!"
+
+msgid "SHIPMENT_BalanceHit"
+msgstr "The game's balance seems to have worked well. I sense a hit!"
+
+msgid "SHIPMENT_BalancePoor"
+msgstr "The game's balance seems off. I fear it won't sell very well..."
+
+msgid "SHIPMENT_NoveltyHuge"
+msgstr "Players have embraced its originality. We could have an enormous hit!"
+
+msgid "SHIPMENT_NoveltyHit"
+msgstr "Players have embraced its originality. We could have a hit!"
+
+msgid "SHIPMENT_NoveltyRejected"
+msgstr "Players haven't embraced its originality. What a shame."
+
+msgid "SHIPMENT_FunHuge"
+msgstr "The game is so entertaining that players should love it. It could be a huge hit!"
+
+msgid "SHIPMENT_FunHit"
+msgstr "The game is entertaining and should appeal to players. It could be a hit!"
+
+msgid "SHIPMENT_MusicNotice"
+msgstr "Listeners are captivated by the game's music! Good music could make it a hit!"
+
+msgid "SHIPMENT_PriceCheap"
+msgstr "The low price should help this game sell well."
+
+msgid "SHIPMENT_PriceAbsurd"
+msgstr "That's beyond any reasonable game price. Even I wouldn't buy it!"
+
+msgid "SHIPMENT_PriceVeryHigh"
+msgstr "It's far too expensive! Will anyone buy it at that price...?"
+
+msgid "SHIPMENT_PriceHigh"
+msgstr "The price is too high. I don't expect it to sell."
+
+msgid "SHIPMENT_PriceSlightlyHigh"
+msgstr "The price is a little high. It may be difficult for children to afford..."
+
+msgid "SHIPMENT_Reviews"
+msgstr "Familion Weekly has reviewed this game to coincide with its release."

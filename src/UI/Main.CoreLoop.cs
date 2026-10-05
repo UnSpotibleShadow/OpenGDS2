@@ -61,6 +61,14 @@ public partial class Main
     }
     private void ShowProjectDecision(GameState state,DevelopmentProjectState project)
     {
+        if (CheckpointDialogueRules.HasPending(project))
+        {
+            var milestone=project.PendingDecision!.Value;
+            ShowConversation(Tr("DEVELOPMENT_ROOM")+" "+(project.RoomIndex+1),
+                [new(DialogueText("CORE_SECRETARY"),DialogueText(CheckpointDialogueRules.MessageKey(milestone)).Replace("{room}",(project.RoomIndex+1).ToString()))],
+                ()=>{CheckpointDialogueRules.Acknowledge(state,project,milestone);ShowProjectDecision(state,project);});
+            return;
+        }
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
         ClearContent();AddHeading(project.Title,28);AddProjectMetrics(project);
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
@@ -203,6 +211,13 @@ public partial class Main
     }
     private void ShowReviews(GameState state,ReleasedGameState product)
     {
+        if (ShipmentDialogueRules.HasPending(product))
+        {
+            ShowConversation(Tr("RELEASE_GAME"),[new(DialogueText("CORE_SECRETARY"),
+                DialogueText(ShipmentDialogueRules.MessageKey(product.ShipmentMessages![product.ShipmentMessageIndex])))],
+                ()=>{ShipmentDialogueRules.Acknowledge(state,product);ShowReviews(state,product);});
+            return;
+        }
         ClearContent();AddHeading(Tr("MAGAZINE_REVIEWS"),28);AddHeading(product.Title,22);
         var scores=product.ReviewScores ?? throw new InvalidOperationException("Reviews are unknown for this product.");
         var row=new HBoxContainer();row.AddThemeConstantOverride("separation",24);_content.AddChild(row);

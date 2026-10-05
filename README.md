@@ -5,7 +5,7 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M50.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M51.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -15,6 +15,13 @@ milestone announcements, calendar transactions, exhibitions and own-company
 awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
 and persistent global records are implemented. Office progression, own-hardware
 development and remaining weekly economics are unfinished.
+
+M51 restores type/genre/completion introductions and shipment commentary before
+reviews. Market remarks share the existing original rolls; saving during shipment
+preserves the message position, market factor and review scores without charging
+again. English translations are authored; Japanese dialogue is imported locally.
+Reimport the LZH for the expanded dialogue cache. Detailed checkpoint meetings
+and other event conversations remain unfinished. See [conversation evidence](docs/conversations.md#m51-development-and-shipment-conversations).
 
 M50 restores the original planning illustration in a separate compact child
 window and fixes cancelling a conversation while it is typing. The illustration
@@ -30,7 +37,7 @@ the new catalog/dialogue. See [adaptations](docs/manga-adaptations.md),
 [conversations](docs/conversations.md) and [local patches](docs/office-effects-and-local-patches.md).
 
 Automatic GitHub Actions are paused at the owner's request. Current checks run
-locally; existing M48 download packages do not include M49/M50 changes. See the
+locally; existing M48 download packages do not include M49–M51 changes. See the
 [validation checkpoint](docs/development-checkpoint.md) and [local build instructions](docs/building.md).
 
 M48 adds sequel development from Hall of Fame predecessors. Open a free desk

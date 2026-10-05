@@ -60,8 +60,14 @@ public static class ReleaseService
             HardwareSourceIndex=project.HardwareSourceIndex,AudienceSourceIndex=project.AudienceSourceIndex,
             GameTypeSourceIndex=project.GameTypeSourceIndex.Value,GenreSourceIndex=project.GenreSourceIndex.Value,
             Quality=project.Quality with {},Bugs=project.Bugs,Recognition=project.Recognition,DataSize=project.DataSize,
-            MarketFactor=MarketFactor(state.ReleasedGames.Count,project.Quality,random,adaptationModifier)
+            MarketFactor=0
         };
+        var market=CalculateMarket(state.ReleasedGames.Count,project.Quality,random,adaptationModifier);
+        product.MarketFactor=market.Factor;product.ShipmentMessages=market.Messages;
+        if (project.OriginalMode==2)
+            product.ShipmentMessages.Insert(0,ShipmentDialogueRules.Adaptation(catalog.Manga.Single(x=>x.SourceIndex==project.MangaSourceIndex).Popularity));
+        if (ShipmentDialogueRules.Price(price) is ShipmentMessage priceMessage) product.ShipmentMessages.Add(priceMessage);
+        product.ShipmentMessages.Add(ShipmentMessage.Reviews);
         ReviewService.Generate(product,catalog,random);
         FinancialRules.Apply(state,-cost);
         if (predecessor is not null) predecessor.HasReleasedSequel=true;
@@ -101,23 +107,33 @@ public static class ReleaseService
         return ReleaseResult.Success;
     }
     public static double MarketFactor(int productIndex,DevelopmentQuality quality,Random random,double adaptationModifier=0)
+        =>CalculateMarket(productIndex,quality,random,adaptationModifier).Factor;
+    public static (double Factor,List<ShipmentMessage> Messages) CalculateMarket(int productIndex,DevelopmentQuality quality,Random random,double adaptationModifier=0)
     {
         DevelopmentWorkRules.ValidateQuality(quality);
         if (productIndex<0) throw new ArgumentOutOfRangeException(nameof(productIndex));
+        var messages=new List<ShipmentMessage>();
         int roll=random.Next(20);
         if (!double.IsFinite(adaptationModifier)) throw new ArgumentOutOfRangeException(nameof(adaptationModifier));
         double factor=1+adaptationModifier+(roll switch {0=>1.5,1 or 2=>.5,3 or 4 or 5=>-.5,_=>0});
+        if (roll==0) messages.Add(ShipmentMessage.BalanceHuge);
+        else if (roll is 1 or 2) messages.Add(ShipmentMessage.BalanceHit);
+        else if (roll is 3 or 4 or 5) messages.Add(ShipmentMessage.BalancePoor);
         if (productIndex<2) factor-=.1;
         else
         {
-            if (quality.Novelty>200) factor+=random.Next(2)==0 ? 2.5 : -.5;
-            else if (quality.Novelty>100) factor+=random.Next(2)==0 ? .5 : -.2;
-            if (quality.Fun>200) {if (random.Next(3)==0) factor+=1.1;}
-            else if (quality.Fun>100 && random.Next(2)==0) factor+=.6;
+            if (quality.Novelty>100)
+            {
+                bool accepted=random.Next(2)==0;
+                factor+=quality.Novelty>200 ? (accepted ? 2.5 : -.5) : (accepted ? .5 : -.2);
+                messages.Add(accepted ? quality.Novelty>200 ? ShipmentMessage.NoveltyHuge : ShipmentMessage.NoveltyHit : ShipmentMessage.NoveltyRejected);
+            }
+            if (quality.Fun>200) {if (random.Next(3)==0) {factor+=1.1;messages.Add(ShipmentMessage.FunHuge);}}
+            else if (quality.Fun>100 && random.Next(2)==0) {factor+=.6;messages.Add(ShipmentMessage.FunHit);}
             // The subsequent >150 and >200 branches are unreachable in the source.
-            if (quality.Graphics>100 && random.Next(10)==1) factor+=.5;
+            if (quality.Graphics>100 && random.Next(10)==1) {factor+=.5;messages.Add(ShipmentMessage.MusicNotice);}
         }
-        return factor<0 ? .1 : factor;
+        return (factor<0 ? .1 : factor,messages);
     }
     internal static void ResetWork(OfficeEmployeeState office)
     {

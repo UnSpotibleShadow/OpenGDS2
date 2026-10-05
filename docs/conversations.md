@@ -1,4 +1,4 @@
-# Conversation reconstruction — M49/M50
+# Conversation reconstruction — M49–M51
 
 Normal hire greetings, ordinary planning discussions and manga rights meetings
 now share the compact portrait/name-strip/message window. Portraits and Japanese
@@ -44,13 +44,13 @@ restarts their reveal without repeating the fee or drawing another variant.
 Simulation waits until acknowledgment. The close button uses the same advance
 behavior. Rights/planning discussions before project acceptance are UI state;
 loading a company cancels them without charging. The original queue is not
-serialized into modern saves. All 50 locally imported entries are guarded by
+serialized into modern saves. All 73 locally imported entries are guarded by
 the supported executable hash; older hire-only imports still support hiring.
 
 ## Remaining conversations
 
 This is partial conversation restoration. Secretary advice/hiring/automation,
-checkpoint and shipment introductions, graduate-hire callers, remaining event
+graduate-hire callers, remaining event
 speakers and the automatic timed presenter require further tracing. M50 restores the original planning illustration; other meeting scenes and the
 automatic timed queue/window sequencing remain unresolved.
 
@@ -66,6 +66,71 @@ Domain tests cover reveal/click/mouth transitions, Unicode, all seven meeting
 branches and persisted hires. Headless Godot checks cover save/reload and modal
 clock blocking, multiple discussions, proposal cancellation and the manga loop.
 Original Windows focus/timer behavior and graphical comparison remain untested.
+
+## M51 development and shipment conversations
+
+The type and genre introductions now precede their existing choice panels;
+the completion introduction precedes release/debugging choices. The shared
+compact portrait window uses the original generic secretary speaker. Detailed
+type/genre meeting modes 4/5 remain unresolved; these introductions alone do not
+reconstruct their full meetings. Sequel checkpoints retain their existing
+automatic inheritance behavior.
+
+| Verified caller | Supported executable anchor |
+| --- | --- |
+| Type introduction, secretary and modal helper | Module2 `00A0283C +A807..A820` |
+| Genre introduction | Same procedure `+ABA1..ABBA` |
+| Completion message, one-based room number | Same procedure `+ADC5..ADE6` |
+| Adaptation/popularity, balance and quality remarks | fGMSyukka `009C9CB8 +0455..0D35` |
+| Price comments: <4000, ≥20000, ≥10000, ≥8000, ≥7000 | Same procedure `+0DB8..0F54` |
+| Mandatory magazine introduction before reviews | Same procedure `+1215..1250` |
+| Product index increments before optional market summary | Same procedure `+101F..102B`, then `+10B1..10C8` |
+| New-company market slots cleared | Module1 `009DD234 +1403..1411` |
+
+`tools/verify_core_dialogue_evidence.py` checks bounded private anchors without
+exporting dialogue tables. Japanese bodies are extracted only into the player's
+hash-guarded cache (schema 3); English contains unofficial authored translations.
+Schema 1/2 imports remain readable; reimport adds Japanese checkpoint/shipment
+bodies. No original text or artwork is published.
+
+Shipment order is adaptation remark when applicable, balance outcome when its
+roll selects a remark, eligible novelty/fun/graphics outcomes, optional price
+comment, then magazine introduction and the existing four reviews. There are at
+most seven messages. No extra random draws are made for presentation. The first
+two products skip quality-specific rolls as before. The source's music remark
+actually tests graphics; its later graphics thresholds remain unreachable.
+Price comments do not change the already reconstructed sales formula.
+
+The optional later market-summary branches read the next product slot after
+incrementing the product index. Fresh-company slots are cleared, so these lines
+are normally absent. They are not substituted with the just-shipped game's
+factor. Dirty unused slots from an original save have not been tested; original
+save compatibility remains unresolved. This is static/data-flow evidence, not
+an original Windows runtime comparison.
+
+Checkpoint acknowledgments only mark the introduction read; stage, selection
+fees and experience rewards remain under the existing domain services. Each
+shipment stores stable message IDs and a read cursor after calculating the
+market and reviews once. Completing a page advances one cursor. Review
+acknowledgment is blocked until all messages are read; simulation clocks stay
+paused through the existing pending-review guard. Loading restarts reveal at
+the unread page without charging or rerolling. These persistence fields are
+modern infrastructure; original queue serialization is not claimed.
+
+Old modern saves lacking a shipment queue go directly to their saved reviews;
+the lost lottery branches cannot be reconstructed reliably. Validation rejects
+unknown message IDs, duplicate/out-of-order stages, missing final review notice,
+invalid cursors and unread queues marked as review-acknowledged.
+
+Regression checks cover every balance roll, accepted/rejected quality branches,
+price/popularity boundaries, invalid/legacy saves and acknowledgment guards.
+Godot checks the actual introduction order, avoids repeating a read checkpoint
+after loading, freezes sales/accounting during shipment, resumes midway without
+changes to money/market/review scores, and completes ordinary/sequel/manga sales.
+The original displays remarks while calculating shipment; OpenGDS2 calculates
+the transaction once before displaying its persisted remarks. Normal resulting
+rules/RNG order are preserved; original mid-dialogue interruption/save behavior
+is not claimed.
 
 
 ## M50 planning illustration and cancellation

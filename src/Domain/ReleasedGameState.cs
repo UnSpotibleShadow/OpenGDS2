@@ -35,6 +35,9 @@ public sealed class ReleasedGameState
     // Older modern saves have unknown reviews; loading must not reroll them.
     public List<int>? ReviewScores {get;set;}
     public bool ReviewPending {get;set;}
+    // Older releases have no recoverable branch history: never invent it.
+    public List<ShipmentMessage>? ShipmentMessages {get;set;}
+    public int ShipmentMessageIndex {get;set;}
     public bool HallOfFame {get;set;}
     public GameDate? ReleasedOn {get;set;}
     public int? OriginalAwardCode {get;set;}
