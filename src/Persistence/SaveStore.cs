@@ -124,6 +124,7 @@ public static class SaveStore
             state.DevelopmentProjects.Select(x=>x?.RoomIndex).Distinct().Count()!=state.DevelopmentProjects.Count)
             throw new InvalidDataException("Invalid development rooms.");
         foreach (var project in state.DevelopmentProjects) ValidateProject(project);
+        SequelDevelopmentRules.ValidateLineage(state);
         if (state.EmployeeSources.Any(x => x is null || x.Employee is null || x.SourceIndex < 0 ||
                 string.IsNullOrWhiteSpace(x.Employee.Name) || x.Employee.OriginalAttributes is null || x.Employee.ContractFee < 0) ||
             state.EmployeeSources.Select(x => x.SourceIndex).Distinct().Count() != state.EmployeeSources.Count ||
@@ -167,7 +168,7 @@ public static class SaveStore
     {
         if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >10 ||
             project.AudienceSourceIndex is <0 or >6 || project.GameTypeSourceIndex is <0 or >50 ||
-            project.GenreSourceIndex is <0 or >17 || project.OriginalMode!=0 ||
+            project.GenreSourceIndex is <0 or >17 || project.OriginalMode is not (0 or 1) ||
             project.OriginalRoomState is not (1 or 2) || project.OriginalStage is <0 or >3 ||
             string.IsNullOrWhiteSpace(project.Title) || project.Title.Length>128 ||
             !double.IsFinite(project.RequiredPoints) || project.RequiredPoints<=0 ||

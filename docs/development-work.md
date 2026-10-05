@@ -43,7 +43,7 @@ New-project acceptance, fGMKikakusyo 0099BA80 +0025..03BC, charges the planning
 quote and initializes room state 1, points, zero progress, four zero quality fields,
 zero bugs, recognition and data size, hardware/audience selection and stage 0.
 Room indices are 0 and 1. The API models the already-licensed, mode-0 branch;
-sequel carry-over, licensing conversations and room availability scheduling remain
+licensing conversations and room availability scheduling remain
 separate. A modern project label is metadata, not a recovered original title-entry
 stage. The project API is not exposed as a playable simulation.
 
@@ -171,3 +171,7 @@ Trace assignment and pending modal transitions; implement chair/standing state;
 connect work cadence, stress, experience and project contributions to the original
 clock; recover debug completion/polishing targets, release/reviews/sales; integrate
 payroll, events and progression. Preserve uncertainties and compatibility quirks.
+
+M48 connects sequel carry-over and the automatic type/genre checkpoints, with
+ordinary fees/fame/affinity bonuses excluded by the original branches. See
+[sequel-development.md](sequel-development.md).

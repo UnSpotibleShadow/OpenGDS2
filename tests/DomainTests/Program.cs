@@ -1824,6 +1824,201 @@ Test("core-loop save rejects corrupt stocks, checkpoints, cells and counters",()
     var e=Worker();s.Employees.Add(e);e.Office!.BurstCount=51;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
 
+(GameState State,OriginalCatalog Catalog,ReleasedGameState Parent) SequelFixture(long money=10_000_000)
+{
+    var state=PlanningState(money);state.Company.HallOfFameCount=1;state.SalesFee1=state.SalesFee2=1500;
+    var parent=new ReleasedGameState {Title="Synthetic Series",HardwareSourceIndex=0,AudienceSourceIndex=0,
+        GameTypeSourceIndex=1,GenreSourceIndex=0,Quality=new(101.9,99.9,33.4,6.6),Recognition=99.9,
+        DataSize=400,Bugs=90,ReviewScores=[8,8,8,8],HallOfFame=true,MarketFactor=1,Price=5800,
+        Recall=new() {OriginalState=1},SalesMilestoneStage=0};
+    state.ReleasedGames.Add(parent);return(state,CoreCatalog(),parent);
+}
+DevelopmentProjectState AcceptSequel(GameState s,OriginalCatalog c,int parent=0,int room=0)
+{
+    Check(DevelopmentProjectService.TryAcceptSequelPlan(s,c,room,0,0,parent,"Synthetic Sequel",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    return s.DevelopmentProjects.Single(x=>x.RoomIndex==room);
+}
+void FinishSequel(GameState s,OriginalCatalog c,DevelopmentProjectState p)
+{
+    var employee=Worker(6+6*p.RoomIndex);
+    for (int stage=0;stage<3;stage++)
+    {
+        p.Progress=stage==0 ? p.RequiredPoints*.5 : stage==1 ? p.RequiredPoints*.81 : p.RequiredPoints;
+        DevelopmentSimulation.TickEmployee(s,employee,c,new WorkRandom());
+    }
+    Check(p.OriginalStage==3 && p.PendingDecision==DevelopmentMilestone.StartDebugging);
+}
+Test("sequel roster requires Hall of Fame, excludes consumed parents and orders newest first",()=>
+{
+    var(s,c,parent)=SequelFixture();
+    s.ReleasedGames.Add(new() {ProductIndex=1,Title="Not famous",ReviewScores=[7,8,8,8]});
+    s.ReleasedGames.Add(new() {ProductIndex=2,Title="Newest famous",ReviewScores=[8,8,8,8],HallOfFame=true});
+    Check(SequelDevelopmentRules.Candidates(s).Select(x=>x.ProductIndex).SequenceEqual(new[]{2,0}));
+    parent.HasReleasedSequel=true;Check(SequelDevelopmentRules.Candidates(s).Single().ProductIndex==2);
+    Check(SequelDevelopmentRules.CheckPredecessor(s,0)==DevelopmentPlanningResult.PredecessorUnavailable);
+    Check(SequelDevelopmentRules.CheckPredecessor(s,1)==DevelopmentPlanningResult.PredecessorUnavailable);
+    Check(SequelDevelopmentRules.CheckPredecessor(s,99)==DevelopmentPlanningResult.PredecessorUnavailable);
+});
+Test("sequel previews leave funds and parent eligibility unchanged",()=>
+{
+    var(s,c,parent)=SequelFixture();string before=SaveStore.Serialize(s);
+    Check(DevelopmentProjectService.CheckSequelPlan(s,c,0,0,0,0,out var quote)==DevelopmentPlanningResult.Success);
+    Check(quote==DevelopmentPlanningRules.Quote(c.Hardware[0],c.Audiences[0],1));
+    Check(SequelDevelopmentRules.SuggestedTitle(parent)=="Synthetic Series2");
+    Check(SaveStore.Serialize(s)==before);
+});
+Test("sequel acceptance floors each inherited value and resets work, bugs and data",()=>
+{
+    var(s,c,parent)=SequelFixture();long before=s.Money!.Value;var p=AcceptSequel(s,c);
+    Check(p.OriginalMode==1 && p.PredecessorProductIndex==0 && p.Quality==new DevelopmentQuality(30,29,10,1));
+    Check(p.Recognition==29 && p.Bugs==0 && p.DataSize==0 && p.Progress==0 && p.RequiredPoints==400);
+    Check(p.GameTypeSourceIndex is null && p.GenreSourceIndex is null && p.PendingDecision is null && p.OriginalStage==0);
+    Check(p.TechnologyApplicationCounts!.All(x=>x.Value==0) && s.Money==before-30 && !parent.HasReleasedSequel);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.DevelopmentProjects[0].Quality==p.Quality);
+});
+Test("two rooms cannot develop the same predecessor and rejection spends nothing",()=>
+{
+    var(s,c,parent)=SequelFixture();AcceptSequel(s,c);long before=s.Money!.Value;
+    Check(DevelopmentProjectService.TryAcceptSequelPlan(s,c,1,0,0,0,"Duplicate",new(25,25,25,25))==DevelopmentPlanningResult.SequelAlreadyDeveloping);
+    Check(s.Money==before && s.DevelopmentProjects.Count==1 && !parent.HasReleasedSequel);
+    // The original list still contains the parent; confirmation rejects it.
+    Check(SequelDevelopmentRules.Candidates(s).Single()==parent);
+});
+Test("sequel planning retains hardware license, computer, funds and occupied room gates",()=>
+{
+    var(s,c,_)=SequelFixture(29);var f=new DevelopmentFocus(25,25,25,25);
+    Check(DevelopmentProjectService.TryAcceptSequelPlan(s,c,0,0,0,0,"Sequel",f)==DevelopmentPlanningResult.InsufficientFunds && s.Money==29);
+    s.Money=100;s.HardwareLicenses!.Clear();Check(DevelopmentProjectService.CheckSequelPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.LicenseRequired);
+    s.HardwareLicenses.Add(0);c.DevelopmentComputers[0].BitWidth=7;Check(DevelopmentProjectService.CheckSequelPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.ComputerTooSmall);
+    c.DevelopmentComputers[0].BitWidth=8;DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Other",f);
+    Check(DevelopmentProjectService.CheckSequelPlan(s,c,0,0,0,0,out _)==DevelopmentPlanningResult.RoomOccupied);
+});
+Test("sequel type inherits parent source directly without roster, fee or fame bonus",()=>
+{
+    var(s,c,parent)=SequelFixture();s.Company.Fame=null;var p=AcceptSequel(s,c);var e=Worker();long before=s.Money!.Value;
+    p.Progress=199.99;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(p.OriginalStage==0 && e.Experience==0);
+    p.Progress=200;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.GameTypeSourceIndex==1 && p.OriginalStage==1 && p.RequiredPoints==420 && p.PendingDecision is null);
+    Check(p.Progress==200 && s.Money==before && e.Experience==10 && p.TypeCandidates is null && s.OriginalTypeRosterMap is null);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Experience==10 && p.RequiredPoints==420);
+});
+Test("sequel genre inheritance adds only original genre points and no audience bonus",()=>
+{
+    var(s,c,_)=SequelFixture();var p=AcceptSequel(s,c);var e=Worker();long before=s.Money!.Value;
+    p.Progress=200;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());var quality=p.Quality;
+    p.Progress=p.RequiredPoints*.81-.001;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(p.OriginalStage==1);
+    p.Progress=p.RequiredPoints*.81;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.OriginalStage==2 && p.GenreSourceIndex==0 && p.RequiredPoints==450 && p.PendingDecision is null);
+    Check(p.Quality==quality && s.Money==before && e.Experience==30);
+    p.Progress=p.RequiredPoints;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.OriginalStage==3 && p.PendingDecision==DevelopmentMilestone.StartDebugging && e.Experience==70);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects[0].PredecessorProductIndex==0);
+});
+Test("sequel automatic checkpoints recalculate thresholds in one employee pass",()=>
+{
+    var(s,c,_)=SequelFixture();var p=AcceptSequel(s,c);var e=Worker();p.Progress=p.RequiredPoints;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.OriginalStage==2 && p.RequiredPoints==450 && p.Progress==400 && p.PendingDecision is null && e.Experience==30);
+    // Zero-point source catalogs can reach debugging in the same pass.
+    var(s2,c2,_)=SequelFixture();c2.GameTypes[1].RawMembers["1308"]=0;c2.Genres[0].RawMembers["1208"]=0;
+    var p2=AcceptSequel(s2,c2);var e2=Worker();p2.Progress=p2.RequiredPoints;
+    DevelopmentSimulation.TickEmployee(s2,e2,c2,new WorkRandom());
+    Check(p2.OriginalStage==3 && p2.PendingDecision==DevelopmentMilestone.StartDebugging && e2.Experience==70);
+});
+Test("successful sequel shipment consumes parent and preserves root, type and genre",()=>
+{
+    var(s,c,parent)=SequelFixture();var p=AcceptSequel(s,c);FinishSequel(s,c,p);
+    p.Quality=new(300,300,300,300);p.Bugs=0;long before=s.Money!.Value;
+    Check(ReleaseService.TryRelease(s,p,c,"Renamed Sequel",5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    var child=s.ReleasedGames[1];Check(parent.HasReleasedSequel && child.OriginalMode==1 && child.PredecessorProductIndex==0);
+    Check(child.SeriesBaseTitle==parent.Title && child.OriginalSequelCounter==1 && !child.HasReleasedSequel && child.ReviewPending);
+    Check(s.Money==before-50_000 && s.DevelopmentProjects.Count==0 && SequelDevelopmentRules.Candidates(s).Count()==0);
+    Check(ReviewService.Acknowledge(s,child) && child.HallOfFame);
+    Check(SequelDevelopmentRules.Candidates(s).Single()==child && SequelDevelopmentRules.SuggestedTitle(child)=="Synthetic Series3");
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames[0].HasReleasedSequel && s.ReleasedGames[1].SeriesBaseTitle==parent.Title);
+});
+Test("sequel lineage counter preserves the fresh-slot increment rather than invented numbering",()=>
+{
+    var(s,c,parent)=SequelFixture();
+    for (int index=0;index<3;index++)
+    {
+        var p=AcceptSequel(s,c,index);FinishSequel(s,c,p);p.Quality=new(300,300,300,300);
+        Check(ReleaseService.TryRelease(s,p,c,"Unique synthetic entry "+index,5800,1,new ConstantRandom(6))==ReleaseResult.Success);
+        Check(ReviewService.Acknowledge(s,s.ReleasedGames[^1]));
+        Check(s.ReleasedGames[^1].OriginalSequelCounter==1 && SequelDevelopmentRules.SuggestedTitle(s.ReleasedGames[^1])=="Synthetic Series3");
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    }
+    Check(SequelDevelopmentRules.Candidates(s).Single().ProductIndex==3);
+});
+Test("failed sequel shipment does not consume eligibility, money or RNG",()=>
+{
+    var(s,c,parent)=SequelFixture();var p=AcceptSequel(s,c);FinishSequel(s,c,p);var random=new SequenceRandom();
+    Check(ReleaseService.TryRelease(s,p,c,parent.Title,5800,1,random)==ReleaseResult.DuplicateTitle);
+    s.Money=0;Check(ReleaseService.TryRelease(s,p,c,"New",5800,1,random)==ReleaseResult.InsufficientFunds);
+    Check(!parent.HasReleasedSequel && s.DevelopmentProjects.Contains(p) && random.Calls==0);
+    parent.HasReleasedSequel=true;s.Money=100000;Check(ReleaseService.TryRelease(s,p,c,"New",5800,1,random)==ReleaseResult.NotReady && random.Calls==0);
+});
+Test("a low-reviewed sequel ends the chain without restoring the predecessor",()=>
+{
+    var(s,c,parent)=SequelFixture();var p=AcceptSequel(s,c);FinishSequel(s,c,p);p.Quality=new();
+    Check(ReleaseService.TryRelease(s,p,c,"Failed synthetic sequel",5800,1,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    var child=s.ReleasedGames[^1];Check(ReviewService.Acknowledge(s,child) && !child.HallOfFame);
+    Check(parent.HasReleasedSequel && !SequelDevelopmentRules.Candidates(s).Any());
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].HasReleasedSequel);
+});
+Test("modern saves before sequel support load with known original-game defaults",()=>
+{
+    var(s,c,_)=SequelFixture();DevelopmentProjectService.TryAcceptNewPlan(s,c,0,0,0,"Original",new(25,25,25,25));
+    var root=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;
+    var product=root["State"]!["ReleasedGames"]![0]!.AsObject();
+    foreach (var name in new[]{"OriginalMode","PredecessorProductIndex","HasReleasedSequel","OriginalSequelCounter","SeriesBaseTitle"}) product.Remove(name);
+    root["State"]!["DevelopmentProjects"]![0]!.AsObject().Remove("PredecessorProductIndex");
+    s=SaveStore.Deserialize(root.ToJsonString());Check(s.ReleasedGames[0].OriginalMode==0 && !s.ReleasedGames[0].HasReleasedSequel && s.ReleasedGames[0].OriginalSequelCounter==0);
+    Check(s.ReleasedGames[0].SeriesBaseTitle is null && s.DevelopmentProjects[0].PredecessorProductIndex is null);
+    Check(SequelDevelopmentRules.SuggestedTitle(s.ReleasedGames[0])=="Synthetic Series2");
+});
+Test("save validation rejects dangling, duplicate and cyclic sequel references",()=>
+{
+    var(s,c,_)=SequelFixture();var p=AcceptSequel(s,c);
+    p.PredecessorProductIndex=99;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.PredecessorProductIndex=0;
+    p.OriginalMode=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.OriginalMode=1;
+    s.DevelopmentProjects.Add(new() {RoomIndex=1,OriginalMode=1,PredecessorProductIndex=0,Title="Duplicate",RequiredPoints=400,Focus=p.Focus});
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.DevelopmentProjects.RemoveAt(1);
+    FinishSequel(s,c,p);p.Quality=new(300,300,300,300);ReleaseService.TryRelease(s,p,c,"Child",5800,1,new SequenceRandom(6,0,0,0,0));
+    ReviewService.Acknowledge(s,s.ReleasedGames[1]);var child=s.ReleasedGames[1];
+    child.PredecessorProductIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));child.PredecessorProductIndex=0;
+    s.ReleasedGames[0].HasReleasedSequel=false;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.ReleasedGames[0].HasReleasedSequel=true;
+    child.SeriesBaseTitle="Wrong root";Throws<InvalidDataException>(()=>SaveStore.Serialize(s));child.SeriesBaseTitle=s.ReleasedGames[0].Title;
+    child.OriginalSequelCounter=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("sequel saves reject manual type and genre selection and mismatched inherited data",()=>
+{
+    var(s,c,_)=SequelFixture();var p=AcceptSequel(s,c);p.Progress=p.RequiredPoints*.5;p.PendingDecision=DevelopmentMilestone.SelectType;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.PendingDecision=null;
+    p.GameTypeSourceIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.GameTypeSourceIndex=null;
+    SequelDevelopmentRules.InheritCheckpoint(s,p,c,DevelopmentMilestone.SelectType);
+    p.GameTypeSourceIndex=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.GameTypeSourceIndex=1;
+    p.GenreSourceIndex=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.GenreSourceIndex=null;
+    p.OriginalMode=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("sequel checkpoints reject ordinary selection APIs and malformed inherited points",()=>
+{
+    var(s,c,_)=SequelFixture();var p=AcceptSequel(s,c);p.Progress=200;
+    Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,new Dictionary<int,int> {{0,0}})==DevelopmentSelectionResult.WrongStage);
+    c.GameTypes[1].RawMembers["1308"]=-1;string before=SaveStore.Serialize(s);
+    Throws<InvalidDataException>(()=>SequelDevelopmentRules.InheritCheckpoint(s,p,c,DevelopmentMilestone.SelectType));
+    Check(SaveStore.Serialize(s)==before);c.GameTypes[1].RawMembers["1308"]=20;
+    SequelDevelopmentRules.InheritCheckpoint(s,p,c,DevelopmentMilestone.SelectType);p.Progress=p.RequiredPoints*.81;
+    Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.WrongStage);
+    c.Genres[0].RawMembers["1208"]=-1;before=SaveStore.Serialize(s);
+    Throws<InvalidDataException>(()=>SequelDevelopmentRules.InheritCheckpoint(s,p,c,DevelopmentMilestone.SelectGenre));Check(SaveStore.Serialize(s)==before);
+});
+Test("two rooms can develop sequels to distinct Hall of Fame games",()=>
+{
+    var(s,c,parent)=SequelFixture();s.ReleasedGames.Add(new() {ProductIndex=1,Title="Other series",HallOfFame=true,ReviewScores=[8,8,8,8]});
+    AcceptSequel(s,c,0,0);AcceptSequel(s,c,1,1);Check(SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects.Count==2);
+});
+
 Test("planning acceptance initializes two rooms, charges once and persists",()=>
 {
     var state=PlanningState();var catalog=PlanningCatalog();var focus=new DevelopmentFocus(25,25,25,25);

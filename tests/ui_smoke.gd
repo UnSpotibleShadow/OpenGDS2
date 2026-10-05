@@ -181,7 +181,11 @@ func run() -> void:
                 office_background.gui_input.emit(event)
                 await process_frame
                 check(main.find_child("DevelopmentRoomActions",true,false) != null,"Desk interior opens room action chooser: %d" % room)
-                check(main.find_child("RoomSequel",true,false).disabled and main.find_child("RoomManga",true,false).disabled,"Unreconstructed workflows are visibly unavailable")
+                check(not main.find_child("RoomSequel",true,false).disabled and main.find_child("RoomManga",true,false).disabled,"Sequel chooser is available; unresolved manga stays disabled")
+                main.find_child("RoomSequel",true,false).pressed.emit()
+                check(main.find_child("SequelSelectionWindow",true,false) != null,"Compact sequel chooser opens")
+                check(main.find_child("ConfirmSequelPredecessor",true,false).disabled,"No Hall of Fame predecessor at opening")
+                await press("CANCEL")
                 main.find_child("RoomOriginalGame",true,false).pressed.emit()
                 await process_frame
                 var selected_room = main.find_child("PlanningRoom",true,false)

@@ -1,11 +1,22 @@
 namespace OpenGDS2.Domain;
 
 public enum DevelopmentPlanningResult { Success, RoomOccupied, ComputerUnknown, HardwareStateUnknown,
-    HardwareUnavailable, LicenseRequired, ComputerTooSmall, MoneyUnknown, InsufficientFunds }
+    HardwareUnavailable, LicenseRequired, ComputerTooSmall, MoneyUnknown, InsufficientFunds,
+    PredecessorUnavailable, SequelAlreadyDeveloping }
 
 /// <summary>New-project, already-licensed acceptance branch of fGMKikakusyo.</summary>
 public static class DevelopmentProjectService
 {
+    public static DevelopmentPlanningResult CheckSequelPlan(GameState state,OriginalCatalog catalog,int roomIndex,
+        int hardwareSourceIndex,int audienceSourceIndex,int predecessorProductIndex,out DevelopmentQuote quote)
+    {
+        var result=CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out quote);
+        var predecessor=SequelDevelopmentRules.CheckPredecessor(state,predecessorProductIndex);
+        return predecessor!=DevelopmentPlanningResult.Success ? predecessor : result;
+    }
+    public static DevelopmentPlanningResult TryAcceptSequelPlan(GameState state,OriginalCatalog catalog,int roomIndex,
+        int hardwareSourceIndex,int audienceSourceIndex,int predecessorProductIndex,string title,DevelopmentFocus focus)
+        =>TryAcceptPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,title,focus,predecessorProductIndex);
     public static DevelopmentPlanningResult CheckNewPlan(GameState state,OriginalCatalog catalog,int roomIndex,
         int hardwareSourceIndex,int audienceSourceIndex,out DevelopmentQuote quote)
     {
@@ -30,10 +41,16 @@ public static class DevelopmentProjectService
     }
     public static DevelopmentPlanningResult TryAcceptNewPlan(GameState state,OriginalCatalog catalog,int roomIndex,
         int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus)
+        =>TryAcceptPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,title,focus,null);
+    private static DevelopmentPlanningResult TryAcceptPlan(GameState state,OriginalCatalog catalog,int roomIndex,
+        int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus,int? predecessorProductIndex)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Length>128) throw new ArgumentException("A project label of at most 128 characters is required.");
         DevelopmentWorkRules.SelectCategory(focus,0);
-        var result=CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out var quote);
+        DevelopmentQuote quote;
+        var result=predecessorProductIndex is int parent
+            ? CheckSequelPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,parent,out quote)
+            : CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out quote);
         if (result!=DevelopmentPlanningResult.Success) return result;
         var project=new DevelopmentProjectState
         {
@@ -41,9 +58,10 @@ public static class DevelopmentProjectService
             RoomIndex=roomIndex,HardwareSourceIndex=hardwareSourceIndex,
             AudienceSourceIndex=audienceSourceIndex,Title=title.Trim(),RequiredPoints=quote.Points,Focus=focus
         };
+        if (predecessorProductIndex is int predecessor)
+            SequelDevelopmentRules.Initialize(project,state.ReleasedGames.Single(x=>x.ProductIndex==predecessor));
         FinancialRules.Apply(state,-quote.Cost);
         state.DevelopmentProjects.Add(project);
         return DevelopmentPlanningResult.Success;
     }
 }
-

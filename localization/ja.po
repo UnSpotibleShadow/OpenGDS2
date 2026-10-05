@@ -1731,3 +1731,27 @@ msgstr "開発量"
 
 msgid "PLANNING_COST_COLUMN"
 msgstr "費用"
+
+msgid "SEQUEL_ELIGIBILITY_NOTE"
+msgstr "殿堂入りしたゲームは、続編を発売するまで続編の開発対象になります。"
+
+msgid "SEQUEL_NO_CANDIDATES"
+msgstr "続編を開発できる殿堂入りゲームがありません。"
+
+msgid "SEQUEL_INHERITANCE_NOTE"
+msgstr "各品質と認知度の30%を切り捨てて引き継ぎます。タイプとジャンルは開発中に引き継ぎます。"
+
+msgid "PLANNING_RESULT_PredecessorUnavailable"
+msgstr "このゲームは続編の開発対象ではありません。"
+
+msgid "PLANNING_RESULT_SequelAlreadyDeveloping"
+msgstr "このゲームの続編は別の部屋で開発中です。"
+
+msgid "SERIES_INSTALLMENT"
+msgstr "作品番号"
+
+msgid "SEQUEL_UNLOCKED"
+msgstr "殿堂入りすると、この作品の続編を開発できます。"
+
+msgid "SEQUEL_SERIES_ENDED"
+msgstr "この作品は殿堂入りしませんでした。このシリーズの続編は開発できません。"

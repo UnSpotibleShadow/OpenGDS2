@@ -76,13 +76,22 @@ public static class DevelopmentSimulation
         }
         TechnologyApplicationService.TickWork(project,employee,catalog,random);
         if (office.WorkTicks>=1) office.WorkTicks++;
-        var milestone=DevelopmentWorkRules.PendingMilestone(project);
-        if (milestone.HasValue)
+        // Mode 1 can cross both automatic checkpoints in one pass. Recalculate
+        // the percentage after each addition to required development points.
+        for (int checkpoint=0;checkpoint<3;checkpoint++)
         {
-            project.PendingDecision=milestone;
+            var milestone=DevelopmentWorkRules.PendingMilestone(project);
+            if (!milestone.HasValue) break;
             double bonus=milestone switch {DevelopmentMilestone.SelectType=>10,DevelopmentMilestone.SelectGenre=>20,_=>40};
             employee.Experience=EmployeeProgressionRules.AccrueExperience(employee.Experience!.Value,bonus,employee.Level!.Value);
-            if (milestone==DevelopmentMilestone.StartDebugging) project.OriginalStage=3;
+            if (project.OriginalMode==1 && milestone!=DevelopmentMilestone.StartDebugging)
+                SequelDevelopmentRules.InheritCheckpoint(state,project,catalog,milestone.Value);
+            else
+            {
+                project.PendingDecision=milestone;
+                if (milestone==DevelopmentMilestone.StartDebugging) project.OriginalStage=3;
+                break;
+            }
         }
 
         int Stat(DevelopmentWorkCategory category)=>category switch
@@ -115,7 +124,7 @@ public static class DevelopmentSimulation
     }
     public static IReadOnlyList<int> PrepareTypeCandidates(GameState state,DevelopmentProjectState project,OriginalCatalog catalog,Random random)
     {
-        if (project.PendingDecision!=DevelopmentMilestone.SelectType) throw new InvalidOperationException("No pending type selection.");
+        if (project.OriginalMode!=0 || project.PendingDecision!=DevelopmentMilestone.SelectType) throw new InvalidOperationException("No pending type selection.");
         if (state.OriginalTypeRosterMap is null) throw new InvalidOperationException("Original roster cells are unknown in this legacy save. Start a new company.");
         if (project.TypeCandidates is null)
         {

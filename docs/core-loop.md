@@ -141,7 +141,8 @@ regression tests cover it instead of silently changing the formula.
 - M35 connects calendar advancement, traced payroll/accounting, renewal, hardware
   and saved loans. M36 adds annual events. Borrowing/bankruptcy and remaining
   scratch-index writers still need reconstruction; see calendar-transactions.md.
-- Polishing, sequels, external studios/jobs and their shipping modifiers.
+- Polishing, external studios/jobs and their shipping modifiers. M48 connects
+  sequels; see [sequel behavior and remaining presentation gaps](sequel-development.md).
 - M36 connects own-company contest selection/prizes, exhibitions, the Beginner
   ending and known graduate queues; rival contest presentation, school
   construction and full company progression remain. M14 adds reviews and sales

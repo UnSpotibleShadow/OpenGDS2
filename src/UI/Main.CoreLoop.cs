@@ -34,6 +34,11 @@ public partial class Main
     {
         if (project.PendingDecision.HasValue) {ShowProjectDecision(state,project);return;}
         ClearContent();AddHeading(project.Title,28);
+        if (project.OriginalMode==1)
+        {
+            AddHeading(Tr("SEQUEL_DEVELOPMENT"),16);
+            AddHeading(Tr("SEQUEL_INHERITANCE_NOTE"),14);
+        }
         var progress=new ProgressBar {Name="DevelopmentProgress",MinValue=0,MaxValue=100};_content.AddChild(progress);
         var report=new Label {Name="DevelopmentReport",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
         AddHeading(Tr("DEVELOPMENT_STAFF_NOTE"),16);
@@ -122,7 +127,9 @@ public partial class Main
         {
             AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;
         }
-        var title=AddField(Tr("GAME_TITLE"),project.Title,128);title.Name="ReleaseTitle";
+        var defaultTitle=project.OriginalMode==1 && project.PredecessorProductIndex is int predecessor
+            ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
+        var title=AddField(Tr("GAME_TITLE"),defaultTitle,128);title.Name="ReleaseTitle";
         AddHeading(Tr("RETAIL_PRICE"),18);
         var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=ReleaseService.DefaultPrice};_content.AddChild(price);
         AddHeading(Tr("PRODUCTION_COPIES"),18);
@@ -208,6 +215,8 @@ public partial class Main
         int total=scores.Sum();
         var result=new Label {Name="ReviewTotal",Text=$"{Tr("REVIEW_TOTAL")}: {total} / 40"};_content.AddChild(result);
         AddHeading(Tr(total>=32 ? "REVIEW_HALL_OF_FAME" : total>=24 ? "REVIEW_GOOD" : total>=12 ? "REVIEW_LOW" : "REVIEW_POOR"),20);
+        if (total>=32 && !product.HasReleasedSequel) AddHeading(Tr("SEQUEL_UNLOCKED"),16);
+        else if (total<32 && product.OriginalMode==1) AddHeading(Tr("SEQUEL_SERIES_ENDED"),16);
         _status=new Label();_content.AddChild(_status);
         AddAction("SAVE_GAME",()=>
         {

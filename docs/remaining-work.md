@@ -13,7 +13,8 @@ Two further original screenshots establish a desk-cluster development action
 chooser (original game, sequel, manga/comic adaptation) and the compact
 hardware/audience quote screen leading to a planning meeting. Recover contextual
 room interaction and the separate quote/meeting presentation; manga adaptation
-joins sequels, polishing and external/contract work as an unresolved workflow.
+joins polishing and external/contract work as an unresolved workflow; M48 now
+connects the verified sequel lifecycle.
 The initial feedback identified Japanese staff names in English mode;
 M40 now supplies provisional display-name readings without changing imported/save
 identity. The owner also reports a
@@ -36,7 +37,8 @@ advice, hiring and automation remain unconnected.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
-Sequel/manga modes remain disabled; the overlapping tenant strip, other facility
+M48 enables sequels from Hall of Fame predecessors. Manga remains disabled; the
+overlapping tenant strip, other facility
 workflows, occupied artwork and original busy-window toggling remain unresolved.
 See [office click evidence and validation](office-clicks-m39.md).
 
@@ -49,7 +51,7 @@ See [office click evidence and validation](office-clicks-m39.md).
 | Dismissal | M15 connects source gate/stress clearing and supported office reservation/work cleanup | M17 clears active study on dismissal and retains learned skills; external tasks and runtime comparison remain |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Ordinary work/debugging and checkpoint experience scheduled in M13; M17 connects study and M18 connects six project technologies; M30 establishes the speed technology's eligible-pass lifetime but not its live effect; resolve that effect, top-level stress relief and external jobs; M31 validates saved source progression |
 | Weekly economics | M35 connects date advancement, ordered resumable calendar transactions, annual renewal, scratch-index payroll, hardware news/markets, recalls and saved loan repayments | M36 connects annual exhibition/contest/Beginner-ending/known graduate branches; M37 connects school purchase/closure, rival awards and global records; resolve student growth, remaining payroll scratch writers, borrowing and bankruptcy; see annual-calendar-events.md and calendar-transactions.md |
-| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; polishing and external/contract workflows remain; see core-loop.md |
+| Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; M48 connects sequel eligibility, inheritance, automatic checkpoints, shipment and series save/load; polishing and external/contract workflows remain; see core-loop.md and sequel-development.md |
 | Events/progression | Module2 periodic body identified; M16 business growth/actions connected | Module2 ordinal 12 start 009E3830, size 10216; separate event eligibility and effects |
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; M16 identifies genre research/member 90 and connects genre unlocks; M17 imports eight technologies and connects purchase/study; M18 connects project effects/stress relief levels 1–2; M33 corrects the technology-only increment and 11/10-pass cadence; M35 connects platform trigger/countdown/retirement and mutable market cells; resolve speed/top-level relief, polishing application and own-hardware progression |
 | Reviews/sales/awards | M14 implements reviews/Hall of Fame/milestones; M19 production budget; M20 weekly sales graph; M21 investigations/recalls | M26 verifies isolated outcomes for both sales-fee negotiations; M36 connects own-company award selection and signed prizes; M37 connects imported rival pool/presentation and sales/global rankings; recover consultation entry costs/timing, bankruptcy and company progression; see reviews-and-events.md, production-budget.md, sales-history.md and consumer-recalls.md |
@@ -69,3 +71,8 @@ Unknown mechanics must remain disabled or nullable. The calendar inspector and
 modern save validation are modern infrastructure, not replacements for missing
 compatibility simulation. User-owned imported data and saves must never be
 included in a public source archive.
+
+M48 completes the verified sequel lifecycle, including Hall of Fame eligibility,
+30% carry-over, automatic type/genre inheritance and consumed-parent lineage.
+See [behavior, source quirk and validation](sequel-development.md). Exact sequel
+conversations and original Windows comparison remain open.

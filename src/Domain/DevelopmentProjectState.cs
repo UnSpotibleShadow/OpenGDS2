@@ -17,6 +17,7 @@ public sealed class DevelopmentProjectState
     public int OriginalRoomState {get;set;}=1;
     public int OriginalStage {get;set;}
     public int OriginalMode {get;set;}
+    public int? PredecessorProductIndex {get;set;}
     // Modern label, not a claim about the original title-entry stage.
     public string Title {get;set;}=string.Empty;
     public double RequiredPoints {get;set;}

@@ -50,7 +50,7 @@ order and pause subsequent ticks until acknowledged. Acknowledgement advances
 only the product counter; no invented bonus is granted. The original company
 record dates and sales chart history remain outside this checkpoint because the
 complete calendar is not integrated. Hall of Fame marks sequel eligibility;
-sequel development itself is still unimplemented.
+M48 connects sequel development; see [eligibility and series lifecycle](sequel-development.md).
 
 ## Recall investigation: integrated in M21
 
