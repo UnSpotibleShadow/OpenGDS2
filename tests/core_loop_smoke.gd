@@ -70,6 +70,9 @@ func create_music_fixture() -> void:
         check(track.save_to_wav("user://music/office-%02d.wav" % (index+1)) == OK,"Write local music fixture")
 
 func run() -> void:
+    var expected_debug := OS.get_environment("OPENGDS2_EXPECT_DEBUG")
+    if expected_debug in ["0", "1"]:
+        check(OS.is_debug_build() == (expected_debug == "1"), "Runtime matches requested export configuration")
     # Set after display initialization: the dummy window otherwise starts at 64².
     root.size = Vector2i(1280,720)
     if OS.get_environment("XDG_DATA_HOME").is_empty():
