@@ -28,8 +28,8 @@ fixture verifies the actual imported cache.
 
 This fixes the initial office picture only. Secretary hiring, later portrait
 changes, salary/contract transactions and automation are not yet modeled.
-Existing saves have no reconstructed secretary identity, so this is not a
-claim of campaign-state parity for original saves.
+M53 persists source index 1 for fresh imported campaigns; older modern saves
+retain unknown identity. This is not campaign-state parity for original saves.
 
 Further tracing established a manual advice entry: the office click handler
 `009C66BC +071F..0741` checks native coordinates inclusively in
@@ -37,9 +37,9 @@ Further tracing established a manual advice entry: the office click handler
 also calls that helper. Its message queue includes project, facility,
 technology, contract, contest, license, computer, stock and funds advice.
 The helper queues preliminary messages and ends with one of three funds
-messages, shown through the modal conversation presenter. Full state mapping,
-random-draw order and presentation still require reconstruction before this
-entry can be connected. The December/weeks ≤3 reminder is one queue item;
+messages, shown through the modal conversation presenter. M53 connects the mapped conditions, random-draw order,
+manual click entry and compact translated presentation; see
+[advice evidence and limitations](secretary-advice.md). The December/weeks ≤3 reminder is one queue item;
 it is not proof of an automatic calendar trigger.
 
 This portrait fix does not diagnose or resolve the owner's red-line artifact.

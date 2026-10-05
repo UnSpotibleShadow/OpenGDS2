@@ -18,6 +18,147 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+(GameState State,OriginalCatalog Catalog) AdviceFixture(long money=150_000_000)
+{
+    var (s,c)=CalendarFixture(new(3,5,1),money);
+    c.Technologies=Enumerable.Range(0,8).Select(i=>new TechnologyDefinition {SourceIndex=i}).ToList();
+    s.TechnologyOwnershipLevels=Enumerable.Range(0,8).ToDictionary(i=>i,_=>0);
+    return(s,c);
+}
+Test("fresh imported campaigns preserve the verified initial secretary without guessing old identities",()=>
+{
+    var(s,c)=AdviceFixture();c.SourceHash=EmployeeDatabaseImporter.ExpectedHash;
+    var session=new GameSession();s=session.StartNewGame("Secretary test","Tester",GameMode.Normal,null,c);
+    Check(s.SecretarySourceIndex==1 && SecretaryAdviceRules.PortraitId(s.SecretarySourceIndex)==2);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).SecretarySourceIndex==1);
+    var legacy=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;legacy["State"]!.AsObject().Remove("SecretarySourceIndex");
+    Check(SaveStore.Deserialize(legacy.ToJsonString()).SecretarySourceIndex is null && SecretaryAdviceRules.PortraitId(null) is null);
+    Check(new int?[]{0,1,2,3,4}.Select(SecretaryAdviceRules.PortraitId).SequenceEqual(new int?[]{1,2,4,5,6}));
+    s.SecretarySourceIndex=5;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("secretary click uses the original inclusive native rectangle",()=>
+{
+    foreach(var(x,y) in new[]{(104.0,80.0),(114.0,104.0),(109.0,92.0)}) Check(OfficeInteractionRules.SecretaryAt(x,y));
+    foreach(var(x,y) in new[]{(103.99,80.0),(114.01,104.0),(109.0,79.99),(109.0,104.01),(double.NaN,92.0),(109.0,double.PositiveInfinity)}) Check(!OfficeInteractionRules.SecretaryAt(x,y));
+});
+Test("secretary advice preserves all message ordering and eligible draw ordering",()=>
+{
+    var(s,c)=AdviceFixture();s.Month=2;s.Calendar!.HardwareStage=1;s.ReleasedGames=[new() {Title="Stock",Stock=200000}];
+    var r=new SequenceRandom(0,0,0,0,0);Check(SecretaryAdviceRules.Prepare(s,c,r)==SecretaryAdviceResult.Success);
+    Check(r.Calls==5 && s.PendingSecretaryAdvice!.Messages.SequenceEqual(new[]{SecretaryAdviceMessage.DevelopGame,SecretaryAdviceMessage.HotSpring,SecretaryAdviceMessage.BuyTechnology,SecretaryAdviceMessage.ContractsNextMonth,SecretaryAdviceMessage.MoreLicenses,SecretaryAdviceMessage.UpgradeComputer,SecretaryAdviceMessage.ExcessStock,SecretaryAdviceMessage.FundsHealthy}));
+    Check(s.Money==150000000 && s.ReleasedGames[0].Stock==200000 && s.Calendar.HardwareStage==1);
+});
+Test("technology advice uses three ordered ownership and funds tiers with one draw",()=>
+{
+    foreach(var(money,count,eligible) in new[]{(149999999L,0,false),(150000000L,0,true),(249999999L,1,false),(250000000L,2,true),(250000000L,3,false),(349999999L,3,false),(350000000L,4,true),(350000000L,5,false)})
+    {
+        var(s,c)=AdviceFixture(money);s.Calendar!.OriginalSlots0444[0]=1;
+        for(int i=0;i<count;i++) s.TechnologyOwnershipLevels![i]=3;
+        var r=eligible ? new SequenceRandom(0,1) : new SequenceRandom(1);
+        Check(SecretaryAdviceRules.Prepare(s,c,r)==SecretaryAdviceResult.Success);
+        Check(s.PendingSecretaryAdvice!.Messages.Contains(SecretaryAdviceMessage.BuyTechnology)==eligible && r.Calls==(eligible ? 2 : 1));
+    }
+    var(state,catalog)=AdviceFixture(350000000);state.Calendar!.OriginalSlots0444[0]=1;
+    var noFallback=new SequenceRandom(1,1);SecretaryAdviceRules.Prepare(state,catalog,noFallback);
+    Check(noFallback.Calls==2 && !state.PendingSecretaryAdvice!.Messages.Contains(SecretaryAdviceMessage.BuyTechnology));
+});
+Test("hot-spring advice uses tenant presence and the 120 million inclusive threshold",()=>
+{
+    foreach(var(money,slot,eligible) in new[]{(119999999L,-1,false),(120000000L,-1,true),(120000000L,1,false)})
+    {
+        var(s,c)=AdviceFixture(money);s.Calendar!.OriginalSlots0444[2]=slot;
+        var r=eligible ? new SequenceRandom(0,1) : new SequenceRandom(1);SecretaryAdviceRules.Prepare(s,c,r);
+        Check(s.PendingSecretaryAdvice!.Messages.Contains(SecretaryAdviceMessage.HotSpring)==eligible && r.Calls==(eligible ? 2 : 1));
+    }
+});
+Test("contract and contest advice are manual calendar branches without extra draws",()=>
+{
+    foreach(var(month,week,message) in new[]{(2,1,(SecretaryAdviceMessage?)SecretaryAdviceMessage.ContractsNextMonth),(3,4,SecretaryAdviceMessage.ContractsThisMonth),(12,3,SecretaryAdviceMessage.Contest),(12,4,null),(4,1,null)})
+    {
+        var(s,c)=AdviceFixture(1);s.Month=month;s.Week=week;var r=new SequenceRandom(1);
+        SecretaryAdviceRules.Prepare(s,c,r);Check(r.Calls==1 && s.PendingSecretaryAdvice!.Messages.Count==(message.HasValue ? 3 : 2));
+        if(message.HasValue) Check(s.PendingSecretaryAdvice!.Messages[1]==message);
+    }
+});
+Test("license advice counts only active licensed hardware but always draws",()=>
+{
+    foreach(int count in Enumerable.Range(0,4))
+    {
+        var(s,c)=AdviceFixture(1);s.HardwareLicenses=Enumerable.Range(0,count).ToHashSet();s.AvailableHardware=[0,1,2];s.HardwareLicenses.Add(10);
+        var r=new SequenceRandom(0);SecretaryAdviceRules.Prepare(s,c,r);Check(r.Calls==1);
+        SecretaryAdviceMessage? expected=count switch {0=>SecretaryAdviceMessage.LicenseUrgent,1=>SecretaryAdviceMessage.MoreLicenses,2=>SecretaryAdviceMessage.AnotherLicense,_=>null};
+        Check(s.PendingSecretaryAdvice!.Messages.Count==(expected.HasValue ? 3 : 2));
+        if(expected.HasValue) Check(s.PendingSecretaryAdvice.Messages[1]==expected);
+    }
+});
+Test("computer advice checks numeric bits and hardware-stage thresholds",()=>
+{
+    foreach(var(bits,stage,eligible) in new[]{(8,0,false),(8,1,true),(16,2,false),(16,3,true),(32,4,false),(32,5,true),(64,9,false)})
+    {
+        var(s,c)=AdviceFixture(1);c.DevelopmentComputers[0].BitWidth=bits;s.Calendar!.HardwareStage=stage;
+        var r=eligible ? new SequenceRandom(1,0) : new SequenceRandom(1);SecretaryAdviceRules.Prepare(s,c,r);
+        Check(s.PendingSecretaryAdvice!.Messages.Contains(SecretaryAdviceMessage.UpgradeComputer)==eligible && r.Calls==(eligible ? 2 : 1));
+    }
+});
+Test("stock advice sums supported own shipments and uses the 200000-copy boundary",()=>
+{
+    foreach(long stock in new[]{199999L,200000L})
+    {
+        var(s,c)=AdviceFixture(1);s.ReleasedGames=[new() {Title="A",Stock=stock-100000},new() {ProductIndex=1,Title="B",Stock=100000}];
+        var r=stock==200000 ? new SequenceRandom(1,0) : new SequenceRandom(1);SecretaryAdviceRules.Prepare(s,c,r);
+        Check(s.PendingSecretaryAdvice!.Messages.Contains(SecretaryAdviceMessage.ExcessStock)==(stock==200000));
+    }
+});
+Test("funds advice keeps low-funds precedence and the strict contract comparison",()=>
+{
+    foreach(var(money,contracts,message) in new[]{(50000000L,100000000L,SecretaryAdviceMessage.FundsLow),(50000001L,50000002L,SecretaryAdviceMessage.FundsContracts),(50000001L,50000001L,SecretaryAdviceMessage.FundsHealthy)})
+    {
+        var(s,c)=AdviceFixture(money);s.Employees=[Candidate(0,contracts)];SecretaryAdviceRules.Prepare(s,c,new SequenceRandom(1));
+        Check(s.PendingSecretaryAdvice!.Messages.Last()==message && s.Money==money && s.Employees[0].ContractFee==contracts);
+    }
+});
+Test("advice save/load reuses its random outcome, advances once and freezes the clock",()=>
+{
+    var(s,c)=AdviceFixture(1);var session=new GameSession(new SequenceRandom(0));session.Restore(s);
+    Check(session.AskSecretary(c)==SecretaryAdviceResult.Success);
+    var saved=SaveStore.Serialize(s);s=SaveStore.Deserialize(saved);session.Restore(s);
+    var replay=new SequenceRandom();Check(SecretaryAdviceRules.Prepare(s,c,replay)==SecretaryAdviceResult.Success && replay.Calls==0);
+    session.TickOffice(c);Check(SaveStore.Serialize(s)==saved);
+    Throws<InvalidOperationException>(()=>session.OpenRecruitment());Check(session.Hire(Candidate(0))==HireResult.ConversationPending);
+    Check(SecretaryAdviceRules.Acknowledge(s));s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.PendingSecretaryAdvice!.MessageIndex==1);
+    while(SecretaryAdviceRules.Acknowledge(s)) {} Check(s.PendingSecretaryAdvice is null && !SecretaryAdviceRules.Acknowledge(s));
+    var legacy=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;legacy["State"]!.AsObject().Remove("PendingSecretaryAdvice");
+    Check(SaveStore.Deserialize(legacy.ToJsonString()).PendingSecretaryAdvice is null);
+});
+Test("unknown advice projections consume no random draws and create no queue",()=>
+{
+    Action<GameState,OriginalCatalog>[] corrupt=[(s,c)=>s.Money=null,(s,c)=>s.Month=null,(s,c)=>s.Week=null,(s,c)=>s.Calendar=null,(s,c)=>s.TechnologyOwnershipLevels=null,(s,c)=>s.TechnologyOwnershipLevels!.Remove(7),(s,c)=>s.DevelopmentComputerIndex=null,(s,c)=>s.AvailableHardware=null,(s,c)=>s.HardwareLicenses=null,(s,c)=>s.Employees=[Candidate(0,null)],(s,c)=>c.DevelopmentComputers.Clear(),(s,c)=>c.Technologies.Clear()];
+    foreach(var change in corrupt) {var(s,c)=AdviceFixture();change(s,c);Check(SecretaryAdviceRules.Prepare(s,c,new SequenceRandom())==SecretaryAdviceResult.StateUnknown && s.PendingSecretaryAdvice is null);}
+});
+Test("advice waits for existing modal game transactions without draws",()=>
+{
+    var(s,c)=AdviceFixture();s.DevelopmentProjects=[new() {Title="Pending",PendingDecision=DevelopmentMilestone.SelectType}];
+    Check(SecretaryAdviceRules.Prepare(s,c,new SequenceRandom())==SecretaryAdviceResult.EventPending);
+    s.DevelopmentProjects.Clear();s.PendingHireGreeting=new();Check(SecretaryAdviceRules.Prepare(s,c,new SequenceRandom())==SecretaryAdviceResult.EventPending);
+    s.PendingHireGreeting=null;s.Calendar!.Pending=new();Check(SecretaryAdviceRules.Prepare(s,c,new SequenceRandom())==SecretaryAdviceResult.EventPending);
+});
+Test("advice validation rejects malformed queues and completed or negative cursors",()=>
+{
+    var(s,c)=AdviceFixture(1);
+    List<SecretaryAdviceMessage>[] bad=[[],[(SecretaryAdviceMessage)99],[SecretaryAdviceMessage.DevelopGame],[SecretaryAdviceMessage.FundsLow,SecretaryAdviceMessage.FundsHealthy],[SecretaryAdviceMessage.HotSpring,SecretaryAdviceMessage.DevelopGame,SecretaryAdviceMessage.FundsHealthy],[SecretaryAdviceMessage.MoreLicenses,SecretaryAdviceMessage.MoreLicenses,SecretaryAdviceMessage.FundsHealthy],[SecretaryAdviceMessage.ContractsNextMonth,SecretaryAdviceMessage.Contest,SecretaryAdviceMessage.FundsLow],[SecretaryAdviceMessage.LicenseUrgent,SecretaryAdviceMessage.AnotherLicense,SecretaryAdviceMessage.FundsLow]];
+    foreach(var messages in bad) {s.PendingSecretaryAdvice=new() {Messages=messages};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));}
+    s.PendingSecretaryAdvice=new() {Messages=[SecretaryAdviceMessage.FundsLow],MessageIndex=-1};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingSecretaryAdvice.MessageIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingSecretaryAdvice=new() {Messages=null!};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("advice arithmetic failure occurs before its lottery and queue mutation",()=>
+{
+    var(s,c)=AdviceFixture();s.Employees=[Candidate(0,long.MaxValue),Candidate(1,1)];
+    Throws<OverflowException>(()=>SecretaryAdviceRules.Prepare(s,c,new SequenceRandom()));Check(s.PendingSecretaryAdvice is null);
+    s.Employees.Clear();s.ReleasedGames=[new() {Title="A",Stock=long.MaxValue},new() {Title="B",Stock=1}];
+    Throws<OverflowException>(()=>SecretaryAdviceRules.Prepare(s,c,new SequenceRandom()));Check(s.PendingSecretaryAdvice is null);
+});
+
 Test("checkpoint introductions acknowledge presentation without advancing the simulation",()=>
 {
     var s=PlanningState(10000);var p=new DevelopmentProjectState {Title="Checkpoint",RequiredPoints=100,Progress=51,Focus=new(25,25,25,25),PendingDecision=DevelopmentMilestone.SelectType};
@@ -3103,7 +3244,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==92 && dialogue.SchemaVersion==4 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==106 && dialogue.SchemaVersion==5 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

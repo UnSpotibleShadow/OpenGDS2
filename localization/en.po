@@ -2435,3 +2435,51 @@ msgstr "Alpha version meeting"
 
 msgid "CHECKPOINT_BETA_MEETING"
 msgstr "Beta version meeting"
+
+msgid "SECRETARY_ADVICE"
+msgstr "Ask Secretary"
+
+msgid "SECRETARY_ADVICE_UNKNOWN"
+msgstr "Some required company data is unknown in this save. Advice cannot be reconstructed yet."
+
+msgid "SECRETARY_ADVICE_DevelopGame"
+msgstr "We should develop a game."
+
+msgid "SECRETARY_ADVICE_HotSpring"
+msgstr "Adding a hot-spring tenant would make our employees happy."
+
+msgid "SECRETARY_ADVICE_BuyTechnology"
+msgstr "To make better games, buy technologies and have our employees learn them."
+
+msgid "SECRETARY_ADVICE_ContractsNextMonth"
+msgstr "Employee contracts are renewed next month. Please keep enough money available."
+
+msgid "SECRETARY_ADVICE_ContractsThisMonth"
+msgstr "Employee contracts are renewed this month. Please keep enough money available."
+
+msgid "SECRETARY_ADVICE_Contest"
+msgstr "The All-Japan Game Contest is this month. I am looking forward to it."
+
+msgid "SECRETARY_ADVICE_LicenseUrgent"
+msgstr "We need to obtain a hardware license as soon as possible."
+
+msgid "SECRETARY_ADVICE_MoreLicenses"
+msgstr "It would be good to obtain more hardware licenses."
+
+msgid "SECRETARY_ADVICE_AnotherLicense"
+msgstr "It would be good to obtain another hardware license."
+
+msgid "SECRETARY_ADVICE_UpgradeComputer"
+msgstr "It is about time to upgrade our development computer."
+
+msgid "SECRETARY_ADVICE_ExcessStock"
+msgstr "We have too much stock. If it has stopped selling, a recycling-shop tenant would help."
+
+msgid "SECRETARY_ADVICE_FundsLow"
+msgstr "Our funds are running low. Please be careful."
+
+msgid "SECRETARY_ADVICE_FundsContracts"
+msgstr "We must keep at least enough money to pay employee contract fees."
+
+msgid "SECRETARY_ADVICE_FundsHealthy"
+msgstr "We have plenty of money, so there should be no need to worry."

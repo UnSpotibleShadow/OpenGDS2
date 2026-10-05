@@ -127,4 +127,28 @@ public partial class Main
         });
         return true;
     }
+
+    private void ShowSecretaryAdvice(GameState state)
+    {
+        if (!DesktopActionEnabled("SECRETARY_ADVICE")) {ShowOfficeReconstruction(state);return;}
+        var result=_session.AskSecretary(_activeCatalog);
+        if (result==SecretaryAdviceResult.Success) {ShowPendingSecretaryAdvice(state);return;}
+        if (result==SecretaryAdviceResult.EventPending) {ShowOfficeReconstruction(state);return;}
+        ClearContent();CompactManagementWindow("SecretaryAdviceWindow",new Vector2(330,142),314);
+        AddHeading(Tr("SECRETARY_ADVICE"),16);
+        _content.AddChild(new Label {Text=Tr("SECRETARY_ADVICE_UNKNOWN"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+    }
+    private bool ShowPendingSecretaryAdvice(GameState state)
+    {
+        if (state.PendingSecretaryAdvice is not { } advice) return false;
+        ShowConversation(Tr("SECRETARY_ADVICE"),[new(DialogueText("CORE_SECRETARY"),
+            DialogueText(SecretaryAdviceRules.MessageKey(advice.Messages[advice.MessageIndex])),
+            SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
+        {
+            if (!ReferenceEquals(state.PendingSecretaryAdvice,advice)) return;
+            SecretaryAdviceRules.Acknowledge(state);ShowOfficeReconstruction(state);
+        });
+        return true;
+    }
 }

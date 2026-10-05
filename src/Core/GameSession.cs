@@ -44,6 +44,8 @@ public sealed class GameSession
         if (catalog?.SourceHash==EmployeeDatabaseImporter.ExpectedHash && catalog.InitialRivalProducts.Count==30 && catalog.StagedRivalProducts.Count==35 && catalog.RivalCompanies.Count==10)
             state.Competition=CompetitionService.Opening(catalog);
         if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
+            state.SecretarySourceIndex=1; // Completed initializer 009F651C +C0F9.
+        if (catalog?.SourceHash == EmployeeDatabaseImporter.ExpectedHash)
             state.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
         if (database is not null)
         {
@@ -65,7 +67,7 @@ public sealed class GameSession
     public RecruitmentState OpenRecruitment()
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null) throw new InvalidOperationException("A hire conversation is pending.");
+        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null) throw new InvalidOperationException("A conversation is pending.");
         state.Recruitment.Candidates.Clear();
         if (state.MinimumSourceIndex is int minimum && state.SourceUpperBound is int upper)
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
@@ -74,7 +76,7 @@ public sealed class GameSession
     public HireResult Hire(EmployeeState candidate)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null) return HireResult.ConversationPending;
+        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null) return HireResult.ConversationPending;
         var result = HiringService.TryHire(state, candidate, _random);
         if (result == HireResult.Success && candidate.SourceIndex is int source && source is >=0 and <=59 && candidate.PortraitId is >=1 and <=10)
             state.PendingHireGreeting = new() {EmployeeSourceIndex=source,Variant=(int)Math.Floor(_random.NextSingle()*10)};
@@ -88,10 +90,13 @@ public sealed class GameSession
         return true;
     }
 
+    public SecretaryAdviceResult AskSecretary(OriginalCatalog? catalog)
+        =>SecretaryAdviceRules.Prepare(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
+
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null) return;
+        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null) return;
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (CalendarService.HasPending(state))
         {

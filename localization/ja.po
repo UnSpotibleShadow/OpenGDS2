@@ -2435,3 +2435,51 @@ msgstr ""
 
 msgid "CHECKPOINT_BETA_MEETING"
 msgstr ""
+
+msgid "SECRETARY_ADVICE"
+msgstr "秘書に相談"
+
+msgid "SECRETARY_ADVICE_UNKNOWN"
+msgstr "このセーブには未解明の会社データがあり、助言を再現できません。"
+
+msgid "SECRETARY_ADVICE_DevelopGame"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_HotSpring"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_BuyTechnology"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_ContractsNextMonth"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_ContractsThisMonth"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_Contest"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_LicenseUrgent"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_MoreLicenses"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_AnotherLicense"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_UpgradeComputer"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_ExcessStock"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_FundsLow"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_FundsContracts"
+msgstr ""
+
+msgid "SECRETARY_ADVICE_FundsHealthy"
+msgstr ""

@@ -1,4 +1,19 @@
-# Development checkpoint — M52, 2026-10-05
+# Development checkpoint — M53, 2026-10-05
+
+M53 connects manual secretary advice through the original office hit rectangle
+and Company/Settings entries. Fourteen conditional messages preserve branch/draw
+order and finish with the funds assessment. Modern saves retain the selected
+queue/read cursor; new imported campaigns preserve opening secretary source 1
+and portrait 2. Reimport the required LZH for the 106-entry local Japanese cache.
+See [source conditions and compatibility limits](secretary-advice.md).
+
+Local direct C# compilation passes all 271 domain checks (267 public, four
+private). All 51 Python checks pass (36 public, fifteen private). Both headless
+Godot suites report zero failures. Actions remain paused; no new desktop export
+or native Windows run was started. Publication references follow below once
+verified.
+
+## Previous M52 validation
 
 M52 restores alpha/type and beta/genre meeting discussions and their shared
 original planning illustration, with compact preview/confirmation panels.

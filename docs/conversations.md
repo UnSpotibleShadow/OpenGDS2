@@ -224,3 +224,15 @@ compare the actual texture with the local import, cancel during typing, wait
 through multiple timer intervals, verify no fee/project was created, then run a
 fresh complete discussion/proposal. The fixture-free core loop still works
 without the private illustration.
+
+## M53: manual secretary advice
+
+The office secretary's inclusive native click rectangle and a Company/Settings
+entry now open the original conditional advice queue. Fourteen authored English
+translations accompany locally imported Japanese pages. Current imported
+campaigns retain initial secretary source 1/portrait 2; older saves keep unknown
+identity. Message IDs and read cursors persist without rerolling, spending money
+or running office/sales/calendar ticks. Recommendations do not perform or unlock
+purchases. See [exact conditions, queue order, source mappings and remaining
+presentation limits](secretary-advice.md). Secretary recruitment/policies, actual
+name captions, event speakers and automatic timed presentation remain unresolved.

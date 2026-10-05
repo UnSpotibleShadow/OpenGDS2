@@ -34,7 +34,7 @@ planning illustration beside its conversation. M40 supplies provisional display-
 pronunciation review remains. M41 restores normal-hire conversations; M42–M43
 restore compact development quotes with locally imported hardware pictures.
 M44 corrects the initializer's final secretary portrait selection; secretary
-advice, hiring and automation remain unconnected.
+M53 connects manual advice; hiring and automation remain unconnected.
 
 M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
@@ -112,3 +112,11 @@ fees/bonuses. Local validation passes 256 C# checks, 48 Python checks and both
 headless Godot suites. The example-title column, remaining selection styling,
 project cancellation/stress, secretary/event callers and the timed presenter
 remain unfinished. Actions stay paused. See [M52 evidence](conversations.md#m52-alpha-and-beta-meetings).
+
+M53 connects manual secretary advice, its fourteen original conditional messages,
+English/Japanese presentation, opening portrait and resumable saved queue. Local
+validation passes 271 C# checks (267 public/four private), 51 Python checks
+(36 public/fifteen private) and both headless Godot suites. Secretary hiring,
+contracts and automation policies, actual secretary name captions, event speakers
+and the automatic timed presenter remain open. Actions stay paused. See
+[the source conditions and compatibility boundaries](secretary-advice.md).
