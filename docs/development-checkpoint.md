@@ -1,4 +1,22 @@
-# Development checkpoint — M44, 2026-10-05
+# Development checkpoint — M45, 2026-10-05
+
+M45 adds genuine Windows/Linux x86_64 debug exports with managed game symbols,
+console/logging instructions and a separate **OpenGDS2-desktop-debug** artifact.
+The release archive layout is retained. Three packaging regressions verify
+symbol preservation, missing-symbol rejection and imported-cache exclusion.
+The core-loop fixture now checks the requested runtime debug flag.
+Local public Python checks and two debug-mode Godot core-loop runs pass.
+All four jobs passed in [run 37268683644](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37268683644): 203 public domain checks, 25 public Python checks
+(10 private fixtures skipped), and zero editor or packaged Linux/Windows
+release/debug core-loop failures. PR #39 merged as `348b1f7470a6d8ddbb47f4057a03d04de6ca1992`;
+tested head `1104a87a123dfc5b7afdb6deab66f17e4ad44c11`.
+
+[Download the debug packages](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37268683644/artifacts/11327755713).
+The artifact contains both platform ZIPs, expires 2026-10-19 and has digest
+`sha256:22aa6ba7c845f8cffc97a4627f49ea8893d74b1e7a8cf86abce052d7b3d3ff63`.
+See [debug package instructions](building.md#debug-packages).
+
+## Previous M44 validation
 
 M44 applies the original initializer's final secretary portrait selection to
 local office imports. Direct C# compilation, 206 domain checks and 32 Python
