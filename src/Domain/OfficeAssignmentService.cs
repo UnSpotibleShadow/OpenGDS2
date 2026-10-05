@@ -1,6 +1,6 @@
 namespace OpenGDS2.Domain;
 
-public enum OfficeAssignmentResult { Success, UnknownWorkspace, Occupied, AlreadyAssigned, NoLoungeSeat }
+public enum OfficeAssignmentResult { Success, UnknownWorkspace, Occupied, AlreadyAssigned, NoLoungeSeat, RestRequired }
 
 /// <summary>Study and development seat subset of Module2 10 (009AF6BC).</summary>
 public static class OfficeAssignmentService
@@ -19,6 +19,11 @@ public static class OfficeAssignmentService
     {
         if (!state.Employees.Contains(employee) || employee.Office is not OfficeEmployeeState office)
             return OfficeAssignmentResult.UnknownWorkspace;
+        // Native assignment click 009C66BC +1055..110E: a work/study request
+        // is allowed only at/below the entry threshold, or under voluntary policy.
+        if (state.SecretaryPolicies is { } policy && SecretaryPolicyRules.BreakThreshold(policy.Break) is int threshold && employee.Stress>threshold)
+            return OfficeAssignmentResult.RestRequired;
+        if (office.AutomaticBreak is not null) office.AutomaticBreak=false;
         if (office.Action == action || office.SeatedAction == action) return OfficeAssignmentResult.AlreadyAssigned;
         if (state.Employees.Any(x => x != employee && x.Office?.Action == action))
             return OfficeAssignmentResult.Occupied;
@@ -26,10 +31,11 @@ public static class OfficeAssignmentService
         return OfficeAssignmentResult.Success;
     }
 
-    public static OfficeAssignmentResult TryTakeBreak(GameState state, EmployeeState employee, Random random)
+    public static OfficeAssignmentResult TryTakeBreak(GameState state, EmployeeState employee, Random random, bool automatic=false)
     {
         if (!state.Employees.Contains(employee) || employee.Office is not OfficeEmployeeState office)
             return OfficeAssignmentResult.UnknownWorkspace;
+        if (!automatic && office.AutomaticBreak is not null) office.AutomaticBreak=false;
         if (office.Action is >=18 and <=20) return OfficeAssignmentResult.AlreadyAssigned;
         var occupied = state.Employees.Where(x => x.Office?.LoungeSeat is not null)
             .Select(x => x.Office!.LoungeSeat!.Value).ToHashSet();

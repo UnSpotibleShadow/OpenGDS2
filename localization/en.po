@@ -2483,3 +2483,114 @@ msgstr "We must keep at least enough money to pay employee contract fees."
 
 msgid "SECRETARY_ADVICE_FundsHealthy"
 msgstr "We have plenty of money, so there should be no need to worry."
+
+msgid "HIRE_SECRETARY"
+msgstr "Hire secretary"
+
+msgid "SECRETARY_POLICIES"
+msgstr "Secretary policies"
+
+msgid "SECRETARY_RANK"
+msgstr "Rank"
+
+msgid "SECRETARY_CATALOG_REQUIRED"
+msgstr "Reimport the original LZH to load secretary records. A known current secretary is required to replace them."
+
+msgid "SECRETARY_HIRE_UNAVAILABLE"
+msgstr "Cannot afford this contract, or another conversation is pending."
+
+msgid "SECRETARY_HIRE_FEE_HELP"
+msgstr "Pay the contract fee and replace the current secretary."
+
+msgid "SECRETARY_HIRE_StateUnknown"
+msgstr "Secretary records or company state are unknown."
+
+msgid "SECRETARY_HIRE_AlreadyEmployed"
+msgstr "This secretary is already employed."
+
+msgid "SECRETARY_HIRE_InsufficientFunds"
+msgstr "Not enough money for this contract."
+
+msgid "SECRETARY_HIRE_EventPending"
+msgstr "Finish the current conversation first."
+
+msgid "SECRETARY_FAREWELL"
+msgstr "Thank you for everything. Please get in touch if you need me again."
+
+msgid "SECRETARY_GREETING"
+msgstr "I am {name}, your new secretary. I look forward to working with you."
+
+msgid "SECRETARY_POLICIES_UNKNOWN"
+msgstr "This save has no recorded policies. Choose all three settings to enable them."
+
+msgid "SECRETARY_BREAK_ENTRY"
+msgstr "Take a break"
+
+msgid "SECRETARY_BREAK_RETURN"
+msgstr "Return to work"
+
+msgid "SECRETARY_POLICY_Production_0"
+msgstr "Funds >= 300m"
+
+msgid "SECRETARY_POLICY_Production_1"
+msgstr "Funds >= 100m"
+
+msgid "SECRETARY_POLICY_Production_2"
+msgstr "Manual"
+
+msgid "SECRETARY_POLICY_Break_0"
+msgstr "Voluntary"
+
+msgid "SECRETARY_POLICY_Break_1"
+msgstr "Stress 100"
+
+msgid "SECRETARY_POLICY_Break_2"
+msgstr "Stress 80"
+
+msgid "SECRETARY_POLICY_Break_3"
+msgstr "Stress 60"
+
+msgid "SECRETARY_POLICY_Return_0"
+msgstr "Stress 40"
+
+msgid "SECRETARY_POLICY_Return_1"
+msgstr "Stress 20"
+
+msgid "SECRETARY_POLICY_Return_2"
+msgstr "Stress 0"
+
+msgid "SECRETARY_NAME_0"
+msgstr "Yukiya Yoshida"
+
+msgid "SECRETARY_NAME_1"
+msgstr "Hagemaru Hageta"
+
+msgid "SECRETARY_NAME_2"
+msgstr "Aoi Hanada"
+
+msgid "SECRETARY_NAME_3"
+msgstr "Ichiro Ichimura"
+
+msgid "SECRETARY_NAME_4"
+msgstr "Akira Ijuin"
+
+msgid "SECRETARY_DESCRIPTION_0"
+msgstr "Graduated top of the class at the University of Tokyo. An accomplished adviser to major companies, with extensive knowledge of the computer industry."
+
+msgid "SECRETARY_DESCRIPTION_1"
+msgstr "Graduated top of the class at Harvard. An experienced secretary who has always worked at the forefront of the profession."
+
+msgid "SECRETARY_DESCRIPTION_2"
+msgstr "Knows the personal computer industry well. Clear, practical advice has attracted interest from other companies."
+
+msgid "SECRETARY_DESCRIPTION_3"
+msgstr "Passed the secretary examination with average grades. Experience has since brought a steady supply of ordinary comments."
+
+msgid "SECRETARY_DESCRIPTION_4"
+msgstr "Background unknown. Several previous employers have gone under. Rumor has it this secretary never took the qualifying examination."
+
+msgid "ASSIGNMENT_RESULT_RestRequired"
+msgstr "Stress is above the secretary policy threshold. Allow this employee to rest."
+
+msgid "SECRETARY_NAMED"
+msgstr "Secretary {name}"

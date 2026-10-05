@@ -1,4 +1,20 @@
-# Development checkpoint — M53, 2026-10-05
+# Development checkpoint — M54, 2026-10-05
+
+M54 imports five secretary records locally, connects paid replacement with
+resumable farewell/identity/greeting, updates named captions and the office sprite,
+and exposes production/rest policies. Automatic production follows the selected
+300m/100m/manual policy; automatic rest enters at stress 100/80/60 and returns at
+40/20/0, with voluntary control. Reimport the required LZH for the 109-entry local
+Japanese dialogue cache. See [source evidence and compatibility limits](secretary-management.md).
+
+Local direct C# compilation passes 286 domain checks (281 public, five private).
+All 54 Python checks pass (38 public, sixteen private). Both headless Godot suites
+report zero failures, and the root project launches headlessly with the compiled
+assembly. Actions remain paused; no new desktop export or native Windows run was
+started. Historical M48 packages do not include M54. Secretary salary/renewal
+transactions remain unproven and are not invented; English names are provisional.
+
+## Previous M53 validation
 
 M53 connects manual secretary advice through the original office hit rectangle
 and Company/Settings entries. Fourteen conditional messages preserve branch/draw

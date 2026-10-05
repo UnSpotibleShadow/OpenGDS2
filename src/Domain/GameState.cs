@@ -49,4 +49,6 @@ public sealed class GameState
     // Original member 0890. Unknown in earlier modern saves; never infer it on load.
     public int? SecretarySourceIndex { get; set; }
     public SecretaryAdviceState? PendingSecretaryAdvice { get; set; }
+    public SecretaryReplacementState? PendingSecretaryReplacement {get;set;}
+    public SecretaryPolicyState? SecretaryPolicies {get;set;}
 }

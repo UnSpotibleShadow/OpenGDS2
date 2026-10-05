@@ -47,7 +47,7 @@ public static class CompanyActivityService
         if (state.CompanyActivityTicks is not int ticks || state.CompanyActivityPerformed is null) return;
         ticks++;
         if (ticks>=160 && state.CompanyActivityPerformed==false &&
-            state.Money >= (state.Mode==GameMode.Beginner ? 100_000_000 : 300_000_000))
+            SecretaryPolicyRules.ProductionThreshold(state.SecretaryPolicies) is long threshold && state.Money>=threshold)
             TryPerform(state,CompanyActivity.ProductionExpansion,random);
         if (ticks==TicksPerWeek)
         {

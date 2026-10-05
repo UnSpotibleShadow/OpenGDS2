@@ -70,7 +70,8 @@ public partial class Main
             ("SETTINGS", ShowSettings), ("IMPORT_BUTTON", ShowImporter), ("BACK_TO_TITLE", ShowTitleScreen)]);
         Menu(menus, "MENU_COMPANY", [("COMPANY_ACTIVITIES", () => ShowCompanyActivities(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
-            ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state))]);
+            ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
+            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state))]);
         Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
         Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state)),
             ("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state))]);
@@ -237,7 +238,7 @@ public partial class Main
     {
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null) &&
+        if (_desktopState is GameState current && (CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {

@@ -13,6 +13,8 @@ public static class OfficePresentationRules
         {
             if (date is null && original.Id is 144 or 145) continue;
             var sprite=date is null ? original : DateSprite(original,date.Value);
+            if (sprite.Id==141 && SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex) is int portrait)
+                sprite=sprite with {SourceX=48+(portrait-1)*152};
             if (state.DevelopmentComputerIndex is int computer)
             {
                 if (sprite.Id==140) sprite=sprite with {X=91,Y=96,SourceX=571+computer*74,SourceY=318};

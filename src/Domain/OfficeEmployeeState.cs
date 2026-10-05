@@ -39,4 +39,7 @@ public sealed class OfficeEmployeeState
     public int PendingSpeechBubble {get;set;}
     public int SpeechBubble {get;set;}
     public int SpeechBubbleTicks {get;set;}
+    // Original member 2A80 flag and 2A64 saved action. Null in older saves.
+    public bool? AutomaticBreak {get;set;}
+    public int? BeforeAutomaticBreakAction {get;set;}
 }

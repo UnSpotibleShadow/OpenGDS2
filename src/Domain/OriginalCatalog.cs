@@ -15,6 +15,7 @@ public sealed class OriginalCatalog
     public List<RivalReleaseDefinition> StagedRivalProducts {get;set;}=[];
     public List<string> RivalCompanies {get;set;}=[];
     public List<MangaDefinition> Manga {get;set;}=[];
+    public List<SecretaryDefinition> Secretaries {get;set;}=[];
 }
 
 /// <summary>Six columns written by Module1 helper 0098128C; loaded locally.</summary>

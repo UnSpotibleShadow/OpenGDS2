@@ -142,7 +142,7 @@ public partial class Main
     private bool ShowPendingSecretaryAdvice(GameState state)
     {
         if (state.PendingSecretaryAdvice is not { } advice) return false;
-        ShowConversation(Tr("SECRETARY_ADVICE"),[new(DialogueText("CORE_SECRETARY"),
+        ShowConversation(DialogueText("CORE_SECRETARY"),[new(SecretaryCaption(state.SecretarySourceIndex),
             DialogueText(SecretaryAdviceRules.MessageKey(advice.Messages[advice.MessageIndex])),
             SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
         {

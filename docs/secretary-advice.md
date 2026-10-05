@@ -100,3 +100,8 @@ fourteen Japanese pages, use Japanese dialogue and compare secretary mouth frame
 with local Human2 artwork. Existing development/release/sales, sequel and manga
 regressions remain green. Actions stay paused; no new exports or native Windows
 validation were run.
+
+M54 supersedes the generic-name and recruitment/policy limitations above: named
+secretary captions, five local records, paid replacement and production/rest
+settings are connected. Original timed presentation and any unproven salary or
+renewal transaction remain open. See [M54 evidence](secretary-management.md).

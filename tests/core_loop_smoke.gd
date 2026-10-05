@@ -127,9 +127,13 @@ func run() -> void:
             {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
         "Technologies":[{"SourceIndex":0,"Identifier":0,"Name":"Synthetic Technology","PurchaseFee":50,"InitialOwnershipLevel":0,"RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable158C":[1,2,3],"RawTable1568":[1,2,3]}],
         "RivalCompanies":["Synthetic rival company A","Synthetic rival company B"],
+        "Secretaries":[],
         "Manga":[{"SourceIndex":0,"Title":"Synthetic Comic","Author":"Synthetic Author","Publisher":"Synthetic Publisher","PopularityDescription":"Synthetic Popularity","Popularity":10,"RightsFee":100}],
         "Genres":[{"SourceIndex":0,"Name":"Synthetic Genre","RawMembers":{"1224":7,"1208":10,"1240":1,"125C":0}}]
     }
+    for index in range(5):
+        catalog.Secretaries.append({"SourceIndex":index,"Name":"Authored secretary %d" % index,"RankCode":min(index,3),
+            "ContractFee":100+index,"AdvertisedSalary":10+index,"PortraitId":[1,2,4,5,6][index],"Description":"Authored secretary biography %d" % index})
     # Genre helper validates its fifteen-column table even for broad audience.
     for type in catalog.GameTypes:
         for column in range(15):
@@ -141,7 +145,7 @@ func run() -> void:
         "Fun":80,"Novelty":80,"Graphics":80,"Music":80,"Accuracy":80,"DevelopmentSpeed":80,"Inspiration":80,
         "Office":{"Action":6,"SeatedAction":6,"WorkEngaged":true,"MovementState":0,"Facing":1,"Frame":13}}
     var state := {"TechnologyOwnershipLevels":{"0":0},"Money":10000000,"Year":1,"Month":4,"Week":1,"DevelopmentComputerIndex":0,"HardwareLicenses":[0],"AvailableHardware":[0],
-        "Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000,"WeeklyNet":0,"MonthlyNet":0,"YearlyNet":0},
+        "SecretarySourceIndex":1,"Company":{"Name":"Synthetic UI Company","PresidentName":"Tester","Fame":12,"Rank":0,"ProductionCapacity":50,"OriginalMember90":23,"ActivityCost":5000000,"WeeklyNet":0,"MonthlyNet":0,"YearlyNet":0},
         "Employees":[worker],"OriginalAccuracyCells":{"99":0},"OriginalTypeRosterMap":roster,"SalesFee1":1500,"SalesFee2":1500,"CompanyActivityTicks":0,"CompanyActivityPerformed":false}
     write_json("user://original/catalog.json",catalog)
     write_json("user://saves/slot1.json",{"Format":"OpenGDS2","SchemaVersion":1,"State":state})
@@ -238,6 +242,54 @@ func run() -> void:
     check(completed_advice.State.PendingSecretaryAdvice == null and completed_advice.State.Money == queued_advice.State.Money,"Advice completion clears the queue without charging fees")
     check(completed_advice.State.CompanyActivityTicks == queued_advice.State.CompanyActivityTicks and completed_advice.State.SalesTicks == queued_advice.State.SalesTicks,"Office and sales clocks stay frozen during advice")
     check(seen_dialogue.has(tr("SECRETARY_ADVICE_FundsLow")),"Funds assessment ends the advice sequence")
+    write_json("user://saves/slot1.json",before_advice)
+    await press("LOAD_GAME")
+    # Replacement is a paid, persisted two-step conversation, not a free alias change.
+    await press("SETTINGS")
+    await press("HIRE_SECRETARY")
+    var secretary_candidates = main.find_child("SecretaryCandidates",true,false)
+    check(secretary_candidates.get_root().get_child_count() == 4,"Secretary recruitment excludes the current secretary")
+    var secretary_choice = secretary_candidates.get_root().get_child(1)
+    check(int(secretary_choice.get_metadata(0)) == 2,"Secretary rows preserve source order")
+    secretary_choice.select(0)
+    secretary_candidates.item_selected.emit()
+    await process_frame
+    check(main.find_child("SecretaryDescription",true,false).text == tr("SECRETARY_DESCRIPTION_2"),"Selected secretary gets an English biography")
+    await press_node("HireSelectedSecretary")
+    check(main.find_child("ConversationMessage",true,false).text == tr("SECRETARY_FAREWELL"),"Old secretary speaks before identity changes")
+    await press_node("ToolbarSAVE_GAME")
+    var secretary_farewell = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(secretary_farewell.State.SecretarySourceIndex == 1 and secretary_farewell.State.PendingSecretaryReplacement.Phase == 0,"Farewell retains the previous secretary")
+    check(secretary_farewell.State.Money == before_advice.State.Money-102,"Secretary replacement charges exactly the imported contract fee")
+    await press("LOAD_GAME")
+    check(main.find_child("ConversationMessage",true,false).text == tr("SECRETARY_FAREWELL"),"Loading resumes the paid farewell")
+    await advance_conversation_page()
+    check(main.find_child("ConversationSpeaker",true,false).text == tr("SECRETARY_NAMED").replace("{name}",tr("SECRETARY_NAME_2")),"Replacement changes the speaker before the greeting")
+    await press_node("ToolbarSAVE_GAME")
+    var secretary_greeting = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(secretary_greeting.State.SecretarySourceIndex == 2 and secretary_greeting.State.PendingSecretaryReplacement.Phase == 1,"New secretary identity and greeting phase are saved together")
+    check(secretary_greeting.State.Money == secretary_farewell.State.Money and secretary_greeting.State.CompanyActivityTicks == secretary_farewell.State.CompanyActivityTicks,"Loading and reading do not charge or tick again")
+    await press("LOAD_GAME")
+    await finish_conversation()
+    await press("SETTINGS")
+    await press("SECRETARY_POLICIES")
+    check(main.find_child("ConfirmSecretaryPolicies",true,false).disabled,"Unknown legacy policies require explicit choices")
+    for choice in ["SecretaryProduction2","SecretaryBreak2","SecretaryReturn0"]:
+        main.find_child(choice,true,false).button_pressed = true
+    await press_node("ConfirmSecretaryPolicies")
+    await press_node("ToolbarSAVE_GAME")
+    var saved_policies = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(saved_policies.State.SecretaryPolicies.Production == 2 and saved_policies.State.SecretaryPolicies.Break == 2 and saved_policies.State.SecretaryPolicies.Return == 0,"Secretary policy choices persist as original enum values")
+    await press("LOAD_GAME")
+    await press("SETTINGS")
+    await press("SECRETARY_POLICIES")
+    check(main.find_child("SecretaryProduction2",true,false).button_pressed and main.find_child("SecretaryReturn0",true,false).button_pressed,"Loading preserves manual production and stress-40 return")
+    main.find_child("SecretaryBreak0",true,false).button_pressed = true
+    check(main.find_child("SecretaryReturn0",true,false).disabled,"Voluntary rest disables return controls")
+    await press("BACK_TO_OFFICE")
+    await press_node("ToolbarSAVE_GAME")
+    var cancelled_policy = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(cancelled_policy.State.SecretaryPolicies.Break == 2,"Closing policy settings cancels the proposal")
     write_json("user://saves/slot1.json",before_advice)
     await press("LOAD_GAME")
     var seasonal_player = main.find_child("MusicPlayer",true,false)

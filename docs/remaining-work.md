@@ -120,3 +120,13 @@ validation passes 271 C# checks (267 public/four private), 51 Python checks
 contracts and automation policies, actual secretary name captions, event speakers
 and the automatic timed presenter remain open. Actions stay paused. See
 [the source conditions and compatibility boundaries](secretary-advice.md).
+
+
+M54 implements the five locally imported secretary records, paid replacement
+through farewell/identity/greeting, named captions and office portrait changes,
+and production/rest policies with resumable automatic-break state. It corrects
+the old production threshold's mode attribution. Salary is a displayed original
+column; no recurring secretary payment or annual renewal is proven, so neither
+is invented. Provisional name readings, exact original form presentation,
+automatic timed conversations and legacy/original save projections remain open.
+See [evidence and boundaries](secretary-management.md).
