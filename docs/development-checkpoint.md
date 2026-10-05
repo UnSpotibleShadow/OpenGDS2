@@ -10,6 +10,17 @@ fixtures); 27 public Python checks pass (10 private fixtures skipped). Both
 headless Godot suites pass, including two-second crossfade completion while the
 simulation is paused. Full SDK and desktop release/debug checks run in CI.
 
+All four jobs passed in [run 37280387678](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37280387678): 205 public domain checks, 27 public Python checks
+(10 private fixtures skipped), a clean SDK build and zero editor or packaged
+Linux/Windows release/debug core-loop failures. PR #41 merged as
+`8910e419b141e2acf823559db3706ab9aaf19748`; tested head
+`ca0202330f73fd6cbaec1d65864b271306af3a32`.
+
+[Download the M47 debug packages](https://github.com/UnSpotibleShadow/OpenGDS2/actions/runs/37280387678/artifacts/11332540879).
+The artifact contains both platform ZIPs, expires 2026-10-19 and has digest
+`sha256:377e1a2f8d318552c4e2c095d25ab5c4e130e8acffe27ff297e8258f9b76b09b`.
+
+
 ## Previous M46 validation
 
 M46 adds optional seasonal office music, with three-month seasons, two existing
