@@ -8,12 +8,16 @@ from pathlib import Path
 import shutil
 import zipfile
 
-def package(source, export, platform, notices, output):
+def package(source, export, platform, notices, output, configuration="release"):
+    if configuration not in {"release", "debug"}:
+        raise ValueError("Unsupported export configuration")
     executable = "OpenGDS2.x86_64" if platform == "linux" else "OpenGDS2.exe"
     if not (export / executable).is_file() or not (export / "OpenGDS2.pck").is_file():
         raise ValueError("The native executable and game pack are required")
     if not list(export.rglob("OpenGDS2.dll")):
         raise ValueError("Export is missing its managed game assembly")
+    if configuration == "debug" and not list(export.rglob("OpenGDS2.pdb")):
+        raise ValueError("Debug export is missing its managed game symbols")
     forbidden = {"original","original_cache","private-original","asset-overrides","saves","upload","generated","tests","tools"}
     for file in export.rglob("*"):
         if file.is_symlink():
@@ -69,13 +73,22 @@ Original LZH importing is still required. See licenses/COMMUNITY_MUSIC_NOTICE.md
 Imported files are stored in Godot's user://original directory; saves are in
 user://saves/slot1.json. Do not copy either directory into a public package.
 Current gameplay includes development, release, sales, employee management,
-training, reviews and recalls. Calendar economics, awards and office progression
-remain incomplete. This is a development checkpoint, not a completed port.
+training, reviews, recalls and verified calendar/annual events. Office progression
+and other systems remain incomplete. This is a development checkpoint, not a completed port.
 
 Code licensing: LICENSE. Original-content exclusions/disclaimers: notice.md.
 Engine and runtime attribution: licenses/.
 Source, validation and current limitations:
 https://github.com/UnSpotibleShadow/OpenGDS2
+"""
+    if configuration == "debug":
+        start = start.replace("OpenGDS2 development build", "OpenGDS2 debug build", 1)
+        start += """
+This package uses Godot's debug export and includes OpenGDS2.pdb C# symbols.
+On Windows, use OpenGDS2.console.exe to keep diagnostics visible. To capture
+diagnostics on either platform, launch with --log-file opengds2-debug.log.
+Attach a compatible .NET debugger to the running game for managed debugging.
+The original LZH requirement and game rules are the same as the release export.
 """
     (export / "GETTING_STARTED.txt").write_text(start,encoding="utf-8")
     files = sorted(file for file in export.rglob("*") if file.is_file() and file.name != "SHA256SUMS")
@@ -85,7 +98,8 @@ https://github.com/UnSpotibleShadow/OpenGDS2
     with zipfile.ZipFile(output,"w",compression=zipfile.ZIP_DEFLATED) as archive:
         for file in sorted(export.rglob("*")):
             if file.is_file():
-                archive.write(file,Path("OpenGDS2-"+platform+"-x86_64") / file.relative_to(export))
+                root = "OpenGDS2-"+platform+"-x86_64"+("-debug" if configuration == "debug" else "")
+                archive.write(file,Path(root) / file.relative_to(export))
     print(f"Desktop package: {output.name} ({output.stat().st_size} bytes)")
 
 if __name__ == "__main__":
@@ -95,5 +109,6 @@ if __name__ == "__main__":
     parser.add_argument("--platform",choices=("linux","windows"),required=True)
     parser.add_argument("--notices",type=Path,required=True)
     parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--configuration", choices=("release", "debug"), default="release")
     args = parser.parse_args()
-    package(args.source,args.export,args.platform,args.notices,args.output)
+    package(args.source,args.export,args.platform,args.notices,args.output,args.configuration)

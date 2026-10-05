@@ -80,3 +80,42 @@ GameDev2DX.lzh locally to enable the reconstructed gameplay and original office.
 The packaging helper obtains .NET notices from the actual published NuGet runtime
 pack. The Godot notice script uses the exporting engine's license/copyright APIs;
 these notices are generated into the build, not copied from the original game.
+
+## Debug packages
+
+The Validate workflow also produces **OpenGDS2-desktop-debug**, with separate
+Windows and Linux x86_64 ZIPs. These use `--export-debug` and include the
+managed game assembly's `OpenGDS2.pdb` symbols. Packaging rejects a debug export
+without that symbol file. Both platforms run the complete synthetic core loop
+and verify that the packaged engine reports the expected debug configuration.
+The release artifact retains its existing filenames and layout.
+
+Extract the entire debug ZIP. On Windows, run `OpenGDS2.console.exe` to see
+diagnostics while playing; `OpenGDS2.exe` also runs the game. No Godot editor or
+separate .NET installation is needed. To retain a log, use a terminal in the
+extracted folder:
+
+```powershell
+.\OpenGDS2.console.exe --log-file opengds2-debug.log
+```
+
+On Linux:
+
+```sh
+./OpenGDS2.x86_64 --log-file opengds2-debug.log
+```
+
+The original LZH is still imported locally from the title screen. Debug exports
+use the same rules, data requirement and save locations as release exports.
+The game C# symbols are included; engine-native symbols are not claimed.
+
+Local debug export commands, after installing the matching .NET templates:
+
+```sh
+mkdir -p builds/linux-debug builds/windows-debug
+godot --headless --path . --export-debug "Linux Debug" builds/linux-debug/OpenGDS2.x86_64
+godot --headless --path . --export-debug "Windows Debug" builds/windows-debug/OpenGDS2.exe
+godot --headless --path . --script res://tools/export_licenses.gd -- /tmp/opengds2-notices
+python3 tools/package_desktop.py --export builds/linux-debug --platform linux --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64-debug.zip
+python3 tools/package_desktop.py --export builds/windows-debug --platform windows --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64-debug.zip
+```
