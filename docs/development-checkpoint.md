@@ -14,6 +14,12 @@ Godot suites report zero failures, covering original illustration use,
 choice preview, confirmation/save/load and ordinary/sequel/manga sales. Actions
 remain paused; no new desktop exports or native Windows runs were started.
 
+M52 merged in [PR #46](https://github.com/UnSpotibleShadow/OpenGDS2/pull/46),
+commit `21998396225b78f8c1c11ca5b1fad65fb4d646e1`; locally tested source head
+`11dbda98aff912cfb649235385e813be4acfda17`. The root project launches
+headlessly with the current compiled assembly. Historical M48 packages do not
+include these changes.
+
 ## Previous M51 validation
 
 M51 restores three development checkpoint introductions and nineteen possible
