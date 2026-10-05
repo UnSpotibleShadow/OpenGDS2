@@ -1,4 +1,5 @@
 using Godot;
+using OpenGDS2.Core;
 using OpenGDS2.Domain;
 
 namespace OpenGDS2.UI;
@@ -32,7 +33,7 @@ public partial class Main
     }
     private void ShowProject(GameState state,DevelopmentProjectState project)
     {
-        if (project.PendingDecision.HasValue) {ShowProjectDecision(state,project);return;}
+        if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
         ClearContent();AddHeading(project.Title,28);
         if (project.OriginalMode==1)
         {
@@ -61,7 +62,7 @@ public partial class Main
     }
     private void ShowProjectDecision(GameState state,DevelopmentProjectState project)
     {
-        if (CheckpointDialogueRules.HasPending(project))
+        if (CheckpointDialogueRules.ShouldIntroduce(state,project))
         {
             var milestone=project.PendingDecision!.Value;
             ShowConversation(Tr("DEVELOPMENT_ROOM")+" "+(project.RoomIndex+1),
@@ -70,62 +71,135 @@ public partial class Main
             return;
         }
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
-        ClearContent();AddHeading(project.Title,28);AddProjectMetrics(project);
+        if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
+        {
+            try {CheckpointMeetingRules.Prepare(state,project,catalog,new Random());}
+            catch (InvalidOperationException) {ClearContent();AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;}
+        }
+        if (CheckpointMeetingRules.HasPending(project)) {ShowCheckpointMeeting(state,project,catalog);return;}
+        ClearContent();AddHeading(project.Title,18);
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
         if (project.PendingDecision==DevelopmentMilestone.SelectType)
         {
-            AddHeading(Tr("SELECT_GAME_TYPE"),22);
+            CompactManagementWindow("TypeMeetingWindow",new Vector2(430,345),410);
+            _dialog?.SetTitle(DialogueText("CHECKPOINT_ALPHA_MEETING"));
+            AddHeading(Tr("SELECT_GAME_TYPE"),16);
             try
             {
                 var candidates=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,new Random());
+                int? selected=null;
+                var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
+                var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true};
+                var group=new ButtonGroup();
+                var options=CheckpointOptions();
                 int listIndex=0;
                 foreach (int source in candidates)
                 {
                     var type=catalog.GameTypes.Single(x=>x.SourceIndex==source);
                     var button=new Button {Name=$"SelectType{listIndex++}",Text=$"{CatalogName(catalog,"TYPE",type.SourceIndex,type.Name)} · ¥{type.SelectionFee:N0}",
-                        Disabled=state.Money is null || state.Money<type.SelectionFee};
+                        ToggleMode=true,ButtonGroup=group};
                     button.Pressed+=()=>
                     {
-                        var result=DevelopmentSelectionRules.TrySelectType(state,project,catalog,source,state.OriginalTypeRosterMap!);
-                        if (result==DevelopmentSelectionResult.Success) ShowOfficeReconstruction(state);
-                        else _status.Text=Tr($"SELECTION_RESULT_{result}");
+                        selected=source;chosen.Text=CatalogName(catalog,"TYPE",type.SourceIndex,type.Name);
+                        confirm.Disabled=state.Money is null || state.Money<type.SelectionFee;
+                        _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                     };
-                    _content.AddChild(button);
+                    options.AddChild(button);
                 }
+                _content.AddChild(chosen);_content.AddChild(confirm);
+                confirm.Pressed+=()=>
+                {
+                    if (!selected.HasValue) return;
+                    var result=CheckpointMeetingRules.TrySelectType(state,project,catalog,selected.Value);
+                    if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
+                    else _status.Text=Tr($"SELECTION_RESULT_{result}");
+                };
             }
             catch (InvalidOperationException) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");}
         }
         else if (project.PendingDecision==DevelopmentMilestone.SelectGenre)
         {
-            AddHeading(Tr("SELECT_GENRE"),22);
+            CompactManagementWindow("GenreMeetingWindow",new Vector2(430,345),410);
+            _dialog?.SetTitle(DialogueText("CHECKPOINT_BETA_MEETING"));
+            AddHeading(Tr("SELECT_GENRE"),16);
             if (state.Company.OriginalMember90 is not int companyValue) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");return;}
+            int? selected=null;
+            var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
+            var confirm=new Button {Name="ConfirmGenreChoice",Text=Tr("CONFIRM"),Disabled=true};
+            var group=new ButtonGroup();
+            var options=CheckpointOptions();
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
                 var button=new Button {Name=$"SelectGenre{genre.SourceIndex}",Text=$"{CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name)} · ¥{genre.SelectionFee:N0}",
-                    Disabled=state.Money is null || state.Money<genre.SelectionFee};
+                    ToggleMode=true,ButtonGroup=group};
                 button.Pressed+=()=>
                 {
-                    var result=DevelopmentSelectionRules.TrySelectGenre(state,project,catalog,genre.SourceIndex);
-                    if (result==DevelopmentSelectionResult.Success) ShowOfficeReconstruction(state);
-                    else _status.Text=Tr($"SELECTION_RESULT_{result}");
+                    selected=genre.SourceIndex;chosen.Text=CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name);
+                    confirm.Disabled=state.Money is null || state.Money<genre.SelectionFee;
+                    _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                 };
-                _content.AddChild(button);
+                options.AddChild(button);
             }
+            _content.AddChild(chosen);_content.AddChild(confirm);
+            confirm.Pressed+=()=>
+            {
+                if (!selected.HasValue) return;
+                var result=CheckpointMeetingRules.TrySelectGenre(state,project,catalog,selected.Value);
+                if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
+                else _status.Text=Tr($"SELECTION_RESULT_{result}");
+            };
         }
         else
         {
+            AddProjectMetrics(project);
             AddHeading(Tr("DEVELOPMENT_COMPLETE"),22);
             if (project.Bugs>=60) AddHeading(Tr("RELEASE_BUG_WARNING"),16);
             AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
             AddAction("CONTINUE_DEBUGGING",()=>{project.PendingDecision=null;ShowProject(state,project);});
         }
-        AddAction("SAVE_GAME",()=>
+        if (project.PendingDecision==DevelopmentMilestone.StartDebugging) AddAction("SAVE_GAME",()=>
         {
             try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
             catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
         });
-        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        if (project.PendingDecision==DevelopmentMilestone.StartDebugging)
+        {
+            AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
+            AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        }
+        if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
+            ShowMeetingScene(DialogueText(project.PendingDecision==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),()=>ShowOfficeReconstruction(state));
+    }
+    private VBoxContainer CheckpointOptions()
+    {
+        var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new Vector2(0,175),
+            HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};_content.AddChild(scroll);
+        var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",1);
+        scroll.AddChild(options);return options;
+    }
+    private void ShowCheckpointMeeting(GameState state,DevelopmentProjectState project,OriginalCatalog catalog)
+    {
+        var meeting=project.CheckpointMeeting!;var line=meeting.Lines[meeting.MessageIndex];
+        string body=DialogueText(CheckpointMeetingRules.MessageKey(line.Message));
+        if (line.TypeSourceIndex is int typeSource)
+        {
+            var type=catalog.GameTypes.Single(x=>x.SourceIndex==typeSource);
+            body=body.Replace("{type}",CatalogName(catalog,"TYPE",type.SourceIndex,type.Name));
+        }
+        var audience=catalog.Audiences.Single(x=>x.SourceIndex==project.AudienceSourceIndex);
+        body=body.Replace("{audience}",CatalogName(catalog,"AUDIENCE",audience.SourceIndex,audience.Name))
+            .Replace("{recognition}",project.Recognition.ToString("0.############",System.Globalization.CultureInfo.InvariantCulture));
+        if (project.GenreSourceIndex is int genreSource)
+        {
+            var genre=catalog.Genres.Single(x=>x.SourceIndex==genreSource);
+            body=body.Replace("{genre}",CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name));
+        }
+        ShowConversation(DialogueText(meeting.Milestone==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),[new(DialogueText(CheckpointMeetingRules.IsSecretary(line.Message) ? "CORE_SECRETARY" : "CORE_EMPLOYEE"),body)],()=>
+        {
+            CheckpointMeetingRules.Acknowledge(state,project);
+            if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) ShowProjectDecision(state,project);
+            else ShowOfficeReconstruction(state);
+        },scene:OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"));
     }
     private void ShowRelease(GameState state,DevelopmentProjectState project)
     {

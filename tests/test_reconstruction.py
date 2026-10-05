@@ -20,6 +20,21 @@ def synthetic_pe():
     return data
 
 class PublicTests(unittest.TestCase):
+    def test_checkpoint_meeting_rejects_unknown_source(self):
+        from verify_checkpoint_meeting_evidence import verify as verify_meeting
+        with self.assertRaises(ParseError):verify_meeting(bytes(synthetic_pe()))
+
+    def test_checkpoint_meeting_localization_coverage(self):
+        import re
+        english=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*(?:\\.[^"\n]*)*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        japanese=set(re.findall(r'^msgid "([^"\n]+)"$',(ROOT/'localization'/'ja.po').read_text(),re.M))
+        messages=['TypeSuggestion','TypeFits','TypeHit','TypeAudience','TypeReaders','TypeChosen','Publicity','BetaComplete','RecognitionLow','RecognitionMedium','RecognitionHigh','ChooseGenre','TypeReminder','GenreMatch','GenreChosen','FunBonus']
+        keys=['CORE_EMPLOYEE','CHECKPOINT_ALPHA_MEETING','CHECKPOINT_BETA_MEETING','CHECKPOINT_NO_CHOICE']+[f'CHECKPOINT_MEETING_{message}' for message in messages]
+        for key in keys:
+            self.assertTrue(english.get(key),key)
+            self.assertIn(key,japanese)
+            self.assertTrue(english[key].isascii(),key)
+
     def test_core_dialogue_rejects_unknown_original(self):
         from verify_core_dialogue_evidence import verify as verify_dialogue
         with self.assertRaises(ParseError):verify_dialogue(bytes(synthetic_pe()))
@@ -123,6 +138,11 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_checkpoint_meeting_anchors(self):
+        from verify_checkpoint_meeting_evidence import verify as verify_meeting
+        self.assertEqual(verify_meeting(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),
+            {"meeting_modes":[4,5],"illustration_index":0,"type_variants":6,"silent_variant":3,"recognition_thresholds":[10,30],"fun_bonus":20,"intro_product_limit":2})
+
     def test_core_dialogue_anchors(self):
         from verify_core_dialogue_evidence import verify as verify_dialogue
         self.assertEqual(verify_dialogue(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),

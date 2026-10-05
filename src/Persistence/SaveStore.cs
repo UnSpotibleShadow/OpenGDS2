@@ -186,6 +186,7 @@ public static class SaveStore
                 project.TechnologyApplicationCounts.Any(x=>x.Value<0)))
             throw new InvalidDataException("Invalid project technology counters.");
         DevelopmentWorkRules.ValidateQuality(project.Quality);
+        CheckpointMeetingRules.Validate(project);
         if (project.PendingDecision is DevelopmentMilestone decision &&
             (decision switch
             {

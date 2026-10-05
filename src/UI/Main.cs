@@ -46,7 +46,7 @@ public partial class Main : Control
             if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
             updated = true;
-            var pending=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue);
+            var pending=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x));
             if (pending is not null) {ShowProjectDecision(state,pending);return;}
         }
         if (updated && _officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture, state);
@@ -285,6 +285,8 @@ public partial class Main : Control
         if (ShowPendingHireGreeting(state)) return;
         if (ShowPendingCalendarEvent(state)) return;
         if (ShowPendingProductEvent(state)) return;
+        var pendingProject=state.DevelopmentProjects.FirstOrDefault(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x));
+        if (pendingProject is not null) {ShowProjectDecision(state,pendingProject);return;}
         CloseDesktopDialog();
         _refreshCoreStatus = null;
         _officeElapsed = 0;

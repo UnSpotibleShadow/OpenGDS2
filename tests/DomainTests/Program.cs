@@ -110,6 +110,106 @@ Test("failed shipment creates no commentary and consumes no lottery draws",()=>
     var s=PlanningState(0);var p=new DevelopmentProjectState {Title="Unaffordable",RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0,Focus=new(25,25,25,25)};s.DevelopmentProjects.Add(p);
     string before=SaveStore.Serialize(s);var r=new SequenceRandom();Check(ReleaseService.TryRelease(s,p,CoreCatalog(),p.Title,5800,100,r)==ReleaseResult.InsufficientFunds && r.Calls==0 && SaveStore.Serialize(s)==before);
 });
+(GameState State,DevelopmentProjectState Project,OriginalCatalog Catalog) CheckpointFixture()
+{
+    var s=PlanningState(100000);s.Company.OriginalMember90=100;s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
+    var p=new DevelopmentProjectState {Title="Checkpoint meeting",RequiredPoints=100,Progress=51,Recognition=12,Focus=new(25,25,25,25),PendingDecision=DevelopmentMilestone.SelectType,TypeCandidates=[0,1,0,1,0]};s.DevelopmentProjects.Add(p);
+    return(s,p,CoreCatalog());
+}
+void DrainMeeting(GameState s,DevelopmentProjectState p) {while(CheckpointMeetingRules.Acknowledge(s,p)) {}}
+Test("checkpoint introduction gates end after the third product while completion remains unconditional",()=>
+{
+    var(s,p,_)=CheckpointFixture();
+    for(int count=0;count<5;count++)
+    {
+        Check(CheckpointDialogueRules.ShouldIntroduce(s,p)==(count<=2));
+        s.ReleasedGames.Add(new(){ProductIndex=count});
+    }
+    p.PendingDecision=DevelopmentMilestone.StartDebugging;Check(CheckpointDialogueRules.ShouldIntroduce(s,p));
+    p.DecisionIntroductionAcknowledged=DevelopmentMilestone.StartDebugging;Check(!CheckpointDialogueRules.ShouldIntroduce(s,p));
+});
+Test("type meeting suggestions preserve source order, duplicate candidates and silent variant three",()=>
+{
+    var(s,p,c)=CheckpointFixture();var r=new SequenceRandom(0,0,1,1,2,0,3,1,5);CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(r.Calls==9 && p.CheckpointMeeting!.Lines.SequenceEqual(new[]{new CheckpointMeetingLine(CheckpointMeetingMessage.TypeSuggestion,0),new CheckpointMeetingLine(CheckpointMeetingMessage.TypeFits,1),new CheckpointMeetingLine(CheckpointMeetingMessage.TypeReaders,0)}));
+    var restored=SaveStore.Deserialize(SaveStore.Serialize(s));var replay=new SequenceRandom();
+    CheckpointMeetingRules.Prepare(restored,restored.DevelopmentProjects[0],c,replay);Check(replay.Calls==0);
+    Check(s.Money==100000 && p.OriginalStage==0 && p.Recognition==12);
+});
+Test("silent type discussions stay prepared across save/load without regenerating a roster",()=>
+{
+    var(s,p,c)=CheckpointFixture();var r=new SequenceRandom(2,2,2,2,2);CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(r.Calls==5 && p.CheckpointMeeting!.Lines.Count==0 && !CheckpointMeetingRules.HasPending(p));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];r=new();CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(r.Calls==0 && p.TypeCandidates!.SequenceEqual(new[]{0,1,0,1,0}));
+});
+Test("genre discussion branches use recognition boundaries ten and thirty",()=>
+{
+    foreach(var(row,expected) in new[]{(0.0,CheckpointMeetingMessage.RecognitionLow),(10.0,CheckpointMeetingMessage.RecognitionLow),(10.01,CheckpointMeetingMessage.RecognitionMedium),(30.0,CheckpointMeetingMessage.RecognitionMedium),(30.01,CheckpointMeetingMessage.RecognitionHigh)})
+    {
+        var(s,p,c)=CheckpointFixture();p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;p.Recognition=row;
+        var r=new SequenceRandom();CheckpointMeetingRules.Prepare(s,p,c,r);var m=p.CheckpointMeeting!;
+        Check(r.Calls==0 && m.Lines.Count==4 && m.Lines[1].Message==expected && m.Lines[^1].TypeSourceIndex==0);
+        Check(SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects[0].CheckpointMeeting!.Lines.SequenceEqual(m.Lines));
+    }
+});
+Test("type selection waits for discussion and confirms once before publicity",()=>
+{
+    var(s,p,c)=CheckpointFixture();CheckpointMeetingRules.Prepare(s,p,c,new SequenceRandom(0,0,2,2,2,2));
+    string before=SaveStore.Serialize(s);Check(CheckpointMeetingRules.TrySelectType(s,p,c,0)==DevelopmentSelectionResult.WrongStage && SaveStore.Serialize(s)==before);
+    DrainMeeting(s,p);Check(CheckpointMeetingRules.TrySelectType(s,p,c,0)==DevelopmentSelectionResult.Success);
+    Check(s.Money==99995 && p.OriginalStage==1 && p.Recognition==16 && p.RequiredPoints==110 && p.PendingDecision is null && CheckpointMeetingRules.HasPending(p));
+    Check(p.CheckpointMeeting!.Lines.Select(x=>x.Message).SequenceEqual(new[]{CheckpointMeetingMessage.TypeChosen,CheckpointMeetingMessage.Publicity}));
+    Check(CheckpointMeetingRules.TrySelectType(s,p,c,0)==DevelopmentSelectionResult.WrongStage && s.Money==99995);
+    Check(CheckpointMeetingRules.Acknowledge(s,p));s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];
+    Check(p.CheckpointMeeting!.MessageIndex==1 && p.Recognition==16 && s.Money==99995);
+    DrainMeeting(s,p);Check(p.CheckpointMeeting is null && !CheckpointMeetingRules.Acknowledge(s,p) && s.Money==99995);
+});
+Test("confirmed meeting suspends company and work clocks even after clearing the selection decision",()=>
+{
+    var(s,p,c)=CheckpointFixture();Check(CheckpointMeetingRules.TrySelectType(s,p,c,0)==DevelopmentSelectionResult.Success);
+    var e=Worker();s.Employees.Add(e);s.CompanyActivityTicks=199;var r=new SequenceRandom();var session=new GameSession(r);session.Restore(s);
+    session.TickOffice(c);DevelopmentSimulation.TickEmployee(s,e,c,r);
+    Check(r.Calls==0 && s.CompanyActivityTicks==199 && p.Progress==51 && e.Office!.WorkIdleTicks==0);
+});
+Test("genre affinity confirmation reports and awards twenty fun exactly once",()=>
+{
+    var(s,p,c)=CheckpointFixture();p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;
+    CheckpointMeetingRules.Prepare(s,p,c,new SequenceRandom());DrainMeeting(s,p);
+    Check(CheckpointMeetingRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+    Check(p.Quality.Fun==20 && p.OriginalStage==2 && s.Money==99993 && p.CheckpointMeeting!.Lines.Select(x=>x.Message).SequenceEqual(new[]{CheckpointMeetingMessage.GenreMatch,CheckpointMeetingMessage.FunBonus}));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];
+    Check(CheckpointMeetingRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.WrongStage && p.Quality.Fun==20);
+    DrainMeeting(s,p);Check(p.CheckpointMeeting is null && p.Quality.Fun==20 && s.Money==99993);
+});
+Test("nonmatching and broad-audience genres have one confirmation and no bonus",()=>
+{
+    for(int audience=0;audience<2;audience++)
+    {
+        var(s,p,c)=CheckpointFixture();p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;
+        if(audience==0)c.GameTypes[0].RawTable13CC=Enumerable.Repeat(99,15).ToList();else c.Audiences[0].RawMembers["14A8"]=1;
+        Check(CheckpointMeetingRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success && p.Quality.Fun==0 && p.CheckpointMeeting!.Lines.Single().Message==CheckpointMeetingMessage.GenreChosen);
+    }
+});
+Test("invalid, unaffordable and locked checkpoint choices preserve state",()=>
+{
+    var(s,p,c)=CheckpointFixture();s.Money=0;string before=SaveStore.Serialize(s);
+    Check(CheckpointMeetingRules.TrySelectType(s,p,c,0)==DevelopmentSelectionResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    Check(CheckpointMeetingRules.TrySelectType(s,new(),c,0)==DevelopmentSelectionResult.WrongStage);
+    p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;s.Company.OriginalMember90=0;before=SaveStore.Serialize(s);
+    Check(CheckpointMeetingRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.WrongStage && SaveStore.Serialize(s)==before);
+});
+Test("save validation rejects corrupt checkpoint phases, message arguments and cursors",()=>
+{
+    var(s,p,c)=CheckpointFixture();CheckpointMeetingRules.Prepare(s,p,c,new SequenceRandom(0,0,2,2,2,2));var m=p.CheckpointMeeting!;
+    m.MessageIndex=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));m.MessageIndex=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));m.MessageIndex=0;
+    m.Lines[0]=new((CheckpointMeetingMessage)99,0);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    m.Lines[0]=new(CheckpointMeetingMessage.TypeSuggestion);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    m.Lines[0]=new(CheckpointMeetingMessage.TypeSuggestion,50);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    m.Lines[0]=new(CheckpointMeetingMessage.TypeSuggestion,0);m.IsConfirmation=true;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    m.IsConfirmation=false;m.Milestone=DevelopmentMilestone.SelectGenre;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.CheckpointMeeting=null;CheckpointMeetingRules.TrySelectType(s,p,c,0);m=p.CheckpointMeeting!;m.MessageIndex=m.Lines.Count;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("conversation timer reveals UTF-16 text and restores the four-step mouth cycle",()=>
 {
     var c=new ConversationRevealState(new string('x',30));
@@ -3003,7 +3103,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==73 && dialogue.SchemaVersion==3 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==92 && dialogue.SchemaVersion==4 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

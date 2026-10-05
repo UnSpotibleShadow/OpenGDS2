@@ -92,7 +92,7 @@ public sealed class GameSession
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
         if (state.PendingHireGreeting is not null) return;
-        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
+        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (CalendarService.HasPending(state))
         {
             if (!CalendarService.Resume(state,catalog,_random)) return;

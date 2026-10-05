@@ -1,4 +1,20 @@
-# Development checkpoint — M51, 2026-10-05
+# Development checkpoint — M52, 2026-10-05
+
+M52 restores alpha/type and beta/genre meeting discussions and their shared
+original planning illustration, with compact preview/confirmation panels.
+Paid choices create resumable follow-up dialogue. Modern saves preserve the
+discussion cursor and existing selection effects; loading cannot charge again,
+repeat publicity or award genre affinity twice. The type/genre introductions now
+respect the original product-count ≤2 gate. Reimport the LZH for the 92-entry
+local Japanese dialogue cache. See [source evidence and compatibility limits](conversations.md#m52-alpha-and-beta-meetings).
+
+Local direct C# compilation and all 256 domain checks pass (252 public, four
+private). All 48 Python checks pass (34 public, fourteen private). Both headless
+Godot suites report zero failures, covering original illustration use,
+choice preview, confirmation/save/load and ordinary/sequel/manga sales. Actions
+remain paused; no new desktop exports or native Windows runs were started.
+
+## Previous M51 validation
 
 M51 restores three development checkpoint introductions and nineteen possible
 shipment remarks, sequenced before review scores. Remarks share the existing

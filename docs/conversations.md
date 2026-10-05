@@ -1,4 +1,4 @@
-# Conversation reconstruction — M49–M51
+# Conversation reconstruction — M49–M52
 
 Normal hire greetings, ordinary planning discussions and manga rights meetings
 now share the compact portrait/name-strip/message window. Portraits and Japanese
@@ -44,7 +44,7 @@ restarts their reveal without repeating the fee or drawing another variant.
 Simulation waits until acknowledgment. The close button uses the same advance
 behavior. Rights/planning discussions before project acceptance are UI state;
 loading a company cancels them without charging. The original queue is not
-serialized into modern saves. All 73 locally imported entries are guarded by
+serialized into modern saves. All 92 locally imported entries are guarded by
 the supported executable hash; older hire-only imports still support hiring.
 
 ## Remaining conversations
@@ -72,8 +72,8 @@ Original Windows focus/timer behavior and graphical comparison remain untested.
 The type and genre introductions now precede their existing choice panels;
 the completion introduction precedes release/debugging choices. The shared
 compact portrait window uses the original generic secretary speaker. Detailed
-type/genre meeting modes 4/5 remain unresolved; these introductions alone do not
-reconstruct their full meetings. Sequel checkpoints retain their existing
+type/genre meeting modes 4/5 were not reconstructed by M51; M52 adds their
+discussions and confirmations below. Sequel checkpoints retain their existing
 automatic inheritance behavior.
 
 | Verified caller | Supported executable anchor |
@@ -149,6 +149,73 @@ Older caches lacking the image still allow discussion; reimport restores it.
 Local dimension-preserving artwork overrides apply through the existing loader.
 Other source meeting modes use different images and are not inferred from this
 one mapping.
+
+## M52 alpha and beta meetings
+
+Meeting mode 4 opens fGMalpha for type selection, and mode 5 opens fGMbeta for
+genre selection. Both use ImageFormG[0], the existing locally imported planning
+illustration. The image is now present during checkpoint discussion, selection
+and confirmation. It is removed when the meeting completes or a different screen
+loads. English uses authored translations; Japanese comes from a local,
+hash-guarded schema-4 cache. Older schema 1–3 caches remain readable; reimport
+adds the new bodies and meeting captions. Original text/assets remain local.
+
+| Verified behavior | Supported executable anchor |
+| --- | --- |
+| Type/genre introductions only when product count ≤2 | Module2 `00A0283C +A7E0..A7EB`, `+AB7A..AB85` |
+| Alpha/beta meeting captions and ImageFormG[0] | fGMKikakuKaigi `009A6DDC +036B..0414` |
+| Modal type/genre selection forms | Meeting timer `009EFA40 +1CA9..1D1C` |
+| Candidate remarks, six variants with variant 3 silent | fGMalpha load `009D2F68 +05F3..0908` |
+| Type choice, then confirmation/publicity | fGMalpha confirm `009ACF14 +0761..08B5` |
+| Beta discussion and recognition thresholds ≤10/≤30 | fGMbeta load `009C7860 +017F..03B4` |
+| Genre choice, affinity response and +20 Fun | fGMbeta confirm `009B00D8 +0767..099B` |
+
+The type meeting keeps the recovered candidate list, including source order and
+duplicates. It evaluates a three-way speech roll for each candidate, then a
+six-way variant roll when eligible. Variant 3 has no message. Other variants
+suggest the candidate or connect it with the target audience. The discussion
+does not choose a type or change fees/quality. Preparing it once saves its
+message IDs and candidate arguments; loading never redraws the list or remarks.
+
+The beta meeting has four pages: beta completion, recognition advice selected
+at thresholds 10/30, a request to choose a genre, and a reminder of the selected
+type. Recognition advice is descriptive; it adds no advertising transaction.
+Type confirmation reports the choice and the resulting recognition from the
+existing fame/3 rule. Genre confirmation follows the existing audience/type
+affinity test: a compatible choice reports the pairing and the +20 Fun bonus;
+otherwise it has one ordinary acknowledgment. Source speakers are the generic
+employee, with the secretary reporting the affinity bonus. Named staff speakers
+or voting mechanics are not invented.
+
+The Godot selection panels use a bounded scrolling list, preview and separate
+Confirm button. Previewing an option never charges funds. Confirming delegates
+to the existing selection rules once, then records the follow-up queue.
+Unpaid/locked options cannot confirm. Simulation, payroll and sales stay paused
+while a checkpoint decision or unread confirmation exists, including after the
+selection cleared PendingDecision. Loading a confirmation resumes its unread
+page. Completing the last confirmation clears the meeting state and resumes
+normal development. Completed pre-choice queues remain saved until selection,
+so an entirely silent type discussion also cannot reroll on load.
+
+Save validation checks phase/stage consistency, stable message IDs, cursors,
+candidate references, required type arguments, and fixed confirmation order.
+Legacy projects with no meeting state can prepare a new discussion at their
+current selection checkpoint; no past charge or bonus is reconstructed.
+
+This is partial visual/interaction parity. The original example-title column and
+its cosmetic random draws, hover/radio details, original desktop focus/position,
+and the full abandon-project/stress transaction remain unfinished. Godot uses
+authored list arrangement and fee labels. Selection effects are committed before
+their persisted confirmations, whereas the original applies some effects between
+dialogue calls. Normal final results are retained; original interruption/save
+timing during those calls has not been compared on Windows. The automatic timed
+presenter and secretary/event conversations are separate remaining work.
+
+`tools/verify_checkpoint_meeting_evidence.py` checks bounded source anchors.
+Regression checks cover silent variants, duplicate candidate order, recognition
+boundaries, repeated/failed choices, malformed saves and stopped clocks after
+confirmation. Headless Godot checks the actual imported picture, preview before
+charge, saved confirmation cursors and the ordinary/sequel/manga core loop.
 
 Cancelling through either window, loading or changing screens removes the scene
 and stops the typing timer before its controls are removed. This fixes a stale

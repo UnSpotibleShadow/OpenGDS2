@@ -74,7 +74,7 @@ func advance_conversation_page() -> void:
 
 func finish_conversation() -> void:
     var pages := 0
-    while main.find_child("ConversationWindow",true,false) != null and pages < 12:
+    while main.find_child("ConversationWindow",true,false) != null and pages < 70:
         await advance_conversation_page()
         pages += 1
     check(main.find_child("ConversationWindow",true,false) == null,"Conversation sequence finishes within its verified page bound")
@@ -379,11 +379,44 @@ func run() -> void:
     await await_node("SelectType0")
     check(main.find_child("ConversationWindow",true,false) == null and seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Loading a read checkpoint does not repeat its introduction")
     await press_node("SelectType0")
+    check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 450,"Type choices use a compact meeting panel")
+    await press("SAVE_GAME")
+    var type_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(type_preview.State.Money == checkpoint.State.Money and type_preview.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Previewing type never charges or confirms it")
+    await press_node("ConfirmTypeChoice")
+    check(main.find_child("ConversationWindow",true,false) != null,"Type confirmation precedes return to development")
+    await press("SAVE_GAME")
+    var type_confirmed = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(type_confirmed.State.DevelopmentProjects[0].CheckpointMeeting.IsConfirmation and type_confirmed.State.DevelopmentProjects[0].CheckpointMeeting.MessageIndex == 0,"Confirmed type dialogue is saved before it is read")
+    await press("LOAD_GAME")
+    await advance_conversation_page()
+    var publicity_parts = tr("CHECKPOINT_MEETING_Publicity").split("{recognition}")
+    var displayed_recognition = main.find_child("ConversationMessage",true,false).text.trim_prefix(publicity_parts[0]).trim_suffix(publicity_parts[1]).to_float()
+    check(is_equal_approx(displayed_recognition,type_confirmed.State.DevelopmentProjects[0].Recognition),"Publicity line reports the resulting recognition")
+    await press("SAVE_GAME")
+    var type_publicity = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(type_publicity.State.Money == type_confirmed.State.Money and type_publicity.State.DevelopmentProjects[0].CheckpointMeeting.MessageIndex == 1,"Reading type confirmation does not repeat its fee")
+    await press("LOAD_GAME")
+    await finish_conversation()
     if not await await_node("SelectGenre0"):
         quit(1)
         return
     check(main.find_child("SelectGenre0",true,false).text.begins_with(tr("CATALOG_GENRE_0")),"Genre selection uses English catalog labels")
     await press_node("SelectGenre0")
+    await press("SAVE_GAME")
+    var genre_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(genre_preview.State.DevelopmentProjects[0].GenreSourceIndex == null,"Previewing genre never confirms it")
+    await press_node("ConfirmGenreChoice")
+    await press("SAVE_GAME")
+    var genre_confirmed = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    var genre_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(genre_reloaded.State.Money == genre_confirmed.State.Money and genre_reloaded.State.DevelopmentProjects[0].Quality == genre_confirmed.State.DevelopmentProjects[0].Quality,"Loading genre confirmation repeats neither fee nor affinity bonus")
+    await finish_conversation()
+    await press("SAVE_GAME")
+    var genre_read = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(genre_read.State.DevelopmentProjects[0].CheckpointMeeting == null,"Genre confirmation finishes and releases the modal guard")
     var ready := false
     for frame in range(15000):
         if main.find_child("ConversationWindow",true,false) != null:
@@ -1247,10 +1280,12 @@ func run() -> void:
         quit(1)
         return
     await press_node("SelectType0")
+    await press_node("ConfirmTypeChoice")
     if not await await_node("SelectGenre0"):
         quit(1)
         return
     await press_node("SelectGenre0")
+    await press_node("ConfirmGenreChoice")
     var manga_ready := false
     for frame in range(15000):
         if main.find_child("ConversationWindow",true,false) != null:

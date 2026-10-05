@@ -44,6 +44,18 @@ public partial class Main
         _conversationScene.GetParent()?.RemoveChild(_conversationScene);
         _conversationScene.QueueFree();_conversationScene=null;
     }
+    private void ShowMeetingScene(string heading,Texture2D? scene,Action close)
+    {
+        if (scene is null || _conversationScene is not null || _workspace is null || _dialog is null) return;
+        _conversationScene=new DesktopWindow {Name="PlanningDiscussionScene"};_workspace.AddChild(_conversationScene);
+        _conversationScene.Initialize(heading,_dialog.Position-new Vector2(270,0),new Vector2(262,190),false);
+        _conversationScene.FindChild("MinimizeWindow",true,false)?.QueueFree();
+        _conversationScene.CloseRequested=close;
+        _conversationScene.Body.AddChild(new TextureRect {Name="PlanningDiscussionPicture",Texture=scene,
+            CustomMinimumSize=new Vector2(256,160),TextureFilter=TextureFilterEnum.Nearest,
+            ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepCentered});
+        _dialog.MoveToFront();
+    }
     private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null)
     {
         CloseConversationScene();
@@ -98,17 +110,7 @@ public partial class Main
                 CloseConversationScene();_conversationReveal=null;cancelled();
             }
             _dialog.CloseRequested=Close;
-            if (scene is not null && _conversationScene is null && _workspace is not null)
-            {
-                _conversationScene=new DesktopWindow {Name="PlanningDiscussionScene"};_workspace.AddChild(_conversationScene);
-                _conversationScene.Initialize(heading,_dialog.Position-new Vector2(270,0),new Vector2(262,190),false);
-                _conversationScene.FindChild("MinimizeWindow",true,false)?.QueueFree();
-                _conversationScene.CloseRequested=Close;
-                _conversationScene.Body.AddChild(new TextureRect {Name="PlanningDiscussionPicture",Texture=scene,
-                    CustomMinimumSize=new Vector2(256,160),TextureFilter=TextureFilterEnum.Nearest,
-                    ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepCentered});
-                _dialog.MoveToFront();
-            }
+            ShowMeetingScene(heading,scene,Close);
             message.GrabFocus();_toolbarHelp=Tr("CONVERSATION_DISMISS_HELP");RefreshDesktop();
         }
         ShowPage();

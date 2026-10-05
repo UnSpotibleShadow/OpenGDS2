@@ -79,14 +79,18 @@ distribution are already implemented in `DevelopmentFocusRules`. After writing
 the four final focus values at +0D38..0D86, it opens `fGMKikakusyo` using Show(1)
 at +0D9D..0DAD. Pool entry 4E resolves to that form's object-info `005EE9C8`.
 This confirms a separate proposal form after the conversation sequence. The
-current OpenGDS2 proposal form preserves the verified acceptance transaction
-but does not reproduce that sequence, speaker selection or timing.
+OpenGDS2 proposal form preserves the verified acceptance transaction. M49
+restored the discussion sequence and source secretary speaker using the shared
+20 ms reveal/mouth timer; original Windows timing/focus comparison remains open.
 
 The form-load mode-0 branch selects picture array index 0 through MDI accessor
 32C at +00A0..00CB. Local inspection also located a 256 × 160 meeting-room
 illustration in serialized `MDIForm1.ImageFormG[0]`, bitmap file offset 18B188.
-The resource name/index and dimensions are established; binding that specific
-MDI accessor to the named array still requires independent confirmation. The
-image is therefore a candidate for the scene, not a newly enabled presentation
-feature. Original pixels and private procedure traces remain outside the
-repository.
+M50 verified the accessor binding and enabled the locally imported picture
+during planning discussions. M52 verifies that modes 4/5 also select index 0,
+then open the alpha/type and beta/genre selection forms. The original picture
+now remains beside checkpoint discussions, compact choice panels and follow-up
+confirmations. The scrolling list and preview/Confirm layout are authored Godot
+presentation; original example-title columns and exact focus/layout remain open.
+Original pixels and private procedure traces remain outside the repository.
+See [checkpoint evidence and persistence](conversations.md#m52-alpha-and-beta-meetings).
