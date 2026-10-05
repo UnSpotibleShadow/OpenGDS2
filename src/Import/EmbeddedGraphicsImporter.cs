@@ -12,6 +12,13 @@ public static class EmbeddedGraphicsImporter
         WriteBitmap(executable, 0x3B5DC6, 466, 290, destination, "OfficeBase.bmp");
         WriteBitmap(executable, 0x3D7469, 1600, 530, destination, "OfficeSprites.bmp");
         WriteBitmap(executable, 0x4A6960, 1600, 530, destination, "OfficeMasks.bmp");
+        // Meeting mode 0 uses MDIForm1.ImageFormG[0], getter 032C.
+        const int meetingOffset=0x18B188;
+        if (meetingOffset>executable.Length-54 ||
+            !executable.AsSpan(meetingOffset-28,13).SequenceEqual(System.Text.Encoding.ASCII.GetBytes("ImageFormG\0\x18\x01")) ||
+            BinaryPrimitives.ReadUInt16LittleEndian(executable.AsSpan(meetingOffset-15,2))!=0)
+            throw new InvalidDataException("Unsupported embedded planning illustration.");
+        WriteBitmap(executable,meetingOffset,256,160,destination,"PlanningMeeting.bmp");
         // MDIForm1 BGraphicH picture properties, verified in the supplied build.
         int[] toolbar = [0x1AD1, 0x216A, 0x2803, 0x2E9C, 0x3535, 0x3BCC, 0x4265, 0x48FE,
             0x4F97, 0x5630, 0x5CC9, 0x6362, 0x69FB, 0x7094, 0x772D, 0x7DC6];

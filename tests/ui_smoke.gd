@@ -198,7 +198,28 @@ func run() -> void:
 
     await press("PLANNING_MEETING")
     check(main.find_child("ConversationWindow",true,false) != null,"Planning discussion precedes the proposal")
+    var scene_window = main.find_child("PlanningDiscussionScene",true,false)
+    var scene_picture = main.find_child("PlanningDiscussionPicture",true,false)
+    check(scene_window != null and scene_picture != null,"Meeting uses a separate original illustration window")
+    if scene_picture != null:
+        var expected_scene := Image.load_from_file("user://original/Graphic/Embedded/PlanningMeeting.bmp")
+        expected_scene.convert(Image.FORMAT_RGB8)
+        var displayed_scene = scene_picture.texture.get_image()
+        displayed_scene.convert(Image.FORMAT_RGB8)
+        check(scene_picture.texture.get_width() == 256 and scene_picture.texture.get_height() == 160,"Meeting retains original pixel dimensions")
+        check(displayed_scene.get_data() == expected_scene.get_data(),"Meeting shows the locally imported ImageFormG[0]")
+    await press("SAVE_GAME")
+    var before_meeting_cancel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    scene_window.find_child("CloseWindow",true,false).pressed.emit()
+    await create_timer(0.08).timeout
+    check(main.find_child("ConversationWindow",true,false) == null and main.find_child("PlanningDiscussionScene",true,false) == null,"Cancelling typing removes both meeting windows and its timer")
+    await press("SAVE_GAME")
+    var after_meeting_cancel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(before_meeting_cancel.State.Money == after_meeting_cancel.State.Money and after_meeting_cancel.State.DevelopmentProjects.is_empty(),"Cancelled discussion does not charge or start development")
+    await press("DEVELOPMENT_PLANNING")
+    await press("PLANNING_MEETING")
     await finish_conversation()
+    check(main.find_child("PlanningDiscussionScene",true,false) == null,"Illustration closes before the proposal")
     await press("PLANNING_NEW_PROPOSAL")
     await finish_conversation()
     var focus_total := 0

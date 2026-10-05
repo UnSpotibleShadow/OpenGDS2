@@ -270,6 +270,7 @@ public partial class Main : Control
 
     private void ShowOfficeReconstruction(GameState state)
     {
+        CloseConversationScene();
         _activeCatalog = _importer.LoadCatalog();
         _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
         PersistPendingRankings(state);
@@ -552,8 +553,9 @@ public partial class Main : Control
 
     private void AddSpacer(float height) => _content.AddChild(new Control { CustomMinimumSize = new Vector2(0, height) });
 
-    private void ClearContent()
+    private void ClearContent(bool keepConversationScene=false)
     {
+        if (!keepConversationScene) CloseConversationScene();
         _conversationReveal=null;_conversationElapsed=0;
         _clockRunning=false;
         _refreshCoreStatus=null;
