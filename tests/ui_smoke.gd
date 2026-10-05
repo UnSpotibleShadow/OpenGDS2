@@ -50,11 +50,24 @@ func run() -> void:
         for index in range(durations.size()):
             var track = load("res://audio/community/office-%02d.ogg" % (index+1))
             check(track != null and abs(track.get_length()-durations[index]) < 0.05,"Bundled music duration %d" % (index+1))
+        var soundtrack = main.find_child("BackgroundMusic",true,false)
+        soundtrack.call("SetSeasonalEnabled",true)
+        for index in range(4):
+            soundtrack.call("SetMonth", [3,6,9,12][index])
+            soundtrack.call("SetGameplayActive",true)
+            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+1)),"Season selects its bundled pair")
+            music.finished.emit()
+            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+2)),"Season advances to second bundled track")
+            music.finished.emit()
+            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+1)),"Bundled seasonal pair wraps")
+        soundtrack.call("SetTitleActive")
+        check(music.stream.resource_path.ends_with("title-theme.ogg"),"Title theme survives bundled seasonal playback")
     await press("日本語")
     check(TranslationServer.get_locale() == "ja", "Japanese setting")
     check(tr("DEVELOPMENT_COMPUTERS") == "開発パソコン", "Japanese computer translation loaded")
     var preferences := ConfigFile.new()
     check(preferences.load("user://interface.cfg") == OK and preferences.get_value("language","locale") == "ja","Language preference is saved outside simulation state")
+    main.find_child("SeasonalMusicEnabled",true,false).button_pressed = false
     main.queue_free()
     await process_frame
     main = load("res://scenes/Main.tscn").instantiate()
@@ -62,6 +75,7 @@ func run() -> void:
     await process_frame
     check(TranslationServer.get_locale() == "ja","Japanese language survives restart")
     await press("SETTINGS")
+    check(not main.find_child("SeasonalMusicEnabled",true,false).button_pressed,"Disabled seasonal music preference survives restart")
     await press("English")
     check(tr("HARDWARE_LICENSES") == "Hardware Licenses", "English license translation loaded")
     check(tr("DEVELOPMENT_PLANNING") == "Development Planning", "English planning translation loaded")

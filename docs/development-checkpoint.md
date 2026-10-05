@@ -1,4 +1,15 @@
-# Development checkpoint — M45, 2026-10-05
+# Development checkpoint — M46, 2026-10-05
+
+M46 adds optional seasonal office music, with three-month seasons, two existing
+authorized recordings per season and local seasonal playlist overrides. The
+title theme stays separate. Preferences do not change original simulation rules
+or saves. See [seasonal soundtrack behavior and tests](seasonal-music.md).
+Local direct C# compilation, 207 domain checks (including three private original
+fixtures), 25 public Python checks and both Godot suites pass. The local editor's
+SDK discovery remains unavailable in this sandbox; full SDK builds and desktop
+exports are verified separately by the published CI workflow.
+
+## Previous M45 validation
 
 M45 adds genuine Windows/Linux x86_64 debug exports with managed game symbols,
 console/logging instructions and a separate **OpenGDS2-desktop-debug** artifact.
