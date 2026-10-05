@@ -60,5 +60,8 @@ Additional caller tracing finds Module1.46 invoked from `fMainVisual` click
 handler `009C66BC +0741` and `fGMHisyoSet` action `0097743C`.
 The secretary-hire/settings menu entries themselves open separate forms
 (`0097A20C`, `0097A254`); they are not evidence of an automatic reminder date.
-The office click region/coordinate interpretation and selected secretary
-initialization still need complete data-flow verification before wiring advice.
+M44 establishes the inclusive native-pixel office hit rectangle
+104..114 × 80..104 and the initializer's final secretary selection (record 1,
+portrait 2). It fixes the initial office tile. The full advice queue/state
+mapping still needs verification before wiring the click.
+See [secretary initialization](secretary-initialization.md).

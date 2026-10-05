@@ -2609,6 +2609,9 @@ if (args.Length == 2)
         var scene = OfficeSceneImporter.Extract(File.ReadAllBytes(args[0]));
         Check(scene.Sprites.Count == 128 && scene.Sprites[0] == new OfficeSpriteDefinition(23,148,64,47,226,11,21,20));
         Check(scene.Sprites[121].Id == 144 && scene.Sprites[122].Id == 145);
+        // The final initializer selects secretary record 1 (portrait 2),
+        // overriding the earlier portrait-1 tile allocation.
+        Check(scene.Sprites.Single(x => x.Id == 141) == new OfficeSpriteDefinition(141,101,79,200,32,16,32,26));
         for (int action=6;action<=17;action++)
         {
             var computer=scene.Sprites.Single(x=>x.Id==93+2*(action-6));
