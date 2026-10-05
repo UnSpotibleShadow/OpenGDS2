@@ -10,8 +10,14 @@ See [source conditions and compatibility limits](secretary-advice.md).
 Local direct C# compilation passes all 271 domain checks (267 public, four
 private). All 51 Python checks pass (36 public, fifteen private). Both headless
 Godot suites report zero failures. Actions remain paused; no new desktop export
-or native Windows run was started. Publication references follow below once
-verified.
+or native Windows run was started. The root project launches headlessly with
+the current compiled assembly. Historical M48 packages do not include M53.
+
+M53 merged in [PR #47](https://github.com/UnSpotibleShadow/OpenGDS2/pull/47),
+commit `e327a4202e1b83f328c21af41a439f91a51ebb4d`; locally tested source head
+`b5d2a25ab8b81c559910b4912af893f05e78468e`. The merged source tree matches the
+verified candidate tree. Secretary names, recruitment/contracts, policies and the
+automatic timed presenter remain unfinished.
 
 ## Previous M52 validation
 
