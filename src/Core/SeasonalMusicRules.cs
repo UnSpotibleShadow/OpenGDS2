@@ -16,13 +16,20 @@ public static class SeasonalMusicRules
 
     public static string Folder(MusicSeason season) => season.ToString().ToLowerInvariant();
 
-    // Existing authorized recordings, allocated in source order; not newly composed music.
-    public static int FirstBundledTrack(MusicSeason season) => season switch
+    public static System.Collections.Generic.IEnumerable<string> BundledPaths(MusicSeason season)
     {
-        MusicSeason.Spring => 1,
-        MusicSeason.Summer => 3,
-        MusicSeason.Autumn => 5,
-        MusicSeason.Winter => 7,
-        _ => throw new System.ArgumentOutOfRangeException(nameof(season))
-    };
+        if (!System.Enum.IsDefined(season)) throw new System.ArgumentOutOfRangeException(nameof(season));
+        string prefix = season == MusicSeason.Summer ? "audio/community" : $"audio/community/{Folder(season)}";
+        int count = season == MusicSeason.Summer ? 8 : 4;
+        for (int index = 1; index <= count; index++) yield return $"{prefix}/office-{index:00}.ogg";
+    }
+
+    public const double CrossfadeSeconds = 2;
+
+    // Equal-power gains avoid the dip caused by a linear blend of unrelated recordings.
+    public static (float Incoming, float Outgoing) CrossfadeGains(double elapsedSeconds)
+    {
+        double fraction = double.IsFinite(elapsedSeconds) ? System.Math.Clamp(elapsedSeconds / CrossfadeSeconds, 0, 1) : 1;
+        return ((float)System.Math.Sin(fraction * System.Math.PI / 2), (float)System.Math.Cos(fraction * System.Math.PI / 2));
+    }
 }

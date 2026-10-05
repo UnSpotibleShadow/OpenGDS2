@@ -19,8 +19,28 @@ Test("community seasons cover all twelve months with winter across New Year",()=
     for (int month=1;month<=12;month++) Check(SeasonalMusicRules.ForMonth(month)==expected[month-1]);
     foreach (var season in Enum.GetValues<MusicSeason>()) Check(expected.Count(x=>x==season)==3);
     foreach (int? month in new int?[] {null,0,-1,13}) Check(SeasonalMusicRules.ForMonth(month) is null);
-    Check(Enum.GetValues<MusicSeason>().SelectMany(s=>Enumerable.Range(SeasonalMusicRules.FirstBundledTrack(s),2)).SequenceEqual(Enumerable.Range(1,8)));
+    Check(SeasonalMusicRules.BundledPaths(MusicSeason.Summer).Count()==8);
+    foreach (var season in new[] {MusicSeason.Spring,MusicSeason.Autumn,MusicSeason.Winter})
+    {
+        var paths=SeasonalMusicRules.BundledPaths(season).ToArray();
+        Check(paths.Length==4 && paths.All(x=>x.StartsWith($"audio/community/{SeasonalMusicRules.Folder(season)}/")));
+    }
+    Check(Enum.GetValues<MusicSeason>().SelectMany(SeasonalMusicRules.BundledPaths).Distinct().Count()==20);
     Check(SeasonalMusicRules.Folder(MusicSeason.Autumn)=="autumn");
+});
+Test("audio crossfade has exact endpoints and maintains equal power",()=>
+{
+    Check(SeasonalMusicRules.CrossfadeGains(0)==(0,1));
+    var end=SeasonalMusicRules.CrossfadeGains(SeasonalMusicRules.CrossfadeSeconds);
+    Check(end.Incoming==1 && Math.Abs(end.Outgoing)<.000001);
+    for (int index=0;index<=100;index++)
+    {
+        var gains=SeasonalMusicRules.CrossfadeGains(index*SeasonalMusicRules.CrossfadeSeconds/100);
+        Check(Math.Abs(gains.Incoming*gains.Incoming+gains.Outgoing*gains.Outgoing-1)<.000001);
+    }
+    Check(SeasonalMusicRules.CrossfadeGains(-1)==(0,1));
+    Check(SeasonalMusicRules.CrossfadeGains(999)==end);
+    Check(SeasonalMusicRules.CrossfadeGains(double.NaN)==end);
 });
 (GameState State,OriginalCatalog Catalog) CalendarFixture(GameDate? date=null,long money=2_000_000_000)
 {

@@ -100,7 +100,9 @@ its installed package retains its own license and attribution.
 Music is an optional modern addition, independent of original game behavior.
 Recordings are loaded from `user://music` in filename order (Ogg Vorbis, WAV or
 MP3). The resolved folder is displayed in Settings. Place files there and restart.
-The public source and desktop packages include eight owner-supplied tracks. A valid
+The public source and desktop packages include twenty owner-supplied office tracks.
+M47 compresses twelve new seasonal WAVs to Ogg Vorbis and adds two-second
+crossfades; summer uses the original eight community office tracks. A valid
 local playlist overrides the bundled tracks; an empty folder uses the bundled music.
 
 For a user-owned ZIP containing audio, run:
@@ -125,7 +127,8 @@ See `audio/community/NOTICE.md` for source provenance.
 The office playlist starts during gameplay, advances on the audio player's finished
 signal and wraps after the last recording. The title screen uses its dedicated
 theme. M46 adds optional [seasonal playlists](seasonal-music.md), enabled by default,
-with three-month seasons and local seasonal subfolders. With no valid local tracks,
+with three-month seasons and local seasonal subfolders. M47 adds the supplied
+seasonal recordings and crossfades. With no valid local tracks,
 the bundled recordings are used. Settings expose music and seasonal toggles,
 volume and Next Track. Preferences use `user://audio.cfg` and
 do not alter saved simulation state, RNG calls or clocks. Manual simulation pause

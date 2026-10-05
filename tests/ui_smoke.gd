@@ -52,14 +52,15 @@ func run() -> void:
             check(track != null and abs(track.get_length()-durations[index]) < 0.05,"Bundled music duration %d" % (index+1))
         var soundtrack = main.find_child("BackgroundMusic",true,false)
         soundtrack.call("SetSeasonalEnabled",true)
+        var seasonal_durations := [[122.8,70.0,127.52,109.0],durations,[83.16,62.8,85.0,58.68],[102.8,71.08,192.8,360.0]]
         for index in range(4):
             soundtrack.call("SetMonth", [3,6,9,12][index])
             soundtrack.call("SetGameplayActive",true)
-            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+1)),"Season selects its bundled pair")
-            music.finished.emit()
-            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+2)),"Season advances to second bundled track")
-            music.finished.emit()
-            check(music.stream.resource_path.ends_with("office-%02d.ogg" % (index*2+1)),"Bundled seasonal pair wraps")
+            var first_track = music.stream
+            for track_index in range(seasonal_durations[index].size()):
+                check(abs(music.stream.get_length()-seasonal_durations[index][track_index]) < 0.05,"Bundled season %d recording %d has expected duration (%s: %s)" % [index,track_index,music.stream.resource_path,music.stream.get_length()])
+                music.finished.emit()
+            check(music.stream == first_track,"Bundled seasonal playlist wraps")
         soundtrack.call("SetTitleActive")
         check(music.stream.resource_path.ends_with("title-theme.ogg"),"Title theme survives bundled seasonal playback")
     await press("日本語")

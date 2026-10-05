@@ -900,13 +900,13 @@ msgid "MUSIC_DIRECTORY"
 msgstr "追加音楽フォルダー"
 
 msgid "MUSIC_LOCAL_NOTE"
-msgstr "8曲の音楽が付属しています。ここにOgg Vorbis、WAV、MP3を配置して再起動すると、ファイル名順に優先再生します。"
+msgstr "20曲のオフィス用音楽が付属しています。ここにOgg Vorbis、WAV、MP3を配置して再起動すると、ファイル名順に優先再生します。"
 
 msgid "MUSIC_SEASONAL_ENABLED"
 msgstr "季節に合わせてオフィスの音楽を変更"
 
 msgid "MUSIC_SEASONAL_NOTE"
-msgstr "春：3～5月、夏：6～8月、秋：9～11月、冬：12～2月。音楽フォルダー内のspring、summer、autumn、winterフォルダーに曲を配置して再起動すると、季節ごとに再生します。"
+msgstr "春：3～5月、夏：6～8月、秋：9～11月、冬：12～2月。季節の変わり目に2秒間で曲を切り替えます。音楽フォルダー内のspring、summer、autumn、winterフォルダーに曲を配置して再起動すると、季節ごとに再生します。"
 
 # Display-only catalog names; Japanese names are resolved from the local import.
 
