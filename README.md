@@ -1,3 +1,6 @@
+This project is free-of-charge, however support is always nice to have. In case you want to support, there's a Ko-fi link below, but again ENTIRELY OPTIONAL!
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0P228889O)
+
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
