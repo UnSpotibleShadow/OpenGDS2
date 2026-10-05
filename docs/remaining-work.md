@@ -84,7 +84,7 @@ M49 is locally tested with 233 public C# checks plus four private fixtures, 30
 public Python checks plus twelve original checks, and zero failures in both
 headless Godot suites. Automatic Actions are paused by owner request; no M49
 export or native Windows validation was run. Next conversation targets are
-secretary advice/policies, checkpoint and shipment introductions, graduate
+secretary advice/policies, detailed checkpoint meetings, graduate
 callers and the timed presenter. These require traced callers and queue behavior,
 not invented reminder schedules. See [conversation scope](conversations.md) and
 [office effect/patch boundaries](office-effects-and-local-patches.md).
@@ -94,3 +94,12 @@ M50 restores the ordinary planning illustration from ImageFormG[0] and fixes
 cancellation during typing. Both headless Godot suites pass locally; Actions
 remain paused. Other meeting modes, automatic event conversations and source
 window-position/focus parity still need separate mapping.
+
+M51 connects the three checkpoint introductions and shipment commentary before
+reviews, using the existing market draws and modern saved message cursors.
+Local validation passes 246 C# checks, 45 Python checks and both headless Godot
+suites; Actions remain paused. Detailed type/genre meeting modes 4/5, secretary
+advice/policies, graduate/event callers and the timed presenter remain open.
+Shipment's optional summary reads the next unused product slot; original-save
+dirty-slot behavior is unresolved and is not replaced with an invented remark.
+See [caller evidence and save boundaries](conversations.md#m51-development-and-shipment-conversations).

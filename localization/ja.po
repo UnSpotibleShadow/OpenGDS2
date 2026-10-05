@@ -2304,3 +2304,74 @@ msgstr ""
 
 msgid "BITMAP_BUBBLE_16"
 msgstr ""
+
+# M51: authored core-loop translations; Japanese is imported locally.
+
+msgid "CORE_SECRETARY"
+msgstr ""
+
+msgid "CHECKPOINT_TYPE_INTRO"
+msgstr ""
+
+msgid "CHECKPOINT_GENRE_INTRO"
+msgstr ""
+
+msgid "CHECKPOINT_COMPLETE_INTRO"
+msgstr ""
+
+msgid "SHIPMENT_AdaptationHuge"
+msgstr ""
+
+msgid "SHIPMENT_AdaptationPopular"
+msgstr ""
+
+msgid "SHIPMENT_AdaptationReaders"
+msgstr ""
+
+msgid "SHIPMENT_AdaptationUnpopular"
+msgstr ""
+
+msgid "SHIPMENT_BalanceHuge"
+msgstr ""
+
+msgid "SHIPMENT_BalanceHit"
+msgstr ""
+
+msgid "SHIPMENT_BalancePoor"
+msgstr ""
+
+msgid "SHIPMENT_NoveltyHuge"
+msgstr ""
+
+msgid "SHIPMENT_NoveltyHit"
+msgstr ""
+
+msgid "SHIPMENT_NoveltyRejected"
+msgstr ""
+
+msgid "SHIPMENT_FunHuge"
+msgstr ""
+
+msgid "SHIPMENT_FunHit"
+msgstr ""
+
+msgid "SHIPMENT_MusicNotice"
+msgstr ""
+
+msgid "SHIPMENT_PriceCheap"
+msgstr ""
+
+msgid "SHIPMENT_PriceAbsurd"
+msgstr ""
+
+msgid "SHIPMENT_PriceVeryHigh"
+msgstr ""
+
+msgid "SHIPMENT_PriceHigh"
+msgstr ""
+
+msgid "SHIPMENT_PriceSlightlyHigh"
+msgstr ""
+
+msgid "SHIPMENT_Reviews"
+msgstr ""

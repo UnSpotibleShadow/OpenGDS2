@@ -3,6 +3,12 @@ using OpenGDS2.Core;
 using OpenGDS2.Persistence;
 using OpenGDS2.Import;
 
+bool AcknowledgeReviews(GameState state,ReleasedGameState product)
+{
+    while (ShipmentDialogueRules.Acknowledge(state,product)) {}
+    return ReviewService.Acknowledge(state,product);
+}
+
 int passed = 0;
 void Test(string name, Action test)
 {
@@ -12,6 +18,98 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("checkpoint introductions acknowledge presentation without advancing the simulation",()=>
+{
+    var s=PlanningState(10000);var p=new DevelopmentProjectState {Title="Checkpoint",RequiredPoints=100,Progress=51,Focus=new(25,25,25,25),PendingDecision=DevelopmentMilestone.SelectType};
+    s.DevelopmentProjects.Add(p);
+    Check(CheckpointDialogueRules.HasPending(p));
+    Check(!CheckpointDialogueRules.Acknowledge(s,p,DevelopmentMilestone.SelectGenre));
+    Check(!CheckpointDialogueRules.Acknowledge(s,new(),DevelopmentMilestone.SelectType));
+    Check(CheckpointDialogueRules.Acknowledge(s,p,DevelopmentMilestone.SelectType));
+    Check(!CheckpointDialogueRules.HasPending(p) && !CheckpointDialogueRules.Acknowledge(s,p,DevelopmentMilestone.SelectType));
+    Check(s.Money==10000 && p.Progress==51 && p.OriginalStage==0 && p.PendingDecision==DevelopmentMilestone.SelectType);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];Check(!CheckpointDialogueRules.HasPending(p));
+    p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;
+    Check(CheckpointDialogueRules.HasPending(p) && CheckpointDialogueRules.Acknowledge(s,p,DevelopmentMilestone.SelectGenre));
+    p.OriginalStage=3;p.GenreSourceIndex=0;p.Progress=100;p.PendingDecision=DevelopmentMilestone.StartDebugging;
+    Check(CheckpointDialogueRules.HasPending(p) && CheckpointDialogueRules.Acknowledge(s,p,DevelopmentMilestone.StartDebugging));
+    Check(p.Progress==100 && p.PendingDecision==DevelopmentMilestone.StartDebugging);
+});
+Test("legacy checkpoint saves replay only their current unresolved introduction",()=>
+{
+    var s=PlanningState();s.DevelopmentProjects.Add(new() {Title="Old checkpoint",RequiredPoints=100,Progress=51,Focus=new(25,25,25,25),PendingDecision=DevelopmentMilestone.SelectType});
+    var json=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;
+    json["State"]!["DevelopmentProjects"]![0]!.AsObject().Remove("DecisionIntroductionAcknowledged");
+    Check(CheckpointDialogueRules.HasPending(SaveStore.Deserialize(json.ToJsonString()).DevelopmentProjects[0]));
+    s.DevelopmentProjects[0].DecisionIntroductionAcknowledged=(DevelopmentMilestone)99;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("market commentary shares balance rolls and preserves the first-two quality suppression",()=>
+{
+    for (int roll=0;roll<20;roll++)
+    {
+        var r=new SequenceRandom(roll);var market=ReleaseService.CalculateMarket(0,new(999,999,999,999),r);
+        ShipmentMessage[] expected=roll switch {0=>[ShipmentMessage.BalanceHuge],1 or 2=>[ShipmentMessage.BalanceHit],3 or 4 or 5=>[ShipmentMessage.BalancePoor],_=>[]};
+        Check(market.Messages.SequenceEqual(expected) && r.Calls==1);
+        Check(market.Factor==ReleaseService.MarketFactor(0,new(999,999,999,999),new SequenceRandom(roll)));
+    }
+});
+Test("market commentary records quality success and rejection with no additional random calls",()=>
+{
+    var r=new SequenceRandom(6,0,0,1);var m=ReleaseService.CalculateMarket(2,new(201,201,201,0),r);
+    Check(r.Calls==4 && Math.Abs(m.Factor-5.1)<1e-12 && m.Messages.SequenceEqual(new[]{ShipmentMessage.NoveltyHuge,ShipmentMessage.FunHuge,ShipmentMessage.MusicNotice}));
+    r=new(6,1,1,0);m=ReleaseService.CalculateMarket(2,new(101,101,101,999),r);
+    Check(r.Calls==4 && m.Factor==.8 && m.Messages.SequenceEqual(new[]{ShipmentMessage.NoveltyRejected}));
+    m=ReleaseService.CalculateMarket(2,new(101,101,0,0),new SequenceRandom(6,0,0));
+    Check(m.Factor==2.1 && m.Messages.SequenceEqual(new[]{ShipmentMessage.NoveltyHit,ShipmentMessage.FunHit}));
+    m=ReleaseService.CalculateMarket(2,new(0,201,0,0),new SequenceRandom(3,1));Check(m.Factor==0 && m.Messages.Last()==ShipmentMessage.NoveltyRejected);
+});
+Test("shipment price comments use the original five independent boundaries",()=>
+{
+    long[] prices=[0,3999,4000,6999,7000,7999,8000,9999,10000,19999,20000];
+    ShipmentMessage?[] expected=[ShipmentMessage.PriceCheap,ShipmentMessage.PriceCheap,null,null,ShipmentMessage.PriceSlightlyHigh,ShipmentMessage.PriceSlightlyHigh,ShipmentMessage.PriceHigh,ShipmentMessage.PriceHigh,ShipmentMessage.PriceVeryHigh,ShipmentMessage.PriceVeryHigh,ShipmentMessage.PriceAbsurd];
+    for(int i=0;i<prices.Length;i++) Check(ShipmentDialogueRules.Price(prices[i])==expected[i]);
+    int[] pop=[0,2,3,5,6,9,10,14];ShipmentMessage[] adaptation=[ShipmentMessage.AdaptationUnpopular,ShipmentMessage.AdaptationUnpopular,ShipmentMessage.AdaptationReaders,ShipmentMessage.AdaptationReaders,ShipmentMessage.AdaptationPopular,ShipmentMessage.AdaptationPopular,ShipmentMessage.AdaptationHuge,ShipmentMessage.AdaptationHuge];
+    for(int i=0;i<pop.Length;i++) Check(ShipmentDialogueRules.Adaptation(pop[i])==adaptation[i]);
+});
+(GameState State,ReleasedGameState Product) ShipmentFixture()
+{
+    var s=PlanningState(1000000);var p=new DevelopmentProjectState {Title="Shipment",RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0,Focus=new(25,25,25,25)};
+    s.DevelopmentProjects.Add(p);Check(ReleaseService.TryRelease(s,p,CoreCatalog(),p.Title,7000,100,new SequenceRandom(0,0,0,0,0))==ReleaseResult.Success);
+    return(s,s.ReleasedGames[0]);
+}
+Test("shipment queues block reviews and survive save/load without repeating a transaction",()=>
+{
+    var(s,g)=ShipmentFixture();Check(g.ShipmentMessages!.SequenceEqual(new[]{ShipmentMessage.BalanceHuge,ShipmentMessage.PriceSlightlyHigh,ShipmentMessage.Reviews}));
+    Check(g.ShipmentMessageIndex==0 && !ReviewService.Acknowledge(s,g));
+    long? money=s.Money;double factor=g.MarketFactor;int[] scores=g.ReviewScores!.ToArray();
+    Check(ShipmentDialogueRules.Acknowledge(s,g));s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames[0];
+    Check(g.ShipmentMessageIndex==1 && s.Money==money && g.MarketFactor==factor && g.ReviewScores!.SequenceEqual(scores));
+    var session=new GameSession(new SequenceRandom());session.Restore(s);session.TickOffice();Check(s.CompanyActivityTicks==0 && s.SalesTicks==0 && s.Money==money);
+    Check(ShipmentDialogueRules.Acknowledge(s,g) && !ReviewService.Acknowledge(s,g));
+    Check(ShipmentDialogueRules.Acknowledge(s,g) && !ShipmentDialogueRules.HasPending(g));
+    Check(ReviewService.Acknowledge(s,g) && !ShipmentDialogueRules.Acknowledge(s,g));
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ShipmentMessageIndex==3 && s.Money==money);
+});
+Test("legacy releases do not invent lost shipment lottery history",()=>
+{
+    var(s,g)=ShipmentFixture();var json=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;
+    var record=json["State"]!["ReleasedGames"]![0]!.AsObject();record.Remove("ShipmentMessages");record.Remove("ShipmentMessageIndex");
+    s=SaveStore.Deserialize(json.ToJsonString());g=s.ReleasedGames[0];Check(g.ShipmentMessages is null && !ShipmentDialogueRules.HasPending(g) && ReviewService.Acknowledge(s,g));
+});
+Test("save validation rejects malformed shipment order, cursors and premature review acknowledgment",()=>
+{
+    var(s,g)=ShipmentFixture();
+    List<ShipmentMessage>[] bad=[[],[ShipmentMessage.Reviews,ShipmentMessage.BalanceHuge],[ShipmentMessage.BalanceHit,ShipmentMessage.BalanceHuge,ShipmentMessage.Reviews],[(ShipmentMessage)99,ShipmentMessage.Reviews],[ShipmentMessage.AdaptationHuge,ShipmentMessage.Reviews],[ShipmentMessage.PriceCheap]];
+    foreach(var messages in bad) {g.ShipmentMessages=messages;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));}
+    g.ShipmentMessages=[ShipmentMessage.Reviews];g.ShipmentMessageIndex=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.ShipmentMessageIndex=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));g.ShipmentMessageIndex=0;g.ReviewPending=false;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.ReviewPending=true;g.ShipmentMessages=null;g.ShipmentMessageIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("failed shipment creates no commentary and consumes no lottery draws",()=>
+{
+    var s=PlanningState(0);var p=new DevelopmentProjectState {Title="Unaffordable",RequiredPoints=1,Progress=1,OriginalStage=3,GameTypeSourceIndex=0,GenreSourceIndex=0,Focus=new(25,25,25,25)};s.DevelopmentProjects.Add(p);
+    string before=SaveStore.Serialize(s);var r=new SequenceRandom();Check(ReleaseService.TryRelease(s,p,CoreCatalog(),p.Title,5800,100,r)==ReleaseResult.InsufficientFunds && r.Calls==0 && SaveStore.Serialize(s)==before);
+});
 Test("conversation timer reveals UTF-16 text and restores the four-step mouth cycle",()=>
 {
     var c=new ConversationRevealState(new string('x',30));
@@ -760,7 +858,7 @@ Test("only successful first shipments increment the resettable hardware gate and
     Check(s.Money==opening && s.DevelopmentProjects.Count==1 && s.ReleasedGames.Count==0);
     s.Calendar.ShipmentsSinceHardwareTrigger=3;
     Check(ReleaseService.TryRelease(s,project,c,project.Title,5800,100,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
-    Check(s.Calendar.ShipmentsSinceHardwareTrigger==4);ReviewService.Acknowledge(s,s.ReleasedGames[0]);
+    Check(s.Calendar.ShipmentsSinceHardwareTrigger==4);AcknowledgeReviews(s,s.ReleasedGames[0]);
     s.ProductionPerformedThisWeek=false;
     Check(ReleaseService.TryProduce(s,s.ReleasedGames[0],c,100)==ReleaseResult.Success && s.Calendar.ShipmentsSinceHardwareTrigger==4);
     Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Calendar!.ShipmentsSinceHardwareTrigger==4);
@@ -1303,8 +1401,8 @@ Test("pending reviews survive save/load and pause simulation until acknowledged"
     Check(g.ReviewScores!.Sum()==32 && g.ReviewPending && !g.HallOfFame && s.Company.HallOfFameCount==0);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==0 && s.CompanyActivityTicks==0);
-    Check(ReviewService.Acknowledge(s,g) && g.HallOfFame && !g.ReviewPending && s.Company.HallOfFameCount==1);
-    Check(!ReviewService.Acknowledge(s,g) && s.Company.HallOfFameCount==1);
+    Check(AcknowledgeReviews(s,g) && g.HallOfFame && !g.ReviewPending && s.Company.HallOfFameCount==1);
+    Check(!AcknowledgeReviews(s,g) && s.Company.HallOfFameCount==1);
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames[0].HallOfFame && s.Company.HallOfFameCount==1);
 });
@@ -1317,7 +1415,7 @@ Test("review validation and legacy unknown values",()=>
     g.ReviewScores=[8,8,8];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     g.ReviewScores=[8,8,8,11];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     g.ReviewScores=[8,8,8,8];g.ReviewPending=true;
-    Check(ReviewService.Acknowledge(s,g) && s.Company.HallOfFameCount is null && g.HallOfFame);
+    Check(AcknowledgeReviews(s,g) && s.Company.HallOfFameCount is null && g.HallOfFame);
     g.ReviewScores=[1,1,1,1];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     g.HallOfFame=false;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ReviewScores!.Sum()==4);
 });
@@ -1342,7 +1440,7 @@ Test("sales batch creates a saved modal milestone and freezes following office t
     for (int i=0;i<20;i++) session.TickOffice(CoreCatalog());
     Check(g.PendingSalesMilestones.SequenceEqual(new[]{1}));
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==0);
-    Check(ReviewService.Acknowledge(s,g)==false && SalesMilestoneService.Acknowledge(s,g));
+    Check(AcknowledgeReviews(s,g)==false && SalesMilestoneService.Acknowledge(s,g));
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
     g.PendingSalesMilestones=[3];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
     g.PendingSalesMilestones=[2,3,4,5];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
@@ -1876,7 +1974,7 @@ Test("development release sales second production and another project form a rep
     }
     Check(tick<30000 && p.OriginalStage==3 && p.Progress==p.RequiredPoints);
     Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,5000,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
-    var g=s.ReleasedGames.Single();Check(ReviewService.Acknowledge(s,g));long before=s.Money!.Value;
+    var g=s.ReleasedGames.Single();Check(AcknowledgeReviews(s,g));long before=s.Money!.Value;
     for (int i=0;i<20;i++) session.TickOffice(c);
     Check(g.UnitsSold>0 && g.Stock<5000 && s.Money>before);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));g=s.ReleasedGames.Single();session.Restore(s);
@@ -1933,6 +2031,7 @@ Test("manga uses ordinary type and genre choices and can become a sequel parent"
     p.OriginalStage=3;p.PendingDecision=null;p.Progress=p.RequiredPoints;p.Quality=new(300,300,300,300);
     Check(ReleaseService.TryRelease(s,p,c,"Adapted game",5800,1,new SequenceRandom(6,0,0,1,0,0,0,0))==ReleaseResult.Success);
     var g=s.ReleasedGames[0];Check(g.OriginalMode==2 && g.MangaSourceIndex==0 && g.PredecessorProductIndex is null && g.SeriesBaseTitle==g.Title && g.OriginalSequelCounter==0);
+    while (ShipmentDialogueRules.Acknowledge(s,g)) {}
     g.ReviewScores=[8,8,8,8];g.ReviewPending=false;g.HallOfFame=true;
     Check(SequelDevelopmentRules.Candidates(s).Single()==g);
     Check(DevelopmentProjectService.TryAcceptSequelPlan(s,c,0,0,0,0,"Adaptation sequel",new(25,25,25,25))==DevelopmentPlanningResult.Success);
@@ -2068,7 +2167,7 @@ Test("successful sequel shipment consumes parent and preserves root, type and ge
     var child=s.ReleasedGames[1];Check(parent.HasReleasedSequel && child.OriginalMode==1 && child.PredecessorProductIndex==0);
     Check(child.SeriesBaseTitle==parent.Title && child.OriginalSequelCounter==1 && !child.HasReleasedSequel && child.ReviewPending);
     Check(s.Money==before-50_000 && s.DevelopmentProjects.Count==0 && SequelDevelopmentRules.Candidates(s).Count()==0);
-    Check(ReviewService.Acknowledge(s,child) && child.HallOfFame);
+    Check(AcknowledgeReviews(s,child) && child.HallOfFame);
     Check(SequelDevelopmentRules.Candidates(s).Single()==child && SequelDevelopmentRules.SuggestedTitle(child)=="Synthetic Series3");
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames[0].HasReleasedSequel && s.ReleasedGames[1].SeriesBaseTitle==parent.Title);
 });
@@ -2079,7 +2178,7 @@ Test("sequel lineage counter preserves the fresh-slot increment rather than inve
     {
         var p=AcceptSequel(s,c,index);FinishSequel(s,c,p);p.Quality=new(300,300,300,300);
         Check(ReleaseService.TryRelease(s,p,c,"Unique synthetic entry "+index,5800,1,new ConstantRandom(6))==ReleaseResult.Success);
-        Check(ReviewService.Acknowledge(s,s.ReleasedGames[^1]));
+        Check(AcknowledgeReviews(s,s.ReleasedGames[^1]));
         Check(s.ReleasedGames[^1].OriginalSequelCounter==1 && SequelDevelopmentRules.SuggestedTitle(s.ReleasedGames[^1])=="Synthetic Series3");
         s=SaveStore.Deserialize(SaveStore.Serialize(s));
     }
@@ -2097,7 +2196,7 @@ Test("a low-reviewed sequel ends the chain without restoring the predecessor",()
 {
     var(s,c,parent)=SequelFixture();var p=AcceptSequel(s,c);FinishSequel(s,c,p);p.Quality=new();
     Check(ReleaseService.TryRelease(s,p,c,"Failed synthetic sequel",5800,1,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
-    var child=s.ReleasedGames[^1];Check(ReviewService.Acknowledge(s,child) && !child.HallOfFame);
+    var child=s.ReleasedGames[^1];Check(AcknowledgeReviews(s,child) && !child.HallOfFame);
     Check(parent.HasReleasedSequel && !SequelDevelopmentRules.Candidates(s).Any());
     Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].HasReleasedSequel);
 });
@@ -2120,7 +2219,7 @@ Test("save validation rejects dangling, duplicate and cyclic sequel references",
     s.DevelopmentProjects.Add(new() {RoomIndex=1,OriginalMode=1,PredecessorProductIndex=0,Title="Duplicate",RequiredPoints=400,Focus=p.Focus});
     Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.DevelopmentProjects.RemoveAt(1);
     FinishSequel(s,c,p);p.Quality=new(300,300,300,300);ReleaseService.TryRelease(s,p,c,"Child",5800,1,new SequenceRandom(6,0,0,0,0));
-    ReviewService.Acknowledge(s,s.ReleasedGames[1]);var child=s.ReleasedGames[1];
+    AcknowledgeReviews(s,s.ReleasedGames[1]);var child=s.ReleasedGames[1];
     child.PredecessorProductIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));child.PredecessorProductIndex=0;
     s.ReleasedGames[0].HasReleasedSequel=false;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.ReleasedGames[0].HasReleasedSequel=true;
     child.SeriesBaseTitle="Wrong root";Throws<InvalidDataException>(()=>SaveStore.Serialize(s));child.SeriesBaseTitle=s.ReleasedGames[0].Title;
@@ -2887,7 +2986,7 @@ if (args.Length == 2)
         }
         Check(ticks<200000 && project.OriginalStage==3 && project.Quality.Fun+project.Quality.Novelty+project.Quality.Graphics+project.Quality.Music>project.Bugs);
         Check(ReleaseService.TryRelease(state,project,catalog,project.Title,5800,5000,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
-        Check(ReviewService.Acknowledge(state,state.ReleasedGames.Single()));
+        Check(AcknowledgeReviews(state,state.ReleasedGames.Single()));
         long funds=state.Money!.Value;
         for (int i=0;i<20;i++) session.TickOffice(catalog);
         Check(state.ReleasedGames.Single().UnitsSold>0 && state.Money>funds);
@@ -2904,7 +3003,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==50 && dialogue.SchemaVersion==2 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==73 && dialogue.SchemaVersion==3 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

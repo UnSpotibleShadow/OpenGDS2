@@ -107,6 +107,7 @@ public static class SaveStore
             if (product.OriginalAwardCode is <0 or >5) throw new InvalidDataException("Invalid original award marker.");
             if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
             RecallService.Validate(product);
+            ShipmentDialogueRules.Validate(product);
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
                 (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
                 product.PendingSalesMilestones.Count>4 ||
@@ -166,6 +167,8 @@ public static class SaveStore
 
     private static void ValidateProject(DevelopmentProjectState project)
     {
+        if (project?.DecisionIntroductionAcknowledged is DevelopmentMilestone introduction && !Enum.IsDefined(introduction))
+            throw new InvalidDataException("Invalid checkpoint introduction.");
         if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >10 ||
             project.AudienceSourceIndex is <0 or >6 || project.GameTypeSourceIndex is <0 or >50 ||
             project.GenreSourceIndex is <0 or >17 || project.OriginalMode is not (0 or 1 or 2) ||

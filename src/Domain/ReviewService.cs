@@ -33,7 +33,7 @@ public static class ReviewService
     }
     public static bool Acknowledge(GameState state,ReleasedGameState product)
     {
-        if (!state.ReleasedGames.Contains(product) || !product.ReviewPending || product.ReviewScores is null) return false;
+        if (!state.ReleasedGames.Contains(product) || !product.ReviewPending || product.ReviewScores is null || ShipmentDialogueRules.HasPending(product)) return false;
         bool hallOfFame=product.ReviewScores.Sum()>=32;
         int? count=hallOfFame && state.Company.HallOfFameCount is int current ? checked(current+1) : state.Company.HallOfFameCount;
         product.HallOfFame=hallOfFame;product.ReviewPending=false;state.Company.HallOfFameCount=count;

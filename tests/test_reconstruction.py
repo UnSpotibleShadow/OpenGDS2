@@ -20,6 +20,22 @@ def synthetic_pe():
     return data
 
 class PublicTests(unittest.TestCase):
+    def test_core_dialogue_rejects_unknown_original(self):
+        from verify_core_dialogue_evidence import verify as verify_dialogue
+        with self.assertRaises(ParseError):verify_dialogue(bytes(synthetic_pe()))
+
+    def test_core_dialogue_english_and_japanese_keys(self):
+        import re
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        japanese=set(re.findall(r'^msgid "([^"\n]+)"$',(ROOT/'localization'/'ja.po').read_text(),re.M))
+        messages=['AdaptationHuge','AdaptationPopular','AdaptationReaders','AdaptationUnpopular','BalanceHuge','BalanceHit','BalancePoor','NoveltyHuge','NoveltyHit','NoveltyRejected','FunHuge','FunHit','MusicNotice','PriceCheap','PriceAbsurd','PriceVeryHigh','PriceHigh','PriceSlightlyHigh','Reviews']
+        keys=['CORE_SECRETARY','CHECKPOINT_TYPE_INTRO','CHECKPOINT_GENRE_INTRO','CHECKPOINT_COMPLETE_INTRO']+[f'SHIPMENT_{message}' for message in messages]
+        for key in keys:
+            self.assertTrue(entries.get(key),key)
+            self.assertIn(key,japanese)
+            self.assertTrue(entries[key].isascii(),key)
+        self.assertIn('{room}',entries['CHECKPOINT_COMPLETE_INTRO'])
+
     def test_pe_rejects_non_pe(self):
         with self.assertRaises(ParseError):PeImage(b'xx'+b'\0'*200)
     def test_va_mapping(self):
@@ -107,6 +123,11 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_core_dialogue_anchors(self):
+        from verify_core_dialogue_evidence import verify as verify_dialogue
+        self.assertEqual(verify_dialogue(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes()),
+            {"checkpoint_introductions":3,"price_thresholds":[4000,20000,10000,8000,7000],"summary_slot":"next","review_intro":True})
+
     def test_hardware_picture_anchors(self):
         from verify_hardware_picture_evidence import verify as verify_pictures
         self.assertEqual(verify_pictures(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())['picture_count'],15)
