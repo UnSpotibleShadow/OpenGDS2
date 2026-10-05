@@ -162,7 +162,7 @@ Toolbar images have translated tooltips and status-bar help; older imports can
 be refreshed from the LZH to obtain the original icons.
 See [translation coverage and remaining work](docs/localization-and-toolbar.md).
 Music can be disabled or adjusted in Settings. Optional seasonal office playlists
-follow three-month seasons and support local seasonal tracks; the title theme
+follow three-month seasons, crossfade between seasons and support local seasonal tracks; the title theme
 stays separate. See [seasonal music](docs/seasonal-music.md).
 A calendar inspector previews the reconstructed calendar
 without skipping unresolved company simulation.

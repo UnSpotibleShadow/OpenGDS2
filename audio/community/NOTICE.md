@@ -36,3 +36,24 @@ with OpenGDS2 under the same owner authorization and audio notice above, and is
 not covered by the source-code MIT grant. The conversion keeps stereo 48 kHz
 audio and removes the MP3's embedded cover art. It loops on the title separately
 from the office playlist and uses the same mute/volume settings.
+
+## Seasonal recordings supplied on 2026-10-05
+
+The owner supplied twelve additional WAV recordings for the spring, autumn and
+winter playlists and requested compression and integration in OpenGDS2. They are
+distributed with the project and its game builds under the same owner authorization
+and separate audio notice above. They are not original Kairosoft assets and are
+not covered by the source-code MIT grant. Summer uses the existing eight office
+recordings. Original supplied WAVs are not bundled.
+
+| Bundled files | Supplied sources |
+| --- | --- |
+| spring/office-01.ogg through office-04.ogg | Spring_Office_1.wav through Spring_Office_4.wav |
+| autumn/office-01.ogg through office-04.ogg | Autumn_Office_1.wav through Autumn_Office_4.wav |
+| winter/office-01.ogg through office-04.ogg | Winter_Office_1.wav through Winter_Office_4.wav |
+
+These files use audio-only Ogg Vorbis quality 4, stereo 48 kHz, with source metadata
+removed. Duration, encoded size and SHA-256 are recorded in
+`seasonal-manifest.json`. Conversion reduced 277,728,960 bytes of WAV audio to
+22,143,224 bytes of Ogg audio (about 92% smaller). Existing recordings and the
+dedicated title theme are retained.

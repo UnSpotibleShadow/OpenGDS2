@@ -1,4 +1,16 @@
-# Development checkpoint — M46, 2026-10-05
+# Development checkpoint — M47, 2026-10-05
+
+M47 integrates twelve supplied seasonal recordings as compressed Ogg Vorbis;
+spring, autumn and winter each have four tracks, while summer uses all eight
+existing office tracks. A two-second equal-power crossfade follows season changes
+without changing simulation rules, clocks or saves. The supplied WAVs remain
+outside the repository. See [seasonal music and validation](seasonal-music.md).
+Local direct C# compilation and 208 domain checks pass (three private original
+fixtures); 27 public Python checks pass (10 private fixtures skipped). Both
+headless Godot suites pass, including two-second crossfade completion while the
+simulation is paused. Full SDK and desktop release/debug checks run in CI.
+
+## Previous M46 validation
 
 M46 adds optional seasonal office music, with three-month seasons, two existing
 authorized recordings per season and local seasonal playlist overrides. The

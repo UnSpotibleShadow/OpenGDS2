@@ -18,6 +18,11 @@ public partial class BackgroundMusic : Node
     private readonly Dictionary<MusicSeason, List<AudioStream>> _seasonTracks = new();
     private readonly HashSet<AudioStream> _ownedTracks = new();
     private AudioStreamPlayer _player = null!;
+    private AudioStreamPlayer _fadePlayer = null!;
+    private bool _crossfading;
+    private ulong _fadeStarted;
+    private float _incomingGain = 1;
+    private float _outgoingGain;
     private bool _gameplayActive;
     private bool _titleActive;
     private AudioStreamOggVorbis? _titleTheme;
@@ -35,37 +40,56 @@ public partial class BackgroundMusic : Node
             VolumePercent = float.IsFinite(value) ? Math.Clamp(value, 0, 100) : 30;
         }
         _player = new AudioStreamPlayer { Name = "MusicPlayer" }; AddChild(_player);
+        _fadePlayer = new AudioStreamPlayer { Name = "MusicFadePlayer" }; AddChild(_fadePlayer);
+        _fadePlayer.Finished += CompleteCrossfade;
         _titleTheme = GD.Load<AudioStreamOggVorbis>("res://audio/community/title-theme.ogg");
         if (_titleTheme is not null) _titleTheme.Loop = true;
         // A valid local playlist overrides the optional bundled community music.
         DirAccess.MakeDirRecursiveAbsolute(DirectoryPath);
         _officeTracks.AddRange(LoadLocalPlaylist(DirectoryPath));
         bool localOffice = _officeTracks.Count > 0;
-        var bundled = new Dictionary<int, AudioStream>();
-        for (int index = 1; index <= 8; index++)
-        {
-            var track = GD.Load<AudioStreamOggVorbis>($"res://audio/community/office-{index:00}.ogg");
-            if (track is null) continue;
-            if (track.GetLength() <= 0) { track.Dispose(); continue; }
-            track.Loop = false;
-            bundled[index] = track; _ownedTracks.Add(track);
-            if (!localOffice) _officeTracks.Add(track);
-        }
+        if (!localOffice) _officeTracks.AddRange(LoadBundledPlaylist(SeasonalMusicRules.BundledPaths(MusicSeason.Summer)));
         foreach (var season in Enum.GetValues<MusicSeason>())
         {
             var tracks = LoadLocalPlaylist($"{DirectoryPath}/{SeasonalMusicRules.Folder(season)}");
             if (tracks.Count == 0 && localOffice) tracks = _officeTracks;
             else if (tracks.Count == 0)
             {
-                int first = SeasonalMusicRules.FirstBundledTrack(season);
-                for (int index = first; index < first + 2; index++)
-                    if (bundled.TryGetValue(index, out var track)) tracks.Add(track);
+                tracks = LoadBundledPlaylist(SeasonalMusicRules.BundledPaths(season));
                 if (tracks.Count == 0) tracks = _officeTracks;
             }
             _seasonTracks[season] = tracks;
         }
+        // Nonseasonal mode includes all bundled recordings, with no duplicate summer tracks.
+        if (!localOffice)
+            foreach (var season in new[] { MusicSeason.Spring, MusicSeason.Autumn, MusicSeason.Winter })
+                foreach (var track in LoadBundledPlaylist(SeasonalMusicRules.BundledPaths(season))) _officeTracks.Add(track);
         _tracks = _officeTracks;
         _player.Finished += NextTrack;
+        ApplyVolume();
+    }
+
+    private List<AudioStream> LoadBundledPlaylist(IEnumerable<string> paths)
+    {
+        var tracks = new List<AudioStream>();
+        foreach (string path in paths)
+        {
+            if (!ResourceLoader.Exists($"res://{path}")) continue;
+            var track = GD.Load<AudioStreamOggVorbis>($"res://{path}");
+            if (track is null) continue;
+            if (track.GetLength() <= 0) { track.Dispose(); continue; }
+            track.Loop = false; tracks.Add(track); _ownedTracks.Add(track);
+        }
+        return tracks;
+    }
+
+    public override void _Process(double delta)
+    {
+        if (!_crossfading) return;
+        // Audio transitions use real time, independent of accelerated game-clock fixtures.
+        double elapsed = (Time.GetTicksUsec() - _fadeStarted) / 1_000_000d;
+        if (elapsed >= SeasonalMusicRules.CrossfadeSeconds) { CompleteCrossfade(); return; }
+        (_incomingGain, _outgoingGain) = SeasonalMusicRules.CrossfadeGains(elapsed);
         ApplyVolume();
     }
 
@@ -98,6 +122,7 @@ public partial class BackgroundMusic : Node
     public override void _ExitTree()
     {
         _player.Stop(); _player.Stream = null;
+        _fadePlayer.Stop(); _fadePlayer.Stream = null;
         foreach (var track in _ownedTracks) track.Dispose();
         _ownedTracks.Clear(); _seasonTracks.Clear(); _officeTracks.Clear(); _tracks.Clear();
         _titleTheme?.Dispose(); _titleTheme = null;
@@ -105,6 +130,7 @@ public partial class BackgroundMusic : Node
 
     public void SetGameplayActive(bool active)
     {
+        if (!active || _titleActive) CompleteCrossfade();
         _gameplayActive = active;
         _titleActive = false;
         UpdatePlayback();
@@ -112,6 +138,7 @@ public partial class BackgroundMusic : Node
 
     public void SetTitleActive()
     {
+        CompleteCrossfade();
         _gameplayActive = false;
         _titleActive = true;
         UpdatePlayback();
@@ -119,13 +146,16 @@ public partial class BackgroundMusic : Node
 
     public void SetEnabled(bool enabled)
     {
+        if (!enabled) CompleteCrossfade();
         Enabled = enabled; UpdatePlayback(); SaveSettings();
     }
 
     public void SetMonth(int month)
     {
-        CurrentSeason = SeasonalMusicRules.ForMonth(month);
-        SelectPlaylist();
+        var season = SeasonalMusicRules.ForMonth(month);
+        bool changed = CurrentSeason.HasValue && season.HasValue && season != CurrentSeason;
+        CurrentSeason = season;
+        SelectPlaylist(changed);
     }
 
     public void SetSeasonalEnabled(bool enabled)
@@ -133,12 +163,16 @@ public partial class BackgroundMusic : Node
         SeasonalEnabled = enabled; SelectPlaylist(); SaveSettings();
     }
 
-    private void SelectPlaylist()
+    private void SelectPlaylist(bool seasonalTransition = false)
     {
         var desired = SeasonalEnabled && CurrentSeason is MusicSeason season
             ? _seasonTracks[season] : _officeTracks;
         // Same-season ticks, dialogs and saves never restart the current recording.
-        if (!ReferenceEquals(_tracks, desired)) { _tracks = desired; TrackIndex = 0; }
+        bool changed = !ReferenceEquals(_tracks, desired);
+        if (changed) { _tracks = desired; TrackIndex = 0; }
+        if (changed && seasonalTransition && Enabled && _gameplayActive && _tracks.Count > 0 && _player.Stream is not null)
+            BeginCrossfade(_tracks[TrackIndex]);
+        else if (changed) CompleteCrossfade();
         UpdatePlayback();
     }
 
@@ -151,6 +185,7 @@ public partial class BackgroundMusic : Node
     public void NextTrack()
     {
         if (_tracks.Count == 0) return;
+        CompleteCrossfade();
         TrackIndex = (TrackIndex + 1) % _tracks.Count;
         // Advancing the office playlist never replaces the title theme.
         if (_gameplayActive) { _player.Stop(); _player.Stream = _tracks[TrackIndex]; UpdatePlayback(); }
@@ -167,7 +202,34 @@ public partial class BackgroundMusic : Node
         if (Enabled && desired is not null && !_player.Playing && DisplayServer.GetName() != "headless") _player.Play();
     }
 
-    private void ApplyVolume() => _player.VolumeDb = VolumePercent <= 0 ? -80 : Mathf.LinearToDb(VolumePercent / 100);
+    private void BeginCrossfade(AudioStream incoming)
+    {
+        if (_player.Stream == incoming) return;
+        // Retargeting keeps at most two voices; the previous fading voice is released.
+        CompleteCrossfade();
+        var outgoing = _player.Stream;
+        float position = _player.GetPlaybackPosition();
+        bool audible = _player.Playing;
+        _fadePlayer.Stream = outgoing;
+        _player.Stop(); _player.Stream = incoming;
+        _fadeStarted = Time.GetTicksUsec(); _crossfading = true;
+        _incomingGain = 0; _outgoingGain = 1; ApplyVolume();
+        _fadePlayer.StreamPaused = !Enabled;
+        if (audible && DisplayServer.GetName() != "headless") _fadePlayer.Play(position);
+    }
+
+    private void CompleteCrossfade()
+    {
+        _crossfading = false; _incomingGain = 1; _outgoingGain = 0;
+        _fadePlayer.Stop(); _fadePlayer.Stream = null; ApplyVolume();
+    }
+
+    private void ApplyVolume()
+    {
+        float volume = VolumePercent / 100;
+        _player.VolumeDb = volume * _incomingGain <= 0 ? -80 : Mathf.LinearToDb(volume * _incomingGain);
+        _fadePlayer.VolumeDb = volume * _outgoingGain <= 0 ? -80 : Mathf.LinearToDb(volume * _outgoingGain);
+    }
 
     private void SaveSettings()
     {

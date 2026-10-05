@@ -137,6 +137,7 @@ func run() -> void:
     root.size = original_viewport_size
     await process_frame
     await press("LOAD_GAME")
+    await press_node("TogglePause")
     var seasonal_player = main.find_child("MusicPlayer",true,false)
     check(abs(seasonal_player.stream.get_length()-11.0) < 0.01,"April save immediately selects spring music")
     var soundtrack = main.find_child("BackgroundMusic",true,false)
@@ -146,13 +147,32 @@ func run() -> void:
     check(seasonal_player.stream == spring_stream,"Same-season date refresh preserves the recording")
     soundtrack.call("SetMonth", 6)
     check(abs(seasonal_player.stream.get_length()-13.0) < 0.01,"June switches to summer")
+    var fading_player = main.find_child("MusicFadePlayer",true,false)
+    check(fading_player.stream == spring_stream and seasonal_player.volume_db <= -70,"Season transition starts with outgoing spring and silent incoming summer")
+    var fade_deadline = Time.get_ticks_msec()+1000
+    while Time.get_ticks_msec() < fade_deadline:
+        await process_frame
+    check(fading_player.stream != null and seasonal_player.volume_db > -70 and fading_player.volume_db < -10,"Both voices change gain during crossfade")
+    soundtrack.call("SetVolume",42.0)
+    var mixed_power = pow(db_to_linear(seasonal_player.volume_db),2)+pow(db_to_linear(fading_player.volume_db),2)
+    check(abs(mixed_power-0.42*0.42) < 0.00001,"Volume changes apply to both crossfade gains")
+    soundtrack.call("SetVolume",30.0)
+    var summer_stream = seasonal_player.stream
+    soundtrack.call("SetMonth", 8)
+    check(seasonal_player.stream == summer_stream and fading_player.stream == spring_stream,"Same-season refresh preserves the active crossfade")
+    fade_deadline = Time.get_ticks_msec()+1200
+    while Time.get_ticks_msec() < fade_deadline:
+        await process_frame
+    check(fading_player.stream == null and abs(seasonal_player.volume_db-linear_to_db(0.3)) < 0.01,"Crossfade releases the outgoing stream and restores full configured gain")
     seasonal_player.finished.emit()
     check(abs(seasonal_player.stream.get_length()-14.0) < 0.01,"Seasonal playlist advances")
     seasonal_player.finished.emit()
     check(abs(seasonal_player.stream.get_length()-13.0) < 0.01,"Seasonal playlist wraps")
     soundtrack.call("SetMonth", 9)
     check(abs(seasonal_player.stream.get_length()-1.0) < 0.01,"Absent autumn playlist falls back to local office music")
+    check(fading_player.stream != null,"Fallback season changes also crossfade")
     soundtrack.call("SetEnabled", false)
+    check(fading_player.stream == null,"Muting cancels and releases outgoing audio")
     soundtrack.call("SetMonth", 12)
     var muted_audio := ConfigFile.new()
     check(muted_audio.load("user://audio.cfg") == OK and not muted_audio.get_value("music","enabled"),"Season transition preserves saved mute setting")
@@ -162,6 +182,7 @@ func run() -> void:
     check(seasonal_player.stream == winter_stream,"December to January preserves winter recording")
     soundtrack.call("SetMonth", 3)
     check(abs(seasonal_player.stream.get_length()-11.0) < 0.01,"March returns to spring")
+    check(fading_player.stream == null,"Muted season change never starts a crossfade")
     soundtrack.call("SetTitleActive")
     soundtrack.call("SetMonth", 6)
     check(seasonal_player.stream.resource_path.ends_with("title-theme.ogg"),"Season changes never replace the title theme")
@@ -170,6 +191,20 @@ func run() -> void:
     check(abs(seasonal_player.stream.get_length()-1.0) < 0.01,"Unknown month safely selects ordinary office music")
     soundtrack.call("SetSeasonalEnabled", false)
     soundtrack.call("SetEnabled", true)
+    soundtrack.call("SetSeasonalEnabled", true)
+    soundtrack.call("SetMonth", 3)
+    soundtrack.call("SetMonth", 6)
+    soundtrack.call("SetMonth", 12)
+    check(abs(seasonal_player.stream.get_length()-15.0) < 0.01 and abs(fading_player.stream.get_length()-13.0) < 0.01,"Rapid season changes retain only the newest incoming and outgoing voices")
+    var rapid_stream = seasonal_player.stream
+    fading_player.finished.emit()
+    check(seasonal_player.stream == rapid_stream and fading_player.stream == null,"Outgoing completion never advances the incoming playlist")
+    soundtrack.call("SetMonth", 3)
+    soundtrack.call("SetTitleActive")
+    check(fading_player.stream == null,"Returning to title releases a pending crossfade")
+    soundtrack.call("SetGameplayActive", true)
+    soundtrack.call("SetSeasonalEnabled", false)
+    await press_node("TogglePause")
     var toolbar = main.find_child("DesktopToolbar",true,false)
     for control in toolbar.get_children():
         if control is Button:

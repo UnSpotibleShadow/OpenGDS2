@@ -1,0 +1,101 @@
+{
+  "encoding": "Ogg Vorbis quality 4, stereo 48000 Hz",
+  "recordings": [
+    {
+      "source": "Autumn_Office_1.wav",
+      "path": "audio/community/autumn/office-01.ogg",
+      "source_bytes": 15980560,
+      "bytes": 1309056,
+      "duration": 83.16,
+      "sha256": "dd6907d99ed7a26202e35fe221202ff557d8764e25e67b35774b4d37149948ef"
+    },
+    {
+      "source": "Autumn_Office_2.wav",
+      "path": "audio/community/autumn/office-02.ogg",
+      "source_bytes": 12071440,
+      "bytes": 955005,
+      "duration": 62.8,
+      "sha256": "2f2a202e6a9a5d2e399261c24fea4a7ced8694d52f67ef72dd442b7f7a389e54"
+    },
+    {
+      "source": "Autumn_Office_3.wav",
+      "path": "audio/community/autumn/office-03.ogg",
+      "source_bytes": 16333840,
+      "bytes": 1284347,
+      "duration": 85.0,
+      "sha256": "a7d6adc6f0758511a701597eb1f8f32fb244dbaf1f28d7b2f9aaf735ba414083"
+    },
+    {
+      "source": "Autumn_Office_4.wav",
+      "path": "audio/community/autumn/office-04.ogg",
+      "source_bytes": 11280400,
+      "bytes": 882280,
+      "duration": 58.68,
+      "sha256": "4e5b6534c44dd0a1fd19eade8ee8dd280c83a8e009065ed03060fc8fd71e3b67"
+    },
+    {
+      "source": "Spring_Office_1.wav",
+      "path": "audio/community/spring/office-01.ogg",
+      "source_bytes": 23591440,
+      "bytes": 1924949,
+      "duration": 122.8,
+      "sha256": "2442267ba8bad564ca4e22d573bc1cb17e747725862fb7330b39bc2fea08d38e"
+    },
+    {
+      "source": "Spring_Office_2.wav",
+      "path": "audio/community/spring/office-02.ogg",
+      "source_bytes": 13453840,
+      "bytes": 1116186,
+      "duration": 70.0,
+      "sha256": "8d843a6f9a5b4883c98ccc699179f896517c95cfdf38bcd72214395d2ce39c97"
+    },
+    {
+      "source": "Spring_Office_3.wav",
+      "path": "audio/community/spring/office-03.ogg",
+      "source_bytes": 24497680,
+      "bytes": 1977038,
+      "duration": 127.52,
+      "sha256": "81b40279695bf1e15bfc2e996ed13a69f97fe1633562d10b6034b2a87f5796fc"
+    },
+    {
+      "source": "Spring_Office_4.wav",
+      "path": "audio/community/spring/office-04.ogg",
+      "source_bytes": 20941840,
+      "bytes": 1781063,
+      "duration": 109.0,
+      "sha256": "1d6dc87cb16164875e21c3a068ad8b83da92b920306be79fd272dde9e193eac6"
+    },
+    {
+      "source": "Winter_Office_1.wav",
+      "path": "audio/community/winter/office-01.ogg",
+      "source_bytes": 19751440,
+      "bytes": 1698200,
+      "duration": 102.8,
+      "sha256": "4483c82f9c3d8f1838c6acb1dd56b042f3f78725744458d3d18ef0032af07400"
+    },
+    {
+      "source": "Winter_Office_2.wav",
+      "path": "audio/community/winter/office-02.ogg",
+      "source_bytes": 13661200,
+      "bytes": 1185782,
+      "duration": 71.08,
+      "sha256": "ec4b5e6b81651e2df675130bc7578ebac18a7aaf5905b945d43b1af0b5b1b54f"
+    },
+    {
+      "source": "Winter_Office_3.wav",
+      "path": "audio/community/winter/office-03.ogg",
+      "source_bytes": 37031440,
+      "bytes": 3040683,
+      "duration": 192.8,
+      "sha256": "61062f1411b579b2fddf15377ab811c5bba65e7879edeaab2f1bd9fa53154e52"
+    },
+    {
+      "source": "Winter_Office_4.wav",
+      "path": "audio/community/winter/office-04.ogg",
+      "source_bytes": 69133840,
+      "bytes": 4988635,
+      "duration": 360.0,
+      "sha256": "11a6f7f7efe4d3f19fdd616844203304e28eb2a2313b82c69ee9cf7d6035a132"
+    }
+  ]
+}
