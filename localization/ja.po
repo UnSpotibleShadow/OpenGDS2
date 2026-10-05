@@ -2375,3 +2375,63 @@ msgstr ""
 
 msgid "SHIPMENT_Reviews"
 msgstr ""
+
+msgid "CORE_EMPLOYEE"
+msgstr ""
+
+msgid "CHECKPOINT_NO_CHOICE"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeSuggestion"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeFits"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeHit"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeAudience"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeReaders"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeChosen"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_Publicity"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_BetaComplete"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_RecognitionLow"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_RecognitionMedium"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_RecognitionHigh"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_ChooseGenre"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_TypeReminder"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_GenreMatch"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_GenreChosen"
+msgstr ""
+
+msgid "CHECKPOINT_MEETING_FunBonus"
+msgstr ""
+
+msgid "CHECKPOINT_ALPHA_MEETING"
+msgstr ""
+
+msgid "CHECKPOINT_BETA_MEETING"
+msgstr ""

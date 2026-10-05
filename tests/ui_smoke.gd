@@ -19,6 +19,17 @@ func finish_conversation() -> void:
         pages += 1
     check(main.find_child("ConversationWindow",true,false) == null,"Conversation sequence finishes within its verified page bound")
 
+func normalize_fixture_numbers(value: Variant) -> Variant:
+    if value is Dictionary:
+        for key in value:
+            value[key] = normalize_fixture_numbers(value[key])
+    elif value is Array:
+        for index in range(value.size()):
+            value[index] = normalize_fixture_numbers(value[index])
+    elif typeof(value) == TYPE_FLOAT and value == floor(value):
+        return int(value)
+    return value
+
 func _initialize() -> void:
     call_deferred("run")
 
@@ -478,5 +489,39 @@ func run() -> void:
     await press("CALENDAR_INSPECTOR")
     await press("NEXT_WEEK")
     await press("CANCEL")
+    if not fixture.is_empty():
+        await press("SAVE_GAME")
+        var meeting_fixture = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        meeting_fixture.State.Calendar.Pending = null
+        meeting_fixture.State.Money = 100000000
+        meeting_fixture.State.DevelopmentProjects = [{"RoomIndex":0,"HardwareSourceIndex":0,"AudienceSourceIndex":0,
+            "Title":"Synthetic checkpoint","RequiredPoints":100,"Progress":51,"OriginalStage":0,"OriginalMode":0,
+            "OriginalRoomState":1,"Focus":{"Fun":25,"Novelty":25,"Graphics":25,"Music":25},"Quality":{},
+            "PendingDecision":0,"DecisionIntroductionAcknowledged":0,"TypeCandidates":[0,1,0,1,0],
+            "CheckpointMeeting":{"Milestone":0,"IsConfirmation":false,"Lines":[],"MessageIndex":0}}]
+        var meeting_file = FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+        meeting_file.store_string(JSON.stringify(normalize_fixture_numbers(meeting_fixture)));meeting_file.close()
+        await press("LOAD_GAME")
+        check(main.find_child("TypeMeetingWindow",true,false) != null,"Imported type selection has its own compact window")
+        var meeting_picture = main.find_child("PlanningDiscussionPicture",true,false)
+        check(meeting_picture != null and meeting_picture.texture.get_image().get_data() == Image.load_from_file("user://original/Graphic/Embedded/PlanningMeeting.bmp").get_data(),"Checkpoint selector uses the verified original meeting illustration")
+        check(main.find_child("ConfirmTypeChoice",true,false).disabled,"Meeting starts without a confirmed selection")
+        main.find_child("SelectType0",true,false).pressed.emit()
+        await process_frame
+        check(not main.find_child("ConfirmTypeChoice",true,false).disabled,"Type preview enables confirmation")
+        await press("SAVE_GAME")
+        var preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(preview.State.Money == meeting_fixture.State.Money and preview.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Imported type preview leaves the transaction untouched")
+        # Freeze/read the queue independently of the employee's current action.
+        main.find_child("ConfirmTypeChoice",true,false).pressed.emit()
+        await process_frame
+        check(main.find_child("ConversationMessage",true,false).text.contains(tr("CATALOG_TYPE_0")),"Imported type confirmation uses English catalog text")
+        await press("SAVE_GAME")
+        var confirmation = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        await press("LOAD_GAME")
+        await press("SAVE_GAME")
+        var reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(reloaded.State.Money == confirmation.State.Money and reloaded.State.DevelopmentProjects[0].Recognition == confirmation.State.DevelopmentProjects[0].Recognition,"Imported confirmation reload preserves the paid fee and publicity")
+        await finish_conversation()
     print("UI smoke checks complete; failures=", failures)
     quit(0 if failures == 0 else 1)

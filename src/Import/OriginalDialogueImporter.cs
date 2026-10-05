@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=3,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=4,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
@@ -41,6 +41,27 @@ public static class OriginalDialogueImporter
         int[] shipmentEntries=[0x41,0x42,0x43,0x44,0x46,0x47,0x48,0x49,0x4B,0x4A,0x4C,0x4D,0x4E,0x53,0x54,0x55,0x56,0x57,0x6D];
         foreach (var message in Enum.GetValues<ShipmentMessage>())
             result.Entries.Add(ShipmentDialogueRules.MessageKey(message),pe.String(shipmentPool,shipmentEntries[(int)message]));
+        const int alphaPool=0x605270,betaPool=0x604840;
+        void Meeting(CheckpointMeetingMessage message,string text)=>result.Entries.Add(CheckpointMeetingRules.MessageKey(message),text);
+        result.Entries.Add("CORE_EMPLOYEE",pe.String(alphaPool,0x12));
+        result.Entries.Add("CHECKPOINT_ALPHA_MEETING",pe.String(meetingPool,0x0F));
+        result.Entries.Add("CHECKPOINT_BETA_MEETING",pe.String(meetingPool,0x10));
+        Meeting(CheckpointMeetingMessage.TypeSuggestion,pe.String(alphaPool,0x44)+"{type}"+pe.String(alphaPool,0x45));
+        Meeting(CheckpointMeetingMessage.TypeFits,pe.String(alphaPool,0x46)+"{type}"+pe.String(alphaPool,0x47));
+        Meeting(CheckpointMeetingMessage.TypeHit,pe.String(alphaPool,0x48)+"{type}"+pe.String(alphaPool,0x49));
+        Meeting(CheckpointMeetingMessage.TypeAudience,"{audience}"+pe.String(alphaPool,0x4B)+"{type}"+pe.String(alphaPool,0x4C));
+        Meeting(CheckpointMeetingMessage.TypeReaders,pe.String(alphaPool,0x46)+"{type}"+pe.String(alphaPool,0x4D)+"{audience}"+pe.String(alphaPool,0x4E));
+        Meeting(CheckpointMeetingMessage.TypeChosen,pe.String(alphaPool,0x2B)+"{type}"+pe.String(alphaPool,0x2D));
+        Meeting(CheckpointMeetingMessage.Publicity,pe.String(alphaPool,0x2E)+"{recognition}"+pe.String(alphaPool,0x31));
+        Meeting(CheckpointMeetingMessage.BetaComplete,pe.String(betaPool,0x43));
+        Meeting(CheckpointMeetingMessage.RecognitionLow,pe.String(betaPool,0x45));
+        Meeting(CheckpointMeetingMessage.RecognitionMedium,pe.String(betaPool,0x46));
+        Meeting(CheckpointMeetingMessage.RecognitionHigh,pe.String(betaPool,0x47));
+        Meeting(CheckpointMeetingMessage.ChooseGenre,pe.String(betaPool,0x48));
+        Meeting(CheckpointMeetingMessage.TypeReminder,pe.String(betaPool,0x49)+"{type}"+pe.String(betaPool,0x4A));
+        Meeting(CheckpointMeetingMessage.GenreMatch,pe.String(betaPool,0x2F)+"{genre}"+pe.String(betaPool,0x31)+"{type}"+pe.String(betaPool,0x33));
+        Meeting(CheckpointMeetingMessage.GenreChosen,pe.String(betaPool,0x2F)+"{genre}"+pe.String(betaPool,0x31)+"{type}"+pe.String(betaPool,0x36));
+        Meeting(CheckpointMeetingMessage.FunBonus,pe.String(betaPool,0x34));
         // Serialized fGMKaiwa Timer1 interval property: 20 milliseconds.
         pe.Require(0x248EAC,6,0,(byte)'T',(byte)'i',(byte)'m',(byte)'e',(byte)'r',(byte)'1',0,0x0B,3,20,0,0,0);
         return result;

@@ -2375,3 +2375,63 @@ msgstr "The price is a little high. It may be difficult for children to afford..
 
 msgid "SHIPMENT_Reviews"
 msgstr "Familion Weekly has reviewed this game to coincide with its release."
+
+msgid "CORE_EMPLOYEE"
+msgstr "Employee"
+
+msgid "CHECKPOINT_NO_CHOICE"
+msgstr "Choose an option, then confirm."
+
+msgid "CHECKPOINT_MEETING_TypeSuggestion"
+msgstr "I think \"{type}\" would be a good choice."
+
+msgid "CHECKPOINT_MEETING_TypeFits"
+msgstr "\"{type}\" seems like a perfect fit."
+
+msgid "CHECKPOINT_MEETING_TypeHit"
+msgstr "Hmm, \"{type}\" is sure to be a hit!"
+
+msgid "CHECKPOINT_MEETING_TypeAudience"
+msgstr "For {audience}, I think \"{type}\" would work well."
+
+msgid "CHECKPOINT_MEETING_TypeReaders"
+msgstr "People in {audience} should enjoy \"{type}\"."
+
+msgid "CHECKPOINT_MEETING_TypeChosen"
+msgstr "So the content will be {type}. Understood. Let's use our research to work toward the beta version."
+
+msgid "CHECKPOINT_MEETING_Publicity"
+msgstr "Using the company's publicity network has raised the game's recognition to {recognition}!"
+
+msgid "CHECKPOINT_MEETING_BetaComplete"
+msgstr "The beta version is finally complete. The game is really taking shape."
+
+msgid "CHECKPOINT_MEETING_RecognitionLow"
+msgstr "We've put so much work into this game, but hardly anyone knows about it. We need more publicity!"
+
+msgid "CHECKPOINT_MEETING_RecognitionMedium"
+msgstr "Recognition is quite good, but I'd like a little more publicity before shipment."
+
+msgid "CHECKPOINT_MEETING_RecognitionHigh"
+msgstr "Recognition is very high! With so many people hearing about it, perhaps it will sell well."
+
+msgid "CHECKPOINT_MEETING_ChooseGenre"
+msgstr "Now let's choose the game's genre as we work toward the finished version."
+
+msgid "CHECKPOINT_MEETING_TypeReminder"
+msgstr "The genre matters. We're making {type}..."
+
+msgid "CHECKPOINT_MEETING_GenreMatch"
+msgstr "{genre} and {type} make a great combination!"
+
+msgid "CHECKPOINT_MEETING_GenreChosen"
+msgstr "{genre} with {type}, then. Let's get to work!"
+
+msgid "CHECKPOINT_MEETING_FunBonus"
+msgstr "This game's Fun has increased by 20."
+
+msgid "CHECKPOINT_ALPHA_MEETING"
+msgstr "Alpha version meeting"
+
+msgid "CHECKPOINT_BETA_MEETING"
+msgstr "Beta version meeting"

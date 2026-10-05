@@ -32,6 +32,7 @@ public sealed class DevelopmentProjectState
     public DevelopmentMilestone? PendingDecision {get;set;}
     // Additive modern notification state; does not alter stage or rewards.
     public DevelopmentMilestone? DecisionIntroductionAcknowledged {get;set;}
+    public CheckpointMeetingState? CheckpointMeeting {get;set;}
     public Dictionary<int,int>? TechnologyApplicationCounts {get;set;}
     public List<int>? TypeCandidates {get;set;}
 }

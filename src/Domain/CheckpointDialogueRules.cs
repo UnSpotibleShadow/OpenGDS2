@@ -5,6 +5,8 @@ public static class CheckpointDialogueRules
 {
     public static bool HasPending(DevelopmentProjectState project)
         =>project.PendingDecision.HasValue && project.DecisionIntroductionAcknowledged!=project.PendingDecision;
+    public static bool ShouldIntroduce(GameState state,DevelopmentProjectState project)
+        =>HasPending(project) && (project.PendingDecision==DevelopmentMilestone.StartDebugging || state.ReleasedGames.Count<=2);
     public static string MessageKey(DevelopmentMilestone milestone)=>milestone switch
     {
         DevelopmentMilestone.SelectType=>"CHECKPOINT_TYPE_INTRO",

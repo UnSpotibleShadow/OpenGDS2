@@ -84,7 +84,7 @@ M49 is locally tested with 233 public C# checks plus four private fixtures, 30
 public Python checks plus twelve original checks, and zero failures in both
 headless Godot suites. Automatic Actions are paused by owner request; no M49
 export or native Windows validation was run. Next conversation targets are
-secretary advice/policies, detailed checkpoint meetings, graduate
+secretary advice/policies, remaining checkpoint presentation, graduate
 callers and the timed presenter. These require traced callers and queue behavior,
 not invented reminder schedules. See [conversation scope](conversations.md) and
 [office effect/patch boundaries](office-effects-and-local-patches.md).
@@ -98,8 +98,17 @@ window-position/focus parity still need separate mapping.
 M51 connects the three checkpoint introductions and shipment commentary before
 reviews, using the existing market draws and modern saved message cursors.
 Local validation passes 246 C# checks, 45 Python checks and both headless Godot
-suites; Actions remain paused. Detailed type/genre meeting modes 4/5, secretary
-advice/policies, graduate/event callers and the timed presenter remain open.
+suites; Actions remain paused. At M51, detailed checkpoint meetings were still
+open; M52 connects their discussion/confirmation flow. Secretary advice/policies,
+graduate/event callers and the timed presenter remain open.
 Shipment's optional summary reads the next unused product slot; original-save
 dirty-slot behavior is unresolved and is not replaced with an invented remark.
 See [caller evidence and save boundaries](conversations.md#m51-development-and-shipment-conversations).
+
+M52 restores alpha/type candidate discussion, beta/genre recognition advice,
+choice confirmations and the shared original meeting illustration. It corrects
+the early-company introduction gate and persists meeting cursors without repeated
+fees/bonuses. Local validation passes 256 C# checks, 48 Python checks and both
+headless Godot suites. The example-title column, remaining selection styling,
+project cancellation/stress, secretary/event callers and the timed presenter
+remain unfinished. Actions stay paused. See [M52 evidence](conversations.md#m52-alpha-and-beta-meetings).
