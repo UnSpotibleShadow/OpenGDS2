@@ -12,6 +12,10 @@ Headless Godot original-asset UI and fixture-free core-loop suites report zero
 failures. The root project launches with the current compiled assembly. Automatic
 Actions remain paused; no new Windows/Linux export or CI run was started.
 
+M50 merged in [PR #44](https://github.com/UnSpotibleShadow/OpenGDS2/pull/44),
+commit `a0da237e640129c9887858f8c07179a4bcf9a950`; locally tested source head
+`d87c34dabab5d3b9db99a20175ad74ca0882a988`.
+
 ## Previous M49 validation
 
 M49 enables 31 locally imported manga/comic adaptations through publisher rights,
