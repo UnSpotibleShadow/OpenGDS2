@@ -1,4 +1,10 @@
-# Development checkpoint — M60, 2026-10-06
+# Development checkpoint — M61, 2026-10-06
+
+M61 restores occupied facility artwork from saved slots, including immediate school construction/closure and modern save/load. See [scope and validation](facility-artwork-m61.md). Direct app compilation, 295 domain checks, the full core-loop and original-LZH UI suites pass. A Windows development package is explicitly requested; it reuses the verified Windows engine/runtime and updates the assembly, translations and four meeting audio resources. Native Windows execution is unverified; Actions remain paused.
+
+Continue from `codex/m61-facility-artwork` while the PR stack is open. Review/merge #50 → #51 → #52 → #53 → #54 → the M61 PR. Do not assume main contains these unmerged changes. The durable [backlog and handoff is issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55), including the final build provenance/digest. Preserve remote assets absent from recovered local snapshots.
+
+## Previous M60 checkpoint
 
 M60 fixes assigned-computer tile mapping, drawing depth and oversized atlas crops,
 and adds local English overlays for the three facility vacancy signs. See

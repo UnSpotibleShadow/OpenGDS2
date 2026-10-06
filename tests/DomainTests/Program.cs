@@ -582,6 +582,22 @@ Test("burst flame snapshots reject malformed cells and older saves restart prese
     s.OfficeBurstFlames.Ticks=new int[11];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OfficeBurstFlames.Ticks=new int[12];
     s.OfficeBurstFlames.SourceX=null!;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
+Test("occupied facility artwork uses saved slots and original geometry without buying unsupported types",()=>
+{
+    var (s,_)=CalendarFixture();s.Money=SchoolService.PurchasePrice;
+    for(int slot=0;slot<3;slot++)
+    {
+        var tile=new OfficeSpriteDefinition(146+slot,-100,0,428,357,162,111,500);
+        Check(OfficeFacilityPresentationRules.Project(tile,s).X==-1000);
+        Check(SchoolService.Open(s,slot)==SchoolResult.Success);
+        var p=OfficeFacilityPresentationRules.Project(tile,s);Check(p.X==(slot==0 ? -16 : slot==1 ? 64 : 320) && p.Y==(slot==0 ? 130 : 170) && p.SourceX==1 && p.SourceY==409 && p.Width==162 && p.Height==111 && p.SortKey==500);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(OfficeFacilityPresentationRules.Project(tile,s)==p);
+        Check(SchoolService.Close(s,slot)==SchoolResult.Success && OfficeFacilityPresentationRules.Project(tile,s).X==-1000);s.Money=SchoolService.PurchasePrice;
+    }
+    int[] columns=[1,163,325,487,649,811,973,1297,1135];
+    for(int type=0;type<9;type++) {s.Calendar!.OriginalSlots0444[0]=type;Check(OfficeFacilityPresentationRules.Project(new(146,-100,0,428,357,162,111,500),s).SourceX==columns[type]);}
+    s.Calendar=null;Check(OfficeFacilityPresentationRules.Project(new(146,-100,0,428,357,162,111,500),s).X==-1000);
+});
 Test("facility lettering changes only three sign interiors and rejects unsupported captions",()=>
 {
     var source=Enumerable.Repeat((byte)81,466*290*3).ToArray();

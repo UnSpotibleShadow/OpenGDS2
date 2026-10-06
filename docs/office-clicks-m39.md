@@ -46,7 +46,7 @@ the work engine's room-state fields; their meanings must not be conflated.
   reproduced.
 - A tenant plot opens a compact facility view focused on that slot. The known
   school purchase/closure services remain unchanged, and legacy unknown calendar
-  state stays explicit. Other facilities and occupied-plot artwork are pending.
+  state stays explicit. Other facility services remain pending; [M61](facility-artwork-m61.md) adds occupied-plot artwork.
 - The sales top-100 table now follows the supplied original column order:
   rank/title, units sold, company. Rank and sales values are right aligned.
 

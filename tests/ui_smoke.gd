@@ -138,6 +138,40 @@ func check_facility_language_switch() -> void:
     var restored: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
     check(restored == english,"Returning to English restores the translated office without changing the save")
 
+func check_occupied_facility_composition(seated: Dictionary) -> void:
+    var fixture = seated.duplicate(true)
+    fixture.State.Calendar.OriginalSlots0444 = [-1,-1,-1]
+    var file := FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+    file.store_string(JSON.stringify(normalize_fixture_numbers(fixture)));file.close()
+    button("LOAD_GAME").pressed.emit()
+    var baseline: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    var positions := [[-16,130],[64,170],[320,170]]
+    for slot in range(3):
+        fixture.State.Calendar.OriginalSlots0444 = [-1,-1,-1]
+        fixture.State.Calendar.OriginalSlots0444[slot] = 0
+        file = FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+        file.store_string(JSON.stringify(normalize_fixture_numbers(fixture)));file.close()
+        button("LOAD_GAME").pressed.emit()
+        var pixels: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+        var changed := 0
+        var outside := 0
+        for pixel in range(466*290):
+            var offset := pixel*3
+            if pixels[offset] != baseline[offset] or pixels[offset+1] != baseline[offset+1] or pixels[offset+2] != baseline[offset+2]:
+                changed += 1
+                var x := pixel % 466
+                var y := int(pixel / 466)
+                if x < positions[slot][0] or x >= positions[slot][0]+162 or y < positions[slot][1] or y >= positions[slot][1]+111:
+                    outside += 1
+        check(changed > 1000 and outside == 0,"Owned school slot %d draws only its clipped original facility rectangle" % slot)
+        button("SAVE_GAME").pressed.emit()
+        button("LOAD_GAME").pressed.emit()
+        check(main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data() == pixels,"Occupied school artwork is stable through save and reload")
+    file = FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+    file.store_string(JSON.stringify(normalize_fixture_numbers(seated)));file.close()
+    button("LOAD_GAME").pressed.emit()
+    check(main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data() == baseline,"Removing the school restores the vacant plot and translated sign")
+
 func _initialize() -> void:
     call_deferred("run")
 
@@ -623,6 +657,7 @@ func run() -> void:
         await press("LOAD_GAME")
         if seated != null and not fixture.is_empty():
             check_facility_language_switch()
+            check_occupied_facility_composition(seated)
             check_assigned_computer_composition(seated)
             check_burst_flame_composition(seated)
         if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
