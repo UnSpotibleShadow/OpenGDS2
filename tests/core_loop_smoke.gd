@@ -4,6 +4,16 @@ var main: Node
 var failures := 0
 var seen_dialogue: Dictionary = {}
 var moved_meeting_picture_position = Vector2(20,180)
+var heard_meeting_phases: Dictionary = {}
+
+func check_meeting_music(phase: String) -> void:
+    var music = main.find_child("MeetingMusicPlayer",true,false)
+    check(music != null and music.stream != null and music.stream.resource_path.ends_with("/meetings/"+phase+".ogg"),"Meeting dialogue uses its phase track: "+phase)
+    if music != null and music.stream != null:
+        check(music.stream.loop,"Meeting track loops through a long dialogue sequence")
+    var office_music = main.find_child("MusicPlayer",true,false)
+    check(office_music.stream_paused or not office_music.playing,"Office soundtrack stays silent during meeting dialogue")
+    heard_meeting_phases[phase] = true
 
 func check(condition: bool, message: String) -> void:
     if not condition:
@@ -63,12 +73,23 @@ func advance_conversation_page() -> void:
     if message == null:
         return
     var previous_position = main.find_child("ConversationWindow",true,false).position
+    var meeting_music = main.find_child("MeetingMusicPlayer",true,false)
+    var previous_music = meeting_music.stream
+    if previous_music != null:
+        check_meeting_music(previous_music.resource_path.get_file().get_basename())
+    else:
+        check(not main.find_child("MusicPlayer",true,false).stream_paused,"Ordinary dialogue keeps the office soundtrack")
     seen_dialogue[message.text] = int(seen_dialogue.get(message.text,0)) + 1
     var accept := InputEventKey.new()
     accept.keycode = KEY_ENTER
     accept.pressed = true
     message.gui_input.emit(accept)
     await process_frame
+
+    if main.find_child("ConversationWindow",true,false) != null:
+        check(meeting_music.stream == previous_music,"Consecutive dialogue pages retain their meeting music stream")
+    else:
+        check(meeting_music.stream == null,"Meeting music stops on dialogue completion")
     var next_window = main.find_child("ConversationWindow",true,false)
     if next_window != null:
         check(next_window.position == previous_position,"Advancing a dialogue preserves its window position")
@@ -463,14 +484,22 @@ func run() -> void:
     check(quoted_state.State.Money == state.Money and quoted_state.State.DevelopmentProjects.is_empty(),"Opening quote does not spend or create a project")
     await press_node("PlanningMeeting")
     check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
+    check_meeting_music("planning")
     var moved_meeting_position = Vector2(110,80)
     main.find_child("ConversationWindow",true,false).position = moved_meeting_position
     var meeting_picture = main.find_child("PlanningDiscussionScene",true,false)
     check(meeting_picture != null,"Synthetic illustration opens with planning dialogue")
     meeting_picture.position = moved_meeting_picture_position
+    main.find_child("ConversationWindow",true,false).find_child("CloseWindow",true,false).pressed.emit()
+    await process_frame
+    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Cancelling planning dialogue stops its meeting soundtrack")
+    await press("START_GAME_DEVELOPMENT")
+    await press_node("PlanningMeeting")
+    check_meeting_music("planning")
     await finish_conversation()
     check(main.find_child("PlanningMeetingWindow",true,false) != null and main.find_child("PlanningQuoteWindow",true,false) == null,"Quote advances to a separate proposal step")
     check(main.find_child("PlanningMeetingWindow",true,false).position == moved_meeting_position,"Planning proposal retains the discussion's position")
+    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Planning proposal is outside meeting dialogue music")
     await press("SAVE_GAME")
     var meeting_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(meeting_state.State.Money == state.Money and meeting_state.State.DevelopmentProjects.is_empty(),"Entering meeting does not debit funds")
@@ -486,6 +515,7 @@ func run() -> void:
         quit(1)
         return
     check(main.find_child("TypeMeetingWindow",true,false).position == moved_meeting_position,"Later type meeting retains the chosen position")
+    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Alpha choice controls are outside meeting dialogue music")
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     for period in ["WeeklyNet","MonthlyNet","YearlyNet"]:
@@ -510,6 +540,7 @@ func run() -> void:
     check(type_preview.State.Money == checkpoint.State.Money and type_preview.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Previewing type never charges or confirms it")
     await press_node("ConfirmTypeChoice")
     check(main.find_child("ConversationWindow",true,false) != null,"Type confirmation precedes return to development")
+    check_meeting_music("alpha")
     await press("SAVE_GAME")
     var type_confirmed = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(type_confirmed.State.DevelopmentProjects[0].CheckpointMeeting.IsConfirmation and type_confirmed.State.DevelopmentProjects[0].CheckpointMeeting.MessageIndex == 0,"Confirmed type dialogue is saved before it is read")
@@ -532,6 +563,7 @@ func run() -> void:
     var genre_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(genre_preview.State.DevelopmentProjects[0].GenreSourceIndex == null,"Previewing genre never confirms it")
     await press_node("ConfirmGenreChoice")
+    check_meeting_music("beta")
     await press("SAVE_GAME")
     var genre_confirmed = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     await press("LOAD_GAME")
@@ -1559,6 +1591,7 @@ func run() -> void:
         check(acknowledged.State.PendingHireGreeting == null and acknowledged.State.Employees.size() == 1 and acknowledged.State.Money == greeting_before.State.Money,"Acknowledgment does not rehire or charge")
     previous_stream = null
     player = null
+    check(heard_meeting_phases.size() == 4,"Core loop exercised all four meeting soundtracks including final/debugging dialogue")
     main.queue_free()
     main = null
     await process_frame

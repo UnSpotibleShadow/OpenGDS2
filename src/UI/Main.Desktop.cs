@@ -35,6 +35,7 @@ public partial class Main
 
     private void DestroyDesktop()
     {
+        _music?.SetMeetingPhase(-1);
         RememberConversationPosition();
         CloseConversationScene();
         CloseEmployeeDetails();

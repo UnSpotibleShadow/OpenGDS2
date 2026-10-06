@@ -5,6 +5,12 @@ executables, saves, private extraction caches or full reverse-engineering traces
 GitHub Actions are paused at the owner's request; do not dispatch them or change
 the workflow to run automatically. Preserve unrelated worktree changes.
 
+Create a feature branch first, commit the changes on that branch, then open a
+pull request into main. Do not publish development changes directly to main.
+Do not generate desktop debug packages unless the owner asks for one.
+Use the owner's existing GitHub connection for publication. Never ask the owner
+to log in through a separate browser session.
+
 ## Bounded local checks
 
 - Run potentially blocking builds, imports, exports and Godot checks through

@@ -57,3 +57,25 @@ removed. Duration, encoded size and SHA-256 are recorded in
 `seasonal-manifest.json`. Conversion reduced 277,728,960 bytes of WAV audio to
 22,143,224 bytes of Ogg audio (about 92% smaller). Existing recordings and the
 dedicated title theme are retained.
+
+## Meeting recordings supplied on 2026-10-06
+
+The owner supplied four WAV recordings and requested OGG conversion and
+integration by meeting phase. They are distributed with OpenGDS2 under the same
+owner authorization and separate audio notice above; the source-code MIT grant
+does not cover these recordings. The supplied WAVs are not bundled.
+
+| Bundled file | Supplied source | Dialogue phase |
+| --- | --- | --- |
+| meetings/planning.ogg | Planning Meeting.wav | Planning discussion |
+| meetings/alpha.ogg | Alpha Meeting.wav | Type/alpha introduction, discussion and confirmation |
+| meetings/beta.ogg | Beta Meeting.wav | Genre/beta introduction, discussion and confirmation |
+| meetings/final.ogg | Final Meeting.wav | Completion/debugging introduction |
+
+The files use audio-only Ogg Vorbis quality 4, stereo 48 kHz, with source metadata
+removed. Source and encoded hashes, sizes and durations are recorded in
+`meetings/manifest.json`. Conversion reduced 61,311,040 WAV bytes to 4,925,290 OGG
+bytes (about 92% smaller). These tracks loop continuously through a dialogue
+sequence and use the existing music mute/volume settings. Selection/proposal
+controls, ordinary office conversations and shipment remarks use the existing
+soundtrack rather than the meeting tracks.

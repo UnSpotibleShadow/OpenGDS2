@@ -270,6 +270,7 @@ public partial class Main : Control
 
     private void ShowOfficeReconstruction(GameState state)
     {
+        _music.SetMeetingPhase(-1);
         CloseConversationScene();
         _activeCatalog = _importer.LoadCatalog();
         _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
@@ -563,8 +564,9 @@ public partial class Main : Control
 
     private void AddSpacer(float height) => _content.AddChild(new Control { CustomMinimumSize = new Vector2(0, height) });
 
-    private void ClearContent(bool keepConversationScene=false)
+    private void ClearContent(bool keepConversationScene=false,bool keepMeetingMusic=false)
     {
+        if (!keepMeetingMusic) _music?.SetMeetingPhase(-1);
         if (!keepConversationScene) CloseConversationScene();
         _conversationReveal=null;_conversationElapsed=0;
         _clockRunning=false;
