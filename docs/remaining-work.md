@@ -1,5 +1,9 @@
 # Remaining reconstruction work
 
+M57 adds the imported example-title column to alpha/type choices and aligned
+fee columns to alpha/beta choices, with keyboard focus and persistent radio
+preview. See [checkpoint choice presentation](checkpoint-choices-m57.md).
+
 M56 supplies phase-specific meeting audio for planning, alpha, beta and final
 dialogues, with continuous playback through each sequence and shared settings.
 Choice/proposal screens and ordinary conversations retain their existing music.
@@ -125,9 +129,9 @@ M52 restores alpha/type candidate discussion, beta/genre recognition advice,
 choice confirmations and the shared original meeting illustration. It corrects
 the early-company introduction gate and persists meeting cursors without repeated
 fees/bonuses. Local validation passes 256 C# checks, 48 Python checks and both
-headless Godot suites. The example-title column, remaining selection styling,
-project cancellation/stress, secretary/event callers and the timed presenter
-remain unfinished. Actions stay paused. See [M52 evidence](conversations.md#m52-alpha-and-beta-meetings).
+headless Godot suites. M57 adds the imported example-title column and aligned fee layout. Original
+cosmetic example draws and remaining selection styling, project cancellation/stress,
+secretary/event callers and the timed presenter remain unfinished. Actions stay paused. See [M52 evidence](conversations.md#m52-alpha-and-beta-meetings).
 
 M53 connects manual secretary advice, its fourteen original conditional messages,
 English/Japanese presentation, opening portrait and resumable saved queue. Local

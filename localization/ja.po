@@ -2676,3 +2676,9 @@ msgstr "CALENDAR_MAKER_8"
 
 msgid "CALENDAR_MAKER_9"
 msgstr "CALENDAR_MAKER_9"
+
+msgid "CHECKPOINT_FEE"
+msgstr "費用"
+
+msgid "CHECKPOINT_EXAMPLES"
+msgstr "作品例"

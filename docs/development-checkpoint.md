@@ -1,4 +1,14 @@
-# Development checkpoint — M56, 2026-10-06
+# Development checkpoint — M57, 2026-10-06
+
+M57 adds locally imported example titles to alpha choices and aligned fees to
+alpha/beta choices. Selecting previews retains radio state, each list starts
+with keyboard focus, and unaffordable options can be inspected without being
+confirmed. Headers share the scroll layout so fee columns remain aligned.
+Direct app compilation, the full fixed-60-FPS core-loop suite and both meeting
+audio integrity checks pass. No debug package, Actions run or native Windows
+validation was created. See [scope and validation](checkpoint-choices-m57.md).
+
+## Previous M56 checkpoint
 
 M56 adds the four owner-supplied meeting recordings as Ogg Vorbis. Planning,
 alpha/type, beta/genre and completion/debugging dialogues select their matching

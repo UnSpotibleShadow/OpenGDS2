@@ -91,20 +91,20 @@ public partial class Main
                 var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
                 var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true};
                 var group=new ButtonGroup();
-                var options=CheckpointOptions();
+                var options=CheckpointOptions(includeExamples:true);
                 int listIndex=0;
                 foreach (int source in candidates)
                 {
                     var type=catalog.GameTypes.Single(x=>x.SourceIndex==source);
-                    var button=new Button {Name=$"SelectType{listIndex++}",Text=$"{CatalogName(catalog,"TYPE",type.SourceIndex,type.Name)} · ¥{type.SelectionFee:N0}",
-                        ToggleMode=true,ButtonGroup=group};
+                    int rowIndex=listIndex++;
+                    var button=AddCheckpointOption(options,$"SelectType{rowIndex}",CatalogName(catalog,"TYPE",type.SourceIndex,type.Name),
+                        type.SelectionFee,group,type.ExampleTitles,$"TypeExamples{rowIndex}");
                     button.Pressed+=()=>
                     {
                         selected=source;chosen.Text=CatalogName(catalog,"TYPE",type.SourceIndex,type.Name);
                         confirm.Disabled=state.Money is null || state.Money<type.SelectionFee;
                         _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                     };
-                    options.AddChild(button);
                 }
                 _content.AddChild(chosen);_content.AddChild(confirm);
                 confirm.Pressed+=()=>
@@ -130,15 +130,14 @@ public partial class Main
             var options=CheckpointOptions();
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
-                var button=new Button {Name=$"SelectGenre{genre.SourceIndex}",Text=$"{CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name)} · ¥{genre.SelectionFee:N0}",
-                    ToggleMode=true,ButtonGroup=group};
+                var button=AddCheckpointOption(options,$"SelectGenre{genre.SourceIndex}",CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name),
+                    genre.SelectionFee,group);
                 button.Pressed+=()=>
                 {
                     selected=genre.SourceIndex;chosen.Text=CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name);
                     confirm.Disabled=state.Money is null || state.Money<genre.SelectionFee;
                     _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                 };
-                options.AddChild(button);
             }
             _content.AddChild(chosen);_content.AddChild(confirm);
             confirm.Pressed+=()=>
@@ -170,12 +169,41 @@ public partial class Main
         if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
             ShowMeetingScene(DialogueText(project.PendingDecision==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),()=>ShowOfficeReconstruction(state));
     }
-    private VBoxContainer CheckpointOptions()
+    private VBoxContainer CheckpointOptions(bool includeExamples=false)
     {
+        var headings=new HBoxContainer {Name="CheckpointColumnHeadings"};
+        headings.AddThemeConstantOverride("separation",4);
+        headings.AddChild(new Label {Text=Tr(includeExamples ? "SELECT_GAME_TYPE" : "SELECT_GENRE"),
+            ClipText=true,CustomMinimumSize=new Vector2(120,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
+        headings.AddChild(new Label {Text=Tr("CHECKPOINT_FEE"),CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
+        if (includeExamples) headings.AddChild(new Label {Text=Tr("CHECKPOINT_EXAMPLES"),
+            ClipText=true,CustomMinimumSize=new Vector2(130,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
         var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new Vector2(0,175),
             HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};_content.AddChild(scroll);
         var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",1);
-        scroll.AddChild(options);return options;
+        scroll.AddChild(options);options.AddChild(headings);return options;
+    }
+    private Button AddCheckpointOption(VBoxContainer options,string nodeName,string caption,long fee,ButtonGroup group,
+        System.Collections.Generic.IReadOnlyList<string>? examples=null,string? examplesNodeName=null)
+    {
+        var row=new HBoxContainer();row.AddThemeConstantOverride("separation",4);options.AddChild(row);
+        string feeText=$"¥{fee:N0}";
+        var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,
+            CustomMinimumSize=new Vector2(120,28),SizeFlagsHorizontal=SizeFlags.ExpandFill,TooltipText=$"{caption}\n{Tr("CHECKPOINT_FEE")}: {feeText}"};
+        row.AddChild(button);
+        // Explicitly retain the preview selection even when a test/accessibility caller emits Pressed directly.
+        button.Pressed+=()=>button.ButtonPressed=true;
+        row.AddChild(new Label {Name=$"{nodeName}Fee",Text=feeText,CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
+        if (examples is not null)
+        {
+            // Show all locally imported examples without drawing from the simulation's random stream.
+            string text=string.Join("\n",examples.Where(x=>!string.IsNullOrWhiteSpace(x)));
+            if (text.Length==0) text="—";
+            row.AddChild(new Label {Name=examplesNodeName!,Text=text,TooltipText=text,CustomMinimumSize=new Vector2(130,0),
+                SizeFlagsHorizontal=SizeFlags.ExpandFill,AutowrapMode=TextServer.AutowrapMode.WordSmart});
+        }
+        if (options.GetChildCount()==2) button.CallDeferred(Control.MethodName.GrabFocus);
+        return button;
     }
     private void ShowCheckpointMeeting(GameState state,DevelopmentProjectState project,OriginalCatalog catalog)
     {

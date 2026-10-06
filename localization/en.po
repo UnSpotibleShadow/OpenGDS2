@@ -2676,3 +2676,9 @@ msgstr "Heartdenk"
 
 msgid "CALENDAR_MAKER_9"
 msgstr "Henikuso"
+
+msgid "CHECKPOINT_FEE"
+msgstr "Fee"
+
+msgid "CHECKPOINT_EXAMPLES"
+msgstr "Example titles"
