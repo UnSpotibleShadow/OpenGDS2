@@ -40,9 +40,18 @@ def verify(data):
     # Work sitting draws intermediate facing frame, then shifts base position.
     require(tick, 0x3444, '28 6c ff 18 00 6b 48 ff e7 05 67 00 fc 96 fb 94 2c ff')
     require(tick, 0x369B, '6b 48 ff e7 05 1e 00 9d f4 08 ad')
-    # The locally imported twelve computer allocations map actions 6..17.
+    # Member 2234 contains hidden placeholders, not the assigned computers.
     require(0x9F651C, 0x42A9, '07 08 00 88 23 f5 06 00 00 00 07 08 00 34 22 fc b0')
     require(0x9F651C, 0x49E1, '07 08 00 88 23 f5 11 00 00 00 07 08 00 34 22 fc b0')
+    # Runtime pool 1D points to member 2218: IDs 50–61, with 36×29 crops
+    # and allocated depths above the desktop, rather than placeholder −1200.
+    if pe.u32(0x5F99AC + 0x1D*4) != 0xA13234:
+        raise ParseError('Assigned-computer array mapping changed')
+    for index in range(12):
+        require(0x9F651C, 0x3504 + index*0x54,
+            '07 08 00 88 23 f5 '+(index+6).to_bytes(4,'little').hex(' ')+' 07 08 00 18 22 fc b0')
+    require(tick, 0x2726, '05 1d 00 fc 96 fc 22 05 1e 00 a2')
+    require(tick, 0x276A, '05 1d 00 fc 96 fc 22 05 20 00 a2')
     # Final secretary selection overrides the temporary portrait-1 tile.
     # Setter argument 20 writes portrait array 0938, indexed by append count.
     require(0x9814E4, 0x50, 'fd 16 20 00 5c ff 07 08 00 80 08 fc 22 07 08 00 38 09 fc b0')

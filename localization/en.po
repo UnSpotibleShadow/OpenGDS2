@@ -2724,3 +2724,6 @@ msgstr "Company funds are unavailable."
 
 msgid "BANK_RESULT_AllSlotsOccupied"
 msgstr "All three loan slots are occupied. Repay a loan before borrowing again."
+
+msgid "BITMAP_FACILITY_AVAILABLE"
+msgstr "FOR RENT"

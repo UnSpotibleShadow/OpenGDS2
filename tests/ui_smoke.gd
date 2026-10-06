@@ -66,12 +66,84 @@ func check_burst_flame_composition(seated: Dictionary) -> void:
     var hidden = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
     check(hidden == baseline,"Leaving burst work removes the flame without altering office pixels")
 
+func check_assigned_computer_composition(seated: Dictionary) -> void:
+    var fixture = seated.duplicate(true)
+    var employee = fixture.State.Employees[0].duplicate(true)
+    employee.Office.X = -1000
+    employee.Office.Y = -1000
+    employee.Office.WorkTicks = 0
+    employee.Office.WorkTier = 0
+    employee.Office.SpeechBubble = 0
+    employee.Office.PendingSpeechBubble = 0
+    employee.Office.SpeechBubbleTicks = 0
+    var positions := [[184,107],[216,123],[153,114],[199,142],[131,129],[163,145],[280,155],[312,171],[249,162],[295,190],[227,177],[259,193]]
+    for model in range(4):
+        fixture.State.DevelopmentComputerIndex = model
+        fixture.State.Employees = []
+        var file := FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+        file.store_string(JSON.stringify(normalize_fixture_numbers(fixture)));file.close()
+        button("LOAD_GAME").pressed.emit()
+        var baseline: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+        for seat in range(12):
+            employee.Office.Action = seat+6
+            employee.Office.SeatedAction = seat+6
+            fixture.State.Employees = [employee]
+            file = FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+            file.store_string(JSON.stringify(normalize_fixture_numbers(fixture)));file.close()
+            button("LOAD_GAME").pressed.emit()
+            var pixels: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+            var changed := 0
+            var outside := 0
+            var red_border := 0
+            for pixel in range(466*290):
+                var offset := pixel*3
+                var differs := pixels[offset] != baseline[offset] or pixels[offset+1] != baseline[offset+1] or pixels[offset+2] != baseline[offset+2]
+                if differs:
+                    changed += 1
+                    var x := pixel % 466
+                    var y := int(pixel / 466)
+                    if x < positions[seat][0] or x >= positions[seat][0]+36 or y < positions[seat][1] or y >= positions[seat][1]+29:
+                        outside += 1
+                    if model == 0 and seat in [0,1,2,6,7,8] and pixels[offset] == 255 and pixels[offset+1] == 0 and pixels[offset+2] == 0:
+                        red_border += 1
+            check(changed > 50 and outside == 0,"Computer model %d seat %d is visible within its tight crop above the desk" % [model,seat])
+            check(red_border == 0,"Rear-facing original PC never samples red atlas borders")
+    var restore := FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+    restore.store_string(JSON.stringify(normalize_fixture_numbers(seated)));restore.close()
+    button("LOAD_GAME").pressed.emit()
+
+func check_facility_language_switch() -> void:
+    var regions := [[35,186,60,13],[116,227,60,13],[372,227,60,13]]
+    var original := Image.load_from_file("user://original/Graphic/Embedded/OfficeBase.bmp")
+    original.convert(Image.FORMAT_RGB8)
+    var japanese := original.get_data()
+    var english: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    var load_control := button("LOAD_GAME")
+    TranslationServer.set_locale("ja")
+    load_control.pressed.emit()
+    var displayed_japanese: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    for r in regions:
+        var same := true
+        var translated := false
+        for y in range(r[1],r[1]+r[3]):
+            for x in range(r[0],r[0]+r[2]):
+                var offset := (y*466+x)*3
+                for channel in range(3):
+                    same = same and displayed_japanese[offset+channel] == japanese[offset+channel]
+                    translated = translated or english[offset+channel] != japanese[offset+channel]
+        check(same and translated,"Japanese uses the original facility sign and English uses the translated overlay")
+    load_control = button("LOAD_GAME")
+    TranslationServer.set_locale("en")
+    load_control.pressed.emit()
+    var restored: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    check(restored == english,"Returning to English restores the translated office without changing the save")
+
 func _initialize() -> void:
     call_deferred("run")
 
 func check_local_artwork_patch() -> void:
-    var patches := DirAccess.get_directories_at("user://localized-artwork/en")
-    check(patches.size() == 1,"English lettering is generated only in local user data")
+    var patches := Array(DirAccess.get_directories_at("user://localized-artwork/en")).filter(func(revision): return FileAccess.file_exists("user://localized-artwork/en/%s/Graphic/Embedded/OfficeBase.png" % revision))
+    check(patches.size() == 1,"Current English background and atlas patches are generated only in local user data")
     if patches.size() != 1:
         return
     var original := Image.load_from_file("user://original/Graphic/Embedded/OfficeSprites.bmp")
@@ -93,6 +165,22 @@ func check_local_artwork_patch() -> void:
             for offset in range(first,last):
                 restored[offset] = source[offset]
     check(restored == source,"Every pixel outside the fourteen caption interiors stays original")
+    var base_original := Image.load_from_file("user://original/Graphic/Embedded/OfficeBase.bmp")
+    var base_patched := Image.load_from_file("user://localized-artwork/en/%s/Graphic/Embedded/OfficeBase.png" % patches[0])
+    base_original.convert(Image.FORMAT_RGB8);base_patched.convert(Image.FORMAT_RGB8)
+    check(base_original.get_size() == base_patched.get_size(),"Facility lettering preserves background dimensions")
+    var base_source := base_original.get_data()
+    var base_output := base_patched.get_data()
+    for r in [[35,186,60,13],[116,227,60,13],[372,227,60,13]]:
+        var changed := false
+        for y in range(r[1],r[1]+r[3]):
+            for x in range(r[0],r[0]+r[2]):
+                var pixel := (y*466+x)*3
+                for channel in range(3):
+                    changed = changed or base_source[pixel+channel] != base_output[pixel+channel]
+                    base_output[pixel+channel] = base_source[pixel+channel]
+        check(changed,"Each facility vacancy sign receives local English lettering")
+    check(base_output == base_source,"Facility lettering leaves borders, poles and every other background pixel unchanged")
 
 func nodes_of_type(type_name: String, parent: Node = main) -> Array[Node]:
     var found: Array[Node] = []
@@ -534,6 +622,8 @@ func run() -> void:
             check(workspace.MovementState == 0 and workspace.LoungeSeat == null, "Desk assignment releases lounge reservation")
         await press("LOAD_GAME")
         if seated != null and not fixture.is_empty():
+            check_facility_language_switch()
+            check_assigned_computer_composition(seated)
             check_burst_flame_composition(seated)
         if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
             main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-desk-test.png")

@@ -2724,3 +2724,6 @@ msgstr "会社の所持金が不明です。"
 
 msgid "BANK_RESULT_AllSlotsOccupied"
 msgstr "借入枠が3件とも使用中です。返済が済むまで新しく借りられません。"
+
+msgid "BITMAP_FACILITY_AVAILABLE"
+msgstr "テナント募集中"
