@@ -106,8 +106,9 @@ Loan type is member 2FC; borrowing year/month/week are 318/334/350, respectively
 The corresponding globals are A11318/A11334/A11350/A1136C. Types
 1/2/3/4 have principal 10/50/100/200 million. Repayment is 1.3 times principal
 exactly one year after borrowing, on the same month and week. News precedes the
-debit; there is no affordability guard in this repayment block. Borrowing UI,
-eligibility/refusal, original save import and bankruptcy remain unimplemented.
+debit; there is no affordability guard in this repayment block. M58 connects borrowing UI and full-slot refusal with saved acknowledgment receipts;
+see [bank borrowing](bank-loans-m58.md). Exact original menu eligibility,
+original save import and bankruptcy remain unimplemented.
 Fresh initialization establishes all three loan types zero.
 
 M36 connects annual events using the verified forms. See

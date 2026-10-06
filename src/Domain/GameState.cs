@@ -46,6 +46,7 @@ public sealed class GameState
     public List<EmployeeState> Employees { get; set; } = [];
     public RecruitmentState Recruitment { get; set; } = new();
     public HireGreetingState? PendingHireGreeting { get; set; }
+    public BankLoanReceipt? PendingBankLoanReceipt {get;set;}
     // Original member 0890. Unknown in earlier modern saves; never infer it on load.
     public int? SecretarySourceIndex { get; set; }
     public SecretaryAdviceState? PendingSecretaryAdvice { get; set; }

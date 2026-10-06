@@ -69,7 +69,7 @@ and the same month/week, charges principal × 1.3, and clears the loan type.
 Remaining targets are opening/reset state, eligibility and refusal paths,
 slot selection, complete calendar ordering, original save fields and insufficient
 funds/game-over behavior. Do not add a bank UI that supplies principal without a
-working due-date/repayment pipeline. No bank service is enabled at this checkpoint.
+working due-date/repayment pipeline. No bank service was enabled at that checkpoint; M58 follows up below.
 
 ## Per-copy fee negotiations
 
@@ -216,7 +216,9 @@ After M35 validation, targeted local traces narrow these next targets:
   This supports M35's news pause projection; it does not establish all indirect
   UI or graphics behavior.
 
-Raw traces/dialogs remain local. Borrowing stays disabled until the menu-state
-lifecycle is checked and the original refusal/confirmation paths are connected
-to the already working due-date transaction. Bankruptcy remains a separate
-periodic-procedure target.
+Raw traces/dialogs remain local. At this checkpoint borrowing stayed disabled
+pending further lifecycle work. M58 now connects the bounded first-empty-slot
+transaction and full-slot refusal to the working due-date pipeline, using an
+authored window and persisted receipt. This does not resolve every original
+menu-enabled writer or establish exact original availability. See
+[bank borrowing](bank-loans-m58.md). Bankruptcy remains a separate target.

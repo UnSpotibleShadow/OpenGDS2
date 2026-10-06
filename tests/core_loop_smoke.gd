@@ -1121,6 +1121,75 @@ func run() -> void:
         await press("SAVE_GAME")
         var notice_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
         check(main.find_child("ConversationWindow",true,false) == null and notice_reloaded.State.Money == expected_money,"Completed notice never repeats on reload: "+notice.key)
+    # Borrowing preview/cancellation, persisted receipts, three-slot refusal and exact due-date debit.
+    var bank_save = launched.duplicate(true)
+    bank_save.State.Calendar.Pending = null
+    bank_save.State.Calendar.Loans = [{"OriginalType":0},{"OriginalType":0},{"OriginalType":0}]
+    bank_save.State.Money = 0
+    bank_save.State.Year = 3; bank_save.State.Month = 5; bank_save.State.Week = 2
+    bank_save.State.CompanyActivityTicks = 0
+    write_json("user://saves/slot1.json",bank_save)
+    await press("LOAD_GAME")
+    await press("COMPANY_ACTIVITIES")
+    await press("BANK")
+    check(main.find_child("ConfirmBankLoan",true,false).disabled,"Borrowing requires an explicit amount selection")
+    await press_node("BankLoanType1")
+    await press("SAVE_GAME")
+    var preview_loan = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(preview_loan.State.Money == 0 and preview_loan.State.Calendar.Loans.all(func(l): return int(l.OriginalType) == 0),"Loan preview never credits funds or reserves a slot")
+    await press("CANCEL")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == 0,"Cancelling bank preview has no financial effect")
+    var bank_principals = {1:10000000,2:50000000,4:200000000}
+    var bank_total = 0
+    var bank_receipt_save: Dictionary
+    for loan_type in [1,2,4]:
+        await press("COMPANY_ACTIVITIES")
+        await press("BANK")
+        await press_node("BankLoanType%d" % loan_type)
+        await press_node("ConfirmBankLoan")
+        bank_total += bank_principals[loan_type]
+        check(main.find_child("ConversationWindow",true,false) != null and main.find_child("MeetingMusicPlayer",true,false).stream == null,"Loan receipt is ordinary dialogue after credit")
+        await press("SAVE_GAME")
+        bank_receipt_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(bank_receipt_save.State.Money == bank_total and bank_receipt_save.State.PendingBankLoanReceipt.OriginalType == loan_type,"Principal is committed before the persisted bank receipt")
+        var bank_ticks = bank_receipt_save.State.CompanyActivityTicks
+        Engine.time_scale = 100
+        await create_timer(0.2).timeout
+        Engine.time_scale = 1
+        await press("LOAD_GAME")
+        await press("SAVE_GAME")
+        var bank_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(bank_reloaded.State.Money == bank_total and bank_reloaded.State.CompanyActivityTicks == bank_ticks,"Receipt reload neither credits twice nor advances the clock")
+        await finish_conversation()
+    await press("COMPANY_ACTIVITIES")
+    await press("BANK")
+    check(main.find_child("BankStatus",true,false).text == tr("BANK_RESULT_AllSlotsOccupied") and main.find_child("BankLoanType1",true,false).disabled,"Bank refuses borrowing when all three slots are occupied")
+    await press("CANCEL")
+    await press("SAVE_GAME")
+    var due_bank = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    due_bank.State.Year = 4; due_bank.State.Month = 5; due_bank.State.Week = 1
+    due_bank.State.CompanyActivityTicks = 199
+    write_json("user://saves/slot1.json",due_bank)
+    await press("LOAD_GAME")
+    Engine.time_scale = 100
+    if not await await_node("ConversationWindow"):
+        quit(1)
+        return
+    Engine.time_scale = 1
+    for slot in range(3):
+        await await_node("ConversationWindow")
+        await press("SAVE_GAME")
+        var due_notice = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(due_notice.State.Calendar.Pending.PendingEvent == 6 and due_notice.State.Calendar.Pending.Index == slot,"New bank loans reach repayment notices in slot order")
+        # Acknowledge only this page, so the following saved notice remains inspectable.
+        await advance_conversation_page()
+    await press("SAVE_GAME")
+    var repaid_bank = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(repaid_bank.State.Money == -78000000 and repaid_bank.State.Calendar.Loans.all(func(l): return int(l.OriginalType) == 0),"All three loans debit principal plus 30% once, including a negative balance")
+    await press("LOAD_GAME")
+    await press("SAVE_GAME")
+    check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == -78000000,"Repaid loans cannot debit again on reload")
     # A real calendar tick crosses May/June and switches audio before any new modal.
     var season_save = launched.duplicate(true)
     season_save.State.Year = 3

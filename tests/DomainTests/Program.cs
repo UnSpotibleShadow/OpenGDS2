@@ -1154,6 +1154,72 @@ Test("hardware market growth updates saved cells and actual sales without modify
     Check(g.UnitsSold==predicted && predicted>SalesService.PotentialSales(g,c,0));
     Check(HardwareCalendarRules.NextMarket(40,0,9,15)==40);
 });
+Test("bank credits all four source principals and shared finance periods before the saved receipt",()=>
+{
+    foreach (int type in Enumerable.Range(1,4))
+    {
+        var (s,c)=CalendarFixture(new(3,5,2),-100);s.Company.Rank=null;
+        long amount=CalendarDialogueRules.LoanPrincipal(type);
+        Check(BankLoanService.TryBorrow(s,type)==BankLoanResult.Success);
+        Check(s.Money==amount-100 && s.Company.WeeklyNet==amount+11 && s.Company.MonthlyNet==amount+22 && s.Company.YearlyNet==amount+33);
+        Check(s.Calendar!.Loans[0].OriginalType==type && s.Calendar.Loans[0].BorrowedOn==new GameDate(3,5,2));
+        Check(BankLoanService.DueOn(s.PendingBankLoanReceipt!.BorrowedOn)==new GameDate(4,5,2));
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));string before=SaveStore.Serialize(s);
+        Check(BankLoanService.TryBorrow(s,type)==BankLoanResult.EventPending && SaveStore.Serialize(s)==before);
+        Check(BankLoanService.Acknowledge(s) && !BankLoanService.Acknowledge(s) && s.Money==amount-100);
+    }
+});
+Test("bank fills the first free slot refuses three loans and reuses repaid slots",()=>
+{
+    var (s,c)=CalendarFixture();
+    for (int type=1;type<=3;type++) {Check(BankLoanService.TryBorrow(s,type)==BankLoanResult.Success);Check(s.PendingBankLoanReceipt!.Slot==type-1);Check(BankLoanService.Acknowledge(s));}
+    string before=SaveStore.Serialize(s);Check(BankLoanService.TryBorrow(s,4)==BankLoanResult.AllSlotsOccupied && SaveStore.Serialize(s)==before);
+    s.Calendar!.Loans[1].OriginalType=0;
+    Check(BankLoanService.TryBorrow(s,4)==BankLoanResult.Success && s.PendingBankLoanReceipt!.Slot==1 && s.Calendar.Loans[2].OriginalType==3);
+});
+Test("new borrowing reaches the existing exact one-year due-date dialogue and debit once",()=>
+{
+    foreach (int type in Enumerable.Range(1,4))
+    {
+        var (s,c)=CalendarFixture(new(3,5,2),0);Check(BankLoanService.TryBorrow(s,type)==BankLoanResult.Success);BankLoanService.Acknowledge(s);
+        s.Year=4;s.Week=1;
+        Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.LoanRepayment);
+        long amount=CalendarDialogueRules.LoanPrincipal(type);Check(s.Money==amount && s.Calendar!.Pending!.Amount==CalendarService.LoanRepayment(type));
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CalendarDialogueRules.Acknowledge(s));
+        Check(s.Money==amount-CalendarService.LoanRepayment(type) && s.Calendar!.Loans[0].OriginalType==0);
+        Check(!CalendarDialogueRules.Acknowledge(s));Check(CalendarService.Resume(s,c,new SequenceRandom()));
+        Check(BankLoanService.TryBorrow(s,1)==BankLoanResult.Success && s.PendingBankLoanReceipt!.Slot==0);
+    }
+});
+Test("bank rejects unknown states invalid terms and pending transactions without mutation",()=>
+{
+    var(s,c)=CalendarFixture();string before=SaveStore.Serialize(s);
+    Throws<ArgumentOutOfRangeException>(()=>BankLoanService.TryBorrow(s,0));Throws<ArgumentOutOfRangeException>(()=>BankLoanService.TryBorrow(s,5));Check(SaveStore.Serialize(s)==before);
+    s.Money=null;Check(BankLoanService.TryBorrow(s,1)==BankLoanResult.MoneyUnknown);
+    s.Money=100;s.Year=null;Check(BankLoanService.TryBorrow(s,1)==BankLoanResult.DateUnknown);
+    s.Year=3;s.PendingSecretaryAdvice=new();Check(BankLoanService.TryBorrow(s,1)==BankLoanResult.EventPending);s.PendingSecretaryAdvice=null;
+    s.Calendar=null;Check(BankLoanService.TryBorrow(s,1)==BankLoanResult.CalendarUnknown);
+});
+Test("bank financial and date overflow are atomic",()=>
+{
+    var(s,c)=CalendarFixture(money:long.MaxValue);string before=SaveStore.Serialize(s);
+    Throws<OverflowException>(()=>BankLoanService.TryBorrow(s,1));Check(SaveStore.Serialize(s)==before);
+    s.Money=0;s.Company.MonthlyNet=long.MaxValue;before=SaveStore.Serialize(s);
+    Throws<OverflowException>(()=>BankLoanService.TryBorrow(s,1));Check(SaveStore.Serialize(s)==before);
+    s.Company.MonthlyNet=0;s.Year=int.MaxValue;before=SaveStore.Serialize(s);
+    Throws<OverflowException>(()=>BankLoanService.TryBorrow(s,1));Check(SaveStore.Serialize(s)==before);
+});
+Test("bank receipt freezes clocks and rejects forged or missing receipt fields",()=>
+{
+    var(s,c)=CalendarFixture();BankLoanService.TryBorrow(s,1);var session=new GameSession(new SequenceRandom());session.Restore(s);
+    string before=SaveStore.Serialize(s);session.TickOffice(c);Check(SaveStore.Serialize(s)==before);
+    Throws<InvalidOperationException>(()=>session.OpenRecruitment());Check(session.Hire(new() {Name="Synthetic candidate"})==HireResult.ConversationPending);
+    Check(session.AskSecretary(c)==SecretaryAdviceResult.EventPending && SaveStore.Serialize(s)==before);
+    string json=SaveStore.Serialize(s);Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"Slot\": 0,","")));
+    s.PendingBankLoanReceipt!.Slot=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.PendingBankLoanReceipt.Slot=0;
+    s.Calendar!.Loans[0].OriginalType=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.Calendar.Loans[0].OriginalType=1;
+    s.Week=3;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("loan slots pause in order before signed repayment and cannot charge twice after reload",()=>
 {
     var (s,c)=CalendarFixture(new(2,5,1),200000000);

@@ -72,7 +72,7 @@ public sealed class GameSession
     public RecruitmentState OpenRecruitment()
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) throw new InvalidOperationException("A conversation is pending.");
+        if (state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) throw new InvalidOperationException("A conversation is pending.");
         state.Recruitment.Candidates.Clear();
         if (state.MinimumSourceIndex is int minimum && state.SourceUpperBound is int upper)
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
@@ -81,7 +81,7 @@ public sealed class GameSession
     public HireResult Hire(EmployeeState candidate)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) return HireResult.ConversationPending;
+        if (state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) return HireResult.ConversationPending;
         var result = HiringService.TryHire(state, candidate, _random);
         if (result == HireResult.Success && candidate.SourceIndex is int source && source is >=0 and <=59 && candidate.PortraitId is >=1 and <=10)
             state.PendingHireGreeting = new() {EmployeeSourceIndex=source,Variant=(int)Math.Floor(_random.NextSingle()*10)};
@@ -96,12 +96,13 @@ public sealed class GameSession
     }
 
     public SecretaryAdviceResult AskSecretary(OriginalCatalog? catalog)
-        =>SecretaryAdviceRules.Prepare(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
+        =>Current?.PendingBankLoanReceipt is not null ? SecretaryAdviceResult.EventPending :
+            SecretaryAdviceRules.Prepare(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
 
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) return;
+        if (state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null) return;
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (CalendarService.HasPending(state))
         {

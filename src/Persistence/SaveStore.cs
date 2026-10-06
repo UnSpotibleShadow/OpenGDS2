@@ -166,6 +166,7 @@ public static class SaveStore
         if (state.PendingRankings is null || state.PendingRankings.Select(p=>p?.Kind).Distinct().Count()!=state.PendingRankings.Count) throw new InvalidDataException("Invalid ranking queue.");
         foreach (var achievement in state.PendingRankings) RankingService.Validate(achievement);
         CalendarService.Validate(state);
+        BankLoanService.Validate(state);
     }
 
     private static void ValidateProject(DevelopmentProjectState project)

@@ -2682,3 +2682,45 @@ msgstr "費用"
 
 msgid "CHECKPOINT_EXAMPLES"
 msgstr "作品例"
+
+msgid "BANK"
+msgstr "銀行"
+
+msgid "BANK_TERMS"
+msgstr "借入金は1年後に利息30%を加えて返済します。"
+
+msgid "BANK_DATE"
+msgstr "{year}年{month}月 第{week}週"
+
+msgid "BANK_LOAN_SLOT"
+msgstr "借入"
+
+msgid "BANK_EMPTY_SLOT"
+msgstr "空き"
+
+msgid "BANK_BORROW"
+msgstr "借りる"
+
+msgid "BANK_REPAYMENT"
+msgstr "1年後の返済額：{amount}"
+
+msgid "BANK_CLERK"
+msgstr "銀行員"
+
+msgid "BANK_RECEIPT"
+msgstr "会社に{principal}を入金しました。{date}に{repayment}を返済してください。"
+
+msgid "BANK_RESULT_CalendarUnknown"
+msgstr "借入記録が不明です。"
+
+msgid "BANK_RESULT_DateUnknown"
+msgstr "現在の日付が不明です。"
+
+msgid "BANK_RESULT_EventPending"
+msgstr "現在の処理を先に完了してください。"
+
+msgid "BANK_RESULT_MoneyUnknown"
+msgstr "会社の所持金が不明です。"
+
+msgid "BANK_RESULT_AllSlotsOccupied"
+msgstr "借入枠が3件とも使用中です。返済が済むまで新しく借りられません。"

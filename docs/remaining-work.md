@@ -1,5 +1,9 @@
 # Remaining reconstruction work
 
+M58 connects bank borrowing, full-slot refusal and saved receipts to annual
+repayment. Original menu-enable parity and bankruptcy remain open. See
+[bank borrowing](bank-loans-m58.md).
+
 M57 adds the imported example-title column to alpha/type choices and aligned
 fee columns to alpha/beta choices, with keyboard focus and persistent radio
 preview. See [checkpoint choice presentation](checkpoint-choices-m57.md).
@@ -63,7 +67,7 @@ See [office click evidence and validation](office-clicks-m39.md).
 | Contract renewal | March-end annual trigger; atomic employee/finance projection tested; unchecked gates/stress reset | Supported workspace cleanup implemented in M15; M35 connects pending renewal to the calendar before payroll; no individual expiry inferred |
 | Dismissal | M15 connects source gate/stress clearing and supported office reservation/work cleanup | M17 clears active study on dismissal and retains learned skills; external tasks and runtime comparison remain |
 | Progression | Manual level-up, thresholds, cap 10, reset and fee ×1.5 verified | Ordinary work/debugging and checkpoint experience scheduled in M13; M17 connects study and M18 connects six project technologies; M30 establishes the speed technology's eligible-pass lifetime but not its live effect; resolve that effect, top-level stress relief and external jobs; M31 validates saved source progression |
-| Weekly economics | M35 connects date advancement, ordered resumable calendar transactions, annual renewal, scratch-index payroll, hardware news/markets, recalls and saved loan repayments | M36 connects annual exhibition/contest/Beginner-ending/known graduate branches; M37 connects school purchase/closure, rival awards and global records; resolve student growth, remaining payroll scratch writers, borrowing and bankruptcy; see annual-calendar-events.md and calendar-transactions.md |
+| Weekly economics | M35 connects date advancement, ordered resumable calendar transactions, annual renewal, scratch-index payroll, hardware news/markets, recalls and saved loan repayments | M36 connects annual exhibition/contest/Beginner-ending/known graduate branches; M37 connects school purchase/closure, rival awards and global records; resolve student growth, remaining payroll scratch writers, original bank menu-enable parity and bankruptcy; see annual-calendar-events.md and calendar-transactions.md |
 | Development simulation | Planning acceptance, focus, work tiers/contributions, type/genre transitions and fresh offset accuracy cells implemented | M13 connects ordinary work, type/genre checkpoints, debugging, release and sales; M48 connects sequel eligibility, inheritance, automatic checkpoints, shipment and series save/load; M49 connects manga rights, fees, normal checkpoints and popularity shipment modifiers; polishing and external/contract workflows remain; see core-loop.md, sequel-development.md and manga-adaptations.md |
 | Events/progression | Module2 periodic body identified; M16 business growth/actions connected | Module2 ordinal 12 start 009E3830, size 10216; separate event eligibility and effects |
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; M16 identifies genre research/member 90 and connects genre unlocks; M17 imports eight technologies and connects purchase/study; M18 connects project effects/stress relief levels 1–2; M33 corrects the technology-only increment and 11/10-pass cadence; M35 connects platform trigger/countdown/retirement and mutable market cells; resolve speed/top-level relief, polishing application and own-hardware progression |
