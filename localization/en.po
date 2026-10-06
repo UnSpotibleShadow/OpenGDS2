@@ -2727,3 +2727,6 @@ msgstr "All three loan slots are occupied. Repay a loan before borrowing again."
 
 msgid "BITMAP_FACILITY_AVAILABLE"
 msgstr "FOR RENT"
+
+msgid "EARLY_ACCESS_CANDIDATE"
+msgstr "Private Early Access test candidate"

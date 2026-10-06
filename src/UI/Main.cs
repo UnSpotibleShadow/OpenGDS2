@@ -57,6 +57,7 @@ public partial class Main : Control
     public override void _Ready()
     {
         LoadInterfaceLanguage();
+        GetWindow().Title = $"OpenGDS2 {BuildInfo.Version}";
         BuildShell();
         _music = new BackgroundMusic { Name = "BackgroundMusic" };
         AddChild(_music);
@@ -179,7 +180,8 @@ public partial class Main : Control
         var quit = new Button { Text = Tr("QUIT"), CustomMinimumSize = new Vector2(0, 46) };
         quit.Pressed += () => GetTree().Quit();
         _content.AddChild(quit);
-        var note = new Label { Text = Tr("DEV_BUILD"), HorizontalAlignment = HorizontalAlignment.Center };
+        var note = new Label { Name = "BuildVersion", Text = $"{Tr("EARLY_ACCESS_CANDIDATE")} — {BuildInfo.Version}", HorizontalAlignment = HorizontalAlignment.Center,
+            AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _content.AddChild(note);
     }
 
