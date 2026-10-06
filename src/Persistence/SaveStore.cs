@@ -167,6 +167,7 @@ public static class SaveStore
         foreach (var achievement in state.PendingRankings) RankingService.Validate(achievement);
         CalendarService.Validate(state);
         BankLoanService.Validate(state);
+        OfficeBurstFlameRules.Validate(state);
     }
 
     private static void ValidateProject(DevelopmentProjectState project)

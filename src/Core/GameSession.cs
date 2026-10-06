@@ -115,6 +115,7 @@ public sealed class GameSession
         foreach (var employee in state.Employees)
         {
             OfficeStaffRules.Tick(employee, _random);
+            OfficeBurstFlameRules.Tick(state,employee);
             if (catalog is not null)
             {
                 TrainingService.Tick(state,employee,catalog,_random);

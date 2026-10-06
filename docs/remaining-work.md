@@ -1,5 +1,8 @@
 # Remaining reconstruction work
 
+M59 restores two-frame burst flames at the twelve development desks with saved
+seat phases. See [burst flames](burst-flames-m59.md).
+
 M58 connects bank borrowing, full-slot refusal and saved receipts to annual
 repayment. Original menu-enable parity and bankruptcy remain open. See
 [bank borrowing](bank-loans-m58.md).
@@ -44,7 +47,7 @@ native-size desktop resizing with window clamping, compact recruitment and a
 smaller desk selector. See [the implementation and validation scope](presentation-fixes-m38.md).
 M49 restores supported work/burst particles and office bubbles, 20 ms
 conversation reveal/mouth frames and seven ordinary planning discussions.
-Remaining bubble writers, flame artwork and other meeting illustrations remain open; M50 imports and displays the ordinary
+M59 restores development-seat burst flames. Remaining bubble writers and other meeting illustrations remain open; M50 imports and displays the ordinary
 planning illustration beside its conversation. M40 supplies provisional display-only English staff-name readings;
 pronunciation review remains. M41 restores normal-hire conversations; M42–M43
 restore compact development quotes with locally imported hardware pictures.
@@ -73,7 +76,7 @@ See [office click evidence and validation](office-clicks-m39.md).
 | Genres/types/hardware | 18 genres, 51 game types, 7 audiences, 4 computers and 11 hardware records imported; computer upgrades/licenses implemented | Type table is genre identifiers; M16 identifies genre research/member 90 and connects genre unlocks; M17 imports eight technologies and connects purchase/study; M18 connects project effects/stress relief levels 1–2; M33 corrects the technology-only increment and 11/10-pass cadence; M35 connects platform trigger/countdown/retirement and mutable market cells; resolve speed/top-level relief, polishing application and own-hardware progression |
 | Reviews/sales/awards | M14 implements reviews/Hall of Fame/milestones; M19 production budget; M20 weekly sales graph; M21 investigations/recalls | M26 verifies isolated outcomes for both sales-fee negotiations; M36 connects own-company award selection and signed prizes; M37 connects imported rival pool/presentation and sales/global rankings; recover consultation entry costs/timing, bankruptcy and company progression; see reviews-and-events.md, production-budget.md, sales-history.md and consumer-recalls.md |
 | Office | Hot-spring price/recovery/warning threshold verified; no office progression | Map office purchase branch eligibility/cost/effects before enabling upgrades |
-| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; M32 connects employee hit-testing; M37 restores compact inspection, arrow, ability chart and bars; recover remaining right-click/room interactions, remaining meeting scenes, work flames and bubble writers, and compare original runtime |
+| Original presentation | 128 tiles, original raster operations, calendar glyphs and hired-staff lounge animation implemented | Desk/study-seat walking/sitting/reassignment and assigned computers connected; M32 connects employee hit-testing; M37 restores compact inspection, arrow, ability chart and bars; recover remaining right-click/room interactions, remaining meeting scenes, study effects and bubble writers, and compare original runtime |
 | Original save compatibility | Sequential Write/Input operations verified, no fixture supplied | Module1 009D9824/009D60E0; verify encoding and full serialization order with local saves |
 | Localization | M29 translates 91 imported catalog labels plus eight existing technology labels; Japanese retains local names; toolbar uses imported images or authored pictograms with localized help; M30 corrects image associations and persists language | M49 reviews readings and supports local corrections, adds planning/rights translations and fourteen local bubble patches; remaining ambiguous readings, two bubble captions and other bitmap text need evidence; recover the original setup default locally and validate Japanese glyphs across desktops |
 | Runtime | M23/M24 export Linux and Windows packages and run the complete core loop on both native platforms; 196 public C# checks at M37; M37 passed all four SDK/export jobs with zero UI/core-loop failures; native validation and build downloads are recorded in development-checkpoint.md; private-original reruns and all 27 Python checks now pass | Graphical usability and original Windows behavioral comparison remain |
