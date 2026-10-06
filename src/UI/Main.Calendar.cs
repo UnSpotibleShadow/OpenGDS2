@@ -9,6 +9,33 @@ public partial class Main
     {
         var calendar=state.Calendar;var pending=calendar?.Pending;
         if (pending is null || pending.PendingEvent is null && pending.Block is null) return false;
+        if (pending.DialoguePage is not null)
+        {
+            string text=DialogueText(CalendarDialogueRules.MessageKey(state));
+            if (pending.PendingEvent is CalendarEvent.HardwareDevelopment or CalendarEvent.HardwareSoon or
+                CalendarEvent.HardwareRetiring or CalendarEvent.HardwareRetired)
+            {
+                int source=calendar!.Hardware[CalendarDialogueRules.HardwareIndex(pending)].SourceIndex;
+                var hardware=_activeCatalog?.Hardware.SingleOrDefault(x=>x.SourceIndex==source);
+                string maker=hardware is not null && hardware.RawMembers.TryGetValue("0FA8",out long id) && id is >=0 and <=9 ?
+                    DialogueText($"CALENDAR_MAKER_{id}") : Tr("UNKNOWN");
+                text=text.Replace("{maker}",maker).Replace("{hardware}",hardware is null ? Tr("UNKNOWN") : CatalogName(_activeCatalog,"HARDWARE",source,hardware.Name));
+            }
+            if (pending.PendingEvent==CalendarEvent.LoanRepayment)
+                text=text.Replace("{principal}",CalendarDialogueRules.LoanPrincipal(calendar!.Loans[pending.Index].OriginalType).ToString("N0"))
+                    .Replace("{repayment}",pending.Amount!.Value.ToString("N0"));
+            if (pending.Graduates is { } graduates) text=text.Replace("{count}",graduates.Candidates.Count.ToString());
+            // These callers explicitly pass generic secretary/-2, unlike the
+            // named portrait used by manual secretary advice.
+            ShowConversation(DialogueText("CORE_SECRETARY"),[new(DialogueText("CORE_SECRETARY"),text)],()=>
+            {
+                if (!ReferenceEquals(state.Calendar?.Pending,pending)) return;
+                CalendarDialogueRules.Acknowledge(state);ShowOfficeReconstruction(state);
+            });
+            return true;
+        }
+        if (pending.Graduates is {GreetingVariant:not null} greeting)
+        {ShowGraduate(state,greeting);return true;}
         ClearContent();AddHeading(Tr("CALENDAR_TRANSACTIONS"),28);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
         if (pending.Block is CalendarBlock block)

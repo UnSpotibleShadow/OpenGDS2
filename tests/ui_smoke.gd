@@ -141,7 +141,7 @@ func run() -> void:
         check(FileAccess.file_exists("user://original/employees.json"), "Database import")
         check(FileAccess.file_exists("user://original/dialogue.json"),"Original Japanese dialogue imported locally")
         var secretary_dialogue = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
-        check(secretary_dialogue.SchemaVersion == 6 and secretary_dialogue.Entries.size() == 109,"Advice text is imported only into the local cache")
+        check(secretary_dialogue.SchemaVersion == 7 and secretary_dialogue.Entries.size() == 136,"Advice text is imported only into the local cache")
         for message in ["DevelopGame","HotSpring","BuyTechnology","ContractsNextMonth","ContractsThisMonth","Contest","LicenseUrgent","MoreLicenses","AnotherLicense","UpgradeComputer","ExcessStock","FundsLow","FundsContracts","FundsHealthy"]:
             check(not secretary_dialogue.Entries["SECRETARY_ADVICE_"+message].is_empty(),"Original secretary message extracted locally: "+message)
         var catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
@@ -551,3 +551,4 @@ func run() -> void:
         await finish_conversation()
     print("UI smoke checks complete; failures=", failures)
     quit(0 if failures == 0 else 1)
+

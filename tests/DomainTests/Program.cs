@@ -996,7 +996,9 @@ Test("graduate prompts survive reload and hire decline each advance one candidat
     var s=GraduateFixture(2);var (_,c)=CalendarFixture();s.Money=150;
     Check(!CalendarService.BeginWeek(s,c,new SequenceRandom(0,0)) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Graduates);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(GraduateService.Hire(s,new SequenceRandom(1))==HireResult.Success);
-    Check(s.Money==50 && s.EmployeeSources[0].GateValue==1 && s.Calendar!.Pending!.Graduates!.CandidateIndex==1);
+    Check(s.Money==50 && s.EmployeeSources[0].GateValue==1 && s.Calendar!.Pending!.Graduates!.CandidateIndex==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(GraduateService.AcknowledgeGreeting(s) && !GraduateService.AcknowledgeGreeting(s));
+    Check(s.Calendar!.Pending!.Graduates!.CandidateIndex==1);
     Check(GraduateService.Hire(s,new SequenceRandom())==HireResult.InsufficientFunds && s.Money==50);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(GraduateService.Decline(s) && !GraduateService.Decline(s));
     Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Month==4 && s.Week==2 && s.Employees.Count==1);
@@ -1156,6 +1158,33 @@ Test("loan slots pause in order before signed repayment and cannot charge twice 
     Check(s.Calendar!.Loans[0].OriginalType==0 && s.Calendar.Loans[1].OriginalType==0 && s.Calendar!.Loans[2].OriginalType==3);
     Check(s.Company.WeeklyNet==-78000000 && s.Company.MonthlyNet==22-78000000);
     Check(CalendarService.LoanRepayment(3)==130000000 && CalendarService.LoanRepayment(4)==260000000);
+});
+Test("calendar repayment dialogue survives reload and charges only after acknowledgement",()=>
+{
+    var (s,c)=CalendarFixture(new(2,5,1),200000000);
+    s.Calendar!.Loans[0]=new() {OriginalType=1,BorrowedOn=new(1,5,2)};
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    Check(s.Calendar.Pending!.DialoguePage==0 && CalendarDialogueRules.MessageKey(s)=="CALENDAR_DIALOGUE_LoanRepayment");
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(s.Money==200000000 && s.Calendar!.Loans[0].OriginalType==1);
+    Check(CalendarDialogueRules.Acknowledge(s) && s.Money==187000000 && s.Calendar.Loans[0].OriginalType==0);
+    Check(!CalendarDialogueRules.Acknowledge(s) && s.Money==187000000);
+});
+Test("calendar conversation keys cover every page and reject forged cursors",()=>
+{
+    foreach (var kind in Enum.GetValues<CalendarEvent>())
+    {
+        int count=CalendarDialogueRules.PageCount(kind);
+        var state=new GameState {Month=4,Calendar=new() {Pending=new() {PendingEvent=kind,DialoguePage=0}}};
+        for(int page=0;page<count;page++)
+        {
+            state.Calendar.Pending.DialoguePage=page;
+            Check(CalendarDialogueRules.ImportKeys.Contains(CalendarDialogueRules.MessageKey(state)));
+        }
+        state.Calendar.Pending.DialoguePage=count;
+        Throws<InvalidOperationException>(()=>CalendarDialogueRules.MessageKey(state));
+    }
+    Check(CalendarDialogueRules.ImportKeys.Distinct().Count()==27);
 });
 Test("calendar recall results stop before later product countdowns market growth and loan debt",()=>
 {
@@ -3391,7 +3420,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==109 && dialogue.SchemaVersion==6 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==136 && dialogue.SchemaVersion==7 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
     });

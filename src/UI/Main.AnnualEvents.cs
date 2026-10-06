@@ -109,9 +109,19 @@ public partial class Main
     }
     private void ShowGraduate(GameState state,GraduateEventState graduates)
     {
+        var employee=state.EmployeeSources.Single(p=>p.SourceIndex==graduates.Candidates[graduates.CandidateIndex]).Employee;
+        if (graduates.GreetingVariant is int variant)
+        {
+            ShowConversation(DialogueText("CORE_EMPLOYEE"),[new(DialogueText("GRADUATE_SPEAKER").Replace("{name}",EmployeeName(employee)),
+                DialogueText($"GRADUATE_GREETING_{variant}"),employee.PortraitId)],()=>
+            {
+                if (!ReferenceEquals(state.Calendar?.Pending?.Graduates,graduates)) return;
+                GraduateService.AcknowledgeGreeting(state);ShowOfficeReconstruction(state);
+            });
+            return;
+        }
         AddHeading(Tr("GRADUATE_RECRUITMENT"),24);
         AnnualMessage("GraduatePosition",string.Format(Tr("GRADUATE_POSITION"),graduates.CandidateIndex+1,graduates.Candidates.Count));
-        var employee=state.EmployeeSources.Single(p=>p.SourceIndex==graduates.Candidates[graduates.CandidateIndex]).Employee;
         AddEmployeeCard(employee);
         AnnualButton("HireGraduate","HIRE_CONFIRM",()=>
         {

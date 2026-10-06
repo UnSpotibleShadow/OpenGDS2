@@ -59,6 +59,8 @@ public sealed class CalendarTransaction
     public ExhibitionState? Exhibition { get; set; }
     public AwardCeremonyState? Awards { get; set; }
     public GraduateEventState? Graduates { get; set; }
+    // Null in pre-M55 saves: do not replay an introduction with unknown history.
+    public int? DialoguePage { get; set; }
 }
 public sealed class CompanyCalendarState
 {

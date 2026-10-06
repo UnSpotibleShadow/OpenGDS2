@@ -75,6 +75,15 @@ modern save validation are modern infrastructure, not replacements for missing
 compatibility simulation. User-owned imported data and saves must never be
 included in a public source archive.
 
+M55 connects calendar announcements and resumable graduate greetings, validates
+their saved page/fee lifecycle, and fixes dialogue/meeting position resets.
+The full core-loop fixture passes with its required fixed 60 FPS cadence.
+Windows development packaging is available, but native Windows validation and
+local recovery of exact seasonal source OGGs remain open; existing GitHub audio
+blobs are preserved. The automatic timed presenter
+and capped-quality polishing entry remain unproven and disabled. See
+[the M55 regression scope](dialogue-regressions-m55.md).
+
 M48 completes the verified sequel lifecycle, including Hall of Fame eligibility,
 30% carry-over, automatic type/genre inheritance and consumed-parent lineage.
 See [behavior, source quirk and validation](sequel-development.md). Exact sequel

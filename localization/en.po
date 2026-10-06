@@ -2594,3 +2594,85 @@ msgstr "Stress is above the secretary policy threshold. Allow this employee to r
 
 msgid "SECRETARY_NAMED"
 msgstr "Secretary {name}"
+
+
+msgid "CALENDAR_DIALOGUE_ContractRenewal"
+msgstr "It is the end of March. We will renew contracts for the coming year. Employees whose contract fees we cannot pay will leave..."
+
+msgid "CALENDAR_DIALOGUE_Awards"
+msgstr "The year is drawing to a close, and the All-Japan Game Contest is about to begin."
+
+msgid "CALENDAR_DIALOGUE_HardwareDevelopment"
+msgstr "We have received word that {maker} is developing a new game console..."
+
+msgid "CALENDAR_DIALOGUE_HardwareSoon"
+msgstr "It looks like {maker}'s new game console will be released soon."
+
+msgid "CALENDAR_DIALOGUE_HardwareRetiring"
+msgstr "{maker}'s {hardware} is expected to go off sale in about three months."
+
+msgid "CALENDAR_DIALOGUE_HardwareRetiringExplanation"
+msgstr "Once a console goes off sale, we will no longer be able to start developing games for it."
+
+msgid "CALENDAR_DIALOGUE_HardwareRetired"
+msgstr "{maker}'s {hardware} has gone off sale."
+
+msgid "CALENDAR_DIALOGUE_HardwareRetiredExplanation"
+msgstr "We can no longer start new development for it."
+
+msgid "CALENDAR_DIALOGUE_ExhibitionSpring"
+msgstr "The spring GameDex exhibition is approaching. Let us exhibit our games and promote them."
+
+msgid "CALENDAR_DIALOGUE_ExhibitionAutumn"
+msgstr "The autumn GameDex exhibition is approaching. Let us exhibit our games and promote them."
+
+msgid "CALENDAR_DIALOGUE_LoanRepayment"
+msgstr "The {principal} yen we borrowed a year ago is due. We have repaid {repayment} yen including interest."
+
+msgid "CALENDAR_DIALOGUE_Graduates"
+msgstr "It is April, and the game school students have graduated. There were {count} promising graduates."
+
+msgid "GRADUATE_GREETING_0"
+msgstr "Thank you. I will work hard and remember everything you have taught me."
+
+msgid "GRADUATE_GREETING_1"
+msgstr "I will use my game school experience to make wonderful games!"
+
+msgid "GRADUATE_GREETING_2"
+msgstr "My grades must have impressed you. I will make great games."
+
+msgid "GRADUATE_GREETING_3"
+msgstr "Well, that is only to be expected of someone like me."
+
+msgid "GRADUATE_SPEAKER"
+msgstr "{name}"
+
+msgid "CALENDAR_MAKER_0"
+msgstr "F-Tsu"
+
+msgid "CALENDAR_MAKER_1"
+msgstr "NinNindo"
+
+msgid "CALENDAR_MAKER_2"
+msgstr "NEU"
+
+msgid "CALENDAR_MAKER_3"
+msgstr "Sedaga"
+
+msgid "CALENDAR_MAKER_4"
+msgstr "Somy"
+
+msgid "CALENDAR_MAKER_5"
+msgstr "Soquare"
+
+msgid "CALENDAR_MAKER_6"
+msgstr "Konamu"
+
+msgid "CALENDAR_MAKER_7"
+msgstr "Namumo"
+
+msgid "CALENDAR_MAKER_8"
+msgstr "Heartdenk"
+
+msgid "CALENDAR_MAKER_9"
+msgstr "Henikuso"

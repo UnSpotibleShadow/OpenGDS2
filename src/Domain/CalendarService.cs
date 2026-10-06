@@ -159,7 +159,12 @@ public static class CalendarService
                 default:throw new InvalidDataException("Unknown calendar phase.");
             }
         }
-        bool Event(CalendarEvent kind) {t.PendingEvent=kind;return false;}
+        bool Event(CalendarEvent kind)
+        {
+            t.PendingEvent=kind;
+            t.DialoguePage=CalendarDialogueRules.PageCount(kind)>0 ? 0 : null;
+            return false;
+        }
         bool Block(CalendarBlock kind) {t.Block=kind;return false;}
     }
     public static long LoanRepayment(int type)=>type switch
@@ -181,14 +186,14 @@ public static class CalendarService
             FinancialRules.Apply(state,checked(-t.Amount!.Value));
             c!.Loans[t.Index].OriginalType=0;t.Index++;
         }
-        t.PendingEvent=null;t.Amount=null;return true;
+        t.DialoguePage=null;t.PendingEvent=null;t.Amount=null;return true;
     }
     public static ContractRenewalResult RenewContracts(GameState state,IReadOnlySet<int> selected)
     {
         var t=state.Calendar?.Pending;
         if (t?.PendingEvent!=CalendarEvent.ContractRenewal) throw new InvalidOperationException("No renewal is pending.");
         var result=ContractRenewalService.TryRenew(state,selected);
-        if (result==ContractRenewalResult.Success) t.PendingEvent=null;
+        if (result==ContractRenewalResult.Success) {t.DialoguePage=null;t.PendingEvent=null;}
         return result;
     }
     public static void Validate(GameState state)
@@ -210,6 +215,7 @@ public static class CalendarService
             if (loan.BorrowedOn is GameDate borrowed)
                 try {CalendarRules.Validate(borrowed);} catch (ArgumentOutOfRangeException ex) {throw new InvalidDataException("Invalid borrowing date.",ex);}
         AnnualCalendarValidation.Validate(state);
+        CalendarDialogueRules.Validate(state);
         var p=c.Pending;if (p is null) return;
         try {CalendarRules.Validate(p.ClosingDate);} catch (ArgumentOutOfRangeException ex) {throw new InvalidDataException("Invalid closing date.",ex);}
         if (!Enum.IsDefined(p.Phase) || p.PendingEvent is not null && !Enum.IsDefined(p.PendingEvent.Value) ||

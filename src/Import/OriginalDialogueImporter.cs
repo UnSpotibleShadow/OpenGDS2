@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=6,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=7,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
@@ -67,6 +67,24 @@ public static class OriginalDialogueImporter
         result.Entries.Add("SECRETARY_NAMED",pe.String(0x60DF28,0xB8)+"{name}"+pe.String(0x60DF28,0xB7));
         result.Entries.Add("SECRETARY_FAREWELL",pe.String(0x603E1C,0x0B));
         result.Entries.Add("SECRETARY_GREETING",pe.String(0x603E1C,0x0F)+"{name}"+pe.String(0x603E1C,0x10));
+        const int calendarPool=0x60DF28,graduatePool=0x5F7714;
+        void Calendar(string key,string text)=>result.Entries.Add("CALENDAR_DIALOGUE_"+key,text);
+        Calendar("ContractRenewal",pe.String(calendarPool,0x91));
+        Calendar("Awards",pe.String(calendarPool,0x95));
+        Calendar("HardwareDevelopment","{maker}"+pe.String(calendarPool,0x9A));
+        Calendar("HardwareSoon","{maker}"+pe.String(calendarPool,0x9B));
+        Calendar("HardwareRetiring","{maker}"+pe.String(calendarPool,0x9F)+"{hardware}"+pe.String(calendarPool,0xA0));
+        Calendar("HardwareRetiringExplanation",pe.String(calendarPool,0xA1));
+        Calendar("HardwareRetired","{maker}"+pe.String(calendarPool,0x9F)+"{hardware}"+pe.String(calendarPool,0xA2));
+        Calendar("HardwareRetiredExplanation",pe.String(calendarPool,0xA3));
+        Calendar("ExhibitionAutumn",pe.String(calendarPool,0xA5));
+        Calendar("ExhibitionSpring",pe.String(calendarPool,0xA9));
+        Calendar("LoanRepayment",pe.String(calendarPool,0xAB)+"{principal}"+pe.String(calendarPool,0xAC)+"{repayment}"+pe.String(calendarPool,0xAD));
+        Calendar("Graduates",pe.String(calendarPool,0xAE)+"{count}"+pe.String(calendarPool,0xAF));
+        for (int i=0;i<10;i++) result.Entries.Add($"CALENDAR_MAKER_{i}",pe.String(calendarPool,0x25+i));
+        int[] graduateEntries=[0x12,0x13,0x14,0x10];
+        for (int i=0;i<4;i++) result.Entries.Add($"GRADUATE_GREETING_{i}",pe.String(graduatePool,graduateEntries[i]));
+        result.Entries.Add("GRADUATE_SPEAKER","{name}"+pe.String(graduatePool,0x0A));
         // Serialized fGMKaiwa Timer1 interval property: 20 milliseconds.
         pe.Require(0x248EAC,6,0,(byte)'T',(byte)'i',(byte)'m',(byte)'e',(byte)'r',(byte)'1',0,0x0B,3,20,0,0,0);
         return result;

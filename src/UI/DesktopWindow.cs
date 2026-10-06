@@ -73,6 +73,12 @@ public partial class DesktopWindow : PanelContainer
 
     public void SetTitle(string title) => _title.Text = title;
 
+    public void SetPositionInsideWorkspace(Vector2 position)
+    {
+        Position = position;
+        FitInsideWorkspace();
+    }
+
     public void Reopen()
     {
         if (_minimized) { _minimized = false; Body.Show(); Size = _expandedSize; }

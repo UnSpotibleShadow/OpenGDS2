@@ -30,6 +30,7 @@ public sealed class GraduateEventState
 {
     [JsonRequired] public List<int> Candidates { get; set; } = [];
     [JsonRequired] public int CandidateIndex { get; set; }
+    public int? GreetingVariant { get; set; }
 }
 
 /// <summary>fGMGameDexSn selection and fGMGameDexKs visitor/awareness transactions.</summary>
@@ -66,7 +67,7 @@ public static class ExhibitionService
             if (id<0 && value+gain>100) gain=100-value;
             changes.Add((id,value+gain));
         }
-        finance.Commit(state);
+        finance.Commit(state);t.DialoguePage=null;
         foreach (var change in changes) SetAwareness(state,change.Id,change.Value);
         e.SelectedProducts=selected;e.Visitors=visitors;e.ReportedAwarenessGain=gain;
         var c=state.Calendar!;
@@ -77,7 +78,7 @@ public static class ExhibitionService
     {
         var t=state.Calendar?.Pending;
         if (t?.PendingEvent!=CalendarEvent.Exhibition) return false;
-        t.Exhibition=null;t.PendingEvent=null;t.Phase=CalendarPhase.Loans;
+        t.DialoguePage=null;t.Exhibition=null;t.PendingEvent=null;t.Phase=CalendarPhase.Loans;
         return true;
     }
     private static double Awareness(GameState state,int id)=>id<0 ?
@@ -148,7 +149,7 @@ public static class AwardService
             if (category==GameAward.GrandPrize && state.Calendar!.FirstGrandPrizeDate is null)
                 state.Calendar.FirstGrandPrizeDate=new(a.Year,12,4);
         }
-        finance?.Commit(state);a.WinningProduct=winner;a.WinningRival=rival;a.AnimationProducts=animation;a.ResultReady=true;
+        finance?.Commit(state);t.DialoguePage=null;a.WinningProduct=winner;a.WinningRival=rival;a.AnimationProducts=animation;a.ResultReady=true;
         if (winner is not null && category==GameAward.GrandPrize) RankingService.Queue(state,RankingKind.GrandPrize);
         return true;
     }
@@ -185,21 +186,30 @@ public static class GraduateService
     {
         var g=state.Calendar?.Pending?.Graduates;
         if (state.Calendar?.Pending?.PendingEvent!=CalendarEvent.Graduates || g is null || g.CandidateIndex>=g.Candidates.Count) return HireResult.NoActiveCandidate;
+        if (g.GreetingVariant is not null) return HireResult.ConversationPending;
         var source=state.EmployeeSources.Single(p=>p.SourceIndex==g.Candidates[g.CandidateIndex]);
         var result=HiringService.TryHire(state,source.Employee,random);
         if (result==HireResult.Success)
         {
             // fGMKeiyakuS's graduate greeting draws one of four after copying.
-            _=random.Next(4);
-            Next(state);
+            g.GreetingVariant=random.Next(4);
+            state.Calendar.Pending.DialoguePage=null;
         }
         return result;
     }
-    public static bool Decline(GameState state)=>Next(state);
+    public static bool AcknowledgeGreeting(GameState state)
+    {
+        if (state.Calendar?.Pending?.PendingEvent!=CalendarEvent.Graduates ||
+            state.Calendar.Pending.Graduates?.GreetingVariant is null) return false;
+        state.Calendar.Pending.Graduates.GreetingVariant=null;
+        return Next(state);
+    }
+    public static bool Decline(GameState state)=>state.Calendar?.Pending?.Graduates?.GreetingVariant is null && Next(state);
     private static bool Next(GameState state)
     {
         var t=state.Calendar?.Pending;var g=t?.Graduates;
         if (t?.PendingEvent!=CalendarEvent.Graduates || g is null || g.CandidateIndex>=g.Candidates.Count) return false;
+        t.DialoguePage=null;
         if (++g.CandidateIndex==g.Candidates.Count)
         {t.Graduates=null;t.PendingEvent=null;t.Phase=CalendarPhase.Complete;}
         return true;
@@ -250,7 +260,9 @@ internal static class AnnualCalendarValidation
                 state.MinimumSourceIndex is not int min || state.MaximumSourceIndex is not int max ||
                 !g.Candidates.SequenceEqual(g.Candidates.Distinct().Order()) ||
                 g.Candidates.Any(id=>id<min || id>max || !state.EmployeeSources.Any(p=>p.SourceIndex==id)) ||
-                state.EmployeeSources.Single(p=>p.SourceIndex==g.Candidates[g.CandidateIndex]).GateValue!=0)
+                g.GreetingVariant is <0 or >3 ||
+                state.EmployeeSources.Single(p=>p.SourceIndex==g.Candidates[g.CandidateIndex]).GateValue!=(g.GreetingVariant is null ? 0 : 1) ||
+                g.GreetingVariant is not null && !state.Employees.Any(p=>p.SourceIndex==g.Candidates[g.CandidateIndex]))
                 throw new InvalidDataException("Invalid graduate candidate queue.");
         }
     }

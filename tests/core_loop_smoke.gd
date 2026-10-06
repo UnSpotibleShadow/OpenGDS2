@@ -3,6 +3,7 @@ extends SceneTree
 var main: Node
 var failures := 0
 var seen_dialogue: Dictionary = {}
+var moved_meeting_picture_position = Vector2(20,180)
 
 func check(condition: bool, message: String) -> void:
     if not condition:
@@ -61,14 +62,22 @@ func advance_conversation_page() -> void:
     check(message != null,"Conversation page exists")
     if message == null:
         return
+    var previous_position = main.find_child("ConversationWindow",true,false).position
     seen_dialogue[message.text] = int(seen_dialogue.get(message.text,0)) + 1
     var accept := InputEventKey.new()
     accept.keycode = KEY_ENTER
     accept.pressed = true
     message.gui_input.emit(accept)
     await process_frame
+    var next_window = main.find_child("ConversationWindow",true,false)
+    if next_window != null:
+        check(next_window.position == previous_position,"Advancing a dialogue preserves its window position")
+    var meeting_picture = main.find_child("PlanningDiscussionScene",true,false)
+    if meeting_picture != null:
+        check(meeting_picture.position == moved_meeting_picture_position,"Meeting illustration retains its chosen position")
     await process_frame
     if is_instance_valid(message) and message.is_inside_tree():
+        await create_timer(0.03).timeout # Complete the original 20ms reveal tick.
         message.gui_input.emit(accept)
     await process_frame
 
@@ -119,7 +128,7 @@ func run() -> void:
     var raw_type := {"1378":5,"1308":10,"13B0":1,"12EC":3}
     var catalog := {
         "SchemaVersion":1,"SourceHash":"4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
-        "Hardware":[{"SourceIndex":0,"Name":"Synthetic Hardware","RawMembers":{"0F00":8,"0FE0":20,"0FFC":10,"0EC8":0,"1050":40,"0F54":15,"10A4":0,"10C0":0},
+        "Hardware":[{"SourceIndex":0,"Name":"Synthetic Hardware","RawMembers":{"0F00":8,"0FE0":20,"0FFC":10,"0EC8":0,"0FA8":4,"1050":40,"0F54":15,"10A4":0,"10C0":0},
             "ProductionBands":[{"SizeThreshold":16,"UnitCost":300},{"SizeThreshold":32,"UnitCost":700},{"SizeThreshold":48,"UnitCost":1200},{"SizeThreshold":64,"UnitCost":1800}]}],
         "Audiences":[{"SourceIndex":0,"Name":"Synthetic Audience","RawMembers":{"14A8":1,"1454":10,"148C":20}}],
         "DevelopmentComputers":[{"SourceIndex":0,"Name":"Synthetic Computer","BitWidth":8}],
@@ -176,6 +185,15 @@ func run() -> void:
     var office_file := FileAccess.open("user://original/Graphic/Embedded/OfficeBase.bmp",FileAccess.WRITE)
     office_file.store_buffer(bmp)
     office_file.close()
+    var meeting_bmp = bmp.duplicate()
+    meeting_bmp.resize(54+256*3*160)
+    meeting_bmp.encode_u32(2,meeting_bmp.size())
+    meeting_bmp.encode_u32(18,256)
+    meeting_bmp.encode_u32(22,160)
+    meeting_bmp.encode_u32(34,256*3*160)
+    var meeting_file = FileAccess.open("user://original/Graphic/Embedded/PlanningMeeting.bmp",FileAccess.WRITE)
+    meeting_file.store_buffer(meeting_bmp)
+    meeting_file.close()
     create_music_fixture()
     var fresh_audio := ConfigFile.new()
     fresh_audio.set_value("music", "enabled", true)
@@ -445,8 +463,14 @@ func run() -> void:
     check(quoted_state.State.Money == state.Money and quoted_state.State.DevelopmentProjects.is_empty(),"Opening quote does not spend or create a project")
     await press_node("PlanningMeeting")
     check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
+    var moved_meeting_position = Vector2(110,80)
+    main.find_child("ConversationWindow",true,false).position = moved_meeting_position
+    var meeting_picture = main.find_child("PlanningDiscussionScene",true,false)
+    check(meeting_picture != null,"Synthetic illustration opens with planning dialogue")
+    meeting_picture.position = moved_meeting_picture_position
     await finish_conversation()
     check(main.find_child("PlanningMeetingWindow",true,false) != null and main.find_child("PlanningQuoteWindow",true,false) == null,"Quote advances to a separate proposal step")
+    check(main.find_child("PlanningMeetingWindow",true,false).position == moved_meeting_position,"Planning proposal retains the discussion's position")
     await press("SAVE_GAME")
     var meeting_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(meeting_state.State.Money == state.Money and meeting_state.State.DevelopmentProjects.is_empty(),"Entering meeting does not debit funds")
@@ -461,6 +485,7 @@ func run() -> void:
     if not await await_node("SelectType0"):
         quit(1)
         return
+    check(main.find_child("TypeMeetingWindow",true,false).position == moved_meeting_position,"Later type meeting retains the chosen position")
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     for period in ["WeeklyNet","MonthlyNet","YearlyNet"]:
@@ -974,6 +999,65 @@ func run() -> void:
     await press("SAVE_GAME")
     var launched = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(launched.State.Calendar.Pending == null and launched.State.AvailableHardware.size() == 1 and launched.State.AvailableHardware[0] == 0,"Acknowledged launch resumes the calendar and unlocks its platform")
+    # Current announcements resume the exact page. Legacy saves above keep
+    # their direct acknowledgement screen rather than replaying an introduction.
+    var moved_dialogue_position = Vector2(80,90)
+    for notice in [
+        {"kind":1,"phase":2,"index":1,"launch":24,"retirement":0,"availability":0,"key":"HardwareDevelopment","pages":1},
+        {"kind":2,"phase":4,"index":0,"launch":4,"retirement":0,"availability":0,"key":"HardwareSoon","pages":1},
+        {"kind":4,"phase":3,"index":1,"launch":0,"retirement":12,"availability":1,"key":"HardwareRetiring","pages":2},
+        {"kind":5,"phase":3,"index":1,"launch":0,"retirement":0,"availability":2,"key":"HardwareRetired","pages":2},
+        {"kind":6,"phase":8,"index":0,"launch":0,"retirement":0,"availability":1,"key":"LoanRepayment","pages":1}
+    ]:
+        var notice_save = launched.duplicate(true)
+        var ns = notice_save.State
+        ns.Year = 3; ns.Month = 5; ns.Week = 2; ns.CompanyActivityTicks = 0
+        ns.Money = 50000000
+        ns.AvailableHardware = [0] if notice.availability == 1 else []
+        ns.HardwareLicenses = [0] if notice.availability == 1 else []
+        var hardware = ns.Calendar.Hardware[0]
+        hardware.Availability = notice.availability
+        hardware.LaunchWeeks = notice.launch
+        hardware.RetirementWeeks = notice.retirement
+        ns.Calendar.Pending = {"ClosingDate":{"Year":3,"Month":5,"Week":1},"Phase":notice.phase,"Index":notice.index,"PendingEvent":notice.kind,"DialoguePage":0}
+        if notice.kind == 6:
+            ns.Calendar.Loans[0] = {"OriginalType":1,"BorrowedOn":{"Year":2,"Month":5,"Week":2}}
+            ns.Calendar.Pending.Amount = 13000000
+        write_json("user://saves/slot1.json",notice_save)
+        await press("LOAD_GAME")
+        var notice_window = main.find_child("ConversationWindow",true,false)
+        if notice.kind == 1:
+            notice_window.position = moved_dialogue_position
+        check(notice_window.position == moved_dialogue_position,"Later calendar conversations keep the chosen position")
+        for page in range(notice.pages):
+            var key = "CALENDAR_DIALOGUE_"+notice.key+("Explanation" if page == 1 else "")
+            var expected = tr(key).replace("{maker}",tr("CALENDAR_MAKER_4")).replace("{hardware}",tr("CATALOG_HARDWARE_0")).replace("{principal}","10,000,000").replace("{repayment}","13,000,000")
+            var message = main.find_child("ConversationMessage",true,false)
+            check(message != null and message.text == expected,"Calendar notice text: "+key+" expected="+expected+" actual="+(message.text if message != null else "<missing>"))
+            check(main.find_child("ConversationWindow",true,false).position == moved_dialogue_position,"Next dialogue page keeps the chosen position: "+key)
+            check(main.find_child("ToolbarSTAFF",true,false).disabled and main.find_child("TogglePause",true,false).disabled,"Calendar conversation owns modal pause: "+key)
+            await press("SAVE_GAME")
+            var before_reload = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+            check(before_reload.State.Calendar.Pending.DialoguePage == page and before_reload.State.Money == ns.Money,"Calendar page persists without early debit: "+key)
+            await press("LOAD_GAME")
+            message = main.find_child("ConversationMessage",true,false)
+            check(message != null and message.text == expected,"Reload resumes calendar page: "+key)
+            check(main.find_child("ConversationWindow",true,false).position == moved_dialogue_position,"Loading a conversation keeps the chosen position: "+key)
+            await advance_conversation_page()
+        Engine.time_scale = 100
+        for frame in range(3):
+            await process_frame
+        Engine.time_scale = 1
+        await press("SAVE_GAME")
+        var notice_done = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        var expected_money = ns.Money-13000000 if notice.kind == 6 else ns.Money
+        check(notice_done.State.Calendar.Pending == null and notice_done.State.Money == expected_money,"Final calendar page commits once: "+notice.key)
+        if notice.kind == 6:
+            check(notice_done.State.Calendar.Loans[0].OriginalType == 0,"Repayment closes its loan after the notice")
+        await press("LOAD_GAME")
+        await press("SAVE_GAME")
+        var notice_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(main.find_child("ConversationWindow",true,false) == null and notice_reloaded.State.Money == expected_money,"Completed notice never repeats on reload: "+notice.key)
     # A real calendar tick crosses May/June and switches audio before any new modal.
     var season_save = launched.duplicate(true)
     season_save.State.Year = 3
@@ -1178,8 +1262,14 @@ func run() -> void:
     await press("SAVE_GAME")
     var hired_graduate = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(hired_graduate.State.Money == gs.Money-100 and hired_graduate.State.Employees.size() == 1,"Graduate hiring charges the displayed source contract fee")
-    check(hired_graduate.State.Calendar.Pending.Graduates.CandidateIndex == 1,"Hiring advances exactly one graduate")
+    check(hired_graduate.State.Calendar.Pending.Graduates.CandidateIndex == 0 and hired_graduate.State.Calendar.Pending.Graduates.GreetingVariant != null,"Hiring persists its greeting before advancing the candidate")
     await press("LOAD_GAME")
+    check(main.find_child("ConversationWindow",true,false) != null,"Reload resumes the graduate greeting")
+    await finish_conversation()
+    await press("SAVE_GAME")
+    var greeted_graduate = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(greeted_graduate.State.Calendar.Pending.Graduates.CandidateIndex == 1,"Acknowledging the greeting advances exactly one graduate")
+    check(greeted_graduate.State.Money == hired_graduate.State.Money and greeted_graduate.State.Employees.size() == 1,"Greeting acknowledgement does not charge or hire again")
     await press_node("DeclineGraduate")
     await press("SAVE_GAME")
     var graduates_done = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1428,6 +1518,22 @@ func run() -> void:
         var greeting_window = main.find_child("ConversationWindow",true,false)
         var greeting_message = main.find_child("ConversationMessage",true,false)
         check(greeting_window != null and greeting_window.size.x <= 350 and greeting_window.size.y <= 165,"Compact saved hire conversation")
+        check(greeting_window.position == moved_dialogue_position,"New hire conversations retain the position from calendar dialogue")
+        if variant == 9:
+            greeting_window.position = greeting_window.get_parent().size-Vector2(greeting_window.size.x,40)
+            root.size = Vector2i(640,360)
+            await process_frame
+            await process_frame
+            var bounds = greeting_window.get_parent().size
+            check(greeting_window.position.x >= 0 and greeting_window.position.x <= maxf(0,bounds.x-greeting_window.size.x) and greeting_window.position.y <= maxf(0,bounds.y-24),"Remembered dialogue position clamps inside a smaller desktop")
+            var clamped_position = greeting_window.position
+            await press("SAVE_GAME")
+            await press("LOAD_GAME")
+            greeting_window = main.find_child("ConversationWindow",true,false)
+            greeting_message = main.find_child("ConversationMessage",true,false)
+            check(greeting_window.position == clamped_position,"Reload retains the clamped dialogue position")
+            root.size = original_viewport_size
+            await process_frame
         var expected_greeting = tr("HIRE_GREETING_%d" % variant).replace("{company}",state.Company.Name)
         check(greeting_message != null and greeting_message.text == expected_greeting,"English greeting branch %d" % variant)
         check(main.find_child("ConversationSpeaker",true,false).text == worker.Name,"Synthetic/custom employee names remain unchanged")
@@ -1443,8 +1549,10 @@ func run() -> void:
         await process_frame
         await process_frame
         check(main.find_child("ConversationWindow",true,false) != null and greeting_message.visible_characters == expected_greeting.length(),"First Enter reveals the current page")
+        await create_timer(0.03).timeout # The original 20ms reveal timer marks the page complete.
         greeting_message.gui_input.emit(accept)
         await process_frame
+        await process_frame # Allow QueueFree to retire the completed modal.
         check(main.find_child("ConversationWindow",true,false) == null,"Second Enter advances the completed page")
         await press("SAVE_GAME")
         var acknowledged = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))

@@ -13,6 +13,7 @@ public partial class Main
     private int? _conversationPortraitId;
     private int _conversationPortraitFrame=-1;
     private DesktopWindow? _conversationScene;
+    private Vector2? _meetingScenePosition;
     private sealed record ConversationPage(string Speaker,string Text,int? PortraitId=null);
 
     private string DialogueText(string key)
@@ -41,6 +42,7 @@ public partial class Main
     private void CloseConversationScene()
     {
         if (_conversationScene is null) return;
+        _meetingScenePosition = _conversationScene.Position;
         _conversationScene.GetParent()?.RemoveChild(_conversationScene);
         _conversationScene.QueueFree();_conversationScene=null;
     }
@@ -49,6 +51,7 @@ public partial class Main
         if (scene is null || _conversationScene is not null || _workspace is null || _dialog is null) return;
         _conversationScene=new DesktopWindow {Name="PlanningDiscussionScene"};_workspace.AddChild(_conversationScene);
         _conversationScene.Initialize(heading,_dialog.Position-new Vector2(270,0),new Vector2(262,190),false);
+        if (_meetingScenePosition is Vector2 position) _conversationScene.SetPositionInsideWorkspace(position);
         _conversationScene.FindChild("MinimizeWindow",true,false)?.QueueFree();
         _conversationScene.CloseRequested=close;
         _conversationScene.Body.AddChild(new TextureRect {Name="PlanningDiscussionPicture",Texture=scene,

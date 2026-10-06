@@ -1,4 +1,23 @@
-# Development checkpoint — M54, 2026-10-05
+# Development checkpoint — M55 continuation, 2026-10-06
+
+M55 restores calendar announcement pages and graduate greeting persistence and
+fixes the reported dialogue/meeting window-position reset. Dialogue, quote and
+meeting decision windows retain their position through page changes and later
+conversations within the running application; illustrations retain an independent
+position. Smaller desktops clamp restored positions to accessible bounds.
+See [changes and regression scope](dialogue-regressions-m55.md).
+
+Direct C# compilation, 283 domain checks, the full synthetic headless core-loop
+suite and the original-LZH UI smoke suite pass locally. Two changed local imported
+music caches were restored from the artifact's verified entries before the
+original-data rerun. These checks use the host runtime; native Windows execution
+has not been verified here. The Windows debug package reuses the authenticated
+M47 engine/runtime/audio and supplies the current DLL, PDB and translations.
+It is a development checkpoint, not a clean export or a public-release gate.
+The twelve exact seasonal source OGGs remain missing locally; existing GitHub
+audio blobs are preserved. Actions remain paused.
+
+## Previous M54 checkpoint
 
 M54 imports five secretary records locally, connects paid replacement with
 resumable farewell/identity/greeting, updates named captions and the office sprite,

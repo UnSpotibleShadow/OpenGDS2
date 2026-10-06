@@ -14,6 +14,7 @@ public partial class Main
     private Control _screen = null!;
     private Control? _workspace;
     private DesktopWindow? _dialog;
+    private Vector2? _conversationPosition;
     private GameState? _desktopState;
     private string _desktopLocale = string.Empty;
     private Label? _desktopFunds;
@@ -34,6 +35,7 @@ public partial class Main
 
     private void DestroyDesktop()
     {
+        RememberConversationPosition();
         CloseConversationScene();
         CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
@@ -360,8 +362,19 @@ public partial class Main
     {
         _conversationReveal=null;_conversationElapsed=0;
         if (_dialog is null) return;
+        RememberConversationPosition();
         _workspace!.RemoveChild(_dialog); _dialog.QueueFree(); _dialog = null;
     }
+
+    private void RememberConversationPosition()
+    {
+        if (_dialog is not null && UsesConversationPosition(_dialog.Name.ToString()))
+            _conversationPosition = _dialog.Position;
+    }
+
+    private static bool UsesConversationPosition(string name) => name is
+        "ConversationWindow" or "SecretaryAdviceWindow" or "PlanningQuoteWindow" or
+        "PlanningMeetingWindow" or "TypeMeetingWindow" or "GenreMeetingWindow" or "MangaRightsWindow";
 
     private void PrepareDesktopDialog()
     {
@@ -386,5 +399,7 @@ public partial class Main
         // Prefer the free space beside the office, keeping the office visible.
         _dialog.Position = new Vector2(Math.Min(480, Math.Max(0, _workspace.Size.X - size.X)),
             Math.Min(36, Math.Max(0, _workspace.Size.Y - size.Y)));
+        if (UsesConversationPosition(name) && _conversationPosition is Vector2 position)
+            _dialog.SetPositionInsideWorkspace(position);
     }
 }
