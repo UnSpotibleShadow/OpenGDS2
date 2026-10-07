@@ -30,6 +30,42 @@ func normalize_fixture_numbers(value: Variant) -> Variant:
         return int(value)
     return value
 
+func check_burst_flame_composition(seated: Dictionary) -> void:
+    # Read fresh textures synchronously: the dummy driver cannot expose Update.
+    var baseline = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    var fixture = seated.duplicate(true)
+    fixture.State.Employees[0].Office.WorkTier = 3
+    fixture.State.Employees[0].Office.WorkTicks = 0
+    fixture.State.OfficeBurstFlames.Ticks[0] = 7
+    var frames: Array[PackedByteArray] = []
+    for source_x in [319,346]:
+        fixture.State.OfficeBurstFlames.SourceX[0] = source_x
+        var file := FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+        file.store_string(JSON.stringify(normalize_fixture_numbers(fixture)));file.close()
+        button("LOAD_GAME").pressed.emit()
+        var pixels: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+        frames.append(pixels)
+        var changed := 0
+        var outside := 0
+        for pixel in range(466*290):
+            var offset := pixel*3
+            if pixels[offset] != baseline[offset] or pixels[offset+1] != baseline[offset+1] or pixels[offset+2] != baseline[offset+2]:
+                changed += 1
+                var x := pixel % 466
+                var y := int(pixel / 466)
+                if x < 200 or x >= 225 or y < 102 or y >= 127:
+                    outside += 1
+        check(changed > 0 and outside == 0,"Imported burst flame frame %d changes only its desk rectangle" % source_x)
+    check(frames[0] != frames[1],"The imported burst flame frames visibly differ")
+    button("SAVE_GAME").pressed.emit()
+    var saved = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(saved.State.OfficeBurstFlames.Ticks[0] == 7 and saved.State.OfficeBurstFlames.SourceX[0] == 346,"Godot reload preserves the saved seat flame phase")
+    var restore := FileAccess.open("user://saves/slot1.json",FileAccess.WRITE)
+    restore.store_string(JSON.stringify(normalize_fixture_numbers(seated)));restore.close()
+    button("LOAD_GAME").pressed.emit()
+    var hidden = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
+    check(hidden == baseline,"Leaving burst work removes the flame without altering office pixels")
+
 func _initialize() -> void:
     call_deferred("run")
 
@@ -497,6 +533,8 @@ func run() -> void:
             check(workspace.Action == 6 and workspace.SeatedAction == 6 and workspace.WorkEngaged, "Staff reaches development desk in Godot")
             check(workspace.MovementState == 0 and workspace.LoungeSeat == null, "Desk assignment releases lounge reservation")
         await press("LOAD_GAME")
+        if seated != null and not fixture.is_empty():
+            check_burst_flame_composition(seated)
         if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
             main.find_child("OriginalOfficeBackground", true, false).texture.get_image().save_png("user://office-desk-test.png")
         await press("STAFF")

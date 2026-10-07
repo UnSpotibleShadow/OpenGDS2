@@ -1,4 +1,10 @@
-# Development checkpoint — M58, 2026-10-06
+# Development checkpoint — M59, 2026-10-06
+
+M59 restores the imported two-frame burst flames at all twelve development desks.
+Seat phases persist through save/load and inactive intervals. See
+[burst flame evidence and validation](burst-flames-m59.md).
+
+## Previous M58 checkpoint
 
 M58 connects bank borrowing to the saved annual repayment pipeline. Three slots,
 four principal choices, saved receipts and transaction guards prevent duplicate

@@ -543,6 +543,45 @@ Test("office work particles rise, expand and show the recovered burst counter ce
     o.WorkCategory=DevelopmentWorkCategory.Bugs;OfficeVisualRules.StartWork(o,new SequenceRandom());Check(o.PendingSpeechBubble==15);
     o.WorkCategory=DevelopmentWorkCategory.Debugging;OfficeVisualRules.StartWork(o,new SequenceRandom(1));Check(o.PendingSpeechBubble==11);
 });
+Test("burst flames preserve seat clocks, exact frame boundaries and saved phase",()=>
+{
+    var s=PlanningState();var e=Worker();s.Employees.Add(e);e.Office!.WorkTier=3;
+    var tile=new OfficeSpriteDefinition(64,-100,0,319,359,25,25,23);
+    for (int tick=0;tick<12;tick++) OfficeBurstFlameRules.Tick(s,e);
+    Check(s.OfficeBurstFlames.Ticks[0]==12 && s.OfficeBurstFlames.SourceX[0]==319);
+    OfficeBurstFlameRules.Tick(s,e);Check(s.OfficeBurstFlames.Ticks[0]==1 && s.OfficeBurstFlames.SourceX[0]==346);
+    var sprite=OfficeBurstFlameRules.Project(tile,s);Check(sprite.X==200 && sprite.Y==102 && sprite.SourceX==346 && sprite.SortKey==140);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];
+    for (int tick=0;tick<5;tick++) OfficeBurstFlameRules.Tick(s,e);
+    Check(s.OfficeBurstFlames.SourceX[0]==346 && s.OfficeBurstFlames.Ticks[0]==6);
+    OfficeBurstFlameRules.Tick(s,e);Check(s.OfficeBurstFlames.SourceX[0]==319 && s.OfficeBurstFlames.Ticks[0]==7);
+    e.Office!.WorkTier=2;OfficeBurstFlameRules.Tick(s,e);Check(s.OfficeBurstFlames.Ticks[0]==7 && OfficeBurstFlameRules.Project(tile,s).X==-100);
+    e.Office.WorkTier=3;e.Office.SeatedAction=7;OfficeBurstFlameRules.Tick(s,e);
+    Check(s.OfficeBurstFlames.Ticks[0]==7 && s.OfficeBurstFlames.Ticks[1]==1);
+    e.Office.SeatedAction=6;Check(OfficeBurstFlameRules.Project(tile,s).SourceX==319);
+});
+Test("burst flame projection covers every original desk and hides unrelated seats",()=>
+{
+    var s=PlanningState();var e=Worker();s.Employees.Add(e);e.Office!.WorkTier=3;
+    (int X,int Y,int Sy)[] expected=[(200,102,359),(232,118,359),(151,105,384),(210,147,359),(125,134,384),(157,150,384),(296,150,359),(328,166,359),(247,153,384),(306,195,359),(221,182,384),(253,198,384)];
+    for(int i=0;i<12;i++)
+    {
+        e.Office.SeatedAction=i+6;var tile=new OfficeSpriteDefinition(64+i,-100,0,319,359,25,25,23);
+        var p=OfficeBurstFlameRules.Project(tile,s);Check((p.X,p.Y,p.SourceY)==expected[i] && p.Width==25 && p.Height==25 && p.SortKey==p.Y+38);
+        var scene=new OfficeSceneData {Sprites=[tile]};Check(OfficePresentationRules.ForState(scene,s).Single()==p);
+        e.Office.WorkEngaged=false;Check(!OfficePresentationRules.ForState(scene,s).Any());e.Office.WorkEngaged=true;
+    }
+    var unrelated=new OfficeSpriteDefinition(38,-100,0,319,359,25,25,23);Check(OfficeBurstFlameRules.Project(unrelated,s)==unrelated);
+});
+Test("burst flame snapshots reject malformed cells and older saves restart presentation only",()=>
+{
+    var s=PlanningState();string old=SaveStore.Serialize(s);var node=System.Text.Json.Nodes.JsonNode.Parse(old)!;node["State"]!.AsObject().Remove("OfficeBurstFlames");
+    var restored=SaveStore.Deserialize(node.ToJsonString());Check(restored.OfficeBurstFlames.Ticks.All(x=>x==0) && restored.OfficeBurstFlames.SourceX.All(x=>x==319));
+    s.OfficeBurstFlames.Ticks[0]=13;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OfficeBurstFlames.Ticks[0]=0;
+    s.OfficeBurstFlames.SourceX[0]=320;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OfficeBurstFlames.SourceX[0]=319;
+    s.OfficeBurstFlames.Ticks=new int[11];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OfficeBurstFlames.Ticks=new int[12];
+    s.OfficeBurstFlames.SourceX=null!;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("English bitmap lettering alters only opaque local caption interiors",()=>
 {
     var colors=Enumerable.Repeat((byte)80,1600*530*3).ToArray();var masks=new byte[colors.Length];

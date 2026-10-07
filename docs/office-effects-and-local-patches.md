@@ -20,8 +20,9 @@ factor (30). Bug work requests bubble 15; ordinary tier-three work requests 10;
 other successful work uses the recovered 1-in-10 draw (debugging 1-in-6) for
 bubbles 10/11. Lounge movement state 6 uses the recovered 1-in-100 idle draw and
 1-in-3 choice of bubbles 5/3. Restored source draws do not establish complete
-VB6 global RNG parity. Other walking/study/event bubble writers, burst flames
-and additional meeting scenes remain unresolved; no substitute animations or
+VB6 global RNG parity. M59 connects development-seat burst flames; see
+[recovered geometry, timing and saved phases](burst-flames-m59.md). Other
+walking/study/event bubble writers and additional meeting scenes remain unresolved; no substitute animations or
 extra random bubble chatter are invented.
 
 Office counters, pending/active bubble identity and burst display count survive
