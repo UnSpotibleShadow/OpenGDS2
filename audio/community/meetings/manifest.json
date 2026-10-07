@@ -1,0 +1,45 @@
+{
+  "encoding": "Ogg Vorbis quality 4, stereo 48000 Hz",
+  "recordings": [
+    {
+      "phase": "planning",
+      "source": "Planning Meeting.wav",
+      "path": "audio/community/meetings/planning.ogg",
+      "duration": 59.2,
+      "source_bytes": 11380240,
+      "source_sha256": "da88d6d0f2531ed0d74d3ba8130fecc290f0c55659e1239a15ed91604628a1bf",
+      "bytes": 851387,
+      "sha256": "f04fde6754c9436498b80a59dcf0b702333befa54c85ac6a0edb16fc51a96db8"
+    },
+    {
+      "phase": "alpha",
+      "source": "Alpha Meeting.wav",
+      "path": "audio/community/meetings/alpha.ogg",
+      "duration": 72.0,
+      "source_bytes": 13837840,
+      "source_sha256": "4ab04d095f0fd63b04c7ce1dddc00b8b9a3f5dd82c692e02646da85c698b4bc1",
+      "bytes": 1169917,
+      "sha256": "89517948bcc2e0d90ed35a8434f7df5fdb36eb5247f58805b3027b08693d1c4a"
+    },
+    {
+      "phase": "beta",
+      "source": "Beta Meeting.wav",
+      "path": "audio/community/meetings/beta.ogg",
+      "duration": 116.76,
+      "source_bytes": 22431760,
+      "source_sha256": "fc9cc66e436cf07973f6fee4a8b29a7bf841d649a5cdb6d6096a3a959329f449",
+      "bytes": 1718204,
+      "sha256": "fcb7ac46e6009dade58b1742a74625acc3c933e5310015c53d21c7a2149fd1f9"
+    },
+    {
+      "phase": "final",
+      "source": "Final Meeting.wav",
+      "path": "audio/community/meetings/final.ogg",
+      "duration": 71.08,
+      "source_bytes": 13661200,
+      "source_sha256": "5a4a278ad1f9de48698ce33dae4ef53d0aa7dc1087e594d7aaa09cf0d68a6251",
+      "bytes": 1185782,
+      "sha256": "af10ee037339c85e37c755e1b4e6e0a28f6fa0ddfb190ae091507dcdb90257b4"
+    }
+  ]
+}

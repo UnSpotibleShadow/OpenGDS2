@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using OpenGDS2.Domain;
 
 namespace OpenGDS2.Core;
 
@@ -19,6 +20,9 @@ public partial class BackgroundMusic : Node
     private readonly HashSet<AudioStream> _ownedTracks = new();
     private AudioStreamPlayer _player = null!;
     private AudioStreamPlayer _fadePlayer = null!;
+    private AudioStreamPlayer _meetingPlayer = null!;
+    private readonly Dictionary<MeetingMusicPhase, AudioStreamOggVorbis> _meetingTracks = new();
+    public int MeetingPhaseIndex { get; private set; } = -1;
     private bool _crossfading;
     private ulong _fadeStarted;
     private float _incomingGain = 1;
@@ -41,6 +45,7 @@ public partial class BackgroundMusic : Node
         }
         _player = new AudioStreamPlayer { Name = "MusicPlayer" }; AddChild(_player);
         _fadePlayer = new AudioStreamPlayer { Name = "MusicFadePlayer" }; AddChild(_fadePlayer);
+        _meetingPlayer = new AudioStreamPlayer { Name = "MeetingMusicPlayer" }; AddChild(_meetingPlayer);
         _fadePlayer.Finished += CompleteCrossfade;
         _titleTheme = GD.Load<AudioStreamOggVorbis>("res://audio/community/title-theme.ogg");
         if (_titleTheme is not null) _titleTheme.Loop = true;
@@ -123,9 +128,12 @@ public partial class BackgroundMusic : Node
     {
         _player.Stop(); _player.Stream = null;
         _fadePlayer.Stop(); _fadePlayer.Stream = null;
+        _meetingPlayer.Stop(); _meetingPlayer.Stream = null;
         foreach (var track in _ownedTracks) track.Dispose();
         _ownedTracks.Clear(); _seasonTracks.Clear(); _officeTracks.Clear(); _tracks.Clear();
         _titleTheme?.Dispose(); _titleTheme = null;
+        foreach (var track in _meetingTracks.Values) track.Dispose();
+        _meetingTracks.Clear();
     }
 
     public void SetGameplayActive(bool active)
@@ -138,6 +146,7 @@ public partial class BackgroundMusic : Node
 
     public void SetTitleActive()
     {
+        SetMeetingPhase(-1);
         CompleteCrossfade();
         _gameplayActive = false;
         _titleActive = true;
@@ -170,7 +179,7 @@ public partial class BackgroundMusic : Node
         // Same-season ticks, dialogs and saves never restart the current recording.
         bool changed = !ReferenceEquals(_tracks, desired);
         if (changed) { _tracks = desired; TrackIndex = 0; }
-        if (changed && seasonalTransition && Enabled && _gameplayActive && _tracks.Count > 0 && _player.Stream is not null)
+        if (changed && seasonalTransition && Enabled && _gameplayActive && MeetingPhaseIndex < 0 && _tracks.Count > 0 && _player.Stream is not null)
             BeginCrossfade(_tracks[TrackIndex]);
         else if (changed) CompleteCrossfade();
         UpdatePlayback();
@@ -196,10 +205,36 @@ public partial class BackgroundMusic : Node
         AudioStream? desired = _titleActive ? _titleTheme :
             _gameplayActive && _tracks.Count > 0 ? _tracks[TrackIndex] : null;
         if (_player.Stream != desired) { _player.Stop(); _player.Stream = desired; }
-        _player.StreamPaused = !Enabled || desired is null;
+        bool meetingActive = _meetingPlayer.Stream is not null;
+        _player.StreamPaused = !Enabled || desired is null || meetingActive;
+        _meetingPlayer.StreamPaused = !Enabled;
         // Headless validation has no audible output. Avoid starting asynchronous
         // dummy-driver playback during accelerated simulation fixtures.
-        if (Enabled && desired is not null && !_player.Playing && DisplayServer.GetName() != "headless") _player.Play();
+        if (Enabled && !meetingActive && desired is not null && !_player.Playing && DisplayServer.GetName() != "headless") _player.Play();
+        if (Enabled && meetingActive && !_meetingPlayer.Playing && DisplayServer.GetName() != "headless") _meetingPlayer.Play();
+    }
+
+    // -1 restores office/title playback. Repeated pages in the same phase keep
+    // the existing player running rather than seeking back to the beginning.
+    public void SetMeetingPhase(int phaseIndex)
+    {
+        if (phaseIndex != -1 && !Enum.IsDefined((MeetingMusicPhase)phaseIndex))
+            throw new ArgumentOutOfRangeException(nameof(phaseIndex));
+        if (MeetingPhaseIndex == phaseIndex) return;
+        AudioStreamOggVorbis? desired = null;
+        if (phaseIndex >= 0)
+        {
+            var phase = (MeetingMusicPhase)phaseIndex;
+            if (!_meetingTracks.TryGetValue(phase, out desired))
+            {
+                desired = GD.Load<AudioStreamOggVorbis>(MeetingMusicRules.ResourcePath(phase));
+                if (desired is not null) { desired.Loop = true; _meetingTracks.Add(phase, desired); }
+            }
+        }
+        CompleteCrossfade();
+        MeetingPhaseIndex = phaseIndex;
+        _meetingPlayer.Stop(); _meetingPlayer.Stream = desired;
+        UpdatePlayback();
     }
 
     private void BeginCrossfade(AudioStream incoming)
@@ -229,6 +264,7 @@ public partial class BackgroundMusic : Node
         float volume = VolumePercent / 100;
         _player.VolumeDb = volume * _incomingGain <= 0 ? -80 : Mathf.LinearToDb(volume * _incomingGain);
         _fadePlayer.VolumeDb = volume * _outgoingGain <= 0 ? -80 : Mathf.LinearToDb(volume * _outgoingGain);
+        _meetingPlayer.VolumeDb = volume <= 0 ? -80 : Mathf.LinearToDb(volume);
     }
 
     private void SaveSettings()

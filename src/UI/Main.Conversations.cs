@@ -59,14 +59,15 @@ public partial class Main
             ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepCentered});
         _dialog.MoveToFront();
     }
-    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null)
+    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null,MeetingMusicPhase? musicPhase=null)
     {
+        _music.SetMeetingPhase(musicPhase is MeetingMusicPhase phase ? (int)phase : -1);
         CloseConversationScene();
         if (pages.Count==0) {completed();return;}
         int pageIndex=0;
         void ShowPage()
         {
-            ClearContent(keepConversationScene:true);
+            ClearContent(keepConversationScene:true,keepMeetingMusic:true);
             CompactManagementWindow("ConversationWindow",new Vector2(330,142),314);
             _content.AddThemeConstantOverride("separation",0);
             _dialog!.SetTitle(heading);

@@ -1,4 +1,20 @@
-# Development checkpoint — M55 continuation, 2026-10-06
+# Development checkpoint — M56, 2026-10-06
+
+M56 adds the four owner-supplied meeting recordings as Ogg Vorbis. Planning,
+alpha/type, beta/genre and completion/debugging dialogues select their matching
+track. Music loops continuously across consecutive pages, respects existing
+mute/volume settings and returns to office/title music when dialogue ends.
+Selection/proposal screens and ordinary conversations retain the office music.
+See [mapping and playback boundaries](meeting-music-m56.md).
+
+Direct app/domain compilation, 284 domain checks, two meeting-audio integrity
+checks, real-time dummy-driver playback checks, the complete synthetic core loop
+and the original-LZH UI suite pass locally. Three changed local old audio caches
+were restored from MD5-verified artifact data for the original-data rerun.
+Publication uses a feature branch and PR into main. Actions
+remain paused; no desktop package or native Windows run is created.
+
+## Previous M55 continuation
 
 M55 restores calendar announcement pages and graduate greeting persistence and
 fixes the reported dialogue/meeting window-position reset. Dialogue, quote and

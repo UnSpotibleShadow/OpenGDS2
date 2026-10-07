@@ -67,7 +67,7 @@ public partial class Main
             var milestone=project.PendingDecision!.Value;
             ShowConversation(Tr("DEVELOPMENT_ROOM")+" "+(project.RoomIndex+1),
                 [new(DialogueText("CORE_SECRETARY"),DialogueText(CheckpointDialogueRules.MessageKey(milestone)).Replace("{room}",(project.RoomIndex+1).ToString()))],
-                ()=>{CheckpointDialogueRules.Acknowledge(state,project,milestone);ShowProjectDecision(state,project);});
+                ()=>{CheckpointDialogueRules.Acknowledge(state,project,milestone);ShowProjectDecision(state,project);},musicPhase:MeetingMusicRules.ForMilestone(milestone));
             return;
         }
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
@@ -199,7 +199,7 @@ public partial class Main
             CheckpointMeetingRules.Acknowledge(state,project);
             if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) ShowProjectDecision(state,project);
             else ShowOfficeReconstruction(state);
-        },scene:OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"));
+        },scene:OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),musicPhase:MeetingMusicRules.ForMilestone(meeting.Milestone));
     }
     private void ShowRelease(GameState state,DevelopmentProjectState project)
     {

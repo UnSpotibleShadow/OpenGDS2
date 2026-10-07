@@ -18,6 +18,16 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("meeting soundtrack maps planning alpha beta and final dialogue phases",()=>
+{
+    Check(Enum.GetValues<MeetingMusicPhase>().Select(MeetingMusicRules.ResourcePath).Distinct().Count()==4);
+    Check(MeetingMusicRules.ResourcePath(MeetingMusicPhase.Planning).EndsWith("/planning.ogg"));
+    Check(MeetingMusicRules.ForMilestone(DevelopmentMilestone.SelectType)==MeetingMusicPhase.Alpha);
+    Check(MeetingMusicRules.ForMilestone(DevelopmentMilestone.SelectGenre)==MeetingMusicPhase.Beta);
+    Check(MeetingMusicRules.ForMilestone(DevelopmentMilestone.StartDebugging)==MeetingMusicPhase.Final);
+    Throws<ArgumentOutOfRangeException>(()=>MeetingMusicRules.ResourcePath((MeetingMusicPhase)99));
+    Throws<ArgumentOutOfRangeException>(()=>MeetingMusicRules.ForMilestone((DevelopmentMilestone)99));
+});
 OriginalCatalog SecretaryCatalog()=>new() {Secretaries=Enumerable.Range(0,5).Select(i=>new SecretaryDefinition
     {SourceIndex=i,Name=$"Test secretary {i}",RankCode=Math.Min(i,3),ContractFee=100+i,AdvertisedSalary=10+i,
      PortraitId=SecretaryAdviceRules.PortraitId(i)!.Value,Description=$"Authored biography {i}"}).ToList()};

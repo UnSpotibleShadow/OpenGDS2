@@ -1,5 +1,11 @@
 # Remaining reconstruction work
 
+M56 supplies phase-specific meeting audio for planning, alpha, beta and final
+dialogues, with continuous playback through each sequence and shared settings.
+Choice/proposal screens and ordinary conversations retain their existing music.
+See [meeting music and validation scope](meeting-music-m56.md). Source publication
+uses feature branches and PRs; debug packages are opt-in only. Actions stay paused.
+
 Completion means a verified development/release/sales loop, calendar economics,
 company progression and regression coverage. M13 implements the own-game core loop; M35–M37 connect verified calendar economics and annual events. Remaining economics and company progression are incomplete.
 
