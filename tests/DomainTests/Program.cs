@@ -1733,9 +1733,9 @@ OriginalCatalog CoreCatalog()
     c.GameTypes[0].RawMembers["12EC"]=3;c.GameTypes[1].RawMembers["12EC"]=3;
     return c;
 }
-EmployeeState Worker(int action=6)=>new()
+EmployeeState Worker(int action=6,int source=0)=>new()
 {
-    Name="Synthetic Worker",SourceIndex=0,PortraitId=1,Level=1,Experience=0,Stress=0,
+    Name="Synthetic Worker",SourceIndex=source,PortraitId=1,Level=1,Experience=0,Stress=0,
     Fun=50,Novelty=50,Graphics=50,Music=50,Accuracy=50,DevelopmentSpeed=50,Inspiration=50,
     Office=new(){Action=action,SeatedAction=action,WorkEngaged=true,MovementState=0,Facing=1}
 };
@@ -2574,6 +2574,62 @@ Test("burst gain is retained when it triggers a checkpoint and progress clips in
     e.Office.WorkTicks=151;e.Office.BurstTicks=119;e.Office.BurstCount=50;
     DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
     Check(p.Progress==100 && p.Quality.Graphics==100 && p.PendingDecision==DevelopmentMilestone.StartDebugging);
+});
+Test("another employee's unfinished burst survives all three phase changes and checkpoint reload",()=>
+{
+    foreach (int stage in new[]{0,1,2})
+    {
+        var c=CoreCatalog();var s=PlanningState(10000000);
+        s.OriginalTypeRosterMap=Enumerable.Range(0,65).ToDictionary(x=>x,_=>0);
+        var lead=Worker();var burst=Worker(7,1);burst.Office!.SlotIndex=1;
+        s.Employees.AddRange([lead,burst]);
+        var p=new DevelopmentProjectState {Title="Synthetic phase boundary",RequiredPoints=100,
+            Progress=stage switch {0=>49,1=>80,_=>99},OriginalStage=stage,Focus=new(100,0,0,0),
+            GameTypeSourceIndex=stage>0 ? 0 : null,GenreSourceIndex=stage==2 ? 0 : null};
+        s.DevelopmentProjects.Add(p);
+        lead.Office!.WorkTier=1;lead.Office.WorkTicks=16;lead.Office.WorkCategory=DevelopmentWorkCategory.Speed;
+        burst.Office.WorkTier=3;burst.Office.WorkTicks=151;burst.Office.BurstTicks=119;
+        burst.Office.BurstCount=37;burst.Office.BurstDisplayCount=37;burst.Office.WorkCategory=DevelopmentWorkCategory.Graphics;
+        var session=new GameSession(new WorkRandom());session.Restore(s);session.TickOffice(c);
+        var milestone=stage switch {0=>DevelopmentMilestone.SelectType,1=>DevelopmentMilestone.SelectGenre,_=>DevelopmentMilestone.StartDebugging};
+        Check(p.PendingDecision==milestone && p.Quality.Graphics==0);
+        Check(burst.Office.BurstCount==37 && burst.Office.BurstTicks==119 && burst.Office.WorkTicks==151);
+        for(int i=0;i<150;i++) session.TickOffice(c);
+        Check(burst.Office.BurstTicks==119 && p.Quality.Graphics==0);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects.Single();burst=s.Employees[1];
+        session.Restore(s);
+        if(stage==0) Check(DevelopmentSelectionRules.TrySelectType(s,p,c,0,s.OriginalTypeRosterMap!)==DevelopmentSelectionResult.Success);
+        else if(stage==1) Check(DevelopmentSelectionRules.TrySelectGenre(s,p,c,0)==DevelopmentSelectionResult.Success);
+        else p.PendingDecision=null; // Actual Continue Debugging operation.
+        double previous=p.Progress;session.TickOffice(c);
+        Check(p.Quality.Graphics==37 && burst.Office!.WorkTicks==0);
+        Check(Math.Abs(p.Progress-Math.Min(p.RequiredPoints,previous+37/3.0))<1e-9);
+        var saved=SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects.Single();
+        Check(saved.Quality.Graphics==37 && saved.Progress==p.Progress);
+    }
+});
+Test("immediate shipment snapshots completed gains and discards another employee's pending burst",()=>
+{
+    var c=CoreCatalog();var s=PlanningState(10000000);s.SalesFee1=s.SalesFee2=1500;
+    var lead=Worker();var burst=Worker(7,1);burst.Office!.SlotIndex=1;
+    s.Employees.AddRange([lead,burst]);
+    var p=new DevelopmentProjectState {Title="Synthetic immediate shipment",RequiredPoints=100,Progress=99,
+        OriginalStage=2,GameTypeSourceIndex=0,GenreSourceIndex=0,Focus=new(100,0,0,0),Quality=new(10,20,30,40)};
+    s.DevelopmentProjects.Add(p);
+    lead.Office!.WorkTier=1;lead.Office.WorkTicks=16;lead.Office.WorkCategory=DevelopmentWorkCategory.Speed;
+    burst.Office.WorkTier=3;burst.Office.WorkTicks=151;burst.Office.BurstTicks=119;
+    burst.Office.BurstCount=37;burst.Office.WorkCategory=DevelopmentWorkCategory.Graphics;
+    var session=new GameSession(new WorkRandom());session.Restore(s);session.TickOffice(c);
+    Check(p.PendingDecision==DevelopmentMilestone.StartDebugging && p.Quality.Graphics==30 && burst.Office.BurstTicks==119);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects.Single();burst=s.Employees[1];
+    Check(ReleaseService.TryRelease(s,p,c,p.Title,5800,1,new SequenceRandom(6,0,0,0,0))==ReleaseResult.Success);
+    var released=s.ReleasedGames.Single();Check(released.Quality==new DevelopmentQuality(10,20,30,40));
+    Check(burst.Office!.WorkTicks==0 && burst.Office.WorkTier==0 && burst.Office.BurstTicks==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));burst=s.Employees[1];released=s.ReleasedGames.Single();
+    var next=new DevelopmentProjectState {Title="Synthetic next project",RequiredPoints=1000,Focus=new(100,0,0,0)};
+    s.DevelopmentProjects.Add(next);
+    DevelopmentSimulation.TickEmployee(s,burst,c,new WorkRandom());
+    Check(next.Quality==new DevelopmentQuality() && next.Progress==0 && released.Quality.Graphics==30);
 });
 Test("development checkpoints award once, pause all clocks and resume after selection",()=>
 {
