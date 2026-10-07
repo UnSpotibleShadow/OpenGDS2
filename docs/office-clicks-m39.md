@@ -68,7 +68,8 @@ Standard SDK/export/native Windows checks all pass in
 PR #33 is merged. The SDK build has zero warnings/errors and public Godot plus
 packaged Linux/native Windows fixtures have zero failures.
 
-The reported sprite-edge artifact remains unresolved. The inspected original
+M60 resolves the assigned-PC artifact by correcting the tile-array mapping and
+rectangle; see [office rendering](office-rendering-m60.md). At M39, the inspected original
 reception employee/computer/chair rectangles contain no pure red line or
 white-mask/nonwhite-color mismatch. This does not explain the owner's captured
 frame or establish a fix; matching runtime state/cache/overrides and graphical

@@ -1,5 +1,8 @@
 # Remaining reconstruction work
 
+M60 corrects assigned-PC rendering and atlas-border artifacts and translates the
+three facility vacancy signs in English. See [office rendering](office-rendering-m60.md).
+
 M59 restores two-frame burst flames at the twelve development desks with saved
 seat phases. See [burst flames](burst-flames-m59.md).
 

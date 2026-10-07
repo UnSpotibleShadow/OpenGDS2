@@ -33,6 +33,8 @@ use the existing count when the display snapshot is absent.
 
 English mode generates an atlas overlay under
 `user://localized-artwork/en/<revision>/Graphic/Embedded/OfficeSprites.png`.
+M60 also translates the three vacant-facility signs in the background using a
+separate local `OfficeBase.png` overlay. See [scope and hash guards](office-rendering-m60.md).
 Generation requires the exact locally imported source and mask hashes. An
 authored 5×7 alphabet draws fourteen translated captions, changing only opaque
 caption interiors. It preserves dimensions, tails, borders, every other sprite

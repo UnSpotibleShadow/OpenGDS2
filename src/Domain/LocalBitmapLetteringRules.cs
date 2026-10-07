@@ -72,4 +72,36 @@ public static class LocalBitmapLetteringRules
         }
         return output;
     }
+    public static readonly (int X,int Y,int Width,int Height)[] FacilitySignInteriors=[
+        (35,186,60,13),(116,227,60,13),(372,227,60,13)];
+
+    public static byte[] PatchFacilitySigns(byte[] pixels,int width,int height,string caption)
+    {
+        if (width!=466 || height!=290 || pixels.Length!=width*height*3)
+            throw new InvalidDataException("Unexpected local office background dimensions.");
+        string text=caption.ToUpperInvariant();
+        if (text.Length==0 || text.Length*6-1>60 || text.Any(c=>!Glyphs.ContainsKey(c)))
+            throw new InvalidDataException("Facility caption does not fit its lettering rectangle.");
+        var output=(byte[])pixels.Clone();
+        foreach (var r in FacilitySignInteriors)
+        {
+            for (int y=r.Y;y<r.Y+r.Height;y++) for (int x=r.X;x<r.X+r.Width;x++)
+            {
+                int pos=(y*width+x)*3;output[pos]=output[pos+1]=output[pos+2]=220;
+            }
+            int left=r.X+(r.Width-(text.Length*6-1))/2,top=r.Y+(r.Height-7)/2;
+            for (int letter=0;letter<text.Length;letter++)
+            {
+                var rows=Glyphs[text[letter]].Split('/');
+                for (int y=0;y<7;y++) for (int x=0;x<5;x++)
+                {
+                    if (rows[y][x]!='1') continue;
+                    int pos=((top+y)*width+left+letter*6+x)*3;
+                    output[pos]=output[pos+1]=output[pos+2]=0;
+                }
+            }
+        }
+        return output;
+    }
+
 }

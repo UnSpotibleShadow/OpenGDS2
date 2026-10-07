@@ -6,13 +6,14 @@ public static class OfficeDeskPresentationRules
     public static OfficeSpriteDefinition ForAssignment(OfficeSpriteDefinition original, int action, int computer)
     {
         if (action is <6 or >17 || computer is <0 or >3) throw new ArgumentOutOfRangeException(nameof(action));
-        if (original.Id!=93+2*(action-6)) throw new ArgumentException("Wrong imported desk tile.",nameof(original));
+        if (original.Id!=50+(action-6)) throw new ArgumentException("Wrong imported desk tile.",nameof(original));
         var position=action switch
         {
             6=>(184,107),7=>(216,123),8=>(153,114),9=>(199,142),10=>(131,129),11=>(163,145),
             12=>(280,155),13=>(312,171),14=>(249,162),15=>(295,190),16=>(227,177),_=>(259,193)
         };
-        // No depth-field write accompanies +2730/+274A; retain the allocator key.
+        // Member 2218 maps to IDs 50–61. Their 36×29 allocation and depth
+        // are retained; member 2234 IDs 93/95/... are hidden placeholders.
         return original with
         {
             X=position.Item1,Y=position.Item2,

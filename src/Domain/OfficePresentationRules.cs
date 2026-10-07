@@ -18,9 +18,9 @@ public static class OfficePresentationRules
             if (state.DevelopmentComputerIndex is int computer)
             {
                 if (sprite.Id==140) sprite=sprite with {X=91,Y=96,SourceX=571+computer*74,SourceY=318};
-                else if (sprite.Id is >=93 and <=115 && (sprite.Id-93)%2==0)
+                else if (sprite.Id is >=50 and <=61)
                 {
-                    int action=6+(sprite.Id-93)/2;
+                    int action=6+(sprite.Id-50);
                     if (assigned.Contains(action)) sprite=OfficeDeskPresentationRules.ForAssignment(sprite,action,computer);
                 }
             }

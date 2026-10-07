@@ -1,4 +1,10 @@
-# Development checkpoint — M59, 2026-10-06
+# Development checkpoint — M60, 2026-10-06
+
+M60 fixes assigned-computer tile mapping, drawing depth and oversized atlas crops,
+and adds local English overlays for the three facility vacancy signs. See
+[rendering corrections and bitmap patch scope](office-rendering-m60.md).
+
+## Previous M59 checkpoint
 
 M59 restores the imported two-frame burst flames at all twelve development desks.
 Seat phases persist through save/load and inactive intervals. See

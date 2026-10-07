@@ -582,6 +582,21 @@ Test("burst flame snapshots reject malformed cells and older saves restart prese
     s.OfficeBurstFlames.Ticks=new int[11];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OfficeBurstFlames.Ticks=new int[12];
     s.OfficeBurstFlames.SourceX=null!;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
 });
+Test("facility lettering changes only three sign interiors and rejects unsupported captions",()=>
+{
+    var source=Enumerable.Repeat((byte)81,466*290*3).ToArray();
+    var patched=LocalBitmapLetteringRules.PatchFacilitySigns(source,466,290,"FOR RENT");
+    Check(source.All(x=>x==81));
+    for(int pixel=0;pixel<466*290;pixel++)
+    {
+        int x=pixel%466,y=pixel/466;bool inside=LocalBitmapLetteringRules.FacilitySignInteriors.Any(r=>x>=r.X && x<r.X+r.Width && y>=r.Y && y<r.Y+r.Height);
+        for(int c=0;c<3;c++) Check(inside ? patched[pixel*3+c] is 0 or 220 : patched[pixel*3+c]==81);
+    }
+    Check(LocalBitmapLetteringRules.FacilitySignInteriors.All(r=>Enumerable.Range(r.Y,r.Height).Any(y=>Enumerable.Range(r.X,r.Width).Any(x=>patched[(y*466+x)*3]==0))));
+    Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchFacilitySigns(source,466,290,"TOO LONG FOR THIS SIGN"));
+    Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchFacilitySigns(source,466,290,"テナント"));
+    Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchFacilitySigns(source,465,290,"FOR RENT"));
+});
 Test("English bitmap lettering alters only opaque local caption interiors",()=>
 {
     var colors=Enumerable.Repeat((byte)80,1600*530*3).ToArray();var masks=new byte[colors.Length];
@@ -3065,11 +3080,11 @@ Test("computer models select corresponding imported office rectangle",()=>
     }
     Check(OfficePresentationRules.ForState(scene,new GameState()).Single().SourceX==571);
 });
-Test("assigned desks display local computer tiles and retain original depth keys",()=>
+Test("assigned desks use the computer array with tight crops and depth above desks",()=>
 {
     var scene=new OfficeSceneData();
     for (int action=6;action<=17;action++)
-        scene.Sprites.Add(new(93+2*(action-6),-1000,-1000,1,296,46,35,-200));
+        scene.Sprites.Add(new(50+(action-6),-100,110,162,308,36,29,33));
     var state=State();state.Year=1;state.Month=4;state.Week=1;
     Check(!OfficePresentationRules.ForState(scene,state).Any());
     state.Employees.Add(new(){Name="Synthetic",PortraitId=1,Office=new(){Action=6}});
@@ -3081,7 +3096,7 @@ Test("assigned desks display local computer tiles and retain original depth keys
             state.Employees[0].Office!.Action=action;
             var tile=OfficePresentationRules.ForState(scene,state).Single();
             var original=scene.Sprites.Single(x=>x.Id==tile.Id);
-            Check(tile.SortKey==original.SortKey && tile.Width==46 && tile.Height==35);
+            Check(tile.SortKey==original.SortKey && tile.Width==36 && tile.Height==29);
             Check(tile.SourceX==(action is 8 or 9 or 14 or 15 ? 571 : 608)+74*computer);
             Check(tile.SourceY==(action is 6 or 7 or 8 or 12 or 13 or 14 ? 318 : 228));
         }
