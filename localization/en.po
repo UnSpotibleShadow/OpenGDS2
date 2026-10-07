@@ -105,10 +105,10 @@ msgid "OPENING_STAFF_DOCUMENTED"
 msgstr "Secretary + 1 employee (identity/stats pending)"
 
 msgid "BEGINNER_RULES_VERIFIED"
-msgstr "Documented Beginner rules: tutorial guidance is enabled, the run is limited to 3 in-game years, and starting funds are higher than Normal mode. The exact starting amount is still being decoded."
+msgstr "Beginner mode ends after Year 2, December, Week 4. Starting funds: ¥1,200,000,000."
 
 msgid "NORMAL_RULES_VERIFIED"
-msgstr "Normal mode does not use the Beginner mode's permanent tutorial/3-year limit. The exact starting-funds value is still being decoded."
+msgstr "Normal mode has no fixed ending date. Starting funds: ¥450,000,000."
 
 msgid "FIRST_OBJECTIVE"
 msgstr "First Objective — Hire Employees"

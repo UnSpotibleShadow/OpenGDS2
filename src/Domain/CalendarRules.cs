@@ -6,6 +6,11 @@ public readonly record struct GameDate(int Year, int Month, int Week);
 public static class CalendarRules
 {
     public static GameDate OpeningDate => new(1, 4, 1);
+    // Original 009DB4F4 +01C7 checks year=2, month=12, transient week=5.
+    // Modern pending transactions retain the valid week which is closing.
+    public static GameDate BeginnerEndingClosingDate => new(2, 12, 4);
+    public static bool IsBeginnerEnding(GameMode mode, GameDate closingDate)
+        => mode == GameMode.Beginner && closingDate == BeginnerEndingClosingDate;
     // Module1 +01AE increments week; +067D tests >=5; +0715 tests month=13.
     // This is only the calendar transformation, not the complete weekly simulation.
     public static GameDate AdvanceWeek(GameDate date)
