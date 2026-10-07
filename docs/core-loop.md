@@ -91,8 +91,10 @@ M13 copies quality, bugs, recognition, data size and selected catalog identifier
 into an independent product record and charges production once. Production
 spending and net receipts are modern accounting projections without gameplay
 bonuses. Completed room work animations are cancelled on release to prevent a
-pending contribution entering a different modern project; exact original worker
-cleanup at shipment still needs runtime verification. Assignment clears the three
+pending contribution entering a different modern project. M67 verifies the
+original completed-stat snapshot and subsequent empty-room burst counter clear;
+exact animation cleanup timing still needs runtime comparison. See
+[unfinished bursts at release](release-burst-boundary-m67.md). Assignment clears the three
 work-animation cells explicitly written by the original assignment branch.
 Modern title length, nonnegative price and checked arithmetic are input/storage
 safeguards; the original price spinner can continue below zero.
@@ -173,3 +175,4 @@ controls are runtime conveniences, separate from original simulation formulas.
 The public setup screen asks for both company and president names. The former
 embedded original default personal-name literal has been removed; its local-import
 recovery remains unresolved rather than substituting an invented original name.
+

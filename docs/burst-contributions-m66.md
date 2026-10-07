@@ -58,3 +58,11 @@ checks verify the currently implemented pipeline; they do not prove every
 unreported campaign state. If a particular case still loses a completed burst,
 record its category, before/after quality and points, and the preceding save.
 No desktop package or GitHub Actions run was produced.
+
+
+## M67 follow-up: another employee finishes development
+
+The earlier investigation did not cover immediate shipment while a different
+employee has an unfinished burst. M67 confirms that phase changes preserve it,
+but shipment excludes its uncommitted gain, supported by original snapshot and
+empty-room cleanup evidence. See [release boundary](release-burst-boundary-m67.md).

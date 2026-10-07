@@ -24,6 +24,7 @@ This is an unpublished Windows x86_64 test candidate. Record pass/fail, Windows 
 | Original game loop | Plan, choose focus/type/genre, develop, debug, ship, acknowledge reviews, sell and reprint | Untested on Windows |
 | Additional projects | Eligible sequel and manga adaptation complete through shipment without duplicate fees | Untested on Windows |
 | Save/reload checkpoints | Quit/relaunch at planning, paid meeting choice, shipment/review, bank receipt and annual event; no lost progress or duplicate money/bonuses | Untested on Windows |
+| Pending development bursts | Another worker triggers Alpha/Beta/Final: the burst survives checkpoint/reload and resumes. Compare immediate shipment (unfinished gain excluded) with Continue Debugging until it finishes (gain included) | Untested on Windows |
 | Annual economy | In Normal mode, continue at least three game years; calendar events, payroll/renewal, bank repayments and awards do not stall or double-charge | Untested on Windows |
 | Beginner ending | Beginner ends after Year 2, December, week 4; a terminal save/reload preserves the ending and Normal continues into Year 3 | Untested on Windows |
 | Display | At 1280×720 and a larger display, test 100% and 150% scaling; text/caret readable, controls and windows reachable | Untested on Windows |
@@ -35,3 +36,4 @@ A crash, unusable import, corrupted save, duplicate transaction or dead-end in a
 ## Reporting
 
 Use the GitHub Bug report template (the repository is currently private). Include version/source SHA, Windows/display/language settings, numbered reproduction steps, expected/actual outcome and a redacted log excerpt. Logs and modern saves may include names/paths: review them before sharing. Never upload the LZH, original executables/graphics/catalogs or original saves. Modern reproduction saves should be shared privately only when requested.
+

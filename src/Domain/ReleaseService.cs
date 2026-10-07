@@ -46,6 +46,8 @@ public static class ReleaseService
         if (state.Money is null) return ReleaseResult.MoneyUnknown;
         if (state.Money<cost) return ReleaseResult.InsufficientFunds;
         int? shipments=state.Calendar is not null ? checked(state.Calendar.ShipmentsSinceHardwareTrigger+1) : null;
+        // Original 009C9CB8 +01E9 copies completed room totals; +104D
+        // empties the room. Do not flush unfinished bursts into this snapshot.
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
@@ -75,7 +77,9 @@ public static class ReleaseService
         state.ProductionPerformedThisWeek=true;
         if (shipments is int count) state.Calendar!.ShipmentsSinceHardwareTrigger=count;
         state.ReleasedGames.Add(product);CompetitionService.AppendOwn(state,product);state.DevelopmentProjects.Remove(project);
-        // A new room must not receive an unfinished contribution from the old product.
+        // Original Module2 +48D1 clears the outstanding burst counter on its
+        // next empty-room pass. Clear the modern animation here so a newly
+        // accepted project cannot receive work from the shipped product.
         foreach (var e in state.Employees.Where(x=>x.Office?.SeatedAction is >=6 and <=17 &&
             (x.Office.SeatedAction-6)/6==project.RoomIndex)) ResetWork(e.Office!);
         return ReleaseResult.Success;
