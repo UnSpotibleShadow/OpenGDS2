@@ -175,3 +175,7 @@ payroll, events and progression. Preserve uncertainties and compatibility quirks
 M48 connects sequel carry-over and the automatic type/genre checkpoints, with
 ordinary fees/fame/affinity bonuses excluded by the original branches. See
 [sequel-development.md](sequel-development.md).
+
+M66 verifies that numbered bursts commit their gains through the live office,
+UI and save paths. See [burst contributions](burst-contributions-m66.md) for
+category-specific gains, timing and the investigation of issue #61.
