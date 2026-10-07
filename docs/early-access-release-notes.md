@@ -1,4 +1,6 @@
-# OpenGDS2 0.1.0-ea.1-rc.1 — private test candidate
+# OpenGDS2 0.1.0-ea.1-rc.2 — private test candidate
+
+RC.2 corrects an exported-runtime startup crash: it preserves the dotnet export feature and assembly identity and compiles the managed game against the bundled export API without editor-only initialization. Exported-runtime startup and full core-loop regressions cover the repair.
 
 Prepared for owner testing before a community Early Access release. It is not published, and the private repository is unchanged.
 
