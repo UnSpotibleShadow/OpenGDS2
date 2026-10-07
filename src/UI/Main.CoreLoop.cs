@@ -77,7 +77,10 @@ public partial class Main
             catch (InvalidOperationException) {ClearContent();AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;}
         }
         if (CheckpointMeetingRules.HasPending(project)) {ShowCheckpointMeeting(state,project,catalog);return;}
-        ClearContent();AddHeading(project.Title,18);
+        ClearContent(keepMeetingMusic:true);
+        if (project.PendingDecision is DevelopmentMilestone phase)
+            _music.SetMeetingPhase((int)MeetingMusicRules.ForMilestone(phase));
+        AddHeading(project.Title,18);
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
         if (project.PendingDecision==DevelopmentMilestone.SelectType)
         {
@@ -232,7 +235,9 @@ public partial class Main
     private void ShowRelease(GameState state,DevelopmentProjectState project)
     {
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
-        ClearContent();AddHeading(Tr("RELEASE_GAME"),28);AddProjectMetrics(project);
+        // Release controls can follow the final meeting. Keep its recording
+        // through this form; opening release from ordinary work has no phase.
+        ClearContent(keepMeetingMusic:true);AddHeading(Tr("RELEASE_GAME"),28);AddProjectMetrics(project);
         if (state.Company.ProductionCapacity is null || state.SalesFee1 is null || state.SalesFee2 is null)
         {
             AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;

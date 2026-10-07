@@ -15,6 +15,26 @@ func check_meeting_music(phase: String) -> void:
     check(office_music.stream_paused or not office_music.playing,"Office soundtrack stays silent during meeting dialogue")
     heard_meeting_phases[phase] = true
 
+func check_meeting_transition(previous_music: AudioStream) -> void:
+    var music = main.find_child("MeetingMusicPlayer",true,false)
+    var phase := ""
+    if main.find_child("PlanningMeetingWindow",true,false) != null:
+        phase = "planning"
+    elif main.find_child("TypeMeetingWindow",true,false) != null:
+        phase = "alpha"
+    elif main.find_child("GenreMeetingWindow",true,false) != null:
+        phase = "beta"
+    else:
+        for button in main.find_children("*","Button",true,false):
+            if button.is_visible_in_tree() and button.text == tr("CONTINUE_DEBUGGING"):
+                phase = "final"
+    if main.find_child("ConversationWindow",true,false) != null or not phase.is_empty():
+        check(music.stream == previous_music,"Meeting sequence keeps its stream across pages and forms")
+        if not phase.is_empty():
+            check_meeting_music(phase)
+    else:
+        check(music.stream == null,"Leaving the meeting sequence clears its recording")
+
 func check(condition: bool, message: String) -> void:
     if not condition:
         failures += 1
@@ -86,10 +106,7 @@ func advance_conversation_page() -> void:
     message.gui_input.emit(accept)
     await process_frame
 
-    if main.find_child("ConversationWindow",true,false) != null:
-        check(meeting_music.stream == previous_music,"Consecutive dialogue pages retain their meeting music stream")
-    else:
-        check(meeting_music.stream == null,"Meeting music stops on dialogue completion")
+    check_meeting_transition(previous_music)
     var next_window = main.find_child("ConversationWindow",true,false)
     if next_window != null:
         check(next_window.position == previous_position,"Advancing a dialogue preserves its window position")
@@ -101,6 +118,7 @@ func advance_conversation_page() -> void:
         await create_timer(0.03).timeout # Complete the original 20ms reveal tick.
         message.gui_input.emit(accept)
     await process_frame
+    check_meeting_transition(previous_music)
 
 func finish_conversation() -> void:
     var pages := 0
@@ -496,10 +514,16 @@ func run() -> void:
     await press("START_GAME_DEVELOPMENT")
     await press_node("PlanningMeeting")
     check_meeting_music("planning")
+    var planning_player = main.find_child("MeetingMusicPlayer",true,false)
+    planning_player.play(3.0)
+    await finish_conversation()
+    check(planning_player.playing and planning_player.get_playback_position() >= 3.0,"Planning form retains playback position")
+    await press("PLANNING_NEW_PROPOSAL")
+    check(planning_player.playing and planning_player.get_playback_position() >= 3.0,"Another focus proposal continues the same recording")
     await finish_conversation()
     check(main.find_child("PlanningMeetingWindow",true,false) != null and main.find_child("PlanningQuoteWindow",true,false) == null,"Quote advances to a separate proposal step")
     check(main.find_child("PlanningMeetingWindow",true,false).position == moved_meeting_position,"Planning proposal retains the discussion's position")
-    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Planning proposal is outside meeting dialogue music")
+    check_meeting_music("planning")
     await press("SAVE_GAME")
     var meeting_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(meeting_state.State.Money == state.Money and meeting_state.State.DevelopmentProjects.is_empty(),"Entering meeting does not debit funds")
@@ -510,12 +534,13 @@ func run() -> void:
     check(title_input.get_theme_color("font_selected_color") == Color.WHITE,"Selected input text remains legible")
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
+    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Accepting a plan ends planning music")
     Engine.time_scale = 100
     if not await await_node("SelectType0"):
         quit(1)
         return
     check(main.find_child("TypeMeetingWindow",true,false).position == moved_meeting_position,"Later type meeting retains the chosen position")
-    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Alpha choice controls are outside meeting dialogue music")
+    check_meeting_music("alpha")
     await press("SAVE_GAME")
     var checkpoint = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     for period in ["WeeklyNet","MonthlyNet","YearlyNet"]:
@@ -544,6 +569,7 @@ func run() -> void:
     await press("LOAD_GAME")
     await await_node("SelectType0")
     check(main.find_child("ConversationWindow",true,false) == null and seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Loading a read checkpoint does not repeat its introduction")
+    check_meeting_music("alpha")
     for unavailable_money in [0,null]:
         var unavailable = checkpoint.duplicate(true)
         unavailable.State.Money = unavailable_money
@@ -617,11 +643,17 @@ func run() -> void:
             break
         await process_frame
     check(ready,"Development reaches completion")
+    check_meeting_music("final")
+    await press("RELEASE_GAME")
+    check_meeting_music("final")
+    await press("CANCEL")
+    check_meeting_music("final")
     check(seen_dialogue.has(tr("CHECKPOINT_GENRE_INTRO")) and seen_dialogue.has(tr("CHECKPOINT_COMPLETE_INTRO").replace("{room}","1")),"Genre and completion announcements precede their decision panels")
     if not ready:
         quit(1)
         return
     await press("CONTINUE_DEBUGGING")
+    check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Continuing work ends final meeting music")
     var debugged := false
     for frame in range(15000):
         var report = main.find_child("DevelopmentReport",true,false)
