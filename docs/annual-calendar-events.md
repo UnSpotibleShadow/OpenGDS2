@@ -88,8 +88,11 @@ windows, restores the title presentation and exits at +04CA, before renewal,
 payroll, tenant expiry or hardware work. OpenGDS2 preserves a valid closing
 week 4 in the terminal pending event and offers return to the title screen.
 Normal crosses this boundary into January. No Normal ending date is invented.
-The tutorial's prose about a three-year limit is not used to replace the
-explicit source predicate. Original restrictions on saving Beginner games and
+M64 reverified both the opening date (Year 1, April, week 1) and this exact
+ending predicate against the supported original executable. The historical
+three-year description is not an elapsed-time rule; mode metadata and tooltips
+now state the actual cutoff. See [the verification](beginner-ending-m64.md).
+Original restrictions on saving Beginner games and
 the full tutorial sequence remain compatibility work.
 
 ## Graduates

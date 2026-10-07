@@ -241,11 +241,11 @@ public partial class Main : Control
         _content.AddChild(summary);
         AddSpacer(8);
 
-        var beginner = new Button { Text = Tr("BEGINNER_MODE"), CustomMinimumSize = new Vector2(0, 52) };
+        var beginner = new Button { Text = Tr("BEGINNER_MODE"), TooltipText = Tr("BEGINNER_RULES_VERIFIED"), CustomMinimumSize = new Vector2(0, 52) };
         beginner.Pressed += () => StartReconstructedGame(companyName, presidentName, GameMode.Beginner);
         _content.AddChild(beginner);
 
-        var normal = new Button { Text = Tr("NORMAL_MODE"), CustomMinimumSize = new Vector2(0, 52) };
+        var normal = new Button { Text = Tr("NORMAL_MODE"), TooltipText = Tr("NORMAL_RULES_VERIFIED"), CustomMinimumSize = new Vector2(0, 52) };
         normal.Pressed += () => StartReconstructedGame(companyName, presidentName, GameMode.Normal);
         _content.AddChild(normal);
 

@@ -1042,6 +1042,29 @@ Test("unknown original release dates stop awards instead of inventing eligibilit
     Check(!CalendarService.Resume(s,c,new SequenceRandom()));
     s.ReleasedGames[0].ReleasedOn=new(3,5,1);Check(!CalendarService.Resume(s,c,new SequenceRandom()) && s.Calendar!.Pending!.PendingEvent==CalendarEvent.Awards);
 });
+Test("beginner ending matches the original exact date rather than three elapsed years",()=>
+{
+    Check(CalendarRules.OpeningDate==new GameDate(1,4,1));
+    Check(GameModeRules.For(GameMode.Beginner).EndingClosingDate==new GameDate(2,12,4));
+    Check(GameModeRules.For(GameMode.Beginner).TimeLimitYears is null && GameModeRules.For(GameMode.Normal).EndingClosingDate is null);
+    foreach(var date in new[] {new GameDate(1,12,4),new GameDate(2,11,4),new GameDate(2,12,3),new GameDate(2,12,4),new GameDate(3,12,4)})
+    {
+        var (s,c)=CalendarFixture(date,1000);s.Mode=GameMode.Beginner;s.Rules=GameModeRules.For(s.Mode);
+        CalendarService.BeginWeek(s,c,new SequenceRandom());
+        Check((s.Calendar!.Pending?.PendingEvent==CalendarEvent.BeginnerEnding)==(date==new GameDate(2,12,4)));
+        Check(!CalendarRules.IsBeginnerEnding(GameMode.Normal,date));
+    }
+});
+Test("old three-year mode metadata cannot change the verified ending after save reload",()=>
+{
+    var (s,c)=CalendarFixture(new(2,12,4),1000);s.Mode=GameMode.Beginner;
+    s.Rules=new GameModeRules(true,3,true);
+    var loaded=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(loaded.Rules.TimeLimitYears is null && loaded.Rules.EndingClosingDate==new GameDate(2,12,4));
+    Check(!CalendarService.BeginWeek(loaded,c,new SequenceRandom()) && loaded.Calendar!.Pending!.PendingEvent==CalendarEvent.BeginnerEnding);
+    var again=SaveStore.Deserialize(SaveStore.Serialize(loaded));
+    Check(again.Calendar!.Pending!.ClosingDate==new GameDate(2,12,4) && !CalendarService.Resume(again,c,new SequenceRandom()));
+});
 Test("normal mode crosses the beginner deadline and beginner ending skips all later transactions",()=>
 {
     var (s,c)=CalendarFixture(new(2,12,4),1000);Check(CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Year==3 && s.Month==1);

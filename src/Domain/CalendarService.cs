@@ -52,7 +52,7 @@ public static class CalendarService
                 case CalendarPhase.EarlyEvents:
                     // fGMGameKaishi writes -1 for Normal; every Beginner
                     // tutorial step remains >= 0, which selects the early exit.
-                    if (state.Mode==GameMode.Beginner && t.ClosingDate==new GameDate(2,12,4)) return Event(CalendarEvent.BeginnerEnding);
+                    if (CalendarRules.IsBeginnerEnding(state.Mode,t.ClosingDate)) return Event(CalendarEvent.BeginnerEnding);
                     if (t.ClosingDate.Month==12 && t.ClosingDate.Week==3)
                     {
                         if (state.ReleasedGames.Any(p=>p.ReleasedOn is null)) return Block(CalendarBlock.Awards);
@@ -242,7 +242,7 @@ public static class CalendarService
             CalendarEvent.HardwareRetired=>p.Phase==CalendarPhase.HardwareLaunch && p.Index>0 && c.Hardware[p.Index-1].RetirementWeeks==0 && c.Hardware[p.Index-1].Availability==2,
             CalendarEvent.LoanRepayment=>p.Phase==CalendarPhase.Loans && p.Index<c.Loans.Count && p.Amount==LoanRepayment(c.Loans[p.Index].OriginalType) &&
                 c.Loans[p.Index].BorrowedOn is GameDate date && displayed.Year==(long)date.Year+1 && displayed.Month==date.Month && displayed.Week==date.Week,
-            CalendarEvent.BeginnerEnding=>p.Phase==CalendarPhase.EarlyEvents && state.Mode==GameMode.Beginner && p.ClosingDate==new GameDate(2,12,4),
+            CalendarEvent.BeginnerEnding=>p.Phase==CalendarPhase.EarlyEvents && CalendarRules.IsBeginnerEnding(state.Mode,p.ClosingDate),
             CalendarEvent.Awards=>p.Phase==CalendarPhase.EarlyEvents && p.ClosingDate.Month==12 && p.ClosingDate.Week==3 && p.Awards is not null,
             CalendarEvent.Exhibition=>p.Phase==CalendarPhase.Exhibition && displayed.Month is 4 or 10 && displayed.Week==1 && p.Exhibition is not null,
             CalendarEvent.Graduates=>p.Phase==CalendarPhase.Graduates && displayed.Month==4 && displayed.Week==2 && c.OriginalSlots0444.Contains(0) && p.Graduates is not null,
@@ -254,7 +254,7 @@ public static class CalendarService
         {
             null or CalendarBlock.CatalogUnknown=>true,
             CalendarBlock.PayrollUnknown=>p.Phase is CalendarPhase.TenantsAndPayroll or CalendarPhase.Recalls,
-            CalendarBlock.BeginnerEnding=>p.Phase==CalendarPhase.EarlyEvents && p.ClosingDate==new GameDate(2,12,4),
+            CalendarBlock.BeginnerEnding=>p.Phase==CalendarPhase.EarlyEvents && p.ClosingDate==CalendarRules.BeginnerEndingClosingDate,
             CalendarBlock.Awards=>p.Phase==CalendarPhase.EarlyEvents && p.ClosingDate.Month==12 && p.ClosingDate.Week==3,
             CalendarBlock.Exhibition=>p.Phase==CalendarPhase.Exhibition && displayed.Month is 4 or 10 && displayed.Week==1,
             CalendarBlock.Graduates=>p.Phase==CalendarPhase.Graduates && displayed.Month==4 && displayed.Week==2 && c.OriginalSlots0444.Contains(0),

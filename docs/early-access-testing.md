@@ -24,7 +24,8 @@ This is an unpublished Windows x86_64 test candidate. Record pass/fail, Windows 
 | Original game loop | Plan, choose focus/type/genre, develop, debug, ship, acknowledge reviews, sell and reprint | Untested on Windows |
 | Additional projects | Eligible sequel and manga adaptation complete through shipment without duplicate fees | Untested on Windows |
 | Save/reload checkpoints | Quit/relaunch at planning, paid meeting choice, shipment/review, bank receipt and annual event; no lost progress or duplicate money/bonuses | Untested on Windows |
-| Annual economy | Continue at least three game years; calendar events, payroll/renewal, bank repayments and awards do not stall or double-charge | Untested on Windows |
+| Annual economy | In Normal mode, continue at least three game years; calendar events, payroll/renewal, bank repayments and awards do not stall or double-charge | Untested on Windows |
+| Beginner ending | Beginner ends after Year 2, December, week 4; a terminal save/reload preserves the ending and Normal continues into Year 3 | Untested on Windows |
 | Display | At 1280×720 and a larger display, test 100% and 150% scaling; text/caret readable, controls and windows reachable | Untested on Windows |
 | Stability | Repeated saves, reloads, title returns and an hour of play produce no crash or stuck modal | Untested on Windows |
 | Data isolation | Ordinary OpenGDS2 data is unchanged; candidate files stay in its separate directory | Untested on Windows |

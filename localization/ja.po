@@ -105,10 +105,10 @@ msgid "OPENING_STAFF_DOCUMENTED"
 msgstr "秘書1人＋社員1人（人物・能力値は解析中）"
 
 msgid "BEGINNER_RULES_VERIFIED"
-msgstr "初心者モードではチュートリアルが表示され、プレイ期間はゲーム内3年間です。通常モードより開始資金が多いことも確認できますが、正確な金額は解析中です。"
+msgstr "初心者モードは2年目12月第4週の終了時に終わります。開始資金は12億円です。"
 
 msgid "NORMAL_RULES_VERIFIED"
-msgstr "通常モードには初心者モードの常時チュートリアル／3年間制限はありません。開始資金の正確な金額は解析中です。"
+msgstr "通常モードには固定の終了日はありません。開始資金は4億5000万円です。"
 
 msgid "FIRST_OBJECTIVE"
 msgstr "最初の目標 — 社員を雇用"
