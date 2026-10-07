@@ -535,6 +535,51 @@ func run() -> void:
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
     check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Accepting a plan ends planning music")
+    # Issue #61: inject a synthetic, numbered burst immediately before its
+    # verified commit, then observe the actual live report and saved project.
+    await press_node("TogglePause")
+    await press("SAVE_GAME")
+    var before_burst = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var pending_burst = before_burst.duplicate(true)
+    var burst_worker = pending_burst.State.Employees[0].Office
+    burst_worker.WorkCategory = 0 # Fun
+    burst_worker.WorkTier = 3
+    burst_worker.WorkTicks = 151
+    burst_worker.BurstTicks = 119
+    burst_worker.BurstCount = 37
+    burst_worker.BurstDisplayCount = 37
+    var original_fun: float = before_burst.State.DevelopmentProjects[0].Quality.Fun
+    var original_progress: float = before_burst.State.DevelopmentProjects[0].Progress
+    write_json("user://saves/slot1.json",pending_burst)
+    await press("LOAD_GAME")
+    await press_node("OpenProject0")
+    await press("SAVE_GAME")
+    var paused_burst = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    check(paused_burst.State.Employees[0].Office.BurstCount == 37 and paused_burst.State.DevelopmentProjects[0].Quality.Fun == original_fun,"Paused/reloaded numbered burst has not committed early")
+    await press_node("TogglePause")
+    var burst_applied := false
+    for frame in range(60):
+        var report = main.find_child("DevelopmentReport",true,false)
+        if report != null and report.text.contains(tr("STAT_FUN")+": "+str(int(original_fun+37))):
+            burst_applied = true
+            break
+        await process_frame
+    main.find_child("TogglePause",true,false).pressed.emit()
+    check(burst_applied,"Live development report receives the numbered burst")
+    await press("SAVE_GAME")
+    var committed_burst = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+    var committed_project = committed_burst.State.DevelopmentProjects[0]
+    check(committed_project.Quality.Fun == original_fun+37,"Saved game quality receives the full burst number")
+    check(is_equal_approx(committed_project.Progress,original_progress+37.0/3.0),"Saved progress receives the original one-third quality-burst gain")
+    await press("LOAD_GAME")
+    await press_node("OpenProject0")
+    check(main.find_child("DevelopmentReport",true,false).text.contains(tr("STAT_FUN")+": "+str(int(original_fun+37))),"Reloaded report retains the committed burst")
+    # Restore the preceding fixture so the remaining core loop tests keep their
+    # ordinary development path and random progression.
+    write_json("user://saves/slot1.json",before_burst)
+    await press("LOAD_GAME")
+    await press_node("OpenProject0")
+    await press_node("TogglePause")
     Engine.time_scale = 100
     if not await await_node("SelectType0"):
         quit(1)

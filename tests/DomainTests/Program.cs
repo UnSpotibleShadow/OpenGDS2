@@ -2508,6 +2508,73 @@ Test("burst completes after 120 accumulation ticks starting at animation tick 32
     Check(p.Progress==0 && e.Office.BurstTicks==119);
     DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTicks==0 && e.Office.BurstTicks==120);
 });
+Test("numbered bursts commit the displayed gain once to all six work categories",()=>
+{
+    foreach (var category in Enum.GetValues<DevelopmentWorkCategory>().Where(x=>x!=DevelopmentWorkCategory.Debugging))
+    {
+        var c=CoreCatalog();var s=PlanningState();var e=Worker();s.Employees.Add(e);
+        var p=new DevelopmentProjectState {Title="Synthetic burst",RequiredPoints=10000,Focus=new(100,0,0,0)};
+        s.DevelopmentProjects.Add(p);
+        e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=category;
+        for (int i=0;i<119;i++) DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+        Check(e.Office.BurstDisplayCount==50 && e.Office.BurstCount==50 && e.Office.BurstTicks==119);
+        var digits=OfficeVisualRules.Sprites(e).Single(x=>x.Id==201);
+        Check(digits.SourceX==468 && digits.SourceY==226); // Atlas number 50.
+        Check(p.Quality==new DevelopmentQuality() && p.Progress==0 && p.Bugs==0);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees.Single();p=s.DevelopmentProjects.Single();
+        DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+        var expected=category switch
+        {
+            DevelopmentWorkCategory.Fun=>new DevelopmentQuality(50,0,0,0),
+            DevelopmentWorkCategory.Novelty=>new DevelopmentQuality(0,50,0,0),
+            DevelopmentWorkCategory.Graphics=>new DevelopmentQuality(0,0,50,0),
+            DevelopmentWorkCategory.Music=>new DevelopmentQuality(0,0,0,50),
+            _=>new DevelopmentQuality()
+        };
+        Check(p.Quality==expected && p.Bugs==(category==DevelopmentWorkCategory.Bugs ? 50 : 0));
+        Check(Math.Abs(p.Progress-(category==DevelopmentWorkCategory.Speed ? 50 : 50/3.0))<1e-9);
+        Check(e.Office!.WorkTicks==0 && !OfficeVisualRules.Sprites(e).Any(x=>x.Id==201));
+        double progress=p.Progress;var quality=p.Quality;int bugs=p.Bugs;
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees.Single();p=s.DevelopmentProjects.Single();
+        DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+        Check(p.Progress==progress && p.Quality==quality && p.Bugs==bugs);
+    }
+});
+Test("live office burst survives modal pause and mid-animation reload then reaches project stats",()=>
+{
+    var c=CoreCatalog();var s=PlanningState();var e=Worker();s.Employees.Add(e);
+    var p=new DevelopmentProjectState {Title="Synthetic live burst",RequiredPoints=10000,Focus=new(100,0,0,0)};
+    s.DevelopmentProjects.Add(p);
+    e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    var session=new GameSession(new BurstRandom());session.Restore(s);
+    for(int i=0;i<30;i++) session.TickOffice(c);
+    Check(e.Office.BurstTicks==30 && e.Office.BurstCount==30 && e.Office.BurstDisplayCount==29);
+    s.PendingHireGreeting=new() {EmployeeSourceIndex=0,Variant=0};
+    for(int i=0;i<200;i++) session.TickOffice(c);
+    Check(e.Office.BurstTicks==30 && p.Progress==0 && p.Quality.Fun==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees.Single();p=s.DevelopmentProjects.Single();
+    session.Restore(s);Check(session.AcknowledgeHireGreeting());
+    for(int i=30;i<120;i++) session.TickOffice(c);
+    Check(p.Quality.Fun==50 && Math.Abs(p.Progress-50/3.0)<1e-9 && e.Office!.WorkTicks==0);
+    var saved=SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects.Single();
+    Check(saved.Quality==p.Quality && saved.Progress==p.Progress);
+});
+Test("burst gain is retained when it triggers a checkpoint and progress clips independently",()=>
+{
+    var c=CoreCatalog();var s=PlanningState();var e=Worker();s.Employees.Add(e);
+    var p=new DevelopmentProjectState {Title="Synthetic crossing",RequiredPoints=100,Progress=49,Focus=new(100,0,0,0)};
+    s.DevelopmentProjects.Add(p);
+    e.Office!.WorkTier=3;e.Office.WorkTicks=151;e.Office.BurstTicks=119;e.Office.BurstCount=50;
+    e.Office.WorkCategory=DevelopmentWorkCategory.Graphics;
+    DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+    Check(p.Quality.Graphics==50 && Math.Abs(p.Progress-(49+50/3.0))<1e-9 && p.PendingDecision==DevelopmentMilestone.SelectType);
+    var saved=SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects.Single();
+    Check(saved.Quality.Graphics==50 && saved.PendingDecision==DevelopmentMilestone.SelectType);
+    p.PendingDecision=null;p.OriginalStage=2;p.Progress=99;
+    e.Office.WorkTicks=151;e.Office.BurstTicks=119;e.Office.BurstCount=50;
+    DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+    Check(p.Progress==100 && p.Quality.Graphics==100 && p.PendingDecision==DevelopmentMilestone.StartDebugging);
+});
 Test("development checkpoints award once, pause all clocks and resume after selection",()=>
 {
     var c=CoreCatalog();var s=PlanningState(10000);var e=Worker();s.Employees.Add(e);
@@ -3708,6 +3775,12 @@ sealed class WorkRandom : Random
 {
     public override int Next(int maxValue)=>maxValue switch {130=>1,300=>0,50=>1,_=>0};
     public override double NextDouble()=>.99;
+}
+
+sealed class BurstRandom : Random
+{
+    public override int Next(int maxValue)=>maxValue switch {130=>1,300=>0,50=>1,_=>0};
+    public override double NextDouble()=>0;
 }
 
 sealed class DoubleSequenceRandom(params double[] values) : Random
