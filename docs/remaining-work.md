@@ -1,5 +1,7 @@
 # Remaining reconstruction work
 
+M68 adds verified project cancellation: a paused confirmation, assigned-room staff stress +20 capped at 99, no refund, and safe room reuse. Original randomized cancellation reaction dialogue remains a presentation task. See [cancellation evidence and compatibility](project-cancellation-m68.md).
+
 The prioritized [GitHub backlog and continuation handoff](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the central entry point for another instance. Update it after each area; this document retains detailed reconstruction targets.
 
 M61 restores occupied facility artwork for saved slots with immediate school open/close refresh. Nine artwork mappings are known; the other eight facility services remain unsupported. See [facility artwork](facility-artwork-m61.md).

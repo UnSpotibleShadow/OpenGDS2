@@ -18,6 +18,82 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+DevelopmentProjectState CancellationProject(int room=0)=>new()
+    {RoomIndex=room,Title="Synthetic cancellation",RequiredPoints=1000,Focus=new(100,0,0,0)};
+Test("cancellation selects all six assigned desks in either room and clamps stress to 99",()=>
+{
+    foreach (int room in new[]{0,1})
+    foreach (int desk in Enumerable.Range(0,6))
+    foreach (double stress in new[]{0d,78.5,79,99,100})
+    {
+        var s=PlanningState();var p=CancellationProject(room);s.DevelopmentProjects.Add(p);
+        var e=Worker(6+6*room+desk);e.Stress=stress;
+        // Assigned but not yet sitting: still penalized in the original.
+        e.Office!.SeatedAction=0;e.Office.WorkEngaged=false;e.Office.MovementState=3;
+        var other=Worker(6+6*(1-room),1);other.Stress=7;s.Employees=[e,other];
+        Check(ProjectCancellationService.Check(s,p)==ProjectCancellationResult.Success && e.Stress==stress);
+        Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.Success);
+        Check(e.Stress==Math.Min(99,stress+20) && other.Stress==7);
+        Check(e.Office.Action==6+6*room+desk && e.Office.SeatedAction==0 && s.DevelopmentProjects.Count==0);
+        Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.ProjectUnavailable && e.Stress==Math.Min(99,stress+20));
+    }
+});
+Test("cancellation has no refund shipment sequel or source-gate side effects across all own-project modes",()=>
+{
+    foreach (int mode in new[]{0,1,2})
+    {
+        var s=PlanningState(321);s.Company.WeeklyNet=3;s.Company.MonthlyNet=4;s.Company.YearlyNet=5;
+        var p=CancellationProject();p.OriginalMode=mode;s.DevelopmentProjects.Add(p);
+        var other=CancellationProject(1);s.DevelopmentProjects.Add(other);var e=Worker(source:4);e.Stress=12;s.Employees.Add(e);
+        var source=new RecruitmentSourceRecord {SourceIndex=4,GateValue=1,Employee=Worker(source:4)};s.EmployeeSources.Add(source);
+        Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.Success);
+        Check(e.Stress==32 && source.Employee.Stress==32 && source.GateValue==1);
+        Check(s.Money==321 && s.Company.WeeklyNet==3 && s.Company.MonthlyNet==4 && s.Company.YearlyNet==5);
+        Check(s.DevelopmentProjects.SequenceEqual(new[]{other}) && s.ReleasedGames.Count==0 && s.ProductionPerformedThisWeek==false);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(s.DevelopmentProjects.Single().RoomIndex==1 && s.Employees.Single().Stress==32 && s.EmployeeSources.Single().Employee.Stress==32);
+    }
+});
+Test("cancellation rejects unknown legacy staff data and pending decisions atomically",()=>
+{
+    var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);
+    var known=Worker();known.Stress=10;var unknown=Worker(7,1);unknown.Stress=null;s.Employees=[known,unknown];
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.StateUnknown && known.Stress==10 && s.DevelopmentProjects.Contains(p));
+    unknown.Stress=0;unknown.Office=null;
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.StateUnknown && known.Stress==10);
+    unknown.Office=Worker(12).Office;unknown.Stress=null;
+    p.PendingDecision=DevelopmentMilestone.SelectType;
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.DecisionPending && known.Stress==10);
+    p.PendingDecision=null;p.OriginalRoomState=2;
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.ProjectUnavailable && known.Stress==10);
+    p.OriginalRoomState=1;
+    // Unknown stress in the unaffected room does not block a known transaction.
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.Success && known.Stress==30 && unknown.Stress is null);
+});
+Test("cancelled bursts and technology cannot leak into an immediately reused room or touch the other room",()=>
+{
+    var s=PlanningState();var p=CancellationProject();var other=CancellationProject(1);s.DevelopmentProjects=[p,other];
+    var e=Worker();e.Office!.WorkTicks=40;e.Office.WorkTier=3;e.Office.BurstTicks=4;e.Office.BurstCount=7;
+    e.Office.TechnologyApplication=new() {TechnologySourceIndex=0,RemainingUnits=3};
+    var second=Worker(12,1);second.Office!.SlotIndex=1;second.Office.WorkTicks=40;second.Office.WorkTier=3;second.Office.BurstTicks=4;
+    s.Employees=[e,second];
+    Check(ProjectCancellationService.TryCancel(s,p)==ProjectCancellationResult.Success);
+    Check(e.Office.WorkTicks==0 && e.Office.WorkTier==0 && e.Office.BurstTicks==0 && e.Office.TechnologyApplication is null);
+    Check(e.Office.Action==6 && e.Office.SeatedAction==6 && e.Office.WorkEngaged);
+    Check(second.Office.WorkTicks==40 && second.Office.WorkTier==3 && second.Office.BurstTicks==4 && second.Stress==0);
+    var next=CancellationProject();s.DevelopmentProjects.Add(next);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];next=s.DevelopmentProjects.Single(x=>x.RoomIndex==0);
+    DevelopmentSimulation.TickEmployee(s,e,CoreCatalog(),new WorkRandom());
+    Check(next.Progress==0 && next.Quality==new DevelopmentQuality() && next.Bugs==0);
+    Check(e.Office!.TechnologyApplication is null && e.Office.WorkTier==0);
+});
+Test("cancellation resolves corrupt source rows before changing stress or room state",()=>
+{
+    var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);var e=Worker();s.Employees.Add(e);
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=Worker()},new() {SourceIndex=0,GateValue=1,Employee=Worker()}];
+    Throws<InvalidOperationException>(()=>ProjectCancellationService.TryCancel(s,p));
+    Check(e.Stress==0 && s.DevelopmentProjects.Contains(p));
+});
 Test("meeting soundtrack maps planning alpha beta and final dialogue phases",()=>
 {
     Check(Enum.GetValues<MeetingMusicPhase>().Select(MeetingMusicRules.ResourcePath).Distinct().Count()==4);

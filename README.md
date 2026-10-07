@@ -18,6 +18,11 @@ awards are implemented. School construction/closure, rival contest presentation,
 and persistent global records are implemented. Office progression, own-hardware
 development and remaining weekly economics are unfinished.
 
+M68 adds **Cancel project** on the live development screen. Confirmation discards
+the project, raises assigned staff stress by 20 (capped at 99), and frees its room
+without refunding development costs. Declining leaves it unchanged. See
+[project cancellation evidence and compatibility](docs/project-cancellation-m68.md).
+
 M52 restores the alpha/type and beta/genre meeting discussions, compact
 selection/confirmation panels and original locally imported meeting illustration.
 Choices preview before charging; follow-up dialogue reports publicity and genre
@@ -242,4 +247,3 @@ Community-written code and documentation use the [MIT License](LICENSE). The eig
 authorized music recordings have a separate [distribution notice](audio/community/NOTICE.md).
 See [notice.md](notice.md) for third-party content exclusions and project disclaimers.
 Original game files and imported data are not distributed with this repository.
-
