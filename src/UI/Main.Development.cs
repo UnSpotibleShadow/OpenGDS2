@@ -145,7 +145,9 @@ public partial class Main
     }
     private void ShowPlanningProposal(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,int? predecessorProductIndex,int? mangaSourceIndex,DevelopmentFocus focus)
     {
-        ClearContent();CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,350),410);
+        ClearContent(keepMeetingMusic:true);
+        _music.SetMeetingPhase((int)MeetingMusicPhase.Planning);
+        CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,350),410);
         _dialog!.SetTitle(Tr("PLANNING_MEETING"));
         var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : mangaSourceIndex is int manga ? MangaText(catalog,manga,"TITLE") : Tr("NEW_PROJECT_TITLE");
         var title=AddField(Tr("GAME_TITLE"),defaultTitle,128);title.Name="PlanningTitle";

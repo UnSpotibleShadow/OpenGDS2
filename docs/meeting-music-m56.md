@@ -14,9 +14,10 @@ helper are committed. The original WAVs remain in the upload directory.
 Meeting music uses a separate player. It pauses the office recording, cancels
 an in-flight seasonal crossfade and loops while the dialogue is active. Page
 recreation and saved checkpoint message queues retain the same phase/player,
-so consecutive pages do not restart the recording. Closing/cancelling dialogue,
-opening selection or proposal controls, leaving for the office/title or loading
-another desktop ends the meeting soundtrack. Ordinary secretary/hire/calendar
+so consecutive pages do not restart the recording. Proposal, title entry and checkpoint selection controls retain their phase
+recording between dialogue pages. Final meeting release controls also retain it.
+Completing/cancelling the sequence or leaving for the office/title ends the
+soundtrack. Loading a pending checkpoint restores the correct phase. Ordinary secretary/hire/calendar
 conversations and shipment commentary do not select a meeting phase.
 
 Mute and volume are shared with the existing soundtrack. Muting pauses meeting
@@ -29,7 +30,9 @@ The real-time Godot audio check starts dummy-driver playback to verify that a
 same-phase request does not seek to the beginning, office audio stays silent,
 mute/volume work and office/title music returns. The full synthetic core loop
 checks phase selection through ordinary/sequel/manga development, checkpoint
-reloads, dialogue sequences, cancellation and absence of music during choices.
+reloads, dialogue sequences, cancellation and continuity through choices and proposal controls. M65/#59
+corrects the former form-transition interruption; same-phase playback positions
+are retained rather than restarted.
 Headless playback checks do not establish subjective sound quality or native
 Windows execution. No desktop debug package or Actions run is produced.
 
