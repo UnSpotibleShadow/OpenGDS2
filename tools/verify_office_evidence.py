@@ -106,6 +106,18 @@ def verify(data):
     require(tick, 0xC97A, '28 6c ff 00 00 6b 48 ff e7 05 19 00 52')
     require(tick, 0xCA55, '28 6c ff 37 00 fc f6 4c fc 28 6c ff 8b 01 fc f6 3c fc')
     require(tick, 0xCA67, '28 6c ff 33 00 fc f6 7c fa 28 6c ff 0e 00 fc f6 6c fa')
+    # Periodic facility projection: slot identity is independent of facility type.
+    periodic=0x9E3830
+    require(periodic,0x594,'05 39 01 fc 96 28 68 ff 00 00 5d fb 5a')
+    for offset,x,y in [(0x5B3,-16,130),(0x5D1,64,170),(0x5EF,320,170)]:
+        require(periodic,offset,'28 68 ff '+x.to_bytes(2,'little',signed=True).hex(' ')+' fc f6 38 fd 28 68 ff '+y.to_bytes(2,'little').hex(' ')+' fc f6 28 fd')
+    for offset,column in [(0x61C,1),(0x63F,163),(0x662,325),(0x685,487),(0x6A8,649),(0x6CB,811),(0x6EE,973),(0x711,1297),(0x734,1135)]:
+        require(periodic,offset,'28 68 ff '+column.to_bytes(2,'little').hex(' ')+' fc f6 08 fd 28 68 ff 99 01 fc f6 f8 fc')
+    require(periodic,0x795,'f3 18 fc')
+    for slot in range(3):
+        require(0x9F651C,0x52C8+slot*0x54,'07 08 00 88 23 f5 '+slot.to_bytes(4,'little').hex(' ')+' 07 08 00 60 04 fc b0')
+    for index,value in [(0x139,0xA11460),(0x13A,0xA1147C)]:
+        if pe.u32(0x5F99AC+index*4)!=value:raise ParseError('Facility projection pool mapping changed')
     return True
 
 

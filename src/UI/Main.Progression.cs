@@ -22,6 +22,8 @@ public partial class Main
     }
     private void ShowFacilities(GameState state,int? selectedSlot=null)
     {
+        RefreshDesktop();
+        if (_officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture,state);
         ClearContent();AddHeading(Tr("COMPANY_FACILITIES"),26);
         if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(350,330),330);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);

@@ -23,3 +23,5 @@ preserve the artifact's Windows engine and runtime. Windows execution cannot be
 verified in this workspace without a Windows runtime.
 
 GitHub Actions remain paused. No remote workflow is dispatched by these tools.
+
+The M61 packager verifies every base PCK payload against its stored MD5 before reusing it. It adds current meeting OGGs, import descriptors, engine-ready resources and their manifest, updates the PCK entry count, and records `--source-commit` and `--build-label` in BUILD_MANIFEST.json. Always copy the trusted base into a separate staging folder; the tool modifies that staging PCK in place. Pass `--platform windows` for the owner's requested development builds. Validate the resulting ZIP, PCK entry digests, meeting resource decoding, assembly hash and SHA256SUMS. Do not claim a native Windows run from Linux checks.

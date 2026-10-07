@@ -25,6 +25,7 @@ public static class OfficePresentationRules
                 }
             }
             sprite=OfficeBurstFlameRules.Project(sprite,state);
+            sprite=OfficeFacilityPresentationRules.Project(sprite,state);
             if ((long)sprite.X+sprite.Width>0 && sprite.Y>0) yield return sprite;
         }
     }
