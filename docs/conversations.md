@@ -246,3 +246,18 @@ provisional English reading. Original generic window captions and named strips
 are distinct. The local dialogue cache is now schema 6, 109 entries. Automatic
 timed dismissal, original focus and exact placement remain unresolved. See
 [secretary management](secretary-management.md).
+
+
+## M57 checkpoint choice presentation
+
+Alpha choices now display all locally imported example titles, in catalog order,
+beside each saved candidate. Alpha and beta use separate fee columns with the
+headers in the same scrolling layout. Preview selections remain visibly selected,
+and the first option receives keyboard focus. Unknown or insufficient funds
+allow preview but disable confirmation; preview does not spend or alter a project.
+
+This is an authored presentation of verified imported information. It does not
+reproduce the original cosmetic random example draw, translate proprietary sample
+titles, or consume gameplay random draws. Candidate order, duplicates, saved
+queues and all selection effects remain governed by the existing rules. See
+[validation and remaining fidelity boundaries](checkpoint-choices-m57.md).

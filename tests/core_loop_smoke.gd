@@ -153,7 +153,7 @@ func run() -> void:
             "ProductionBands":[{"SizeThreshold":16,"UnitCost":300},{"SizeThreshold":32,"UnitCost":700},{"SizeThreshold":48,"UnitCost":1200},{"SizeThreshold":64,"UnitCost":1800}]}],
         "Audiences":[{"SourceIndex":0,"Name":"Synthetic Audience","RawMembers":{"14A8":1,"1454":10,"148C":20}}],
         "DevelopmentComputers":[{"SourceIndex":0,"Name":"Synthetic Computer","BitWidth":8}],
-        "GameTypes":[{"SourceIndex":0,"Name":"Synthetic Type A","RawMembers":raw_type,"RawTable13CC":[]},
+        "GameTypes":[{"SourceIndex":0,"Name":"Synthetic Type A","ExampleTitles":["Synthetic Example A","Synthetic Example B","Synthetic Example C"],"RawMembers":raw_type,"RawTable13CC":[]},
             {"SourceIndex":1,"Name":"Synthetic Type B","RawMembers":raw_type,"RawTable13CC":[]}],
         "Technologies":[{"SourceIndex":0,"Identifier":0,"Name":"Synthetic Technology","PurchaseFee":50,"InitialOwnershipLevel":0,"RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable158C":[1,2,3],"RawTable1568":[1,2,3]}],
         "RivalCompanies":["Synthetic rival company A","Synthetic rival company B"],
@@ -527,13 +527,41 @@ func run() -> void:
     check(checkpoint.State.DevelopmentProjects[0].DecisionIntroductionAcknowledged == 0,"Reading the type introduction persists its acknowledgment")
     check(seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Type introduction precedes selection exactly once")
     var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
+    check(main.find_child("CheckpointColumnHeadings",true,false) != null,"Checkpoint choice columns have headings")
+    check(tr("CHECKPOINT_FEE") == "Fee" and tr("CHECKPOINT_EXAMPLES") == "Example titles","English checkpoint column headings are translated")
+    check(main.find_child("SelectType0",true,false).has_focus(),"Type choices start with keyboard focus")
     for index in range(offered_types.size()):
         check(main.find_child("SelectType%d" % index,true,false).text.begins_with(tr("CATALOG_TYPE_%d" % offered_types[index])),"Each randomized type label matches its saved source ID")
+        var expected_examples = "\n".join(catalog.GameTypes[offered_types[index]].get("ExampleTitles",[]))
+        if expected_examples.is_empty():
+            expected_examples = "—"
+        check(main.find_child("TypeExamples%d" % index,true,false).text == expected_examples,"Example column preserves the selected source's imported titles and order")
+        check(main.find_child("SelectType%dFee" % index,true,false).text.begins_with("¥"),"Fees have their own aligned column")
+        var row_fee = main.find_child("SelectType%dFee" % index,true,false)
+        var header_fee = main.find_child("CheckpointColumnHeadings",true,false).get_child(1)
+        check(is_equal_approx(row_fee.position.x,header_fee.position.x),"Header and fee cells stay aligned inside the scrolling list")
     # Reload checkpoint through the actual office controls before selecting.
     await press("LOAD_GAME")
     await await_node("SelectType0")
     check(main.find_child("ConversationWindow",true,false) == null and seen_dialogue.get(tr("CHECKPOINT_TYPE_INTRO"),0) == 1,"Loading a read checkpoint does not repeat its introduction")
+    for unavailable_money in [0,null]:
+        var unavailable = checkpoint.duplicate(true)
+        unavailable.State.Money = unavailable_money
+        write_json("user://saves/slot1.json",unavailable)
+        await press("LOAD_GAME")
+        await await_node("SelectType0")
+        await press_node("SelectType0")
+        check(main.find_child("SelectType0",true,false).button_pressed,"Unaffordable types remain available for selected preview")
+        check(main.find_child("ConfirmTypeChoice",true,false).disabled,"Unknown or insufficient money cannot confirm a type")
+        await press("SAVE_GAME")
+        var uncharged = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
+        check(uncharged.State.Money == unavailable_money and uncharged.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Preview leaves funds and project unchanged when payment is unavailable")
+        check(uncharged.State.DevelopmentProjects[0].TypeCandidates == offered_types,"Redrawing example titles never rerolls candidate order")
+    write_json("user://saves/slot1.json",checkpoint)
+    await press("LOAD_GAME")
+    await await_node("SelectType0")
     await press_node("SelectType0")
+    check(main.find_child("SelectType0",true,false).button_pressed,"Type preview retains its radio selection")
     check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 450,"Type choices use a compact meeting panel")
     await press("SAVE_GAME")
     var type_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -558,7 +586,10 @@ func run() -> void:
         quit(1)
         return
     check(main.find_child("SelectGenre0",true,false).text.begins_with(tr("CATALOG_GENRE_0")),"Genre selection uses English catalog labels")
+    check(main.find_child("SelectGenre0",true,false).has_focus(),"Genre choices start with keyboard focus")
+    check(main.find_child("TypeExamples0",true,false) == null,"Genre panel contains no unrelated type-example column")
     await press_node("SelectGenre0")
+    check(main.find_child("SelectGenre0",true,false).button_pressed,"Genre preview retains its radio selection")
     await press("SAVE_GAME")
     var genre_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(genre_preview.State.DevelopmentProjects[0].GenreSourceIndex == null,"Previewing genre never confirms it")
