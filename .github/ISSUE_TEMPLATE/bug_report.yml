@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible problem in a versioned OpenGDS2 build.
+title: "[Bug]: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Build version and source commit
+      placeholder: "0.1.0-ea.1-rc.1; source commit from BUILD_MANIFEST.json"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Windows version and display settings
+      description: Include resolution, scaling percentage and interface language.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Exact steps to reproduce
+      description: Say whether you started a new company or loaded a modern save.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Paste a redacted error excerpt or screenshot. Logs can contain personal paths/names; review before posting. Never attach the LZH, imported original files, original saves or private catalogs. Share a modern JSON reproduction save privately only when requested.

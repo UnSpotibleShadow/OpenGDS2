@@ -2727,3 +2727,6 @@ msgstr "借入枠が3件とも使用中です。返済が済むまで新しく�
 
 msgid "BITMAP_FACILITY_AVAILABLE"
 msgstr "テナント募集中"
+
+msgid "EARLY_ACCESS_CANDIDATE"
+msgstr "アーリーアクセス非公開テスト候補"

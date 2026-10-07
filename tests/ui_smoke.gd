@@ -249,6 +249,9 @@ func run() -> void:
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
+    check(main.find_child("BuildVersion",true,false).text.contains("0.1.0-ea.1-rc.1"),"Title identifies the private candidate version")
+    check(root.title.contains("0.1.0-ea.1-rc.1"),"Window identifies the candidate version")
+    check(ProjectSettings.globalize_path("user://").contains("OpenGDS2-EarlyAccessTesting"),"Candidate user data is isolated from ordinary development data")
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
     if DirAccess.get_files_at("user://music").is_empty():
@@ -714,4 +717,3 @@ func run() -> void:
         await finish_conversation()
     print("UI smoke checks complete; failures=", failures)
     quit(0 if failures == 0 else 1)
-

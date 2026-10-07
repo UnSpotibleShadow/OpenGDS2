@@ -1,4 +1,8 @@
-# Development checkpoint — M61, 2026-10-06
+# Development checkpoint — M62, 2026-10-06
+
+M62 prepares private Early Access candidate 0.1.0-ea.1-rc.1 with visible version, isolated user data, known issues, owner test matrix, release gates and a GitHub bug template. See [release preparation](early-access-release.md). Public release, repository visibility changes and Actions remain unauthorized/paused. Continue from `codex/m62-early-access-candidate` while the stack is unmerged; it retains M61. Direct app compilation, the full core-loop suite and original-LZH UI suite pass, including candidate identity and data isolation. The unchanged domain baseline remains 295 passing checks. Windows owner playthrough and clean-export/source-audio gates remain pending.
+
+## Previous M61 checkpoint
 
 M61 restores occupied facility artwork from saved slots, including immediate school construction/closure and modern save/load. See [scope and validation](facility-artwork-m61.md). Direct app compilation, 295 domain checks, the full core-loop and original-LZH UI suites pass. A Windows development package is explicitly requested; it reuses the verified Windows engine/runtime and updates the assembly, translations and four meeting audio resources. Native Windows execution is unverified; Actions remain paused.
 

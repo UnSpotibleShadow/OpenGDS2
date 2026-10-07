@@ -5,7 +5,9 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M52.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M62.
+
+The private test candidate is **0.1.0-ea.1-rc.1**. See [test checklist](docs/early-access-testing.md), [known limitations](docs/early-access-known-issues.md) and [release gates](docs/early-access-release.md). It is prepared for owner testing and is not yet approved for public release. Candidate saves/settings/imports use a separate `OpenGDS2-EarlyAccessTesting` folder. [Issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the durable continuation backlog.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -44,7 +46,7 @@ the new catalog/dialogue. See [adaptations](docs/manga-adaptations.md),
 [conversations](docs/conversations.md) and [local patches](docs/office-effects-and-local-patches.md).
 
 Automatic GitHub Actions are paused at the owner's request. Current checks run
-locally; existing M48 download packages do not include M49–M52 changes. See the
+locally; historical M48 packages do not include the latest changes. The M61 development package and M62 candidate identify their source commit and reused Windows runtime in BUILD_MANIFEST.json. See the
 [validation checkpoint](docs/development-checkpoint.md) and [local build instructions](docs/building.md).
 
 M48 adds sequel development from Hall of Fame predecessors. Open a free desk
@@ -240,3 +242,4 @@ Community-written code and documentation use the [MIT License](LICENSE). The eig
 authorized music recordings have a separate [distribution notice](audio/community/NOTICE.md).
 See [notice.md](notice.md) for third-party content exclusions and project disclaimers.
 Original game files and imported data are not distributed with this repository.
+
