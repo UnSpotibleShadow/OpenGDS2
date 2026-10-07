@@ -13,6 +13,48 @@ import zipfile
 import re
 import json
 
+
+def config_entries(data):
+    """Read the length-prefixed Variant records in Godot's ECFG settings."""
+    if data[:4] != b"ECFG" or len(data) < 8:
+        raise ValueError("Invalid exported project configuration")
+    entries = {}
+    cursor = 8
+    for _ in range(struct.unpack_from("<I", data, 4)[0]):
+        length = struct.unpack_from("<I", data, cursor)[0]
+        cursor += 4
+        key = data[cursor:cursor+length].decode("utf-8")
+        cursor += length
+        size = struct.unpack_from("<I", data, cursor)[0]
+        cursor += 4
+        value = data[cursor:cursor+size]
+        if len(value) != size or key in entries:
+            raise ValueError("Invalid exported configuration record")
+        entries[key] = value
+        cursor += size
+    if cursor != len(data):
+        raise ValueError("Invalid exported configuration length")
+    return entries
+
+
+def preserve_export_configuration(base_config, candidate_config):
+    entries = config_entries(base_config)
+    features = entries.get("_custom_features", b"")
+    if len(features) < 8 or struct.unpack_from("<I", features)[0] != 4:
+        raise ValueError("Trusted export has no string feature record")
+    size = struct.unpack_from("<I", features, 4)[0]
+    if "dotnet" not in features[8:8+size].decode().split(","):
+        raise ValueError("Trusted export lacks its dotnet runtime feature")
+    entries.update(config_entries(candidate_config))
+    # Export feature selection belongs to the trusted native runtime, not the editor.
+    entries["_custom_features"] = features
+    output = bytearray(b"ECFG" + struct.pack("<I", len(entries)))
+    for key, value in entries.items():
+        encoded = key.encode()
+        output.extend(struct.pack("<I", len(encoded)) + encoded)
+        output.extend(struct.pack("<I", len(value)) + value)
+    return bytes(output)
+
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("base", type=Path)
@@ -28,6 +70,14 @@ if args.candidate:
     if args.platform != "windows" or not args.project_config or not version or args.build_label != version.group(1):
         raise ValueError("The private candidate requires Windows, its project configuration and the current build version")
 base, destination = args.base, args.destination
+assembly = root/".godot/mono/temp/bin/ExportDebug/OpenGDS2.dll"
+runtime = base/("data_OpenGDS2_windows_x86_64" if args.platform == "windows"
+                else "data_OpenGDS2_linuxbsd_x86_64")
+receipt = json.loads(assembly.with_suffix(".build.json").read_text())
+if receipt.get("editor_api") is not False or receipt.get("configuration") != "ExportDebug" \
+        or receipt.get("assembly_sha256") != hashlib.sha256(assembly.read_bytes()).hexdigest() \
+        or receipt.get("godot_api_sha256") != hashlib.sha256((runtime/"GodotSharp.dll").read_bytes()).hexdigest():
+    raise ValueError("Assembly must be compiled against this export's Godot API; run workspace_roslyn_build.py export")
 pck = base / "OpenGDS2.pck"
 data = pck.read_bytes()
 file_base = struct.unpack_from("<Q", data, 24)[0]
@@ -47,7 +97,7 @@ for _ in range(count):
     if path in ("localization/en.po", "localization/ja.po"):
         content = (root/path).read_bytes()
     if path == "project.binary" and args.project_config:
-        content = args.project_config.read_bytes()
+        content = preserve_export_configuration(content, args.project_config.read_bytes())
     entries.append((raw, content, flags))
     cursor = entry+36
 # Meeting tracks were added after the base artifact. Include current source
@@ -80,9 +130,6 @@ header = bytearray(data[:100])
 struct.pack_into("<Q",header,24,new_base)
 struct.pack_into("<I",header,96,len(entries))
 pck.write_bytes(header+directory+b"\0"*(new_base-100-len(directory))+payload)
-assembly = root/".godot/mono/temp/bin/Debug/OpenGDS2.dll"
-runtime = base/("data_OpenGDS2_windows_x86_64" if args.platform == "windows"
-                else "data_OpenGDS2_linuxbsd_x86_64")
 for suffix in (".dll", ".pdb"):
     shutil.copy2(assembly.with_suffix(suffix),runtime/("OpenGDS2"+suffix))
 if args.platform == "linux":
@@ -100,8 +147,9 @@ if args.platform == "linux":
     "OpenGDS2 "+args.build_label+" "+args.platform+" development snapshot.\n"
     "Source commit: "+args.source_commit+"\n"
     "Includes meeting music, checkpoint choices, bank loans, office rendering and facility artwork.\n"
-    "Godot engine, .NET runtime and imported community audio reused from M47 debug artifact.\n"
-    "Not a clean source export; missing source OGG integrity gate remains unresolved.\n"
+    "Godot engine, .NET runtime and imported community audio reused from a verified debug artifact.\n"
+    "Managed assembly compiled against the export API; dotnet export metadata preserved.\n"
+    "Not a clean source export. Native Windows testing remains required.\n"
     "No original game files included. Import your legally obtained LZH locally.\n"
     + ("On Windows: extract the whole ZIP, then run OpenGDS2.console.exe.\n"
        "Windows launch has not been tested in this Linux workspace.\n"
@@ -112,6 +160,8 @@ build_manifest = {
     "build_label": args.build_label,
     "source_commit": args.source_commit,
     "managed_assembly_sha256": hashlib.sha256(assembly.read_bytes()).hexdigest(),
+    "managed_build": receipt,
+    "dotnet_export_metadata_preserved": bool(args.project_config),
     "updated_resources": added+["audio/community/meetings/manifest.json"]
         + (["project.binary"] if args.project_config else []),
     "packaging": "updated managed assembly and resources; reused Godot/.NET native runtime",
