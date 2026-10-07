@@ -45,6 +45,7 @@ public partial class Main
         AddHeading(Tr("DEVELOPMENT_STAFF_NOTE"),16);
         AddAction("STAFF",()=>ShowStaff(state));
         if (project.OriginalStage==3) AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
+        AddAction("CANCEL_PROJECT",()=>ShowProjectCancellation(state,project));
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
         _activeCatalog=_importer.LoadCatalog();_clockRunning=true;
         _refreshCoreStatus=()=>
@@ -59,6 +60,27 @@ public partial class Main
                     .Select(x=>$"{EmployeeName(x)} · {Tr("STRESS")}: {x.Stress:N0}%"));
         };
         _refreshCoreStatus();
+    }
+    private void ShowProjectCancellation(GameState state,DevelopmentProjectState project)
+    {
+        ClearContent();CompactManagementWindow("ProjectCancellationWindow",new Vector2(390,230),370);
+        _dialog?.SetTitle(Tr("CANCEL_PROJECT"));
+        AddHeading(project.Title,18);AddHeading(Tr("CANCEL_PROJECT_CONFIRM"),16);
+        _status=new Label {Name="CancellationStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
+        var availability=ProjectCancellationService.Check(state,project);
+        var confirm=new Button {Name="ConfirmProjectCancellation",Text=Tr("CONFIRM"),Disabled=availability!=ProjectCancellationResult.Success};
+        _content.AddChild(confirm);
+        if (availability!=ProjectCancellationResult.Success) _status.Text=Tr($"CANCELLATION_RESULT_{availability}");
+        confirm.Pressed+=()=>
+        {
+            var result=ProjectCancellationService.TryCancel(state,project);
+            if (result!=ProjectCancellationResult.Success) {_status.Text=Tr($"CANCELLATION_RESULT_{result}");return;}
+            ClearContent();CompactManagementWindow("ProjectCancellationWindow",new Vector2(390,230),370);
+            _dialog?.SetTitle(Tr("CANCEL_PROJECT"));
+            AddHeading(Tr("PROJECT_CANCELLED"),18);
+            AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        };
+        AddAction("KEEP_PROJECT",()=>ShowProject(state,project));
     }
     private void ShowProjectDecision(GameState state,DevelopmentProjectState project)
     {

@@ -2730,3 +2730,24 @@ msgstr "テナント募集中"
 
 msgid "EARLY_ACCESS_CANDIDATE"
 msgstr "アーリーアクセス非公開テスト候補"
+
+msgid "CANCEL_PROJECT"
+msgstr "開発を中止"
+
+msgid "CANCEL_PROJECT_CONFIRM"
+msgstr "この開発を中止しますか？ 担当社員のストレスが20増加します（上限99）。開発費は返金されません。"
+
+msgid "KEEP_PROJECT"
+msgstr "開発を続ける"
+
+msgid "PROJECT_CANCELLED"
+msgstr "開発を中止しました。担当社員のストレスが増加しました。この開発室で新しい企画を始められます。"
+
+msgid "CANCELLATION_RESULT_ProjectUnavailable"
+msgstr "この企画はここでは中止できません。"
+
+msgid "CANCELLATION_RESULT_DecisionPending"
+msgstr "現在の会議を終えてから開発を中止してください。"
+
+msgid "CANCELLATION_RESULT_StateUnknown"
+msgstr "この古いセーブには社員の配置またはストレスの情報がありません。開発を中止できません。"

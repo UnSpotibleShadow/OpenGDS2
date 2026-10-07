@@ -2730,3 +2730,24 @@ msgstr "FOR RENT"
 
 msgid "EARLY_ACCESS_CANDIDATE"
 msgstr "Private Early Access test candidate"
+
+msgid "CANCEL_PROJECT"
+msgstr "Cancel project"
+
+msgid "CANCEL_PROJECT_CONFIRM"
+msgstr "Discard this project? Assigned staff gain 20 stress (maximum 99). Development costs are not refunded."
+
+msgid "KEEP_PROJECT"
+msgstr "Keep developing"
+
+msgid "PROJECT_CANCELLED"
+msgstr "Project discarded. Assigned staff stress has increased. The room is available for a new project."
+
+msgid "CANCELLATION_RESULT_ProjectUnavailable"
+msgstr "This project cannot be cancelled here."
+
+msgid "CANCELLATION_RESULT_DecisionPending"
+msgstr "Finish the current meeting before cancelling the project."
+
+msgid "CANCELLATION_RESULT_StateUnknown"
+msgstr "This older save lacks staff assignment or stress data. Cancellation is unavailable."
