@@ -283,6 +283,7 @@ public partial class Main : Control
             _session.TickOffice(_activeCatalog);
             PersistPendingRankings(state);
         }
+        if (ShowPendingBankLoanReceipt(state)) return;
         if (ShowPendingHireGreeting(state)) return;
         if (ShowPendingSecretaryReplacement(state)) return;
         if (ShowPendingSecretaryAdvice(state)) return;

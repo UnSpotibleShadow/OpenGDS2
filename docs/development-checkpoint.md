@@ -1,4 +1,11 @@
-# Development checkpoint — M57, 2026-10-06
+# Development checkpoint — M58, 2026-10-06
+
+M58 connects bank borrowing to the saved annual repayment pipeline. Three slots,
+four principal choices, saved receipts and transaction guards prevent duplicate
+credit on reload. Original menu-enable parity and bankruptcy remain unresolved.
+See [bank scope and validation](bank-loans-m58.md).
+
+## Previous M57 checkpoint
 
 M57 adds locally imported example titles to alpha choices and aligned fees to
 alpha/beta choices. Selecting previews retains radio state, each list starts

@@ -2682,3 +2682,45 @@ msgstr "Fee"
 
 msgid "CHECKPOINT_EXAMPLES"
 msgstr "Example titles"
+
+msgid "BANK"
+msgstr "Bank"
+
+msgid "BANK_TERMS"
+msgstr "Loans are repaid after one year, with 30% interest."
+
+msgid "BANK_DATE"
+msgstr "Year {year}, month {month}, week {week}"
+
+msgid "BANK_LOAN_SLOT"
+msgstr "Loan"
+
+msgid "BANK_EMPTY_SLOT"
+msgstr "Available"
+
+msgid "BANK_BORROW"
+msgstr "Borrow"
+
+msgid "BANK_REPAYMENT"
+msgstr "Repayment after one year: {amount}"
+
+msgid "BANK_CLERK"
+msgstr "Bank clerk"
+
+msgid "BANK_RECEIPT"
+msgstr "We have credited {principal} to your company. Repayment of {repayment} is due on {date}."
+
+msgid "BANK_RESULT_CalendarUnknown"
+msgstr "Loan records are unavailable."
+
+msgid "BANK_RESULT_DateUnknown"
+msgstr "The current date is unavailable."
+
+msgid "BANK_RESULT_EventPending"
+msgstr "Finish the current transaction first."
+
+msgid "BANK_RESULT_MoneyUnknown"
+msgstr "Company funds are unavailable."
+
+msgid "BANK_RESULT_AllSlotsOccupied"
+msgstr "All three loan slots are occupied. Repay a loan before borrowing again."

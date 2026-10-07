@@ -8,6 +8,7 @@ public partial class Main
     private void ShowCompanyActivities(GameState state)
     {
         ClearContent();AddHeading(Tr("COMPANY_ACTIVITIES"),28);
+        AddAction("BANK",()=>ShowBank(state),BankLoanService.CheckBorrow(state) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
         AddHeading($"{Tr("COMPANY_ACTIVITY_COST")}: ¥{state.Company.ActivityCost:N0}",18);
         var grid=new GridContainer {Columns=2};_content.AddChild(grid);
