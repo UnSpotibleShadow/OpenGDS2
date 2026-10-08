@@ -241,7 +241,7 @@ public partial class Main
     {
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null) &&
+        if (_desktopState is GameState current && (current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {

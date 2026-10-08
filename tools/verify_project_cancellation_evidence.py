@@ -41,6 +41,24 @@ def verify(path: Path) -> None:
             if body[offset:offset + len(expected)] != expected:
                 raise ValueError(f"Changed transaction anchor {address:08X}+{offset:04X}")
         print(f"PASS room handler {address:08X}: confirmation, assigned action, +20, cap 99, empty room")
+    for address, random_offset, random_slot, summary_offset in [
+        (0x009AAA8C,0x032E,0x15,0x0749),(0x009AA1B8,0x030E,0x13,0x0729)]:
+        expected=bytes([0x27,0x58,0xFF,0x0A,random_slot,0,4,0,0xF4,7,0xEB,0xB3,0xFB,0xE6])
+        if pe.bytes_at(address+random_offset,len(expected))!=expected:
+            raise ValueError("Changed Int(Rnd * 7) reaction draw")
+        if pe.bytes_at(address+summary_offset,5)!=bytes.fromhex("2818fe0100"):
+            raise ValueError("Changed summary sequence boundary")
+    def string_at(pool: int,index: int) -> str:
+        address=pe.u32(pool+4*index)
+        length=pe.u32(address-4)
+        if length<2 or length>4096 or length%2:
+            raise ValueError("Invalid local cancellation string")
+        return pe.bytes_at(address,length).decode("utf-16-le")
+    first=[0x16,0x19,0x1B,*range(0x1C,0x23),0x24,0x25,0x26]
+    second=[0x14,0x17,0x19,*range(0x1A,0x21),0x22,0x23,0x24]
+    if [string_at(0x5FEE38,i) for i in first]!=[string_at(0x5FE5FC,i) for i in second]:
+        raise ValueError("Room cancellation dialogue differs")
+    print("PASS matching named employee captions, seven reactions and two room summaries; no original strings emitted")
 
 
 if __name__ == "__main__":

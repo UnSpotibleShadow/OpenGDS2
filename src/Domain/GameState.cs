@@ -53,5 +53,6 @@ public sealed class GameState
     public int? SecretarySourceIndex { get; set; }
     public SecretaryAdviceState? PendingSecretaryAdvice { get; set; }
     public SecretaryReplacementState? PendingSecretaryReplacement {get;set;}
+    public ProjectCancellationDialogueState? PendingProjectCancellation {get;set;}
     public SecretaryPolicyState? SecretaryPolicies {get;set;}
 }

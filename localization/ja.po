@@ -2751,3 +2751,6 @@ msgstr "現在の会議を終えてから開発を中止してください。"
 
 msgid "CANCELLATION_RESULT_StateUnknown"
 msgstr "この古いセーブには社員の配置またはストレスの情報がありません。開発を中止できません。"
+
+msgid "CANCELLATION_REIMPORT_REQUIRED"
+msgstr "開発中止の会話を復元するには、元のLZHを再インポートしてください。中止の処理は完了しています。"

@@ -62,8 +62,8 @@ Unknown legacy workspaces or affected stress block cancellation before mutation.
 An unaffected employee's unknown stress does not block it. Active checkpoint
 choices must finish first. Polishing room state 2 remains outside the verified
 playable workflow. The modern confirmation and result use authored English and
-Japanese translations. Original randomized staff reaction dialogue is a remaining
-presentation task; this milestone adds the verified gameplay transaction.
+Japanese translations. M69 now restores original randomized staff reactions and ordered summaries with
+a saved cursor; see [cancellation dialogue](cancellation-dialogue-m69.md).
 
 ## Validation
 

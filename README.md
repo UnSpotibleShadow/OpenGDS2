@@ -22,6 +22,9 @@ M68 adds **Cancel project** on the live development screen. Confirmation discard
 the project, raises assigned staff stress by 20 (capped at 99), and frees its room
 without refunding development costs. Declining leaves it unchanged. See
 [project cancellation evidence and compatibility](docs/project-cancellation-m68.md).
+M69 restores seven staff reactions and the two cancellation summaries, with
+page-by-page save/reload and no repeated stress penalty. Japanese dialogue is
+read from a refreshed local LZH import; see [cancellation dialogue](docs/cancellation-dialogue-m69.md).
 
 M52 restores the alpha/type and beta/genre meeting discussions, compact
 selection/confirmation panels and original locally imported meeting illustration.

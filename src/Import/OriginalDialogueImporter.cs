@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=7,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=8,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
@@ -85,6 +85,12 @@ public static class OriginalDialogueImporter
         int[] graduateEntries=[0x12,0x13,0x14,0x10];
         for (int i=0;i<4;i++) result.Entries.Add($"GRADUATE_GREETING_{i}",pe.String(graduatePool,graduateEntries[i]));
         result.Entries.Add("GRADUATE_SPEAKER","{name}"+pe.String(graduatePool,0x0A));
+        const int cancellationPool=0x5FEE38;
+        pe.Require(pe.Offset(0x9AAA8C+0x032E),0x27,0x58,0xFF,0x0A,0x15,0,4,0,0xF4,7,0xEB,0xB3,0xFB,0xE6);
+        result.Entries.Add("CANCELLATION_EMPLOYEE_NAMED",pe.String(cancellationPool,0x16)+"{name}"+pe.String(cancellationPool,0x19));
+        for (int i=0;i<7;i++) result.Entries.Add(ProjectCancellationDialogueRules.ReactionKey(i),pe.String(cancellationPool,0x1C+i));
+        result.Entries.Add("CANCELLATION_STRESS_SUMMARY",pe.String(cancellationPool,0x24)+"{room}"+pe.String(cancellationPool,0x25));
+        result.Entries.Add("CANCELLATION_DISCARD_SUMMARY",pe.String(cancellationPool,0x24)+"{room}"+pe.String(cancellationPool,0x26));
         // Serialized fGMKaiwa Timer1 interval property: 20 milliseconds.
         pe.Require(0x248EAC,6,0,(byte)'T',(byte)'i',(byte)'m',(byte)'e',(byte)'r',(byte)'1',0,0x0B,3,20,0,0,0);
         return result;
