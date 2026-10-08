@@ -4,6 +4,21 @@ extends SceneTree
 var main: Node
 var failures := 0
 
+func advance_page() -> void:
+    var message = main.find_child("ConversationMessage",true,false)
+    check(message != null,"Cancellation conversation page exists")
+    if message == null:
+        return
+    var accept := InputEventKey.new()
+    accept.keycode = KEY_ENTER
+    accept.pressed = true
+    message.gui_input.emit(accept)
+    await process_frame
+    if is_instance_valid(message) and message.is_inside_tree():
+        await create_timer(0.03).timeout
+        message.gui_input.emit(accept)
+        await process_frame
+
 func check(ok: bool, message: String) -> void:
     print(("PASS " if ok else "FAIL ") + message)
     if not ok:
@@ -45,6 +60,10 @@ func run() -> void:
         quit(1)
         return
     root.size = Vector2i(1280,720)
+    var private_dialogue := OS.get_environment("OPENGDS2_LOCAL_DIALOGUE")
+    if not private_dialogue.is_empty():
+        DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://original"))
+        check(DirAccess.copy_absolute(private_dialogue,ProjectSettings.globalize_path("user://original/dialogue.json")) == OK,"Optional local original dialogue cache")
     write_json("user://original/catalog.json", {"SchemaVersion":1,
         "SourceHash":"4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6"})
     for locale in ["en", "ja"]:
@@ -98,11 +117,44 @@ func run() -> void:
         check(after.Money == before.Money and after.Company.WeeklyNet == before.Company.WeeklyNet, "No refund or financial change")
         check(int(after.Employees[0].Office.Action) == 6 and int(after.Employees[0].Office.SeatedAction) == 6, "Desk assignment stays")
         check(int(after.Employees[0].Office.WorkTicks) == 0 and int(after.Employees[0].Office.WorkTier) == 0, "Pending work cleared")
-        await press("BACK_TO_OFFICE")
+        check(int(after.PendingProjectCancellation.MessageIndex) == 0 and after.PendingProjectCancellation.Staff.size() == 1,"Saved reaction and cursor")
+        var reaction_key := "CANCELLATION_REACTION_%d" % int(after.PendingProjectCancellation.Staff[0].Variant)
+        var window = main.find_child("ConversationWindow",true,false)
+        check(window != null,"Staff reaction uses the compact conversation presenter")
+        window.position = Vector2(350,170)
+        check(main.find_child("ToolbarSTART_GAME_DEVELOPMENT",true,false).disabled,"New project action blocked during cancellation messages")
+        await create_timer(0.5).timeout
+        await press_node("ToolbarSAVE_GAME")
+        check(saved() == after,"Pending dialogue pauses all work and time")
+        for page in range(3):
+            await press_node("ToolbarSAVE_GAME")
+            var page_save := saved()
+            await press_node("ToolbarLOAD_GAME")
+            check(main.find_child("ConversationWindow",true,false) != null,"Reload resumes cancellation conversation")
+            var key := reaction_key if page == 0 else ("CANCELLATION_STRESS_SUMMARY" if page == 1 else "CANCELLATION_DISCARD_SUMMARY")
+            var expected: String = tr(key) if locale == "en" else tr("CANCELLATION_REIMPORT_REQUIRED")
+            if locale == "ja" and not private_dialogue.is_empty():
+                expected = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json")).Entries.get(key,tr("CANCELLATION_REIMPORT_REQUIRED"))
+            expected = expected.replace("{room}","1")
+            check(main.find_child("ConversationMessage",true,false).text == expected,"Exact selected reaction or ordered summary")
+            await press_node("ToolbarSAVE_GAME")
+            check(saved() == page_save,"Reload never rerolls or repeats penalties")
+            window = main.find_child("ConversationWindow",true,false)
+            window.position = Vector2(350,170)
+            await advance_page()
+            await press_node("ToolbarSAVE_GAME")
+            var advanced := saved()
+            if page < 2:
+                check(int(advanced.PendingProjectCancellation.MessageIndex) == page+1,"Only acknowledged page advances")
+                check(main.find_child("ConversationWindow",true,false).position == Vector2(350,170),"Moved conversation position persists")
+            else:
+                check(advanced.PendingProjectCancellation == null and main.find_child("ConversationWindow",true,false) == null,"Final summary completes the sequence")
+                # Stop resumed ordinary simulation before checking the saved result.
+                await press_node("TogglePause")
+            check(advanced.Employees[0].Stress == after.Employees[0].Stress,"Acknowledgement never reapplies stress")
         await press_node("ToolbarLOAD_GAME")
         check(main.find_child("OpenProject0",true,false) == null and main.find_child("OpenProject1",true,false) != null, "Saved cancellation survives reload")
         # Loading the confirmed save cannot repeat the stress transaction.
-        await press_node("TogglePause")
         await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Stress == after.Employees[0].Stress, "Reload never reapplies cancellation stress")
         main.queue_free()

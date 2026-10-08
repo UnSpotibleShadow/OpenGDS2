@@ -2751,3 +2751,36 @@ msgstr "Finish the current meeting before cancelling the project."
 
 msgid "CANCELLATION_RESULT_StateUnknown"
 msgstr "This older save lacks staff assignment or stress data. Cancellation is unavailable."
+
+msgid "CANCELLATION_EMPLOYEE_NAMED"
+msgstr "Employee {name}"
+
+msgid "CANCELLATION_REACTION_0"
+msgstr "After all that work? I am furious!"
+
+msgid "CANCELLATION_REACTION_1"
+msgstr "Cancelling development really annoys me!"
+
+msgid "CANCELLATION_REACTION_2"
+msgstr "Stopping development can be a brave decision."
+
+msgid "CANCELLATION_REACTION_3"
+msgstr "...Oh..."
+
+msgid "CANCELLATION_REACTION_4"
+msgstr "We got so far. There must be a reason to stop..."
+
+msgid "CANCELLATION_REACTION_5"
+msgstr "What a disaster! I have lost my motivation..."
+
+msgid "CANCELLATION_REACTION_6"
+msgstr "Aaaaah!"
+
+msgid "CANCELLATION_STRESS_SUMMARY"
+msgstr "Staff assigned to development room {room} have become much more stressed."
+
+msgid "CANCELLATION_DISCARD_SUMMARY"
+msgstr "The game in development room {room} has been discarded."
+
+msgid "CANCELLATION_REIMPORT_REQUIRED"
+msgstr "Reimport your original LZH to restore the cancellation dialogue. The cancellation is already complete."

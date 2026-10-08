@@ -81,6 +81,7 @@ Test("cancelled bursts and technology cannot leak into an immediately reused roo
     Check(e.Office.WorkTicks==0 && e.Office.WorkTier==0 && e.Office.BurstTicks==0 && e.Office.TechnologyApplication is null);
     Check(e.Office.Action==6 && e.Office.SeatedAction==6 && e.Office.WorkEngaged);
     Check(second.Office.WorkTicks==40 && second.Office.WorkTier==3 && second.Office.BurstTicks==4 && second.Stress==0);
+    while (ProjectCancellationDialogueRules.Acknowledge(s)) {}
     var next=CancellationProject();s.DevelopmentProjects.Add(next);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];next=s.DevelopmentProjects.Single(x=>x.RoomIndex==0);
     DevelopmentSimulation.TickEmployee(s,e,CoreCatalog(),new WorkRandom());
@@ -93,6 +94,82 @@ Test("cancellation resolves corrupt source rows before changing stress or room s
     s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=Worker()},new() {SourceIndex=0,GateValue=1,Employee=Worker()}];
     Throws<InvalidOperationException>(()=>ProjectCancellationService.TryCancel(s,p));
     Check(e.Stress==0 && s.DevelopmentProjects.Contains(p));
+});
+Test("cancellation dialogue selects each original reaction once in employed order",()=>
+{
+    for (int variant=0;variant<7;variant++)
+    {
+        var s=PlanningState();var p=CancellationProject(1);s.DevelopmentProjects.Add(p);
+        var a=Worker(12,8);var b=Worker(17,3);b.Office!.SlotIndex=1;b.Office.SeatedAction=0;b.Office.WorkEngaged=false;b.Office.MovementState=3;
+        s.Employees=[a,Worker(6,9),b];var random=new GreetingRandom((variant+.25f)/7);
+        Check(ProjectCancellationService.TryCancel(s,p,random)==ProjectCancellationResult.Success);
+        var pending=s.PendingProjectCancellation!;
+        Check(random.GreetingCalls==2 && pending.RoomIndex==1 && pending.MessageIndex==0);
+        Check(pending.Staff.Select(x=>x.SourceIndex).SequenceEqual(new int?[]{8,3}));
+        Check(pending.Staff.All(x=>x.Variant==variant && x.PortraitId==1));
+        Check(s.Employees[0].Stress==20 && s.Employees[1].Stress==0 && s.Employees[2].Stress==20);
+    }
+});
+Test("cancellation dialogue cursor survives every page reload without rerolls or penalties",()=>
+{
+    var s=PlanningState();var p=CancellationProject();var other=CancellationProject(1);s.DevelopmentProjects=[p,other];
+    var e=Worker();s.Employees.Add(e);var random=new GreetingRandom(.95f);
+    Check(ProjectCancellationService.TryCancel(s,p,random)==ProjectCancellationResult.Success);
+    Check(ProjectCancellationService.TryCancel(s,other,random)==ProjectCancellationResult.DecisionPending);
+    for (int page=0;page<3;page++)
+    {
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));var pending=s.PendingProjectCancellation!;
+        Check(pending.MessageIndex==page && pending.Staff[0].Variant==6 && pending.Staff[0].Name==e.Name);
+        Check(s.Employees[0].Stress==20 && s.Money==100 && s.DevelopmentProjects.Single().RoomIndex==1);
+        Check(ProjectCancellationDialogueRules.Acknowledge(s));
+    }
+    Check(s.PendingProjectCancellation is null && !ProjectCancellationDialogueRules.Acknowledge(s) && random.GreetingCalls==1);
+});
+Test("unoccupied cancellation has two summaries and no random employee draw",()=>
+{
+    var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);var random=new GreetingRandom(.5f);
+    Check(ProjectCancellationService.TryCancel(s,p,random)==ProjectCancellationResult.Success);
+    Check(s.PendingProjectCancellation!.Staff.Count==0 && random.GreetingCalls==0);
+    Check(ProjectCancellationDialogueRules.Acknowledge(s) && s.PendingProjectCancellation!.MessageIndex==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(ProjectCancellationDialogueRules.Acknowledge(s) && s.PendingProjectCancellation is null);
+});
+Test("bad cancellation random values reject before changing stress and project",()=>
+{
+    foreach (float roll in new[]{-1f,1f,float.NaN,float.PositiveInfinity})
+    {
+        var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);s.Employees.Add(Worker());
+        Throws<ArgumentOutOfRangeException>(()=>ProjectCancellationService.TryCancel(s,p,new GreetingRandom(roll)));
+        Check(s.Employees[0].Stress==0 && s.PendingProjectCancellation is null && s.DevelopmentProjects.Contains(p));
+    }
+});
+Test("corrupt cancellation dialogue saves reject and old saves default to no pending sequence",()=>
+{
+    Action<ProjectCancellationDialogueState>[] corruptions=[p=>p.RoomIndex=2,p=>p.MessageIndex=-1,p=>p.MessageIndex=3,
+        p=>p.Staff=null!,p=>p.Staff[0].Variant=7,p=>p.Staff[0].Name="",p=>p.Staff[0].PortraitId=11,
+        p=>p.Staff.Add(p.Staff[0])];
+    foreach (var corrupt in corruptions)
+    {
+        var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);s.Employees.Add(Worker());
+        Check(ProjectCancellationService.TryCancel(s,p,new GreetingRandom(0))==ProjectCancellationResult.Success);
+        corrupt(s.PendingProjectCancellation!);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    }
+    var old=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(PlanningState()))!;
+    Check(old["State"]!.AsObject().Remove("PendingProjectCancellation"));
+    Check(SaveStore.Deserialize(old.ToJsonString()).PendingProjectCancellation is null);
+});
+Test("pending cancellation suspends the session clock recruitment and direct development work",()=>
+{
+    var s=PlanningState();var p=CancellationProject();s.DevelopmentProjects.Add(p);s.Employees.Add(Worker());
+    var session=new GameSession(new GreetingRandom(0));session.Restore(s);
+    Check(session.CancelProject(p)==ProjectCancellationResult.Success);
+    string before=SaveStore.Serialize(s);session.TickOffice(CoreCatalog());
+    DevelopmentSimulation.TickEmployee(s,s.Employees[0],CoreCatalog(),new WorkRandom());
+    Check(SaveStore.Serialize(s)==before);
+    Throws<InvalidOperationException>(()=>session.OpenRecruitment());
+    Check(session.Hire(Worker())==HireResult.ConversationPending && session.AskSecretary(CoreCatalog())==SecretaryAdviceResult.EventPending);
+    while (ProjectCancellationDialogueRules.Acknowledge(s)) {}
+    session.TickOffice(CoreCatalog());Check(s.CompanyActivityTicks==1);
 });
 Test("meeting soundtrack maps planning alpha beta and final dialogue phases",()=>
 {
@@ -3788,9 +3865,11 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==136 && dialogue.SchemaVersion==7 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==146 && dialogue.SchemaVersion==8 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
+        Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
+        Check(dialogue.Entries["CANCELLATION_EMPLOYEE_NAMED"].Contains("{name}") && dialogue.Entries["CANCELLATION_STRESS_SUMMARY"].Contains("{room}"));
     });
     Test("optional local original database parity", () =>
     {

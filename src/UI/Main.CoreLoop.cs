@@ -73,14 +73,41 @@ public partial class Main
         if (availability!=ProjectCancellationResult.Success) _status.Text=Tr($"CANCELLATION_RESULT_{availability}");
         confirm.Pressed+=()=>
         {
-            var result=ProjectCancellationService.TryCancel(state,project);
+            var result=_session.CancelProject(project);
             if (result!=ProjectCancellationResult.Success) {_status.Text=Tr($"CANCELLATION_RESULT_{result}");return;}
-            ClearContent();CompactManagementWindow("ProjectCancellationWindow",new Vector2(390,230),370);
-            _dialog?.SetTitle(Tr("CANCEL_PROJECT"));
-            AddHeading(Tr("PROJECT_CANCELLED"),18);
-            AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+            ShowOfficeReconstruction(state);
         };
         AddAction("KEEP_PROJECT",()=>ShowProject(state,project));
+    }
+    private bool ShowPendingProjectCancellation(GameState state)
+    {
+        if (state.PendingProjectCancellation is not { } pending) return false;
+        int cursor=pending.MessageIndex;
+        bool english=TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase);
+        var imported=english ? null : _importer.LoadDialogue();
+        string Text(string key)=>english ? Tr(key) : imported?.Entries.GetValueOrDefault(key) ?? Tr("CANCELLATION_REIMPORT_REQUIRED");
+        string heading,speaker,body;int? portrait=null;
+        if (cursor<pending.Staff.Count)
+        {
+            var reaction=pending.Staff[cursor];
+            var employee=new EmployeeState {Name=reaction.Name,SourceIndex=reaction.SourceIndex};
+            heading=english || imported?.Entries.ContainsKey("CANCELLATION_EMPLOYEE_NAMED")==true
+                ? Text("CANCELLATION_EMPLOYEE_NAMED").Replace("{name}",EmployeeName(employee)) : Tr("CANCEL_PROJECT");
+            speaker=DialogueText("CORE_EMPLOYEE");body=Text(ProjectCancellationDialogueRules.ReactionKey(reaction.Variant));
+            portrait=reaction.PortraitId;
+        }
+        else
+        {
+            heading=speaker=DialogueText("CORE_SECRETARY");
+            body=Text(cursor==pending.Staff.Count ? "CANCELLATION_STRESS_SUMMARY" : "CANCELLATION_DISCARD_SUMMARY")
+                .Replace("{room}",(pending.RoomIndex+1).ToString());
+        }
+        ShowConversation(heading,[new(speaker,body,portrait)],()=>
+        {
+            if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingProjectCancellation,pending) || pending.MessageIndex!=cursor) return;
+            ProjectCancellationDialogueRules.Acknowledge(state);ShowOfficeReconstruction(state);
+        });
+        return true;
     }
     private void ShowProjectDecision(GameState state,DevelopmentProjectState project)
     {

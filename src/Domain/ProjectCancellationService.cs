@@ -10,7 +10,7 @@ public static class ProjectCancellationService
         if (!state.DevelopmentProjects.Contains(project) || project.RoomIndex is <0 or >1 ||
             project.OriginalRoomState!=1 || project.OriginalMode is not (0 or 1 or 2))
             return ProjectCancellationResult.ProjectUnavailable;
-        if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project))
+        if (state.PendingProjectCancellation is not null || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project))
             return ProjectCancellationResult.DecisionPending;
         // An absent legacy workspace cannot establish which room gets the penalty.
         if (state.Employees.Any(x=>x.Office is null) || Assigned(state,project).Any(x=>
@@ -19,7 +19,7 @@ public static class ProjectCancellationService
         return ProjectCancellationResult.Success;
     }
 
-    public static ProjectCancellationResult TryCancel(GameState state,DevelopmentProjectState project)
+    public static ProjectCancellationResult TryCancel(GameState state,DevelopmentProjectState project,Random? random=null)
     {
         var result=Check(state,project);
         if (result!=ProjectCancellationResult.Success) return result;
@@ -28,6 +28,9 @@ public static class ProjectCancellationService
         var affected=Assigned(state,project).Select(employee=>(Employee:employee,
             Source:employee.SourceIndex is int sourceIndex
                 ? state.EmployeeSources.SingleOrDefault(x=>x.SourceIndex==sourceIndex) : null)).ToList();
+        // Prepare every random reaction before changing stress or removing the
+        // project. Reload only reads this snapshot; it never repeats the transaction.
+        var dialogue=ProjectCancellationDialogueRules.Prepare(project.RoomIndex,affected.Select(x=>x.Employee),random ?? new Random());
         foreach (var (employee,source) in affected)
         {
             // Original +06E2..073F (room 1): +20, then cap at 99, including 100 -> 99.
@@ -35,6 +38,7 @@ public static class ProjectCancellationService
             if (source is not null) source.Employee.Stress=employee.Stress;
         }
         state.DevelopmentProjects.Remove(project);
+        state.PendingProjectCancellation=dialogue;
         // Project removal represents the original room-state-zero write. Clear
         // its seated work/application now so immediate reuse cannot inherit it.
         // Stress uses assigned Action; outstanding work uses SeatedAction.
