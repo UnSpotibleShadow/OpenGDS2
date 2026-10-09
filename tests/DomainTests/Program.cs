@@ -928,6 +928,141 @@ Test("office tenant hit regions map three slots without inventing overlap order"
     Check(OfficeInteractionRules.TenantSlotAt(double.NaN,0) is null);
     Check(OfficeInteractionRules.TenantSlotAt(0,double.NegativeInfinity) is null);
 });
+Test("all facility types purchase exact prices once in any plot without financial accumulators",()=>
+{
+    long[] prices=[600_000_000,60_000_000,80_000_000,100_000_000,500_000_000,250_000_000,300_000_000,150_000_000,1_000_000_000];
+    foreach (FacilityKind kind in Enum.GetValues<FacilityKind>()) foreach (int slot in Enumerable.Range(0,3))
+    {
+        var (s,_)=CalendarFixture(money:prices[(int)kind]*2);s.Company.Rank=null;
+        Check(FacilityService.PurchasePrice(kind)==prices[(int)kind]);
+        Check(FacilityService.Open(s,slot,kind)==FacilityResult.Success && s.Money==prices[(int)kind]);
+        Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33);
+        Check(FacilityService.Open(s,(slot+1)%3,kind)==FacilityResult.AlreadyOwned);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(s.Calendar!.OriginalSlots0444[slot]==(int)kind);
+        Check(FacilityService.Close(s,slot,kind)==FacilityResult.Success && s.Money==prices[(int)kind] && s.Calendar.OriginalSlots0444[slot]==-1);
+        Check(FacilityService.Close(s,slot,kind)==FacilityResult.NotOwned);
+    }
+});
+Test("facility purchase rejection preserves state and checks affordability before duplicates",()=>
+{
+    var (s,_)=CalendarFixture(money:59_999_999);s.Calendar!.OriginalSlots0444[1]=1;
+    string before=SaveStore.Serialize(s);
+    Check(FacilityService.Open(s,0,FacilityKind.HotSpring)==FacilityResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    s.Money=100_000_000;s.Calendar.OriginalSlots0444[0]=0;
+    Check(FacilityService.Open(s,0,FacilityKind.Recycling)==FacilityResult.SlotOccupied);
+    Check(FacilityService.Open(s,-1,FacilityKind.School)==FacilityResult.InvalidSlot);
+    Check(FacilityService.Close(s,0,FacilityKind.HotSpring)==FacilityResult.NotOwned);
+    Throws<ArgumentOutOfRangeException>(()=>FacilityService.Open(s,0,(FacilityKind)99));
+});
+Test("hot spring ownership receipt and reload prevent repeated spending and clear source stress",()=>
+{
+    var (s,_)=CalendarFixture(money:8_000_000);s.Calendar!.OriginalSlots0444[0]=1;
+    var e=Worker(source:0);e.Stress=99;s.Employees=[e];
+    var source=Worker(source:0);source.Stress=99;s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=source}];
+    Check(FacilityService.HotSpring(s,1)==FacilityResult.NotOwned && s.Money==8_000_000);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.Success && s.Money==0 && e.Stress==0 && source.Stress==0);
+    Check(s.Company.WeeklyNet==11-8_000_000 && s.PendingFacilityReceipt!.Kind==FacilityKind.HotSpring);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));string before=SaveStore.Serialize(s);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.EventPending && SaveStore.Serialize(s)==before);
+    var session=new GameSession();session.Restore(s);session.TickOffice();Check(SaveStore.Serialize(s)==before);
+    s.PendingFacilityReceipt=null;Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
+});
+Test("recycling zeroes stock and pays exactly once without changing sales or production history",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=2;
+    var p=new ReleasedGameState {Title="Recycle A",Stock=7,UnitsSold=9,ProductionSpending=123,NetSalesReceipts=456};
+    var q=new ReleasedGameState {Title="Recycle B",ProductIndex=1,Stock=3};s.ReleasedGames=[p,q];
+    long before=s.Money!.Value;
+    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000 && p.Stock==0 && q.Stock==0);
+    Check(s.Company.WeeklyNet==5011 && p.UnitsSold==9 && p.ProductionSpending==123 && p.NetSalesReceipts==456);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(FacilityService.Recycle(s,0)==FacilityResult.EventPending && s.PendingFacilityReceipt!.Amount==5000);
+    s.PendingFacilityReceipt=null;Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000);
+});
+Test("recycling overflow is atomic before stock disposal",()=>
+{
+    var (s,_)=CalendarFixture(money:long.MaxValue);s.Calendar!.OriginalSlots0444[0]=2;
+    var p=new ReleasedGameState {Stock=1};s.ReleasedGames=[p];
+    Throws<OverflowException>(()=>FacilityService.Recycle(s,0));Check(p.Stock==1 && s.Money==long.MaxValue && s.PendingFacilityReceipt is null);
+    s.Money=0;p.Stock=long.MaxValue;Throws<OverflowException>(()=>FacilityService.Recycle(s,0));Check(p.Stock==long.MaxValue && s.Money==0);
+});
+Test("technology selector uses source order and its shared payroll scratch writer even when cancelled",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=3;s.OriginalPayrollScratchIndex=17;s.SourceUpperBound=2;
+    var a=new EmployeeState {Name="A",SourceIndex=1,RawParameter34=2};var b=new EmployeeState {Name="B",SourceIndex=0,RawParameter34=3};s.Employees=[a,b];
+    s.EmployeeSources=[new() {SourceIndex=1,GateValue=1,Employee=a},new() {SourceIndex=0,GateValue=1,Employee=b}];
+    Check(FacilityService.OpenTechnologyRoster(s,0)!.SequenceEqual(new[]{b,a}) && s.OriginalPayrollScratchIndex==2);
+    Check(s.Money==2_000_000_000 && a.MaximumTechnologies==2 && b.MaximumTechnologies==3);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.OriginalPayrollScratchIndex==2);
+});
+Test("technology study adds one capacity and synchronizes source without changing skills experience or assignments",()=>
+{
+    var (s,_)=CalendarFixture(money:40_000_000);s.Calendar!.OriginalSlots0444[0]=3;
+    var e=new EmployeeState {Name="Study",PortraitId=1,SourceIndex=0,RawParameter34=8,Experience=17,TechnologyLevels=new() {{0,1}},Office=Worker().Office};
+    var source=new EmployeeState {Name="Study",SourceIndex=0,RawParameter34=8};s.Employees=[e];
+    s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=source}];
+    Check(FacilityService.Study(s,0,e)==FacilityResult.Success && e.MaximumTechnologies==9 && source.MaximumTechnologies==9 && s.Money==0);
+    Check(e.Experience==17 && e.TechnologyLevels![0]==1 && e.Office!.Action==6 && s.Company.WeeklyNet==11-40_000_000);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Employees[0].MaximumTechnologies==9 && s.EmployeeSources[0].Employee.MaximumTechnologies==9);
+    Check(FacilityService.Study(s,0,s.Employees[0])==FacilityResult.EventPending);
+    s.PendingFacilityReceipt=null;Check(FacilityService.Study(s,0,s.Employees[0])==FacilityResult.InsufficientFunds);
+});
+Test("technology study rejects unknown source capacity and overflow without spending",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=3;
+    var e=new EmployeeState {Name="Unknown",SourceIndex=0};s.Employees=[e];
+    Check(FacilityService.Study(s,0,e)==FacilityResult.StateUnknown && FacilityService.OpenTechnologyRoster(s,0) is null);
+    e.RawParameter34=int.MaxValue;s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=e}];
+    Throws<OverflowException>(()=>FacilityService.Study(s,0,e));Check(s.Money==2_000_000_000 && e.MaximumTechnologies==int.MaxValue && s.PendingFacilityReceipt is null);
+});
+Test("production facility preserves single draw 15 to 19 gain negative cash and untouched weekly flags",()=>
+{
+    foreach (var (roll,gain) in new[]{(0f,15),(.2f,16),(.4f,17),(.6f,18),(float.BitDecrement(1f),19)})
+    {
+        var (s,_)=CalendarFixture(money:0);s.Calendar!.OriginalSlots0444[0]=7;s.Company.ProductionCapacity=50;s.CompanyActivityPerformed=true;
+        var random=new GreetingRandom(roll);
+        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.Success && s.Money==-10_000_000 && s.Company.ProductionCapacity==50+gain && random.GreetingCalls==1);
+        Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33 && s.CompanyActivityPerformed==true);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.EventPending && random.GreetingCalls==1 && s.PendingFacilityReceipt!.Gain==gain);
+    }
+});
+Test("production expansion invalid draw and overflow are atomic",()=>
+{
+    foreach (float roll in new[]{-1f,1f,float.NaN})
+    {
+        var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=7;s.Company.ProductionCapacity=50;
+        Throws<ArgumentOutOfRangeException>(()=>FacilityService.ExpandProduction(s,0,new GreetingRandom(roll)));
+        Check(s.Money==2_000_000_000 && s.Company.ProductionCapacity==50 && s.PendingFacilityReceipt is null);
+    }
+    var (t,_c)=CalendarFixture(money:long.MinValue);t.Calendar!.OriginalSlots0444[0]=7;t.Company.ProductionCapacity=50;
+    Throws<OverflowException>(()=>FacilityService.ExpandProduction(t,0,new GreetingRandom(0)));Check(t.Company.ProductionCapacity==50 && t.Money==long.MinValue);
+});
+Test("facility changes are blocked during other pending game decisions",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=7;s.Company.ProductionCapacity=50;
+    s.PendingHireGreeting=new() {EmployeeSourceIndex=0,Variant=0};
+    Check(FacilityService.ExpandProduction(s,0,new GreetingRandom(0))==FacilityResult.EventPending);
+    Check(FacilityService.Close(s,0,FacilityKind.ProductionLab)==FacilityResult.EventPending);
+    Check(FacilityService.Open(s,1,FacilityKind.HotSpring)==FacilityResult.EventPending);
+});
+Test("facility receipt validation rejects unsupported missing or malformed result snapshots",()=>
+{
+    var (s,_)=CalendarFixture();s.PendingFacilityReceipt=new() {Kind=FacilityKind.Casino,Amount=0};
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingFacilityReceipt=new() {Kind=FacilityKind.ProductionLab,Amount=10_000_000,Gain=20};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingFacilityReceipt=new() {Kind=FacilityKind.TechnologySchool,Amount=40_000_000,Gain=2};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingFacilityReceipt=null;s.Calendar!.OriginalSlots0444[0]=9;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("overlapping tenant strips expose both exact strict hits without choosing priority",()=>
+{
+    foreach (double sum in new[]{270.5,272,273.5})
+        Check(OfficeInteractionRules.TenantSlotsAt(sum-160,(sum+160)/2).SequenceEqual(new[]{0,1}));
+    Check(OfficeInteractionRules.TenantSlotsAt(110,215).SequenceEqual(new[]{0})); // sum270
+    Check(OfficeInteractionRules.TenantSlotsAt(114,217).SequenceEqual(new[]{1})); // sum274
+    Check(OfficeInteractionRules.TenantSlotsAt(double.NaN,0).Count==0);
+});
 Test("school purchase uses empty slots and exact cash without changing period accounting",()=>
 {
     var (s,c)=CalendarFixture(money:SchoolService.PurchasePrice);s.Company.Rank=null;

@@ -2754,3 +2754,141 @@ msgstr "この古いセーブには社員の配置またはストレスの情報
 
 msgid "CANCELLATION_REIMPORT_REQUIRED"
 msgstr "開発中止の会話を復元するには、元のLZHを再インポートしてください。中止の処理は完了しています。"
+
+msgid "FACILITY_NAME_School"
+msgstr "ゲーム学校"
+
+msgid "FACILITY_NAME_HotSpring"
+msgstr "社員用温泉"
+
+msgid "FACILITY_NAME_Recycling"
+msgstr "ソフト買取店"
+
+msgid "FACILITY_NAME_TechnologySchool"
+msgstr "技術研修所"
+
+msgid "FACILITY_NAME_Casino"
+msgstr "カジノ"
+
+msgid "FACILITY_NAME_Lawyer"
+msgstr "法律事務所"
+
+msgid "FACILITY_NAME_MysteryLab"
+msgstr "不思議な研究所"
+
+msgid "FACILITY_NAME_ProductionLab"
+msgstr "生産研究所"
+
+msgid "FACILITY_NAME_HardwareLab"
+msgstr "ハード開発研究所"
+
+msgid "FACILITY_DESCRIPTION_School"
+msgstr "毎年4月に卒業生を採用できます。"
+
+msgid "FACILITY_DESCRIPTION_HotSpring"
+msgstr "温泉を利用すると全社員のストレスがなくなります。"
+
+msgid "FACILITY_DESCRIPTION_Recycling"
+msgstr "ソフトの在庫をすべて1本500円で売却できます。"
+
+msgid "FACILITY_DESCRIPTION_TechnologySchool"
+msgstr "社員が習得できる技術の数を1つ増やせます。"
+
+msgid "FACILITY_DESCRIPTION_ProductionLab"
+msgstr "生産力が15～19増えます。資金が不足していても利用でき、残高がマイナスになる場合があります。"
+
+msgid "FACILITY_COMING_SOON"
+msgstr "準備中"
+
+msgid "FACILITY_CLOSE"
+msgstr "施設を閉鎖"
+
+msgid "FACILITY_CLOSE_CONFIRMATION"
+msgstr "{0}を閉鎖しますか？返金はありません。"
+
+msgid "FACILITY_HOT_SPRING_ACTION"
+msgstr "温泉を利用"
+
+msgid "FACILITY_RECYCLE_ACTION"
+msgstr "在庫を売却"
+
+msgid "FACILITY_STUDY_ACTION"
+msgstr "習得技術数を増やす"
+
+msgid "FACILITY_PRODUCTION_ACTION"
+msgstr "生産力を増やす"
+
+msgid "FACILITY_CHOOSE_PLOT"
+msgstr "施設の区画を選択"
+
+msgid "FACILITY_CONFIRM_HotSpring"
+msgstr "全社員のストレスをなくすために{0:N0}円を支払いますか？"
+
+msgid "FACILITY_CONFIRM_Recycling"
+msgstr "ソフトの在庫をすべて{0:N0}円で売却しますか？"
+
+msgid "FACILITY_CONFIRM_TechnologySchool"
+msgstr "{0:N0}円でこの社員の習得技術数を1つ増やしますか？"
+
+msgid "FACILITY_CONFIRM_ProductionLab"
+msgstr "{0:N0}円で生産力を増やしますか？残高がマイナスになる場合があります。"
+
+msgid "FACILITY_RECEIPT_HotSpring"
+msgstr "全社員のストレスが0になりました。費用：{0:N0}円。"
+
+msgid "FACILITY_RECEIPT_Recycling"
+msgstr "在庫を{0:N0}円で売却しました。"
+
+msgid "FACILITY_RECEIPT_TechnologySchool"
+msgstr "{2}の習得技術数が{1}になりました。費用：{0:N0}円。"
+
+msgid "FACILITY_RECEIPT_ProductionLab"
+msgstr "生産力が{1}増えました。費用：{0:N0}円。"
+
+msgid "FACILITY_RESULT_Success"
+msgstr "施設を更新しました。"
+
+msgid "FACILITY_RESULT_CalendarUnknown"
+msgstr "このセーブデータには施設情報がありません。"
+
+msgid "FACILITY_RESULT_EventPending"
+msgstr "先に現在の選択を完了してください。"
+
+msgid "FACILITY_RESULT_InvalidSlot"
+msgstr "無効な区画です。"
+
+msgid "FACILITY_RESULT_SlotOccupied"
+msgstr "この区画は使用中です。"
+
+msgid "FACILITY_RESULT_AlreadyOwned"
+msgstr "この施設はすでに所有しています。"
+
+msgid "FACILITY_RESULT_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "FACILITY_RESULT_InsufficientFunds"
+msgstr "資金が足りません。"
+
+msgid "FACILITY_RESULT_NotOwned"
+msgstr "この区画には該当する施設がありません。"
+
+msgid "FACILITY_RESULT_StateUnknown"
+msgstr "必要な社員情報または会社情報がありません。"
+
+msgid "FACILITY_RESULT_NoEmployees"
+msgstr "社員がいません。"
+
+msgid "FACILITY_RESULT_NotEmployed"
+msgstr "この社員はすでに退職しています。"
+
+msgid "FACILITY_DESCRIPTION_Casino"
+msgstr "この施設のサービスは準備中です。"
+
+msgid "FACILITY_DESCRIPTION_Lawyer"
+msgstr "この施設のサービスは準備中です。"
+
+msgid "FACILITY_DESCRIPTION_MysteryLab"
+msgstr "この施設のサービスは準備中です。"
+
+msgid "FACILITY_DESCRIPTION_HardwareLab"
+msgstr "この施設のサービスは準備中です。"
