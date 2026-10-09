@@ -2885,10 +2885,76 @@ msgid "FACILITY_DESCRIPTION_Casino"
 msgstr "この施設のサービスは準備中です。"
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
-msgstr "この施設のサービスは準備中です。"
+msgstr "弁護士と運送費や販売手数料の引き下げを交渉します。"
 
 msgid "FACILITY_DESCRIPTION_MysteryLab"
 msgstr "この施設のサービスは準備中です。"
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
 msgstr "この施設のサービスは準備中です。"
+
+msgid "NEGOTIATION_TARGET_Transport"
+msgstr "運送費を交渉"
+
+msgid "NEGOTIATION_TARGET_Retail"
+msgstr "販売手数料を交渉"
+
+msgid "NEGOTIATION_CURRENT_FEE"
+msgstr "{0}：1本につき {1:N0}円"
+
+msgid "NEGOTIATION_CONFIRM"
+msgstr "交渉には所持金 {0:N0}円が必要です。原作どおり、所持金の確認のみでこの金額は引かれません。交渉しますか？"
+
+msgid "NEGOTIATION_FIRST_SUCCESS"
+msgstr "1本あたりの費用を200円引き下げ、{fee}円にします。"
+
+msgid "NEGOTIATION_SUCCESS"
+msgstr "交渉を受け入れます。200円引き下げて、1本あたり{fee}円にします。"
+
+msgid "NEGOTIATION_FAILURE"
+msgstr "現在の経費では、今回はこれ以上の値下げができません。"
+
+msgid "NEGOTIATION_FLOOR"
+msgstr "すでに最低額のため、これ以上は下げられません。"
+
+msgid "NEGOTIATION_SUCCESS_SUMMARY"
+msgstr "交渉が成立し、1本あたりの費用が下がりました。"
+
+msgid "NEGOTIATION_FLOOR_SUMMARY"
+msgstr "費用が最低額に達しているため、交渉は成立しませんでした。"
+
+msgid "NEGOTIATION_Transport_INTRO"
+msgstr "運送会社と費用の引き下げを交渉してきます。"
+
+msgid "NEGOTIATION_Transport_SPEAKER"
+msgstr "運送会社の担当者"
+
+msgid "NEGOTIATION_Transport_FIRST_GREETING"
+msgstr "はじめまして。運送会社として御社のゲームを扱っています。"
+
+msgid "NEGOTIATION_Transport_GREETING"
+msgstr "いつもお取引いただきありがとうございます。"
+
+msgid "NEGOTIATION_Transport_QUESTION"
+msgstr "費用の引き下げについて、検討させてください。"
+
+msgid "NEGOTIATION_Transport_FAILURE_SUMMARY"
+msgstr "今回は運送会社が値下げを断り、交渉は成立しませんでした。"
+
+msgid "NEGOTIATION_Retail_INTRO"
+msgstr "販売店と費用の引き下げを交渉してきます。"
+
+msgid "NEGOTIATION_Retail_SPEAKER"
+msgstr "販売店の担当者"
+
+msgid "NEGOTIATION_Retail_FIRST_GREETING"
+msgstr "はじめまして。販売店として御社のゲームを扱っています。"
+
+msgid "NEGOTIATION_Retail_GREETING"
+msgstr "いつもお取引いただきありがとうございます。"
+
+msgid "NEGOTIATION_Retail_QUESTION"
+msgstr "費用の引き下げについて、検討させてください。"
+
+msgid "NEGOTIATION_Retail_FAILURE_SUMMARY"
+msgstr "今回は販売店が値下げを断り、交渉は成立しませんでした。"

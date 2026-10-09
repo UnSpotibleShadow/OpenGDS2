@@ -59,6 +59,14 @@ public partial class Main
                             ConfirmFacilityService(state,index,kind,checked(FacilityService.StockForRecycling(state)*FacilityService.RecyclingPrice),()=>FacilityService.Recycle(state,index)));break;
                     case FacilityKind.TechnologySchool:
                         AnnualButton($"TechnologyRoster{slot}","FACILITY_STUDY_ACTION",()=>ShowFacilityTechnologyRoster(state,index));break;
+                    case FacilityKind.Lawyer:
+                        foreach (var target in Enum.GetValues<FeeNegotiationTarget>())
+                        {
+                            var chosenTarget=target;
+                            AnnualMessage($"NegotiationFee{target}",string.Format(Tr("NEGOTIATION_CURRENT_FEE"),Tr($"NEGOTIATION_TARGET_{target}"),FeeNegotiationService.CurrentFee(state,target)));
+                            AnnualButton($"Negotiate{target}{slot}",$"NEGOTIATION_TARGET_{target}",()=>ShowFeeNegotiationConfirmation(state,index,chosenTarget));
+                        }
+                        break;
                     case FacilityKind.ProductionLab:
                         FacilityAction($"ExpandProduction{slot}","FACILITY_PRODUCTION_ACTION",FacilityService.ProductionExpansionCost,
                             ()=>ConfirmFacilityService(state,index,kind,FacilityService.ProductionExpansionCost,()=>_session.ExpandFacilityProduction(index)));break;
@@ -123,6 +131,35 @@ public partial class Main
             state.PendingFacilityReceipt=null;ShowOfficeReconstruction(state);
         });
         AddSaveActions(state);return true;
+    }
+    private void ShowFeeNegotiationConfirmation(GameState state,int slot,FeeNegotiationTarget target)
+    {
+        ClearContent();CompactManagementWindow("NegotiationConfirmationWindow",new Vector2(410,280),390);
+        AddHeading(Tr($"NEGOTIATION_TARGET_{target}"),22);
+        AnnualMessage("NegotiationConfirmation",string.Format(Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds));
+        AnnualButton("ConfirmFeeNegotiation","CONFIRM",()=>
+        {
+            if (!ReferenceEquals(_session.Current,state)) return;
+            var result=_session.BeginFeeNegotiation(slot,target);
+            if (result==FacilityResult.Success) ShowOfficeReconstruction(state);
+            else {ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");}
+        });
+        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+    }
+    private bool ShowPendingFeeNegotiation(GameState state)
+    {
+        if (state.PendingFeeNegotiation is not { } pending) return false;
+        int cursor=pending.MessageIndex;
+        string Text(string key)=>TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase)
+            ? Tr(key) : _importer.LoadDialogue()?.Entries.GetValueOrDefault(key) ?? Tr(key);
+        string speaker=cursor is >=1 and <=3 ? Text(FeeNegotiationService.Key(pending.Target,"SPEAKER")) : SecretaryCaption(state.SecretarySourceIndex);
+        string body=Text(FeeNegotiationService.MessageKey(pending)).Replace("{fee}",pending.After.ToString());
+        ShowConversation(Tr($"NEGOTIATION_TARGET_{pending.Target}"),[new(speaker,body,cursor is >=1 and <=3 ? 4 : null)],()=>
+        {
+            if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingFeeNegotiation,pending) || pending.MessageIndex!=cursor) return;
+            FeeNegotiationService.Acknowledge(state);ShowOfficeReconstruction(state);
+        });
+        return true;
     }
     private void ShowTenantPlotChoice(GameState state,IReadOnlyList<int> slots)
     {

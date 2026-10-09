@@ -66,6 +66,13 @@ public static class SaveStore
             throw new InvalidDataException("Invalid session state.");
         if (state.PendingProjectCancellation is { } cancellation) ProjectCancellationDialogueRules.Validate(cancellation);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);
+        if (state.PendingFeeNegotiation is { } negotiation)
+        {
+            FeeNegotiationService.Validate(negotiation);
+            if (FeeNegotiationService.CurrentFee(state,negotiation.Target)!=negotiation.After ||
+                state.Calendar?.OriginalSlots0444.Contains((int)FacilityKind.Lawyer)!=true || state.PendingFacilityReceipt is not null)
+                throw new InvalidDataException("Fee negotiation disagrees with company state.");
+        }
         if (state.PendingHireGreeting is HireGreetingState greeting &&
             (greeting.Variant is <0 or >9 || greeting.EmployeeSourceIndex is <0 or >59 ||
              !state.Employees.Any(e => e is not null && e.SourceIndex == greeting.EmployeeSourceIndex && e.PortraitId is >=1 and <=10)))

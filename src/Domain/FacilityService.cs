@@ -22,9 +22,9 @@ public static class FacilityService
     public const long ProductionExpansionCost=10_000_000;
     public const long RecyclingPrice=500;
     public static long PurchasePrice(FacilityKind kind)=>Prices[ValidKind(kind)];
-    public static bool ServiceAvailable(FacilityKind kind)=>kind is FacilityKind.School or FacilityKind.HotSpring or FacilityKind.Recycling or FacilityKind.TechnologySchool or FacilityKind.ProductionLab;
+    public static bool ServiceAvailable(FacilityKind kind)=>kind is FacilityKind.School or FacilityKind.HotSpring or FacilityKind.Recycling or FacilityKind.TechnologySchool or FacilityKind.ProductionLab or FacilityKind.Lawyer;
     private static int ValidKind(FacilityKind kind)=>Enum.IsDefined(kind) ? (int)kind : throw new ArgumentOutOfRangeException(nameof(kind));
-    public static bool HasPendingDecision(GameState state)=>state.PendingFacilityReceipt is not null || CalendarService.HasPending(state) ||
+    public static bool HasPendingDecision(GameState state)=>(state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null) || CalendarService.HasPending(state) ||
         state.PendingProjectCancellation is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null ||
         state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || RecallService.HasPending(state) ||
         SalesMilestoneService.HasPending(state) || state.DevelopmentProjects.Any(p=>p.PendingDecision is not null || CheckpointMeetingRules.HasPending(p)) ||
@@ -55,7 +55,7 @@ public static class FacilityService
         if (state.Calendar!.OriginalSlots0444[slot]!=type) return FacilityResult.NotOwned;
         state.Calendar.OriginalSlots0444[slot]=-1;return FacilityResult.Success;
     }
-    private static FacilityResult CheckService(GameState state,int slot,FacilityKind kind)
+    internal static FacilityResult CheckService(GameState state,int slot,FacilityKind kind)
     {
         var result=CheckSlot(state,slot);if (result!=FacilityResult.Success) return result;
         return state.Calendar!.OriginalSlots0444[slot]==(int)kind ? FacilityResult.Success : FacilityResult.NotOwned;

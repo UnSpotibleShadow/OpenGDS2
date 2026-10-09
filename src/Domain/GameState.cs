@@ -55,5 +55,6 @@ public sealed class GameState
     public SecretaryReplacementState? PendingSecretaryReplacement {get;set;}
     public ProjectCancellationDialogueState? PendingProjectCancellation {get;set;}
     public FacilityReceipt? PendingFacilityReceipt {get;set;}
+    public FeeNegotiationState? PendingFeeNegotiation {get;set;}
     public SecretaryPolicyState? SecretaryPolicies {get;set;}
 }

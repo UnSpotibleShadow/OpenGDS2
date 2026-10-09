@@ -98,3 +98,8 @@ Local UI validation uses the host engine and partial source restoration; optiona
 title audio is absent locally. The broader core-loop UI suite stops at its title-audio assertion before gameplay, so this run is not counted as passing. No native Windows validation, desktop package,
 GitHub Actions run or public release is claimed. Track continued work in
 [backlog #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55).
+
+M71 follow-up: lawyer construction and both fee consultations are now enabled.
+See [lawyer consultations](lawyer-facility-m71.md) for the recovered entry,
+affordability-only behavior and saved result sequence. The M70 unresolved notes
+above describe the earlier milestone.

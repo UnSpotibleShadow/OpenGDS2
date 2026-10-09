@@ -928,6 +928,85 @@ Test("office tenant hit regions map three slots without inventing overlap order"
     Check(OfficeInteractionRules.TenantSlotAt(double.NaN,0) is null);
     Check(OfficeInteractionRules.TenantSlotAt(0,double.NegativeInfinity) is null);
 });
+GameState LawyerState(long funds=15_000_000,long fee=1500)
+{
+    var (state,_)=CalendarFixture(money:funds);state.Calendar!.OriginalSlots0444[0]=5;
+    state.SalesFee1=state.SalesFee2=fee;return state;
+}
+Test("lawyer consultations preserve original affordability-only cash behavior and target independent fees",()=>
+{
+    foreach (var target in Enum.GetValues<FeeNegotiationTarget>())
+    {
+        var s=LawyerState();var random=new GreetingRandom(.75f);
+        Check(FeeNegotiationService.Begin(s,0,target,random)==FacilityResult.Success);
+        Check(s.Money==15_000_000 && s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33);
+        Check(FeeNegotiationService.CurrentFee(s,target)==1300 && FeeNegotiationService.CurrentFee(s,target==FeeNegotiationTarget.Transport ? FeeNegotiationTarget.Retail : FeeNegotiationTarget.Transport)==1500);
+        Check(random.GreetingCalls==0 && s.PendingFeeNegotiation!.MessageIndex==0);
+    }
+});
+Test("lawyer lower-fee outcome uses exactly one Single draw and original shrinking chances",()=>
+{
+    foreach (long fee in new[]{1300L,1100,900,700}) foreach (float roll in new[]{0f,.99f})
+    {
+        var s=LawyerState(fee:fee);var random=new GreetingRandom(roll);
+        Check(FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Retail,random)==FacilityResult.Success);
+        Check(s.SalesFee1==(roll==0 ? fee-200 : fee) && random.GreetingCalls==1);
+        while (FeeNegotiationService.Acknowledge(s)) {}
+        Check(s.Money==15_000_000 && !FeeNegotiationService.Acknowledge(s));
+    }
+});
+Test("lawyer fee floor and unmatched fee branches preserve original draw and message counts",()=>
+{
+    foreach (long fee in new[]{500L,600})
+    {
+        var s=LawyerState(fee:fee);var random=new GreetingRandom(0);
+        Check(FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Transport,random)==FacilityResult.Success);
+        Check(s.SalesFee2==fee && random.GreetingCalls==0 && FeeNegotiationService.MessageCount(s.PendingFeeNegotiation!)==(fee==500 ? 5 : 1));
+    }
+});
+Test("lawyer rejected entry cannot change cash fees or RNG",()=>
+{
+    var s=LawyerState(14_999_999);string before=SaveStore.Serialize(s);var random=new GreetingRandom(0);
+    Check(FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Transport,random)==FacilityResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    s.Money=15_000_000;s.SalesFee2=null;
+    Check(FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Transport,random)==FacilityResult.StateUnknown);
+    s.Calendar!.OriginalSlots0444[0]=0;
+    Check(FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Transport,random)==FacilityResult.NotOwned && random.GreetingCalls==0);
+});
+Test("lawyer outcome snapshots resume every dialogue cursor without rerolls and block duplicate consultation",()=>
+{
+    var s=LawyerState(fee:1300);var random=new GreetingRandom(0);var session=new GameSession(random);session.Restore(s);
+    Check(session.BeginFeeNegotiation(0,FeeNegotiationTarget.Transport)==FacilityResult.Success);
+    for(int i=0;i<5;i++)
+    {
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));session.Restore(s);
+        Check(s.PendingFeeNegotiation!.MessageIndex==i && s.SalesFee2==1100);
+        Check(FeeNegotiationService.ImportKeys.Contains(FeeNegotiationService.MessageKey(s.PendingFeeNegotiation)));
+        Check(session.BeginFeeNegotiation(0,FeeNegotiationTarget.Retail)==FacilityResult.EventPending);
+        Check(FacilityService.Close(s,0,FacilityKind.Lawyer)==FacilityResult.EventPending);
+        int? clock=s.CompanyActivityTicks;session.TickOffice();Check(s.CompanyActivityTicks==clock);
+        Check(FeeNegotiationService.Acknowledge(s));
+    }
+    Check(s.PendingFeeNegotiation is null && random.GreetingCalls==1 && s.Money==15_000_000);
+});
+Test("lawyer invalid Single draw leaves state unchanged",()=>
+{
+    foreach (float roll in new[]{float.NaN,float.PositiveInfinity,-.1f,1f})
+    {
+        var s=LawyerState(fee:1300);string before=SaveStore.Serialize(s);
+        Throws<ArgumentOutOfRangeException>(()=>FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Retail,new GreetingRandom(roll)));
+        Check(SaveStore.Serialize(s)==before);
+    }
+});
+Test("lawyer save validation rejects tampered fee results cursors and missing ownership",()=>
+{
+    var s=LawyerState();FeeNegotiationService.Begin(s,0,FeeNegotiationTarget.Retail,new GreetingRandom(0));
+    s.PendingFeeNegotiation!.After=1100;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingFeeNegotiation.After=1300;s.PendingFeeNegotiation.MessageIndex=5;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingFeeNegotiation.MessageIndex=0;s.SalesFee1=1500;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.SalesFee1=1300;s.Calendar!.OriginalSlots0444[0]=-1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    Check(FeeNegotiationService.ImportKeys.Count==18 && FeeNegotiationService.ImportKeys.Distinct().Count()==18);
+});
 Test("all facility types purchase exact prices once in any plot without financial accumulators",()=>
 {
     long[] prices=[600_000_000,60_000_000,80_000_000,100_000_000,500_000_000,250_000_000,300_000_000,150_000_000,1_000_000_000];
@@ -4000,7 +4079,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==146 && dialogue.SchemaVersion==8 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==164 && dialogue.SchemaVersion==9 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
         Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));

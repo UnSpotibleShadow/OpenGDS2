@@ -286,6 +286,7 @@ public partial class Main : Control
             PersistPendingRankings(state);
         }
         if (ShowPendingProjectCancellation(state)) return;
+        if (ShowPendingFeeNegotiation(state)) return;
         if (ShowPendingFacilityReceipt(state)) return;
         if (ShowPendingBankLoanReceipt(state)) return;
         if (ShowPendingHireGreeting(state)) return;
