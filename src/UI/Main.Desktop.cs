@@ -202,18 +202,19 @@ public partial class Main
         if (pixel.X < 0 || pixel.Y < 0 || pixel.X >= native.X || pixel.Y >= native.Y) return;
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
-        var tenant=OfficeInteractionRules.TenantSlotAt(pixel.X,pixel.Y);
+        var tenants=OfficeInteractionRules.TenantSlotsAt(pixel.X,pixel.Y);
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
-        image.MouseDefaultCursorShape = employee is null && room is null && tenant is null && !secretary ? CursorShape.Arrow : CursorShape.PointingHand;
+        image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary ? CursorShape.Arrow : CursorShape.PointingHand;
         if (secretary && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();ShowSecretaryAdvice(state);return;
         }
-        if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} && (room is not null || tenant is not null))
+        if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} && (room is not null || tenants.Count>0))
         {
             image.AcceptEvent();
             if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
-            if (tenant is int slot) ShowFacilities(state,slot);
+            if (tenants.Count>1) ShowTenantPlotChoice(state,tenants);
+            else if (tenants.Count==1) ShowFacilities(state,tenants[0]);
             else if (room is int index) ShowDevelopmentRoomActions(state,index);
             return;
         }
@@ -241,7 +242,7 @@ public partial class Main
     {
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null) &&
+        if (_desktopState is GameState current && (current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || current.PendingFacilityReceipt is not null) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {

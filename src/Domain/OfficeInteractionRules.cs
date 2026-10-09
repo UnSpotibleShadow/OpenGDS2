@@ -22,18 +22,23 @@ public static class OfficeInteractionRules
     /// <summary>009C66BC +00D1..021E: three tenant diamonds, slots 0–2.</summary>
     public static int? TenantSlotAt(double x, double y)
     {
-        if (!double.IsFinite(x) || !double.IsFinite(y)) return null;
+        var hits=TenantSlotsAt(x,y);
+        return hits.Count==1 ? hits[0] : null;
+    }
+
+    /// <summary>The original independently forwards all matching plot hits.</summary>
+    public static IReadOnlyList<int> TenantSlotsAt(double x,double y)
+    {
+        if (!double.IsFinite(x) || !double.IsFinite(y)) return [];
+        var hits=new List<int>(2);
         float sum=(float)(y+x/2),difference=(float)(y-x/2);
         if (difference>124 && difference<208)
         {
-            // The source's independent tests overlap here. Its modal sequence
-            // needs runtime verification; do not invent a slot priority.
-            if (sum>270 && sum<274) return null;
-            if (sum>190 && sum<274) return 0;
-            if (sum>270 && sum<354) return 1;
+            if (sum>190 && sum<274) hits.Add(0);
+            if (sum>270 && sum<354) hits.Add(1);
         }
-        if (sum>398 && sum<482 && difference>-2 && difference<80) return 2;
-        return null;
+        if (sum>398 && sum<482 && difference>-2 && difference<80) hits.Add(2);
+        return hits;
     }
 
     public static EmployeeState? EmployeeAt(GameState state, double x, double y)

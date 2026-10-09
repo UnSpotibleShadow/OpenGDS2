@@ -2784,3 +2784,141 @@ msgstr "The game in development room {room} has been discarded."
 
 msgid "CANCELLATION_REIMPORT_REQUIRED"
 msgstr "Reimport your original LZH to restore the cancellation dialogue. The cancellation is already complete."
+
+msgid "FACILITY_NAME_School"
+msgstr "Game school"
+
+msgid "FACILITY_NAME_HotSpring"
+msgstr "Staff hot spring"
+
+msgid "FACILITY_NAME_Recycling"
+msgstr "Recycling shop"
+
+msgid "FACILITY_NAME_TechnologySchool"
+msgstr "Technology school"
+
+msgid "FACILITY_NAME_Casino"
+msgstr "Casino"
+
+msgid "FACILITY_NAME_Lawyer"
+msgstr "Law office"
+
+msgid "FACILITY_NAME_MysteryLab"
+msgstr "Mystery lab"
+
+msgid "FACILITY_NAME_ProductionLab"
+msgstr "Production lab"
+
+msgid "FACILITY_NAME_HardwareLab"
+msgstr "Hardware lab"
+
+msgid "FACILITY_DESCRIPTION_School"
+msgstr "Recruit graduates each April."
+
+msgid "FACILITY_DESCRIPTION_HotSpring"
+msgstr "A visit clears stress for every employee."
+
+msgid "FACILITY_DESCRIPTION_Recycling"
+msgstr "Sell all remaining game stock for ¥500 per copy."
+
+msgid "FACILITY_DESCRIPTION_TechnologySchool"
+msgstr "Increase an employee’s technology capacity by one."
+
+msgid "FACILITY_DESCRIPTION_ProductionLab"
+msgstr "Increase production capacity by 15–19. Payment can leave funds negative."
+
+msgid "FACILITY_COMING_SOON"
+msgstr "Coming soon"
+
+msgid "FACILITY_CLOSE"
+msgstr "Close facility"
+
+msgid "FACILITY_CLOSE_CONFIRMATION"
+msgstr "Close {0}? There is no refund."
+
+msgid "FACILITY_HOT_SPRING_ACTION"
+msgstr "Visit hot spring"
+
+msgid "FACILITY_RECYCLE_ACTION"
+msgstr "Sell remaining stock"
+
+msgid "FACILITY_STUDY_ACTION"
+msgstr "Increase technology capacity"
+
+msgid "FACILITY_PRODUCTION_ACTION"
+msgstr "Expand production capacity"
+
+msgid "FACILITY_CHOOSE_PLOT"
+msgstr "Choose a facility plot"
+
+msgid "FACILITY_CONFIRM_HotSpring"
+msgstr "Spend ¥{0:N0} to clear every employee’s stress?"
+
+msgid "FACILITY_CONFIRM_Recycling"
+msgstr "Sell all remaining game stock for ¥{0:N0}?"
+
+msgid "FACILITY_CONFIRM_TechnologySchool"
+msgstr "Spend ¥{0:N0} to increase this employee’s technology capacity by one?"
+
+msgid "FACILITY_CONFIRM_ProductionLab"
+msgstr "Spend ¥{0:N0} to expand production capacity? Funds may become negative."
+
+msgid "FACILITY_RECEIPT_HotSpring"
+msgstr "All employee stress is now zero. Cost: ¥{0:N0}."
+
+msgid "FACILITY_RECEIPT_Recycling"
+msgstr "Stock sold for ¥{0:N0}."
+
+msgid "FACILITY_RECEIPT_TechnologySchool"
+msgstr "{2} can now learn {1} technologies. Cost: ¥{0:N0}."
+
+msgid "FACILITY_RECEIPT_ProductionLab"
+msgstr "Production capacity increased by {1}. Cost: ¥{0:N0}."
+
+msgid "FACILITY_RESULT_Success"
+msgstr "Facility updated."
+
+msgid "FACILITY_RESULT_CalendarUnknown"
+msgstr "Facility information is unavailable for this save."
+
+msgid "FACILITY_RESULT_EventPending"
+msgstr "Finish the current decision first."
+
+msgid "FACILITY_RESULT_InvalidSlot"
+msgstr "Invalid facility plot."
+
+msgid "FACILITY_RESULT_SlotOccupied"
+msgstr "This plot is already occupied."
+
+msgid "FACILITY_RESULT_AlreadyOwned"
+msgstr "This facility is already owned."
+
+msgid "FACILITY_RESULT_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "FACILITY_RESULT_InsufficientFunds"
+msgstr "Not enough funds."
+
+msgid "FACILITY_RESULT_NotOwned"
+msgstr "This facility is no longer on this plot."
+
+msgid "FACILITY_RESULT_StateUnknown"
+msgstr "Required staff or company information is unavailable."
+
+msgid "FACILITY_RESULT_NoEmployees"
+msgstr "There are no employees."
+
+msgid "FACILITY_RESULT_NotEmployed"
+msgstr "This employee is no longer employed."
+
+msgid "FACILITY_DESCRIPTION_Casino"
+msgstr "This facility’s service is coming soon."
+
+msgid "FACILITY_DESCRIPTION_Lawyer"
+msgstr "This facility’s service is coming soon."
+
+msgid "FACILITY_DESCRIPTION_MysteryLab"
+msgstr "This facility’s service is coming soon."
+
+msgid "FACILITY_DESCRIPTION_HardwareLab"
+msgstr "This facility’s service is coming soon."

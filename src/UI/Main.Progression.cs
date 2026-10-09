@@ -25,9 +25,8 @@ public partial class Main
         RefreshDesktop();
         if (_officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture,state);
         ClearContent();AddHeading(Tr("COMPANY_FACILITIES"),26);
-        if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(350,330),330);
+        if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(410,440),390);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
-        AnnualMessage("SchoolDescription",Tr("SCHOOL_DESCRIPTION"));
         if (state.Calendar is null) AnnualMessage("FacilitiesUnknown",Tr("CALENDAR_LEGACY_SAVE"));
         else for (int slot=0;slot<3;slot++)
         {
@@ -36,22 +35,105 @@ public partial class Main
             AddHeading(string.Format(Tr("FACILITY_SLOT"),slot+1)+": "+FacilityName(value),18);
             if (value==-1)
             {
-                var buy=new Button {Name=$"OpenSchool{slot}",Text=$"{Tr("OPEN_GAME_SCHOOL")} — ¥{SchoolService.PurchasePrice:N0}",Disabled=state.Calendar.OriginalSlots0444.Contains(0)};
-                _content.AddChild(buy);buy.Pressed+=()=>
-                {var result=SchoolService.Open(state,index);ShowFacilities(state,selectedSlot);_status.Text=Tr($"SCHOOL_RESULT_{result}");};
+                foreach (FacilityKind kind in Enum.GetValues<FacilityKind>())
+                {
+                    var chosenKind=kind;bool available=FacilityService.ServiceAvailable(kind);
+                    var buy=new Button {Name=kind==FacilityKind.School ? $"OpenSchool{slot}" : $"OpenFacility{slot}_{(int)kind}",Text=$"{FacilityName((int)kind)} — ¥{FacilityService.PurchasePrice(kind):N0}"+
+                        (available ? "" : " · "+Tr("FACILITY_COMING_SOON")),
+                        Disabled=!available || state.Calendar.OriginalSlots0444.Contains((int)kind) || FacilityService.HasPendingDecision(state)};
+                    _content.AddChild(buy);buy.Pressed+=()=>
+                    {var result=FacilityService.Open(state,index,chosenKind);ShowFacilities(state,selectedSlot);_status.Text=Tr($"FACILITY_RESULT_{result}");};
+                }
             }
-            else if (value==0)
-                AnnualButton($"CloseSchool{slot}","CLOSE_GAME_SCHOOL",()=>ShowSchoolClosure(state,index));
+            else if (value is >=0 and <=8)
+            {
+                var kind=(FacilityKind)value;
+                AnnualMessage($"FacilityDescription{slot}",Tr($"FACILITY_DESCRIPTION_{kind}"));
+                switch (kind)
+                {
+                    case FacilityKind.HotSpring:
+                        FacilityAction($"UseHotSpring{slot}","FACILITY_HOT_SPRING_ACTION",EmployeeCareService.HotSpringCost,
+                            ()=>ConfirmFacilityService(state,index,kind,EmployeeCareService.HotSpringCost,()=>FacilityService.HotSpring(state,index)));break;
+                    case FacilityKind.Recycling:
+                        AnnualButton($"RecycleStock{slot}","FACILITY_RECYCLE_ACTION",()=>
+                            ConfirmFacilityService(state,index,kind,checked(FacilityService.StockForRecycling(state)*FacilityService.RecyclingPrice),()=>FacilityService.Recycle(state,index)));break;
+                    case FacilityKind.TechnologySchool:
+                        AnnualButton($"TechnologyRoster{slot}","FACILITY_STUDY_ACTION",()=>ShowFacilityTechnologyRoster(state,index));break;
+                    case FacilityKind.ProductionLab:
+                        FacilityAction($"ExpandProduction{slot}","FACILITY_PRODUCTION_ACTION",FacilityService.ProductionExpansionCost,
+                            ()=>ConfirmFacilityService(state,index,kind,FacilityService.ProductionExpansionCost,()=>_session.ExpandFacilityProduction(index)));break;
+                }
+                AnnualButton(kind==FacilityKind.School ? $"CloseSchool{slot}" : $"CloseFacility{slot}","FACILITY_CLOSE",()=>ShowFacilityClosure(state,index,kind));
+            }
         }
         AddSaveActions(state);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
     }
-    private string FacilityName(int value)=>value switch {-1=>Tr("FACILITY_EMPTY"),0=>Tr("GAME_SCHOOL"),_=>string.Format(Tr("FACILITY_OTHER"),value)};
-    private void ShowSchoolClosure(GameState state,int slot)
+    private void FacilityAction(string name,string key,long amount,Action action)
     {
-        ClearContent();AddHeading(Tr("CLOSE_GAME_SCHOOL"),26);AnnualMessage("SchoolCloseConfirmation",Tr("SCHOOL_CLOSE_CONFIRMATION"));
-        AnnualButton("ConfirmSchoolClosure","CONFIRM",()=>
-        {var result=SchoolService.Close(state,slot);ShowFacilities(state);_status.Text=Tr($"SCHOOL_RESULT_{result}");});
-        AddAction("CANCEL",()=>ShowFacilities(state));
+        var button=new Button {Name=name,Text=$"{Tr(key)} — ¥{amount:N0}"};_content.AddChild(button);button.Pressed+=action;
+    }
+    private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(Tr("FACILITY_OTHER"),value);
+    private void ShowFacilityClosure(GameState state,int slot,FacilityKind kind)
+    {
+        ClearContent();AddHeading(Tr("FACILITY_CLOSE"),26);
+        AnnualMessage("FacilityCloseConfirmation",string.Format(Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind)));
+        AnnualButton(kind==FacilityKind.School ? "ConfirmSchoolClosure" : "ConfirmFacilityClosure","CONFIRM",()=>
+        {var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");});
+        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+    }
+    private void ConfirmFacilityService(GameState state,int slot,FacilityKind kind,long amount,Func<FacilityResult> action)
+    {
+        ClearContent();CompactManagementWindow("FacilityConfirmationWindow",new Vector2(410,280),390);
+        AddHeading(FacilityName((int)kind),22);
+        AnnualMessage("FacilityConfirmation",string.Format(Tr($"FACILITY_CONFIRM_{kind}"),amount));
+        AnnualButton("ConfirmFacilityService","CONFIRM",()=>
+        {
+            if (!ReferenceEquals(_session.Current,state)) return;
+            var result=action();
+            if (result==FacilityResult.Success) ShowOfficeReconstruction(state);
+            else {ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");}
+        });
+        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+    }
+    private void ShowFacilityTechnologyRoster(GameState state,int slot)
+    {
+        var roster=FacilityService.OpenTechnologyRoster(state,slot);
+        ClearContent();CompactManagementWindow("FacilityStudyWindow",new Vector2(410,360),390);
+        AddHeading(Tr("FACILITY_STUDY_ACTION"),22);
+        if (roster is null) AnnualMessage("FacilityRosterUnknown",Tr("FACILITY_RESULT_StateUnknown"));
+        else if (roster.Count==0) AnnualMessage("FacilityRosterEmpty",Tr("FACILITY_RESULT_NoEmployees"));
+        else foreach (var employee in roster)
+        {
+            var student=employee;
+            var button=new Button {Name=$"StudyCapacity{employee.SourceIndex}",Text=$"{EmployeeName(employee)} · {employee.MaximumTechnologies} → {employee.MaximumTechnologies+1} · ¥{FacilityService.TechnologyStudyCost:N0}"};
+            _content.AddChild(button);button.Pressed+=()=>ConfirmFacilityService(state,slot,FacilityKind.TechnologySchool,
+                FacilityService.TechnologyStudyCost,()=>FacilityService.Study(state,slot,student));
+        }
+        AddSaveActions(state);AddAction("CANCEL",()=>ShowFacilities(state,slot));
+    }
+    private bool ShowPendingFacilityReceipt(GameState state)
+    {
+        if (state.PendingFacilityReceipt is not { } receipt) return false;
+        ClearContent();CompactManagementWindow("FacilityResultWindow",new Vector2(410,280),390);
+        AddHeading(FacilityName((int)receipt.Kind),22);
+        AnnualMessage("FacilityServiceResult",string.Format(Tr($"FACILITY_RECEIPT_{receipt.Kind}"),receipt.Amount,receipt.Gain,receipt.EmployeeName));
+        AnnualButton("AcknowledgeFacilityReceipt","CONTINUE",()=>
+        {
+            if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingFacilityReceipt,receipt)) return;
+            state.PendingFacilityReceipt=null;ShowOfficeReconstruction(state);
+        });
+        AddSaveActions(state);return true;
+    }
+    private void ShowTenantPlotChoice(GameState state,IReadOnlyList<int> slots)
+    {
+        ClearContent();CompactManagementWindow("TenantPlotChoiceWindow",new Vector2(350,230),330);
+        AddHeading(Tr("FACILITY_CHOOSE_PLOT"),22);
+        foreach (int slot in slots)
+        {
+            int chosen=slot;var button=new Button {Name=$"ChooseTenantPlot{slot}",Text=string.Format(Tr("FACILITY_SLOT"),slot+1)};
+            _content.AddChild(button);button.Pressed+=()=>ShowFacilities(state,chosen);
+        }
+        AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
     }
     private void ShowRankings(GameState? state=null)
     {

@@ -209,7 +209,7 @@ public static class CalendarService
             c.Hardware.Any(h=>h.Availability==2 && state.HardwareLicenses.Contains(h.SourceIndex)) ||
             c.Loans is null || c.Loans.Count!=3 || c.Loans.Any(l=>l is null || l.OriginalType is <0 or >4 || l.OriginalType>0 && l.BorrowedOn is null) ||
             c.Tenants is null || c.Tenants.Count!=2 || c.Tenants.Any(t=>t is null || t.Weeks<0) ||
-            c.OriginalSlots0444 is null || c.OriginalSlots0444.Count!=3)
+            c.OriginalSlots0444 is null || c.OriginalSlots0444.Count!=3 || c.OriginalSlots0444.Any(x=>x is <-1 or >8))
             throw new InvalidDataException("Invalid company calendar cells.");
         foreach (var loan in c.Loans)
             if (loan.BorrowedOn is GameDate borrowed)

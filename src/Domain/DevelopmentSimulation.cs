@@ -5,7 +5,7 @@ public static class DevelopmentSimulation
 {
     public static void TickEmployee(GameState state,EmployeeState employee,OriginalCatalog catalog,Random random)
     {
-        if (state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null) return;
+        if (state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || state.PendingFacilityReceipt is not null) return;
         var office=employee.Office;
         if (office is null || !office.WorkEngaged || office.MovementState!=0 || office.SeatedAction is <6 or >17) return;
         var project=state.DevelopmentProjects.SingleOrDefault(x=>x.RoomIndex==(office.SeatedAction-6)/6);

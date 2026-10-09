@@ -12,7 +12,7 @@ public sealed class EmployeeState
     public int? PortraitId { get; init; }
     // Literal order: inspiration, speed, accuracy, music, graphics, novelty, fun.
     public List<int> OriginalAttributes { get; init; } = [];
-    public int? RawParameter34 { get; init; }
+    public int? RawParameter34 { get; set; }
     [System.Text.Json.Serialization.JsonIgnore]
     public int? MaximumTechnologies => RawParameter34;
     // Null means unknown in older modern saves; keys are source indices, not identifiers.

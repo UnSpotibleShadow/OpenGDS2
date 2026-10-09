@@ -5,7 +5,7 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M62.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M70.
 
 The private test candidate is **0.1.0-ea.1-rc.1**. See [test checklist](docs/early-access-testing.md), [known limitations](docs/early-access-known-issues.md) and [release gates](docs/early-access-release.md). It is prepared for owner testing and is not yet approved for public release. Candidate saves/settings/imports use a separate `OpenGDS2-EarlyAccessTesting` folder. [Issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the durable continuation backlog.
 
@@ -17,6 +17,8 @@ milestone announcements, calendar transactions, exhibitions and own-company
 awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
 and persistent global records are implemented. Office progression, own-hardware
 development and remaining weekly economics are unfinished.
+
+M70 adds **staff hot springs, stock recycling, technology-capacity study and production-lab expansion** to facility management, with confirmed transactions and saved results. Four remaining facilities await their dependent systems. See [facility rules and remaining work](docs/facilities-m70.md).
 
 M68 adds **Cancel project** on the live development screen. Confirmation discards
 the project, raises assigned staff stress by 20 (capped at 99), and frees its room

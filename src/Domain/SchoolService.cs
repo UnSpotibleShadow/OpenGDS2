@@ -10,7 +10,7 @@ public static class SchoolService
     {
         var c=state.Calendar;
         if (c is null) return SchoolResult.CalendarUnknown;
-        if (c.Pending is not null) return SchoolResult.EventPending;
+        if (FacilityService.HasPendingDecision(state)) return SchoolResult.EventPending;
         if (slot is <0 or >2) return SchoolResult.InvalidSlot;
         if (c.OriginalSlots0444.Contains(0)) return SchoolResult.AlreadyOwned;
         if (c.OriginalSlots0444[slot]!=-1) return SchoolResult.SlotOccupied;
@@ -24,7 +24,7 @@ public static class SchoolService
     {
         var c=state.Calendar;
         if (c is null) return SchoolResult.CalendarUnknown;
-        if (c.Pending is not null) return SchoolResult.EventPending;
+        if (FacilityService.HasPendingDecision(state)) return SchoolResult.EventPending;
         if (slot is <0 or >2) return SchoolResult.InvalidSlot;
         if (c.OriginalSlots0444[slot]!=0) return SchoolResult.NotOwned;
         c.OriginalSlots0444[slot]=-1;return SchoolResult.Success;
