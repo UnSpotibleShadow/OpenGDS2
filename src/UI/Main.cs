@@ -173,6 +173,12 @@ public partial class Main : Control
             _content.AddChild(button);
         }
         AddAction("GLOBAL_RANKINGS",()=>ShowRankings());
+        var previous = new Button { Name = "LoadPreviousSave", Text = Tr("LOAD_PREVIOUS_SAVE"),
+            TooltipText = Tr("LOAD_PREVIOUS_SAVE_NOTE"), Disabled = !System.IO.File.Exists(SaveStore.BackupPath(SavePath)),
+            CustomMinimumSize = new Vector2(0, 46) };
+        previous.Pressed += LoadPreviousSession;
+        _content.AddChild(previous);
+        AddAction("EARLY_ACCESS_SCOPE", ShowEarlyAccessScope);
         var import = new Button { Text = Tr("IMPORT_BUTTON"), CustomMinimumSize = new Vector2(0, 46) };
         import.Pressed += ShowImporter;
         _content.AddChild(import);
@@ -183,6 +189,8 @@ public partial class Main : Control
         var note = new Label { Name = "BuildVersion", Text = $"{Tr("EARLY_ACCESS_CANDIDATE")} — {BuildInfo.Version}", HorizontalAlignment = HorizontalAlignment.Center,
             AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _content.AddChild(note);
+        _content.AddChild(new Label { Name = "EarlyAccessBoundary", Text = Tr("EARLY_ACCESS_BOUNDARY"),
+            HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart });
     }
 
     /// <summary>
@@ -240,6 +248,9 @@ public partial class Main : Control
         };
         _content.AddChild(summary);
         AddSpacer(8);
+
+        _content.AddChild(new Label { Name = "EarlyAccessModeBoundary", Text = Tr("EARLY_ACCESS_BOUNDARY"),
+            HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart });
 
         var beginner = new Button { Text = Tr("BEGINNER_MODE"), TooltipText = Tr("BEGINNER_RULES_VERIFIED"), CustomMinimumSize = new Vector2(0, 52) };
         beginner.Pressed += () => StartReconstructedGame(companyName, presidentName, GameMode.Beginner);
@@ -495,6 +506,21 @@ public partial class Main : Control
     {
         try { var state = SaveStore.Load(SavePath); _session.Restore(state); ShowOfficeReconstruction(state); }
         catch (Exception ex) { ShowTitleScreen(); _status.Text = $"{Tr("LOAD_FAILED")}: {ex.Message}"; }
+    }
+
+    private void LoadPreviousSession()
+    {
+        try { var state = SaveStore.LoadBackup(SavePath); _session.Restore(state); ShowOfficeReconstruction(state); }
+        catch (Exception ex) { ShowTitleScreen(); _status.Text = $"{Tr("LOAD_FAILED")}: {ex.Message}"; }
+    }
+
+    private void ShowEarlyAccessScope()
+    {
+        DestroyDesktop();
+        ClearContent(); AddHeading(Tr("EARLY_ACCESS_SCOPE"), 30);
+        foreach (var key in new[] { "EARLY_ACCESS_BOUNDARY", "EARLY_ACCESS_FEATURES", "EARLY_ACCESS_DEFERRED", "LOAD_PREVIOUS_SAVE_NOTE" })
+            _content.AddChild(new Label { Text = Tr(key), AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        AddAction("BACK_TO_TITLE", ShowTitleScreen);
     }
 
     private void ShowSettings()

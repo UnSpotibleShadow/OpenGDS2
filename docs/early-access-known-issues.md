@@ -1,15 +1,16 @@
-# Known limitations — 0.1.0-ea.1-rc.2
+# Known limitations — 0.1.0-ea.1-rc.3
 
-This private candidate is an unfinished community reconstruction. It requires a supported, locally imported GameDev2DX.lzh. The title screen works without it; normal gameplay does not. No original-game files are bundled.
+This private test candidate requires the supported, locally imported GameDev2DX.lzh. The title/settings work without it; gameplay needs the import. No original files are bundled.
 
 | Area | Candidate boundary |
 | --- | --- |
-| Development | Original games, eligible Hall of Fame sequels and manga adaptations are implemented. Polishing, external/contract work and the original cancellation/stress transaction are not implemented. Unsupported work is not offered as a completed action. |
-| Economy/progression | Verified calendar charges and bank borrowing/annual repayment are implemented. Bankruptcy, office/company upgrades, own-hardware development and some original economy gates remain incomplete. Negative funds do not establish a complete original game-over lifecycle. |
-| Facilities | School purchase, closure, graduates and occupied artwork are supported. Eight other facility services and student-growth behavior remain unimplemented. |
-| Original fidelity | Automatic conversation scheduling/callers, some exact form geometry, remaining office bubbles/bitmap labels and progression effects remain open. English personal-name readings are provisional. |
-| Saves | Modern JSON saves only; original-game save import is unsupported. Future candidate versions may require a fresh company. The candidate has a separate data folder and does not migrate ordinary development saves automatically. |
-| Package | Windows x86_64 only for this candidate. It uses a reused verified Windows Godot/.NET debug runtime, the current managed assembly and community audio resources. It is not a clean source export; all 25 community source OGGs have been recovered and integrity checked. Clean export validation remains pending. |
-| Validation | Automated domain/core/UI checks run on the Linux host; Windows-native graphical behavior, fresh machine launch and a sustained multi-year playthrough require owner testing. No claim of native Windows validation is made. |
+| Campaign | Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Bankruptcy and office/company upgrades are incomplete; negative funds do not end the game. No complete original endgame is claimed. |
+| Development | Original projects, eligible Hall of Fame sequels, manga adaptations, meetings, cancellation, debugging and shipment are supported. Polishing and external/contract work are unavailable. |
+| Economy | Verified payroll/calendar events, borrowing and annual repayment are supported. Some upstream economy/menu gates and payroll scratch writers need original comparison; missing data pauses with an explanation rather than fabricated values. |
+| Facilities | School, hot springs, recycling, technology capacity, production expansion and lawyer consultation are supported with saved results. Casino, mystery lab and own hardware remain unavailable. Student-growth effects are incomplete. |
+| Fidelity | Automatic conversation scheduling/cadence, some growth effects/form geometry/bubbles/bitmap labels and provisional English name readings remain open. Existing English facility vacancy signs are translated locally. |
+| Saves | Modern JSON only. Saving retains one previous valid slot; the title's Load Previous Save restores earlier progress without changing the current file until explicit Save. Original save import is unsupported; future versions may require a fresh company. Back up saves before upgrading. |
+| Package | Windows x86_64, current export-API managed assembly with a verified reused Godot/.NET debug runtime and community audio resources. All 25 exact OGG sources are locally verified. This is not a clean SDK source export. |
+| Acceptance | Automated domain, source-host and exported-host checks do not establish native Windows acceptance. Fresh-machine graphical behavior and multi-year playthrough require owner testing. |
 
-Do not rely on this build for a complete original-game campaign. Back up modern saves before upgrading. Public release remains blocked on the release gates in early-access-release.md, including a decision on incomplete end-of-game/progression behavior.
+The title and mode selection disclose the campaign boundary. Detailed unresolved evidence and release decisions are in DECISIONS.md / `early-access-decisions.md`. Follow TEST_CHECKLIST.md; a crash, save corruption, duplicate transaction or supported-workflow dead end blocks public release. Public release has not been approved.

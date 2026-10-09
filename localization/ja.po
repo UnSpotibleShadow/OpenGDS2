@@ -2958,3 +2958,21 @@ msgstr "費用の引き下げについて、検討させてください。"
 
 msgid "NEGOTIATION_Retail_FAILURE_SUMMARY"
 msgstr "今回は販売店が値下げを断り、交渉は成立しませんでした。"
+
+msgid "LOAD_PREVIOUS_SAVE"
+msgstr "前回のセーブを読み込む"
+
+msgid "LOAD_PREVIOUS_SAVE_NOTE"
+msgstr "再保存時に前回の有効なセーブを保持します。読み込みは以前の進行を復元しますが、保存を選ぶまで現在のファイルは変更しません。購入や会話の進行が以前の状態に戻る場合があります。"
+
+msgid "EARLY_ACCESS_SCOPE"
+msgstr "アーリーアクセス：対応範囲"
+
+msgid "EARLY_ACCESS_BOUNDARY"
+msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。倒産と会社・事務所の拡張は未完成で、資金がマイナスでもゲームは終了しません。"
+
+msgid "EARLY_ACCESS_FEATURES"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、現代形式のセーブ。"
+
+msgid "EARLY_ACCESS_DEFERRED"
+msgstr "未対応または未完成：カジノ、謎の研究所、自社ハード、磨き込み、受託開発、原作セーブの取り込み、会社の成長、会話や成長効果の一部。この非公開候補版はWindowsでの通しプレイ検証が必要です。"

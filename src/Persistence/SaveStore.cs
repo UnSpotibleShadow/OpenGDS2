@@ -49,7 +49,11 @@ public static class SaveStore
             {
                 var bytes = System.Text.Encoding.UTF8.GetBytes(text); stream.Write(bytes); stream.Flush(true);
             }
-            File.Move(temp, absolute, true);
+            if (File.Exists(absolute) && IsReadableSave(absolute))
+                File.Replace(temp, absolute, BackupPath(absolute));
+            else
+                // Keep a valid previous save when replacing a damaged current slot.
+                File.Move(temp, absolute, true);
         }
         finally { if (File.Exists(temp)) File.Delete(temp); }
     }
@@ -57,6 +61,13 @@ public static class SaveStore
     {
         if (new FileInfo(path).Length > MaxBytes) throw new InvalidDataException("Save is too large.");
         return Deserialize(File.ReadAllText(path));
+    }
+    public static string BackupPath(string path) => Path.GetFullPath(path) + ".bak";
+    public static GameState LoadBackup(string path) => Load(BackupPath(path));
+    private static bool IsReadableSave(string path)
+    {
+        try { Load(path); return true; }
+        catch (InvalidDataException) { return false; }
     }
     private static void Validate(GameState state)
     {

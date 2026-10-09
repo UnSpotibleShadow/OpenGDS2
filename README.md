@@ -254,3 +254,7 @@ Community-written code and documentation use the [MIT License](LICENSE). The eig
 authorized music recordings have a separate [distribution notice](audio/community/NOTICE.md).
 See [notice.md](notice.md) for third-party content exclusions and project disclaimers.
 Original game files and imported data are not distributed with this repository.
+
+## Current private Early Access candidate
+
+RC.3 supports the reconstructed core loop and implemented facilities, with previous-valid-save recovery. Beginner retains its verified ending; Normal is experimental ongoing play without complete bankruptcy or office progression. See [release scope and unresolved decisions](docs/early-access-decisions.md), [known limitations](docs/early-access-known-issues.md) and [Windows acceptance checklist](docs/early-access-testing.md). Public release remains pending native Windows acceptance and a clean source export.
