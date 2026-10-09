@@ -2988,3 +2988,21 @@ msgstr "You would like to discuss a lower fee. Let me consider it."
 
 msgid "NEGOTIATION_Retail_FAILURE_SUMMARY"
 msgstr "The negotiation failed. The retailer has declined a reduction this time."
+
+msgid "LOAD_PREVIOUS_SAVE"
+msgstr "Load Previous Save"
+
+msgid "LOAD_PREVIOUS_SAVE_NOTE"
+msgstr "The previous valid save is kept when you save again. Loading it restores earlier progress in memory and leaves the current file untouched until you choose Save. It may roll back purchases or dialogue progress."
+
+msgid "EARLY_ACCESS_SCOPE"
+msgstr "Early Access: Supported Features"
+
+msgid "EARLY_ACCESS_BOUNDARY"
+msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play: bankruptcy and office/company upgrades are incomplete; negative funds do not end the game."
+
+msgid "EARLY_ACCESS_FEATURES"
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity and lawyer consultations; modern saves."
+
+msgid "EARLY_ACCESS_DEFERRED"
+msgstr "Unavailable or incomplete: casino, mystery lab, own hardware, polishing, contract work, original save import, full company progression and some original conversation/growth effects. This private candidate still needs Windows playthrough acceptance."

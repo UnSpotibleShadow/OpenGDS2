@@ -249,8 +249,8 @@ func run() -> void:
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
-    check(main.find_child("BuildVersion",true,false).text.contains("0.1.0-ea.1-rc.1"),"Title identifies the private candidate version")
-    check(root.title.contains("0.1.0-ea.1-rc.1"),"Window identifies the candidate version")
+    check(main.find_child("BuildVersion",true,false).text.contains("0.1.0-ea.1-rc.3"),"Title identifies the private candidate version")
+    check(root.title.contains("0.1.0-ea.1-rc.3"),"Window identifies the candidate version")
     check(ProjectSettings.globalize_path("user://").contains("OpenGDS2-EarlyAccessTesting"),"Candidate user data is isolated from ordinary development data")
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
@@ -302,7 +302,7 @@ func run() -> void:
         check(FileAccess.file_exists("user://original/employees.json"), "Database import")
         check(FileAccess.file_exists("user://original/dialogue.json"),"Original Japanese dialogue imported locally")
         var secretary_dialogue = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
-        check(secretary_dialogue.SchemaVersion == 7 and secretary_dialogue.Entries.size() == 136,"Advice text is imported only into the local cache")
+        check(secretary_dialogue.SchemaVersion == 9 and secretary_dialogue.Entries.size() == 164,"Advice text is imported only into the local cache")
         for message in ["DevelopGame","HotSpring","BuyTechnology","ContractsNextMonth","ContractsThisMonth","Contest","LicenseUrgent","MoreLicenses","AnotherLicense","UpgradeComputer","ExcessStock","FundsLow","FundsContracts","FundsHealthy"]:
             check(not secretary_dialogue.Entries["SECRETARY_ADVICE_"+message].is_empty(),"Original secretary message extracted locally: "+message)
         var catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))

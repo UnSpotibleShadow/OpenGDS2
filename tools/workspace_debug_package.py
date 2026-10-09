@@ -173,8 +173,10 @@ build_manifest = {
 if args.candidate:
     for source, name in [("docs/early-access-testing.md","TEST_CHECKLIST.md"),
                          ("docs/early-access-known-issues.md","KNOWN_ISSUES.md"),
-                         ("docs/early-access-release-notes.md","RELEASE_NOTES.md")]:
+                         ("docs/early-access-release-notes.md","RELEASE_NOTES.md"),
+                         ("docs/early-access-decisions.md","DECISIONS.md")]:
         shutil.copy2(root/source,base/name)
+    shutil.copy2(root/"audio/community/NOTICE.md",base/"licenses/COMMUNITY_MUSIC_NOTICE.md")
     (base/"GETTING_STARTED.txt").write_text(
         "OpenGDS2 "+args.build_label+" — PRIVATE EARLY ACCESS TEST CANDIDATE\n\n"
         "Extract the entire ZIP. Run OpenGDS2.console.exe (or OpenGDS2.exe).\n"
@@ -185,7 +187,10 @@ if args.candidate:
         "Your ordinary OpenGDS2 saves/imports/settings are not used. Start a new company.\n"
         "Modern JSON saves are supported; original-game saves are not supported.\n"
         "Save compatibility across future Early Access versions is not guaranteed. Back up before upgrading.\n\n"
-        "Read TEST_CHECKLIST.md, KNOWN_ISSUES.md and RELEASE_NOTES.md before testing.\n"
+        "Read TEST_CHECKLIST.md, KNOWN_ISSUES.md, RELEASE_NOTES.md and DECISIONS.md before testing.\n"
+        "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play.\n"
+        "Bankruptcy and company/office upgrades remain incomplete; negative funds do not end the game.\n"
+        "The title's Load Previous Save restores the previous valid save without overwriting the current file.\n"
         "Capture a log with: OpenGDS2.console.exe --log-file opengds2-test.log\n"
         "Report the version, Windows version, exact steps and expected/actual result.\n"
         "Share logs privately; never publish imported originals, original saves or the LZH.\n\n"

@@ -1,10 +1,12 @@
 # Remaining reconstruction work
 
+For current Early Access scope, release gates and every unresolved decision/evidence item, see [the M72 decision register](early-access-decisions.md). Full reconstruction targets below remain open even when deferred from the first candidate.
+
 M68 adds verified project cancellation: a paused confirmation, assigned-room staff stress +20 capped at 99, no refund, and safe room reuse. M69 adds the seven staff reactions, ordered room summaries and a saved dialogue cursor; Japanese text comes from local LZH reimport. See [cancellation dialogue](cancellation-dialogue-m69.md). See [cancellation evidence and compatibility](project-cancellation-m68.md).
 
 The prioritized [GitHub backlog and continuation handoff](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the central entry point for another instance. Update it after each area; this document retains detailed reconstruction targets.
 
-M71 connects both lawyer fee consultations with original affordability-only entry, independent fee outcomes and saved five-page dialogue. See [lawyer evidence and compatibility](lawyer-facility-m71.md). Next: recover mystery-lab delayed results.
+M71 connects both lawyer fee consultations with original affordability-only entry, independent fee outcomes and saved five-page dialogue. See [lawyer evidence and compatibility](lawyer-facility-m71.md). M72 prepares the versioned Early Access scope and previous-save recovery. Optional next reconstruction: mystery-lab delayed results.
 
 M70 connects the hot spring, recycling, technology-capacity study and production lab, including verified construction/closure, accounting and saved results. Nine prices and artwork mappings are known; casino, mystery lab and own-hardware services remain disabled. See [facility management and next dependencies](facilities-m70.md). M61 restores occupied facility artwork for saved slots with immediate open/close refresh. See [facility artwork](facility-artwork-m61.md).
 

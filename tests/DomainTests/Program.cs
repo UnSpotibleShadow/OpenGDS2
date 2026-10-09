@@ -3972,7 +3972,31 @@ Test("atomic save/load", () =>
         string path = Path.Combine(dir, "save.json"); SaveStore.Save(path, State());
         Check(SaveStore.Load(path).Money == 100);
         SaveStore.Save(path, State(200)); Check(SaveStore.Load(path).Money == 200);
-        Check(Directory.GetFiles(dir).Length == 1);
+        Check(Directory.GetFiles(dir).Length == 2 && SaveStore.LoadBackup(path).Money == 100);
+    }
+    finally { if (Directory.Exists(dir)) Directory.Delete(dir, true); }
+});
+Test("previous valid save survives damaged current slot and rejected writes", () =>
+{
+    string dir = Path.Combine(Path.GetTempPath(), "opengds2-backup-" + Guid.NewGuid());
+    try
+    {
+        string path = Path.Combine(dir, "save.json");
+        SaveStore.Save(path, State(100));
+        Check(!File.Exists(SaveStore.BackupPath(path)));
+        SaveStore.Save(path, State(200));
+        Check(SaveStore.Load(path).Money == 200 && SaveStore.LoadBackup(path).Money == 100);
+        File.WriteAllText(path, "{");
+        Throws<InvalidDataException>(() => SaveStore.Load(path));
+        Check(SaveStore.LoadBackup(path).Money == 100 && File.ReadAllText(path) == "{");
+        SaveStore.Save(path, State(300));
+        Check(SaveStore.Load(path).Money == 300 && SaveStore.LoadBackup(path).Money == 100);
+        var invalid = State(400); invalid.Week = 5;
+        Throws<InvalidDataException>(() => SaveStore.Save(path, invalid));
+        Check(SaveStore.Load(path).Money == 300 && SaveStore.LoadBackup(path).Money == 100);
+        SaveStore.Save(path, State(500));
+        Check(SaveStore.Load(path).Money == 500 && SaveStore.LoadBackup(path).Money == 300);
+        Check(!Directory.EnumerateFiles(dir, "*.tmp").Any());
     }
     finally { if (Directory.Exists(dir)) Directory.Delete(dir, true); }
 });
