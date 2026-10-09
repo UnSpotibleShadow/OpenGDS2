@@ -2915,10 +2915,76 @@ msgid "FACILITY_DESCRIPTION_Casino"
 msgstr "This facility’s service is coming soon."
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
-msgstr "This facility’s service is coming soon."
+msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
 
 msgid "FACILITY_DESCRIPTION_MysteryLab"
 msgstr "This facility’s service is coming soon."
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
 msgstr "This facility’s service is coming soon."
+
+msgid "NEGOTIATION_TARGET_Transport"
+msgstr "Negotiate transport fee"
+
+msgid "NEGOTIATION_TARGET_Retail"
+msgstr "Negotiate retail fee"
+
+msgid "NEGOTIATION_CURRENT_FEE"
+msgstr "{0}: ¥{1:N0} per copy"
+
+msgid "NEGOTIATION_CONFIRM"
+msgstr "Consultation requires ¥{0:N0} available. The original checks funds without deducting this amount. Proceed?"
+
+msgid "NEGOTIATION_FIRST_SUCCESS"
+msgstr "We can reduce our fee by ¥200 to ¥{fee} per copy."
+
+msgid "NEGOTIATION_SUCCESS"
+msgstr "Agreed. Our fee will be ¥{fee} per copy after a ¥200 reduction."
+
+msgid "NEGOTIATION_FAILURE"
+msgstr "Our current costs leave no room for a further reduction."
+
+msgid "NEGOTIATION_FLOOR"
+msgstr "We have reached our minimum fee and cannot reduce it further."
+
+msgid "NEGOTIATION_SUCCESS_SUMMARY"
+msgstr "The negotiation succeeded. Our costs per copy are now lower."
+
+msgid "NEGOTIATION_FLOOR_SUMMARY"
+msgstr "The negotiation failed: the fee is already at its minimum."
+
+msgid "NEGOTIATION_Transport_INTRO"
+msgstr "I will ask the transport company to reduce its fee."
+
+msgid "NEGOTIATION_Transport_SPEAKER"
+msgstr "Transport company manager"
+
+msgid "NEGOTIATION_Transport_FIRST_GREETING"
+msgstr "Hello. We handle your games at our transport company."
+
+msgid "NEGOTIATION_Transport_GREETING"
+msgstr "Welcome back. Thank you for your continued business."
+
+msgid "NEGOTIATION_Transport_QUESTION"
+msgstr "You would like to discuss a lower fee. Let me consider it."
+
+msgid "NEGOTIATION_Transport_FAILURE_SUMMARY"
+msgstr "The negotiation failed. The transport company has declined a reduction this time."
+
+msgid "NEGOTIATION_Retail_INTRO"
+msgstr "I will ask the retailer to reduce its fee."
+
+msgid "NEGOTIATION_Retail_SPEAKER"
+msgstr "Retailer manager"
+
+msgid "NEGOTIATION_Retail_FIRST_GREETING"
+msgstr "Hello. We handle your games at our retailer."
+
+msgid "NEGOTIATION_Retail_GREETING"
+msgstr "Welcome back. Thank you for your continued business."
+
+msgid "NEGOTIATION_Retail_QUESTION"
+msgstr "You would like to discuss a lower fee. Let me consider it."
+
+msgid "NEGOTIATION_Retail_FAILURE_SUMMARY"
+msgstr "The negotiation failed. The retailer has declined a reduction this time."

@@ -1,8 +1,7 @@
 namespace OpenGDS2.Domain;
 
 /// <summary>
-/// Fee-result branches of original meeting modes 13 and 14. Entry costs,
-/// availability, dialogue RNG and calendar scheduling remain unresolved.
+/// Fee-result branches of original meeting modes 13 and 14. The live facility service owns entry and saved dialogue sequencing.
 /// </summary>
 public static class FeeNegotiationRules
 {

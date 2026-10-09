@@ -13,13 +13,25 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=8,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=9,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
         result.Entries.Add("HIRE_GREETING_9",pe.String(pool,0x1A)+"{company}"+pe.String(pool,0x1C));
         result.Entries.Add("NEW_EMPLOYEE",pe.String(pool,0x10));
         const int meetingPool=0x5FAFCC;
+        foreach (var target in Enum.GetValues<FeeNegotiationTarget>())
+        {
+            int[] cells=target==FeeNegotiationTarget.Transport ? [0x106,0x108,0x109,0x10E,0x10A,0x111] : [0x115,0x117,0x118,0x11A,0x119,0x11B];
+            string[] names=["INTRO","SPEAKER","FIRST_GREETING","GREETING","QUESTION","FAILURE_SUMMARY"];
+            for (int i=0;i<cells.Length;i++) result.Entries.Add(FeeNegotiationService.Key(target,names[i]),pe.String(meetingPool,cells[i]));
+        }
+        result.Entries.Add("NEGOTIATION_FIRST_SUCCESS",pe.String(meetingPool,0x10B)+"{fee}"+pe.String(meetingPool,0x10C));
+        result.Entries.Add("NEGOTIATION_SUCCESS",pe.String(meetingPool,0x10F)+"{fee}"+pe.String(meetingPool,0x10C));
+        result.Entries.Add("NEGOTIATION_FAILURE",pe.String(meetingPool,0x110));
+        result.Entries.Add("NEGOTIATION_FLOOR",pe.String(meetingPool,0x113));
+        result.Entries.Add("NEGOTIATION_SUCCESS_SUMMARY",pe.String(meetingPool,0x10D));
+        result.Entries.Add("NEGOTIATION_FLOOR_SUMMARY",pe.String(meetingPool,0x114));
         result.Entries.Add("MEETING_SECRETARY",pe.String(meetingPool,0x21));
         result.Entries.Add("MEETING_INTRO",pe.String(meetingPool,0x23)+"{hardware}"+pe.String(meetingPool,0x24)+"{audience}"+pe.String(meetingPool,0x25));
         for (int line=0;line<27;line++) result.Entries.Add($"MEETING_LINE_{line}",pe.String(meetingPool,0x28+line));

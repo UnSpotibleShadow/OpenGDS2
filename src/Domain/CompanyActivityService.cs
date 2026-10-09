@@ -41,7 +41,7 @@ public static class CompanyActivityService
     }
     public static void Tick(GameState state,Random random,OriginalCatalog? catalog=null)
     {
-        if (CalendarService.HasPending(state) || state.PendingFacilityReceipt is not null) return;
+        if (CalendarService.HasPending(state) || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null)) return;
         // This recovered budget phase is separate from the incomplete calendar
         // economics. Older modern saves leave phase/flag unknown.
         if (state.CompanyActivityTicks is not int ticks || state.CompanyActivityPerformed is null) return;
