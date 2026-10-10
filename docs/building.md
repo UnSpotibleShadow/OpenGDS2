@@ -33,10 +33,9 @@ python3 tools/recover_employee_database.py /private/GameDev2DX.exe --out /privat
 dotnet run --project tests/DomainTests/DomainTests.csproj -- /private/GameDev2DX.exe /private/employees.json
 ```
 
-Direct Roslyn compilation (including Godot source generators), C# tests and
-Godot headless UI checks passed using a temporary runtime workaround. The normal
-SDK/MSBuild command remains blocked here; see validation.md. No workaround or
-downloaded toolchain is bundled.
+M73 validated the normal SDK/MSBuild path and a clean Windows release export in
+this workspace. Its build-host adapters are documented in workspace-runtime.md;
+none are shipped. See windows-source-export-m73.md for exact scope and checks.
 
 Headless UI regression test (use a disposable data directory):
 

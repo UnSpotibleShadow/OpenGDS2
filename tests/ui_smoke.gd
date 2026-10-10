@@ -249,8 +249,8 @@ func run() -> void:
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
-    check(main.find_child("BuildVersion",true,false).text.contains("0.1.0-ea.1-rc.3"),"Title identifies the private candidate version")
-    check(root.title.contains("0.1.0-ea.1-rc.3"),"Window identifies the candidate version")
+    check(main.find_child("BuildVersion",true,false).text.contains("0.1.0-ea.1-rc.4"),"Title identifies the private candidate version")
+    check(root.title.contains("0.1.0-ea.1-rc.4"),"Window identifies the candidate version")
     check(ProjectSettings.globalize_path("user://").contains("OpenGDS2-EarlyAccessTesting"),"Candidate user data is isolated from ordinary development data")
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")

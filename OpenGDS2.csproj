@@ -6,5 +6,8 @@
     <Nullable>enable</Nullable>
     <RootNamespace>OpenGDS2</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'ExportRelease'">
+    <RuntimeFrameworkVersion>8.0.31</RuntimeFrameworkVersion>
+  </PropertyGroup>
   <ItemGroup><Compile Remove="tests/**/*.cs" /></ItemGroup>
 </Project>
