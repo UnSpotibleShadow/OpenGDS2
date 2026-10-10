@@ -4,13 +4,18 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import zipfile
 
-def package(source, export, platform, notices, output, configuration="release"):
+def package(source, export, platform, notices, output, configuration="release", candidate=False, source_commit=None):
     if configuration not in {"release", "debug"}:
         raise ValueError("Unsupported export configuration")
+    candidate_version = re.search(r'^config/version="([^"]+)"$', (source / "project.godot").read_text(), re.M) if candidate else None
+    if candidate and (platform != "windows" or configuration != "release" or not candidate_version
+                      or not re.fullmatch(r"[0-9a-f]{40}", source_commit or "")):
+        raise ValueError("A candidate requires a Windows release export, current version and exact source commit")
     executable = "OpenGDS2.x86_64" if platform == "linux" else "OpenGDS2.exe"
     if not (export / executable).is_file() or not (export / "OpenGDS2.pck").is_file():
         raise ValueError("The native executable and game pack are required")
@@ -66,7 +71,7 @@ office appearance, select Import Original Game and choose your legally obtained
 GameDev2DX.lzh archive. Import happens locally; this package contains no original
 Kairosoft executable, graphics, sounds or game database.
 
-Eight owner-supplied background tracks are bundled; Settings can mute or adjust them.
+Owner-supplied background and meeting tracks are bundled; Settings can mute or adjust them.
 Local files in the music folder shown in Settings override the bundled playlist.
 Original LZH importing is still required. See licenses/COMMUNITY_MUSIC_NOTICE.md.
 
@@ -91,6 +96,41 @@ Attach a compatible .NET debugger to the running game for managed debugging.
 The original LZH requirement and game rules are the same as the release export.
 """
     (export / "GETTING_STARTED.txt").write_text(start,encoding="utf-8")
+    if candidate:
+        for filename, target in [("early-access-testing.md", "TEST_CHECKLIST.md"),
+                                 ("early-access-known-issues.md", "KNOWN_ISSUES.md"),
+                                 ("early-access-release-notes.md", "RELEASE_NOTES.md"),
+                                 ("early-access-decisions.md", "DECISIONS.md")]:
+            shutil.copyfile(source / "docs" / filename, export / target)
+        (export / "GETTING_STARTED.txt").write_text(
+            f"OpenGDS2 {candidate_version.group(1)} — PRIVATE EARLY ACCESS TEST CANDIDATE\n\n"
+            "Extract the complete ZIP and run OpenGDS2.exe or OpenGDS2.console.exe.\n"
+            "No editor or separate .NET installation is needed. Import your legally obtained\n"
+            "GameDev2DX.lzh from the title. No original game files are included.\n"
+            "Read LICENSE, notice.md and licenses/ for code, engine, runtime and music notices.\n\n"
+            "Data folder: %APPDATA%\\OpenGDS2-EarlyAccessTesting. Start a new company.\n"
+            "Modern JSON saves are supported; original saves are not. Back up before upgrading.\n"
+            "Load Previous Save recovers the previous valid slot without overwriting the current file.\n\n"
+            "Read TEST_CHECKLIST.md, KNOWN_ISSUES.md, RELEASE_NOTES.md and DECISIONS.md.\n"
+            "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play.\n"
+            "Bankruptcy and company/office upgrades are incomplete; negative funds do not end play.\n"
+            "Capture logs: OpenGDS2.console.exe --log-file opengds2-test.log\n"
+            "Report the version, Windows version, steps and expected/actual results privately.\n"
+            "Never publish imported originals, original saves or the LZH.\n\n"
+            "This is a standard SDK/Godot release export prepared for owner testing.\n"
+            "Native Windows acceptance remains pending; host checks do not establish it.\n"
+            "BUILD_MANIFEST.json records provenance. This is not a public release.\n", encoding="utf-8")
+        manifest = {
+            "build_label": candidate_version.group(1), "source_commit": source_commit,
+            "platform": platform, "configuration": configuration,
+            "build_method": "standard Godot .NET source export",
+            "private_early_access_candidate": True,
+            "candidate_data_directory": "OpenGDS2-EarlyAccessTesting",
+            "runtime_packs": [f"{name}/{ver}" for name, ver in sorted(runtime_packs)],
+            "assembly_sha256": hashlib.sha256(next(export.rglob("OpenGDS2.dll")).read_bytes()).hexdigest(),
+            "native_windows_acceptance": "pending owner testing",
+        }
+        (export / "BUILD_MANIFEST.json").write_text(json.dumps(manifest, indent=2)+"\n", encoding="utf-8")
     files = sorted(file for file in export.rglob("*") if file.is_file() and file.name != "SHA256SUMS")
     sums = "\n".join(hashlib.sha256(file.read_bytes()).hexdigest()+"  "+file.relative_to(export).as_posix() for file in files)+"\n"
     (export / "SHA256SUMS").write_text(sums,encoding="utf-8")
@@ -98,7 +138,7 @@ The original LZH requirement and game rules are the same as the release export.
     with zipfile.ZipFile(output,"w",compression=zipfile.ZIP_DEFLATED) as archive:
         for file in sorted(export.rglob("*")):
             if file.is_file():
-                root = "OpenGDS2-"+platform+"-x86_64"+("-debug" if configuration == "debug" else "")
+                root = ("OpenGDS2-"+platform+"-"+candidate_version.group(1)) if candidate else "OpenGDS2-"+platform+"-x86_64"+("-debug" if configuration == "debug" else "")
                 archive.write(file,Path(root) / file.relative_to(export))
     print(f"Desktop package: {output.name} ({output.stat().st_size} bytes)")
 
@@ -110,5 +150,7 @@ if __name__ == "__main__":
     parser.add_argument("--notices",type=Path,required=True)
     parser.add_argument("--output",type=Path,required=True)
     parser.add_argument("--configuration", choices=("release", "debug"), default="release")
+    parser.add_argument("--candidate", action="store_true", help="Include the private Windows Early Access handoff")
+    parser.add_argument("--source-commit", help="Exact 40-character source commit for candidate provenance")
     args = parser.parse_args()
-    package(args.source,args.export,args.platform,args.notices,args.output,args.configuration)
+    package(args.source,args.export,args.platform,args.notices,args.output,args.configuration,args.candidate,args.source_commit)

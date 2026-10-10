@@ -1,6 +1,6 @@
 # Early Access release preparation
 
-Target version: **0.1.0-ea.1**, with private candidate **0.1.0-ea.1-rc.3**. A candidate is for owner testing, not authorization to publish, tag a release or make the repository public.
+Target version: **0.1.0-ea.1**, with private candidate **0.1.0-ea.1-rc.4**. A candidate is for owner testing, not authorization to publish, tag a release or make the repository public.
 
 ## Minimum scope
 
@@ -18,7 +18,7 @@ The supported facilities include school, hot springs, recycling, technology capa
 - [ ] Resolve every crash, save corruption, duplicate transaction and supported-workflow dead end reported during testing; rerun relevant regressions.
 - [x] Decide and visibly document the allowed campaign boundary (EA-02); final owner release acceptance remains separate.
 - [x] Restore all twelve exact seasonal source OGGs locally and pass source integrity checks, preserving existing remote blobs (2026-10-07).
-- [ ] Produce a clean Windows source export using Godot 4.4.1 .NET/.NET 8 and matching templates; compare packaged resource, license and checksum checks with the tested candidate. The reused-runtime fallback is not evidence of this gate.
+- [x] Produce a clean Windows source export using Godot 4.4.1 .NET/.NET 8 and matching templates; packaged resource, license and checksum checks passed in M73. Native Windows acceptance remains separate.
 - [ ] Review community-recording distribution permission, code/runtime notices and original-content exclusions for the actual public package.
 - [x] Merge the validated M56–M62 branch stack in order (#50 → #51 → #52 → #53 → #54 → #57 → #58); owner confirmed the complete branch/PR/merge workflow on 2026-10-07.
 - [ ] Owner approves the exact source SHA, final Windows ZIP/hash, known-issue list, supported scope and distribution destination.
@@ -27,6 +27,28 @@ Keep Actions paused. Never change repository visibility, publish a GitHub releas
 
 ## Reproduction
 
-The candidate uses project.godot version/isolation settings. `tools/write_candidate_config.gd` serializes those settings to a private project.binary. Compile the fallback assembly with `tools/workspace_roslyn_build.py export`. Run the bounded app/domain/UI and exported-runtime startup checks from AGENTS.md; then use a copied trusted Windows base with `tools/workspace_debug_package.py --platform windows --source-commit <verified-sha> --build-label 0.1.0-ea.1-rc.3 --project-config <generated-project.binary> --candidate`.
+Install Godot 4.4.1 .NET, matching .NET export templates and .NET SDK 8. The
+ExportRelease configuration pins the self-contained runtime to 8.0.31. On an
+ordinary machine, build/import and run the Windows Desktop release exporter;
+use the bounded commands in building.md. On this restricted Linux host, use
+`tools/workspace_sdk.py` inside `tools/bounded_process.py`; see workspace-runtime.md.
+No original archive or trusted old desktop artifact is needed to build the package.
 
-The fallback checks every reused PCK digest, includes current meeting audio/imports, the current assembly/translations and the owner-facing test, limitation, release-note and decision documents. BUILD_MANIFEST.json and SHA256SUMS record provenance and contents. Check the packed settings, resource decoding, archive integrity and current assembly digest before offering the candidate. Native Windows test results must be recorded separately, not inferred from host checks.
+Generate notices through `tools/export_licenses.gd` using that editor, then run:
+
+```sh
+python3 tools/package_desktop.py --source . --export /path/to/windows-export \
+  --platform windows --configuration release --notices /path/to/notices \
+  --candidate --source-commit <exact-source-sha> \
+  --output /path/to/OpenGDS2-windows-0.1.0-ea.1-rc.4.zip
+```
+
+Set NUGET_PACKAGES to the cache used for the export so runtime notices match the
+actual publish. BUILD_MANIFEST.json records source/assembly/runtime provenance;
+SHA256SUMS covers all packaged files. Include current testing, limitation,
+release-note and decision documents. Validate every PCK payload digest,
+resource decoding, archive integrity and content exclusions before handoff.
+Native Windows test results remain separate from exported-host checks.
+
+See [M73 validation](windows-source-export-m73.md) for this source export's
+provenance, checks and remaining acceptance gates. Actions remain paused.

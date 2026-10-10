@@ -1,4 +1,4 @@
-# Known limitations — 0.1.0-ea.1-rc.3
+# Known limitations — 0.1.0-ea.1-rc.4
 
 This private test candidate requires the supported, locally imported GameDev2DX.lzh. The title/settings work without it; gameplay needs the import. No original files are bundled.
 
@@ -10,7 +10,7 @@ This private test candidate requires the supported, locally imported GameDev2DX.
 | Facilities | School, hot springs, recycling, technology capacity, production expansion and lawyer consultation are supported with saved results. Casino, mystery lab and own hardware remain unavailable. Student-growth effects are incomplete. |
 | Fidelity | Automatic conversation scheduling/cadence, some growth effects/form geometry/bubbles/bitmap labels and provisional English name readings remain open. Existing English facility vacancy signs are translated locally. |
 | Saves | Modern JSON only. Saving retains one previous valid slot; the title's Load Previous Save restores earlier progress without changing the current file until explicit Save. Original save import is unsupported; future versions may require a fresh company. Back up saves before upgrading. |
-| Package | Windows x86_64, current export-API managed assembly with a verified reused Godot/.NET debug runtime and community audio resources. All 25 exact OGG sources are locally verified. This is not a clean SDK source export. |
+| Package | Windows x86_64 standard SDK/Godot release export, matching official Godot 4.4.1 .NET templates and .NET 8.0.31. All 25 exact OGG sources are locally verified and resources regenerated. Build-host adapters are excluded. |
 | Acceptance | Automated domain, source-host and exported-host checks do not establish native Windows acceptance. Fresh-machine graphical behavior and multi-year playthrough require owner testing. |
 
 The title and mode selection disclose the campaign boundary. Detailed unresolved evidence and release decisions are in DECISIONS.md / `early-access-decisions.md`. Follow TEST_CHECKLIST.md; a crash, save corruption, duplicate transaction or supported-workflow dead end blocks public release. Public release has not been approved.

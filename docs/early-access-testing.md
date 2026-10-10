@@ -1,11 +1,11 @@
-# Owner test checklist — 0.1.0-ea.1-rc.3
+# Owner test checklist — 0.1.0-ea.1-rc.4
 
 This is an unpublished Windows x86_64 test candidate. Record pass/fail, Windows version, resolution/scaling, language and exact steps. Report the visible version and source commit from BUILD_MANIFEST.json. Do not mark an untested row as passed.
 
 ## Start safely
 
 1. Extract the entire ZIP into a fresh folder. Keep OpenGDS2.pck and data_OpenGDS2_windows_x86_64 beside both executables.
-2. Run OpenGDS2.console.exe. The title should identify 0.1.0-ea.1-rc.3 as a private Early Access test candidate. No editor or separate .NET install is required.
+2. Run OpenGDS2.console.exe. The title should identify 0.1.0-ea.1-rc.4 as a private Early Access test candidate. No editor or separate .NET install is required.
 3. Candidate imports, settings and saves use `%APPDATA%\OpenGDS2-EarlyAccessTesting`. Ordinary `%APPDATA%\Godot\app_userdata\OpenGDS2` data remains separate. Do not move your ordinary save into this candidate for the fresh-start test.
 4. Import your supported GameDev2DX.lzh locally. Start a new company. Read KNOWN_ISSUES.md before testing.
 5. Capture diagnostics from a terminal in the extracted folder: `.\OpenGDS2.console.exe --log-file opengds2-test.log`.

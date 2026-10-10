@@ -1,5 +1,6 @@
 """Desktop package diagnostics and content boundaries use authored fixtures."""
 import importlib.util
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -69,4 +70,33 @@ class DesktopPackageTests(unittest.TestCase):
         (cache / "dialogue.json").write_text("Private fixture must not enter package")
         with self.assertRaisesRegex(ValueError, "private/cache"):
             self.package("debug")
+        self.assertFalse(self.output.exists())
+
+    def test_candidate_records_source_and_handoff_in_checked_archive(self):
+        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\n')
+        docs = self.source / "docs"
+        docs.mkdir()
+        for name in ["testing", "known-issues", "release-notes", "decisions"]:
+            (docs / ("early-access-"+name+".md")).write_text("Authored candidate fixture")
+        commit = "a" * 40
+        with patch.dict(os.environ, {"NUGET_PACKAGES": str(self.nuget)}):
+            desktop.package(self.source, self.export, "windows", self.notices,
+                            self.output, candidate=True, source_commit=commit)
+        with zipfile.ZipFile(self.output) as archive:
+            prefix = "OpenGDS2-windows-0.1.0-ea.1-rc.4/"
+            manifest = json.loads(archive.read(prefix+"BUILD_MANIFEST.json"))
+            self.assertEqual(manifest["source_commit"], commit)
+            self.assertEqual(manifest["runtime_packs"], ["microsoft.netcore.app.runtime.win-x64/8.0.0"])
+            self.assertEqual(manifest["native_windows_acceptance"], "pending owner testing")
+            self.assertEqual(archive.read(prefix+"DECISIONS.md"), b"Authored candidate fixture")
+            for line in archive.read(prefix+"SHA256SUMS").decode().splitlines():
+                digest, name = line.split("  ", 1)
+                self.assertEqual(hashlib.sha256(archive.read(prefix+name)).hexdigest(), digest)
+
+    def test_candidate_rejects_debug_and_unidentified_source(self):
+        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\n')
+        for configuration, commit in [("debug", "a" * 40), ("release", None)]:
+            with self.assertRaisesRegex(ValueError, "candidate requires"):
+                desktop.package(self.source, self.export, "windows", self.notices,
+                                self.output, configuration, True, commit)
         self.assertFalse(self.output.exists())
