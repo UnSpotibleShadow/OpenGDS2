@@ -6,7 +6,7 @@ M68 adds verified project cancellation: a paused confirmation, assigned-room sta
 
 The prioritized [GitHub backlog and continuation handoff](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the central entry point for another instance. Update it after each area; this document retains detailed reconstruction targets.
 
-M71 connects both lawyer fee consultations with original affordability-only entry, independent fee outcomes and saved five-page dialogue. See [lawyer evidence and compatibility](lawyer-facility-m71.md). M72 prepares the versioned Early Access scope and previous-save recovery. M73 resolves the clean Windows source-export gate and prepares RC.4. Next release work: owner native Windows acceptance and any resulting blocking fixes. Optional next reconstruction: mystery-lab delayed results.
+M71 connects both lawyer fee consultations with original affordability-only entry, independent fee outcomes and saved five-page dialogue. See [lawyer evidence and compatibility](lawyer-facility-m71.md). M72 prepares the versioned Early Access scope and previous-save recovery. M73 resolves the clean Windows source-export gate and prepares RC.4. Next release work: owner native Windows acceptance and any resulting blocking fixes. Current reconstruction investigation: U01 bankruptcy and office/company progression; mystery-lab delayed results remain a separate option.
 
 M70 connects the hot spring, recycling, technology-capacity study and production lab, including verified construction/closure, accounting and saved results. Nine prices and artwork mappings are known; casino, mystery lab and own-hardware services remain disabled. See [facility management and next dependencies](facilities-m70.md). M61 restores occupied facility artwork for saved slots with immediate open/close refresh. See [facility artwork](facility-artwork-m61.md).
 
@@ -71,7 +71,7 @@ M39 connects verified desk-interior hits to a contextual room chooser and
 original-game planning, and tenant-plot hits to focused school management.
 M48 enables sequels from Hall of Fame predecessors; M49 enables the 31-title
 manga rights/development/release lifecycle. The
-overlapping tenant strip now offers both plots through a modern chooser; the four remaining facility
+overlapping tenant strip now offers both plots through a modern chooser; the three remaining facility
 workflows and original busy-window toggling remain unresolved; M61 implements occupied artwork.
 See [office click evidence and validation](office-clicks-m39.md).
 

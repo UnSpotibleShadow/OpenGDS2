@@ -5,9 +5,9 @@ This project is free-of-charge, however support is always nice to have. In case 
 # OpenGDS2
 
 Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; this continuation includes M7–M71.
+targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; main includes reconstruction through M73.
 
-The private test candidate is **0.1.0-ea.1-rc.1**. See [test checklist](docs/early-access-testing.md), [known limitations](docs/early-access-known-issues.md) and [release gates](docs/early-access-release.md). It is prepared for owner testing and is not yet approved for public release. Candidate saves/settings/imports use a separate `OpenGDS2-EarlyAccessTesting` folder. [Issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the durable continuation backlog.
+The private test candidate is **0.1.0-ea.1-rc.4**. See [test checklist](docs/early-access-testing.md), [known limitations](docs/early-access-known-issues.md) and [release gates](docs/early-access-release.md). It is prepared for owner testing and is not yet approved for public release. Candidate saves/settings/imports use a separate `OpenGDS2-EarlyAccessTesting` folder. [Issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the durable continuation backlog.
 
 The own-game **development → release → sales** loop is playable. Staff develop
 projects at their assigned desks; you select a type and genre, debug or release,
@@ -15,8 +15,10 @@ then manage inventory and further production. Hiring, employee inspection,
 manual level-up, dismissal and modern save/load are also available. Release reviews and sales
 milestone announcements, calendar transactions, exhibitions and own-company
 awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
-and persistent global records are implemented. Office progression, own-hardware
-development and remaining weekly economics are unfinished.
+and persistent global records are implemented. Office progression, bankruptcy, own-hardware
+development and unresolved economy edge cases are unfinished.
+
+The [2026-10-10 audit](https://github.com/UnSpotibleShadow/OpenGDS2/pull/72) compares M73 with the supplied original. The [current checkpoint](docs/development-checkpoint.md) records fresh validation separately from historical build results; the [RC.4 acceptance record](docs/windows-acceptance-record.md) identifies the exact Windows candidate.
 
 M71 connects **lawyer transport and retail fee negotiations**, preserving original funds checks and saving each dialogue cursor. See [lawyer consultations](docs/lawyer-facility-m71.md).
 
@@ -58,7 +60,7 @@ the new catalog/dialogue. See [adaptations](docs/manga-adaptations.md),
 [conversations](docs/conversations.md) and [local patches](docs/office-effects-and-local-patches.md).
 
 Automatic GitHub Actions are paused at the owner's request. Current checks run
-locally; historical M48 packages do not include the latest changes. The M61 development package and M62 candidate identify their source commit and reused Windows runtime in BUILD_MANIFEST.json. See the
+locally; historical M48 packages do not include the latest changes. The M73 RC.4 candidate identifies its source commit and Windows export provenance in BUILD_MANIFEST.json. See the
 [validation checkpoint](docs/development-checkpoint.md) and [local build instructions](docs/building.md).
 
 M48 adds sequel development from Hall of Fame predecessors. Open a free desk
@@ -257,4 +259,4 @@ Original game files and imported data are not distributed with this repository.
 
 ## Current private Early Access candidate
 
-RC.3 supports the reconstructed core loop and implemented facilities, with previous-valid-save recovery. Beginner retains its verified ending; Normal is experimental ongoing play without complete bankruptcy or office progression. See [release scope and unresolved decisions](docs/early-access-decisions.md), [known limitations](docs/early-access-known-issues.md) and [Windows acceptance checklist](docs/early-access-testing.md). Public release remains pending native Windows acceptance and a clean source export.
+RC.4 supports the reconstructed core loop and implemented facilities, with previous-valid-save recovery. Beginner retains its verified ending; Normal is experimental ongoing play without complete bankruptcy or office progression. See [release scope and unresolved decisions](docs/early-access-decisions.md), [known limitations](docs/early-access-known-issues.md) and [Windows acceptance checklist](docs/early-access-testing.md). M73 records a clean Windows source export; public release remains pending native Windows acceptance.

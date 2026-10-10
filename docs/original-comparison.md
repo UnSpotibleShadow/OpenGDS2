@@ -1,4 +1,19 @@
-# Original / OpenGDS2 comparison — M32–M36
+# Original / OpenGDS2 comparison — current M73 baseline
+
+Current source baseline: `cd82cea6a5e51385f0c6b0ac9f7e8971f79b5c09`. The [2026-10-10 audit](https://github.com/UnSpotibleShadow/OpenGDS2/pull/72) is the current assessment. The detailed M32–M36 comparison below preserves earlier evidence; its disabled-feature descriptions are historical.
+
+| Area | Current implementation | Remaining comparison work |
+| --- | --- | --- |
+| Development | Original games, sequels, manga rights, meetings, debug/shipment, cancellation and reactions | Original runtime comparison of timing, layout and shared RNG |
+| Economy | Sales/reprints, recalls, annual payroll and renewals, bank repayment, exhibitions and awards | Bankruptcy, office/company progression, original bank gates and shared scratch semantics |
+| Facilities | School, hot spring, recycling, technology capacity, production lab and lawyer | Casino, mystery laboratory and own-hardware services; unresolved school growth |
+| Saves | Modern saves, modal/dialogue continuation and previous-valid-save recovery | Original save compatibility; native Windows corruption/reload acceptance |
+| Presentation | Imported original artwork/dialogue with authored translations and local patches | Original-vs-modern Windows comparison, fonts, layout and remaining conversations |
+| Validation | Fresh original-evidence checks and Python tests; historical M73 clean Windows export | Fresh .NET/Godot validation and owner native Windows acceptance |
+
+Normal mode remains experimental ongoing play without complete bankruptcy or office progression. Beginner retains its verified ending. Source reconstruction and static evidence are not an original-game playthrough.
+
+# Historical comparison — M32–M36
 
 This audit compares the supplied GameDev2DX distribution and original desktop
 screenshot with OpenGDS2 through M31, then records the first correction in M32.

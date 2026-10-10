@@ -1,4 +1,16 @@
-# Development checkpoint — M62, 2026-10-06
+# Development checkpoint — M74 continuation, 2026-10-10
+
+Baseline: main `cd82cea6a5e51385f0c6b0ac9f7e8971f79b5c09` (M73/RC.4). Work proceeds on `codex/m74-validation-and-progression`; the audit is PR #72. The entries below are historical checkpoints, not instructions to resume their old branches.
+
+Fresh validation: 61 selected Python tests passed, including 17 opt-in original-executable fixtures, using the supplied supported executable. The localization test now permits exactly the ten cancellation keys whose Japanese text is imported locally; newly missing translations and duplicate keys still fail. This changes validation, not shipped dialogue. The prior audit separately passed all 20 original-evidence verifier scripts and the connector guard tests.
+
+No fresh C# build, domain suite, Godot .NET smoke run or native Windows execution is claimed here. This environment lacks the .NET SDK and the required Godot 4.4.1 .NET runtime; SDK acquisition has not started. Historical M73 build/export results remain historical. No new package was generated and Actions remain paused.
+
+Next acceptance: complete the [exact RC.4 Windows record](windows-acceptance-record.md), following the existing checklist. The candidate ZIP is not present in this continuation workspace. Native Windows acceptance remains open.
+
+Campaign research remains U01: bankruptcy and office progression. A private decode of Module2's periodic routine completed without undecoded bytes, but did not establish a complete bankruptcy trigger or terminal transition. Its writes to the payroll scratch variable build an employee index list; they do not justify interpreting that shared variable as a bankruptcy threshold. No gameplay rule is changed on this incomplete evidence. See [investigation scope](campaign-progression-investigation.md).
+
+# Historical M62 checkpoint — 2026-10-06
 
 M62 prepares private Early Access candidate 0.1.0-ea.1-rc.1 with visible version, isolated user data, known issues, owner test matrix, release gates and a GitHub bug template. See [release preparation](early-access-release.md). Public release, repository visibility changes and Actions remain unauthorized/paused. Continue from `codex/m62-early-access-candidate` while the stack is unmerged; it retains M61. Direct app compilation, the full core-loop suite and original-LZH UI suite pass, including candidate identity and data isolation. The unchanged domain baseline remains 295 passing checks. Windows owner playthrough and clean-export/source-audio gates remain pending.
 

@@ -118,7 +118,16 @@ class PublicTests(unittest.TestCase):
             ids=re.findall(r'^msgid "(.*)"$',text,re.M)
             self.assertEqual(len(ids),len(set(ids)),language+' duplicate msgid')
             keys.append(set(ids))
-        self.assertEqual(keys[0],keys[1])
+        # Cancellation's original Japanese is imported locally, never bundled.
+        # Keep the exception exact: a new untranslated authored key must fail.
+        imported_cancellation={
+            'CANCELLATION_EMPLOYEE_NAMED',
+            'CANCELLATION_STRESS_SUMMARY',
+            'CANCELLATION_DISCARD_SUMMARY',
+            *(f'CANCELLATION_REACTION_{variant}' for variant in range(7)),
+        }
+        self.assertEqual(keys[0]-keys[1],imported_cancellation)
+        self.assertEqual(keys[1]-keys[0],set())
     def test_english_catalog_translation_coverage(self):
         import re
         text=(ROOT/'localization'/'en.po').read_text()
@@ -169,6 +178,10 @@ class PublicTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('OPENGDS2_ORIGINAL_EXE'),'Original fixture is opt-in and never redistributed')
 class OriginalTests(unittest.TestCase):
+    def test_cancellation_dialogue_anchors(self):
+        from verify_project_cancellation_evidence import verify as verify_cancellation
+        verify_cancellation(Path(os.environ['OPENGDS2_ORIGINAL_EXE']))
+
     def test_secretary_management_anchors(self):
         from verify_secretary_management_evidence import verify as verify_secretary
         result=verify_secretary(Path(os.environ['OPENGDS2_ORIGINAL_EXE']).read_bytes())
