@@ -33,6 +33,7 @@ public partial class Main
     }
     private void ShowProject(GameState state,DevelopmentProjectState project)
     {
+        if (project.OriginalRoomState==2) {ShowHardwareProject(state,project);return;}
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
         ClearContent();AddHeading(project.Title,28);
         if (project.OriginalMode==1)
@@ -119,7 +120,7 @@ public partial class Main
                 ()=>{CheckpointDialogueRules.Acknowledge(state,project,milestone);ShowProjectDecision(state,project);},musicPhase:MeetingMusicRules.ForMilestone(milestone));
             return;
         }
-        var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
         {
             try {CheckpointMeetingRules.Prepare(state,project,catalog,new Random());}
@@ -283,7 +284,7 @@ public partial class Main
     }
     private void ShowRelease(GameState state,DevelopmentProjectState project)
     {
-        var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         // Release controls can follow the final meeting. Keep its recording
         // through this form; opening release from ordinary work has no phase.
         ClearContent(keepMeetingMusic:true);AddHeading(Tr("RELEASE_GAME"),28);AddProjectMetrics(project);
@@ -432,7 +433,7 @@ public partial class Main
             ClearContent();AddHeading(Tr($"RELEASE_RESULT_{availability}"),20);
             AddAction("CANCEL",()=>ShowSales(state));return;
         }
-        var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog.");
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         ClearContent();AddHeading(product.Title,28);AddHeading(Tr("PRODUCE_MORE"),22);
         var copies=ProductionQuantity(state,"ProductionCopies");
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize);

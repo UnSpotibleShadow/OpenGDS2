@@ -68,7 +68,7 @@ public partial class Main
 
     private void ShowPlanningPreview(GameState state,int? selectedRoom=null,int? predecessorProductIndex=null,int? mangaSourceIndex=null)
     {
-        var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog.");
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog."));
         ClearContent();CompactManagementWindow("PlanningQuoteWindow",new Vector2(430,360),410);
         _dialog!.SetTitle($"{Tr("DEVELOPMENT_PLANNING")} · ¥{state.Money:N0}");
         var room=new OptionButton {Name="PlanningRoom"};
@@ -123,7 +123,9 @@ public partial class Main
             var result=CheckPlanning(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
             quote.Text=$"{Tr("DEVELOPMENT_POINTS")}\n{value.Points:N0}\n{Tr("PLANNING_COST")}\n¥{value.Cost:N0}";
             bits.Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}";
-            picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{hardwareId}.bmp");
+            int pictureIndex=hardwareId==11 ? OwnHardwareService.OwnPictureIndex(state.OwnHardware.LaunchedDesign!.Value,state.OwnHardware.LaunchedMedium!.Value) : hardwareId;
+            picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{pictureIndex}.bmp");
+            picture.SetMeta("hardware_picture_index",pictureIndex);
             gate.Text=result==DevelopmentPlanningResult.Success ? "" : Tr($"PLANNING_RESULT_{result}");meeting.Disabled=result!=DevelopmentPlanningResult.Success;
         }
         hardware.ItemSelected+=()=> {var row=hardware.GetSelected();if (row is not null && state.HardwareLicenses?.Contains(row.GetMetadata(0).AsInt32())==true) hardwareId=row.GetMetadata(0).AsInt32();RefreshQuote();};

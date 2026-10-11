@@ -42,6 +42,7 @@ public static class SalesService
     }
     public static void Tick(GameState state,OriginalCatalog catalog,Random random)
     {
+        catalog=OwnHardwareService.Catalog(state,catalog);
         // Unknown legacy fees must not silently become zero.
         if (state.Money is null || state.SalesFee1 is null || state.SalesFee2 is null ||
             state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;

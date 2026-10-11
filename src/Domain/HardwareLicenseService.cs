@@ -7,6 +7,7 @@ public static class HardwareLicenseService
 {
     public static LicensePurchaseResult TryPurchase(GameState state, OriginalCatalog catalog, int sourceIndex)
     {
+        catalog=OwnHardwareService.Catalog(state,catalog);
         var hardware = catalog.Hardware.SingleOrDefault(x => x.SourceIndex == sourceIndex)
             ?? throw new ArgumentOutOfRangeException(nameof(sourceIndex));
         if (state.AvailableHardware is null) return LicensePurchaseResult.AvailabilityUnknown;

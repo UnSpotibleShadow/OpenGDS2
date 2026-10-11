@@ -72,7 +72,7 @@ public static class SequelDevelopmentRules
             if (state.ReleasedGames.Count(x=>x.OriginalMode==1 && x.PredecessorProductIndex==product.ProductIndex)!=(product.HasReleasedSequel ? 1 : 0))
                 throw new InvalidDataException("Invalid predecessor consumption.");
         }
-        foreach (var project in state.DevelopmentProjects)
+        foreach (var project in state.DevelopmentProjects.Where(p=>p.OriginalRoomState==1))
         {
             ValidateManga(project.OriginalMode,project.MangaSourceIndex);
             if (project.OriginalMode!=1 && project.PredecessorProductIndex.HasValue)

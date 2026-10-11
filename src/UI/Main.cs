@@ -22,7 +22,9 @@ public partial class Main : Control
     private OriginalOfficeRenderer? _officeRenderer;
     private ImageTexture? _officeTexture;
     private double _officeElapsed;
-    private OriginalCatalog? _activeCatalog;
+    private OriginalCatalog? _baseCatalog;
+    private OriginalCatalog? _activeCatalog
+    {get=>_baseCatalog is { } c && _session.Current is { } s ? OwnHardwareService.Catalog(s,c) : _baseCatalog;set=>_baseCatalog=value;}
     private bool _clockRunning;
     private bool _paused;
     private Action? _refreshCoreStatus;
@@ -44,6 +46,7 @@ public partial class Main : Control
             PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
             if (ShowPendingMysteryLabResult(state)) return;
+            if (ShowPendingOwnHardware(state)) return;
             if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
             updated = true;
@@ -298,6 +301,7 @@ public partial class Main : Control
             PersistPendingRankings(state);
         }
         if (ShowPendingMysteryLabResult(state)) return;
+            if (ShowPendingOwnHardware(state)) return;
         if (ShowPendingProjectCancellation(state)) return;
         if (ShowPendingFeeNegotiation(state)) return;
         if (ShowPendingFacilityReceipt(state)) return;
@@ -392,7 +396,7 @@ public partial class Main : Control
     private void ShowLicenses(GameState state)
     {
         ClearContent(); AddHeading(Tr("HARDWARE_LICENSES"), 30);
-        var catalog = _importer.LoadCatalog();
+        var catalog = _activeCatalog;
         if (catalog is not null)
             foreach (var hardware in catalog.Hardware.Where(x => state.AvailableHardware?.Contains(x.SourceIndex) == true))
             {

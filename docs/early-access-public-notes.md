@@ -10,12 +10,14 @@ Hire and train employees, assign desks, upgrade PCs, develop original games,
 sequels and manga adaptations, hold meetings, debug and ship. Follow reviews,
 sales and reprints, calendar events, loans and the implemented facilities.
 Mystery-lab experiments have seven source-backed outcomes and saved progress/results.
+Develop and launch one own console, then use it for software planning, production
+and sales while its market grows. Design/media and technology flags persist.
 Modern saves include previous-valid-save recovery. English and Japanese
 interfaces and audio controls are available.
 
 Beginner ends after Year 2, December, week 4. Normal is experimental ongoing
 play: bankruptcy and full company progression are incomplete, and negative
-funds can persist. Casino gameplay, own hardware and original-save
+funds can persist. Casino gameplay and original-save
 import are deferred. See KNOWN_ISSUES.md for the remaining boundaries.
 
 This release includes the payroll-screen fix: visiting ordinary technology

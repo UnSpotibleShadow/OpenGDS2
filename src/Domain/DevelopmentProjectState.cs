@@ -24,6 +24,7 @@ public sealed class DevelopmentProjectState
     public double RequiredPoints {get;set;}
     public double Progress {get;set;}
     public DevelopmentQuality Quality {get;set;}=new();
+    public HardwareDesignState? HardwareDesign {get;set;}
     public DevelopmentQuality? PolishingTargets {get;set;}
     public int Bugs {get;set;}
     public double Recognition {get;set;}

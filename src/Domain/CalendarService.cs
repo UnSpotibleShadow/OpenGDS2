@@ -20,6 +20,7 @@ public static class CalendarService
     public static bool HasPending(GameState state)=>state.Calendar?.Pending is not null;
     public static bool BeginWeek(GameState state,OriginalCatalog? catalog,Random random)
     {
+        if (catalog is not null) catalog=OwnHardwareService.Catalog(state,catalog);
         var c=state.Calendar ?? throw new InvalidOperationException("Unknown calendar state.");
         if (c.Pending is not null) throw new InvalidOperationException("A calendar transaction is already pending.");
         if (state.Year is not int y || state.Month is not int m || state.Week is not int w)
@@ -38,6 +39,7 @@ public static class CalendarService
     }
     public static bool Resume(GameState state,OriginalCatalog? catalog,Random random)
     {
+        if (catalog is not null) catalog=OwnHardwareService.Catalog(state,catalog);
         var c=state.Calendar ?? throw new InvalidOperationException("Unknown calendar state.");
         var t=c.Pending;if (t is null) return true;
         if (t.PendingEvent is not null || RecallService.HasPending(state)) return false;
@@ -201,7 +203,7 @@ public static class CalendarService
         var c=state.Calendar;if (c is null) return;
         if (state.Year is null || state.Month is null || state.Week is null || state.CompanyActivityTicks is null ||
             state.AvailableHardware is null || state.HardwareLicenses is null || c.HardwareStage<0 || c.ShipmentsSinceHardwareTrigger<0 ||
-            c.Hardware is null || c.Hardware.Count is <1 or >11 || c.Hardware.Any(h=>h is null || h.SourceIndex is <0 or >10 ||
+            c.Hardware is null || c.Hardware.Count is <1 or >12 || c.Hardware.Any(h=>h is null || h.SourceIndex is <0 or >11 ||
                 h.Availability is <0 or >2 || h.LaunchWeeks is <0 or >24 || h.RetirementWeeks is <0 or >17 ||
                 !double.IsFinite(h.Market) || h.Market<0 || h.GrowthWeeks<0 || h.GrowthBoost<0) ||
             !c.Hardware.Select(h=>h.SourceIndex).SequenceEqual(c.Hardware.Select(h=>h.SourceIndex).Distinct().Order()) ||

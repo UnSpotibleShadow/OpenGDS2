@@ -18,11 +18,7 @@ public static class BankLoanService
         if (state.Calendar is not { } calendar) return BankLoanResult.CalendarUnknown;
         if (state.Year is not int y || state.Month is not int m || state.Week is not int w) return BankLoanResult.DateUnknown;
         CalendarService.Validate(state);
-        if (calendar.Pending is not null || state.PendingBankLoanReceipt is not null ||
-            state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null ||
-            state.DevelopmentProjects.Any(p=>p.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(p)) ||
-            state.ReleasedGames.Any(p=>p.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state))
-            return BankLoanResult.EventPending;
+        if (FacilityService.HasPendingDecision(state)) return BankLoanResult.EventPending;
         CalendarRules.Validate(new(y,m,w));
         if (state.Money is null) return BankLoanResult.MoneyUnknown;
         return calendar.Loans.All(l=>l.OriginalType!=0) ? BankLoanResult.AllSlotsOccupied : BankLoanResult.Success;
