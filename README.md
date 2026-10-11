@@ -1,262 +1,94 @@
-This project is free-of-charge, however support is always nice to have. In case you want to support, there's a Ko-fi link below, but again ENTIRELY OPTIONAL!
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0P228889O)
-
 # OpenGDS2
 
-Community modernization/reconstruction of the 2001 PC Game Dev Story 2 DX,
-targeting **Godot 4 + C#/.NET 8**. M6 is the baseline; main includes reconstruction through M73.
+An unofficial community reconstruction of **Game Dev Story 2 DX**, the 2001 PC game, built with **Godot 4 and C#/.NET 8**.
 
-The private test candidate is **0.1.0-ea.1-rc.4**. See [test checklist](docs/early-access-testing.md), [known limitations](docs/early-access-known-issues.md) and [release gates](docs/early-access-release.md). It is prepared for owner testing and is not yet approved for public release. Candidate saves/settings/imports use a separate `OpenGDS2-EarlyAccessTesting` folder. [Issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) is the durable continuation backlog.
+Run a game studio: hire and train employees, develop games, ship them, follow reviews and sales, and reinvest in your company. OpenGDS2 brings the original game into a modern engine, with English and Japanese interfaces and modern save support.
 
-The own-game **development → release → sales** loop is playable. Staff develop
-projects at their assigned desks; you select a type and genre, debug or release,
-then manage inventory and further production. Hiring, employee inspection,
-manual level-up, dismissal and modern save/load are also available. Release reviews and sales
-milestone announcements, calendar transactions, exhibitions and own-company
-awards are implemented. School construction/closure, rival contest presentation, rival sales rankings
-and persistent global records are implemented. Office progression, bankruptcy, own-hardware
-development and unresolved economy edge cases are unfinished.
+## Early Access
 
-The [2026-10-10 audit](https://github.com/UnSpotibleShadow/OpenGDS2/pull/72) compares M73 with the supplied original. The [current checkpoint](docs/development-checkpoint.md) records fresh validation separately from historical build results; the [RC.4 acceptance record](docs/windows-acceptance-record.md) identifies the exact Windows candidate.
+**Target release: Friday, 16 October 2026, at 19:00 CEST.** This is a release target, not an available download announcement. The current private candidate is `0.1.0-ea.1-rc.4`.
 
-M71 connects **lawyer transport and retail fee negotiations**, preserving original funds checks and saving each dialogue cursor. See [lawyer consultations](docs/lawyer-facility-m71.md).
+The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 
-M70 adds **staff hot springs, stock recycling, technology-capacity study and production-lab expansion** to facility management, with confirmed transactions and saved results. Three remaining facilities await their dependent systems. See [facility rules and remaining work](docs/facilities-m70.md).
+Release downloads will be announced here when available. Historical GitHub Actions development packages are outdated; automatic builds are currently paused.
 
-M68 adds **Cancel project** on the live development screen. Confirmation discards
-the project, raises assigned staff stress by 20 (capped at 99), and frees its room
-without refunding development costs. Declining leaves it unchanged. See
-[project cancellation evidence and compatibility](docs/project-cancellation-m68.md).
-M69 restores seven staff reactions and the two cancellation summaries, with
-page-by-page save/reload and no repeated stress penalty. Japanese dialogue is
-read from a refreshed local LZH import; see [cancellation dialogue](docs/cancellation-dialogue-m69.md).
+### What you can play
 
-M52 restores the alpha/type and beta/genre meeting discussions, compact
-selection/confirmation panels and original locally imported meeting illustration.
-Choices preview before charging; follow-up dialogue reports publicity and genre
-affinity. Save/load preserves discussion progress and confirmed choices without
-repeating fees or bonuses. Reimport the LZH for the expanded Japanese dialogue.
-See [meeting evidence and remaining presentation gaps](docs/conversations.md#m52-alpha-and-beta-meetings).
+- Hire, assign, train and manage employees; upgrade their development PCs.
+- Plan original games, sequels and manga adaptations; choose types and genres.
+- Develop, hold meetings, debug, cancel projects and ship games.
+- Read reviews, track sales and sales history, and produce more copies.
+- Take loans, participate in calendar events, exhibitions and awards, and use the implemented facilities.
+- Save and resume supported workflows, with a previous-valid-save recovery option.
+- Use English or Japanese text and adjust music and audio settings.
 
-M51 restores type/genre/completion introductions and shipment commentary before
-reviews. Market remarks share the existing original rolls; saving during shipment
-preserves the message position, market factor and review scores without charging
-again. English translations are authored; Japanese dialogue is imported locally.
-Reimport the LZH for the expanded dialogue cache. Other event conversations
-remain unfinished. See [conversation evidence](docs/conversations.md#m51-development-and-shipment-conversations).
+**Beginner mode** ends after Year 2, December, week 4. **Normal mode** supports experimental ongoing play; bankruptcy and full company/office progression are incomplete, and negative funds can persist.
 
-M50 restores the original planning illustration in a separate compact child
-window and fixes cancelling a conversation while it is typing. The illustration
-is imported locally; reimport the original LZH to obtain it.
+### What is still missing
 
-M49 adds manga/comic adaptations: choose one of 31 locally imported titles,
-discuss rights, accept the combined quote, then develop, release and sell the
-game. It also restores conversation typing/mouth frames, planning discussions,
-supported work/burst effects and office bubbles. English mode generates fourteen
-caption patches locally from the required original import. Uncertain name
-readings remain provisional and can be corrected locally. Reimport the LZH for
-the new catalog/dialogue. See [adaptations](docs/manga-adaptations.md),
-[conversations](docs/conversations.md) and [local patches](docs/office-effects-and-local-patches.md).
+Casino gameplay, the mystery lab, own-hardware development and original-game save importing are outside the first supported Early Access scope. Some dialogue, original presentation, Japanese bitmap text and English name readings still need work. Modern saves are separate from the original game's saves.
 
-Automatic GitHub Actions are paused at the owner's request. Current checks run
-locally; historical M48 packages do not include the latest changes. The M73 RC.4 candidate identifies its source commit and Windows export provenance in BUILD_MANIFEST.json. See the
-[validation checkpoint](docs/development-checkpoint.md) and [local build instructions](docs/building.md).
+Recent research has recovered more of the original systems, but recovered evidence does not mean those systems are implemented.
 
-M48 adds sequel development from Hall of Fame predecessors. Open a free desk
-room and choose Sequel; the new project carries 30% of predecessor quality and
-recognition (rounded down), then inherits its type and genre automatically.
-Shipment consumes the predecessor, and the child must earn Hall of Fame reviews
-to continue the series. Save/load preserves the lineage and the original counter
-quirk. See [sequel evidence and limitations](docs/sequel-development.md).
+See the [known issues](docs/early-access-known-issues.md) and [scope and research decisions](docs/early-access-decisions.md) for details. Older documents may still describe the previous owner-testing release gates; the current plan is a community-tested Early Access release.
 
-M37 adds school purchase/closure, imported rival releases and sales, actual rival
-award winners and the six earliest-achievement records. It also restores compact
-employee inspection with a selection arrow, portrait, ability chart and status
-bars. See [school/rival/ranking evidence](docs/school-rivals-and-rankings.md) and
-[employee presentation](docs/compact-employee-presentation.md). Reimport the LZH
-and start a new company to initialize rival history; older saves stay playable
-without fabricating their missing rival history.
+## Getting started
 
-M8 adds verified March-end contract renewal rules and local importing for seven
-audience definitions. See [M8 evidence and limitations](docs/milestone-8.md).
-M9 adds development computer upgrades, available hardware license purchases,
-eleven hardware records, 51 game types and verified planning quotes. See
-[development planning evidence](docs/development-planning.md).
+### Windows release package
 
-M10 composes the original office from locally imported sprite/mask atlases and
-128 recovered tiles, restores calendar glyphs and classic desktop controls, and
-animates hired employees entering and resting in the lounge. Movement survives
-save/load. Existing caches need reimporting. See
-[original presentation recovery](docs/original-presentation.md) for verified
-behavior and unresolved work paths.
+Once a release is available:
 
-M11 adds development-domain formulas and planning transitions, a bilingual planning
-preview, imported employee portraits, full office route rules and computer-upgrade
-sprites. M13 subsequently connects work scheduling and release/sales. See
-[M11 evidence and integration gaps](docs/development-work.md).
+1. Extract the **entire ZIP** into a fresh folder.
+2. Run `OpenGDS2.console.exe`, keeping the accompanying files and folders together. The packaged build does not require the Godot editor or a separate .NET installation.
+3. On the title screen, select **Import original assets** and choose your legally obtained `GameDev2DX.lzh`.
+4. Start a new company and choose Beginner or Normal mode.
 
-M12 connects employee reassignment to the office: choose a development desk under
-Staff, watch the employee walk and sit, then send them back to the lounge.
-Assigned desks display locally imported computers, including the purchased model.
-Movement, reservations and seated state survive save/load. See
-[M12 evidence and limits](docs/milestone-12.md). M13 now schedules project progress.
+**The original LZH archive is required to play.** Original game files and imported assets are not bundled. The self-extracting `.exe` installer is not a supported import input; choose the `.lzh` archive instead. The title screen and settings work before importing.
 
-M13 connects the **development → release → sales** loop. Hire and assign staff,
-start a project, choose its type and genre, debug or ship, and produce more copies
-as stock sells. The original sales formula and production size bands drive the
-simulation. Save/load preserves work and selection checkpoints. Reimport your
-original archive and start a new company for this milestone.
+The current RC.4 candidate keeps imports, settings and saves in `%APPDATA%\OpenGDS2-EarlyAccessTesting`, separate from ordinary OpenGDS2 data. Follow the final release's package notes for its data location and save compatibility.
 
-M19 restores the company-wide weekly production allowance. First shipment and
-reprints consume it; the sales screen re-enables reproduction at the next
-200-tick budget reset. Older saves with an unknown allowance require a new
-company. See [production-budget.md](docs/production-budget.md).
+### Your first game
 
-M20 records the original current-week and twelve prior weeks of product sales.
-Open **Sales History** for the classic graph; signed counts and original scale
-boundaries are preserved. See [sales-history.md](docs/sales-history.md).
+Hire employees, assign them to development desks, then start game development in a free room. Choose the project's type and genre, develop and debug it, and ship when ready. Follow sales and use **Produce More Copies** to replenish stock. Send tired staff to the lounge.
 
-M21 adds consumer investigations, the original five-week recall countdown,
-refund decisions and reproduction prohibitions. Both event dialogs survive
-save/load without charging twice. See [consumer-recalls.md](docs/consumer-recalls.md).
+Language, mute and volume controls are in **Settings**. Refresh the original import when package notes ask for it.
 
-M22 displays imported monthly salaries and preserves the staff form's shared
-payroll index in saves. Its original-debit preview remains separate from the
-salary total; monthly charging is still disabled. See [payroll-state.md](docs/payroll-state.md).
+## Help test Early Access
 
-M23 adds downloadable Linux/Windows x86_64 development packages, with startup
-and the complete core-loop fixture tested against extracted builds on both
-platforms. Download **OpenGDS2-desktop-development** from a successful
-[Validate workflow](https://github.com/UnSpotibleShadow/OpenGDS2/actions).
-M24 fixes immediate pause/resume feedback and clock regression coverage.
-M25 restores the compact desktop with simultaneous office, company, employee
-and product windows, original-size office graphics and locally imported toolbar
-icons/wallpaper. It includes eight optional owner-supplied background tracks and supports local music overrides,
-with mute/volume settings and independent audio preferences. M28 bundles the
-explicitly authorized recordings; local playlists can override them. Required LZH
-importing remains unchanged. Local translated-artwork overrides remain outside
-the repository; a hash-checked local patch tool creates replacements without
-changing imported originals. See [desktop/UI and music scope](docs/desktop-ui-and-music.md).
-See [desktop build instructions](docs/building.md).
-M26 independently verifies both per-copy sales-fee negotiation outcome branches
-and adds tested domain arithmetic. Consultations remain unavailable until their
-entry conditions and complete costs/timing are recovered; see
-[weekly economics evidence](docs/weekly-economics-investigation.md).
-M27 prevents oversized modern saves from replacing a readable slot and verifies
-both the exact size boundary and failure without data loss.
-M29 translates 91 catalog labels and replaces toolbar initials with images and
-localized help. M30 corrects original-image associations and preserves language
-selection after restart. M31 validates inactive saved employee progression before
-recruitment can restore it; unknown values remain nullable. See
-[translation coverage](docs/localization-and-toolbar.md) and
-[source-record save integrity](docs/source-save-integrity.md).
+Useful reports include the release version, Windows version, display resolution/scaling, reproduction steps, and what you expected versus what happened. Save/reload problems, crashes, duplicate charges and stuck workflows are especially useful to report.
 
-M32 restores employee selection directly from the office and staff table.
-M33 corrects the technology-only work-counter increment, restoring the original
-11/10 eligible-pass cadence. See the
-[original/OpenGDS2 comparison](docs/original-comparison.md) for remaining gaps.
-M34 restores signed weekly/monthly/yearly financial totals and the company
-window rows. Live calendar scheduling remains incomplete; see
-[financial accounting](docs/financial-accounting.md).
+A public reporting destination will be linked here before release. The [Windows testing checklist](docs/early-access-testing.md) is available as a guide for community testers, rather than a requirement that everyone complete every test.
 
-M14 adds original review scoring, four-reviewer release results, Hall of Fame
-status and sales milestone announcements. Reviews and pending announcements
-survive save/load and pause the office clock until acknowledged. See
-[review and event evidence](docs/reviews-and-events.md).
+Review logs before sharing them: they may contain names or local paths. **Do not upload the original archive, executables, graphics, databases or original saves.** Back up modern saves before trying a newer build.
 
-M15 adds employee dismissal and supported workspace cleanup for nonrenewal,
-including workers walking to a desk or lounge. Payroll and recall arithmetic
-have isolated regression coverage while their calendar scheduling remains
-unresolved. See [employee dismissal evidence](docs/employee-dismissal.md).
+## Build from source
 
-M17 imports the eight technology definitions and initial employee skills, connects
-technology purchasing and study at all five training seats, and preserves learned
-skills through saving, dismissal and rehiring; see [training evidence](docs/training-and-technologies.md).
-M18 connects six timed project technologies with diminishing returns, plus two
-stress-relief levels. Speed and top-level stress relief remain unresolved; see
-[application evidence](docs/technology-application.md).
-
-M16 connects public relations, genre research and production expansion, including
-the shared budget and automatic production growth. Research unlocks more genres;
-fame increases future project recognition. See [company activity evidence and
-clock scope](docs/company-activities.md).
-See [the playable loop, evidence and limits](docs/core-loop.md). M35 connects calendar economics;
-M36 adds exhibitions, own-company contest prizes, the Beginner ending and known
-graduate-event queues. School construction, rival contest presentation and full
-company progression remain unfinished. See [annual event evidence](docs/annual-calendar-events.md).
-
-M32 audits the original and current implementation and restores employee selection
-from office clicks and staff-table activation. See the
-[original/OpenGDS2 comparison and prioritized gaps](docs/original-comparison.md).
-
-## Run
-
-Install Godot **4.4.1 .NET** and .NET SDK 8, then:
+Install **Godot 4.4.1 .NET** and the **.NET 8 SDK**:
 
 ```sh
 dotnet build OpenGDS2.csproj
 godot --path .
 ```
 
-Alternatively open `project.godot` in the .NET edition of Godot. The title screen
-works without original assets. Use **Import original assets** to choose your
-legally obtained `GameDev2DX.lzh`; the importer also extracts employee definitions
-from the game in memory. The SFX installer itself is not supported.
+Alternatively, open `project.godot` in the .NET edition of Godot. Playing from source still requires the original LZH import.
 
-New Game → enter company/president → select mode → Hire Employees → choose an
-applicant → Staff → Assign a Desk → Start Game Development → choose type/genre →
-debug or release → Sales → Produce More Copies. Use the lounge for tired staff.
-Reopening recruitment rebuilds its five slots. Save/load preserves funds, staff,
-source gates, projects, decisions and released products.
-English translates all imported genre, type, audience, hardware, computer and
-technology labels, plus the adaptation catalog and recovered meeting dialogue.
-English staff readings are provisional; Japanese retains imported names. Office
-bubble captions are patched locally in English, and other bitmap text can use
-local artwork overrides. Change language under Settings.
-Toolbar images have translated tooltips and status-bar help; older imports can
-be refreshed from the LZH to obtain the original icons.
-See [translation coverage and remaining work](docs/localization-and-toolbar.md).
-Music can be disabled or adjusted in Settings. Optional seasonal office playlists
-follow three-month seasons, crossfade between seasons and support local seasonal tracks; the title theme
-stays separate. See [seasonal music](docs/seasonal-music.md).
-A calendar inspector previews the reconstructed calendar
-without skipping unresolved company simulation.
-
-## Evidence and tests
+See [building instructions](docs/building.md) for setup and exports. Development checks:
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py'
 dotnet run --project tests/DomainTests/DomainTests.csproj
 ```
 
-Original-only evidence tests are opt-in; see [employee-initializer.md](docs/employee-initializer.md).
-The C# suite has no Godot or third-party test-framework dependency.
+The [development checkpoint](docs/development-checkpoint.md), [original-game comparison](docs/original-comparison.md) and [continuation backlog](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) contain the technical history and outstanding work.
 
-[Milestone 7](docs/milestone-7.md) distinguishes recovered facts from gaps.
-[Remaining work](docs/remaining-work.md) lists exact next trace targets.
-[Validation](docs/validation.md) records 134 public C# checks and 19 public
-Python checks at M31, with both packaged desktop core-loop suites passing.
-Optional private fixtures add two C# checks and eight Python checks; their most
-recent local checks predate M31. See the [current continuation checkpoint](docs/development-checkpoint.md).
-Earlier SDK/export checks were tested in GitHub Actions. Automatic runs are now
-paused; M49 validation is local. Original-fixture checks never upload original
-content.
+## Support the project
 
-## Copyright boundary
+OpenGDS2 is **free of charge**. If you would like to support development, you can do so through Ko-fi. Support is entirely optional.
 
-No Kairosoft executables, graphics, sounds, imported employee database or private
-saves are bundled. All imports go into Godot's per-user cache. Do not commit that
-cache, locally extracted executables/databases or whole disassemblies. Original
-save compatibility remains unsupported.
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0P228889O)
 
-## License
+## License and original content
 
-Community-written code and documentation use the [MIT License](LICENSE). The eight
-authorized music recordings have a separate [distribution notice](audio/community/NOTICE.md).
-See [notice.md](notice.md) for third-party content exclusions and project disclaimers.
-Original game files and imported data are not distributed with this repository.
+Community-written code and documentation use the [MIT License](LICENSE). Bundled community music has separate [distribution terms](audio/community/NOTICE.md); it is not covered by the code license.
 
-## Current private Early Access candidate
-
-RC.4 supports the reconstructed core loop and implemented facilities, with previous-valid-save recovery. Beginner retains its verified ending; Normal is experimental ongoing play without complete bankruptcy or office progression. See [release scope and unresolved decisions](docs/early-access-decisions.md), [known limitations](docs/early-access-known-issues.md) and [Windows acceptance checklist](docs/early-access-testing.md). M73 records a clean Windows source export; public release remains pending native Windows acceptance.
+OpenGDS2 is an unofficial community project. Original game files and imported data remain outside the repository and release packages. See [notice.md](notice.md) for third-party notices and exclusions.
