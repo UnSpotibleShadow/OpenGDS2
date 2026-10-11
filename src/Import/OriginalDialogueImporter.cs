@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=10,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=11,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
@@ -51,6 +51,12 @@ public static class OriginalDialogueImporter
         result.Entries.Add("MANGA_RIGHTS_DECLINED",pe.String(meetingPool,0x8B));
         const int workPool=0x5F99AC,shipmentPool=0x60736C;
         result.Entries.Add("CORE_SECRETARY",pe.String(workPool,0x77));
+        result.Entries.Add("FINANCIAL_FAILURE_INTRO_0",pe.String(workPool,0xEF));
+        result.Entries.Add("FINANCIAL_FAILURE_INTRO_1",pe.String(workPool,0xF0));
+        result.Entries.Add("FINANCIAL_FAILURE_CLOSING",pe.String(workPool,0xFB));
+        result.Entries.Add("FINANCIAL_FAILURE_NAMED",pe.String(workPool,0xD6)+"{name}"+pe.String(workPool,0xD7));
+        result.Entries.Add("FINANCIAL_FAILURE_EMPLOYEE",pe.String(workPool,0xD9));
+        for (int i=0;i<8;i++) result.Entries.Add(FinancialFailureService.ReactionKey(i),pe.String(workPool,0xF3+i));
         result.Entries.Add("CHECKPOINT_TYPE_INTRO",pe.String(workPool,0xC4));
         result.Entries.Add("CHECKPOINT_GENRE_INTRO",pe.String(workPool,0xCC));
         result.Entries.Add("CHECKPOINT_COMPLETE_INTRO",pe.String(workPool,0xA1)+"{room}"+pe.String(workPool,0xCD));

@@ -39,6 +39,7 @@ public static class SaveStore
     }
     public static void Save(string path, GameState state)
     {
+        if (FinancialFailureService.IsComplete(state)) throw new InvalidOperationException("Saving is disabled after financial failure.");
         string text = Serialize(state);
         string absolute = Path.GetFullPath(path);
         Directory.CreateDirectory(Path.GetDirectoryName(absolute)!);
@@ -76,6 +77,7 @@ public static class SaveStore
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
             throw new InvalidDataException("Invalid session state.");
         if (state.PendingProjectCancellation is { } cancellation) ProjectCancellationDialogueRules.Validate(cancellation);
+        FinancialFailureService.Validate(state);
         MysteryLabService.Validate(state);
         OwnHardwareService.Validate(state);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);

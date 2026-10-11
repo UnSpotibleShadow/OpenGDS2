@@ -168,7 +168,7 @@ public partial class Main
         facilities.AddThemeFontSizeOverride("font_size",11);company.Body.AddChild(facilities);
         facilities.Pressed+=()=>{if (_dialog is null) ShowFacilities(state);};
         var staff = ChildWindow("EmployeeWindow", Tr("EMPLOYEE_WINDOW"), new Vector2(720, 130), new Vector2(390, 150));
-        OriginalPayrollRules.CaptureStaffList(state);
+        if (state.FinancialFailure is null) OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
             "SHORT_MUSIC", "SHORT_ACCURACY", "SHORT_SPEED", "SHORT_INSPIRATION", "SHORT_EXPERIENCE"], [86, 32, 22, 22, 22, 22, 22, 22, 22, 50]);
         staff.Body.AddChild(_staffTable); _staffTable.ItemActivated += () =>
@@ -240,6 +240,8 @@ public partial class Main
 
     private bool DesktopActionEnabled(string key)
     {
+        if (_desktopState?.FinancialFailure is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
+        if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
         if (_desktopState is GameState current && (current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || (current.PendingFacilityReceipt is not null || current.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(current) || current.PendingMysteryLabResult is not null)) &&
