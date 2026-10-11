@@ -51,6 +51,8 @@ public partial class Main
                 AnnualMessage($"FacilityDescription{slot}",Tr($"FACILITY_DESCRIPTION_{kind}"));
                 switch (kind)
                 {
+                    case FacilityKind.Casino:
+                        AnnualButton($"EnterCasino{slot}","CASINO_ENTER",()=>ShowCasino(state));break;
                     case FacilityKind.HotSpring:
                         FacilityAction($"UseHotSpring{slot}","FACILITY_HOT_SPRING_ACTION",EmployeeCareService.HotSpringCost,
                             ()=>ConfirmFacilityService(state,index,kind,EmployeeCareService.HotSpringCost,()=>FacilityService.HotSpring(state,index)));break;

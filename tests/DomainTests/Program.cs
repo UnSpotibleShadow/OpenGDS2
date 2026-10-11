@@ -18,6 +18,180 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+GameState PokerFixture(long coins=100)
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=(int)FacilityKind.Casino;s.Casino.Coins=coins;
+    Check(CasinoPokerService.Open(s)==CasinoResult.Success);return s;
+}
+float[] CardDraws(params CasinoCard[] cards)=>cards.SelectMany(c=>new[]{(c.Suit+.01f)/4,(c.Rank+.01f)/13}).ToArray();
+PokerRoundState ReadyPoker(GameState s,params CasinoCard[] cards)
+{
+    var p=s.Casino.Poker;p.Cards=cards.ToList();p.UsedCards=cards.Select(x=>x.Identifier).ToHashSet();
+    p.Revealed=[true,true,true,true,true];p.Phase=1;p.Tick=45;s.Casino.Bet=1;
+    return p;
+}
+Test("poker uses the recovered nine categories, total-return multipliers and high-pair threshold",()=>
+{
+    var hands=new (int Outcome,CasinoCard[] Cards)[] {
+        (0,[new(0,1),new(1,1),new(2,4),new(3,7),new(0,11)]),
+        (1,[new(0,9),new(1,9),new(2,4),new(3,7),new(0,11)]),
+        (1,[new(0,0),new(1,0),new(2,4),new(3,7),new(0,11)]),
+        (2,[new(0,1),new(1,1),new(2,4),new(3,4),new(0,11)]),
+        (3,[new(0,1),new(1,1),new(2,1),new(3,4),new(0,11)]),
+        (4,[new(0,0),new(1,1),new(2,2),new(3,3),new(0,4)]),
+        (4,[new(0,8),new(1,9),new(2,10),new(3,11),new(0,12)]),
+        (4,[new(0,0),new(1,9),new(2,10),new(3,11),new(0,12)]),
+        (5,[new(0,0),new(0,2),new(0,4),new(0,7),new(0,12)]),
+        (6,[new(0,1),new(1,1),new(2,1),new(3,4),new(0,4)]),
+        (7,[new(0,1),new(1,1),new(2,1),new(3,1),new(0,11)]),
+        (8,[new(2,0),new(2,1),new(2,2),new(2,3),new(2,4)]),
+        (9,[new(3,0),new(3,9),new(3,10),new(3,11),new(3,12)])};
+    foreach (var (outcome,cards) in hands) Check(CasinoPokerService.Classify(cards)==outcome);
+    Check(CasinoPokerService.Multipliers.SequenceEqual(new[]{0,1,2,3,10,15,20,100,500,1000}));
+    Check(CasinoPokerService.Classify([new(0,0),new(1,1),new(2,10),new(3,11),new(0,12)])==0);
+    Throws<ArgumentException>(()=>CasinoPokerService.Classify([new(0,0),new(0,0),new(0,1),new(0,2),new(0,3)]));
+});
+Test("coin purchase debits the financial helper without an affordability gate or redemption",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Money=1;s.Company.WeeklyNet=10;s.Company.MonthlyNet=20;s.Company.YearlyNet=30;
+    Check(CasinoPokerService.BuyCoins(s)==CasinoResult.Success && s.Casino.Coins==50 && s.Money==-9999999);
+    Check(s.Company.WeeklyNet==-9999990 && s.Company.MonthlyNet==-9999980 && s.Company.YearlyNet==-9999970);
+    Check(CasinoPokerService.Open(s)==CasinoResult.Success);Check(CasinoPokerService.BuyCoins(s)==CasinoResult.EventPending && s.Casino.Coins==50);
+});
+Test("poker entry checks coins and ownership and resets form phase while retaining shared amounts",()=>
+{
+    var (s,_)=CalendarFixture();Check(CasinoPokerService.Open(s)==CasinoResult.NotOwned);
+    s.Calendar!.OriginalSlots0444[0]=4;Check(CasinoPokerService.Open(s)==CasinoResult.NoCoins);
+    s.Casino.Coins=50;s.Casino.Bet=17;s.Casino.PendingPayout=100;s.Casino.ChainBonus=31;
+    Check(CasinoPokerService.Open(s)==CasinoResult.Success && !CasinoPokerService.CanCommand(s,1));
+    Check(s.Casino.Bet==17 && s.Casino.PendingPayout==100 && s.Casino.ChainBonus==31 && s.Casino.Poker.Phase==0);
+});
+Test("poker spends one coin per accepted increment with native fifty cap and failed-command entry draw",()=>
+{
+    var s=PokerFixture(55);var random=new GreetingRandom(0);
+    Check(CasinoPokerService.Command(s,1,random)==CasinoResult.InvalidAction && random.GreetingCalls==1);
+    for (int i=0;i<50;i++) Check(CasinoPokerService.Command(s,0,random)==CasinoResult.Success);
+    Check(s.Casino.Coins==5 && s.Casino.Bet==50 && CasinoPokerService.CanCommand(s,1));
+    Check(CasinoPokerService.Command(s,0,random)==CasinoResult.InvalidAction && random.GreetingCalls==52 && s.Casino.Coins==5);
+    CasinoPokerService.Close(s);CasinoPokerService.Open(s);Check(!CasinoPokerService.CanCommand(s,0) && !CasinoPokerService.CanCommand(s,1));
+});
+Test("poker rejection sampling consumes both draws on duplicates and marks source card identity",()=>
+{
+    var used=new HashSet<int>{0};var random=new FailureRandom(0,0,0,.1f);
+    var card=CasinoPokerService.Draw(used,random);Check(card==new CasinoCard(0,1) && random.Calls==4 && used.SetEquals(new[]{0,1}));
+    Throws<InvalidOperationException>(()=>CasinoPokerService.Draw(Enumerable.Range(0,52).ToHashSet(),new FailureRandom()));
+});
+Test("initial poker deal is generated once and reveals at nine-event intervals through forty-five",()=>
+{
+    var s=PokerFixture();CasinoPokerService.Command(s,0,new FailureRandom(0));
+    CasinoCard[] cards=[new(0,0),new(1,2),new(2,4),new(3,6),new(0,8)];
+    var random=new FailureRandom(new[]{0f}.Concat(CardDraws(cards)).ToArray());Check(CasinoPokerService.Command(s,1,random)==CasinoResult.Success && random.Calls==11);
+    for (int tick=1;tick<=45;tick++)
+    {
+        CasinoPokerService.Tick(s,new FailureRandom());Check(s.Casino.Poker.Revealed.Count(x=>x)==tick/9);
+        Check(CasinoPokerService.CanCommand(s,1)==(tick==45));
+    }
+    Check(s.Casino.Poker.Cards.SequenceEqual(cards) && s.Casino.Coins==99);
+});
+Test("poker replaces only unheld cards from the existing used map in source index order",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,0),new(1,2),new(2,4),new(3,6),new(0,8));
+    foreach (int i in new[]{0,2,4}) Check(CasinoPokerService.SelectCard(s,i));
+    var random=new FailureRandom(new[]{0f}.Concat(CardDraws(new(1,9),new(2,11))).ToArray());
+    Check(CasinoPokerService.Command(s,1,random)==CasinoResult.Success && random.Calls==5);
+    Check(p.Cards.SequenceEqual(new CasinoCard[]{new(0,0),new(1,9),new(2,4),new(2,11),new(0,8)}) && p.UsedCards.Count==7);
+    for (int i=0;i<18;i++) CasinoPokerService.Tick(s,new FailureRandom());
+    Check(p.Phase==0 && s.Casino.Bet==0 && p.Revealed.All(x=>x));
+});
+Test("holding all cards enters the award after the source result delay and excludes the returned stake",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));s.Casino.Bet=7;
+    foreach (int i in Enumerable.Range(0,5)) CasinoPokerService.SelectCard(s,i);
+    CasinoPokerService.Command(s,1,new FailureRandom(0));CasinoPokerService.Tick(s,new FailureRandom());
+    Check(p.Phase==3 && p.Outcome==1 && !p.AwardReady);
+    for (int i=0;i<32;i++) CasinoPokerService.Tick(s,new FailureRandom());Check(!p.AwardReady);
+    CasinoPokerService.Tick(s,new FailureRandom());Check(p.AwardReady && s.Casino.PendingPayout==7 && s.Casino.Coins==100);
+});
+Test("poker collection credits exactly one coin per two callbacks and close does not drain or refund",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=3;
+    Check(CasinoPokerService.Command(s,0,new FailureRandom(0))==CasinoResult.Success);
+    CasinoPokerService.Tick(s,new FailureRandom());Check(s.Casino.Coins==100 && s.Casino.PendingPayout==3);
+    CasinoPokerService.Tick(s,new FailureRandom());Check(s.Casino.Coins==101 && s.Casino.PendingPayout==2);
+    Check(CasinoPokerService.Close(s) && s.CompanyActivityPerformed==true && s.Casino.Bet==1 && s.Casino.PendingPayout==2);
+    CasinoPokerService.Tick(s,new FailureRandom());Check(s.Casino.Coins==101 && s.Casino.PendingPayout==2);
+    Check(!CasinoPokerService.Close(s));
+});
+Test("poker complete collection clears phase and stake after the last coin",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=1;
+    CasinoPokerService.Command(s,0,new FailureRandom(0));CasinoPokerService.Tick(s,new FailureRandom());CasinoPokerService.Tick(s,new FailureRandom());
+    Check(p.Phase==0 && s.Casino.Coins==101 && s.Casino.Bet==0 && s.Casino.PendingPayout==0 && !p.DealEnabled);
+});
+Test("poker double-up delays generation until callback eighteen and uses a fresh rejection map",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=3;
+    var entry=new FailureRandom(0);CasinoPokerService.Command(s,1,entry);Check(entry.Calls==1 && p.UsedCards.Count==0 && p.Phase==5);
+    for (int i=0;i<17;i++) CasinoPokerService.Tick(s,new FailureRandom());
+    Check(!CasinoPokerService.SelectCard(s,1));
+    var draws=new FailureRandom(CardDraws(new(0,4),new(1,5),new(2,6),new(3,7),new(0,8)));CasinoPokerService.Tick(s,draws);
+    Check(draws.Calls==10 && p.Revealed[0] && p.Revealed.Count(x=>x)==1 && p.UsedCards.Count==5 && s.Casino.Coins==100 && s.Casino.PendingPayout==3);
+});
+Test("double-up compares aces high, doubles only pending winnings and retains storage after loss",()=>
+{
+    foreach (bool win in new[]{false,true})
+    {
+        var s=PokerFixture();var p=ReadyPoker(s,new(0,12),new(1,0),new(2,2),new(3,3),new(0,4));p.Phase=5;p.Tick=18;p.Revealed=[true,false,false,false,false];
+        if (!win) p.Cards=[new(0,0),new(1,12),new(2,2),new(3,3),new(0,4)];
+        s.Casino.PendingPayout=7;Check(!CasinoPokerService.SelectCard(s,0) && CasinoPokerService.SelectCard(s,1));
+        for (int i=0;i<28;i++) CasinoPokerService.Tick(s,new FailureRandom());
+        Check(s.Casino.Coins==100 && s.Casino.PendingPayout==(win ? 14 : 7) && p.Phase==(win ? 3 : 0));
+        Check(s.Casino.Bet==(win ? 1 : 0));
+    }
+});
+Test("equal double-up ranks retain the award then redeal after the native tie delay",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,4),new(1,4),new(2,6),new(3,7),new(0,8));p.Phase=5;p.Tick=18;s.Casino.PendingPayout=9;
+    CasinoPokerService.SelectCard(s,1);for (int i=0;i<28;i++) CasinoPokerService.Tick(s,new FailureRandom());
+    Check(p.Phase==6 && p.TieRedeal && p.TieTick==2 && s.Casino.PendingPayout==9);
+    for (int i=0;i<27;i++) CasinoPokerService.Tick(s,new FailureRandom());Check(p.Phase==6);
+    CasinoPokerService.Tick(s,new FailureRandom());Check(p.Phase==5 && p.Tick==0 && p.UsedCards.Count==0 && s.Casino.PendingPayout==9);
+});
+Test("modern poker saves resume reveal and partial payout without replaying draws or credits",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=4;
+    CasinoPokerService.Command(s,0,new FailureRandom(0));CasinoPokerService.Tick(s,new FailureRandom());
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));CasinoPokerService.Tick(s,new FailureRandom());
+    Check(s.Casino.Coins==101 && s.Casino.PendingPayout==3);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Casino.Coins==101 && s.Casino.Poker.Phase==4);
+});
+Test("casino pauses office and blocks other modal transactions while preserving accounting",()=>
+{
+    var s=PokerFixture();var session=new GameSession(new FailureRandom());session.Restore(s);string before=SaveStore.Serialize(s);
+    session.TickOffice();Check(SaveStore.Serialize(s)==before);
+    Check(FacilityService.Close(s,0,FacilityKind.Casino)==FacilityResult.EventPending && !FinancialFailureService.Begin(s));
+});
+Test("casino numeric boundary rejects an unrepresentable action before changing coins or pending payout",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=long.MaxValue;
+    var random=new FailureRandom(0,0);Check(CasinoPokerService.Command(s,0,random)==CasinoResult.NumericLimit);
+    Check(CasinoPokerService.Command(s,1,random)==CasinoResult.NumericLimit && random.Calls==2);
+    Check(s.Casino.Coins==100 && s.Casino.PendingPayout==long.MaxValue && p.Phase==3);
+});
+Test("new company resets original coins while preserving native shared casino scratch storage",()=>
+{
+    var s=PokerFixture();s.Casino.Bet=17;s.Casino.PendingPayout=37;s.Casino.ChainBonus=5;
+    var session=new GameSession();session.Restore(s);var fresh=session.StartNewGame("New","Owner",GameMode.Normal);
+    Check(fresh.Casino.Coins==0 && fresh.Casino.Bet==17 && fresh.Casino.PendingPayout==37 && fresh.Casino.ChainBonus==5 && !fresh.Casino.PokerOpen);
+});
+Test("casino malformed phases cards maps and active overlaps are rejected",()=>
+{
+    var mutations=new Action<GameState>[] {s=>s.Casino.Coins=-1,s=>s.Casino.Bet=51,s=>s.Casino.PendingPayout=-1,
+        s=>s.Casino.Poker.Phase=7,s=>s.Casino.Poker.Holds.RemoveAt(0),s=>s.Casino.Poker.UsedCards.Add(52),
+        s=>s.Calendar!.OriginalSlots0444[0]=-1,s=>s.Casino.Poker.RevealOrder=[0,0],s=>s.Casino.Poker.Phase=1};
+    foreach (var mutate in mutations) {var s=PokerFixture();mutate(s);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));}
+});
 GameState FailureFixture(long? money=-1)
 {
     var (s,_)=CalendarFixture();s.Money=money;s.SourceUpperBound=3;s.OriginalPayrollScratchIndex=2;
