@@ -2921,7 +2921,7 @@ msgid "FACILITY_DESCRIPTION_MysteryLab"
 msgstr "Run a ¥25 million experiment with an unpredictable effect on funds, production capacity, fame or staff stress."
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
-msgstr "This facility’s service is coming soon."
+msgstr "Develop and launch one own console, then make games for its growing market."
 
 msgid "NEGOTIATION_TARGET_Transport"
 msgstr "Negotiate transport fee"
@@ -3002,10 +3002,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play: bankruptcy and office/company upgrades are incomplete; negative funds do not end the game."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: casino, own hardware, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+msgstr "Unavailable or incomplete: casino, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
 
 msgid "MYSTERY_LAB_START"
 msgstr "Start an experiment"
@@ -3048,3 +3048,79 @@ msgstr "All employed staff now have zero stress."
 
 msgid "MYSTERY_LAB_RESULT_6"
 msgstr "All employed staff now have stress 90. Give them a break soon."
+
+msgid "OWN_HARDWARE_START"
+msgstr "Develop your own console"
+
+msgid "OWN_HARDWARE_PROJECT"
+msgstr "Console development"
+
+msgid "OWN_HARDWARE_PLAN_RULES"
+msgstr "Choose an empty development room, a console design and a medium. Develop 2,500 points and all four qualities to 800, and apply graphics, music, fun and novelty technologies. Only one console may be developed and launched."
+
+msgid "OWN_HARDWARE_DESIGN_0"
+msgstr "Console design A — ¥200 million"
+
+msgid "OWN_HARDWARE_DESIGN_1"
+msgstr "Console design B — ¥100 million"
+
+msgid "OWN_HARDWARE_MEDIUM_0"
+msgstr "Cartridge — ¥200 million"
+
+msgid "OWN_HARDWARE_MEDIUM_1"
+msgstr "CD — ¥100 million"
+
+msgid "OWN_HARDWARE_LIFECYCLE"
+msgstr "Assign employees to this room and apply all four required technologies. Closing the monitor or demolishing the lab keeps the project running. Hardware projects cannot be cancelled."
+
+msgid "OWN_HARDWARE_TECH_APPLIED"
+msgstr "Applied"
+
+msgid "OWN_HARDWARE_TECH_REQUIRED"
+msgstr "Required"
+
+msgid "OWN_HARDWARE_TECH_COMPLETED"
+msgstr "{0} has been applied to console development in room {1}."
+
+msgid "OWN_HARDWARE_LAUNCH"
+msgstr "Launch your console"
+
+msgid "OWN_HARDWARE_LAUNCH_RULES"
+msgstr "Development is complete. Name your console to launch it immediately. No additional launch fee is charged; you can develop games for it and its market grows each week."
+
+msgid "OWN_HARDWARE_NAME"
+msgstr "Console name"
+
+msgid "OWN_HARDWARE_DEFAULT_NAME"
+msgstr "My console"
+
+msgid "OWN_HARDWARE_RESULT_FacilityUnavailable"
+msgstr "The hardware lab is unavailable."
+
+msgid "OWN_HARDWARE_RESULT_EventPending"
+msgstr "Finish the pending event first."
+
+msgid "OWN_HARDWARE_RESULT_StateUnknown"
+msgstr "Required platform or project data is missing. Start a fresh company with the supported original import."
+
+msgid "OWN_HARDWARE_RESULT_AlreadyLaunched"
+msgstr "Your company has already launched its console."
+
+msgid "OWN_HARDWARE_RESULT_ProjectRunning"
+msgstr "A console is already in development."
+
+msgid "OWN_HARDWARE_RESULT_RoomOccupied"
+msgstr "Choose an empty development room."
+
+msgid "OWN_HARDWARE_RESULT_MoneyUnknown"
+msgstr "The company balance is unknown."
+
+msgid "OWN_HARDWARE_RESULT_InsufficientFunds"
+msgstr "Not enough funds for this design."
+
+msgid "OWN_HARDWARE_RESULT_NotReady"
+msgstr "Complete the work, quality targets and all four required technologies."
+
+msgid "OWN_HARDWARE_RESULT_InvalidName"
+msgstr "Enter a console name of 1–128 characters."
+

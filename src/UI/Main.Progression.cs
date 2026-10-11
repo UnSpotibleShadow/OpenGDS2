@@ -70,6 +70,10 @@ public partial class Main
                     case FacilityKind.ProductionLab:
                         FacilityAction($"ExpandProduction{slot}","FACILITY_PRODUCTION_ACTION",FacilityService.ProductionExpansionCost,
                             ()=>ConfirmFacilityService(state,index,kind,FacilityService.ProductionExpansionCost,()=>_session.ExpandFacilityProduction(index)));break;
+                    case FacilityKind.HardwareLab:
+                        var hard=new Button {Name=$"StartHardwarePlan{slot}",Text=Tr("OWN_HARDWARE_START"),
+                            Disabled=state.OwnHardware.Launched is not null || state.DevelopmentProjects.Any(p=>p.OriginalRoomState==2)};
+                        _content.AddChild(hard);hard.Pressed+=()=>ShowHardwarePlan(state,index);break;
                     case FacilityKind.MysteryLab:
                         if (state.MysteryLab.Progress>0)
                             AnnualMessage("MysteryLabProgress",string.Format(Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)));

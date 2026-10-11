@@ -19,6 +19,7 @@ public static class ReleaseService
         string title,long price,long copies,Random random)
     {
         ValidateInput(title,price,copies);
+        catalog=OwnHardwareService.Catalog(state,catalog);
         if (!state.DevelopmentProjects.Contains(project) || project.OriginalRoomState!=1 || project.OriginalStage!=3 ||
             project.Progress<project.RequiredPoints || project.GameTypeSourceIndex is null || project.GenreSourceIndex is null)
             return ReleaseResult.NotReady;
@@ -86,6 +87,7 @@ public static class ReleaseService
     }
     public static ReleaseResult TryProduce(GameState state,ReleasedGameState product,OriginalCatalog catalog,long copies)
     {
+        catalog=OwnHardwareService.Catalog(state,catalog);
         if (copies<1) throw new ArgumentOutOfRangeException(nameof(copies));
         if (!state.ReleasedGames.Contains(product)) throw new ArgumentException("Product is not in this company.");
         var availability=CheckProduction(state,product);

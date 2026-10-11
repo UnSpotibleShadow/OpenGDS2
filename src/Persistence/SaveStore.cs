@@ -77,6 +77,7 @@ public static class SaveStore
             throw new InvalidDataException("Invalid session state.");
         if (state.PendingProjectCancellation is { } cancellation) ProjectCancellationDialogueRules.Validate(cancellation);
         MysteryLabService.Validate(state);
+        OwnHardwareService.Validate(state);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);
         if (state.PendingFeeNegotiation is { } negotiation)
         {
@@ -96,8 +97,8 @@ public static class SaveStore
             throw new InvalidDataException("Invalid original payroll scratch index.");
         if (state.DevelopmentComputerIndex is < 0 or > 3)
             throw new InvalidDataException("Invalid development computer.");
-        if ((state.HardwareLicenses?.Any(x => x is < 0 or > 10) ?? false) ||
-            (state.AvailableHardware?.Any(x => x is < 0 or > 10) ?? false))
+        if ((state.HardwareLicenses?.Any(x => x is < 0 or > 11) ?? false) ||
+            (state.AvailableHardware?.Any(x => x is < 0 or > 11) ?? false))
             throw new InvalidDataException("Invalid hardware state.");
         if (state.TechnologyOwnershipLevels?.Any(x=>x.Key is <0 or >7 || x.Value is <0 or >3)==true)
             throw new InvalidDataException("Invalid technology ownership.");
@@ -117,7 +118,7 @@ public static class SaveStore
         foreach (var product in state.ReleasedGames)
         {
             if (product is null || string.IsNullOrWhiteSpace(product.Title) || product.Title.Length>128 ||
-                product.HardwareSourceIndex is <0 or >10 || product.AudienceSourceIndex is <0 or >6 ||
+                product.HardwareSourceIndex is <0 or >11 || product.AudienceSourceIndex is <0 or >6 ||
                 product.GameTypeSourceIndex is <0 or >50 || product.GenreSourceIndex is <0 or >17 || product.Bugs<0 ||
                 !double.IsFinite(product.Recognition) || product.Recognition<0 || !double.IsFinite(product.DataSize) || product.DataSize<0 ||
                 !double.IsFinite(product.MarketFactor) || product.MarketFactor<0 || product.Demand<0 || product.Price<0 ||
@@ -195,7 +196,7 @@ public static class SaveStore
     {
         if (project?.DecisionIntroductionAcknowledged is DevelopmentMilestone introduction && !Enum.IsDefined(introduction))
             throw new InvalidDataException("Invalid checkpoint introduction.");
-        if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >10 ||
+        if (project is null || project.RoomIndex is <0 or >1 || project.HardwareSourceIndex is <0 or >11 ||
             project.AudienceSourceIndex is <0 or >6 || project.GameTypeSourceIndex is <0 or >50 ||
             project.GenreSourceIndex is <0 or >17 || project.OriginalMode is not (0 or 1 or 2) ||
             project.OriginalRoomState is not (1 or 2) || project.OriginalStage is <0 or >3 ||

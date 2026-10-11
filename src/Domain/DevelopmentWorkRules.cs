@@ -74,7 +74,7 @@ public static class DevelopmentWorkRules
             !double.IsFinite(project.RequiredPoints) || !double.IsFinite(project.Progress) ||
             project.Progress<0 || project.Bugs<0) throw new InvalidDataException("Invalid development project.");
         if (project.OriginalRoomState==2 && project.PolishingTargets is null)
-            throw new InvalidOperationException("Original polishing targets are required.");
+            throw new InvalidOperationException("Original hardware quality targets are required.");
         ValidateQuality(project.Quality);
         if (project.PolishingTargets is not null) ValidateQuality(project.PolishingTargets);
         int gain;

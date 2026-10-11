@@ -25,9 +25,10 @@ public static class SecretaryAdviceRules
         ? $"SECRETARY_ADVICE_{message}" : throw new ArgumentOutOfRangeException(nameof(message));
     public static SecretaryAdviceResult Prepare(GameState state,OriginalCatalog? catalog,Random random)
     {
+        if (catalog is not null) catalog=OwnHardwareService.Catalog(state,catalog);
         ArgumentNullException.ThrowIfNull(state);ArgumentNullException.ThrowIfNull(random);
         if (state.PendingSecretaryAdvice is not null) return SecretaryAdviceResult.Success;
-        if (state.PendingMysteryLabResult is not null || state.PendingSecretaryReplacement is not null || state.PendingHireGreeting is not null || CalendarService.HasPending(state) ||
+        if (OwnHardwareService.HasPending(state) || state.PendingMysteryLabResult is not null || state.PendingSecretaryReplacement is not null || state.PendingHireGreeting is not null || CalendarService.HasPending(state) ||
             state.DevelopmentProjects.Any(p=>p.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(p)) ||
             state.ReleasedGames.Any(p=>p.ReviewPending) || RecallService.HasPending(state) || SalesMilestoneService.HasPending(state))
             return SecretaryAdviceResult.EventPending;

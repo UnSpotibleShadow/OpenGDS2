@@ -23,6 +23,7 @@ public static class DevelopmentProjectService
         var result=CheckNewPlan(state,catalog,roomIndex,hardwareSourceIndex,audienceSourceIndex,out quote);
         var manga=catalog.Manga.SingleOrDefault(x=>x.SourceIndex==mangaSourceIndex);
         if (manga is null) return DevelopmentPlanningResult.MangaUnavailable;
+        catalog=OwnHardwareService.Catalog(state,catalog);
         quote=DevelopmentPlanningRules.Quote(catalog.Hardware.Single(x=>x.SourceIndex==hardwareSourceIndex),
             catalog.Audiences.Single(x=>x.SourceIndex==audienceSourceIndex),2,manga.RightsFee);
         if (result is not (DevelopmentPlanningResult.Success or DevelopmentPlanningResult.InsufficientFunds)) return result;
@@ -44,6 +45,7 @@ public static class DevelopmentProjectService
     public static DevelopmentPlanningResult CheckNewPlan(GameState state,OriginalCatalog catalog,int roomIndex,
         int hardwareSourceIndex,int audienceSourceIndex,out DevelopmentQuote quote)
     {
+        catalog=OwnHardwareService.Catalog(state,catalog);
         if (roomIndex is <0 or >1) throw new ArgumentOutOfRangeException(nameof(roomIndex));
         var hardware=catalog.Hardware.SingleOrDefault(x=>x.SourceIndex==hardwareSourceIndex)
             ?? throw new ArgumentOutOfRangeException(nameof(hardwareSourceIndex));
@@ -69,6 +71,7 @@ public static class DevelopmentProjectService
     private static DevelopmentPlanningResult TryAcceptPlan(GameState state,OriginalCatalog catalog,int roomIndex,
         int hardwareSourceIndex,int audienceSourceIndex,string title,DevelopmentFocus focus,int? predecessorProductIndex,int? mangaSourceIndex=null)
     {
+        catalog=OwnHardwareService.Catalog(state,catalog);
         if (string.IsNullOrWhiteSpace(title) || title.Length>128) throw new ArgumentException("A project label of at most 128 characters is required.");
         DevelopmentWorkRules.SelectCategory(focus,0);
         DevelopmentQuote quote;

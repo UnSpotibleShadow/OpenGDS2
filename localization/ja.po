@@ -2891,7 +2891,7 @@ msgid "FACILITY_DESCRIPTION_MysteryLab"
 msgstr "2500万円で実験を行います。資金、生産容量、知名度、社員のストレスに予測できない効果が生じます。"
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
-msgstr "この施設のサービスは準備中です。"
+msgstr "自社ハードを1台開発・発売し、成長する市場に向けてゲームを開発します。"
 
 msgid "NEGOTIATION_TARGET_Transport"
 msgstr "運送費を交渉"
@@ -2972,10 +2972,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。倒産と会社・事務所の拡張は未完成で、資金がマイナスでもゲームは終了しません。"
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、現代形式のセーブ。"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、現代形式のセーブ。"
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "未対応または未完成：カジノ、自社ハード、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
+msgstr "未対応または未完成：カジノ、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
 
 msgid "MYSTERY_LAB_START"
 msgstr "実験を開始"
@@ -3018,3 +3018,79 @@ msgstr "在籍中の社員のストレスを解消しました。"
 
 msgid "MYSTERY_LAB_RESULT_6"
 msgstr "在籍中の社員のストレスは90です。休憩をおすすめします。"
+
+msgid "OWN_HARDWARE_START"
+msgstr "自社ハードを開発"
+
+msgid "OWN_HARDWARE_PROJECT"
+msgstr "自社ハード開発"
+
+msgid "OWN_HARDWARE_PLAN_RULES"
+msgstr "空いている開発室、ハードの設計と記録媒体を選びます。開発量2500、各品質800と、グラフィック・音楽・面白さ・斬新さの技術が必要です。開発・発売できる自社ハードは1台です。"
+
+msgid "OWN_HARDWARE_DESIGN_0"
+msgstr "ハード設計A — 2億円"
+
+msgid "OWN_HARDWARE_DESIGN_1"
+msgstr "ハード設計B — 1億円"
+
+msgid "OWN_HARDWARE_MEDIUM_0"
+msgstr "カートリッジ — 2億円"
+
+msgid "OWN_HARDWARE_MEDIUM_1"
+msgstr "CD — 1億円"
+
+msgid "OWN_HARDWARE_LIFECYCLE"
+msgstr "この開発室に社員を配置し、必要な4つの技術を使用します。画面を閉じたり研究所を撤去しても開発は続きます。ハード開発の中止はできません。"
+
+msgid "OWN_HARDWARE_TECH_APPLIED"
+msgstr "使用済み"
+
+msgid "OWN_HARDWARE_TECH_REQUIRED"
+msgstr "未使用"
+
+msgid "OWN_HARDWARE_TECH_COMPLETED"
+msgstr "開発室{1}のハード開発に「{0}」の技術を使用しました。"
+
+msgid "OWN_HARDWARE_LAUNCH"
+msgstr "自社ハードを発売"
+
+msgid "OWN_HARDWARE_LAUNCH_RULES"
+msgstr "開発が完了しました。名前を決めてすぐに発売できます。発売時の追加費用はありません。自社ハード用のゲームを開発でき、市場は毎週成長します。"
+
+msgid "OWN_HARDWARE_NAME"
+msgstr "ハード名"
+
+msgid "OWN_HARDWARE_DEFAULT_NAME"
+msgstr "自社ハード"
+
+msgid "OWN_HARDWARE_RESULT_FacilityUnavailable"
+msgstr "ハード研究所がありません。"
+
+msgid "OWN_HARDWARE_RESULT_EventPending"
+msgstr "進行中のイベントを完了してください。"
+
+msgid "OWN_HARDWARE_RESULT_StateUnknown"
+msgstr "必要なハードや開発データが不足しています。対応する原作データを取り込み、新しい会社で始めてください。"
+
+msgid "OWN_HARDWARE_RESULT_AlreadyLaunched"
+msgstr "この会社の自社ハードは発売済みです。"
+
+msgid "OWN_HARDWARE_RESULT_ProjectRunning"
+msgstr "自社ハードを開発中です。"
+
+msgid "OWN_HARDWARE_RESULT_RoomOccupied"
+msgstr "空いている開発室を選んでください。"
+
+msgid "OWN_HARDWARE_RESULT_MoneyUnknown"
+msgstr "会社の資金が不明です。"
+
+msgid "OWN_HARDWARE_RESULT_InsufficientFunds"
+msgstr "この設計に必要な資金が足りません。"
+
+msgid "OWN_HARDWARE_RESULT_NotReady"
+msgstr "開発量、各品質と必要な4つの技術を完了してください。"
+
+msgid "OWN_HARDWARE_RESULT_InvalidName"
+msgstr "1〜128文字のハード名を入力してください。"
+

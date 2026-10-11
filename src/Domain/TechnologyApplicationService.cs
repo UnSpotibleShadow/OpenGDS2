@@ -21,12 +21,12 @@ public static class TechnologyApplicationService
         if (office.SeatedAction is <6 or >17) return TechnologyApplicationResult.NotAtDevelopmentDesk;
         var project=state.DevelopmentProjects.SingleOrDefault(x=>x.RoomIndex==(office.SeatedAction-6)/6);
         if (project is null) return TechnologyApplicationResult.NoProject;
-        if (project.OriginalRoomState!=1) return TechnologyApplicationResult.UnresolvedBehavior;
+        if (project.OriginalRoomState is not (1 or 2)) return TechnologyApplicationResult.UnresolvedBehavior;
         if (level is <1 or >3) return TechnologyApplicationResult.NotLearned;
         if (technology.RawTable1568.Count!=3 || technology.RawTable1568.Any(x=>x<0) ||
             technology.RawTable158C.Count!=3 || technology.RawTable158C.Any(x=>x<=0)) return TechnologyApplicationResult.StateUnknown;
         if (employee.Experience<technology.RawTable1568[level-1]) return TechnologyApplicationResult.InsufficientExperience;
-        if (project.PendingDecision.HasValue) return TechnologyApplicationResult.DecisionPending;
+        if (OwnHardwareService.HasPending(state) || project.PendingDecision.HasValue) return TechnologyApplicationResult.DecisionPending;
         // Do not replace the unresolved speed scratch/lifetime paths or the
         // level-three stress-relief source index with intended behavior.
         if (technology.Identifier==4 || technology.Identifier==5 && level==3) return TechnologyApplicationResult.UnresolvedBehavior;
@@ -62,6 +62,8 @@ public static class TechnologyApplicationService
     }
     public static void ApplyCompleted(DevelopmentProjectState project,TechnologyDefinition technology,int level,Random random)
     {
+        if (project.OriginalRoomState==2 && OwnHardwareService.RequiredTechnologies.Contains(technology.Identifier))
+        {OwnHardwareService.QueueTechnology(project,technology.Identifier);return;}
         if (project.TechnologyApplicationCounts is null || !project.TechnologyApplicationCounts.TryGetValue(technology.Identifier,out int previous))
             throw new InvalidDataException("Original project technology counters are unknown.");
         int next=checked(previous+1);

@@ -1703,7 +1703,7 @@ Test("calendar repayment dialogue survives reload and charges only after acknowl
     Check(s.Calendar.Pending!.DialoguePage==0 && CalendarDialogueRules.MessageKey(s)=="CALENDAR_DIALOGUE_LoanRepayment");
     s=SaveStore.Deserialize(SaveStore.Serialize(s));
     Check(s.Money==200000000 && s.Calendar!.Loans[0].OriginalType==1);
-    Check(CalendarDialogueRules.Acknowledge(s) && s.Money==187000000 && s.Calendar.Loans[0].OriginalType==0);
+    Check(CalendarDialogueRules.Acknowledge(s) && s.Money==187000000 && s.Calendar!.Loans[0].OriginalType==0);
     Check(!CalendarDialogueRules.Acknowledge(s) && s.Money==187000000);
 });
 Test("calendar conversation keys cover every page and reject forged cursors",()=>
@@ -2464,6 +2464,188 @@ Test("staff entry captures the original scratch count and retains the distinct d
     Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==0);
     Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==0 && OriginalPayrollRules.MonthlyDebit(s)==0);
 });
+(GameState State,OriginalCatalog Catalog) HardwareFixture(long money=1_000_000_000)
+{
+    var (s,c)=CalendarFixture(money:money);s.Calendar!.OriginalSlots0444[0]=8;
+    // The synthetic calendar catalog intentionally omits software planning columns.
+    foreach (var hardware in c.Hardware)
+    {hardware.RawMembers["0F00"]=64;hardware.RawMembers["0FFC"]=0;hardware.RawMembers["0FE0"]=400;hardware.RawMembers["0FC4"]=0;}
+    return (s,c);
+}
+DevelopmentProjectState StartHardware(GameState s,OriginalCatalog c,int room=0,int design=0,int medium=0)
+{
+    Check(OwnHardwareService.Start(s,c,0,room,design,medium,"Synthetic console development")==OwnHardwareResult.Success);
+    return s.DevelopmentProjects.Single(p=>p.OriginalRoomState==2);
+}
+void ReadyHardware(DevelopmentProjectState p)
+{p.Progress=2500;p.Quality=new(800,800,800,800);foreach (int id in OwnHardwareService.RequiredTechnologies) p.HardwareDesign!.TechnologyFlags[id]=1;}
+Test("hardware quotes all design combinations and accepts equal funds with accounting",()=>
+{
+    for (int d=0;d<2;d++) for (int m=0;m<2;m++) for (int room=0;room<2;room++)
+    {
+        long cost=(d==0 ? 200_000_000L : 100_000_000L)+(m==0 ? 200_000_000L : 100_000_000L);
+        var (s,c)=HardwareFixture(cost);Check(OwnHardwareService.Quote(d,m)==cost);var p=StartHardware(s,c,room,d,m);
+        Check(s.Money==0 && s.Company.WeeklyNet==11-cost && s.Company.MonthlyNet==22-cost && s.Company.YearlyNet==33-cost);
+        Check(p.OriginalRoomState==2 && p.OriginalMode==1 && p.OriginalStage==0 && p.RequiredPoints==2500 && p.Progress==0);
+        Check(p.Quality==new DevelopmentQuality() && p.PolishingTargets==new DevelopmentQuality(800,800,800,800));
+        Check(p.HardwareDesign!.Design==d && p.HardwareDesign.Medium==m && p.HardwareDesign.TechnologyFlags.Values.All(x=>x==0));
+        Check(OwnHardwareService.CheckStart(s,c,0,1-room,d,m)==OwnHardwareResult.ProjectRunning);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.DevelopmentProjects.Single().HardwareDesign!.Design==d);
+    }
+});
+Test("hardware rejects insufficient funds occupied room incomplete catalog and duplicate ownership atomically",()=>
+{
+    var (s,c)=HardwareFixture(199_999_999);string before=SaveStore.Serialize(s);
+    Check(OwnHardwareService.Start(s,c,0,0,1,1,"Hardware")==OwnHardwareResult.InsufficientFunds && SaveStore.Serialize(s)==before);
+    s.Money=1_000_000_000;c.Hardware.RemoveAt(10);before=SaveStore.Serialize(s);
+    Check(OwnHardwareService.Start(s,c,0,0,1,1,"Hardware")==OwnHardwareResult.StateUnknown && SaveStore.Serialize(s)==before);
+    (s,c)=HardwareFixture();var p=StartHardware(s,c);ReadyHardware(p);Check(OwnHardwareService.Launch(s,p,"Console")==OwnHardwareResult.Success);
+    before=SaveStore.Serialize(s);Check(OwnHardwareService.Start(s,c,0,1,0,0,"Second")==OwnHardwareResult.AlreadyLaunched && SaveStore.Serialize(s)==before);
+    (s,c)=HardwareFixture();var software=new DevelopmentProjectState {RoomIndex=0,Title="Synthetic software",RequiredPoints=100,Focus=new(25,25,25,25)};
+    s.DevelopmentProjects.Add(software);before=SaveStore.Serialize(s);
+    Check(OwnHardwareService.Start(s,c,0,0,1,1,"Hardware")==OwnHardwareResult.RoomOccupied && SaveStore.Serialize(s)==before);
+    s.Company.WeeklyNet=long.MinValue;Throws<OverflowException>(()=>OwnHardwareService.Start(s,c,0,1,1,1,"Hardware"));
+    Check(s.Money==1_000_000_000 && s.DevelopmentProjects.Count==1);
+});
+Test("hardware work preserves inclusive interval boundaries and idles at full targets",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c);
+    foreach (int roll in Enumerable.Range(0,400))
+    {
+        var category=roll<=50 ? DevelopmentWorkCategory.Fun : roll<=100 ? DevelopmentWorkCategory.Novelty :
+            roll<=150 ? DevelopmentWorkCategory.Graphics : roll<=200 ? DevelopmentWorkCategory.Music : DevelopmentWorkCategory.Speed;
+        Check(OwnHardwareService.SelectCategory(p,roll)==category);
+    }
+    p.Quality=new(800,0,0,0);Check(OwnHardwareService.SelectCategory(p,50) is null && OwnHardwareService.SelectCategory(p,51)==DevelopmentWorkCategory.Novelty);
+    p.Quality=new(800,800,800,800);p.Progress=2500;
+    Check(Enumerable.Range(0,400).All(roll=>OwnHardwareService.SelectCategory(p,roll) is null));
+    Check(DevelopmentWorkRules.PendingMilestone(p) is null);Throws<ArgumentOutOfRangeException>(()=>OwnHardwareService.SelectCategory(p,400));
+});
+Test("hardware ordinary work uses real worker scheduling caps qualities and avoids software checkpoints",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c);var e=Worker();s.Employees=[e];
+    p.Quality=new(799,800,800,800);p.Progress=2499;e.Office!.WorkCategory=DevelopmentWorkCategory.Fun;e.Office.WorkTier=2;e.Office.WorkTicks=16;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Quality==new DevelopmentQuality(800,800,800,800) && p.Progress==2500 && p.PendingDecision is null && p.OriginalStage==0);
+    Check(!OwnHardwareService.Ready(p));
+    // Full-target selection must leave work idle, rather than reassign an unrelated category.
+    e.Office.WorkTicks=0;e.Office.WorkIdleTicks=100;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTicks==0);
+});
+Test("hardware demolition and reload leave worker progress alive without the facility",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c);s.Employees=[Worker()];
+    Check(FacilityService.Close(s,0,FacilityKind.HardwareLab)==FacilityResult.Success);long money=s.Money!.Value;
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects.Single();var e=s.Employees.Single();
+    e.Office!.WorkCategory=DevelopmentWorkCategory.Speed;e.Office.WorkTier=2;e.Office.WorkTicks=16;
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(p.Progress==4 && s.Money==money && s.Calendar!.OriginalSlots0444[0]==-1);
+    Check(ProjectCancellationService.Check(s,p)==ProjectCancellationResult.ProjectUnavailable);
+});
+Test("hardware completion requires all work qualities and four flags exactly",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c);ReadyHardware(p);Check(OwnHardwareService.Ready(p));
+    p.Progress=2499;Check(!OwnHardwareService.Ready(p));p.Progress=2500;
+    foreach (int id in OwnHardwareService.RequiredTechnologies)
+    {p.HardwareDesign!.TechnologyFlags[id]=0;Check(!OwnHardwareService.Ready(p));p.HardwareDesign.TechnologyFlags[id]=1;}
+    p.Quality=new(800,799,800,800);Check(!OwnHardwareService.Ready(p));p.Quality=new(800,800,800,800);
+    p.HardwareDesign!.PendingTechnology=1;Check(!OwnHardwareService.Ready(p));p.HardwareDesign.PendingTechnology=null;
+    p.HardwareDesign.TechnologyFlags[1]=2;Check(!OwnHardwareService.Ready(p));Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("hardware technologies use saved messages and set flags after acknowledgment without percentage RNG",()=>
+{
+    foreach (int id in OwnHardwareService.RequiredTechnologies)
+    {
+        var (s,c)=HardwareFixture();var p=StartHardware(s,c);var e=Worker();e.Experience=100;e.TechnologyLevels=new() {{id,1}};s.Employees=[e];
+        var t=new TechnologyDefinition {SourceIndex=id,Identifier=id,RawTable1568=[5,10,15],RawTable158C=[1,2,3]};c.Technologies=[t];
+        Check(TechnologyApplicationService.TryUse(s,e,t)==TechnologyApplicationResult.Success && e.Experience==95);
+        e.Office!.WorkTier=4;e.Office.WorkTicks=20;var noRandom=new SequenceRandom();
+        TechnologyApplicationService.TickWork(p,e,c,noRandom);
+        Check(noRandom.Calls==0 && p.HardwareDesign!.PendingTechnology==id && p.HardwareDesign.TechnologyFlags[id]==0 && p.Quality==new DevelopmentQuality());
+        Check(e.Office.TechnologyApplication is null && OwnHardwareService.HasPending(s));
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects.Single();
+        Check(p.HardwareDesign!.PendingTechnology==id && OwnHardwareService.AcknowledgeTechnology(s,p));
+        Check(p.HardwareDesign.TechnologyFlags[id]==1 && s.OwnHardware.RetainedRoomFlags[0][id]==1 && !OwnHardwareService.AcknowledgeTechnology(s,p));
+        Check(TechnologyApplicationService.TryUse(s,s.Employees.Single(),t)==TechnologyApplicationResult.Success);
+    }
+});
+Test("hardware start preserves retained native flags rather than resetting them",()=>
+{
+    var (s,c)=HardwareFixture();s.OwnHardware.RetainedRoomFlags[1][3]=1;var p=StartHardware(s,c,1);
+    Check(p.HardwareDesign!.TechnologyFlags[3]==1 && p.HardwareDesign.TechnologyFlags[1]==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.OwnHardware.RetainedRoomFlags[1][3]==1 && s.DevelopmentProjects.Single().HardwareDesign!.TechnologyFlags[3]==1);
+});
+Test("hardware launch appends exact cartridge CD records bands license and earliest ranking without another debit",()=>
+{
+    for (int medium=0;medium<2;medium++)
+    {
+        var (s,c)=HardwareFixture();var p=StartHardware(s,c,medium:medium);ReadyHardware(p);
+        long cash=s.Money!.Value;long? weekly=s.Company.WeeklyNet;int catalogCount=c.Hardware.Count;
+        Check(OwnHardwareService.Launch(s,p,"Synthetic Console")==OwnHardwareResult.Success && s.Money==cash && s.Company.WeeklyNet==weekly);
+        var h=s.OwnHardware.Launched!;Check(h.SourceIndex==11 && h.Identifier==11 && h.BitWidth==64 && h.LicenseFee==0 && h.PlanningCost==0);
+        Check(h.PlanningPoints==(medium==0 ? 400 : 600) && h.RawMembers["0F54"]==(medium==0 ? 50 : 36));
+        Check(h.RawMembers["0FA8"]==(medium==0 ? 3 : 4) && h.RawMembers["0F70"]==400000);
+        Check(h.ProductionBands.SequenceEqual(medium==0 ? new ProductionBand[] {new(64,600),new(128,1000),new(256,1500),new(512,2000)} :
+            new ProductionBand[] {new(20,700),new(40,1000),new(60,1300),new(80,1500)}));
+        var market=s.Calendar!.Hardware.Single(x=>x.SourceIndex==11);
+        Check(market.Availability==1 && market.Market==(medium==0 ? 0 : 10) && market.GrowthWeeks==240 && market.GrowthBoost==10 && market.LaunchWeeks==0 && market.RetirementWeeks==0);
+        Check(s.HardwareLicenses!.Contains(11) && s.AvailableHardware!.Contains(11) && s.DevelopmentProjects.Count==0);
+        Check(s.PendingRankings.Single().Kind==RankingKind.OwnHardware && c.Hardware.Count==catalogCount && OwnHardwareService.Catalog(s,c).Hardware.Count==12);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));string before=SaveStore.Serialize(s);
+        Check(OwnHardwareService.Launch(s,p,"Again")==OwnHardwareResult.NotReady && SaveStore.Serialize(s)==before);
+    }
+});
+Test("own console enters ordinary software planning and weekly market growth after reload",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c,medium:1);ReadyHardware(p);Check(OwnHardwareService.Launch(s,p,"CD Console")==OwnHardwareResult.Success);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));c.DevelopmentComputers[0].BitWidth=64;
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,11,0,"Own platform game",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    Check(s.DevelopmentProjects.Single().HardwareSourceIndex==11);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(ReleaseService.UnitProductionCost(OwnHardwareService.Catalog(s,c).Hardware.Single(h=>h.SourceIndex==11),20)==900);
+    var market=s.Calendar!.Hardware.Single(x=>x.SourceIndex==11);double expected=HardwareCalendarRules.NextMarket(10,240,10,36);
+    Check(CalendarService.BeginWeek(s,c,new Random(10)));Check(Math.Abs(market.Market-expected)<.0000001 && market.GrowthWeeks==239 && market.GrowthBoost==9);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(Math.Abs(s.Calendar!.Hardware.Single(x=>x.SourceIndex==11).Market-expected)<.0000001);
+});
+Test("own platform supports shipment sales and reprints through the unchanged catalog entry points",()=>
+{
+    var (s,c)=HardwareFixture();var hardware=StartHardware(s,c,medium:1);ReadyHardware(hardware);
+    Check(OwnHardwareService.Launch(s,hardware,"Synthetic CD")==OwnHardwareResult.Success);c.DevelopmentComputers[0].BitWidth=64;
+    Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,11,0,"Own software",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+    var p=s.DevelopmentProjects.Single();p.OriginalStage=3;p.Progress=p.RequiredPoints;p.GameTypeSourceIndex=0;p.GenreSourceIndex=0;p.Quality=new(100,100,100,100);p.DataSize=20;
+    s.SalesFee1=s.SalesFee2=1500;
+    long cash=s.Money!.Value;Check(ReleaseService.TryRelease(s,p,c,"Own software",5800,10,new Random(5))==ReleaseResult.Success);
+    var product=s.ReleasedGames.Single();Check(product.HardwareSourceIndex==11 && s.Money==cash-9000);
+    while (ShipmentDialogueRules.HasPending(product)) Check(ShipmentDialogueRules.Acknowledge(s,product));
+    Check(ReviewService.Acknowledge(s,product));s.ProductionPerformedThisWeek=false;cash=s.Money!.Value;
+    Check(ReleaseService.TryProduce(s,product,c,5)==ReleaseResult.Success && product.Stock==15 && s.Money==cash-4500);
+    s.SalesTicks=SalesService.TicksPerBatch-1;SalesService.Tick(s,c,new Random(10));
+    Check(product.UnitsSold>0 && product.Stock<15);s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames.Single().HardwareSourceIndex==11);
+});
+Test("hardware saved pending messages and launch gate suspend session and other workflows",()=>
+{
+    var (s,c)=HardwareFixture();var p=StartHardware(s,c);p.HardwareDesign!.PendingTechnology=1;
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects.Single();var session=new GameSession();session.Restore(s);
+    string before=SaveStore.Serialize(s);session.TickOffice(c);Check(SaveStore.Serialize(s)==before);
+    Throws<InvalidOperationException>(()=>session.OpenRecruitment());Check(session.AskSecretary(c)==SecretaryAdviceResult.EventPending);
+    Check(FacilityService.Close(s,0,FacilityKind.HardwareLab)==FacilityResult.EventPending);
+    Check(BankLoanService.CheckBorrow(s)==BankLoanResult.EventPending);
+    Check(OwnHardwareService.AcknowledgeTechnology(s,p));ReadyHardware(p);before=SaveStore.Serialize(s);
+    session.TickOffice(c);Check(SaveStore.Serialize(s)==before && FacilityService.HasPendingDecision(s));
+    Check(OwnHardwareService.Launch(s,p," ")==OwnHardwareResult.InvalidName && SaveStore.Serialize(s)==before);
+});
+Test("hardware rejects fabricated own platform references flags targets and launch records",()=>
+{
+    var (s,c)=HardwareFixture();s.HardwareLicenses!.Add(11);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.HardwareLicenses.Remove(11);
+    var p=StartHardware(s,c);p.HardwareDesign!.TechnologyFlags.Remove(1);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.HardwareDesign.TechnologyFlags[1]=0;
+    p.PolishingTargets=new(900,800,800,800);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));p.PolishingTargets=new(800,800,800,800);
+    ReadyHardware(p);Check(OwnHardwareService.Launch(s,p,"Valid")==OwnHardwareResult.Success);
+    s.OwnHardware.Launched!.RawMembers["0F54"]=50; // A cartridge already has 50.
+    s.OwnHardware.Launched.RawMembers["0F54"]=51;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.OwnHardware.Launched.RawMembers["0F54"]=50;
+    s.OwnHardware.Launched.ProductionBands[0]=new(64,601);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    (s,c)=HardwareFixture();var old=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;old["State"]!.AsObject().Remove("OwnHardware");
+    Check(SaveStore.Deserialize(old.ToJsonString()).OwnHardware.Launched is null);
+});
+
 (GameState State,OriginalCatalog Catalog) LabFixture(long money=100_000_000)
 {
     var (s,c)=CalendarFixture(money:money);s.Calendar!.OriginalSlots0444[0]=6;s.SourceUpperBound=3;
@@ -4171,6 +4353,18 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original catalog supports own-console launch and subsequent software planning",()=>
+    {
+        var db=EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        var session=new GameSession();var s=session.StartNewGame("Synthetic company","Tester",GameMode.Normal,db,c);
+        s.Money=2_000_000_000;Check(FacilityService.Open(s,0,FacilityKind.HardwareLab)==FacilityResult.Success);
+        var hardware=StartHardware(s,c,design:1,medium:1);ReadyHardware(hardware);
+        Check(OwnHardwareService.Launch(s,hardware,"Original-backed console")==OwnHardwareResult.Success);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));s.DevelopmentComputerIndex=c.DevelopmentComputers.Single(x=>x.BitWidth==64).SourceIndex;
+        Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,11,0,"Original-backed software",new(25,25,25,25))==DevelopmentPlanningResult.Success);
+        Check(s.DevelopmentProjects.Single().HardwareSourceIndex==11 && OwnHardwareService.Catalog(s,c).Hardware.Count==12 && c.Hardware.Count==11);
+        SaveStore.Deserialize(SaveStore.Serialize(s));
+    });
     Test("optional original import supports development release and real-catalog sales",()=>
     {
         var db=EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));

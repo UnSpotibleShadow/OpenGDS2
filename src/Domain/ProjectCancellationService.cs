@@ -10,7 +10,7 @@ public static class ProjectCancellationService
         if (!state.DevelopmentProjects.Contains(project) || project.RoomIndex is <0 or >1 ||
             project.OriginalRoomState!=1 || project.OriginalMode is not (0 or 1 or 2))
             return ProjectCancellationResult.ProjectUnavailable;
-        if (state.PendingMysteryLabResult is not null || state.PendingProjectCancellation is not null || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project))
+        if (OwnHardwareService.HasPending(state) || state.PendingMysteryLabResult is not null || state.PendingProjectCancellation is not null || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project))
             return ProjectCancellationResult.DecisionPending;
         // An absent legacy workspace cannot establish which room gets the penalty.
         if (state.Employees.Any(x=>x.Office is null) || Assigned(state,project).Any(x=>

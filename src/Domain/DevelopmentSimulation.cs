@@ -5,7 +5,7 @@ public static class DevelopmentSimulation
 {
     public static void TickEmployee(GameState state,EmployeeState employee,OriginalCatalog catalog,Random random)
     {
-        if (state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return;
+        if (state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(state) || state.PendingMysteryLabResult is not null)) return;
         var office=employee.Office;
         if (office is null || !office.WorkEngaged || office.MovementState!=0 || office.SeatedAction is <6 or >17) return;
         var project=state.DevelopmentProjects.SingleOrDefault(x=>x.RoomIndex==(office.SeatedAction-6)/6);
@@ -14,7 +14,7 @@ public static class DevelopmentSimulation
             // Original +4886..48EA cancels a workspace application when its room is empty.
             office.TechnologyApplication=null;ReleaseService.ResetWork(office);return;
         }
-        if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) || project.OriginalRoomState!=1 ||
+        if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) || project.OriginalRoomState is not (1 or 2) ||
             office.TechnologyApplication is not null && project.TechnologyApplicationCounts is null) return;
         if (employee.Stress is not double stress || employee.DevelopmentSpeed is not int speed ||
             employee.Inspiration is not int inspiration || employee.Experience is null || employee.Level is null)
@@ -50,7 +50,12 @@ public static class DevelopmentSimulation
                 if (random.Next(50)==0 && project.Bugs>0)
                     Start(DevelopmentWorkCategory.Debugging);
             }
-            else Start(DevelopmentWorkRules.SelectCategory(project.Focus!,random.Next(300)));
+            else
+            {
+                var category=project.OriginalRoomState==2 ? OwnHardwareService.SelectCategory(project,random.Next(400)) :
+                    DevelopmentWorkRules.SelectCategory(project.Focus!,random.Next(300));
+                if (category.HasValue) Start(category.Value);
+            }
         }
         else office.WorkIdleTicks=checked(office.WorkIdleTicks+1);
         if (office.TechnologyApplication is not null && office.WorkTicks==0)
