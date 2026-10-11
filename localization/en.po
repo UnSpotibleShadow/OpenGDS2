@@ -2918,7 +2918,7 @@ msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
 
 msgid "FACILITY_DESCRIPTION_MysteryLab"
-msgstr "This facility’s service is coming soon."
+msgstr "Run a ¥25 million experiment with an unpredictable effect on funds, production capacity, fame or staff stress."
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
 msgstr "This facility’s service is coming soon."
@@ -3002,7 +3002,49 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play: bankruptcy and office/company upgrades are incomplete; negative funds do not end the game."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity and lawyer consultations; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: casino, mystery lab, own hardware, polishing, contract work, original save import, full company progression and some original conversation/growth effects. This private candidate still needs Windows playthrough acceptance."
+msgstr "Unavailable or incomplete: casino, own hardware, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+
+msgid "MYSTERY_LAB_START"
+msgstr "Start an experiment"
+
+msgid "MYSTERY_LAB_PROGRESS"
+msgstr "Experiment in progress: {0:0.0}%"
+
+msgid "MYSTERY_LAB_LIFECYCLE"
+msgstr "Demolishing the lab suspends the experiment. Rebuilding resumes it."
+
+msgid "FACILITY_CONFIRM_MysteryLab"
+msgstr "Start an unpredictable experiment for ¥{0:N0}? The fee is charged even if it leaves funds negative."
+
+msgid "FACILITY_RESULT_ExperimentRunning"
+msgstr "An experiment is already running."
+
+msgid "MYSTERY_LAB_INTRO"
+msgstr "The experiment is complete. Let’s see what happened."
+
+msgid "MYSTERY_LAB_RESULT_0"
+msgstr "Company funds increased by 50%."
+
+msgid "MYSTERY_LAB_RESULT_1"
+msgstr "Company funds have been halved."
+
+msgid "MYSTERY_LAB_RESULT_2"
+msgstr "Production capacity has doubled."
+
+msgid "MYSTERY_LAB_RESULT_3"
+msgstr "Production capacity fell by 20%."
+
+msgid "MYSTERY_LAB_RESULT_4"
+msgstr "Company fame is now 80."
+
+msgid "MYSTERY_LAB_RESULT_4_HIGH"
+msgstr "Company fame is now 99."
+
+msgid "MYSTERY_LAB_RESULT_5"
+msgstr "All employed staff now have zero stress."
+
+msgid "MYSTERY_LAB_RESULT_6"
+msgstr "All employed staff now have stress 90. Give them a break soon."

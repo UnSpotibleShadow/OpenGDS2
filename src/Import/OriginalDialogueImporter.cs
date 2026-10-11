@@ -13,13 +13,17 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=9,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=10,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));
         result.Entries.Add("HIRE_GREETING_9",pe.String(pool,0x1A)+"{company}"+pe.String(pool,0x1C));
         result.Entries.Add("NEW_EMPLOYEE",pe.String(pool,0x10));
         const int meetingPool=0x5FAFCC;
+        result.Entries.Add("MYSTERY_LAB_INTRO",pe.String(meetingPool,0x11C));
+        int[] labCells=[0x11E,0x11F,0x120,0x122,0x124,0x128,0x129];
+        for (int i=0;i<labCells.Length;i++) result.Entries.Add($"MYSTERY_LAB_RESULT_{i}",pe.String(meetingPool,labCells[i]));
+        result.Entries.Add("MYSTERY_LAB_RESULT_4_HIGH",pe.String(meetingPool,0x125));
         foreach (var target in Enum.GetValues<FeeNegotiationTarget>())
         {
             int[] cells=target==FeeNegotiationTarget.Transport ? [0x106,0x108,0x109,0x10E,0x10A,0x111] : [0x115,0x117,0x118,0x11A,0x119,0x11B];

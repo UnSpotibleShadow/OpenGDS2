@@ -43,6 +43,7 @@ public partial class Main : Control
             _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
+            if (ShowPendingMysteryLabResult(state)) return;
             if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
             updated = true;
@@ -296,6 +297,7 @@ public partial class Main : Control
             _session.TickOffice(_activeCatalog);
             PersistPendingRankings(state);
         }
+        if (ShowPendingMysteryLabResult(state)) return;
         if (ShowPendingProjectCancellation(state)) return;
         if (ShowPendingFeeNegotiation(state)) return;
         if (ShowPendingFacilityReceipt(state)) return;

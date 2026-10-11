@@ -70,6 +70,15 @@ public partial class Main
                     case FacilityKind.ProductionLab:
                         FacilityAction($"ExpandProduction{slot}","FACILITY_PRODUCTION_ACTION",FacilityService.ProductionExpansionCost,
                             ()=>ConfirmFacilityService(state,index,kind,FacilityService.ProductionExpansionCost,()=>_session.ExpandFacilityProduction(index)));break;
+                    case FacilityKind.MysteryLab:
+                        if (state.MysteryLab.Progress>0)
+                            AnnualMessage("MysteryLabProgress",string.Format(Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)));
+                        AnnualMessage("MysteryLabLifecycle",Tr("MYSTERY_LAB_LIFECYCLE"));
+                        var experiment=new Button {Name=$"StartMysteryExperiment{slot}",
+                            Text=$"{Tr("MYSTERY_LAB_START")} — ¥{MysteryLabService.ExperimentCost:N0}",
+                            Disabled=state.MysteryLab.Progress>0 || FacilityService.HasPendingDecision(state)};
+                        _content.AddChild(experiment);experiment.Pressed+=()=>ConfirmFacilityService(state,index,kind,
+                            MysteryLabService.ExperimentCost,()=>_session.StartMysteryExperiment(index));break;
                 }
                 AnnualButton(kind==FacilityKind.School ? $"CloseSchool{slot}" : $"CloseFacility{slot}","FACILITY_CLOSE",()=>ShowFacilityClosure(state,index,kind));
             }
@@ -131,6 +140,19 @@ public partial class Main
             state.PendingFacilityReceipt=null;ShowOfficeReconstruction(state);
         });
         AddSaveActions(state);return true;
+    }
+    private bool ShowPendingMysteryLabResult(GameState state)
+    {
+        if (state.PendingMysteryLabResult is not { } pending) return false;
+        int cursor=pending.MessageIndex;string key=MysteryLabService.MessageKey(pending);
+        string body=TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase)
+            ? Tr(key) : _importer.LoadDialogue()?.Entries.GetValueOrDefault(key) ?? Tr(key);
+        ShowConversation(FacilityName((int)FacilityKind.MysteryLab),[new(SecretaryCaption(state.SecretarySourceIndex),body,null)],()=>
+        {
+            if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingMysteryLabResult,pending) || pending.MessageIndex!=cursor) return;
+            MysteryLabService.Acknowledge(state);ShowOfficeReconstruction(state);
+        });
+        return true;
     }
     private void ShowFeeNegotiationConfirmation(GameState state,int slot,FeeNegotiationTarget target)
     {
