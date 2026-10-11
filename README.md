@@ -57,7 +57,7 @@ Language, mute and volume controls are in **Settings**. Refresh the original imp
 
 Useful reports include the release version, Windows version, display resolution/scaling, reproduction steps, and what you expected versus what happened. Save/reload problems, crashes, duplicate charges and stuck workflows are especially useful to report.
 
-A public reporting destination will be linked here before release. The [Windows testing checklist](docs/early-access-testing.md) is available as a guide for community testers, rather than a requirement that everyone complete every test.
+Report bugs through [GitHub Issues](https://github.com/UnSpotibleShadow/OpenGDS2/issues) once the repository becomes public before release. The [Windows testing checklist](docs/early-access-testing.md) is available as a guide for community testers, rather than a requirement that everyone complete every test.
 
 Review logs before sharing them: they may contain names or local paths. **Do not upload the original archive, executables, graphics, databases or original saves.** Back up modern saves before trying a newer build.
 

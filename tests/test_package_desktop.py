@@ -100,3 +100,83 @@ class DesktopPackageTests(unittest.TestCase):
                 desktop.package(self.source, self.export, "windows", self.notices,
                                 self.output, configuration, True, commit)
         self.assertFalse(self.output.exists())
+
+    def public_fixture(self, version="0.1.0-ea.1", directory="OpenGDS2-EarlyAccessTesting"):
+        (self.source / "project.godot").write_text(
+            f'config/version="{version}"\nconfig/use_custom_user_dir=true\n'
+            f'config/custom_user_dir_name="{directory}"\n')
+        docs = self.source / "docs"
+        docs.mkdir(exist_ok=True)
+        for name in ["testing", "known-issues", "release-notes", "decisions"]:
+            (docs / ("early-access-" + name + ".md")).write_text("Authored historical candidate fixture")
+        (docs / "early-access-public-notes.md").write_text(
+            "Public @VERSION@\nReport: @REPORT_URL@\nData: @DATA_DIRECTORY@\n")
+
+    def public_package(self, **kwargs):
+        args = dict(early_access=True, source_commit="b" * 40, report_url="https://example.test/bugs")
+        args.update(kwargs)
+        with patch.dict(os.environ, {"NUGET_PACKAGES": str(self.nuget)}):
+            desktop.package(self.source, self.export, "windows", self.notices, self.output, **args)
+
+    def test_public_ea_contains_provenance_reporting_notices_and_verified_checksums(self):
+        self.public_fixture(directory="OpenGDS2-AuthoredTest")
+        self.public_package()
+        with zipfile.ZipFile(self.output) as archive:
+            prefix = "OpenGDS2-windows-0.1.0-ea.1/"
+            manifest = json.loads(archive.read(prefix + "BUILD_MANIFEST.json"))
+            self.assertFalse(manifest["private_early_access_candidate"])
+            self.assertTrue(manifest["public_early_access"])
+            self.assertEqual(manifest["source_commit"], "b" * 40)
+            self.assertEqual(manifest["data_directory"], "OpenGDS2-AuthoredTest")
+            self.assertEqual(manifest["community_report_url"], "https://example.test/bugs")
+            self.assertEqual(manifest["native_windows_acceptance"], "incomplete; community testing")
+            self.assertEqual(manifest["assembly_sha256"], hashlib.sha256(archive.read(prefix + "OpenGDS2.dll")).hexdigest())
+            notes = archive.read(prefix + "RELEASE_NOTES.md").decode()
+            self.assertIn("Public 0.1.0-ea.1", notes)
+            self.assertIn("https://example.test/bugs", notes)
+            self.assertNotIn("@DATA_DIRECTORY@", notes)
+            self.assertIn("OpenGDS2-AuthoredTest", archive.read(prefix + "GETTING_STARTED.txt").decode())
+            self.assertIn(prefix + "licenses/GODOT_LICENSE.txt", archive.namelist())
+            self.assertIn(prefix + "licenses/microsoft.netcore.app.runtime.win-x64-8.0.0-license.txt", archive.namelist())
+            for line in archive.read(prefix + "SHA256SUMS").decode().splitlines():
+                digest, name = line.split("  ", 1)
+                self.assertEqual(hashlib.sha256(archive.read(prefix + name)).hexdigest(), digest)
+
+    def test_public_ea_rejects_rc_version_debug_missing_commit_and_invalid_reporting_url(self):
+        self.public_fixture(version="0.1.0-ea.1-rc.4")
+        with self.assertRaisesRegex(ValueError, "final EA version"):
+            self.public_package()
+        self.public_fixture()
+        for kwargs in [{"configuration": "debug"}, {"source_commit": None},
+                       {"report_url": None}, {"report_url": "http://example.test/bugs"},
+                       {"report_url": "https://example.test/bug report"}, {"candidate": True}]:
+            with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
+                self.public_package(**kwargs)
+        self.assertFalse(self.output.exists())
+
+    def test_public_ea_requires_an_explicit_data_directory(self):
+        self.public_fixture()
+        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1"\n')
+        with self.assertRaisesRegex(ValueError, "data directory"):
+            self.public_package()
+        self.assertFalse(self.output.exists())
+
+    def test_public_ea_rejects_original_imports(self):
+        self.public_fixture()
+        (self.export / "GameDev2DX.lzh").write_bytes(b"Authored exclusion fixture")
+        with self.assertRaisesRegex(ValueError, "Original-game content"):
+            self.public_package()
+        self.assertFalse(self.output.exists())
+
+    def test_public_ea_replaces_private_candidate_handoff_when_reusing_export_folder(self):
+        self.public_fixture(version="0.1.0-ea.1-rc.4")
+        with patch.dict(os.environ, {"NUGET_PACKAGES": str(self.nuget)}):
+            desktop.package(self.source, self.export, "windows", self.notices,
+                            self.output, candidate=True, source_commit="a" * 40)
+        self.public_fixture()
+        self.public_package()
+        with zipfile.ZipFile(self.output) as archive:
+            prefix = "OpenGDS2-windows-0.1.0-ea.1/"
+            self.assertNotIn("PRIVATE EARLY ACCESS", archive.read(prefix + "GETTING_STARTED.txt").decode())
+            self.assertNotIn("historical candidate", archive.read(prefix + "RELEASE_NOTES.md").decode())
+            self.assertFalse(json.loads(archive.read(prefix + "BUILD_MANIFEST.json"))["private_early_access_candidate"])
