@@ -31,7 +31,7 @@ public static class SecretaryManagementRules
             !string.IsNullOrWhiteSpace(x.Description) && x.PortraitId==SecretaryAdviceRules.PortraitId(x.SourceIndex)) &&
         rows.Select(x=>x.SourceIndex).Distinct().Count()==5;
 
-    public static bool OtherEventPending(GameState state)=>state.PendingHireGreeting is not null ||
+    public static bool OtherEventPending(GameState state)=>state.PendingMysteryLabResult is not null || state.PendingHireGreeting is not null ||
         state.PendingSecretaryAdvice is not null || CalendarService.HasPending(state) ||
         state.DevelopmentProjects.Any(p=>p.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(p)) ||
         state.ReleasedGames.Any(p=>p.ReviewPending) || RecallService.HasPending(state) || SalesMilestoneService.HasPending(state);

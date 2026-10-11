@@ -2464,6 +2464,125 @@ Test("staff entry captures the original scratch count and retains the distinct d
     Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==0);
     Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==0 && OriginalPayrollRules.MonthlyDebit(s)==0);
 });
+(GameState State,OriginalCatalog Catalog) LabFixture(long money=100_000_000)
+{
+    var (s,c)=CalendarFixture(money:money);s.Calendar!.OriginalSlots0444[0]=6;s.SourceUpperBound=3;
+    var e=Worker(source:1);e.Stress=10;s.Employees=[e];
+    s.EmployeeSources=Enumerable.Range(0,3).Select(i=>new RecruitmentSourceRecord {SourceIndex=i,GateValue=i==1 ? 1 : 0,
+        Employee=new() {Name=$"Synthetic lab {i}",SourceIndex=i,Stress=i*10}}).ToList();
+    s.Company.Fame=12;s.Company.ProductionCapacity=50;return (s,c);
+}
+void CompleteLab(GameState s,int outcome)
+{
+    var rng=new GreetingRandom((outcome+.25f)/7f);
+    Check(MysteryLabService.Start(s,0,rng)==FacilityResult.Success && rng.GreetingCalls==1);
+    for (int i=0;i<494;i++) Check(!MysteryLabService.Tick(s));
+    Check(s.MysteryLab.Progress<=100 && MysteryLabService.Tick(s));
+    Check(s.PendingMysteryLabResult!.Outcome==outcome && s.MysteryLab.Progress>100);
+}
+Test("lab selects seven single-draw outcomes and applies exactly the recovered effects without accounting",()=>
+{
+    for (int outcome=0;outcome<7;outcome++)
+    {
+        var (s,_)=LabFixture();CompleteLab(s,outcome);
+        Check(s.Money==(outcome==0 ? 112_500_000 : outcome==1 ? 37_500_000 : 75_000_000));
+        Check(s.Company.ProductionCapacity==(outcome==2 ? 100 : outcome==3 ? 40 : 50));
+        Check(s.Company.Fame==(outcome==4 ? 80 : 12));
+        Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33);
+        Check(s.Employees[0].Stress==(outcome==5 ? 0 : outcome==6 ? 90 : 10));
+        Check(s.EmployeeSources[0].Employee.Stress==0 && s.EmployeeSources[2].Employee.Stress==20);
+        Check(s.EmployeeSources[1].Employee.Stress==s.Employees[0].Stress);
+        string before=SaveStore.Serialize(s);Check(!MysteryLabService.Tick(s) && SaveStore.Serialize(s)==before);
+    }
+});
+Test("lab has no affordability gate and negative odd cash uses floor rather than truncation",()=>
+{
+    foreach (long afterFee in new long[] {-3,7})
+    foreach (int outcome in new[] {0,1})
+    {
+        var (s,_)=LabFixture(MysteryLabService.ExperimentCost+afterFee);CompleteLab(s,outcome);
+        Check(s.Money==(afterFee==-3 ? (outcome==0 ? -5 : -2) : (outcome==0 ? 10 : 3)));
+    }
+});
+Test("lab fame threshold and production flooring are evaluated at completion",()=>
+{
+    foreach (int before in new[]{0,79,80,99,100})
+    {
+        var (s,_)=LabFixture();s.Company.Fame=before;CompleteLab(s,4);
+        Check(s.Company.Fame==(before<80 ? 80 : 99) && s.PendingMysteryLabResult!.Fame99==(before>=80));
+        Check(MysteryLabService.Acknowledge(s));
+        Check(MysteryLabService.MessageKey(s.PendingMysteryLabResult!)==(before<80 ? "MYSTERY_LAB_RESULT_4" : "MYSTERY_LAB_RESULT_4_HIGH"));
+    }
+    var (state,_)=LabFixture();state.Company.ProductionCapacity=7;CompleteLab(state,3);Check(state.Company.ProductionCapacity==5);
+    (state,_)=LabFixture();Check(MysteryLabService.Start(state,0,new GreetingRandom(0))==FacilityResult.Success);
+    state.Money=9;state.MysteryLab.Progress=99.9;Check(MysteryLabService.Tick(state) && state.Money==13);
+});
+Test("lab demolition suspends work and rebuilding preserves progress and selected outcome without refunds",()=>
+{
+    var (s,_)=LabFixture(1_000_000_000);Check(MysteryLabService.Start(s,0,new GreetingRandom(.5f))==FacilityResult.Success);
+    for (int i=0;i<10;i++) Check(!MysteryLabService.Tick(s));
+    double progress=s.MysteryLab.Progress;int outcome=s.MysteryLab.Outcome;
+    Check(FacilityService.Close(s,0,FacilityKind.MysteryLab)==FacilityResult.Success && s.Money==975_000_000);
+    for (int i=0;i<600;i++) Check(!MysteryLabService.Tick(s));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.MysteryLab.Progress==progress && s.MysteryLab.Outcome==outcome);
+    Check(FacilityService.Open(s,2,FacilityKind.MysteryLab)==FacilityResult.Success && s.Money==675_000_000);
+    Check(s.MysteryLab.Progress==progress && !MysteryLabService.Tick(s) && s.MysteryLab.Progress==progress+.2);
+});
+Test("lab saved intro and result pages never reroll reapply or clear progress before modal return",()=>
+{
+    var (s,_)=LabFixture();CompleteLab(s,2);
+    for (int page=0;page<2;page++)
+    {
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(s.PendingMysteryLabResult!.MessageIndex==page && s.Company.ProductionCapacity==100 && s.MysteryLab.Progress>100);
+        Check(!MysteryLabService.Tick(s));Check(MysteryLabService.Acknowledge(s));
+    }
+    Check(s.PendingMysteryLabResult is null && s.MysteryLab.Progress==0 && s.MysteryLab.Outcome==2);
+    Check(!MysteryLabService.Acknowledge(s));
+    Check(MysteryLabService.Start(s,0,new GreetingRandom(0))==FacilityResult.Success);
+});
+Test("lab active and modal guards reject repeat starts and pause session recruitment and direct work",()=>
+{
+    var (s,c)=LabFixture();CompleteLab(s,6);var rng=new GreetingRandom(0);var session=new GameSession(rng);session.Restore(s);
+    string snapshot=SaveStore.Serialize(s);session.TickOffice(c);CompanyActivityService.Tick(s,rng,c);
+    Check(SaveStore.Serialize(s)==snapshot && rng.GreetingCalls==0);
+    Check(MysteryLabService.Start(s,0,rng)==FacilityResult.EventPending);
+    Check(FacilityService.Close(s,0,FacilityKind.MysteryLab)==FacilityResult.EventPending);
+    Check(session.Hire(Worker())==HireResult.ConversationPending);Throws<InvalidOperationException>(()=>session.OpenRecruitment());
+    Check(session.AskSecretary(c)==SecretaryAdviceResult.EventPending);
+    Check(SecretaryAdviceRules.Prepare(s,c,rng)==SecretaryAdviceResult.EventPending);
+    Check(!SecretaryPolicyRules.TrySet(s,new()));
+    MysteryLabService.Acknowledge(s);MysteryLabService.Acknowledge(s);
+    Check(MysteryLabService.Start(s,0,rng)==FacilityResult.Success && rng.GreetingCalls==1);
+    Check(MysteryLabService.Start(s,0,rng)==FacilityResult.ExperimentRunning && rng.GreetingCalls==1);
+});
+Test("lab stress outcomes affect current gate-one staff including employees hired during the experiment",()=>
+{
+    var (s,_)=LabFixture();Check(MysteryLabService.Start(s,0,new GreetingRandom(.8f))==FacilityResult.Success);
+    s.EmployeeSources[1].GateValue=0;s.EmployeeSources[2].GateValue=1;
+    var hired=Worker(source:2);hired.Stress=88;s.Employees=[hired];s.MysteryLab.Progress=99.9;
+    Check(MysteryLabService.Tick(s) && hired.Stress==0 && s.EmployeeSources[2].Employee.Stress==0 && s.EmployeeSources[1].Employee.Stress==10);
+});
+Test("lab unknown-data rejected starts and overflow completion are atomic",()=>
+{
+    var (s,_)=LabFixture();var rng=new GreetingRandom(0);s.Company.Fame=null;
+    Check(MysteryLabService.Start(s,0,rng)==FacilityResult.StateUnknown && s.Money==100_000_000 && rng.GreetingCalls==0);
+    (s,_)=LabFixture(long.MinValue);Throws<OverflowException>(()=>MysteryLabService.Start(s,0,rng));Check(rng.GreetingCalls==0 && s.MysteryLab.Progress==0);
+    (s,_)=LabFixture();s.Company.ProductionCapacity=int.MaxValue;Check(MysteryLabService.Start(s,0,new GreetingRandom(.3f))==FacilityResult.Success);
+    s.MysteryLab.Progress=99.9;string before=SaveStore.Serialize(s);Throws<OverflowException>(()=>MysteryLabService.Tick(s));Check(SaveStore.Serialize(s)==before);
+    (s,_)=LabFixture();Throws<ArgumentOutOfRangeException>(()=>MysteryLabService.Start(s,0,new GreetingRandom(float.NaN)));Check(s.Money==100_000_000 && s.MysteryLab.Progress==0);
+});
+Test("lab saves reject latent result seven invalid cursors and missing state while old modern saves migrate idle",()=>
+{
+    var (s,_)=LabFixture();var old=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;
+    old["State"]!.AsObject().Remove("MysteryLab");old["State"]!.AsObject().Remove("PendingMysteryLabResult");
+    Check(SaveStore.Deserialize(old.ToJsonString()).MysteryLab.Progress==0);
+    foreach (Action<GameState> corrupt in new Action<GameState>[] {x=>x.MysteryLab.Outcome=7,x=>x.MysteryLab.Progress=-1,
+        x=>x.MysteryLab.Progress=100.1,x=>x.MysteryLab=null!})
+    {var (bad,_)=LabFixture();corrupt(bad);Throws<InvalidDataException>(()=>SaveStore.Serialize(bad));}
+    CompleteLab(s,4);s.PendingMysteryLabResult!.MessageIndex=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingMysteryLabResult.MessageIndex=0;s.PendingMysteryLabResult.Outcome=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("technology actions retain payroll through reload and charge month end exactly once",()=>
 {
     for (int action=0;action<3;action++)
@@ -4129,10 +4248,11 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==164 && dialogue.SchemaVersion==9 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==173 && dialogue.SchemaVersion==10 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
         Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
+        Check(MysteryLabService.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
         Check(dialogue.Entries["CANCELLATION_EMPLOYEE_NAMED"].Contains("{name}") && dialogue.Entries["CANCELLATION_STRESS_SUMMARY"].Contains("{room}"));
     });
     Test("optional local original database parity", () =>

@@ -18,7 +18,7 @@ Release downloads will be announced here when available. Historical GitHub Actio
 - Plan original games, sequels and manga adaptations; choose types and genres.
 - Develop, hold meetings, debug, cancel projects and ship games.
 - Read reviews, track sales and sales history, and produce more copies.
-- Take loans, participate in calendar events, exhibitions and awards, and use the implemented facilities.
+- Take loans, participate in calendar events, exhibitions and awards, and use the implemented facilities, including mystery-lab experiments.
 - Save and resume supported workflows, with a previous-valid-save recovery option.
 - Use English or Japanese text and adjust music and audio settings.
 
@@ -26,7 +26,7 @@ Release downloads will be announced here when available. Historical GitHub Actio
 
 ### What is still missing
 
-Casino gameplay, the mystery lab, own-hardware development and original-game save importing are outside the first supported Early Access scope. Some dialogue, original presentation, Japanese bitmap text and English name readings still need work. Modern saves are separate from the original game's saves.
+Casino gameplay, own-hardware development and original-game save importing are outside the first supported Early Access scope. Some dialogue, original presentation, Japanese bitmap text and English name readings still need work. Modern saves are separate from the original game's saves.
 
 Recent research has recovered more of the original systems, but recovered evidence does not mean those systems are implemented.
 

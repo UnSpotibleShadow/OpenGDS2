@@ -56,5 +56,9 @@ public sealed class GameState
     public ProjectCancellationDialogueState? PendingProjectCancellation {get;set;}
     public FacilityReceipt? PendingFacilityReceipt {get;set;}
     public FeeNegotiationState? PendingFeeNegotiation {get;set;}
+    // Before M82 modern saves had no experiment workflow; absent fields migrate
+    // to idle, independently of unsupported original-save importing.
+    public MysteryLabState MysteryLab {get;set;}=new();
+    public MysteryLabResult? PendingMysteryLabResult {get;set;}
     public SecretaryPolicyState? SecretaryPolicies {get;set;}
 }

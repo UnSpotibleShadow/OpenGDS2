@@ -2888,7 +2888,7 @@ msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "弁護士と運送費や販売手数料の引き下げを交渉します。"
 
 msgid "FACILITY_DESCRIPTION_MysteryLab"
-msgstr "この施設のサービスは準備中です。"
+msgstr "2500万円で実験を行います。資金、生産容量、知名度、社員のストレスに予測できない効果が生じます。"
 
 msgid "FACILITY_DESCRIPTION_HardwareLab"
 msgstr "この施設のサービスは準備中です。"
@@ -2972,7 +2972,49 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。倒産と会社・事務所の拡張は未完成で、資金がマイナスでもゲームは終了しません。"
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、現代形式のセーブ。"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、現代形式のセーブ。"
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "未対応または未完成：カジノ、謎の研究所、自社ハード、磨き込み、受託開発、原作セーブの取り込み、会社の成長、会話や成長効果の一部。この非公開候補版はWindowsでの通しプレイ検証が必要です。"
+msgstr "未対応または未完成：カジノ、自社ハード、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
+
+msgid "MYSTERY_LAB_START"
+msgstr "実験を開始"
+
+msgid "MYSTERY_LAB_PROGRESS"
+msgstr "実験の進行状況: {0:0.0}%"
+
+msgid "MYSTERY_LAB_LIFECYCLE"
+msgstr "研究所を取り壊すと実験は中断され、再建後に続行できます。"
+
+msgid "FACILITY_CONFIRM_MysteryLab"
+msgstr "予測できない実験に¥{0:N0}を支払いますか？資金が不足していても実行されます。"
+
+msgid "FACILITY_RESULT_ExperimentRunning"
+msgstr "すでに実験が進行中です。"
+
+msgid "MYSTERY_LAB_INTRO"
+msgstr "実験が完了しました。結果を確認しましょう。"
+
+msgid "MYSTERY_LAB_RESULT_0"
+msgstr "資金が50%増加しました。"
+
+msgid "MYSTERY_LAB_RESULT_1"
+msgstr "資金が50%減少しました。"
+
+msgid "MYSTERY_LAB_RESULT_2"
+msgstr "生産能力が100%増加しました。"
+
+msgid "MYSTERY_LAB_RESULT_3"
+msgstr "生産能力が20%低下しました。"
+
+msgid "MYSTERY_LAB_RESULT_4"
+msgstr "会社の知名度は80です。"
+
+msgid "MYSTERY_LAB_RESULT_4_HIGH"
+msgstr "会社の知名度は99です。"
+
+msgid "MYSTERY_LAB_RESULT_5"
+msgstr "在籍中の社員のストレスを解消しました。"
+
+msgid "MYSTERY_LAB_RESULT_6"
+msgstr "在籍中の社員のストレスは90です。休憩をおすすめします。"
