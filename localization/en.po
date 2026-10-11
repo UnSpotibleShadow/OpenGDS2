@@ -2912,7 +2912,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "This employee is no longer employed."
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "This facility’s service is coming soon."
+msgstr "Buy casino coins and play poker. Other casino activities are not available yet."
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
@@ -3002,10 +3002,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution in either mode. Original presentation and full campaign parity remain incomplete."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins and poker; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: casino, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+msgstr "Unavailable or incomplete: blackjack, card-chain, horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
 
 msgid "MYSTERY_LAB_START"
 msgstr "Start an experiment"
@@ -3171,3 +3171,125 @@ msgstr "I will remember the games we made."
 
 msgid "FINANCIAL_FAILURE_REACTION_7"
 msgstr "Good luck with whatever comes next."
+
+# Authored casino interface, without original dialogue or bitmaps.
+
+msgid "CASINO_ENTER"
+msgstr "Casino"
+
+msgid "CASINO_COINS"
+msgstr "Coins: {0:N0}"
+
+msgid "CASINO_AVAILABLE_GAMES"
+msgstr "Poker is available. Blackjack, card-chain and horse racing are being reconstructed."
+
+msgid "CASINO_POKER"
+msgstr "Poker"
+
+msgid "CASINO_BUY_COINS"
+msgstr "Buy 50 coins — ¥10,000,000"
+
+msgid "CASINO_PURCHASE_CONFIRM"
+msgstr "Buy 50 coins for ¥10,000,000? This debit may leave company cash negative."
+
+msgid "CASINO_CLOSE_NOTE"
+msgstr "Closing keeps credited coins. Uncollected winnings and the bet are not refunded."
+
+msgid "CASINO_RESULT_NotOwned"
+msgstr "Build a casino first."
+
+msgid "CASINO_RESULT_EventPending"
+msgstr "Finish the current event first."
+
+msgid "CASINO_RESULT_NoCoins"
+msgstr "Buy coins before opening a card game."
+
+msgid "CASINO_RESULT_MoneyUnknown"
+msgstr "This older save has no known cash balance."
+
+msgid "CASINO_RESULT_InvalidAction"
+msgstr "This action is unavailable in the current phase."
+
+msgid "CASINO_RESULT_NumericLimit"
+msgstr "This amount exceeds the modern save format’s numeric range."
+
+msgid "POKER_TOTALS"
+msgstr "Coins: {0:N0} · Bet: {1:N0} · Pending: {2:N0}"
+
+msgid "POKER_BET"
+msgstr "Add a bet, then deal. Each bet spends one coin."
+
+msgid "POKER_RETAINED_BET"
+msgstr "The original retains a closed round’s 50-coin bet. This form cannot accept another bet or deal; closing gives no refund."
+
+msgid "POKER_REVEAL"
+msgstr "Revealing cards…"
+
+msgid "POKER_HOLD"
+msgstr "Choose cards to hold, then draw replacements."
+
+msgid "POKER_WIN"
+msgstr "Collect your winnings or try double-up."
+
+msgid "POKER_RESULT_WAIT"
+msgstr "Counting the award…"
+
+msgid "POKER_COLLECTING"
+msgstr "Collecting coins… Closing stops the remaining transfer."
+
+msgid "POKER_CHOOSE_DOUBLE"
+msgstr "Choose one of the four hidden cards. Aces are high."
+
+msgid "POKER_TIE"
+msgstr "Equal rank. Another comparison hand will be dealt."
+
+msgid "POKER_COLLECT"
+msgstr "Collect"
+
+msgid "POKER_ADD_BET"
+msgstr "Bet +1"
+
+msgid "POKER_DRAW"
+msgstr "Draw"
+
+msgid "POKER_DOUBLE"
+msgstr "Double-up"
+
+msgid "POKER_DEAL"
+msgstr "Deal"
+
+msgid "POKER_HELD"
+msgstr "Hold"
+
+msgid "POKER_PAY_TABLE"
+msgstr "Pair 10+ ×1 · Two pairs ×2 · Three ×3 · Straight ×10 · Flush ×15\nFull house ×20 · Four ×100 · Straight flush ×500 · Royal ×1000"
+
+msgid "POKER_OUTCOME_0"
+msgstr "No win"
+
+msgid "POKER_OUTCOME_1"
+msgstr "High pair"
+
+msgid "POKER_OUTCOME_2"
+msgstr "Two pairs"
+
+msgid "POKER_OUTCOME_3"
+msgstr "Three of a kind"
+
+msgid "POKER_OUTCOME_4"
+msgstr "Straight"
+
+msgid "POKER_OUTCOME_5"
+msgstr "Flush"
+
+msgid "POKER_OUTCOME_6"
+msgstr "Full house"
+
+msgid "POKER_OUTCOME_7"
+msgstr "Four of a kind"
+
+msgid "POKER_OUTCOME_8"
+msgstr "Straight flush"
+
+msgid "POKER_OUTCOME_9"
+msgstr "Royal flush"

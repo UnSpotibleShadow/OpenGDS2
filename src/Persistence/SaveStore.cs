@@ -77,6 +77,7 @@ public static class SaveStore
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
             throw new InvalidDataException("Invalid session state.");
         if (state.PendingProjectCancellation is { } cancellation) ProjectCancellationDialogueRules.Validate(cancellation);
+        CasinoPokerService.Validate(state);
         FinancialFailureService.Validate(state);
         MysteryLabService.Validate(state);
         OwnHardwareService.Validate(state);

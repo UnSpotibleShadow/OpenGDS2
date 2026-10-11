@@ -15,6 +15,7 @@ public sealed class GameState
     // Shared original scratch A14034/member 3018; not a live employed-count cache.
     public int? OriginalPayrollScratchIndex { get; set; }
     public long? Money { get; set; }
+    public CasinoState Casino {get;set;}=new();
     public FinancialFailureState? FinancialFailure {get;set;}
     public Dictionary<int,int>? TechnologyOwnershipLevels { get; set; }
     public int? DevelopmentComputerIndex { get; set; }

@@ -19,6 +19,7 @@ public sealed class GameSession
         var state = new GameState
         {
             Mode = mode, Rules = GameModeRules.For(mode),
+            Casino=new() {Coins=0,Bet=Current?.Casino.Bet ?? 0,PendingPayout=Current?.Casino.PendingPayout ?? 0,ChainBonus=Current?.Casino.ChainBonus ?? 0},
             Money = mode == GameMode.Beginner ? 1_200_000_000L : 450_000_000L,
             Year = date.Year, Month = date.Month, Week = date.Week,
             TechnologyOwnershipLevels = catalog?.Technologies.Count>0 ? catalog.Technologies.ToDictionary(x=>x.SourceIndex,x=>x.InitialOwnershipLevel) : null,
@@ -80,7 +81,7 @@ public sealed class GameSession
     public RecruitmentState OpenRecruitment()
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) throw new InvalidOperationException("A conversation is pending.");
+        if (state.Casino.PokerOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) throw new InvalidOperationException("A conversation is pending.");
         state.Recruitment.Candidates.Clear();
         if (state.MinimumSourceIndex is int minimum && state.SourceUpperBound is int upper)
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
@@ -89,7 +90,7 @@ public sealed class GameSession
     public HireResult Hire(EmployeeState candidate)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return HireResult.ConversationPending;
+        if (state.Casino.PokerOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return HireResult.ConversationPending;
         var result = HiringService.TryHire(state, candidate, _random);
         if (result == HireResult.Success && candidate.SourceIndex is int source && source is >=0 and <=59 && candidate.PortraitId is >=1 and <=10)
             state.PendingHireGreeting = new() {EmployeeSourceIndex=source,Variant=(int)Math.Floor(_random.NextSingle()*10)};
@@ -104,14 +105,14 @@ public sealed class GameSession
     }
 
     public SecretaryAdviceResult AskSecretary(OriginalCatalog? catalog)
-        =>Current is { } ownState && (ownState.FinancialFailure is not null || OwnHardwareService.HasPending(ownState)) || Current?.PendingBankLoanReceipt is not null || Current?.PendingProjectCancellation is not null || (Current?.PendingFacilityReceipt is not null || Current?.PendingFeeNegotiation is not null || Current?.PendingMysteryLabResult is not null) ? SecretaryAdviceResult.EventPending :
+        =>Current is { } ownState && (ownState.Casino.PokerOpen || ownState.FinancialFailure is not null || OwnHardwareService.HasPending(ownState)) || Current?.PendingBankLoanReceipt is not null || Current?.PendingProjectCancellation is not null || (Current?.PendingFacilityReceipt is not null || Current?.PendingFeeNegotiation is not null || Current?.PendingMysteryLabResult is not null) ? SecretaryAdviceResult.EventPending :
             SecretaryAdviceRules.Prepare(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
 
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
         if (catalog is not null) catalog=OwnHardwareService.Catalog(state,catalog);
-        if (state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return;
+        if (state.Casino.PokerOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return;
         if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         if (CalendarService.HasPending(state))
         {
@@ -148,6 +149,8 @@ public sealed class GameSession
         }
         FinancialFailureService.Begin(state);
     }
+    public CasinoResult PokerCommand(int command)=>CasinoPokerService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random);
+    public void TickPoker()=>CasinoPokerService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
     public bool AcknowledgeFinancialFailure()=>Current is { } state && FinancialFailureService.Acknowledge(state,_random);
     public void Restore(GameState state) => Current = state ?? throw new ArgumentNullException(nameof(state));
     public void Clear() => Current = null;

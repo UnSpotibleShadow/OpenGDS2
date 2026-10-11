@@ -2882,7 +2882,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "この社員はすでに退職しています。"
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "この施設のサービスは準備中です。"
+msgstr "コインの購入とポーカーに対応しています。他のカジノゲームは未対応です。"
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "弁護士と運送費や販売手数料の引き下げを交渉します。"
@@ -2972,10 +2972,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。どちらのモードでも所持金がマイナスになると会社を解散します。原作の演出やキャンペーン全体の完全な再現は未完成です。"
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、現代形式のセーブ。"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、カジノのコイン購入とポーカー、現代形式のセーブ。"
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "未対応または未完成：カジノ、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
+msgstr "未対応または未完成：ブラックジャック・カードチェーン・競馬、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
 
 msgid "MYSTERY_LAB_START"
 msgstr "実験を開始"
@@ -3141,3 +3141,125 @@ msgstr "私たちが作ったゲームを忘れません。"
 
 msgid "FINANCIAL_FAILURE_REACTION_7"
 msgstr "次の挑戦がうまくいくことを願っています。"
+
+# Authored casino interface, without original dialogue or bitmaps.
+
+msgid "CASINO_ENTER"
+msgstr "カジノ"
+
+msgid "CASINO_COINS"
+msgstr "コイン：{0:N0}枚"
+
+msgid "CASINO_AVAILABLE_GAMES"
+msgstr "ポーカーをプレイできます。ブラックジャック、カードチェーン、競馬は再現作業中です。"
+
+msgid "CASINO_POKER"
+msgstr "ポーカー"
+
+msgid "CASINO_BUY_COINS"
+msgstr "コイン50枚を購入 — ¥10,000,000"
+
+msgid "CASINO_PURCHASE_CONFIRM"
+msgstr "¥10,000,000でコイン50枚を購入しますか？所持金がマイナスになることがあります。"
+
+msgid "CASINO_CLOSE_NOTE"
+msgstr "閉じても受け取ったコインは残ります。未受領の賞金や賭けたコインは返金されません。"
+
+msgid "CASINO_RESULT_NotOwned"
+msgstr "まずカジノを設置してください。"
+
+msgid "CASINO_RESULT_EventPending"
+msgstr "先に進行中のイベントを終えてください。"
+
+msgid "CASINO_RESULT_NoCoins"
+msgstr "カードゲームを始める前にコインを購入してください。"
+
+msgid "CASINO_RESULT_MoneyUnknown"
+msgstr "この古いセーブの所持金が不明です。"
+
+msgid "CASINO_RESULT_InvalidAction"
+msgstr "現在の状態ではこの操作を実行できません。"
+
+msgid "CASINO_RESULT_NumericLimit"
+msgstr "この金額は現在のセーブ形式の数値範囲を超えています。"
+
+msgid "POKER_TOTALS"
+msgstr "コイン：{0:N0} · 賭け：{1:N0} · 未受領：{2:N0}"
+
+msgid "POKER_BET"
+msgstr "1枚ずつ賭けてからカードを配ります。賭けるたびにコインを消費します。"
+
+msgid "POKER_RETAINED_BET"
+msgstr "原作と同様に、閉じたラウンドの50枚の賭けが残っています。追加の賭けや配布はできません。閉じても返金されません。"
+
+msgid "POKER_REVEAL"
+msgstr "カードを公開中…"
+
+msgid "POKER_HOLD"
+msgstr "残すカードを選び、残りを引き直してください。"
+
+msgid "POKER_WIN"
+msgstr "賞金を受け取るか、ダブルアップに挑戦できます。"
+
+msgid "POKER_RESULT_WAIT"
+msgstr "賞金を計算中…"
+
+msgid "POKER_COLLECTING"
+msgstr "コインを受領中…閉じると残りの受領は止まります。"
+
+msgid "POKER_CHOOSE_DOUBLE"
+msgstr "裏向きの4枚から1枚を選んでください。Aは最も強いカードです。"
+
+msgid "POKER_TIE"
+msgstr "同じ強さです。比較用のカードをもう一度配ります。"
+
+msgid "POKER_COLLECT"
+msgstr "受け取る"
+
+msgid "POKER_ADD_BET"
+msgstr "1枚賭ける"
+
+msgid "POKER_DRAW"
+msgstr "引き直す"
+
+msgid "POKER_DOUBLE"
+msgstr "ダブルアップ"
+
+msgid "POKER_DEAL"
+msgstr "配る"
+
+msgid "POKER_HELD"
+msgstr "残す"
+
+msgid "POKER_PAY_TABLE"
+msgstr "10以上のペア×1 · 2ペア×2 · 3枚×3 · ストレート×10 · フラッシュ×15\nフルハウス×20 · 4枚×100 · ストレートフラッシュ×500 · ロイヤル×1000"
+
+msgid "POKER_OUTCOME_0"
+msgstr "役なし"
+
+msgid "POKER_OUTCOME_1"
+msgstr "10以上のペア"
+
+msgid "POKER_OUTCOME_2"
+msgstr "2ペア"
+
+msgid "POKER_OUTCOME_3"
+msgstr "3枚組"
+
+msgid "POKER_OUTCOME_4"
+msgstr "ストレート"
+
+msgid "POKER_OUTCOME_5"
+msgstr "フラッシュ"
+
+msgid "POKER_OUTCOME_6"
+msgstr "フルハウス"
+
+msgid "POKER_OUTCOME_7"
+msgstr "4枚組"
+
+msgid "POKER_OUTCOME_8"
+msgstr "ストレートフラッシュ"
+
+msgid "POKER_OUTCOME_9"
+msgstr "ロイヤルフラッシュ"
