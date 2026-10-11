@@ -2464,6 +2464,32 @@ Test("staff entry captures the original scratch count and retains the distinct d
     Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==0);
     Check(OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==0 && OriginalPayrollRules.MonthlyDebit(s)==0);
 });
+Test("technology actions retain payroll through reload and charge month end exactly once",()=>
+{
+    for (int action=0;action<3;action++)
+    {
+        var (s,c)=CalendarFixture(new(3,5,4),1000);
+        var e=Worker(action==1 ? 1 : 6);e.Experience=100;e.RawParameter34=1;
+        e.TechnologyLevels=new() {{0,action==2 ? 1 : 0}};s.Employees=[e];
+        s.SourceUpperBound=2;s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=e},
+            new() {SourceIndex=1,GateValue=0,Employee=new() {Name="Synthetic salary",SourceIndex=1,RawParameter40=120}}];
+        s.TechnologyOwnershipLevels=new() {{0,action==0 ? 0 : 3}};
+        Check(OriginalPayrollRules.CaptureStaffList(s) && s.OriginalPayrollScratchIndex==1);
+        if (action==0) Check(TechnologyService.TryPurchase(s,TrainingTechnology())==TechnologyPurchaseResult.Success);
+        else if (action==1) Check(TrainingService.TryStart(s,e,TrainingTechnology())==TrainingResult.Success);
+        else
+        {
+            s.DevelopmentProjects.Add(new() {Title="Synthetic payroll project",RequiredPoints=100,Focus=new(25,25,25,25),
+                TechnologyApplicationCounts=TechnologyApplicationService.NewProjectCounters()});
+            Check(TechnologyApplicationService.TryUse(s,e,UseTechnology())==TechnologyApplicationResult.Success);
+        }
+        Check(s.OriginalPayrollScratchIndex==1);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        Check(CalendarService.BeginWeek(s,c,new SequenceRandom()) && s.Month==6 && s.Week==1);
+        Check(s.Money==(action==0 ? 830 : 880) && s.Company.MonthlyNet==-120);
+        Check(CalendarService.Resume(s,c,new SequenceRandom()) && s.Money==(action==0 ? 830 : 880));
+    }
+});
 Test("partial or duplicate source tables cannot establish a staff scratch snapshot",()=>
 {
     var s=PayrollFixture();s.OriginalPayrollScratchIndex=2;s.SourceUpperBound=null;
