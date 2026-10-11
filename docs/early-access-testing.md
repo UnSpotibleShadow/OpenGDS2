@@ -1,6 +1,6 @@
-# Owner test checklist — 0.1.0-ea.1-rc.4
+# Windows community testing guide — RC.4 baseline
 
-This is an unpublished Windows x86_64 test candidate. Record pass/fail, Windows version, resolution/scaling, language and exact steps. Report the visible version and source commit from BUILD_MANIFEST.json. Do not mark an untested row as passed.
+This matrix describes the unpublished Windows x86_64 RC.4 baseline. The owner chose community testing for the announced Early Access release; completing all nineteen rows is not a pre-release gate. Use the final package’s version, data-path notes and manifest when testing a newer build. RC.4 predates the M80 payroll-screen fix. Record pass/fail, Windows version, resolution/scaling, language and exact steps. Report the visible version and source commit from BUILD_MANIFEST.json. Do not mark an untested row as passed.
 
 ## Start safely
 
@@ -34,9 +34,9 @@ This is an unpublished Windows x86_64 test candidate. Record pass/fail, Windows 
 | Stability | Repeated saves, reloads, title returns and an hour of play produce no crash or stuck modal | Untested on Windows |
 | Data isolation | Ordinary OpenGDS2 data is unchanged; candidate files stay in its separate directory | Untested on Windows |
 
-A crash, unusable import, corrupted save, duplicate transaction or dead-end in a supported workflow blocks release. Log cosmetic defects separately with screenshots. Keep negative-funds/progression limitations visible; the candidate boundary is documented in DECISIONS.md and must be accepted as part of the exact final release scope.
+Known crashes, unusable imports, corrupted saves, duplicate transactions or dead ends in supported workflows require fixes before publication. Unrun rows remain untested rather than blocking solely because they have not run. Log cosmetic defects separately with screenshots. Keep negative-funds/progression limitations visible; the candidate boundary is documented in DECISIONS.md and must be accepted as part of the exact final release scope.
 
 ## Reporting
 
-Use the GitHub Bug report template (the repository is currently private). Include version/source SHA, Windows/display/language settings, numbered reproduction steps, expected/actual outcome and a redacted log excerpt. Logs and modern saves may include names/paths: review them before sharing. Never upload the LZH, original executables/graphics/catalogs or original saves. Modern reproduction saves should be shared privately only when requested.
+Use the public reporting destination linked in the release notes. The repository is currently private, so its GitHub bug template alone is not yet accessible to community testers. Include version/source SHA, Windows/display/language settings, numbered reproduction steps, expected/actual outcome and a redacted log excerpt. Logs and modern saves may include names/paths: review them before sharing. Never upload the LZH, original executables/graphics/catalogs or original saves. Modern reproduction saves should be shared privately only when requested.
 

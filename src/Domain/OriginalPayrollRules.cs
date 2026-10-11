@@ -2,7 +2,8 @@ namespace OpenGDS2.Domain;
 
 /// <summary>
 /// Monthly arithmetic: 009DB4F4 +06B7..0770. Staff-list scratch writer:
-/// 009B0B60 +0051..00AA. Other scratch writers and live scheduling remain unresolved.
+/// 009B0B60 +0051..00AA. The technology-capacity roster also captures its count;
+/// ordinary purchase/training/use screens preserve this shared snapshot.
 /// </summary>
 public static class OriginalPayrollRules
 {
@@ -39,8 +40,9 @@ public static class OriginalPayrollRules
         return true;
     }
 
-    // Technology selection also writes 3018, but its complete lifecycle is not mapped.
-    // Clear the projection rather than retaining a count from the staff form.
+    // Explicit uncertainty guard for callers with genuinely incomplete evidence.
+    // The capacity-facility selector has a recovered count writer; ordinary
+    // technology screens have no established scratch write and must preserve it.
     public static void InvalidateScratch(GameState state) => state.OriginalPayrollScratchIndex=null;
 
     /// <summary>009B0B60 +00BF sums each employed row's own BDC salary for display.</summary>

@@ -1,4 +1,4 @@
-# M22: staff salaries and original payroll scratch
+# Staff salaries and original payroll scratch — M80 screen-state fix
 
 This milestone adds a staff-information projection. It does **not** enable monthly
 charges or advance the company date. The original Windows runtime has not verified
@@ -37,21 +37,33 @@ For example, with salaries 700, 100 and 300 in rows 0, 1 and 2, and only rows
 1 and 2 employed, the displayed total is 400. Staff entry leaves scratch = 2;
 the original monthly formula therefore projects 2 × 300 = 600.
 
-Technology-selection procedure `0099F9A4` also writes this scratch. The current
-technology screens conservatively invalidate the projection because that writer's
-complete lifecycle is not reconstructed. This null assignment is a modern
-uncertainty guard; it is not a claimed original numeric write. The known Module1
-`009933DC/009930BC` and periodic `009E3830 +1AAC/+1AF7` writers are still
-unconnected. They must be reconstructed before treating this as complete global
-scratch emulation.
+The technology-capacity facility selector `fGMTenantTechSel 0099F9A4`
+also rebuilds the employed count (`+02B9/+0312`). M70 already connects that
+writer through `FacilityService.OpenTechnologyRoster`, including opening and
+cancelling the selection without buying study.
+
+M80 removes the three earlier uncertainty resets from the ordinary technology
+purchase, employee training and technology-use screens. They were incorrectly
+associated with that facility selector. Simply visiting these screens previously
+set a valid payroll snapshot to null, potentially stopping month-end calendar
+advancement until Staff was reopened. These screens now preserve the snapshot;
+they do not recalculate it or supply an invented zero. Actual staff-list and
+capacity-selector writers remain active. This is a source change after RC.4;
+the existing RC.4 ZIP does not contain this fix.
+
+M76 maps the Module1 `009933DC/009930BC` random-employee portrait (-1) writers
+and periodic `009E3830` employee selection. Those paths remain unconnected;
+secretary (-2) dialogue bypasses the random-employee writer. See
+[workflow research](workflow-verification-m76.md#shared-payroll-scratch-writer-lifecycle-and-order).
+Modern save/load retains the snapshot for continuity; no original save/load/reset
+reference to member 3018 was found.
 
 ## Unresolved
 
 - A startup/reset value for 3018 has not been proven; fresh sessions do not set zero.
 - Original runtime values and the apparent stale-count payroll defect.
-- Remaining scratch writers, source-slot lifecycle and original save restoration.
-- March-end renewal ordering, monthly debit, bankruptcy, complete weekly events
-  and hardware progression in a live calendar.
+- Integration of the recovered random-employee and periodic scratch writers; source-slot runtime comparison.
+- Bankruptcy and remaining original economy/runtime fidelity. M35 already connects monthly debit and renewal ordering.
 
 Signed values are retained by the pure arithmetic; checked modern arithmetic
 rejects overflow. The inspector reports an unavailable preview if monetary projection
@@ -65,3 +77,15 @@ out-of-table counts, signed values, overflow and save/load. The Godot core-loop
 fixture checks the actual labels and saved scratch without charging money.
 M22 is authored through GitHub while the local execution workspace is disconnected;
 original-fixture and local runtime reruns remain pending.
+
+## M80 validation
+
+A synthetic regression exercises purchase, training and application, saves/reloads
+the preserved snapshot, then crosses month end and verifies exactly one payroll
+charge. The recovered facility roster writer and existing unknown-data guards
+remain covered by the domain suite. Native Windows UI testing is not claimed.
+
+Validation on 2026-10-11: all 335 domain tests pass; the Godot/.NET app
+build succeeds with zero warnings/errors; M76 evidence verification passes
+44 procedure fingerprints and 35 payout entries. The domain suite retains one
+existing nullable warning in an unrelated calendar-dialogue test.
