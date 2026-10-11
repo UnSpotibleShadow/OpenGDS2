@@ -1,6 +1,6 @@
-# Early Access decisions and unresolved evidence — M73
+# Early Access decisions and unresolved evidence — M76 research
 
-Updated 2026-10-10 for private candidate **0.1.0-ea.1-rc.4**. This is the durable decision register; [issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) links it for continuation. Keep stable IDs when resolving entries. Record the source/evidence, validation and affected candidate for each resolution; never silently turn unknown original behavior into an implemented rule.
+Updated 2026-10-11 with M76 static verification; the private candidate remains **0.1.0-ea.1-rc.4**. This is the durable decision register; [issue #55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) links it for continuation. Keep stable IDs when resolving entries. Record the source/evidence, validation and affected candidate for each resolution; never silently turn unknown original behavior into an implemented rule. [M76 findings and verification boundaries](workflow-verification-m76.md) resolve several research gaps without changing candidate gameplay.
 
 ## Decisions made for this candidate
 
@@ -10,7 +10,7 @@ Updated 2026-10-10 for private candidate **0.1.0-ea.1-rc.4**. This is the durabl
 | EA-02 | Beginner retains its original Year 2, December, week 4 terminal boundary. Normal remains experimental ongoing play with no invented campaign cap or bankruptcy. | The ending is verified; full company/office progression and bankruptcy are not. Title, mode selection, scope page and package notes disclose this boundary. Negative funds can persist. This is a deliberate candidate scope choice, not proof of original endgame parity. |
 | EA-03 | Retain one previous valid modern save and offer explicit recovery from the title. | Each successful replacement preserves the previous readable slot as `slot1.json.bak`. Recovery loads into memory only. Invalid new saves do not replace either file; saving after a damaged current slot retains the good backup. Recovery rolls back progress and is never merged with the newer state. |
 | EA-04 | Keep RC.4 private and isolated in `OpenGDS2-EarlyAccessTesting`, with an exact version/source manifest. | Owner requested testing before release. No public release/tag, visibility change or Actions dispatch is authorized by candidate preparation. RC.4 includes M64–M72 and M73 source-export tooling. Earlier candidate results are not substituted for its checks. |
-| EA-05 | Do not require casino, mystery lab, own hardware, polishing, contract work or original-save import for the first supported Early Access scope. | They depend on unresolved original lifecycles. Track them below; completing them is full-reconstruction work, not a reason to fabricate mechanics for this candidate. |
+| EA-05 | Casino, mystery lab, own hardware and original-save import remain outside the first supported Early Access scope. | M76 recovers lab/hardware lifecycles but does not implement them. Separate polishing and external contract work have no recovered workflow and are removed from unconditional reconstruction requirements. |
 
 ## Public release gates still open
 
@@ -28,14 +28,14 @@ These remain open unless a later milestone supplies evidence. They are not silen
 
 | ID | Area | What cannot yet be determined | Next evidence / dependency |
 | --- | --- | --- | --- |
-| U-01 | Bankruptcy and company/office progression | Bankruptcy trigger/outcome, office purchase eligibility/cost/effects, complete campaign progression | Trace periodic Module2 body `009E3830` and office purchase callers; compare original runtime before enabling. EA-02 discloses the candidate boundary. |
-| U-02 | Bank | All original menu-enable writers and exact bank form/message presentation | Trace upstream eligibility writers; borrowing and repayment transactions themselves are implemented. |
-| U-03 | Mystery lab | Seven delayed outcomes, dates/dispatch order and saved pending lifecycle | Entry `00987B40` is known: ¥25m debit and seven-way selection. Recover calendar dispatcher/effects before enabling construction. |
-| U-04 | Casino | Poker/blackjack/dice rules, coin ownership, game and payout lifecycle | Coin purchase is known: 50 for ¥10m. Trace game forms and settlement, not only entry. |
-| U-05 | Own hardware | Requirements, special room project, completion/launch/market lifecycle and ownership restriction | Entries `009864AC`/`00990B70` are known; trace remaining consumers before enabling. |
-| U-06 | Polishing and external work | Entry limits, payment/progress/completion/cancellation and room lifecycle | Recover their original callers and consumers; keep unavailable until complete. |
-| U-07 | Payroll | Remaining writers of shared scratch index/member 3018 and original runtime confirmation of apparent index defect | Calendar/statics preserve the known scratch arithmetic; Staff can resolve a missing projection. Do not replace it with a salary sum. See `payroll-state.md`. |
-| U-08 | Employee progression | Student growth, speed-technology consumer and top-level stress-relief effects | Trace remaining stat/growth writers; known training/capacity transactions remain supported. |
+| U-01 | Bankruptcy and company/office progression | Implementation of recovered failure UI/cleanup; modern terminal-save representation; native modal comparison | M75/M76 identify strict negative-funds failure in continuous loop `00A0283C`, cleanup, timer stop and menu/title changes. Office relocation/rank progression has no recovered writer; production-capacity expansion is real. Do not invent office upgrades. EA-02 remains the candidate boundary. |
+| U-02 | Bank | Exact bank form/message presentation comparison | M76 found no individual bank enable writer; its parent Actions menu is disabled on failure. No additional eligibility progression is established. Borrowing/repayment remain implemented. |
+| U-03 | Mystery lab | Integration and saved modern modal behavior | M75/M76 recover seven effects, per-active-iteration cadence, closure suspension/rebuild resumption, original pending save/load and no start affordability guard. Reset follows modal return. Ready for source-backed implementation. |
+| U-04 | Casino | Outcome/deck rules, interrupted-round transitions and horse-racing settlement | M76 recovers coin purchase/bets, three payout tables, coin save/load and close helper. Correct inventory: poker, blackjack, card chain and horse racing; card chain is not dice. |
+| U-05 | Own hardware | Integration and runtime comparison | M76 recovers quote, one-console/project guards, room initialization/work, four technology flags, completion/launch, production bands, licensing, market growth and original saved cells. Ready for source-backed implementation. |
+| U-06 | Polishing and external work | Unestablished feature proposals; no unconditional parity requirement | M76 follows all explicit room-state writers and project selectors. State 2 is hardware, and the contract form concerns employees. No separate polishing or external-job workflow was recovered. Reopen only with new source evidence. |
+| U-07 | Payroll | Integration of all recovered scratch writers and runtime comparison | M76 maps staff, technology selection, random-employee dialogue and periodic poaching writers, including weekly-before-periodic ordering. Original save/load/reset omit scratch member 3018. Preserve the recovered index arithmetic; do not substitute a salary sum. |
+| U-08 | Employee progression | Deliberate treatment of recovered technology defects and runtime comparison | M76 resolves speed's retained eligibility local and top-level stress relief's unassigned local/workspace-slot-0 target under documented VB6 frame initialization. Periodic student skill growth has no recovered writer. |
 | U-09 | Automatic conversations | Presenter timing, queues, salary/renewal/graduate callers and original busy-window/modal cadence | Recover caller → queue → completion sequence. Modern saved dialogue pages do not establish original scheduler parity. |
 | U-10 | Facility presentation | Exact original hot-spring reactions/animation, shared VB RNG-stream parity and lawyer portrait/background timing | Verified transactions/odds are supported; compare original runtime for presentation and random-stream ordering. |
 | U-11 | Room/tenant interaction | Original overlapping-hit priority, right-click paths and busy-window toggle sequence | Modern overlap chooser is intentional; original sequence remains unverified. |
@@ -59,4 +59,4 @@ release source export and fresh RC.4 package now replace the fallback route.
 334 standard-SDK domain tests, current UI, exported-host startup/core loop/recovery,
 seven audio and five package tests pass. See windows-source-export-m73.md and #55
 for provenance and final candidate hashes. No original mechanics were invented;
-U-01 through U-16, native Windows acceptance and public approval remain open.
+This is historical M73 validation. M76 subsequently resolves or narrows the research portions of U-01 through U-08 as recorded above; candidate gameplay, native Windows acceptance and public approval are unchanged.
