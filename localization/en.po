@@ -2999,7 +2999,7 @@ msgid "EARLY_ACCESS_SCOPE"
 msgstr "Early Access: Supported Features"
 
 msgid "EARLY_ACCESS_BOUNDARY"
-msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play: bankruptcy and office/company upgrades are incomplete; negative funds do not end the game."
+msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution in either mode. Original presentation and full campaign parity remain incomplete."
 
 msgid "EARLY_ACCESS_FEATURES"
 msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; modern saves."
@@ -3124,3 +3124,50 @@ msgstr "Complete the work, quality targets and all four required technologies."
 msgid "OWN_HARDWARE_RESULT_InvalidName"
 msgstr "Enter a console name of 1–128 characters."
 
+
+# Authored fallback; Japanese native lines import locally from the owner archive.
+
+msgid "FINANCIAL_FAILURE"
+msgstr "Company dissolution"
+
+msgid "FINANCIAL_FAILURE_INTRO_0"
+msgstr "Our cash balance has fallen below zero. We cannot continue operating."
+
+msgid "FINANCIAL_FAILURE_INTRO_1"
+msgstr "The company must dissolve. Let us speak with the staff before we close."
+
+msgid "FINANCIAL_FAILURE_CLOSING"
+msgstr "The company has closed. Thank you for playing. You can start a new company or load an earlier save."
+
+msgid "FINANCIAL_FAILURE_NAMED"
+msgstr "{name} — employee"
+
+msgid "FINANCIAL_FAILURE_EMPLOYEE"
+msgstr "Employee"
+
+msgid "FINANCIAL_FAILURE_ROSTER_UNKNOWN"
+msgstr "This older save has an incomplete staff roster, so the original farewell sequence cannot be reconstructed. Load an earlier save or start a new company."
+
+msgid "FINANCIAL_FAILURE_REACTION_0"
+msgstr "I hoped we could keep making games together."
+
+msgid "FINANCIAL_FAILURE_REACTION_1"
+msgstr "I will miss working here."
+
+msgid "FINANCIAL_FAILURE_REACTION_2"
+msgstr "Thank you for everything I learned."
+
+msgid "FINANCIAL_FAILURE_REACTION_3"
+msgstr "This is a difficult goodbye."
+
+msgid "FINANCIAL_FAILURE_REACTION_4"
+msgstr "I wish our next game could have reached the players."
+
+msgid "FINANCIAL_FAILURE_REACTION_5"
+msgstr "We did what we could. I hope we meet again."
+
+msgid "FINANCIAL_FAILURE_REACTION_6"
+msgstr "I will remember the games we made."
+
+msgid "FINANCIAL_FAILURE_REACTION_7"
+msgstr "Good luck with whatever comes next."

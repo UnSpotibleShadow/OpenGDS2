@@ -23,7 +23,7 @@ Release downloads will be announced here when available. Historical GitHub Actio
 - Save and resume supported workflows, with a previous-valid-save recovery option.
 - Use English or Japanese text and adjust music and audio settings.
 
-**Beginner mode** ends after Year 2, December, week 4. **Normal mode** supports experimental ongoing play; bankruptcy and full company/office progression are incomplete, and negative funds can persist.
+**Beginner mode** ends after Year 2, December, week 4. **Normal mode** supports experimental ongoing play. In either mode, negative funds trigger the recovered company-dissolution sequence and return to the title. Full original presentation and company progression are still under review.
 
 ### What is still missing
 

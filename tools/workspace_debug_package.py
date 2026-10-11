@@ -189,7 +189,7 @@ if args.candidate:
         "Save compatibility across future Early Access versions is not guaranteed. Back up before upgrading.\n\n"
         "Read TEST_CHECKLIST.md, KNOWN_ISSUES.md, RELEASE_NOTES.md and DECISIONS.md before testing.\n"
         "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play.\n"
-        "Bankruptcy and company/office upgrades remain incomplete; negative funds do not end the game.\n"
+        "Negative funds trigger company dissolution in either mode; full original presentation remains incomplete.\n"
         "The title's Load Previous Save restores the previous valid save without overwriting the current file.\n"
         "Capture a log with: OpenGDS2.console.exe --log-file opengds2-test.log\n"
         "Report the version, Windows version, exact steps and expected/actual result.\n"

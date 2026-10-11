@@ -18,6 +18,100 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+GameState FailureFixture(long? money=-1)
+{
+    var (s,_)=CalendarFixture();s.Money=money;s.SourceUpperBound=3;s.OriginalPayrollScratchIndex=2;
+    s.EmployeeSources=Enumerable.Range(0,3).Select(i=>new RecruitmentSourceRecord {SourceIndex=i,GateValue=i==1 ? 0 : 1,
+        Employee=new() {Name="Synthetic "+i,SourceIndex=i,PortraitId=i+1,Stress=9,RawParameter40=100}}).Reverse().ToList();
+    return s;
+}
+Test("financial failure triggers strictly below zero in either mode without cash clamping",()=>
+{
+    foreach (var mode in Enum.GetValues<GameMode>()) foreach (long? cash in new long?[]{null,0,1,-1,-3})
+    {
+        var s=FailureFixture(cash);s.Mode=mode;
+        Check(FinancialFailureService.Begin(s)==(cash<0));Check(s.Money==cash);
+        Check(!FinancialFailureService.Begin(s));
+    }
+});
+Test("failure consumes every source gate draw and only selected employed reaction draws in source order",()=>
+{
+    var s=FailureFixture();var random=new FailureRandom(.9f,.0f,.9f,.9f,.999f);
+    Check(FinancialFailureService.Begin(s));Check(FinancialFailureService.Acknowledge(s,random) && random.Calls==0);
+    Check(FinancialFailureService.Acknowledge(s,random) && random.Calls==2 && s.FinancialFailure!.Reaction!.SourceIndex==0 && s.FinancialFailure.Reaction.Variant==0);
+    Check(FinancialFailureService.Acknowledge(s,random) && random.Calls==5 && s.FinancialFailure!.Reaction!.SourceIndex==2 && s.FinancialFailure.Reaction.Variant==7);
+    Check(FinancialFailureService.Acknowledge(s,random) && random.Calls==5 && s.FinancialFailure!.Phase==3);
+    Check(FinancialFailureService.Acknowledge(s,random) && FinancialFailureService.IsComplete(s));
+    Check(!FinancialFailureService.Acknowledge(s,random) && s.OriginalPayrollScratchIndex==2);
+});
+Test("all eight failure reactions resume without repeating their selection draws",()=>
+{
+    for (int variant=0;variant<8;variant++)
+    {
+        var s=FailureFixture();s.SourceUpperBound=1;s.EmployeeSources=s.EmployeeSources.Where(x=>x.SourceIndex==0).ToList();
+        var r=new FailureRandom(.5f,(variant+.01f)/8);FinancialFailureService.Begin(s);
+        FinancialFailureService.Acknowledge(s,r);s=SaveStore.Deserialize(SaveStore.Serialize(s));
+        FinancialFailureService.Acknowledge(s,r);Check(s.FinancialFailure!.Reaction!.Variant==variant && r.Calls==2);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));var empty=new FailureRandom();
+        FinancialFailureService.Acknowledge(s,empty);Check(s.FinancialFailure!.Phase==3 && empty.Calls==0);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));FinancialFailureService.Acknowledge(s,empty);Check(FinancialFailureService.IsComplete(s));
+    }
+});
+Test("failure skips unselected employed reactions and still scans unemployed slots",()=>
+{
+    var s=FailureFixture();var r=new FailureRandom(0,.999f,.499f);FinancialFailureService.Begin(s);
+    FinancialFailureService.Acknowledge(s,r);FinancialFailureService.Acknowledge(s,r);
+    Check(r.Calls==3 && s.FinancialFailure!.Phase==3 && s.FinancialFailure.NextSource==3);
+});
+Test("unknown legacy failure roster suspends without fabricated reactions or random draws",()=>
+{
+    var s=FailureFixture();s.SourceUpperBound=null;var r=new FailureRandom();FinancialFailureService.Begin(s);
+    FinancialFailureService.Acknowledge(s,r);FinancialFailureService.Acknowledge(s,r);
+    Check(s.FinancialFailure!.Phase==2 && s.FinancialFailure.Slots is null && r.Calls==0);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(!FinancialFailureService.Acknowledge(s,r));
+    var session=new GameSession(r);session.Restore(s);string before=SaveStore.Serialize(s);session.TickOffice();Check(SaveStore.Serialize(s)==before);
+});
+Test("failure preserves company gameplay cells and stops office work and new transactions",()=>
+{
+    var s=FailureFixture();var p=CancellationProject();s.DevelopmentProjects.Add(p);s.Company.WeeklyNet=17;s.MysteryLab.Progress=18;
+    var r=new FailureRandom(0,0,0);var session=new GameSession(r);session.Restore(s);FinancialFailureService.Begin(s);
+    string before=SaveStore.Serialize(s);session.TickOffice();Check(SaveStore.Serialize(s)==before && ReferenceEquals(s.DevelopmentProjects[0],p));
+    Check(FacilityService.HasPendingDecision(s) && BankLoanService.CheckBorrow(s)==BankLoanResult.EventPending);
+    Check(s.Money==-1 && s.Company.WeeklyNet==17 && s.MysteryLab.Progress==18);
+    Check(s.EmployeeSources.All(x=>x.Employee.Stress==9) && s.OriginalPayrollScratchIndex==2);
+});
+Test("failure waits for earlier modal receipts and resumes at the late office-loop trigger",()=>
+{
+    var s=FailureFixture();s.PendingBankLoanReceipt=new() {Slot=0,OriginalType=1,BorrowedOn=new(3,5,1)};
+    Check(!FinancialFailureService.Begin(s));s.PendingBankLoanReceipt=null;
+    var session=new GameSession(new FailureRandom());session.Restore(s);session.TickOffice();Check(s.FinancialFailure?.Phase==0);
+});
+Test("invalid failure cursors reactions snapshots and overlaps are rejected",()=>
+{
+    var mutations=new Action<GameState>[] {s=>s.FinancialFailure!.Phase=5,s=>s.FinancialFailure!.NextSource=-1,
+        s=>s.FinancialFailure!.Reaction=new() {SourceIndex=0,Variant=0},s=>s.Money=0,
+        s=>s.FinancialFailure!.Slots![0].SourceIndex=3,s=>s.FinancialFailure!.Slots![0].PortraitId=11,
+        s=>s.FinancialFailure!.Slots![1].Employed=true,s=>s.FinancialFailure!.Phase=3,
+        s=>s.PendingHireGreeting=new() {EmployeeSourceIndex=0,Variant=0}};
+    foreach (var mutate in mutations) {var s=FailureFixture();FinancialFailureService.Begin(s);mutate(s);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));}
+});
+Test("failure continuation rejects missing required phase and reaction fields",()=>
+{
+    var s=FailureFixture();FinancialFailureService.Begin(s);
+    string json=SaveStore.Serialize(s);Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"Phase\": 0,","")));
+    var r=new FailureRandom(.9f,.3f);FinancialFailureService.Acknowledge(s,r);FinancialFailureService.Acknowledge(s,r);
+    json=SaveStore.Serialize(s);Throws<InvalidDataException>(()=>SaveStore.Deserialize(json.Replace("\"Variant\": 2","\"Unused\": 2")));
+});
+Test("terminal failure disables save replacement and new company starts independently",()=>
+{
+    var s=FailureFixture();var r=new FailureRandom(0,0,0);FinancialFailureService.Begin(s);
+    while (FinancialFailureService.Acknowledge(s,r)) {}
+    var path=Path.Combine(Path.GetTempPath(),"opengds-failure-"+Guid.NewGuid()+".json");
+    try {File.WriteAllText(path,"preserved");Throws<InvalidOperationException>(()=>SaveStore.Save(path,s));Check(File.ReadAllText(path)=="preserved");}
+    finally {File.Delete(path);}
+    var session=new GameSession();session.Restore(s);var fresh=session.StartNewGame("New","Owner",GameMode.Normal);
+    Check(fresh.FinancialFailure is null && fresh.Money==450000000 && s.Money==-1);
+});
 DevelopmentProjectState CancellationProject(int room=0)=>new()
     {RoomIndex=room,Title="Synthetic cancellation",RequiredPoints=1000,Focus=new(100,0,0,0)};
 Test("cancellation selects all six assigned desks in either room and clamps stress to 99",()=>
@@ -4442,7 +4536,8 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==173 && dialogue.SchemaVersion==10 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==186 && dialogue.SchemaVersion==11 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
         Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
@@ -4589,4 +4684,10 @@ sealed class GreetingRandom(float value) : Random
     public int GreetingCalls {get;private set;}
     public override int Next(int maxValue)=>0;
     public override float NextSingle() {GreetingCalls++;return value;}
+}
+
+sealed class FailureRandom(params float[] values) : Random
+{
+    public int Calls {get;private set;}
+    public override float NextSingle()=>Calls<values.Length ? values[Calls++] : throw new Exception("Unexpected failure draw");
 }

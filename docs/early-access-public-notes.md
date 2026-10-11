@@ -16,8 +16,8 @@ Modern saves include previous-valid-save recovery. English and Japanese
 interfaces and audio controls are available.
 
 Beginner ends after Year 2, December, week 4. Normal is experimental ongoing
-play: bankruptcy and full company progression are incomplete, and negative
-funds can persist. Casino gameplay and original-save
+play. Negative funds in either mode trigger company dissolution and return
+to the title. Original presentation and full campaign parity remain incomplete. Casino gameplay and original-save
 import are deferred. See KNOWN_ISSUES.md for the remaining boundaries.
 
 This release includes the payroll-screen fix: visiting ordinary technology
@@ -55,3 +55,5 @@ rows as untested.
 Code and documentation use the MIT License. Community music has separate
 distribution terms. See LICENSE, notice.md and licenses/ for the code, engine,
 runtime and music notices.
+
+M84 adds the recovered financial-failure sequence. See [evidence and modern continuation rules](financial-failure-m84.md). These changes are not in the unchanged RC.4 ZIP; rebuild the final source before release.

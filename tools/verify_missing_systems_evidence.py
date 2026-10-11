@@ -26,6 +26,19 @@ def verify(data):
         raw = bytes.fromhex(expected)
         if pe.bytes_at(SPANS[name][0] + offset, len(raw)) != raw:
             raise ParseError("Changed " + name + " anchor")
+    # Failure dialogue calls use this procedure's pool, not the weekly pool.
+    for offset,cell in [(0xCEA1,0xEF),(0xCEF6,0xF0),(0xD372,0xFB),
+                        (0xCFA3,0xD6),(0xCFB6,0xD7),(0xCFC8,0xD9)]:
+        raw=pe.bytes_at(0xA0283C+offset,5)
+        if raw[0]!=0x3A or struct.unpack_from("<H",raw,3)[0]!=cell:
+            raise ParseError("Changed failure dialogue cell")
+    for i,offset in enumerate([0xCFD3,0xD04A,0xD0C1,0xD138,0xD1AF,0xD226,0xD29D,0xD314]):
+        raw=pe.bytes_at(0xA0283C+offset,5)
+        if raw[0]!=0x3A or struct.unpack_from("<H",raw,3)[0]!=0xF3+i:
+            raise ParseError("Changed failure reaction cell")
+    for index,address in [(0xF1,0xA11A7C),(0xF2,0xA11CA0),(0x78,0xA11AE0),(0xD8,0xA11C30)]:
+        if pe.u32(0x5F99AC+index*4)!=address:
+            raise ParseError("Changed failure source roster mapping")
     # The same funds variable is read by the failure predicate and lab effects.
     for pool, index, address in [(0x5F99AC,0x3A,0xA1103C),
                                  (0x5F5D08,0x12,0xA1103C),

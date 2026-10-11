@@ -2969,7 +2969,7 @@ msgid "EARLY_ACCESS_SCOPE"
 msgstr "アーリーアクセス：対応範囲"
 
 msgid "EARLY_ACCESS_BOUNDARY"
-msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。倒産と会社・事務所の拡張は未完成で、資金がマイナスでもゲームは終了しません。"
+msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。どちらのモードでも所持金がマイナスになると会社を解散します。原作の演出やキャンペーン全体の完全な再現は未完成です。"
 
 msgid "EARLY_ACCESS_FEATURES"
 msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、現代形式のセーブ。"
@@ -3094,3 +3094,50 @@ msgstr "開発量、各品質と必要な4つの技術を完了してくださ�
 msgid "OWN_HARDWARE_RESULT_InvalidName"
 msgstr "1〜128文字のハード名を入力してください。"
 
+
+# Authored fallback; Japanese native lines import locally from the owner archive.
+
+msgid "FINANCIAL_FAILURE"
+msgstr "会社の解散"
+
+msgid "FINANCIAL_FAILURE_INTRO_0"
+msgstr "所持金がマイナスになりました。営業を続けることができません。"
+
+msgid "FINANCIAL_FAILURE_INTRO_1"
+msgstr "会社を解散します。最後に社員と話しましょう。"
+
+msgid "FINANCIAL_FAILURE_CLOSING"
+msgstr "会社は閉鎖されました。プレイありがとうございました。新しい会社を始めるか、以前のセーブを読み込めます。"
+
+msgid "FINANCIAL_FAILURE_NAMED"
+msgstr "社員：{name}"
+
+msgid "FINANCIAL_FAILURE_EMPLOYEE"
+msgstr "社員"
+
+msgid "FINANCIAL_FAILURE_ROSTER_UNKNOWN"
+msgstr "この古いセーブには社員の元データが不足しているため、別れの会話を再現できません。以前のセーブを読み込むか、新しい会社を始めてください。"
+
+msgid "FINANCIAL_FAILURE_REACTION_0"
+msgstr "一緒にゲームを作り続けたかったです。"
+
+msgid "FINANCIAL_FAILURE_REACTION_1"
+msgstr "ここでの仕事が恋しくなります。"
+
+msgid "FINANCIAL_FAILURE_REACTION_2"
+msgstr "多くのことを学びました。ありがとうございました。"
+
+msgid "FINANCIAL_FAILURE_REACTION_3"
+msgstr "つらいお別れですね。"
+
+msgid "FINANCIAL_FAILURE_REACTION_4"
+msgstr "次のゲームをプレイヤーに届けたかったです。"
+
+msgid "FINANCIAL_FAILURE_REACTION_5"
+msgstr "できることはやりました。また会えるといいですね。"
+
+msgid "FINANCIAL_FAILURE_REACTION_6"
+msgstr "私たちが作ったゲームを忘れません。"
+
+msgid "FINANCIAL_FAILURE_REACTION_7"
+msgstr "次の挑戦がうまくいくことを願っています。"

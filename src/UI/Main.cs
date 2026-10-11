@@ -45,6 +45,7 @@ public partial class Main : Control
             _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
+            if (ShowPendingFinancialFailure(state)) return;
             if (ShowPendingMysteryLabResult(state)) return;
             if (ShowPendingOwnHardware(state)) return;
             if (ShowPendingCalendarEvent(state)) return;
@@ -287,12 +288,14 @@ public partial class Main : Control
 
     private void ShowOfficeReconstruction(GameState state)
     {
+        if (FinancialFailureService.IsComplete(state)) {ShowTitleScreen();return;}
         _music.SetMeetingPhase(-1);
         CloseConversationScene();
         _activeCatalog = _importer.LoadCatalog();
         _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
         PersistPendingRankings(state);
         EnsureDesktop(state);
+        if (ShowPendingFinancialFailure(state)) return;
         // M35 persisted these two stops before their form behavior was mapped.
         // Resume the existing cursor, without replaying a week boundary.
         if (state.Calendar?.Pending?.Block is CalendarBlock.Exhibition or CalendarBlock.BeginnerEnding)
