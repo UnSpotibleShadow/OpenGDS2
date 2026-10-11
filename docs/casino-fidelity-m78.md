@@ -2,13 +2,15 @@
 
 Reviewed 2026-10-11. This extends [M77](casino-investigation-m77.md) without changing game behavior or expanding the supported Early Access scope. The original executable is identified by SHA-256 `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`. Original files, full traces, dependencies and runtime binaries stay private. The LZH import remains required.
 
+Follow-up: [M79 remaining-runtime analysis](casino-runtime-boundaries-m79.md) resolves coordinate rounding, bounds ordinary odds midpoints, traces native keyboard preview and supplies exact drawing parameters. It also qualifies the timer guarantee below: KillTimer does not remove already-posted messages.
+
 ## Result and remaining boundary
 
 The remaining **source-level** race recurrence, RNG recurrence/seeding, serialized timer/control defaults and same-timer reentrancy questions now have evidence. M77's ordinary casino rules and known defects still apply. There is no new evidence for slots, dice, redemption, split, insurance or an ordinary horse-management workflow.
 
 This is not native Windows acceptance. A reference VB6 runtime's actual RNG instructions were executed in an x86 emulator, with only project-context lookup stubbed. The game was not executed in that emulator. Attempts to run isolated 32-bit runtime/type-library/numeric probes failed in this Linux workspace: legacy Wine required a 32-bit ELF loader the host could not execute; userspace emulation could not start its child Wine loader; official Wine 11 WoW64 reached initialization after optional Mono/HTML installers were disabled, but all three probes terminated with segmentation faults (exit 139). Earlier bounded setup attempts timed out and were not counted as passes. This is a concrete execution blocker, not evidence that a workflow is absent.
 
-The remaining acceptance work requires a working Windows/VB6 environment (or a compatibility runner that can execute these probes): mouse/focus/keyboard event delivery, modal interaction between different timers, actual wall-clock timing, `Format("###.0", value)` midpoint/locale output and numeric-string multiplication, coordinate conversion at half-integers, and screenshots of race camera/sprites. The available original archive does not pin a VB6 runtime DLL version. Do not claim that this separately obtained reference DLL is the user's exact 2001 installed runtime.
+The remaining acceptance work requires a working Windows/VB6 environment (or a compatibility runner that can execute these probes): mouse/focus/keyboard event delivery, modal interaction between different timers, actual wall-clock timing, `Format("###.0", value)` midpoint/locale output and numeric-string multiplication, screenshots of race camera/sprites. The available original archive does not pin a VB6 runtime DLL version. Do not claim that this separately obtained reference DLL is the user's exact 2001 installed runtime.
 
 ## Native runtime identity and reproducibility
 
@@ -86,7 +88,7 @@ Label Visible is indexed property 10 in `Label_rgbpprop`, not CommandButton's En
 
 `TimerCtlProc` (`66030622`) handles WM_TIMER (`0x113`). It checks the handler-busy bit, kills the current Win32 timer before dispatch, marks the handler busy, and fires its event. If the object survives, it clears that bit and rearms using the stored interval **after the handler returns**. If the form/control unloads, it skips rearming. `HrCtlTimerSet` (`660305CD`) also checks Enabled, positive interval, valid window and busy/armed flags before SetTimer.
 
-Thus the same timer cannot recursively enter its event through a modal message loop. A long callback does not produce a backlog of accumulated tick callbacks; the next period starts after return. Other independently enabled timers can still have messages processed by that modal loop. Do not simulate all timers with one blanket pause, nor create catch-up bursts from elapsed time. This constrains M77's payout dialog and close/reload findings; it does not change their cash/state assignments.
+Thus the same busy timer cannot recursively enter its event through a modal message loop. The runtime rearms after return and has no elapsed-time catch-up loop. However, KillTimer does not remove already-posted WM_TIMER messages; a late message can still dispatch on a surviving disabled timer. M79 checks that branch. Rearming is not a guarantee about the next message delivery time. Other independently enabled timers can still have messages processed by that modal loop. Do not simulate all timers with one blanket pause, nor create catch-up bursts from elapsed time. This constrains M77's payout dialog and close/reload findings; it does not change their cash/state assignments.
 
 ## Horse recurrence and finish order
 
@@ -128,3 +130,5 @@ The exact formatting midpoint policy, locale-dependent separators/string coercio
 ## Implementation handoff
 
 M77 plus this report supplies the ordinary source-backed rules and known defects for a casino implementation proposal. First decide which original defects to preserve and label any corrections. A proposal must preserve the shared RNG order, source-indexed dispatch, tick windows including 290, ascending-index finish ties, requested timer intervals and callback rearm semantics. It must explicitly retain the unverified Windows input/coercion/rendering acceptance boundary. Casino is still outside supported EA; this research adds no game implementation, assets, packaging or Actions dispatch.
+
+M79 supersedes the coordinate and locale-test portions of the acceptance note above: native coordinate conversion is verified as nearest, ties to even; all 64 ordinary odds combinations avoid decimal midpoints; VarFormat uses the Windows user-default locale, so changing only the thread locale would not establish that behavior. See the linked M79 report for the remaining external-runtime acceptance cases.
