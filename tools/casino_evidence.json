@@ -1,0 +1,759 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "spans": {
+    "fKeibaMain-009D46D0": {
+      "address": 10307280,
+      "size": 6404,
+      "sha256": "62d060b288955f43a355ee5a3dd2cfaa5e124ff47ab80d4e5b9f9e9d240fa290"
+    },
+    "fKeibaMain-0099061C": {
+      "address": 10028572,
+      "size": 580,
+      "sha256": "30a0f7f29494a471a13bb9d37d2eda2785c7a637d2aae61ac1ab01bf41c97fad"
+    },
+    "fKeibaMain-0097AA30": {
+      "address": 9939504,
+      "size": 24,
+      "sha256": "8d85a06e29bc7a83bb3cd120de2d2541f2ac7f22b35d1b685f31138bae0d4456"
+    },
+    "fKeibaMain-00983268": {
+      "address": 9974376,
+      "size": 184,
+      "sha256": "c0b428aab88e470e483516d26eb5517dd26f18f901b5e3843d8ff39f4258847a"
+    },
+    "fKeibaMain-00983480": {
+      "address": 9974912,
+      "size": 188,
+      "sha256": "384b6371651387c83af50173ab96c57c70c5b5fb4aed78498a4c9f103e91c792"
+    },
+    "fKeibaMain-009896AC": {
+      "address": 10000044,
+      "size": 412,
+      "sha256": "6a147452cfa4a66c4cde7443f1622174963d391c098f5a41e0438caf744661bd"
+    },
+    "fKeibaMain-009782B0": {
+      "address": 9929392,
+      "size": 12,
+      "sha256": "3bf89e3c78ede7611808f7bc40537222be988c06bd867936cc2c8de12990a657"
+    },
+    "fKeibaMain-0097FB54": {
+      "address": 9960276,
+      "size": 92,
+      "sha256": "86baa45293e7662131145d26f653f63316d29a6385432f9ae891a52706c0005f"
+    },
+    "fKeibaMain-0097E9F4": {
+      "address": 9955828,
+      "size": 80,
+      "sha256": "7ac8e3dafdd58cb5f579ec754b47227d4e87c167cff63c5a5b378a85f5fd34ca"
+    },
+    "fKeibaMain-0097FC94": {
+      "address": 9960596,
+      "size": 92,
+      "sha256": "40bee0ae5cda3718bca1f6e98b437f4ae1986468c418c31ea9226bf4e96e6605"
+    },
+    "fKeibaMain-0097EA88": {
+      "address": 9955976,
+      "size": 80,
+      "sha256": "31523068766b56633b940b01b265fa4b8927ee899f5076d831c6fdbea39bf051"
+    },
+    "fKeibaMain-009CC3E0": {
+      "address": 10273760,
+      "size": 5240,
+      "sha256": "343f46e1d98b65e134cc31a8d666b327e455111f36cd188565b5da2f1ff16a98"
+    },
+    "fKeibaMain-00978418": {
+      "address": 9929752,
+      "size": 12,
+      "sha256": "7e877c3a48d7ac3c1c12b5db29ad75f1e7a155e1b1dcce68b8c3623ac90e91d5"
+    },
+    "fKeibaMain-009E6148": {
+      "address": 10379592,
+      "size": 10556,
+      "sha256": "a1bbfb46aeeac9bb119314aa636fa2e8a4a7d81793c2661a73cd375d72481194"
+    },
+    "fKeibaMain-009EB860": {
+      "address": 10401888,
+      "size": 16572,
+      "sha256": "cfadf23be00762d760ee418e1b229169fe030c81137cd5f1b2139908bdf82035"
+    },
+    "fKeibaMain-009A12F8": {
+      "address": 10097400,
+      "size": 1572,
+      "sha256": "8f4ea5febdf4e55c470ada5635bcf91e1d27d8146a7d79ce1943e4a00dbe3f0c"
+    },
+    "fKeibaModosi-009850B4": {
+      "address": 9982132,
+      "size": 260,
+      "sha256": "0e399f5008882760e9b14fa3a50e65dc095283ce0bf65544672ec139faafd2f4"
+    },
+    "fKeibaModosi-0099E754": {
+      "address": 10086228,
+      "size": 1468,
+      "sha256": "df88e084947aea42cc4851df8ae97492649a879962ba66353c7b6ec7790b1ddb"
+    },
+    "fGMTenantCasinoSn-00994780": {
+      "address": 10045312,
+      "size": 804,
+      "sha256": "c0eae9a4f0e00e06539283b40f87e88de175fe8227fa11f3cd480c9823d9843c"
+    },
+    "fGMTenantCasinoSn-00985B10": {
+      "address": 9984784,
+      "size": 296,
+      "sha256": "8d2f9069d7f3f50625e3ac16686058202c99c5dd6851e8e2a342d18f890b2281"
+    },
+    "fCasinoPoker-009C3564": {
+      "address": 10237284,
+      "size": 3816,
+      "sha256": "6450d1207bde0a652a11fcb0add4353139a3854c7aae9b96770be6691d50eb14"
+    },
+    "fCasinoPoker-0097A8B4": {
+      "address": 9939124,
+      "size": 24,
+      "sha256": "6bdcbe35f346835b4fc4edd80952afdfbfaeab9b73f140ea7a413e6d167f240d"
+    },
+    "fCasinoPoker-009B9DE4": {
+      "address": 10198500,
+      "size": 3412,
+      "sha256": "cc0d43d39ce02af858a4ce1fb69bf274c1b27bcf8e9b052b9314b36b496740f8"
+    },
+    "fCasinoPoker-009960C4": {
+      "address": 10051780,
+      "size": 900,
+      "sha256": "27d54a9f312cf607dfdf81538cae81c92dd0fbdcbb39e5e96e191094bbc49533"
+    },
+    "fCasinoPoker-009783DC": {
+      "address": 9929692,
+      "size": 12,
+      "sha256": "3fff52c883ddd215aef5f3abb2d70b4a0cda3ef19f15f24297b315e14f5777ce"
+    },
+    "fCasinoPoker-00989E44": {
+      "address": 10001988,
+      "size": 400,
+      "sha256": "5cd94301b00b83bb6284f5fca2deef3dcd51a1d05d6ee1ad3ed9bda70e169e64"
+    },
+    "fCasinoPoker-00982C34": {
+      "address": 9972788,
+      "size": 172,
+      "sha256": "7e49738d751c1cc7407e007cd286af497c655f8d6c0a3dcf584ebed8471d268d"
+    },
+    "fCasinoPoker-00982F4C": {
+      "address": 9973580,
+      "size": 172,
+      "sha256": "7e49738d751c1cc7407e007cd286af497c655f8d6c0a3dcf584ebed8471d268d"
+    },
+    "fCasinoPoker-009D0374": {
+      "address": 10290036,
+      "size": 5396,
+      "sha256": "1a1effe9d861ec7ab4ab7ab6aedad7b9c2f7853bf8b0199800ca92d70dbbb17b"
+    },
+    "fCasinoBJ-009A7644": {
+      "address": 10122820,
+      "size": 2008,
+      "sha256": "febdc50a467444502d9bfd5b30a15befc92c9b8f97e57094791f2f04fa365ac7"
+    },
+    "fCasinoBJ-009D1968": {
+      "address": 10295656,
+      "size": 5388,
+      "sha256": "0420bc640b527b2f0aedee3e935e48fbf0d9a6c3764dc1ec841deb47599a777c"
+    },
+    "fCasinoBJ-009951FC": {
+      "address": 10047996,
+      "size": 800,
+      "sha256": "4dfd50ee3c6398e5ec8a7d185d0e8a1cd6ff2e2c3edc2e71d8755f4923a81e99"
+    },
+    "fCasinoBJ-00978274": {
+      "address": 9929332,
+      "size": 12,
+      "sha256": "d1a5541fbcefe0848aa7e4fca0f6d71a38cda2f7ee17e4912c9da3164189fa68"
+    },
+    "fCasinoBJ-00988514": {
+      "address": 9995540,
+      "size": 356,
+      "sha256": "fdcc65eb8cb880bdb0cea321775c34fdc8f95a8980e33538015b4f5d2b9e43d2"
+    },
+    "fCasinoBJ-0097EFDC": {
+      "address": 9957340,
+      "size": 84,
+      "sha256": "49a59ebdb286c498c8b1d1381d6f09ff2996ef6263c1d5b1539b5cbca355b4f9"
+    },
+    "fCasinoBJ-0097EE14": {
+      "address": 9956884,
+      "size": 84,
+      "sha256": "95d04b8eff1865d451dad977437bad6c83cdabae31bec0c86428a6ac7f12650a"
+    },
+    "fCasinoBJ-009D7BB8": {
+      "address": 10320824,
+      "size": 7108,
+      "sha256": "b05068e1f1c58cf97ffc07bf9debe1b24f88874816dd58281bf63d757d782959"
+    },
+    "fCasinoCC-009A7EB8": {
+      "address": 10124984,
+      "size": 1968,
+      "sha256": "1ec720e8b0e875d6a2c2939ef29379ce6d61f11bd803871534b75700de1fb7da"
+    },
+    "fCasinoCC-009921A8": {
+      "address": 10035624,
+      "size": 672,
+      "sha256": "2fa7bf549e9a109dde036dcb2968b756860851adc34c041d007094be93bb41d5"
+    },
+    "fCasinoCC-0097AB60": {
+      "address": 9939808,
+      "size": 24,
+      "sha256": "7784cbf8f13775bbcaa4a2819709fd3ac29942bc3c33d728d2cb470f124395ed"
+    },
+    "fCasinoCC-0097FF18": {
+      "address": 9961240,
+      "size": 80,
+      "sha256": "c403623259cb750175959e3c40e63fb1692218e50cdb3faaa1db85c36785532e"
+    },
+    "fCasinoCC-009C8A8C": {
+      "address": 10259084,
+      "size": 4432,
+      "sha256": "1ae47c1b3c7c2bf9c18b06be8278b975259d2b1cd8a0259b63e924875a213b07"
+    },
+    "fCasinoCC-009846DC": {
+      "address": 9979612,
+      "size": 256,
+      "sha256": "90cbe618a3b9d87cfcdecf83f91f142eda92c91433613314348702562f96a570"
+    },
+    "fCasinoCC-0099B03C": {
+      "address": 10072124,
+      "size": 1188,
+      "sha256": "c89afc7f51a4e8cbc90f6ad1f34353021f0a03f48f6e9db2781af2852b9e9e4a"
+    },
+    "fCasinoCC-009784CC": {
+      "address": 9929932,
+      "size": 12,
+      "sha256": "4949db6f40e7c9dee826557393ce18038d9f5184a4676c49b117312a119a73b0"
+    },
+    "fCasinoCC-0097A44C": {
+      "address": 9937996,
+      "size": 24,
+      "sha256": "02e18d62d774797b956a7cc24f42c55250b372155192d512846deb35fec24b54"
+    },
+    "fCasinoCC-0097A134": {
+      "address": 9937204,
+      "size": 24,
+      "sha256": "fd9b5d23572f391da0a6172cf4eae9ff9d1cc5cc6deb02d69dde9783e3f074a6"
+    },
+    "fCasinoCC-0097A0EC": {
+      "address": 9937132,
+      "size": 24,
+      "sha256": "66811cf236015222f3545b617139db33f2713afa7473027d16d6662f93d94e9d"
+    },
+    "fCasinoCC-0098EEF4": {
+      "address": 10022644,
+      "size": 540,
+      "sha256": "36f63d8878c9d04e33417bf90978cc803922908ecdb8737285a7e33ea1e470de"
+    },
+    "fCasinoCC-00982E44": {
+      "address": 9973316,
+      "size": 172,
+      "sha256": "517d1ad501c218b92f77801c5b7323a3d10cd67cbcd20a0726fd11f7eec87be4"
+    },
+    "fCasinoCC-00982D3C": {
+      "address": 9973052,
+      "size": 172,
+      "sha256": "517d1ad501c218b92f77801c5b7323a3d10cd67cbcd20a0726fd11f7eec87be4"
+    },
+    "fCasinoCC-009E13B8": {
+      "address": 10359736,
+      "size": 9116,
+      "sha256": "855df973548084817ba62fb50e12e71054b28e83cd3a12aa94f489d6558a12bb"
+    }
+  },
+  "dispatch": [
+    {
+      "form": "fKeibaMain",
+      "slot": 1784,
+      "link_address": 6359232,
+      "target": 10307280
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1788,
+      "link_address": 6359236,
+      "target": 9974376
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1792,
+      "link_address": 6359240,
+      "target": 10273760
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1796,
+      "link_address": 6359244,
+      "target": 9929752
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1800,
+      "link_address": 6359248,
+      "target": 10028572
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1804,
+      "link_address": 6359252,
+      "target": 9939504
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1808,
+      "link_address": 6359256,
+      "target": 9974912
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1812,
+      "link_address": 6359260,
+      "target": 10000044
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1816,
+      "link_address": 6359264,
+      "target": 9929392
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1820,
+      "link_address": 6359268,
+      "target": 9960276
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1824,
+      "link_address": 6359272,
+      "target": 9955828
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1828,
+      "link_address": 6359276,
+      "target": 9960596
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1832,
+      "link_address": 6359280,
+      "target": 9955976
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1836,
+      "link_address": 6359284,
+      "target": 10379592
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1840,
+      "link_address": 6359288,
+      "target": 10401888
+    },
+    {
+      "form": "fKeibaMain",
+      "slot": 1844,
+      "link_address": 6359292,
+      "target": 10097400
+    },
+    {
+      "form": "fKeibaModosi",
+      "slot": 1784,
+      "link_address": 6207744,
+      "target": 9982132
+    },
+    {
+      "form": "fKeibaModosi",
+      "slot": 1788,
+      "link_address": 6207748,
+      "target": 10086228
+    },
+    {
+      "form": "fGMTenantCasinoSn",
+      "slot": 1784,
+      "link_address": 6201928,
+      "target": 10045312
+    },
+    {
+      "form": "fGMTenantCasinoSn",
+      "slot": 1788,
+      "link_address": 6201932,
+      "target": 9984784
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1784,
+      "link_address": 6331512,
+      "target": 10237284
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1788,
+      "link_address": 6331516,
+      "target": 10198500
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1792,
+      "link_address": 6331520,
+      "target": 9939124
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1796,
+      "link_address": 6331524,
+      "target": 10051780
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1800,
+      "link_address": 6331528,
+      "target": 9929692
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1804,
+      "link_address": 6331532,
+      "target": 10001988
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1808,
+      "link_address": 6331536,
+      "target": 9972788
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1812,
+      "link_address": 6331540,
+      "target": 9973580
+    },
+    {
+      "form": "fCasinoPoker",
+      "slot": 1816,
+      "link_address": 6331544,
+      "target": 10290036
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1784,
+      "link_address": 6335124,
+      "target": 10122820
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1788,
+      "link_address": 6335128,
+      "target": 10295656
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1792,
+      "link_address": 6335132,
+      "target": 10047996
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1796,
+      "link_address": 6335136,
+      "target": 9929332
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1800,
+      "link_address": 6335140,
+      "target": 9995540
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1804,
+      "link_address": 6335144,
+      "target": 9957340
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1808,
+      "link_address": 6335148,
+      "target": 9956884
+    },
+    {
+      "form": "fCasinoBJ",
+      "slot": 1812,
+      "link_address": 6335152,
+      "target": 10320824
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1784,
+      "link_address": 6354224,
+      "target": 10124984
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1788,
+      "link_address": 6354228,
+      "target": 10035624
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1792,
+      "link_address": 6354232,
+      "target": 10259084
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1796,
+      "link_address": 6354236,
+      "target": 9939808
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1800,
+      "link_address": 6354240,
+      "target": 9961240
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1804,
+      "link_address": 6354244,
+      "target": 9979612
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1808,
+      "link_address": 6354248,
+      "target": 10072124
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1812,
+      "link_address": 6354252,
+      "target": 9929932
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1816,
+      "link_address": 6354256,
+      "target": 9937996
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1820,
+      "link_address": 6354260,
+      "target": 9937204
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1824,
+      "link_address": 6354264,
+      "target": 9937132
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1828,
+      "link_address": 6354268,
+      "target": 10022644
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1832,
+      "link_address": 6354272,
+      "target": 9973316
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1836,
+      "link_address": 6354276,
+      "target": 9973052
+    },
+    {
+      "form": "fCasinoCC",
+      "slot": 1840,
+      "link_address": 6354280,
+      "target": 10359736
+    }
+  ],
+  "anchors": [
+    {
+      "kind": "var_i2",
+      "address": 10237284,
+      "value": 0,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10237999,
+      "value": 1,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10238312,
+      "value": 2,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10238586,
+      "value": 3,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10238969,
+      "value": 4,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10239109,
+      "value": 5,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10239669,
+      "value": 6,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10239943,
+      "value": 7,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10240483,
+      "value": 8,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10240847,
+      "value": 9,
+      "label": "poker outcome"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10124984,
+      "value": 0,
+      "label": "chain bonus category"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10125305,
+      "value": 5,
+      "label": "chain bonus category"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10125865,
+      "value": 6,
+      "label": "chain bonus category"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10126139,
+      "value": 7,
+      "label": "chain bonus category"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10126679,
+      "value": 8,
+      "label": "chain bonus category"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300075,
+      "value": 2,
+      "label": "blackjack award table index"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300201,
+      "value": 3,
+      "label": "blackjack award table index"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300327,
+      "value": 4,
+      "label": "blackjack award table index"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300556,
+      "value": 5,
+      "label": "blackjack award table index"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300682,
+      "value": 6,
+      "label": "blackjack award table index"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300001,
+      "value": 5,
+      "label": "MORE five-card count"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300127,
+      "value": 6,
+      "label": "MORE six-card count"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300253,
+      "value": 7,
+      "label": "MORE seven-card count"
+    },
+    {
+      "kind": "operand_u16",
+      "address": 10361163,
+      "opcode": 30,
+      "value": 603,
+      "label": "exhausted chain retry"
+    },
+    {
+      "kind": "operand_u16",
+      "address": 10360416,
+      "opcode": 28,
+      "value": 1427,
+      "label": "used-card retry branch"
+    },
+    {
+      "kind": "operand_u16",
+      "address": 10098420,
+      "opcode": 16,
+      "value": 1784,
+      "label": "post-payout next-card call"
+    },
+    {
+      "kind": "operand_u16",
+      "address": 10307954,
+      "opcode": 16,
+      "value": 1792,
+      "label": "setup pair-selection call"
+    },
+    {
+      "kind": "copy_global",
+      "address": 10307962,
+      "index": 13,
+      "label": "next-card overwrites temporary cash"
+    },
+    {
+      "kind": "copy_global",
+      "address": 10028589,
+      "index": 38,
+      "label": "start commits temporary cash"
+    }
+  ]
+}
