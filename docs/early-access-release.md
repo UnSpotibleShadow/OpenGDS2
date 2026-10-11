@@ -23,7 +23,8 @@ The supported facilities include school, hot springs, recycling, technology capa
 - [ ] Review community-recording distribution permission, code/runtime notices and original-content exclusions for the actual public package.
 - [x] Merge the validated M56–M62 branch stack in order (#50 → #51 → #52 → #53 → #54 → #57 → #58); owner confirmed the complete branch/PR/merge workflow on 2026-10-07.
 - [ ] Finalize the exact source SHA, final Windows ZIP/hash, known-issue list and distribution destination for owner publication approval.
-- [ ] Provide a community-accessible bug-report destination; a private repository issue link is insufficient for public testers.
+- [x] Reporting destination chosen: the owner plans to make OpenGDS2 public before release; use https://github.com/UnSpotibleShadow/OpenGDS2/issues.
+- [ ] Verify the repository and issue form are accessible without owner access after the owner changes visibility. Choosing the route does not close public-access verification.
 
 Keep Actions paused. Never change repository visibility, publish a GitHub release or distribute to the community as part of candidate preparation. After approval, publish the reviewed artifact with notes/checksums and link the backlog/bug-report route. Keep source/asset licensing boundaries and required LZH import explicit.
 
@@ -54,3 +55,36 @@ Native Windows test results remain separate from exported-host checks.
 
 See [M73 validation](windows-source-export-m73.md) for this source export's
 provenance, checks and remaining acceptance gates. Actions remain paused.
+
+## Public Early Access packaging — M81
+
+The packager now has a separate `--early-access` mode; ordinary development and
+private `--candidate` modes remain available. It requires a Windows release
+export, a final `x.y.z-ea.n` project version (RC labels are rejected), exact source
+commit, HTTPS reporting URL and explicit custom data directory. It does not
+publish a release or verify that the reporting URL is publicly accessible.
+
+Before the final export, select the final source/version and update the in-game
+private-candidate wording. The current source still identifies RC.4; this command
+intentionally refuses it. Build and export that final source normally, then:
+
+```sh
+python3 tools/package_desktop.py --source . --export /path/to/windows-export \
+  --platform windows --configuration release --notices /path/to/notices \
+  --early-access --source-commit <exact-source-sha> \
+  --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues \
+  --output /path/to/OpenGDS2-windows-0.1.0-ea.1.zip
+```
+
+Public packages include generated getting-started instructions, the public
+release-note template, limitations/community checklist/decision notes, runtime
+licenses, source/assembly provenance and checksums. They record native Windows
+acceptance as incomplete; no owner-test completion or public URL availability
+is inferred. The data directory is read from the source project settings.
+Reusing an export directory replaces private candidate handoff files with the
+public ones, but a fresh final export is still required for updated gameplay.
+
+Ten authored-fixture package tests pass, including full archive checksum
+verification, version/source/mode guards, reporting/data requirements, original
+content exclusions and replacement of a private-candidate handoff. These tests
+create no distributable game build and do not establish native acceptance.
