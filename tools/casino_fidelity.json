@@ -1,0 +1,1135 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "race_span": {
+    "address": 10401888,
+    "size": 16572,
+    "sha256": "cfadf23be00762d760ee418e1b229169fe030c81137cd5f1b2139908bdf82035"
+  },
+  "controls": [
+    {
+      "form": "fKeibaMain",
+      "control": "Command1",
+      "index": null,
+      "offset": 3861030,
+      "length": 70,
+      "sha256": "aa604e40e5592deb3727e4aedd52910951255854dc81cb3036631d85b15ff849"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Timer3",
+      "index": null,
+      "offset": 3780397,
+      "length": 33,
+      "sha256": "a52617f61483bce229c87b77c8e21afd3933a13659a3b8fbeb826385c37a9bae"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Command3",
+      "index": null,
+      "offset": 3715842,
+      "length": 64,
+      "sha256": "9a47567d8bb7282d14ded7e1f6b7d2a79c93f7a34482782eca75f81717628d8d"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Command2",
+      "index": null,
+      "offset": 3860967,
+      "length": 62,
+      "sha256": "aac8a8f77be345aa37954ff4349614931ed8dfe218bebee17076d82529c816fb"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Command4",
+      "index": null,
+      "offset": 3715777,
+      "length": 64,
+      "sha256": "dbc0d5b557985e071bac7e4172b4fc1963b984d97c7b3a6b19e5b8cdea141998"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Timer1",
+      "index": null,
+      "offset": 3860640,
+      "length": 31,
+      "sha256": "3b84e327172acab0483e2835fd634b354b2027560166a6fa617d5e30091d8b79"
+    },
+    {
+      "form": "fKeibaMain",
+      "control": "Timer2",
+      "index": null,
+      "offset": 3780431,
+      "length": 33,
+      "sha256": "ba96b96e3c2be367907c83d9724de3ab5f0d08b6fddc0d68c7a2f6f54d498063"
+    },
+    {
+      "form": "fCasinoPoker",
+      "control": "Command1",
+      "index": null,
+      "offset": 2856774,
+      "length": 64,
+      "sha256": "a227733e9d5190a921fc35c77cd1a6e04c0e8073a0db4ad58b2df1694db25e65"
+    },
+    {
+      "form": "fCasinoPoker",
+      "control": "Command3",
+      "index": 1,
+      "offset": 2854601,
+      "length": 69,
+      "sha256": "7186603a5632217a2195987fe2da3ba494c65d71b165a6c14dd7a9061c5c5f48"
+    },
+    {
+      "form": "fCasinoPoker",
+      "control": "Command3",
+      "index": 0,
+      "offset": 2854671,
+      "length": 66,
+      "sha256": "f982f4b8fca30c041c52397e83f766ce84ad9acf17e77966158f08fa129da210"
+    },
+    {
+      "form": "fCasinoPoker",
+      "control": "Timer1",
+      "index": null,
+      "offset": 2854569,
+      "length": 31,
+      "sha256": "e511c7d6f76fe84c350457172882ec2e97c02c0e6a538e0b9add988c921e867d"
+    },
+    {
+      "form": "fCasinoBJ",
+      "control": "Command1",
+      "index": 2,
+      "offset": 2931535,
+      "length": 66,
+      "sha256": "7eee8d8e64146652e78c28de1b7c55664ad31dc5672e1e6f76ac998df93a872d"
+    },
+    {
+      "form": "fCasinoBJ",
+      "control": "Command1",
+      "index": 1,
+      "offset": 2931602,
+      "length": 69,
+      "sha256": "ab8366fa218a37910fc90023217871bf7d6a905381d2817e9889c21d7b95c232"
+    },
+    {
+      "form": "fCasinoBJ",
+      "control": "Command1",
+      "index": 0,
+      "offset": 2931672,
+      "length": 69,
+      "sha256": "3571666ef49138e6da7e368f02bdd158c6201451ce567ba54c3c66baaed29171"
+    },
+    {
+      "form": "fCasinoBJ",
+      "control": "Timer1",
+      "index": null,
+      "offset": 2928390,
+      "length": 31,
+      "sha256": "b78ac007800d2df91042e165f4c23f1f605857fbc33a6f6ebc8784931bec4659"
+    },
+    {
+      "form": "fCasinoCC",
+      "control": "Timer1",
+      "index": null,
+      "offset": 3010579,
+      "length": 31,
+      "sha256": "03aa2957d4750cdfa82289172ee2e2365f7fab66476df15bdfa2fb7354d1afab"
+    },
+    {
+      "form": "fCasinoCC",
+      "control": "Command3",
+      "index": 0,
+      "offset": 3010442,
+      "length": 66,
+      "sha256": "551981c0a224d3e47943f4df2ffaef2b172ee78a11715dff19da9cac433f40d5"
+    },
+    {
+      "form": "fCasinoCC",
+      "control": "Command3",
+      "index": 1,
+      "offset": 3010509,
+      "length": 69,
+      "sha256": "824b61cd6b9c044168ba46fd2c01f6353c09b75dbdc679a73b76d9114676612e"
+    },
+    {
+      "form": "fCasinoCC",
+      "control": "Command1",
+      "index": null,
+      "offset": 3009002,
+      "length": 64,
+      "sha256": "5b877a9a2f012b8ac4a37d8000c04d9f1ef7ab8371dab0e54eba01bb894f1e18"
+    },
+    {
+      "form": "fCasinoCC",
+      "control": "Command2",
+      "index": null,
+      "offset": 3005314,
+      "length": 64,
+      "sha256": "33778c6d9799f19cb837d43323341b368e522c4f61416bd68d58cac040b544dd"
+    }
+  ],
+  "movement": [
+    {
+      "store_offset": 225,
+      "sign": "+",
+      "denominator": 3.0,
+      "literal_address": 10402088,
+      "literal_kind": "i2",
+      "arithmetic_address": 10402101,
+      "divide_address": 10402093
+    },
+    {
+      "store_offset": 3178,
+      "sign": "-",
+      "denominator": 5.0,
+      "literal_address": 10405045,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405054,
+      "divide_address": 10405050
+    },
+    {
+      "store_offset": 3234,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10405101,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405110,
+      "divide_address": 10405106
+    },
+    {
+      "store_offset": 3290,
+      "sign": "+",
+      "denominator": 5.0,
+      "literal_address": 10405157,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405166,
+      "divide_address": 10405162
+    },
+    {
+      "store_offset": 3366,
+      "sign": "+",
+      "denominator": 5.0,
+      "literal_address": 10405233,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405242,
+      "divide_address": 10405238
+    },
+    {
+      "store_offset": 3425,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10405292,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405301,
+      "divide_address": 10405297
+    },
+    {
+      "store_offset": 3481,
+      "sign": "+",
+      "denominator": 5.0,
+      "literal_address": 10405348,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405357,
+      "divide_address": 10405353
+    },
+    {
+      "store_offset": 3540,
+      "sign": "-",
+      "denominator": 3.0,
+      "literal_address": 10405407,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405416,
+      "divide_address": 10405412
+    },
+    {
+      "store_offset": 3652,
+      "sign": "+",
+      "denominator": 4.0,
+      "literal_address": 10405519,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405528,
+      "divide_address": 10405524
+    },
+    {
+      "store_offset": 3711,
+      "sign": "+",
+      "denominator": 3.0,
+      "literal_address": 10405578,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405587,
+      "divide_address": 10405583
+    },
+    {
+      "store_offset": 3770,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10405637,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405646,
+      "divide_address": 10405642
+    },
+    {
+      "store_offset": 3843,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10405710,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405719,
+      "divide_address": 10405715
+    },
+    {
+      "store_offset": 3899,
+      "sign": "-",
+      "denominator": 3.0,
+      "literal_address": 10405766,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405775,
+      "divide_address": 10405771
+    },
+    {
+      "store_offset": 3962,
+      "sign": "+",
+      "denominator": 2.5,
+      "literal_address": 10405822,
+      "literal_kind": "r8",
+      "arithmetic_address": 10405838,
+      "divide_address": 10405834
+    },
+    {
+      "store_offset": 4077,
+      "sign": "+",
+      "denominator": 5.0,
+      "literal_address": 10405944,
+      "literal_kind": "i2",
+      "arithmetic_address": 10405953,
+      "divide_address": 10405949
+    },
+    {
+      "store_offset": 4136,
+      "sign": "+",
+      "denominator": 5.0,
+      "literal_address": 10406003,
+      "literal_kind": "i2",
+      "arithmetic_address": 10406012,
+      "divide_address": 10406008
+    },
+    {
+      "store_offset": 4195,
+      "sign": "-",
+      "denominator": 5.0,
+      "literal_address": 10406062,
+      "literal_kind": "i2",
+      "arithmetic_address": 10406071,
+      "divide_address": 10406067
+    },
+    {
+      "store_offset": 4268,
+      "sign": "-",
+      "denominator": 7.0,
+      "literal_address": 10406135,
+      "literal_kind": "i2",
+      "arithmetic_address": 10406144,
+      "divide_address": 10406140
+    },
+    {
+      "store_offset": 4324,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10406191,
+      "literal_kind": "i2",
+      "arithmetic_address": 10406200,
+      "divide_address": 10406196
+    },
+    {
+      "store_offset": 4383,
+      "sign": "-",
+      "denominator": 7.0,
+      "literal_address": 10406250,
+      "literal_kind": "i2",
+      "arithmetic_address": 10406259,
+      "divide_address": 10406255
+    },
+    {
+      "store_offset": 5161,
+      "sign": "-",
+      "denominator": 5.0,
+      "literal_address": 10407028,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407037,
+      "divide_address": 10407033
+    },
+    {
+      "store_offset": 5338,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10407205,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407214,
+      "divide_address": 10407210
+    },
+    {
+      "store_offset": 5470,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10407337,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407346,
+      "divide_address": 10407342
+    },
+    {
+      "store_offset": 5594,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10407461,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407470,
+      "divide_address": 10407466
+    },
+    {
+      "store_offset": 5718,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10407585,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407594,
+      "divide_address": 10407590
+    },
+    {
+      "store_offset": 5850,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10407717,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407726,
+      "divide_address": 10407722
+    },
+    {
+      "store_offset": 5974,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10407841,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407850,
+      "divide_address": 10407846
+    },
+    {
+      "store_offset": 6098,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10407965,
+      "literal_kind": "i2",
+      "arithmetic_address": 10407974,
+      "divide_address": 10407970
+    },
+    {
+      "store_offset": 6230,
+      "sign": "+",
+      "denominator": 10.0,
+      "literal_address": 10408097,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408106,
+      "divide_address": 10408102
+    },
+    {
+      "store_offset": 6379,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10408246,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408255,
+      "divide_address": 10408251
+    },
+    {
+      "store_offset": 6503,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10408370,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408379,
+      "divide_address": 10408375
+    },
+    {
+      "store_offset": 6635,
+      "sign": "-",
+      "denominator": 6.0,
+      "literal_address": 10408502,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408511,
+      "divide_address": 10408507
+    },
+    {
+      "store_offset": 6759,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10408626,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408635,
+      "divide_address": 10408631
+    },
+    {
+      "store_offset": 6883,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10408750,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408759,
+      "divide_address": 10408755
+    },
+    {
+      "store_offset": 7015,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10408882,
+      "literal_kind": "i2",
+      "arithmetic_address": 10408891,
+      "divide_address": 10408887
+    },
+    {
+      "store_offset": 7147,
+      "sign": "-",
+      "denominator": 12.0,
+      "literal_address": 10409014,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409023,
+      "divide_address": 10409019
+    },
+    {
+      "store_offset": 7271,
+      "sign": "+",
+      "denominator": 11.0,
+      "literal_address": 10409138,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409147,
+      "divide_address": 10409143
+    },
+    {
+      "store_offset": 7459,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10409326,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409335,
+      "divide_address": 10409331
+    },
+    {
+      "store_offset": 7583,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10409450,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409459,
+      "divide_address": 10409455
+    },
+    {
+      "store_offset": 7715,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10409582,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409591,
+      "divide_address": 10409587
+    },
+    {
+      "store_offset": 7847,
+      "sign": "+",
+      "denominator": 6.0,
+      "literal_address": 10409714,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409723,
+      "divide_address": 10409719
+    },
+    {
+      "store_offset": 7979,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10409846,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409855,
+      "divide_address": 10409851
+    },
+    {
+      "store_offset": 8103,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10409970,
+      "literal_kind": "i2",
+      "arithmetic_address": 10409979,
+      "divide_address": 10409975
+    },
+    {
+      "store_offset": 8235,
+      "sign": "-",
+      "denominator": 10.0,
+      "literal_address": 10410102,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410111,
+      "divide_address": 10410107
+    },
+    {
+      "store_offset": 8359,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10410226,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410235,
+      "divide_address": 10410231
+    },
+    {
+      "store_offset": 8500,
+      "sign": "+",
+      "denominator": 10.0,
+      "literal_address": 10410367,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410376,
+      "divide_address": 10410372
+    },
+    {
+      "store_offset": 8632,
+      "sign": "-",
+      "denominator": 10.0,
+      "literal_address": 10410499,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410508,
+      "divide_address": 10410504
+    },
+    {
+      "store_offset": 8756,
+      "sign": "+",
+      "denominator": 10.0,
+      "literal_address": 10410623,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410632,
+      "divide_address": 10410628
+    },
+    {
+      "store_offset": 8888,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10410755,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410764,
+      "divide_address": 10410760
+    },
+    {
+      "store_offset": 9012,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10410879,
+      "literal_kind": "i2",
+      "arithmetic_address": 10410888,
+      "divide_address": 10410884
+    },
+    {
+      "store_offset": 9144,
+      "sign": "-",
+      "denominator": 7.0,
+      "literal_address": 10411011,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411020,
+      "divide_address": 10411016
+    },
+    {
+      "store_offset": 9268,
+      "sign": "+",
+      "denominator": 10.0,
+      "literal_address": 10411135,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411144,
+      "divide_address": 10411140
+    },
+    {
+      "store_offset": 9400,
+      "sign": "-",
+      "denominator": 11.0,
+      "literal_address": 10411267,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411276,
+      "divide_address": 10411272
+    },
+    {
+      "store_offset": 9545,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10411412,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411421,
+      "divide_address": 10411417
+    },
+    {
+      "store_offset": 9725,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10411592,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411601,
+      "divide_address": 10411597
+    },
+    {
+      "store_offset": 9857,
+      "sign": "-",
+      "denominator": 11.0,
+      "literal_address": 10411724,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411733,
+      "divide_address": 10411729
+    },
+    {
+      "store_offset": 9981,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10411848,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411857,
+      "divide_address": 10411853
+    },
+    {
+      "store_offset": 10113,
+      "sign": "-",
+      "denominator": 10.0,
+      "literal_address": 10411980,
+      "literal_kind": "i2",
+      "arithmetic_address": 10411989,
+      "divide_address": 10411985
+    },
+    {
+      "store_offset": 10237,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10412104,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412113,
+      "divide_address": 10412109
+    },
+    {
+      "store_offset": 10369,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10412236,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412245,
+      "divide_address": 10412241
+    },
+    {
+      "store_offset": 10501,
+      "sign": "+",
+      "denominator": 6.0,
+      "literal_address": 10412368,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412377,
+      "divide_address": 10412373
+    },
+    {
+      "store_offset": 10633,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10412500,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412509,
+      "divide_address": 10412505
+    },
+    {
+      "store_offset": 10782,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10412649,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412658,
+      "divide_address": 10412654
+    },
+    {
+      "store_offset": 10906,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10412773,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412782,
+      "divide_address": 10412778
+    },
+    {
+      "store_offset": 11030,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10412897,
+      "literal_kind": "i2",
+      "arithmetic_address": 10412906,
+      "divide_address": 10412902
+    },
+    {
+      "store_offset": 11154,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10413021,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413030,
+      "divide_address": 10413026
+    },
+    {
+      "store_offset": 11278,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10413145,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413154,
+      "divide_address": 10413150
+    },
+    {
+      "store_offset": 11410,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10413277,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413286,
+      "divide_address": 10413282
+    },
+    {
+      "store_offset": 11542,
+      "sign": "+",
+      "denominator": 9.0,
+      "literal_address": 10413409,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413418,
+      "divide_address": 10413414
+    },
+    {
+      "store_offset": 11674,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10413541,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413550,
+      "divide_address": 10413546
+    },
+    {
+      "store_offset": 11841,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10413708,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413717,
+      "divide_address": 10413713
+    },
+    {
+      "store_offset": 11973,
+      "sign": "-",
+      "denominator": 7.0,
+      "literal_address": 10413840,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413849,
+      "divide_address": 10413845
+    },
+    {
+      "store_offset": 12097,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10413964,
+      "literal_kind": "i2",
+      "arithmetic_address": 10413973,
+      "divide_address": 10413969
+    },
+    {
+      "store_offset": 12221,
+      "sign": "+",
+      "denominator": 6.0,
+      "literal_address": 10414088,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414097,
+      "divide_address": 10414093
+    },
+    {
+      "store_offset": 12353,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10414220,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414229,
+      "divide_address": 10414225
+    },
+    {
+      "store_offset": 12477,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10414344,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414353,
+      "divide_address": 10414349
+    },
+    {
+      "store_offset": 12601,
+      "sign": "+",
+      "denominator": 6.0,
+      "literal_address": 10414468,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414477,
+      "divide_address": 10414473
+    },
+    {
+      "store_offset": 12733,
+      "sign": "-",
+      "denominator": 9.0,
+      "literal_address": 10414600,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414609,
+      "divide_address": 10414605
+    },
+    {
+      "store_offset": 12874,
+      "sign": "-",
+      "denominator": 4.0,
+      "literal_address": 10414741,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414750,
+      "divide_address": 10414746
+    },
+    {
+      "store_offset": 12998,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10414865,
+      "literal_kind": "i2",
+      "arithmetic_address": 10414874,
+      "divide_address": 10414870
+    },
+    {
+      "store_offset": 13130,
+      "sign": "-",
+      "denominator": 6.0,
+      "literal_address": 10414997,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415006,
+      "divide_address": 10415002
+    },
+    {
+      "store_offset": 13254,
+      "sign": "+",
+      "denominator": 6.0,
+      "literal_address": 10415121,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415130,
+      "divide_address": 10415126
+    },
+    {
+      "store_offset": 13386,
+      "sign": "+",
+      "denominator": 7.0,
+      "literal_address": 10415253,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415262,
+      "divide_address": 10415258
+    },
+    {
+      "store_offset": 13518,
+      "sign": "-",
+      "denominator": 8.0,
+      "literal_address": 10415385,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415394,
+      "divide_address": 10415390
+    },
+    {
+      "store_offset": 13642,
+      "sign": "-",
+      "denominator": 6.0,
+      "literal_address": 10415509,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415518,
+      "divide_address": 10415514
+    },
+    {
+      "store_offset": 13766,
+      "sign": "+",
+      "denominator": 8.0,
+      "literal_address": 10415633,
+      "literal_kind": "i2",
+      "arithmetic_address": 10415642,
+      "divide_address": 10415638
+    }
+  ],
+  "race_literals": [
+    {
+      "offset": 3070,
+      "value": 65
+    },
+    {
+      "offset": 3083,
+      "value": 80
+    },
+    {
+      "offset": 3544,
+      "value": 110
+    },
+    {
+      "offset": 3557,
+      "value": 130
+    },
+    {
+      "offset": 3969,
+      "value": 140
+    },
+    {
+      "offset": 3982,
+      "value": 180
+    },
+    {
+      "offset": 4568,
+      "value": 210
+    },
+    {
+      "offset": 5088,
+      "value": 200
+    },
+    {
+      "offset": 5101,
+      "value": 230
+    },
+    {
+      "offset": 5219,
+      "value": 231
+    },
+    {
+      "offset": 5232,
+      "value": 260
+    },
+    {
+      "offset": 7340,
+      "value": 261
+    },
+    {
+      "offset": 7353,
+      "value": 290
+    },
+    {
+      "offset": 9461,
+      "value": 290
+    },
+    {
+      "offset": 9474,
+      "value": 330
+    },
+    {
+      "offset": 9606,
+      "value": 331
+    },
+    {
+      "offset": 9619,
+      "value": 360
+    },
+    {
+      "offset": 11743,
+      "value": 361
+    },
+    {
+      "offset": 13842,
+      "value": -1920
+    },
+    {
+      "offset": 14621,
+      "value": -1320
+    },
+    {
+      "offset": 15700,
+      "value": 45
+    },
+    {
+      "offset": 16107,
+      "value": 200
+    },
+    {
+      "offset": 16562,
+      "value": 700
+    }
+  ],
+  "runtime": {
+    "sha256": "e86cbb17c8fcd97bb04d9e0b7fb3ef7a33c6896e681705fc95405f14008737cd",
+    "spans": [
+      {
+        "name": "rtRandomNext",
+        "address": 1711678045,
+        "size": 95,
+        "sha256": "8b1a4c9dbdf71e61bfd870e529895acf62fe74e2cb83548e248db2245672e595"
+      },
+      {
+        "name": "negative_seed",
+        "address": 1711854999,
+        "size": 63,
+        "sha256": "940bb19dc27e3c5ff19bca491d53ac47bfa2fe5d9da702bf5fbfd1985c8d80b7"
+      },
+      {
+        "name": "rtRandomizeTimer",
+        "address": 1711628665,
+        "size": 58,
+        "sha256": "ad5cba8a47a91773199e2feecef1065c1cf2a2c516e63ede6c94ae46963990fd"
+      },
+      {
+        "name": "rtRandomizeValue",
+        "address": 1712236703,
+        "size": 160,
+        "sha256": "ea4093aa1fa2496dad34ae88b57476c9f646115f86da45d9a2ccf469025e8bd9"
+      },
+      {
+        "name": "TimerCtlProc",
+        "address": 1711474210,
+        "size": 324,
+        "sha256": "3a79d8b290e05fb0f25be590c9c82d1517b4a1b7ed43d0956825752c13c954c3"
+      },
+      {
+        "name": "HrCtlTimerSet",
+        "address": 1711474125,
+        "size": 85,
+        "sha256": "bbcefa49e12714753249f34d90fe361a5b0dd5bfdc270ea4cc7471abdf2ecd75"
+      },
+      {
+        "name": "InitTimer",
+        "address": 1711474534,
+        "size": 18,
+        "sha256": "d24c80f3f654f1cbb8dbc4a6145255d69fb1ec29648399cd122f67c6cc53d99f"
+      },
+      {
+        "name": "rtcVarFromFormatVar",
+        "address": 1712304710,
+        "size": 180,
+        "sha256": "8116d2a1590be6972949d298ddbd8f0bd6515fd48a6b54bd080268c3dceb429a"
+      }
+    ],
+    "property_indices": [
+      {
+        "table": 1711389792,
+        "index": 49,
+        "descriptor": 1711389472,
+        "name_address": 1711388104,
+        "name": "KeyPreview"
+      },
+      {
+        "table": 1711413656,
+        "index": 8,
+        "descriptor": 1711286112,
+        "name_address": 1711285560,
+        "name": "Enabled"
+      },
+      {
+        "table": 1711408656,
+        "index": 10,
+        "descriptor": 1711286208,
+        "name_address": 1711285632,
+        "name": "Visible"
+      },
+      {
+        "table": 1711415328,
+        "index": 2,
+        "descriptor": 1711415296,
+        "name_address": 1711285560,
+        "name": "Enabled"
+      },
+      {
+        "table": 1711415328,
+        "index": 3,
+        "descriptor": 1711415312,
+        "name_address": 1711415280,
+        "name": "Interval"
+      }
+    ]
+  },
+  "key_preview": {
+    "offset": 3005291,
+    "code": 49,
+    "value": 255
+  }
+}
