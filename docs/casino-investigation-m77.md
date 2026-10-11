@@ -140,8 +140,11 @@ player 14 ends as a loss; dealer 15 versus player 15 ends as a tie. A generic
 "dealer always draws to 17" rule would change this source behavior
 (`009A7644 +06FB..07CD`).
 
-Special awards are checked when the player requests **MORE**, before another
-card is drawn, in this order:
+Special awards are checked when the player requests **STAY**, before ordinary
+dealer play, in this order. The control mapping is explicit: command index 1
+is MORE and enters player-draw phase 3; index 2 is STAY and checks these awards
+before entering dealer phase 8. The timer assigns those captions to indices
+1/2 at `+0491..04F6`; do not infer actions from the handler branch order.
 
 | Current player hand | Award / bet |
 | --- | ---: |
@@ -151,7 +154,7 @@ card is drawn, in this order:
 | Exactly three sixes | 25 |
 | At least eight cards | 100 |
 
-They are request-triggered awards, not an unconditional bonus automatically
+They are stay-triggered awards, not an unconditional bonus automatically
 applied on reaching the card count. Branches select the seven-entry table
 `[1,2,4,6,20,25,100]`. Collection transfers one coin every two ticks.
 No ordinary split, insurance or stake-doubling action was recovered.

@@ -754,6 +754,18 @@
       "address": 10028589,
       "index": 38,
       "label": "start commits temporary cash"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10298787,
+      "value": 3,
+      "label": "MORE enters player-draw phase"
+    },
+    {
+      "kind": "var_i2",
+      "address": 10300724,
+      "value": 8,
+      "label": "STAY enters dealer phase"
     }
   ]
 }
