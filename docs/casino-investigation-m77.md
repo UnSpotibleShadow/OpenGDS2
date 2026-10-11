@@ -1,5 +1,7 @@
 # Casino investigation — M77
 
+Follow-up: [M78 fidelity closure](casino-fidelity-m78.md) resolves the source-level RNG, race motion, control defaults and same-timer reentrancy gaps below. Its explicit Windows execution boundary supersedes those pending static-tracing items; this historical report remains the ordinary-rule evidence.
+
 Research checkpoint: 2026-10-11. No casino gameplay is implemented by this change.
 The supported original is the locally extracted 2001 executable, SHA-256
 `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`.

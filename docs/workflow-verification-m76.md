@@ -1,5 +1,7 @@
 # Workflow verification — M76
 
+Casino follow-up: [M78 fidelity closure](casino-fidelity-m78.md) recovers the remaining source-level race, RNG, control defaults and timer lifecycle evidence. Windows input, numeric-format/coercion and rendering acceptance remains blocked by the documented runner failures.
+
 Research completed 2026-10-11 against the supported 2001 PC executable. This supplements M75 and corrects earlier backlog assumptions. It changes research scope, not gameplay. Original files, text and complete traces remain private.
 
 ## Method and limits
