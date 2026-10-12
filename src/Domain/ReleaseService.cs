@@ -72,6 +72,7 @@ public static class ReleaseService
         if (ShipmentDialogueRules.Price(price) is ShipmentMessage priceMessage) product.ShipmentMessages.Add(priceMessage);
         product.ShipmentMessages.Add(ShipmentMessage.Reviews);
         ReviewService.Generate(product,catalog,random);
+        ReviewPresentationRules.Prepare(product,random);
         FinancialRules.Apply(state,-cost);
         if (predecessor is not null) predecessor.HasReleasedSequel=true;
         // First shipment sets the flag; its handler does not test the reprint guard.

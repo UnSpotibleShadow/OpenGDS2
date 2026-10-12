@@ -13,7 +13,21 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=11,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=12,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        // fGMCrossR comment branches: 49 reachable variants, local strings only.
+        const int reviewPool=0x5F92C4;
+        int[][][] reviewComments=[
+            [[0x2b], [0x2c, -1, 0x2f, -2, 0x31], [0x32], [0x33], [0x34], [0x35], [0x36], [0x37, -1, 0x38], [0x39]],
+            [[0x3a], [0x3b], [0x3c], [0x3d, -2, 0x3e], [0x3f], [0x40], [0x41], [0x42, -2, 0x43]],
+            [[0x3a], [-1, 0x44, -2, 0x45], [0x46], [0x47], [0x48], [0x49], [0x4a], [0x4b], [0x4c], [-2, 0x4d], [0x4e, -1, 0x4f]],
+            [[0x50], [-1, 0x44, -2, 0x51], [0x52], [0x53], [0x54, -1, 0x55], [0x56, -2, 0x57], [0x58], [0x59, -1, 0x5a], [0x5b]],
+            [[0x5c], [0x5d], [0x5e], [0x5f], [0x60, -3, 0x62], [-3, 0x63], [0x64], [-3, 0x65]],
+            [[0x66], [0x67], [0x68], [0x69, -3, 0x6a]]
+        ];
+        for(int band=0;band<reviewComments.Length;band++)
+            for(int variant=0;variant<reviewComments[band].Length;variant++)
+                result.Entries.Add($"REVIEW_COMMENT_{band}_{variant}",string.Concat(reviewComments[band][variant].Select(token=>
+                    token switch {-1=>"{genre}",-2=>"{type}",-3=>"{company}",_=>pe.String(reviewPool,token)})));
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));

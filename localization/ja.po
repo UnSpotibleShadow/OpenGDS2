@@ -3458,3 +3458,48 @@ msgstr "合計契約金"
 
 msgid "PROPOSAL_ARTWORK_REIMPORT"
 msgstr "企画書の画像を表示するには、タイトル画面でオリジナルのアーカイブを再インポートしてください。"
+
+msgid "REVIEW_COMMENT_UNAVAILABLE"
+msgstr "このセーブには個別のコメントが記録されていません。"
+
+msgid "REVIEW_REACTION_4"
+msgstr "低評"
+
+msgid "REVIEW_REACTION_8"
+msgstr "微妙"
+
+msgid "REVIEW_REACTION_9"
+msgstr "普通"
+
+msgid "REVIEW_REACTION_6"
+msgstr "好評"
+
+msgid "REVIEW_REACTION_7"
+msgstr "最高"
+
+msgid "REVIEW_ARTWORK_REIMPORT"
+msgstr "審査員と点数の画像を表示するには、オリジナルのアーカイブを再インポートしてください。"
+
+msgid "EXHIBITION_PREVIOUS_RECORD"
+msgstr "過去最高自社ブース来客数"
+
+msgid "EXHIBITION_VISITORS"
+msgstr "自社ブース来客数"
+
+msgid "EXHIBITION_DEVELOPING"
+msgstr "開発中のゲーム"
+
+msgid "EXHIBITION_PROGRESS"
+msgstr "完成度"
+
+msgid "EXHIBITION_RELEASED"
+msgstr "発売済ゲーム"
+
+msgid "EXHIBITION_ROOM"
+msgstr "第{room}開発室"
+
+msgid "PRODUCT_SHIP"
+msgstr "出荷する"
+
+msgid "EVENT_ARTWORK_REIMPORT"
+msgstr "この場面の画像を表示するには、オリジナルのアーカイブを再インポートしてください。"

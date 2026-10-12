@@ -12,8 +12,9 @@ artwork. The owner's device and staff examples are separate resources.
 | Meeting/completion | `Graphic/Embedded/PlanningMeeting.bmp` | 256×160 ImageFormG[0] |
 | Proposal document | `Graphic/Embedded/PlanningProposal.bmp` | Separate 256×160 fGMKikakusyo Picture1; M95 imports it |
 | Toolbar icons | `Graphic/Embedded/Toolbar0.bmp` through `Toolbar15.bmp` | Separate embedded control pictures |
-| Exhibition and awards | ImageFormG[26]/[4] | Known single-frame GIFs; M93 identifies them, local import/render support still pending |
-| Reviewer portraits/names, score and reaction images | Serialized fGMCrossR controls | Separate images; resource extraction/presentation still pending |
+| Exhibition and awards | `Graphic/Embedded/ExhibitionBooth.png`, `AwardsStage.png` | M96 locally decodes the known single-frame ImageFormG[26]/[4] GIFs |
+| Reviewer portraits/names, score and reaction images | `Reviewer0…3.bmp`, `ReviewScore1…10.png`, `ReviewReaction0…9.bmp` in `Graphic/Embedded` | M96 binds Image1 portraits, hidden Image4 digits (RLE8), and Image3 reactions |
+| Trophies and Hall of Fame badge | `Trophy0…4.bmp`, `EmptyBadge.png` | Separate shared ImageTF resources; Hall of Fame reuses Trophy2, slot 5 is blank |
 | Other archive graphics | Imported `Graphic` files | Local index lists whatever is present without guessing their purpose |
 
 For a quick visual reference of **all currently imported images**, run:

@@ -35,6 +35,9 @@ public sealed class ReleasedGameState
     // Older modern saves have unknown reviews; loading must not reroll them.
     public List<int>? ReviewScores {get;set;}
     public bool ReviewPending {get;set;}
+    // Null preserves unknown comment/reveal history in pre-M96 modern saves.
+    public List<int>? ReviewCommentVariants {get;set;}
+    public int? ReviewDisplayCallbacks {get;set;}
     // Older releases have no recoverable branch history: never invent it.
     public List<ShipmentMessage>? ShipmentMessages {get;set;}
     public int ShipmentMessageIndex {get;set;}

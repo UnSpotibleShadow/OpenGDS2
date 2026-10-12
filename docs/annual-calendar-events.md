@@ -50,10 +50,14 @@ are in `fGMKontesuto.Timer1`, `009CEE10`.
 | Category, presentation order | Own-company selection | Signed payment | Product marker |
 | --- | --- | --- | --- |
 | Music | Music ≥70 and floor(Rnd × 10) =1 | +¥100,000,000 | 3 |
-| Graphics | Graphics ≥70 and floor(Rnd × 10) =1 | +¥100,000,000 | 2 |
-| Design | (Fun + Novelty)/2 ≥80 and floor(Rnd × 10) =1 | +¥300,000,000 | 4 |
-| Worst game | Second pass: Fun ≤30 and floor(Rnd × 2) =0 | −¥200,000,000 | 1 |
-| Grand prize | Four-stat average ≥120 and floor(Rnd × 10) =1; or lifetime units ≥1,000,000 | +¥500,000,000 | 5 |
+| Graphics | Graphics ≥70 and floor(Rnd × 10) =1 | +¥100,000,000 | 4 |
+| Runner-up Grand Prix (internal Design) | (Fun + Novelty)/2 ≥80 and floor(Rnd × 10) =1 | +¥300,000,000 | 2 |
+| Worst game | Second pass: Fun ≤30 and floor(Rnd × 2) =0 | −¥200,000,000 | 5 |
+| Grand prize | Four-stat average ≥120 and floor(Rnd × 10) =1; or lifetime units ≥1,000,000 | +¥500,000,000 | 1 |
+
+M96 corrects the earlier marker transcription by checking both the `009CEE10`
+writers and `009C4570` display readers. Modern save schema 1 migrates its old
+marker meanings once to schema 2; payouts and selection rules are unchanged.
 
 **Verified source quirks:** the ascending ElseIf thresholds make higher
 music/graphics/design/grand-prize thresholds unreachable. Each successful later

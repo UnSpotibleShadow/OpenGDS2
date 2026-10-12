@@ -208,7 +208,9 @@ score cycling consumes additional random draws; modern score generation omits
 that cycling/comment RNG and should not claim whole-session RNG equivalence.
 `Command1 ->0097A524` closes the review form.
 
-Final score digits use local `Image2[score-1]`. Individual comments draw from
+M96 resource inspection corrects the array roles: four visible `Image2[row]`
+score slots receive pictures from the ten hidden `Image4[score-1]` resources.
+Those hidden digit BMPs use RLE8 compression. Individual comments draw from
 six score bands <=2, <=4, <=6, <=8, <=9, else, with respectively
 9/8/11/9/8/4 reachable variants. The last band contains a fifth case which its
 floor(Rnd*4) cannot reach. Vertical reaction pictures are copied from `Image3`
@@ -229,9 +231,11 @@ backgrounds must not be mistaken for the native timer-driven scene animation.
 Exhibition gameplay and awards winner/prize logic already exist; keep their
 saved results separate from any restored presentation/reels.
 
-The contest's runner-up label is corroborated by compact award-marker value 4
-in `009C4570 +0578..05ED`. Current `AWARD_Design` translations need correction
-to runner-up Grand Prix while preserving the implemented selection formula.
+M96 corrects the earlier marker interpretation: compact value 2 is runner-up;
+value 4 (`009C4570 +0578..05ED`) is graphics. The `009CEE10` writers corroborate
+markers 1/2/3/4/5 = Grand Prix/runner-up/music/graphics/worst. The visible
+`AWARD_Design` label is runner-up Grand Prix; its selection/prize formula is
+unchanged. Old modern marker meanings migrate once in save schema 2.
 
 Annual renewal is **`fGMSKoyouKz`, not `fGMKeiyakuS`**: weekly routine
 `009DB4F4 +0552..0562` opens the former at March end. The latter is the separate
