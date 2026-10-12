@@ -2,6 +2,8 @@
 
 Follow-up: [M78 fidelity closure](casino-fidelity-m78.md) resolves the source-level RNG, race motion, control defaults and same-timer reentrancy gaps below. Its explicit Windows execution boundary supersedes those pending static-tracing items; this historical report remains the ordinary-rule evidence.
 
+Implementation follow-up: [M87 card-chain](casino-card-chain-m87.md) confirms that command `009C8A8C +0C1A` also invokes the bonus classifier on the initial deal. The keyboard-reachable replacement branch and early/dealer double-up choices are preserved with explicit liveness boundaries.
+
 Research checkpoint: 2026-10-11. No casino gameplay is implemented by this change.
 The supported original is the locally extracted 2001 executable, SHA-256
 `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`.

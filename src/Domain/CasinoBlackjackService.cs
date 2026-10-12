@@ -36,7 +36,7 @@ public static class CasinoBlackjackService
         if (FacilityService.HasPendingDecision(s)) return CasinoResult.EventPending;
         if (s.Casino.Coins<=0) return CasinoResult.NoCoins;
         // 009951FC resets bet, phase, timer, blink and lose flag, not shared payout/bonus.
-        s.Casino.Bet=0;s.Casino.Poker=new();s.Casino.Blackjack=ResetForm(s.Casino.Blackjack);s.Casino.BlackjackOpen=true;return CasinoResult.Success;
+        s.Casino.Bet=0;s.Casino.CardChain=new();s.Casino.Poker=new();s.Casino.Blackjack=ResetForm(s.Casino.Blackjack);s.Casino.BlackjackOpen=true;return CasinoResult.Success;
     }
     public static BlackjackRoundState ResetForm(BlackjackRoundState previous)=>new()
     {Win=previous.Win,AwardIndex=previous.AwardIndex,AwardTick=previous.AwardTick,ReopenedWin=previous.Win};
@@ -176,7 +176,7 @@ public static class CasinoBlackjackService
     }
     public static void Validate(GameState s)
     {
-        if (s.Casino is not { } c || c.Blackjack is not { } b || c.PokerOpen && c.BlackjackOpen ||
+        if (s.Casino is not { } c || c.Blackjack is not { } b || new[]{c.PokerOpen,c.BlackjackOpen,c.CardChainOpen}.Count(x=>x)>1 ||
             b.Phase is <0 or >8 || b.Tick is <-9 or >75 || b.PlayerCount is <0 or >9 || b.DealerCount is <0 or >9 || b.PlayerTotal is <0 or >31 || b.DealerTotal is <0 or >31 ||
             b.AwardIndex is <0 or >6 || b.AwardTick is <0 or >30 || b.CollectTick is <0 or >1 || b.TieTick is <0 or >=30 ||
             b.Cards is null || b.UsedCards is null || b.DoubleCards is null || b.Marks is null || b.Marks.Count!=5 || b.Marks.Any(x=>x is <0 or >4) ||

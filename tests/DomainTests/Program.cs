@@ -18,6 +18,158 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+GameState CardChainFixture()
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Casino.Coins=100;
+    Check(CasinoCardChainService.Open(s)==CasinoResult.Success);return s;
+}
+PokerRoundState ChainHand(GameState s,params CasinoCard[] cards)
+{
+    var p=s.Casino.CardChain.Round;p.Cards=cards.ToList();p.UsedCards=cards.Select(c=>c.Identifier).ToHashSet();p.Phase=1;p.Revealed=[true,true,true,true,true];s.Casino.Bet=1;
+    return p;
+}
+Test("card-chain range bands match all recovered payout boundaries",()=>
+{
+    int[] values=[1,2,3,4,6,8,10,13,17,20,25,30,40,50,55,60,70,80,100];Check(CasinoCardChainService.Multipliers.SequenceEqual(values));
+    int[] lower=[10,14,17,20,23,26,28,30,32,34,36,38,40,42,44,46,48,50,52];
+    Check(CasinoCardChainService.ChainMultiplier(9)==0);
+    for(int i=0;i<lower.Length;i++) {Check(CasinoCardChainService.ChainMultiplier(lower[i])==values[i]);if(i+1<lower.Length) Check(CasinoCardChainService.ChainMultiplier(lower[i+1]-1)==values[i]);}
+});
+Test("card-chain strongest hand bonuses include royal under straight flush",()=>
+{
+    Check(CasinoCardChainService.BonusMultiplier([new(0,0),new(0,2),new(0,4),new(0,7),new(0,11)])==1);
+    Check(CasinoCardChainService.BonusMultiplier([new(0,1),new(1,1),new(2,1),new(0,2),new(1,2)])==2);
+    Check(CasinoCardChainService.BonusMultiplier([new(0,1),new(1,1),new(2,1),new(3,1),new(0,2)])==5);
+    Check(CasinoCardChainService.BonusMultiplier([new(0,0),new(0,9),new(0,10),new(0,11),new(0,12)])==20);
+});
+Test("card-chain load retains shared amounts, accepted betting resets only bonus",()=>
+{
+    var s=CardChainFixture();s.Casino.Bet=17;s.Casino.PendingPayout=73;s.Casino.ChainBonus=19;
+    CasinoCardChainService.Close(s);CasinoCardChainService.Open(s);
+    Check(s.Casino.Bet==17 && s.Casino.PendingPayout==73 && s.Casino.ChainBonus==19);
+    CasinoCardChainService.Command(s,0,new FailureRandom(0));Check(s.Casino.Bet==18 && s.Casino.Coins==99 && s.Casino.ChainBonus==0 && s.Casino.PendingPayout==73);
+});
+Test("card-chain initial deal evaluates bonus before any replacement",()=>
+{
+    var s=CardChainFixture();CasinoCardChainService.Command(s,0,new FailureRandom(0));
+    CasinoCard[] cards=[new(0,0),new(0,9),new(0,10),new(0,11),new(0,12)];var r=new FailureRandom(new[]{0f}.Concat(CardDraws(cards)).ToArray());
+    CasinoCardChainService.Command(s,1,r);Check(s.Casino.ChainBonus==20 && s.Casino.CardChain.ChainCount==0 && r.Calls==11);
+    CasinoPokerService.Validate(s);
+});
+Test("card-chain first selection is free and later choices match removed suit or rank",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(0,2),new(2,0),new(3,7));
+    Check(CasinoCardChainService.SelectCard(s,0));var r=new FailureRandom(CardDraws(new CasinoCard(0,9)));
+    CasinoCardChainService.Tick(s,r);Check(s.Casino.CardChain.PreviousCard==new CasinoCard(0,0) && r.Calls==0);
+    CasinoCardChainService.Tick(s,r);CasinoCardChainService.Tick(s,r);
+    Check(s.Casino.CardChain.ChainCount==1 && r.Calls==2);
+    Check(CasinoCardChainService.CanSelect(s,0) && !CasinoCardChainService.CanSelect(s,1) && CasinoCardChainService.CanSelect(s,2) && CasinoCardChainService.CanSelect(s,3));CasinoPokerService.Validate(s);
+});
+Test("card-chain short bonus award adds retained pending instead of clearing it",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    s.Casino.ChainBonus=2;s.Casino.PendingPayout=73;CasinoCardChainService.SelectCard(s,0);
+    var r=new FailureRandom(CardDraws(new CasinoCard(2,9)));for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);
+    Check(s.Casino.CardChain.Round.Phase==3 && s.Casino.PendingPayout==75 && s.Casino.CardChain.ChainCount==1);CasinoPokerService.Validate(s);
+});
+Test("card-chain ten replacement award replaces retained pending before adding bonus",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    s.Casino.CardChain.ChainCount=9;s.Casino.CardChain.PreviousCard=new(0,0);s.Casino.PendingPayout=73;s.Casino.ChainBonus=2;
+    CasinoCardChainService.SelectCard(s,0);var r=new FailureRandom(CardDraws(new CasinoCard(2,9)));for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);
+    Check(s.Casino.PendingPayout==3 && s.Casino.CardChain.Round.Phase==3);
+});
+Test("card-chain no bonus short loss retains storage but clears active bet",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));s.Casino.PendingPayout=73;
+    CasinoCardChainService.SelectCard(s,0);var r=new FailureRandom(CardDraws(new CasinoCard(2,9)));for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);
+    Check(s.Casino.CardChain.Round.Phase==0 && s.Casino.Bet==0 && s.Casino.PendingPayout==73);
+});
+Test("card-chain bonuses accumulate once for each replacement evaluation",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(0,2),new(0,4),new(0,7),new(0,11));
+    var r=new FailureRandom(CardDraws(new CasinoCard(0,9),new CasinoCard(0,10)));
+    for(int k=0;k<2;k++) {CasinoCardChainService.SelectCard(s,0);for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);}
+    Check(s.Casino.ChainBonus==2 && s.Casino.CardChain.ChainCount==2);
+});
+Test("card-chain collection switches from ten to one below one hundred fifty",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));p.Phase=3;s.Casino.PendingPayout=150;
+    CasinoCardChainService.Command(s,0,new FailureRandom(0));for(int i=0;i<2;i++) CasinoCardChainService.Tick(s,new FailureRandom());
+    Check(s.Casino.Coins==110 && s.Casino.PendingPayout==140);
+    for(int i=0;i<2;i++) CasinoCardChainService.Tick(s,new FailureRandom());Check(s.Casino.Coins==111 && s.Casino.PendingPayout==139);
+    CasinoCardChainService.Close(s);Check(s.Casino.Bet==1 && s.Casino.PendingPayout==139 && s.CompanyActivityPerformed==true);
+});
+Test("card-chain copied keyboard replacement consumes five plus one cards but one chain step",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    CasinoCard[] drawn=[new(0,1),new(0,2),new(0,3),new(0,4),new(0,5),new(0,6)];
+    var r=new FailureRandom(new[]{0f,0f}.Concat(CardDraws(drawn)).ToArray());
+    Check(CasinoCardChainService.Command(s,1,r)==CasinoResult.InvalidAction && r.Calls==1);
+    Check(CasinoCardChainService.Command(s,1,r,direct:true)==CasinoResult.Success && r.Calls==12);
+    for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);
+    Check(r.Calls==14 && s.Casino.CardChain.ChainCount==1 && s.Casino.CardChain.Round.UsedCards.Count==11);
+});
+Test("card-chain keyboard can start without a bet while the deal button is disabled",()=>
+{
+    var s=CardChainFixture();Check(!CasinoCardChainService.CanCommand(s,1));
+    var r=new FailureRandom(new[]{0f}.Concat(CardDraws(BlackjackDeck().Take(5).ToArray())).ToArray());
+    Check(CasinoCardChainService.Command(s,1,r,direct:true)==CasinoResult.Success && s.Casino.Bet==0);
+    CasinoPokerService.Validate(s);
+});
+Test("card-chain exhausted deck pauses without extra draws, recycled cards or invented award",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));p.UsedCards=Enumerable.Range(0,52).ToHashSet();
+    s.Casino.CardChain.ChainCount=47;s.Casino.CardChain.PreviousCard=new(0,0);CasinoCardChainService.SelectCard(s,0);
+    var r=new FailureRandom();for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);
+    Check(s.Casino.CardChain.DeckExhausted && r.Calls==0 && s.Casino.PendingPayout==0 && s.Casino.Bet==1);
+    CasinoPokerService.Validate(s);Check(CasinoCardChainService.Close(s));
+});
+Test("card-chain double-up follows fresh-deck timing and high-card comparison",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));p.Phase=3;s.Casino.PendingPayout=4;
+    CasinoCardChainService.Command(s,1,new FailureRandom(0));var r=new FailureRandom(CardDraws(new CasinoCard(0,1),new CasinoCard(1,0),new CasinoCard(2,2),new CasinoCard(3,3),new CasinoCard(0,4)));
+    for(int i=0;i<18;i++) CasinoCardChainService.Tick(s,r);Check(r.Calls==10 && p.Revealed[0]);
+    CasinoCardChainService.SelectCard(s,1);for(int i=0;i<28;i++) CasinoCardChainService.Tick(s,new FailureRandom());
+    Check(s.Casino.PendingPayout==8 && p.Phase==3);CasinoPokerService.Validate(s);
+});
+Test("card-chain keyboard dealer choice and early double selection preserve their stalled paths",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));p.Phase=3;s.Casino.PendingPayout=4;
+    CasinoCardChainService.Command(s,1,new FailureRandom(0));Check(CasinoCardChainService.SelectCard(s,0,direct:true));
+    for(int i=0;i<50;i++) CasinoCardChainService.Tick(s,new FailureRandom());
+    Check(p.Tick==28 && p.Phase==6 && s.Casino.PendingPayout==4 && s.Casino.CardChain.EarlyDoubleSelection);
+    CasinoPokerService.Validate(s);CasinoCardChainService.Close(s);
+});
+Test("card-chain saved replacement restores the same removed reference and used deck",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));CasinoCardChainService.SelectCard(s,0);CasinoCardChainService.Tick(s,new FailureRandom());
+    var copy=System.Text.Json.JsonSerializer.Deserialize<GameState>(System.Text.Json.JsonSerializer.Serialize(s))!;CasinoPokerService.Validate(copy);
+    Check(copy.Casino.CardChain.PreviousCard==new CasinoCard(0,0) && copy.Casino.CardChain.Round.Tick==1);
+    copy.Casino.BlackjackOpen=true;Throws<InvalidDataException>(()=>CasinoPokerService.Validate(copy));
+});
+Test("card-chain overflow refuses financial commands and bounds bonus addition",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(0,2),new(0,4),new(0,7),new(0,11));p.Phase=3;s.Casino.PendingPayout=long.MaxValue;
+    Check(CasinoCardChainService.Command(s,0,new FailureRandom(0))==CasinoResult.NumericLimit);
+    Check(CasinoCardChainService.Command(s,1,new FailureRandom(0))==CasinoResult.NumericLimit);
+    p.Phase=1;s.Casino.ChainBonus=long.MaxValue;CasinoCardChainService.SelectCard(s,0);var r=new FailureRandom(CardDraws(new CasinoCard(0,9)));
+    for(int i=0;i<3;i++) CasinoCardChainService.Tick(s,r);Check(s.Casino.CardChain.NumericBoundary && s.Casino.ChainBonus==long.MaxValue);
+});
+
+Test("card-chain early keyboard double-up can resolve using retained cards without a new draw",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,1),new(1,0),new(1,3),new(2,5),new(3,7));p.Phase=3;s.Casino.PendingPayout=4;
+    CasinoCardChainService.Command(s,1,new FailureRandom(0));CasinoCardChainService.SelectCard(s,1,direct:true);
+    var r=new FailureRandom();for(int i=0;i<28;i++) CasinoCardChainService.Tick(s,r);
+    Check(r.Calls==0 && p.Phase==3 && s.Casino.PendingPayout==8 && s.Casino.CardChain.EarlyDoubleSelection);CasinoPokerService.Validate(s);
+});
+Test("card-chain session pauses progression and blocks simultaneous card tables",()=>
+{
+    var s=CardChainFixture();var session=new GameSession(new FailureRandom());session.Restore(s);var before=s.CompanyActivityTicks;session.TickOffice();
+    Check(s.CompanyActivityTicks==before && CasinoPokerService.Open(s)==CasinoResult.EventPending && CasinoBlackjackService.Open(s)==CasinoResult.EventPending);
+    Check(FacilityService.HasPendingDecision(s));CasinoCardChainService.Close(s);Check(CasinoPokerService.Open(s)==CasinoResult.Success);
+});
 GameState BlackjackFixture()
 {
     var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Casino.Coins=100;

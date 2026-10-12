@@ -2912,7 +2912,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "This employee is no longer employed."
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "Buy casino coins and play poker. Blackjack is also available; card-chain and horse racing are not available yet."
+msgstr "Buy casino coins and play poker. Blackjack and card-chain are also available; horse racing is not available yet."
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
@@ -3002,10 +3002,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution in either mode. Original presentation and full campaign parity remain incomplete."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins, poker and blackjack; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins, poker, blackjack and card-chain; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: card-chain, horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+msgstr "Unavailable or incomplete: horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
 
 msgid "MYSTERY_LAB_START"
 msgstr "Start an experiment"
@@ -3181,7 +3181,7 @@ msgid "CASINO_COINS"
 msgstr "Coins: {0:N0}"
 
 msgid "CASINO_AVAILABLE_GAMES"
-msgstr "Poker and blackjack are available. Card-chain and horse racing are being reconstructed."
+msgstr "Poker, blackjack and card-chain are available. Horse racing is being reconstructed."
 
 msgid "CASINO_POKER"
 msgstr "Poker"
@@ -3323,3 +3323,27 @@ msgstr "Original rules: natural 21 pays 2×. Stay with 5/6/7 cards pays 4×/6×/
 
 msgid "BLACKJACK_CARD_BOUNDARY"
 msgstr "The original only predeals nine cards per side. This next draw reaches an unsupported array boundary; close this table to continue."
+
+msgid "CASINO_CARD_CHAIN"
+msgstr "Card-chain"
+
+msgid "CARD_CHAIN_TOTALS"
+msgstr "Coins: {0}   Bet: {1}   Award: {2}\nChain: {3}   Bonus: {4}"
+
+msgid "CARD_CHAIN_SELECT"
+msgstr "Choose a card matching the last removed suit or rank. The first choice is free."
+
+msgid "CARD_CHAIN_RULES"
+msgstr "Ten or more replacements earn a chain return. Hand bonuses accumulate on the initial deal and replacements: flush 1×, full house 2×, four of a kind 5×, straight flush 20×."
+
+msgid "CARD_CHAIN_KEYS"
+msgstr "Original shortcuts: 1–5 select cards; lowercase q/w invoke the two commands, including the copied replacement path."
+
+msgid "CARD_CHAIN_EXHAUSTED"
+msgstr "All 52 cards have been used. The original retries forever here. This table is paused; close it to continue. No cards are recycled or awards invented."
+
+msgid "CARD_CHAIN_DEALER_KEY"
+msgstr "The shortcut selected the dealer card. The original comparison only resolves player choices 2–5, so this path waits. Close the table to continue."
+
+msgid "CARD_CHAIN_ZERO_WAIT"
+msgstr "The retained award is zero. Original collection waits without crediting coins; close this table to continue."

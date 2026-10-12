@@ -12,13 +12,13 @@ sales and reprints, calendar events, loans and the implemented facilities.
 Mystery-lab experiments have seven source-backed outcomes and saved progress/results.
 Develop and launch one own console, then use it for software planning, production
 and sales while its market grows. Design/media and technology flags persist.
-Buy casino coins and play poker and blackjack, including their distinct double-up games.
+Buy casino coins and play poker, blackjack and card-chain, including their distinct double-up games.
 Modern saves include previous-valid-save recovery. English and Japanese
 interfaces and audio controls are available.
 
 Beginner ends after Year 2, December, week 4. Normal is experimental ongoing
 play. Negative funds in either mode trigger company dissolution and return
-to the title. Original presentation and full campaign parity remain incomplete. Card-chain, horse racing and original-save
+to the title. Original presentation and full campaign parity remain incomplete. Horse racing and original-save
 import are deferred. See KNOWN_ISSUES.md for the remaining boundaries.
 
 This release includes the payroll-screen fix: visiting ordinary technology
