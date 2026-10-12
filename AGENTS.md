@@ -1,6 +1,29 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M97 room promotion
+## Current handoff — 2026-10-12, M98 original-window census
+
+M97 is merged in PR #101 at `39a3158c399221634f6e7c193ce21936f3e65650`.
+M98 research on `codex/m98-window-census` inventories every native form:
+84 forms/designers, 920 control definitions, 572 bound events; 32 targeted
+procedure and seven image fingerprints. See `docs/window-census-m98.md` and
+`tools/verify_window_census_evidence.py`; verify PR/#55/main publication state.
+This is analysis only; engine tests/builds are unnecessary. #95 stays open.
+
+Newly tracked gaps: separate Hall celebration, illustrated sales milestones,
+advanced-programming start/stop challenge (workflow, not just decoration), media
+information, reproduction tables, third-party hardware launch card, activity
+confirmation/results, help topics, numbered save/load previews and live charts/
+record panes. Do not reimplement already recovered simulation. Before coding
+advanced programming, trace its reel weights/actor mapping/meeting modes 9/10/17
+and resume mutations; existing ordinary bursts are not its equivalent.
+`fGMZishaNet` is reachable but its displayed data has no recovered writers in
+our decoded reference index; do not invent working multiplayer from its name.
+All 84 forms are mapped for comparison, not certified for pixel/control parity.
+Original artwork/previews/traces stay private. #94 timing and #97 exhaustive
+artwork-family audit remain separate. Start from the newly expanded #95 rather
+than repeating the original screenshot-only research.
+
+## Previous handoff — M97 room promotion
 
 M96 is merged in PR #100 at `b9e131c67009026822ba43edbc19396ee04084ef`.
 M97 on `codex/m97-room-promotion` implements the remaining paid promotion path:

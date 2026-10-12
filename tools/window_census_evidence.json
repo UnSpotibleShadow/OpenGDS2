@@ -1,0 +1,1419 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "baseline_main": "39a3158c399221634f6e7c193ce21936f3e65650",
+  "objects": 86,
+  "forms": [
+    {
+      "ordinal": 0,
+      "name": "MDIForm1",
+      "group": "Desktop/company",
+      "modern_comparison": "Main.Desktop.cs",
+      "controls": 72,
+      "procedures": 54,
+      "bound_events": 50
+    },
+    {
+      "ordinal": 2,
+      "name": "MainForm16",
+      "group": "Utility/about \u2014 native roles require further classification",
+      "modern_comparison": "Main.cs",
+      "controls": 6,
+      "procedures": 3,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 3,
+      "name": "fGMInfo",
+      "group": "Desktop/company",
+      "modern_comparison": "Main.Desktop.cs",
+      "controls": 32,
+      "procedures": 23,
+      "bound_events": 20
+    },
+    {
+      "ordinal": 4,
+      "name": "MainForm3",
+      "group": "Utility/about \u2014 native roles require further classification",
+      "modern_comparison": "Main.cs",
+      "controls": 3,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 5,
+      "name": "fGMKaiwa",
+      "group": "Portrait conversations",
+      "modern_comparison": "Main.Conversations.cs",
+      "controls": 6,
+      "procedures": 9,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 6,
+      "name": "fGMSKoyouKz",
+      "group": "Staff/hiring/renewal",
+      "modern_comparison": "Main.cs; Main.RenewalPresentation.cs",
+      "controls": 22,
+      "procedures": 10,
+      "bound_events": 9
+    },
+    {
+      "ordinal": 7,
+      "name": "fMainAbout",
+      "group": "Utility/about \u2014 native roles require further classification",
+      "modern_comparison": "Main.cs",
+      "controls": 6,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 8,
+      "name": "fMainVisual",
+      "group": "Desktop/company",
+      "modern_comparison": "Main.Desktop.cs",
+      "controls": 10,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 9,
+      "name": "fGMKaihatu",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 18,
+      "procedures": 13,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 10,
+      "name": "fGMWSTech",
+      "group": "Training/level-up/technology/challenge",
+      "modern_comparison": "Main.Training.cs; Main.EmployeeDetails.cs",
+      "controls": 10,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 11,
+      "name": "fGMKikakusyo",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 5,
+      "procedures": 3,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 12,
+      "name": "fGMDevW1",
+      "group": "Development reports",
+      "modern_comparison": "Main.CoreLoop.cs",
+      "controls": 10,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 13,
+      "name": "fGMZisha",
+      "group": "Own-product lists/reports; Net remains a dormant-data candidate",
+      "modern_comparison": "Main.CoreLoop.cs; Main.ProductPresentation.cs; Main.SalesHistory.cs",
+      "controls": 14,
+      "procedures": 14,
+      "bound_events": 13
+    },
+    {
+      "ordinal": 14,
+      "name": "fGMSyukka",
+      "group": "Shipment/reproduction/media information",
+      "modern_comparison": "Main.CoreLoop.cs",
+      "controls": 14,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 15,
+      "name": "fGMKansei",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 8,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 16,
+      "name": "fGMalpha",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 14,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 17,
+      "name": "fGMbeta",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 13,
+      "procedures": 9,
+      "bound_events": 9
+    },
+    {
+      "ordinal": 18,
+      "name": "fGMSyain",
+      "group": "Staff/hiring/renewal",
+      "modern_comparison": "Main.cs; Main.RenewalPresentation.cs",
+      "controls": 20,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 19,
+      "name": "fGMSendenBaitai",
+      "group": "Promotion/company activities",
+      "modern_comparison": "Main.Promotion.cs; Main.Company.cs",
+      "controls": 8,
+      "procedures": 9,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 20,
+      "name": "fGMMedia",
+      "group": "Shipment/reproduction/media information",
+      "modern_comparison": "Main.CoreLoop.cs",
+      "controls": 7,
+      "procedures": 3,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009A2F24"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x009774E4"
+        },
+        {
+          "control": "Command1",
+          "index": 5,
+          "slot": 0,
+          "start": "0x0097A6A0"
+        }
+      ]
+    },
+    {
+      "ordinal": 21,
+      "name": "fGMSyukkaSai",
+      "group": "Shipment/reproduction/media information",
+      "modern_comparison": "Main.CoreLoop.cs",
+      "controls": 13,
+      "procedures": 9,
+      "bound_events": 9
+    },
+    {
+      "ordinal": 22,
+      "name": "fGMCrossR",
+      "group": "Reviews/Hall celebration/sales milestones",
+      "modern_comparison": "Main.ReviewPresentation.cs; Main.CoreLoop.cs",
+      "controls": 9,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 23,
+      "name": "fGMCrossRDen",
+      "group": "Reviews/Hall celebration/sales milestones",
+      "modern_comparison": "Main.ReviewPresentation.cs; Main.CoreLoop.cs",
+      "controls": 5,
+      "procedures": 4,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Command1",
+          "index": 2,
+          "slot": 0,
+          "start": "0x0097B104"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x00986780"
+        },
+        {
+          "control": "Timer1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x00982814"
+        }
+      ]
+    },
+    {
+      "ordinal": 24,
+      "name": "fGMKikakuKaigi",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 3,
+      "procedures": 2,
+      "bound_events": 2
+    },
+    {
+      "ordinal": 25,
+      "name": "fKeibaMain",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 37,
+      "procedures": 16,
+      "bound_events": 14
+    },
+    {
+      "ordinal": 26,
+      "name": "fKeibaModosi",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 5,
+      "procedures": 2,
+      "bound_events": 2
+    },
+    {
+      "ordinal": 27,
+      "name": "fGMLevelUP",
+      "group": "Training/level-up/technology/challenge",
+      "modern_comparison": "Main.Training.cs; Main.EmployeeDetails.cs",
+      "controls": 5,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 28,
+      "name": "fGMHisyoK",
+      "group": "Secretary/employee action-choice utility",
+      "modern_comparison": "Main.Secretary.cs; Main.EmployeeDetails.cs",
+      "controls": 15,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 29,
+      "name": "fGMComK",
+      "group": "Computers/licenses/hardware information/announcement",
+      "modern_comparison": "Main.cs; Main.Calendar.cs",
+      "controls": 13,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 30,
+      "name": "fGMHLicense",
+      "group": "Computers/licenses/hardware information/announcement",
+      "modern_comparison": "Main.cs; Main.Calendar.cs",
+      "controls": 13,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 31,
+      "name": "fGMKoudou",
+      "group": "Secretary/employee action-choice utility",
+      "modern_comparison": "Main.Secretary.cs; Main.EmployeeDetails.cs",
+      "controls": 4,
+      "procedures": 3,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 32,
+      "name": "fGMKaiwa2",
+      "group": "Portrait conversations",
+      "modern_comparison": "Main.Conversations.cs",
+      "controls": 6,
+      "procedures": 9,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 33,
+      "name": "fGMGameDexSn",
+      "group": "Exhibition/awards",
+      "modern_comparison": "Main.AnnualEvents.cs; Main.EventPresentation.cs",
+      "controls": 12,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 34,
+      "name": "fGMGameDexKs",
+      "group": "Exhibition/awards",
+      "modern_comparison": "Main.AnnualEvents.cs; Main.EventPresentation.cs",
+      "controls": 5,
+      "procedures": 3,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 35,
+      "name": "fGMGameHardInfo",
+      "group": "Computers/licenses/hardware information/announcement",
+      "modern_comparison": "Main.cs; Main.Calendar.cs",
+      "controls": 11,
+      "procedures": 6,
+      "bound_events": 6
+    },
+    {
+      "ordinal": 36,
+      "name": "fGMKeiyakuS",
+      "group": "Staff/hiring/renewal",
+      "modern_comparison": "Main.cs; Main.RenewalPresentation.cs",
+      "controls": 8,
+      "procedures": 6,
+      "bound_events": 6
+    },
+    {
+      "ordinal": 37,
+      "name": "fGMHardHatubai",
+      "group": "Computers/licenses/hardware information/announcement",
+      "modern_comparison": "Main.cs; Main.Calendar.cs",
+      "controls": 7,
+      "procedures": 3,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Command1",
+          "index": 3,
+          "slot": 0,
+          "start": "0x00980D38"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009936FC"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00977CC4"
+        }
+      ]
+    },
+    {
+      "ordinal": 38,
+      "name": "fGMRank100",
+      "group": "Sales chart/reach-time records",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 13,
+      "procedures": 6,
+      "bound_events": 6,
+      "event_bindings": [
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009968B8"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 7,
+          "start": "0x0098D908"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x0097B730"
+        },
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 0,
+          "start": "0x0097CEF4"
+        },
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 8,
+          "start": "0x0097CF70"
+        },
+        {
+          "control": "Timer1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x00995924"
+        }
+      ]
+    },
+    {
+      "ordinal": 39,
+      "name": "fGMTenaSel",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 40,
+      "name": "fGMTenantOnsen",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 41,
+      "name": "fGMTenantGameS",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 6,
+      "procedures": 3,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 42,
+      "name": "fGMTenantReS",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 7,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 43,
+      "name": "fGMOuri",
+      "group": "Reviews/Hall celebration/sales milestones",
+      "modern_comparison": "Main.ReviewPresentation.cs; Main.CoreLoop.cs",
+      "controls": 5,
+      "procedures": 3,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Command1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x0097AEF0"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009B4F34"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00978194"
+        }
+      ]
+    },
+    {
+      "ordinal": 44,
+      "name": "fGMHikinuki",
+      "group": "Poaching/employment offers",
+      "modern_comparison": "Main.Calendar.cs",
+      "controls": 16,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 45,
+      "name": "fGMHikinukiSel",
+      "group": "Poaching/employment offers",
+      "modern_comparison": "Main.Calendar.cs",
+      "controls": 22,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 46,
+      "name": "fGMHikinukiKeS",
+      "group": "Poaching/employment offers",
+      "modern_comparison": "Main.Calendar.cs",
+      "controls": 6,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 47,
+      "name": "fGMHikinukiKnS",
+      "group": "Poaching/employment offers",
+      "modern_comparison": "Main.Calendar.cs",
+      "controls": 6,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 48,
+      "name": "fGMTechKau",
+      "group": "Training/level-up/technology/challenge",
+      "modern_comparison": "Main.Training.cs; Main.EmployeeDetails.cs",
+      "controls": 9,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 49,
+      "name": "fGMGameNew",
+      "group": "New game/save/load/start gate",
+      "modern_comparison": "Main.cs",
+      "controls": 7,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 50,
+      "name": "fGMGameSave",
+      "group": "New game/save/load/start gate",
+      "modern_comparison": "Main.cs",
+      "controls": 10,
+      "procedures": 9,
+      "bound_events": 9,
+      "event_bindings": [
+        {
+          "control": "VScroll1",
+          "index": 7,
+          "slot": 0,
+          "start": "0x0097E454"
+        },
+        {
+          "control": "VScroll1",
+          "index": 7,
+          "slot": 8,
+          "start": "0x0097E214"
+        },
+        {
+          "control": "Command1",
+          "index": 9,
+          "slot": 0,
+          "start": "0x0099D598"
+        },
+        {
+          "control": "Command2",
+          "index": 8,
+          "slot": 0,
+          "start": "0x0097AF3C"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009AB380"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 7,
+          "start": "0x009913A0"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00977BAC"
+        },
+        {
+          "control": "LabelT1",
+          "index": 3,
+          "slot": 2,
+          "start": "0x00977B74"
+        },
+        {
+          "control": "LabelT1",
+          "index": 3,
+          "slot": 8,
+          "start": "0x00980AF8"
+        }
+      ]
+    },
+    {
+      "ordinal": 51,
+      "name": "fGMGameLoad",
+      "group": "New game/save/load/start gate",
+      "modern_comparison": "Main.cs",
+      "controls": 10,
+      "procedures": 9,
+      "bound_events": 9,
+      "event_bindings": [
+        {
+          "control": "VScroll1",
+          "index": 3,
+          "slot": 0,
+          "start": "0x0097E844"
+        },
+        {
+          "control": "VScroll1",
+          "index": 3,
+          "slot": 8,
+          "start": "0x0097E8D4"
+        },
+        {
+          "control": "Command1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x009B2C24"
+        },
+        {
+          "control": "Command2",
+          "index": 2,
+          "slot": 0,
+          "start": "0x0097B19C"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009A8758"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 7,
+          "start": "0x009910E4"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00977DA4"
+        },
+        {
+          "control": "LabelT1",
+          "index": 6,
+          "slot": 2,
+          "start": "0x00977CFC"
+        },
+        {
+          "control": "LabelT1",
+          "index": 6,
+          "slot": 8,
+          "start": "0x00980DF8"
+        }
+      ]
+    },
+    {
+      "ordinal": 52,
+      "name": "fGMKontesuto",
+      "group": "Exhibition/awards",
+      "modern_comparison": "Main.AnnualEvents.cs; Main.EventPresentation.cs",
+      "controls": 7,
+      "procedures": 5,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 53,
+      "name": "fGMKontesutoHp",
+      "group": "Exhibition/awards",
+      "modern_comparison": "Main.AnnualEvents.cs; Main.EventPresentation.cs",
+      "controls": 4,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 54,
+      "name": "fGMTenantTechS",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 55,
+      "name": "fGMTenantTechSel",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 6,
+      "bound_events": 6
+    },
+    {
+      "ordinal": 56,
+      "name": "fGMTenantCasino",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 7,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 57,
+      "name": "fGMDevW2",
+      "group": "Development reports",
+      "modern_comparison": "Main.CoreLoop.cs",
+      "controls": 10,
+      "procedures": 10,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 58,
+      "name": "fGMTenantBengo",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 9,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 59,
+      "name": "fGMKaiwaC",
+      "group": "Portrait conversations",
+      "modern_comparison": "Main.Conversations.cs",
+      "controls": 6,
+      "procedures": 8,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 61,
+      "name": "fGMSeisanZ",
+      "group": "Promotion/company activities",
+      "modern_comparison": "Main.Promotion.cs; Main.Company.cs",
+      "controls": 6,
+      "procedures": 4,
+      "bound_events": 4,
+      "event_bindings": [
+        {
+          "control": "Command1",
+          "index": 4,
+          "slot": 0,
+          "start": "0x0099ED68"
+        },
+        {
+          "control": "Command2",
+          "index": 3,
+          "slot": 0,
+          "start": "0x0097AD28"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x00994414"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00977394"
+        }
+      ]
+    },
+    {
+      "ordinal": 62,
+      "name": "fGMTenantSeisan",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 63,
+      "name": "fGMTenantNazoP",
+      "group": "Tenants/facility selection",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 64,
+      "name": "fGMTenantHard",
+      "group": "Own hardware development/launch/report",
+      "modern_comparison": "Main.Hardware.cs",
+      "controls": 7,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 65,
+      "name": "fGMTenantHardS",
+      "group": "Own hardware development/launch/report",
+      "modern_comparison": "Main.Hardware.cs",
+      "controls": 9,
+      "procedures": 5,
+      "bound_events": 5
+    },
+    {
+      "ordinal": 66,
+      "name": "fGMDevH",
+      "group": "Own hardware development/launch/report",
+      "modern_comparison": "Main.Hardware.cs",
+      "controls": 3,
+      "procedures": 4,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 67,
+      "name": "fGMSyukkaH",
+      "group": "Own hardware development/launch/report",
+      "modern_comparison": "Main.Hardware.cs",
+      "controls": 7,
+      "procedures": 4,
+      "bound_events": 3
+    },
+    {
+      "ordinal": 68,
+      "name": "fGMZishaH",
+      "group": "Own hardware development/launch/report",
+      "modern_comparison": "Main.Hardware.cs",
+      "controls": 4,
+      "procedures": 2,
+      "bound_events": 2
+    },
+    {
+      "ordinal": 69,
+      "name": "fGMTenantCasinoSn",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 2,
+      "procedures": 2,
+      "bound_events": 2
+    },
+    {
+      "ordinal": 70,
+      "name": "fCasinoPoker",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 23,
+      "procedures": 9,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 71,
+      "name": "fGMToutatuRank",
+      "group": "Sales chart/reach-time records",
+      "modern_comparison": "Main.Progression.cs",
+      "controls": 8,
+      "procedures": 3,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Command1",
+          "index": 6,
+          "slot": 0,
+          "start": "0x0097A570"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009A658C"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x009777BC"
+        }
+      ]
+    },
+    {
+      "ordinal": 72,
+      "name": "fGMGameKaishi",
+      "group": "New game/save/load/start gate",
+      "modern_comparison": "Main.cs",
+      "controls": 2,
+      "procedures": 2,
+      "bound_events": 2
+    },
+    {
+      "ordinal": 73,
+      "name": "fCasinoBJ",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 23,
+      "procedures": 8,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 74,
+      "name": "fCasinoCC",
+      "group": "Casino/horse racing",
+      "modern_comparison": "Main.Casino.cs; Main.HorseRacing.cs",
+      "controls": 26,
+      "procedures": 15,
+      "bound_events": 10
+    },
+    {
+      "ordinal": 75,
+      "name": "fGMBank",
+      "group": "Bank",
+      "modern_comparison": "Main.Bank.cs",
+      "controls": 10,
+      "procedures": 5,
+      "bound_events": 4
+    },
+    {
+      "ordinal": 76,
+      "name": "fGMHelp",
+      "group": "Original help viewer \u2014 no equivalent topic browser",
+      "modern_comparison": "Main.cs",
+      "controls": 12,
+      "procedures": 8,
+      "bound_events": 7,
+      "event_bindings": [
+        {
+          "control": "Label2",
+          "index": 8,
+          "slot": 1,
+          "start": "0x00998634"
+        },
+        {
+          "control": "Label2",
+          "index": 8,
+          "slot": 8,
+          "start": "0x0097C8B8"
+        },
+        {
+          "control": "Label2",
+          "index": 8,
+          "slot": 9,
+          "start": "0x0097C840"
+        },
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 0,
+          "start": "0x00989310"
+        },
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 8,
+          "start": "0x009779EC"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x00980064"
+        },
+        {
+          "control": "Command1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x0098291C"
+        }
+      ]
+    },
+    {
+      "ordinal": 77,
+      "name": "fGMZishaNet",
+      "group": "Own-product lists/reports; Net remains a dormant-data candidate",
+      "modern_comparison": "Main.CoreLoop.cs; Main.ProductPresentation.cs; Main.SalesHistory.cs",
+      "controls": 10,
+      "procedures": 6,
+      "bound_events": 6,
+      "event_bindings": [
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 0,
+          "start": "0x0097CC0C"
+        },
+        {
+          "control": "VScroll1",
+          "index": 2,
+          "slot": 8,
+          "start": "0x0097CC88"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009900DC"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 7,
+          "start": "0x0098B600"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00976FB8"
+        },
+        {
+          "control": "Timer1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x0099C4EC"
+        }
+      ]
+    },
+    {
+      "ordinal": 78,
+      "name": "fGMZishaK",
+      "group": "Own-product lists/reports; Net remains a dormant-data candidate",
+      "modern_comparison": "Main.CoreLoop.cs; Main.ProductPresentation.cs; Main.SalesHistory.cs",
+      "controls": 7,
+      "procedures": 3,
+      "bound_events": 3,
+      "event_bindings": [
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009C2568"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00977F2C"
+        },
+        {
+          "control": "Command1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x0097AA7C"
+        }
+      ]
+    },
+    {
+      "ordinal": 79,
+      "name": "fGMHisyoSet",
+      "group": "Secretary/employee action-choice utility",
+      "modern_comparison": "Main.Secretary.cs; Main.EmployeeDetails.cs",
+      "controls": 17,
+      "procedures": 9,
+      "bound_events": 9
+    },
+    {
+      "ordinal": 80,
+      "name": "fGMKaihatuS",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 7,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 81,
+      "name": "fGMManga",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 10,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 82,
+      "name": "fGMZokuhen",
+      "group": "Planning/proposal/checkpoints",
+      "modern_comparison": "Main.Development.cs; Main.CoreLoop.cs",
+      "controls": 12,
+      "procedures": 9,
+      "bound_events": 9
+    },
+    {
+      "ordinal": 83,
+      "name": "fGMSKoyou",
+      "group": "Staff/hiring/renewal",
+      "modern_comparison": "Main.cs; Main.RenewalPresentation.cs",
+      "controls": 22,
+      "procedures": 8,
+      "bound_events": 8
+    },
+    {
+      "ordinal": 84,
+      "name": "fGMZishaKW",
+      "group": "Own-product lists/reports; Net remains a dormant-data candidate",
+      "modern_comparison": "Main.CoreLoop.cs; Main.ProductPresentation.cs; Main.SalesHistory.cs",
+      "controls": 10,
+      "procedures": 7,
+      "bound_events": 7
+    },
+    {
+      "ordinal": 85,
+      "name": "fGMKoudo",
+      "group": "Training/level-up/technology/challenge",
+      "modern_comparison": "Main.Training.cs; Main.EmployeeDetails.cs",
+      "controls": 6,
+      "procedures": 4,
+      "bound_events": 4,
+      "event_bindings": [
+        {
+          "control": "Timer1",
+          "index": 1,
+          "slot": 0,
+          "start": "0x0098F68C"
+        },
+        {
+          "control": "Command1",
+          "index": 2,
+          "slot": 0,
+          "start": "0x00980EB8"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 6,
+          "start": "0x009A19A0"
+        },
+        {
+          "control": "Form",
+          "index": -1,
+          "slot": 8,
+          "start": "0x00978044"
+        }
+      ]
+    }
+  ],
+  "fingerprints": [
+    {
+      "form": "fGMMedia",
+      "start": "0x009A2F24",
+      "size": 1812,
+      "sha256": "1074ebf2f50e4c50c85675cb96a450871992c336cb9f120f1cfa9a6c34a884f8"
+    },
+    {
+      "form": "fGMCrossRDen",
+      "start": "0x00986780",
+      "size": 312,
+      "sha256": "1089392aded23f9d1c59098ec9142d3849c4a7f68682629a680b339dd37e7a53"
+    },
+    {
+      "form": "fGMCrossRDen",
+      "start": "0x00982814",
+      "size": 196,
+      "sha256": "7266917713adfee8bc1dc7e398978b14ea0d5ac53044c611ca27f5b1f65494e0"
+    },
+    {
+      "form": "fGMHardHatubai",
+      "start": "0x00980D38",
+      "size": 104,
+      "sha256": "ec3aeb1d36d854fbba98b735001ffd8bc2519e4bfc87cf87e681d4f2ba209432"
+    },
+    {
+      "form": "fGMHardHatubai",
+      "start": "0x009936FC",
+      "size": 740,
+      "sha256": "aff12b218c37d07ba1add39d3a7e27430146f7646a7c9779bdec23fb0356f8aa"
+    },
+    {
+      "form": "fGMRank100",
+      "start": "0x009968B8",
+      "size": 928,
+      "sha256": "bb3647da027816b8756528c12246d340c3ecd5d2d113b41a89e01d7603a58a6c"
+    },
+    {
+      "form": "fGMRank100",
+      "start": "0x0098D908",
+      "size": 528,
+      "sha256": "65d8231f4d186898eb516eecda385a6301cb05aa377f5182f3bffd9ab79e1a48"
+    },
+    {
+      "form": "fGMRank100",
+      "start": "0x00995924",
+      "size": 856,
+      "sha256": "b663beaf68d790eeecfbb8bf16a0b8b14c59c35f11939247c10c9ea0088b6e73"
+    },
+    {
+      "form": "fGMOuri",
+      "start": "0x009B4F34",
+      "size": 3128,
+      "sha256": "723ebc848faccf03860b18eb8a8279102ba4a7e72096f9de90bae97a91be0612"
+    },
+    {
+      "form": "fGMGameSave",
+      "start": "0x0099D598",
+      "size": 1432,
+      "sha256": "03b8da37ee3631e937721a103c37bcf4fe19906f97b3b4be6dc453eea8d4d719"
+    },
+    {
+      "form": "fGMGameSave",
+      "start": "0x009AB380",
+      "size": 2164,
+      "sha256": "7c919daaebf64e0f20bb079afe584366118dc280cef1606ea9d382a59cb86922"
+    },
+    {
+      "form": "fGMGameSave",
+      "start": "0x009913A0",
+      "size": 628,
+      "sha256": "2052391a007c87f7e82e635ef5e3b2f96ed66c6ed4a4088951707d845d094f63"
+    },
+    {
+      "form": "fGMGameSave",
+      "start": "0x00980AF8",
+      "size": 128,
+      "sha256": "ed181f2bba6196c1118c1200b603832c855332428f0d0b183cf5f44b2b98d9fd"
+    },
+    {
+      "form": "fGMGameLoad",
+      "start": "0x009B2C24",
+      "size": 2792,
+      "sha256": "5611c406a4d66e57f68c72ec80fcc4e857a7e05c8595a0b8ff7c45d0b54acf6f"
+    },
+    {
+      "form": "fGMGameLoad",
+      "start": "0x009A8758",
+      "size": 2108,
+      "sha256": "437af10fdf8ecac79c61d9a8273c8d7465e67fb2100b6e590072ff88fbb03186"
+    },
+    {
+      "form": "fGMGameLoad",
+      "start": "0x009910E4",
+      "size": 628,
+      "sha256": "e6bedf9ac7a0a10350e9884102b41c3e499e48b77c8bd6bd6a7fcd7bd0d53f6d"
+    },
+    {
+      "form": "fGMGameLoad",
+      "start": "0x00980DF8",
+      "size": 128,
+      "sha256": "9a5712245a56f7226acf868267fa5aecf3a2b624e8cc8c5ab8ecabb6834f6504"
+    },
+    {
+      "form": "fGMSeisanZ",
+      "start": "0x0099ED68",
+      "size": 1424,
+      "sha256": "21a4fa711d95bdcb6f48d422bb351af8f36f7894107b6169a20cfc6cd51e2296"
+    },
+    {
+      "form": "fGMSeisanZ",
+      "start": "0x00994414",
+      "size": 792,
+      "sha256": "5a5ee8d2d10e364afb5996bee9a3d9622f776d4801baef983f20f2c26205eadd"
+    },
+    {
+      "form": "fGMToutatuRank",
+      "start": "0x009A658C",
+      "size": 2064,
+      "sha256": "a0e33fb4df2c3ab8c2bcecb05904a83105c2a8f48fee14abc447958a57ee1980"
+    },
+    {
+      "form": "fGMHelp",
+      "start": "0x0098291C",
+      "size": 208,
+      "sha256": "318747498984fed95b1191d0e451c585c5b29611cf8786a1ea908fde0a37513f"
+    },
+    {
+      "form": "fGMHelp",
+      "start": "0x009970C0",
+      "size": 992,
+      "sha256": "9b28f30e275385138e820321cfa3fb04dba43c9a4b5142ccf3fcc1686eb1339e"
+    },
+    {
+      "form": "fGMHelp",
+      "start": "0x00980064",
+      "size": 104,
+      "sha256": "5f85e6d5eaf843d479117b40c55ed85227e0739186c06fb9684116d67ac087b8"
+    },
+    {
+      "form": "fGMHelp",
+      "start": "0x00998634",
+      "size": 1080,
+      "sha256": "7850cc36915ce4da0c9d37408eadb19242bd5b5b27ca88650f83a0b751a5242f"
+    },
+    {
+      "form": "fGMHelp",
+      "start": "0x00989310",
+      "size": 396,
+      "sha256": "10637bdd84370450bf331897c8b191b4902f267830fb3576c9dabb141c2da259"
+    },
+    {
+      "form": "fGMZishaNet",
+      "start": "0x009900DC",
+      "size": 588,
+      "sha256": "b260f9f1c07583475bc2b913077fb52f956ada11c70d59029d0375d789041c78"
+    },
+    {
+      "form": "fGMZishaNet",
+      "start": "0x0098B600",
+      "size": 460,
+      "sha256": "5ff0d0f5cad79adaf1d5988e9ebfda783c53c344be317b8aea09ecaac6d9a249"
+    },
+    {
+      "form": "fGMZishaNet",
+      "start": "0x0099C4EC",
+      "size": 1272,
+      "sha256": "0dff951ee2ee97321185981639e3a2c54ece6fe3e085e9d5c95eea3d4388034c"
+    },
+    {
+      "form": "fGMZishaK",
+      "start": "0x009C2568",
+      "size": 3968,
+      "sha256": "3df68a55b1f4cffde1850cb2c0118226279e42b256f2000f94f3bc79715f5888"
+    },
+    {
+      "form": "fGMKoudo",
+      "start": "0x00980EB8",
+      "size": 140,
+      "sha256": "ff00f2a47e07b49a2bb2432e258b4e3f2766c25166270e14122059ca40bb9185"
+    },
+    {
+      "form": "fGMKoudo",
+      "start": "0x009A19A0",
+      "size": 1696,
+      "sha256": "df1614a9948a1184a88a5d972348b4eed646d5586927b197c4405fea68b3f053"
+    },
+    {
+      "form": "fGMKoudo",
+      "start": "0x0098F68C",
+      "size": 580,
+      "sha256": "aa67903959f6b34023d54f030765a2110d5817556e8dad0d0d13340ab69a140f"
+    }
+  ],
+  "resources": [
+    {
+      "name": "hall_frame2",
+      "offset": "0x2f2ea1",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "09de5d7139e414c766c774318c76680a7ea007670a3e0d65e53f2733b1d49bea"
+    },
+    {
+      "name": "hall_frame1",
+      "offset": "0x2fd305",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "0d925ce0d3eb02d82bf3837f89464fa21ab2115b6aee53c709657c882d00b23c"
+    },
+    {
+      "name": "sales_million",
+      "offset": "0x361f1a",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "6e53a83f5d3a8fe2bd3b3e078a4025a59975efff349e4e55c121485b43168f0d"
+    },
+    {
+      "name": "sales_half_million",
+      "offset": "0x36c37c",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "8383986ab2d045b24d3044f0610d190c1ea23f74ea7fc995223a1dd9e7bd4df2"
+    },
+    {
+      "name": "sales_quarter_million",
+      "offset": "0x3767de",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "d1849ceec0108d9dd62c3602eccb22c4fbacff422c77ef7a3d568977ce841d89"
+    },
+    {
+      "name": "sales_hundred_thousand",
+      "offset": "0x380c40",
+      "size": 42038,
+      "width": 256,
+      "height": 160,
+      "sha256": "ca11db0a50bb2d8ac8c7fea86d0fa7d562fb4dc17454c75f56c183a7dc0aa26c"
+    },
+    {
+      "name": "help_title_art",
+      "offset": "0x33f306",
+      "size": 128646,
+      "width": 250,
+      "height": 171,
+      "sha256": "f8e0e9682b3ab95677fbe0ad6b63fad40181587b0238b11454f0bb4c4b0c80ef"
+    }
+  ]
+}
