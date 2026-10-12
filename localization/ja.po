@@ -3398,3 +3398,63 @@ msgstr "開発量"
 
 msgid "OFFICE_ASSIGN_HINT"
 msgstr "社員を選んで机を右クリックすると、配置できます。"
+
+msgid "PROJECT_AUDIENCE"
+msgstr "対象ユーザー層"
+
+msgid "PROJECT_GENRE"
+msgstr "ジャンル"
+
+msgid "PROJECT_CONTENT"
+msgstr "ゲーム内容"
+
+msgid "PROJECT_SIZE"
+msgstr "ゲーム容量"
+
+msgid "SHIPMENT_MEDIA_COST"
+msgstr "メディア価格（一本）"
+
+msgid "SHIPMENT_PACKAGE_COST"
+msgstr "パッケージ代（一本）"
+
+msgid "SHIPMENT_UNIT_COST"
+msgstr "合計コスト（一本）"
+
+msgid "SHIPMENT_RETAILER_SHARE"
+msgstr "小売店の取り分（一本）"
+
+msgid "SHIPMENT_TRANSPORT_SHARE"
+msgstr "運送会社の取り分（一本）"
+
+msgid "SHIPMENT_ALL_SOLD"
+msgstr "全て売れた場合の受取額"
+
+msgid "PRODUCT_DETAILS"
+msgstr "ゲーム情報"
+
+msgid "PRODUCT_RELEASE_DATE"
+msgstr "発売日"
+
+msgid "PRODUCT_CONTEST_RESULT"
+msgstr "ゲームコンテスト"
+
+msgid "COMPACT_HISTORY_OLDEST"
+msgstr "12週"
+
+msgid "COMPACT_HISTORY_MIDDLE"
+msgstr "6週"
+
+msgid "COMPACT_HISTORY_NEWEST"
+msgstr "1週"
+
+msgid "RENEWAL_INSTRUCTION"
+msgstr "契約を継続したい社員をチェックしてください。"
+
+msgid "RENEWAL_CONTINUE"
+msgstr "継続"
+
+msgid "RENEWAL_SELECTED_TOTAL"
+msgstr "合計契約金"
+
+msgid "PROPOSAL_ARTWORK_REIMPORT"
+msgstr "企画書の画像を表示するには、タイトル画面でオリジナルのアーカイブを再インポートしてください。"

@@ -54,22 +54,7 @@ public partial class Main
         else if (ShowAnnualCalendarEvent(state,pending)) { }
         else if (pending.PendingEvent==CalendarEvent.ContractRenewal)
         {
-            AddHeading(Tr("ANNUAL_CONTRACT_RENEWAL"),22);
-            var selection=new Dictionary<int,CheckBox>();
-            foreach (var employee in state.Employees.OrderBy(x=>x.SourceIndex))
-            {
-                int id=employee.SourceIndex ?? throw new InvalidOperationException("Unknown employee identity.");
-                var checkbox=new CheckBox {Name=$"RenewEmployee{id}",ButtonPressed=true,
-                    Text=$"{EmployeeName(employee)} — ¥{employee.ContractFee:N0}"};
-                selection.Add(id,checkbox);_content.AddChild(checkbox);
-            }
-            var confirm=new Button {Name="ConfirmContractRenewal",Text=Tr("CONFIRM_CONTRACT_RENEWAL")};_content.AddChild(confirm);
-            confirm.Pressed+=()=>
-            {
-                var result=CalendarService.RenewContracts(state,selection.Where(x=>x.Value.ButtonPressed).Select(x=>x.Key).ToHashSet());
-                if (result==ContractRenewalResult.Success) ShowOfficeReconstruction(state);
-                else _status.Text=Tr($"CONTRACT_RENEWAL_{result}");
-            };
+            ShowAnnualRenewal(state);
         }
         else if (pending.PendingEvent is CalendarEvent kind)
         {

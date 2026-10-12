@@ -32,4 +32,12 @@ public static class SalesHistoryRules
         for (int i=0;i<CellCount-1;i++) maximum=Math.Max(maximum,history[i]);
         return maximum>=100000 ? 200000 : maximum>=30000 ? 80000 : 40000;
     }
+    /// <summary>fGMZishaKW 009C4570: the narrow individual-product variant.</summary>
+    public static long CompactChartCeiling(IReadOnlyList<long> history)
+    {
+        Validate(history);
+        long maximum=0;
+        for(int i=0;i<CellCount-1;i++)maximum=Math.Max(maximum,history[i]);
+        return maximum<20000 ? 20000 : maximum<40000 ? 40000 : maximum<100000 ? 80000 : maximum<200000 ? 200000 : 400000;
+    }
 }

@@ -3428,3 +3428,63 @@ msgstr "Dev. points"
 
 msgid "OFFICE_ASSIGN_HINT"
 msgstr "Select an employee, then right-click a desk to assign them."
+
+msgid "PROJECT_AUDIENCE"
+msgstr "Audience"
+
+msgid "PROJECT_GENRE"
+msgstr "Genre"
+
+msgid "PROJECT_CONTENT"
+msgstr "Content"
+
+msgid "PROJECT_SIZE"
+msgstr "Size"
+
+msgid "SHIPMENT_MEDIA_COST"
+msgstr "Media cost per copy"
+
+msgid "SHIPMENT_PACKAGE_COST"
+msgstr "Packaging per copy"
+
+msgid "SHIPMENT_UNIT_COST"
+msgstr "Production cost per copy"
+
+msgid "SHIPMENT_RETAILER_SHARE"
+msgstr "Retailer share per copy"
+
+msgid "SHIPMENT_TRANSPORT_SHARE"
+msgstr "Transport share per copy"
+
+msgid "SHIPMENT_ALL_SOLD"
+msgstr "Receipts if all copies sell"
+
+msgid "PRODUCT_DETAILS"
+msgstr "Game details"
+
+msgid "PRODUCT_RELEASE_DATE"
+msgstr "Released"
+
+msgid "PRODUCT_CONTEST_RESULT"
+msgstr "Contest result"
+
+msgid "COMPACT_HISTORY_OLDEST"
+msgstr "12 weeks"
+
+msgid "COMPACT_HISTORY_MIDDLE"
+msgstr "6 weeks"
+
+msgid "COMPACT_HISTORY_NEWEST"
+msgstr "1 week"
+
+msgid "RENEWAL_INSTRUCTION"
+msgstr "Check the employees whose contracts you want to renew."
+
+msgid "RENEWAL_CONTINUE"
+msgstr "Renew"
+
+msgid "RENEWAL_SELECTED_TOTAL"
+msgstr "Selected renewal fees"
+
+msgid "PROPOSAL_ARTWORK_REIMPORT"
+msgstr "Reimport your original archive from the title screen to show the proposal illustration."

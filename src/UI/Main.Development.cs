@@ -149,10 +149,15 @@ public partial class Main
     {
         ClearContent(keepMeetingMusic:true);
         _music.SetMeetingPhase((int)MeetingMusicPhase.Planning);
-        CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,350),410);
+        CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,510),410);
         _dialog!.SetTitle(Tr("PLANNING_MEETING"));
         var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : mangaSourceIndex is int manga ? MangaText(catalog,manga,"TITLE") : Tr("NEW_PROJECT_TITLE");
-        var title=AddField(Tr("GAME_TITLE"),defaultTitle,128);title.Name="PlanningTitle";
+        var illustration=OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningProposal.bmp");
+        _content.AddChild(Picture("ProposalIllustration",illustration,new(256,160)));
+        if(illustration is null)_content.AddChild(new Label {Text=Tr("PROPOSAL_ARTWORK_REIMPORT"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+        var device=new HBoxContainer();_content.AddChild(device);
+        device.AddChild(Picture("ProposalHardwarePicture",HardwarePicture(state,hardwareId),new(64,64)));
+        device.AddChild(new Label {Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}",SizeFlagsVertical=SizeFlags.ShrinkCenter});
         AddHeading(CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),16);
         AddHeading(CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name),16);
         var quote=new Label {Name="PlanningQuote",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(quote);
@@ -170,17 +175,16 @@ public partial class Main
             var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
             quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}   {Tr("DEVELOPMENT_POINTS")}: {value.Points}";
             gate.Text=Tr($"PLANNING_RESULT_{result}");
-            start.Disabled=result!=DevelopmentPlanningResult.Success || string.IsNullOrWhiteSpace(title.Text);
+            start.Disabled=result!=DevelopmentPlanningResult.Success;
         }
-        title.TextChanged+=_=>RefreshQuote();
         RefreshQuote();ShowFocus();
         AddAction("PLANNING_NEW_PROPOSAL",()=>ShowPlanningMeeting(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex));
         start.Pressed+=()=>
         {
             var result=predecessorProductIndex is int predecessor
-                ? DevelopmentProjectService.TryAcceptSequelPlan(state,catalog,roomIndex,hardwareId,audienceId,predecessor,title.Text,focus)
-                : mangaSourceIndex is int manga ? DevelopmentProjectService.TryAcceptMangaPlan(state,catalog,roomIndex,hardwareId,audienceId,manga,title.Text,focus)
-                : DevelopmentProjectService.TryAcceptNewPlan(state,catalog,roomIndex,hardwareId,audienceId,title.Text,focus);
+                ? DevelopmentProjectService.TryAcceptSequelPlan(state,catalog,roomIndex,hardwareId,audienceId,predecessor,defaultTitle,focus)
+                : mangaSourceIndex is int manga ? DevelopmentProjectService.TryAcceptMangaPlan(state,catalog,roomIndex,hardwareId,audienceId,manga,defaultTitle,focus)
+                : DevelopmentProjectService.TryAcceptNewPlan(state,catalog,roomIndex,hardwareId,audienceId,defaultTitle,focus);
             if (result==DevelopmentPlanningResult.Success) ShowProject(state,state.DevelopmentProjects.Single(x=>x.RoomIndex==roomIndex));
             else gate.Text=Tr($"PLANNING_RESULT_{result}");
         };

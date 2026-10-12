@@ -1,33 +1,46 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M94 office presentation
+## Current handoff — 2026-10-12, M95 development screens
 
-M94 implements the first #95 group on `codex/m94-office-presentation`:
-selected employee + right-click desk assignment with all twelve native regions,
-rest-policy guard and occupied-target work-timer reset; room-label/digit/panel
-sprites 87–92, independent panel clocks and shared completed-room blink; saved
-presentation phase; alpha/beta added-development-point columns; corrected
-runner-up Grand Prix translation. Original artwork stays in local imports;
-English room lettering patches only six verified caption interiors. Native
-Japanese labels/digits and all other pixels remain unchanged.
+M94 is merged in PR #98 at `9d9a844ee3b5d22ade1c025ea8e377f94032f2e2`:
+right-click desk assignment, room labels/progress, saved room panel/blink phases,
+checkpoint added-point columns and runner-up Grand Prix wording. Do not redo it.
 
-Issue #95 MUST stay open at the owner's request. The full 1600×530 OFFICE atlas was
-shown in chat; device pictures, staff portraits and dialog illustrations are
-separate resources. The owner corrected any implication that it covered all
-game artwork. A combined resource reference index belongs to the #97 todo. Exhaustive atlas review is deferred to #97; pacing is separate
-#94. Remaining #95 implementation: combined proposal/completion/project forms,
-initial shipment breakdown, compact post-launch graph/report, annual renewal
-roster/details, review rows/reveals and locally imported event artwork, and
-source-backed paid promotion with M93's documented Empty-frame boundary.
-M94 does not introduce an automatic disaster workflow: `OriginalRoomPaused`
-represents the recovered per-room disruption flag only. Do not confuse it with
-the global pause or a checkpoint meeting.
+M95 on `codex/m95-development-panels` restores the proposal document bitmap,
+defers title entry to shipment, combines hardware/audience/type/genre/size,
+quality/focus/bugs/recognition/progress in live and checkpoint/completion panels,
+adds the completion meeting illustration and separate yellow/cyan shipment tables,
+adds the compact individual-product chart/report using its separate five-scale
+rule, and restores annual renewal roster selection/details/radar/checked totals.
+Transactions and saved outcomes retain their existing services. Reimport the
+original archive to populate the newly recovered proposal image in older caches;
+missing optional artwork does not discard a save or block development. See
+`docs/development-panels-m95.md`. Verify #55/PR/main for publication state.
 
-M94 validation: 489 optional-original domain checks, clean application build,
-English/Japanese office assignment and save/load smoke, private original-artwork
-check verifying every pixel outside the fourteen bubble and six room-caption
-interiors, and the core-loop UI suite. Check issue #55 and the milestone PR for
-verified remote publication state before continuing from a snapshot.
+#95 MUST stay open at the owner's request. Remaining work: paid six-media
+promotion with M93's native Empty-frame scope boundary; reviewer portraits,
+score/reaction/comment rows and callback presentation; exhibition selection/
+attendance presentation and GIF booth artwork; persistent awards rows and GIF
+stage artwork. Exact native font/window stacking/timing and scene motion require
+runtime comparisons; do not claim these are already equivalent.
+
+The owner corrected the atlas scope: the shown 1600×530 sheet is the full OFFICE
+sprite atlas, not all game graphics. Device pictures, archive staff portraits,
+meeting/dialog pictures and serialized controls are separate. The resource-family
+index is `docs/artwork-reference-index.md`; `tools/local_artwork_reference.py`
+generates a private HTML reference of all images currently present in a cache,
+without embedding or copying pixels. Exhaustive atlas AND separate-resource review
+remain deferred to #97; pacing is separate #94. No original graphics are committed.
+
+M95 validation: 491 optional-original domain checks (including exact proposal
+resource identity and both graph variants), clean application build/import,
+core-loop UI checks covering proposal/title timing, both shipment tables and
+reprints, compact product report, and renewal selection/fees. Bilingual project
+panel checks cover completion/shipment preview/cancel/reload and renewal details.
+M93 source verifier still passes 32 fingerprints, 60 anchors, 15 event bindings,
+four resources and 78 numeric literals. M94's bilingual office/native-pixel checks
+remain the preceding milestone's evidence. `OriginalRoomPaused` is the recovered
+room disruption flag only; no automatic disaster workflow was invented.
 
 The owner requested investigation of presentation ticket #95 before implementing
 its missing handlers/actions. M93 is an analysis/evidence milestone; it changes
