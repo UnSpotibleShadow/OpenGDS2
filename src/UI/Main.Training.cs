@@ -56,6 +56,12 @@ public partial class Main
         {
             if (employee.TechnologyLevels?.TryGetValue(technology.SourceIndex,out int level)!=true) continue;
             AddHeading($"{TechnologyName(technology)} — {Tr("LEVEL")} {level}",18);
+            if(technology.Identifier==5 && level==3)
+            {
+                var target=TechnologyApplicationService.LevelThreeStressTarget(state);
+                _content.AddChild(new Label {Name="StressReliefSourceTarget",AutowrapMode=TextServer.AutowrapMode.WordSmart,
+                    Text=target is null ? Tr("STRESS_RELIEF_MAPPING_UNKNOWN") : string.Format(Tr("STRESS_RELIEF_SLOT_ZERO"),EmployeeName(target))});
+            }
             if (employee.Office?.Training?.TechnologySourceIndex==technology.SourceIndex)
             {
                 AddHeading($"{Tr("TRAINING_PROGRESS")}: {employee.Office.Training.Progress} / {technology.RequiredTrainingWork[level]}",16);
@@ -88,6 +94,12 @@ public partial class Main
             if (employee.TechnologyLevels?.TryGetValue(technology.SourceIndex,out int level)!=true || level<1) continue;
             var result=TechnologyApplicationService.CheckUse(state,employee,technology);
             AddHeading($"{TechnologyName(technology)} — {Tr("LEVEL")} {level}",18);
+            if(technology.Identifier==5 && level==3)
+            {
+                var target=TechnologyApplicationService.LevelThreeStressTarget(state);
+                _content.AddChild(new Label {Name="StressReliefSourceTarget",AutowrapMode=TextServer.AutowrapMode.WordSmart,
+                    Text=target is null ? Tr("STRESS_RELIEF_MAPPING_UNKNOWN") : string.Format(Tr("STRESS_RELIEF_SLOT_ZERO"),EmployeeName(target))});
+            }
             if (technology.RawTable1568.Count!=3) continue;
             var button=new Button {Name=$"UseTechnology{technology.SourceIndex}",
                 Text=$"{Tr("USE_TECHNOLOGY")} — {technology.RawTable1568[level-1]} {Tr("EXPERIENCE")}",

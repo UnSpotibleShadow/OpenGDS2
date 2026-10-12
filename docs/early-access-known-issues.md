@@ -18,3 +18,5 @@ The title and mode selection disclose the campaign boundary. Detailed unresolved
 M80 fixes unsupported payroll-state resets when visiting ordinary technology screens. M82 adds mystery-lab experiments; M83 adds own hardware and protects bank borrowing during pending results. These source changes are not in the existing RC.4 ZIP; use the final package’s manifest to identify the code actually shipped.
 
 M84 adds the recovered financial-failure sequence. See [evidence and modern continuation rules](financial-failure-m84.md). These changes are not in the unchanged RC.4 ZIP; rebuild the final source before release.
+
+Level-three stress relief now follows the recovered actor-slot-0 target, spending the selected employee’s experience. Its screen identifies the actual recipient; an unknown slot mapping disables use before spending experience. Speed technology still needs continuous-loop counter/eligibility integration.

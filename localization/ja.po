@@ -3374,3 +3374,9 @@ msgstr "原作の不具合を再現しています：組み合わせの添字に
 
 msgid "HORSE_CLOSE_NOTE"
 msgstr "開始前に閉じると仮の賭けを破棄します。開始時に確定した賭け金は戻りません。"
+
+msgid "STRESS_RELIEF_SLOT_ZERO"
+msgstr "原作の挙動：レベル3ではオフィスの0番スロットの社員「{0}」のストレスを0にします。経験値は選択した社員が消費します。"
+
+msgid "STRESS_RELIEF_MAPPING_UNKNOWN"
+msgstr "オフィスの0番スロットに対応する原作の社員が不明なため、この操作はできません。経験値は消費しません。"

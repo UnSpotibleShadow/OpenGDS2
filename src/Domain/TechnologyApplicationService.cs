@@ -13,6 +13,8 @@ public static class TechnologyApplicationService
 {
     public static readonly int[] ProjectTechnologyIdentifiers=[0,1,2,3,6,7];
     public static Dictionary<int,int> NewProjectCounters()=>ProjectTechnologyIdentifiers.ToDictionary(x=>x,_=>0);
+    // 009A98E8 +06AA..06BE: Empty local -02B4 indexes workspace actor map at 0.
+    public static EmployeeState? LevelThreeStressTarget(GameState state)=>state.Employees.SingleOrDefault(e=>e.Office?.SlotIndex==0 && e.SourceIndex is >=0);
     public static TechnologyApplicationResult CheckUse(GameState state,EmployeeState employee,TechnologyDefinition technology)
     {
         if (!state.Employees.Contains(employee)) return TechnologyApplicationResult.NotEmployed;
@@ -27,10 +29,13 @@ public static class TechnologyApplicationService
             technology.RawTable158C.Count!=3 || technology.RawTable158C.Any(x=>x<=0)) return TechnologyApplicationResult.StateUnknown;
         if (employee.Experience<technology.RawTable1568[level-1]) return TechnologyApplicationResult.InsufficientExperience;
         if (OwnHardwareService.HasPending(state) || project.PendingDecision.HasValue) return TechnologyApplicationResult.DecisionPending;
-        // Do not replace the unresolved speed scratch/lifetime paths or the
-        // level-three stress-relief source index with intended behavior.
-        if (technology.Identifier==4 || technology.Identifier==5 && level==3) return TechnologyApplicationResult.UnresolvedBehavior;
-        if (technology.Identifier==5) return employee.Stress is null ? TechnologyApplicationResult.StateUnknown : TechnologyApplicationResult.Success;
+        // Speed still requires the continuous-loop eligibility/counter integration.
+        if (technology.Identifier==4) return TechnologyApplicationResult.UnresolvedBehavior;
+        if (technology.Identifier==5)
+        {
+            if(level==3) return LevelThreeStressTarget(state) is null ? TechnologyApplicationResult.StateUnknown : TechnologyApplicationResult.Success;
+            return employee.Stress is null ? TechnologyApplicationResult.StateUnknown : TechnologyApplicationResult.Success;
+        }
         if (!ProjectTechnologyIdentifiers.Contains(technology.Identifier)) return TechnologyApplicationResult.UnresolvedBehavior;
         return project.TechnologyApplicationCounts?.ContainsKey(technology.Identifier)==true
             ? TechnologyApplicationResult.Success : TechnologyApplicationResult.StateUnknown;
@@ -43,10 +48,15 @@ public static class TechnologyApplicationService
         employee.Experience-=technology.RawTable1568[level-1];
         if (technology.Identifier==5)
         {
-            double reduction=level==1 ? .5 : .8;
-            employee.Stress=Math.Floor(employee.Stress!.Value-employee.Stress.Value*reduction);
-            var source=state.EmployeeSources.SingleOrDefault(x=>x.SourceIndex==employee.SourceIndex);
-            if (source is not null) source.Employee.Stress=employee.Stress;
+            var target=level==3 ? LevelThreeStressTarget(state)! : employee;
+            if(level==3) target.Stress=0;
+            else
+            {
+                double reduction=level==1 ? .5 : .8;
+                target.Stress=Math.Floor(target.Stress!.Value-target.Stress.Value*reduction);
+            }
+            var source=state.EmployeeSources.SingleOrDefault(x=>x.SourceIndex==target.SourceIndex);
+            if (source is not null) source.Employee.Stress=target.Stress;
         }
         else employee.Office!.TechnologyApplication=new() {TechnologySourceIndex=technology.SourceIndex,RemainingUnits=technology.RawTable158C[level-1]};
         TrainingService.SynchronizeSource(state,employee);

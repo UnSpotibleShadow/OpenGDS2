@@ -1,5 +1,67 @@
 # Development execution safeguards
 
+## Current handoff — 2026-10-12, M90
+
+Start by reading GitHub issue #55 and checking current `main` and open PRs through
+the owner's connector. This workspace can be a snapshot without `.git`; remote
+state is authoritative. Preserve the remote base tree when publishing explicit
+changed paths. Do not mirror snapshot omissions into repository deletions.
+
+The following milestones are implemented; do not redo their investigations or
+replace their documented native quirks with guessed behavior:
+
+- M82–M85: laboratory, hardware lifecycle, financial failure and casino poker.
+- M86, PR #86: blackjack, retained form state, ace retry and double-up timing;
+  see `docs/casino-blackjack-m86.md`.
+- M87, PR #87: card-chain, initial-deal bonus, keyboard paths, shared double-up
+  and safe exhausted-deck boundary; see `docs/casino-card-chain-m87.md`.
+- M88, PR #88: locally recovered 44-runner/10-jockey catalog, member aliases and
+  selector evidence; see `docs/horse-catalog-m88.md`. Native names stay private.
+- M89, PR #89: horse wagers, odds, both physics modes, retained finish behavior
+  and temporary winnings overwritten by the next setup; see
+  `docs/casino-horse-racing-m89.md`. Verified main before M90:
+  `83277904a7424741cd2c1232cff051597cc43156`.
+- M90: level-three stress relief resolves office actor slot 0 under the documented
+  VB6 Empty-frame premise, charges the selected employee and names the actual
+  recipient. Missing source mapping disables use before charging experience.
+  See `docs/stress-relief-m90.md` and check its PR/merge state before resuming.
+
+M90 validation: 459 domain checks with the optional original fixture; clean
+application build; English/Japanese stress-relief smoke checks including save/load
+and missing mapping; M76 source verifier: 44 fingerprints/35 payout entries.
+The resumed environment lacks community audio assets; these checks establish
+functional behavior, not audio or native Windows acceptance.
+
+Next fidelity work, in priority order:
+
+1. Speed technology: native identifier 4 sets a separate 50/100/150 counter
+   (`A13A64`, company member `2A48`) and skips ordinary application units. Main
+   `00A0283C +5656..56C3` retains worker eligibility; `+AFD8..B01B` decrements the
+   counter and clears work state. Trace surrounding guards and actor iteration
+   before implementation; the current generic application model is insufficient.
+2. Payroll scratch writers and automatic conversations: the original uses
+   employed count times salary at the scratch index, not a salary sum. Trace the
+   technology-employee selector, portrait-dialogue helper `009933DC` and periodic
+   poaching `009E3830`, including queue/completion order. Do not reintroduce
+   unsupported resets removed in M80.
+3. Original save import and whole-session native RNG integration remain separate
+   work. Local draw ordering is recovered; the application still uses shared
+   `System.Random`. Do not claim native deterministic playthrough parity.
+
+Office relocation, separate polishing/external-job workflows and automatic
+student skill growth are not established; require original evidence before
+adding them. Private traces, original PE and validation logs may be under
+`/workspace/scratch`; check existence rather than assuming persistence. The
+original PE SHA-256 is
+`4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`.
+
+Release target is Friday 2026-10-16, 19:00 CEST. RC.4 predates M86–M90 and is
+unchanged: a final-source Windows export is still required. The owner chose
+community native playthrough testing and plans to make the repository public;
+do not change visibility, export packages or enable Actions without instruction.
+Keep README's Ko-fi section and original LZH requirement. Issue #55 is the living
+handoff; update it and this section when milestones or release decisions change.
+
 Keep the original LZH requirement. Never commit imported original assets,
 executables, saves, private extraction caches or full reverse-engineering traces.
 GitHub Actions are paused at the owner's request; do not dispatch them or change
