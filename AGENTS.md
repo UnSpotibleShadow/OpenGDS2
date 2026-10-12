@@ -1,6 +1,6 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M90
+## Current handoff — 2026-10-12, M91
 
 Start by reading GitHub issue #55 and checking current `main` and open PRs through
 the owner's connector. This workspace can be a snapshot without `.git`; remote
@@ -26,26 +26,35 @@ replace their documented native quirks with guessed behavior:
   VB6 Empty-frame premise, charges the selected employee and names the actual
   recipient. Missing source mapping disables use before charging experience.
   See `docs/stress-relief-m90.md`.
+- M91: speed technology uses the separate 50/100/150 actor-pass timer, retained
+  frame eligibility and actor-slot order. It accelerates ordinary starts, not
+  debugging. Original in-flight application stalls and unused timer retention
+  are preserved and disclosed. See `docs/speed-technology-m91.md`; check issue
+  #55 and the `codex/m91-speed-technology` PR for publication state.
+
+M91 validation: 476 optional-original domain checks, clean application build and
+English/Japanese speed UI checks; speed evidence checks two procedure fingerprints
+and 32 bounded numeric anchors. `SharedWorkUnits` models
+the native burst/application-unit alias, including mid-burst technology use and
+speed reactivation after expiry. Modern saves retain it; existing synthetic
+fixtures that inject a burst must set this underlying cell as well as its display
+projection. Native Windows and whole-session RNG equivalence remain pending.
 
 M90 validation: 459 domain checks with the optional original fixture; clean
 application build; English/Japanese stress-relief smoke checks including save/load
 and missing mapping; M76 source verifier: 44 fingerprints/35 payout entries.
-The resumed environment lacks community audio assets; these checks establish
-functional behavior, not audio or native Windows acceptance.
+Those initial M90 checks preceded community-audio restoration; the later M90
+source export/startup included verified audio. Native Windows acceptance remains
+pending.
 
 Next fidelity work, in priority order:
 
-1. Speed technology: native identifier 4 sets a separate 50/100/150 counter
-   (`A13A64`, company member `2A48`) and skips ordinary application units. Main
-   `00A0283C +5656..56C3` retains worker eligibility; `+AFD8..B01B` decrements the
-   counter and clears work state. Trace surrounding guards and actor iteration
-   before implementation; the current generic application model is insufficient.
-2. Payroll scratch writers and automatic conversations: the original uses
+1. Payroll scratch writers and automatic conversations: the original uses
    employed count times salary at the scratch index, not a salary sum. Trace the
    technology-employee selector, portrait-dialogue helper `009933DC` and periodic
    poaching `009E3830`, including queue/completion order. Do not reintroduce
    unsupported resets removed in M80.
-3. Original save import and whole-session native RNG integration remain separate
+2. Original save import and whole-session native RNG integration remain separate
    work. Local draw ordering is recovered; the application still uses shared
    `System.Random`. Do not claim native deterministic playthrough parity.
 
@@ -71,6 +80,13 @@ community native playthrough testing and plans to make the repository public;
 do not change visibility, export packages or enable Actions without instruction.
 Keep README's Ko-fi section and original LZH requirement. Issue #55 is the living
 handoff; update it and this section when milestones or release decisions change.
+
+M90 download delivery failed in the app. The configured GitHub credentials work
+for API calls but were rejected by `uploads.github.com` (HTTP 401); no asset was
+uploaded. The empty temporary draft release was deleted and HTTP 404 verified.
+The owner chose to clone and build locally. Do not claim the package was received,
+retry uploads blindly or create another release for this handoff. That ZIP also
+predates M91; current source is the owner's testing route.
 
 Keep the original LZH requirement. Never commit imported original assets,
 executables, saves, private extraction caches or full reverse-engineering traces.

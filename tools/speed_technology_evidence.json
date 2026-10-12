@@ -1,0 +1,178 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "spans": {
+    "fGMInfo-009A98E8": {
+      "address": 10131688,
+      "size": 2112,
+      "sha256": "8c7136eb6952a501c1c4150f657673860fa3fd25678a9f3548988d884d0c71e4"
+    },
+    "Module2-00A0283C": {
+      "address": 10496060,
+      "size": 56604,
+      "sha256": "2a02c38bb853e37b5e616f4251350a25d12e0d27d19406098f5037b29a678ff4"
+    }
+  },
+  "anchors": [
+    {
+      "label": "level-one timer 50",
+      "address": 10133587,
+      "hex": "284cff3200"
+    },
+    {
+      "label": "level-two timer 100",
+      "address": 10133638,
+      "hex": "284cff6400"
+    },
+    {
+      "label": "level-three timer 150",
+      "address": 10133689,
+      "hex": "284cff9600"
+    },
+    {
+      "label": "speed skips shared unit assignment",
+      "address": 10133703,
+      "hex": "1e1d08"
+    },
+    {
+      "label": "ordinary shared-unit write",
+      "address": 10133760,
+      "hex": "05a600fcb0"
+    },
+    {
+      "label": "selected technology flag",
+      "address": 10133765,
+      "hex": "284cff0100052300fc2205a70052"
+    },
+    {
+      "label": "shared technology selection",
+      "address": 10133794,
+      "hex": "05a800fcb0"
+    },
+    {
+      "label": "actor-slot iteration",
+      "address": 10498702,
+      "hex": "fe635cfd69ce"
+    },
+    {
+      "label": "inactive actor bypass",
+      "address": 10498725,
+      "hex": "1cb1c7"
+    },
+    {
+      "label": "empty room cleanup branch",
+      "address": 10514626,
+      "hex": "1ceb48"
+    },
+    {
+      "label": "empty room unit and technology flag clear",
+      "address": 10514701,
+      "hex": "286cff00006b48ffe7057b0052286cff00006b48ffe7057c0052"
+    },
+    {
+      "label": "debugging bypasses speed eligibility shortcut",
+      "address": 10518105,
+      "hex": "1cf65b"
+    },
+    {
+      "label": "speed idle comparison 10000",
+      "address": 10518162,
+      "hex": "286cff1027"
+    },
+    {
+      "label": "speed skips both eligibility stores",
+      "address": 10518171,
+      "hex": "1e9856"
+    },
+    {
+      "label": "non-speed zero eligibility store",
+      "address": 10518212,
+      "hex": "fcf65cfb"
+    },
+    {
+      "label": "non-speed one eligibility store",
+      "address": 10518224,
+      "hex": "fcf65cfb"
+    },
+    {
+      "label": "retained frame eligibility read",
+      "address": 10518271,
+      "hex": "045cfb"
+    },
+    {
+      "label": "ordinary work-start branch",
+      "address": 10518393,
+      "hex": "1cd65b"
+    },
+    {
+      "label": "debugging uses actual idle counter and requires no active technology",
+      "address": 10519602,
+      "hex": "6b48ffe7057f00fc96286cff00005dfb2f2cff6b48ffe7057c00fc9628fcfe00005dfb2f0cfffb27ecfe6b48ffe7052c00fc9628ccfe00005dfb2fdcfefb27acfe6b48ffe7058000fc96053100fbbc9cfe283cfd0a0028bcfe64006b48ffe7056c00fc96fc22057200fc96fb9c8cfe2880fd0a00fbbc20fefb9410fefb5600fefb27f0fdff1b3510fe"
+    },
+    {
+      "label": "active technology starts tier four only at zero work ticks",
+      "address": 10520173,
+      "hex": "1c685e"
+    },
+    {
+      "label": "speed exclusion from ordinary technology consumer",
+      "address": 10522344,
+      "hex": "28fcfe04005dfb2f0cfffbc4ecfefb27"
+    },
+    {
+      "label": "speed skips technology timing increment",
+      "address": 10522388,
+      "hex": "1cb088"
+    },
+    {
+      "label": "timer flag and selected identifier test",
+      "address": 10541005,
+      "hex": "6b48ffe7057c00fc96286cff01005dfb2f2cff6b48ffe7057d00fc96fc22057e00fc9628fcfe04005dfb2f0cfffb27ecfeff1b1c1cb0"
+    },
+    {
+      "label": "speed speech bubble request four",
+      "address": 10541059,
+      "hex": "286cff04006b48ffe7051900526b"
+    },
+    {
+      "label": "separate timer decrement",
+      "address": 10541076,
+      "hex": "05d500fc96286cff0100fb9c2cff6b48ffe705d50052"
+    },
+    {
+      "label": "timer expiry comparison",
+      "address": 10541098,
+      "hex": "6b48ffe705d500fc96286cff00005dfb4d1c1cb0"
+    },
+    {
+      "label": "expiry clears flag and timer only",
+      "address": 10541118,
+      "hex": "286cff00006b48ffe7057c0052286cff00006b48ffe705d50052"
+    },
+    {
+      "label": "next actor slot",
+      "address": 10548896,
+      "hex": "645cfd"
+    },
+    {
+      "label": "ordinary start clears shared burst and unit cell",
+      "address": 10519020,
+      "hex": "52286cff00006b48ffe7057b0052286cff00006b48ffe7051800"
+    },
+    {
+      "label": "burst increment writes shared unit cell",
+      "address": 10535686,
+      "hex": "e99a6b48ffe7057b00fc96286cff0100fb942cff6b48ffe7057b0052"
+    },
+    {
+      "label": "burst quality reads shared unit cell",
+      "address": 10535763,
+      "hex": "6b48ffe7057b00fc96"
+    },
+    {
+      "label": "ordinary completion clears work ticks only",
+      "address": 10536004,
+      "hex": "286cff00006b48ffe7052c0052"
+    }
+  ],
+  "runtime_premise": "M76 documented VB6 Empty/numeric-zero frame initialization; native runtime reproduction remains outstanding."
+}

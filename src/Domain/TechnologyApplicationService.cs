@@ -6,6 +6,9 @@ public sealed class TechnologyApplicationState
 {
     public int TechnologySourceIndex {get;set;}
     public int RemainingUnits {get;set;}
+    // Identifier snapshot: speed shares the selected-technology flag but uses
+    // the separate office member 2A48, not the remaining-unit cell.
+    public bool IsSpeedBoost {get;set;}
 }
 
 /// <summary>fGMInfo 009A98E8 and Module2 00A0283C +66D8..88B0, own-game mode 1.</summary>
@@ -25,12 +28,13 @@ public static class TechnologyApplicationService
         if (project is null) return TechnologyApplicationResult.NoProject;
         if (project.OriginalRoomState is not (1 or 2)) return TechnologyApplicationResult.UnresolvedBehavior;
         if (level is <1 or >3) return TechnologyApplicationResult.NotLearned;
-        if (technology.RawTable1568.Count!=3 || technology.RawTable1568.Any(x=>x<0) ||
-            technology.RawTable158C.Count!=3 || technology.RawTable158C.Any(x=>x<=0)) return TechnologyApplicationResult.StateUnknown;
+        if (technology.RawTable1568.Count!=3 || technology.RawTable1568.Any(x=>x<0)) return TechnologyApplicationResult.StateUnknown;
+        if (technology.Identifier is not (4 or 5) &&
+            (technology.RawTable158C.Count!=3 || technology.RawTable158C.Any(x=>x<=0))) return TechnologyApplicationResult.StateUnknown;
         if (employee.Experience<technology.RawTable1568[level-1]) return TechnologyApplicationResult.InsufficientExperience;
         if (OwnHardwareService.HasPending(state) || project.PendingDecision.HasValue) return TechnologyApplicationResult.DecisionPending;
-        // Speed still requires the continuous-loop eligibility/counter integration.
-        if (technology.Identifier==4) return TechnologyApplicationResult.UnresolvedBehavior;
+        if (technology.Identifier==4) return state.RetainedDevelopmentEligibility is null
+            ? TechnologyApplicationResult.StateUnknown : TechnologyApplicationResult.Success;
         if (technology.Identifier==5)
         {
             if(level==3) return LevelThreeStressTarget(state) is null ? TechnologyApplicationResult.StateUnknown : TechnologyApplicationResult.Success;
@@ -58,7 +62,21 @@ public static class TechnologyApplicationService
             var source=state.EmployeeSources.SingleOrDefault(x=>x.SourceIndex==target.SourceIndex);
             if (source is not null) source.Employee.Stress=target.Stress;
         }
-        else employee.Office!.TechnologyApplication=new() {TechnologySourceIndex=technology.SourceIndex,RemainingUnits=technology.RawTable158C[level-1]};
+        else if (technology.Identifier==4)
+        {
+            var office=employee.Office!;
+            // +07DF skips the shared-unit assignment at +081B. Keep its old
+            // value while replacing the selected technology, as the source does.
+            int units=office.TechnologyApplication?.RemainingUnits ?? office.SharedWorkUnits ?? office.BurstCount;
+            office.SharedWorkUnits=units;
+            office.SpeedBoostTicks=50*level;
+            office.TechnologyApplication=new() {TechnologySourceIndex=technology.SourceIndex,RemainingUnits=units,IsSpeedBoost=true};
+        }
+        else
+        {
+            employee.Office!.SharedWorkUnits=technology.RawTable158C[level-1];
+            employee.Office.TechnologyApplication=new() {TechnologySourceIndex=technology.SourceIndex,RemainingUnits=technology.RawTable158C[level-1]};
+        }
         TrainingService.SynchronizeSource(state,employee);
         return TechnologyApplicationResult.Success;
     }
@@ -93,10 +111,11 @@ public static class TechnologyApplicationService
     public static void TickWork(DevelopmentProjectState project,EmployeeState employee,OriginalCatalog catalog,Random random)
     {
         var office=employee.Office!;var application=office.TechnologyApplication;
-        if (application is null || office.WorkTier!=4) return;
+        if (application is null || application.IsSpeedBoost || office.WorkTier!=4) return;
         if (office.WorkTicks>=20)
         {
             office.WorkTicks=1;application.RemainingUnits--;
+            office.SharedWorkUnits=application.RemainingUnits;
             if (application.RemainingUnits==0)
             {
                 var technology=catalog.Technologies.Single(x=>x.SourceIndex==application.TechnologySourceIndex);
@@ -109,5 +128,19 @@ public static class TechnologyApplicationService
         // ordinary path jumps past it at +66D8. Both paths then reach the
         // common +9C15..9C43 increment in DevelopmentSimulation.
         if (office.WorkTicks>=1) office.WorkTicks++;
+    }
+    public static void TickSpeed(EmployeeState employee)
+    {
+        if (employee.Office is not {TechnologyApplication.IsSpeedBoost:true} office) return;
+        office.PendingSpeechBubble=4; // +AFC7..AFD3, consumed by the usual bubble queue.
+        office.SharedWorkUnits=office.TechnologyApplication!.RemainingUnits;
+        // +AF91..B01B is outside the development-seat/room branch: travelling
+        // and resting still consume the timer. Expiry clears only the selected
+        // technology flag and timer, preserving work tier/ticks and shared units.
+        if (--office.SpeedBoostTicks<=0)
+        {
+            office.SpeedBoostTicks=0;
+            office.TechnologyApplication=null;
+        }
     }
 }

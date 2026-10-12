@@ -94,6 +94,12 @@ public partial class Main
             if (employee.TechnologyLevels?.TryGetValue(technology.SourceIndex,out int level)!=true || level<1) continue;
             var result=TechnologyApplicationService.CheckUse(state,employee,technology);
             AddHeading($"{TechnologyName(technology)} — {Tr("LEVEL")} {level}",18);
+            if (technology.Identifier==4)
+            {
+                _content.AddChild(new Label {Name="SpeedTechnologyNote",Text=Tr("SPEED_TECHNOLOGY_NOTE"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+                if(employee.Office is {WorkTier:4,WorkTicks:>0})
+                    _content.AddChild(new Label {Name="SpeedTechnologyInterruptedWork",Text=Tr("SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+            }
             if(technology.Identifier==5 && level==3)
             {
                 var target=TechnologyApplicationService.LevelThreeStressTarget(state);
@@ -115,7 +121,11 @@ public partial class Main
         }
         AddHeading(Tr("TECHNOLOGY_USE_NOTE"),16);
         if (employee.Office?.TechnologyApplication is TechnologyApplicationState active)
-            AddHeading($"{Tr("TECHNOLOGY_REMAINING_WORK")}: {active.RemainingUnits}",16);
+        {
+            if(active.IsSpeedBoost)
+                _content.AddChild(new Label {Name="SpeedTechnologyRemaining",Text=string.Format(Tr("SPEED_TECHNOLOGY_REMAINING"),employee.Office.SpeedBoostTicks*OfficeStaffRules.TickSeconds)});
+            else AddHeading($"{Tr("TECHNOLOGY_REMAINING_WORK")}: {active.RemainingUnits}",16);
+        }
         AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
         AddSaveActions(state);
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));

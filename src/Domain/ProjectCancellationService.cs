@@ -45,6 +45,7 @@ public static class ProjectCancellationService
         foreach (var employee in state.Employees.Where(x=>BelongsToRoom(x.Office!.SeatedAction,project.RoomIndex)))
         {
             employee.Office!.TechnologyApplication=null;
+            employee.Office.SharedWorkUnits=0;
             ReleaseService.ResetWork(employee.Office);
         }
         return ProjectCancellationResult.Success;

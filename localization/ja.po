@@ -605,6 +605,15 @@ msgstr "活動費用"
 msgid "GENRE_RESEARCH"
 msgstr "ジャンル開拓"
 
+msgid "SPEED_TECHNOLOGY_NOTE"
+msgstr "通常作業の開始待ち時間を短縮します。デバッグは加速しません。選択中の技術を置き換えます。"
+
+msgid "SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"
+msgstr "適用中の技術を速度向上に置き換えると、作業が停止する場合があります。配置を変更すると作業状態をリセットできます。"
+
+msgid "SPEED_TECHNOLOGY_REMAINING"
+msgstr "速度向上の残り時間：オフィス進行 {0:0.00} 秒"
+
 msgid "PUBLIC_RELATIONS"
 msgstr "広報活動"
 

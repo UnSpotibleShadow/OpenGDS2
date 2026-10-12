@@ -3070,7 +3070,160 @@ Test("stress relief floors selected lower levels and preserves the slot-zero top
     Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==19 && e.Experience==85);
     e.TechnologyLevels[5]=3;e.Stress=100;
     Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==0 && e.Experience==70);
-    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.UnresolvedBehavior && e.Experience==70);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.StateUnknown && e.Experience==70);
+});
+(GameState State,EmployeeState Employee,OriginalCatalog Catalog,DevelopmentProjectState Project) SpeedFixture(int level=1)
+{
+    var(s,e,c,p)=UseFixture();s.RetainedDevelopmentEligibility=0;e.Level=10;e.TechnologyLevels![4]=level;
+    p.OriginalStage=0;p.GameTypeSourceIndex=null;p.GenreSourceIndex=null;p.RequiredPoints=10000;
+    return(s,e,c,p);
+}
+Test("speed sets the separate level timer and preserves the shared unit cell",()=>
+{
+    for(int level=1;level<=3;level++)
+    {
+        var(s,e,c,p)=SpeedFixture(level);e.Office!.BurstCount=17;c.Technologies[4].RawTable158C=[];
+        Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.Success);
+        Check(e.Experience==100-5*level && e.Office.SpeedBoostTicks==50*level && e.Office.TechnologyApplication is {IsSpeedBoost:true,RemainingUnits:17});
+        Check(p.Quality==new DevelopmentQuality(100,100,100,100) && p.Progress==0 && s.Money==100);
+    }
+});
+Test("speed requires established frame eligibility without consuming experience",()=>
+{
+    var(s,e,c,p)=SpeedFixture();s.RetainedDevelopmentEligibility=null;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.StateUnknown && e.Experience==100 && e.Office!.SpeedBoostTicks==0);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(s.RetainedDevelopmentEligibility==0 && TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.Success);
+});
+Test("speed substitutes the idle comparison and starts ordinary work without tier four",()=>
+{
+    var(s,e,c,p)=SpeedFixture();DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office!.WorkTicks==0 && e.Office.WorkIdleTicks==1);
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.WorkTicks==2 && e.Office.WorkTier==1 && e.Office.WorkCategory==DevelopmentWorkCategory.Fun);
+    Check(e.Office.TechnologyApplication is {IsSpeedBoost:true,RemainingUnits:0} && e.DevelopmentSpeed==50 && e.Office.SpeedBoostTicks==50);
+});
+Test("speed retains eligibility one and skips ordinary technology completion",()=>
+{
+    var(s,e,c,p)=SpeedFixture();s.RetainedDevelopmentEligibility=1;
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    for(int i=0;i<50;i++){DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());TechnologyApplicationService.TickSpeed(e);}
+    Check(s.RetainedDevelopmentEligibility==1 && e.Office is {SpeedBoostTicks:0,TechnologyApplication:null,WorkTier:4,WorkTicks:51});
+    Check(p.Progress==0 && p.TechnologyApplicationCounts!.Values.All(x=>x==0));
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office.WorkTicks==52 && s.RetainedDevelopmentEligibility==0);
+});
+Test("speed replaces in-flight technology without resetting its work counters",()=>
+{
+    var(s,e,c,p)=SpeedFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());Check(e.Office!.WorkTier==4 && s.RetainedDevelopmentEligibility==1);
+    int tick=e.Office.WorkTicks;TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    Check(e.Office.TechnologyApplication is {IsSpeedBoost:true,TechnologySourceIndex:4,RemainingUnits:2} && e.Office.WorkTicks==tick && e.Experience==90);
+    for(int i=0;i<50;i++){DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());TechnologyApplicationService.TickSpeed(e);}
+    Check(e.Office.TechnologyApplication is null && e.Office.WorkTier==4 && e.Office.WorkTicks==tick+50 && p.TechnologyApplicationCounts![0]==0);
+    Check(OfficeAssignmentService.TryAssignStudySeat(s,e,1)==OfficeAssignmentResult.Success && e.Office.WorkTicks==0 && e.Office.WorkTier==0);
+});
+Test("speed does not accelerate debugging but its separate timer still expires",()=>
+{
+    var(s,e,c,p)=SpeedFixture();p.OriginalStage=3;p.GameTypeSourceIndex=p.GenreSourceIndex=0;
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    for(int i=0;i<50;i++){DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());TechnologyApplicationService.TickSpeed(e);}
+    Check(p.Bugs==101 && e.Office is {TechnologyApplication:null,SpeedBoostTicks:0,WorkTier:4});
+});
+Test("speed timer consumes actor passes while travelling and resting without random draws",()=>
+{
+    var(s,e,c,p)=SpeedFixture(3);TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    OfficeAssignmentService.TryAssignStudySeat(s,e,1);var session=new GameSession(new WorkRandom());session.Restore(s);
+    session.TickOffice(c);Check(e.Office!.SpeedBoostTicks==149);
+    for(int i=0;i<149;i++)TechnologyApplicationService.TickSpeed(e);
+    Check(e.Office.SpeedBoostTicks==0 && e.Office.TechnologyApplication is null);
+});
+Test("speed pauses with pending decisions and resumes on the next actor pass",()=>
+{
+    var(s,e,c,p)=SpeedFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    var session=new GameSession(new WorkRandom());session.Restore(s);p.PendingDecision=DevelopmentMilestone.SelectType;
+    session.TickOffice(c);Check(e.Office!.SpeedBoostTicks==50);
+    p.PendingDecision=null;session.TickOffice(c);Check(e.Office.SpeedBoostTicks==49);
+});
+Test("normal technology replacement retains the unused speed timer",()=>
+{
+    var(s,e,c,p)=SpeedFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);TechnologyApplicationService.TickSpeed(e);
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);TechnologyApplicationService.TickSpeed(e);
+    Check(e.Office!.SpeedBoostTicks==49 && e.Office.TechnologyApplication is {IsSpeedBoost:false,RemainingUnits:2,TechnologySourceIndex:0});
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);Check(e.Office.SpeedBoostTicks==50 && e.Office.TechnologyApplication!.RemainingUnits==2);
+});
+Test("empty development room clears the selected technology but retains its separate timer",()=>
+{
+    var(s,e,c,p)=SpeedFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);s.DevelopmentProjects.Clear();
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());TechnologyApplicationService.TickSpeed(e);
+    Check(e.Office is {TechnologyApplication:null,SpeedBoostTicks:50,WorkTicks:0});
+});
+Test("speed ordinary bursts retain shared units until the next work start",()=>
+{
+    var(s,e,c,p)=SpeedFixture();e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    e.Office.BurstCount=37;e.Office.BurstTicks=119;TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Quality.Fun==137 && Math.Abs(p.Progress-37/3.0)<1e-10 && e.Office.TechnologyApplication is {IsSpeedBoost:true,RemainingUnits:37});
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.TechnologyApplication is {IsSpeedBoost:true,RemainingUnits:0} && e.Office.WorkTicks==2);
+});
+Test("actor slot order determines retained eligibility even after a reused hire slot",()=>
+{
+    foreach(bool boostedFirst in new[]{false,true})
+    {
+        var(s,e,c,p)=SpeedFixture();var previous=Worker(7,1);previous.Level=10;previous.Experience=100;
+        previous.TechnologyLevels=Enumerable.Range(0,8).ToDictionary(x=>x,_=>1);
+        previous.Office!.SlotIndex=boostedFirst ? 1 : 0;e.Office!.SlotIndex=boostedFirst ? 0 : 1;
+        s.Employees.Add(previous);TechnologyApplicationService.TryUse(s,previous,c.Technologies[0]);TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+        // List order is deliberately opposite the actor order in one case.
+        var session=new GameSession(new WorkRandom());session.Restore(s);session.TickOffice(c);
+        Check(e.Office.WorkTier==(boostedFirst ? 1 : 4) && e.Office.SpeedBoostTicks==49 && s.RetainedDevelopmentEligibility==1);
+    }
+});
+Test("retained eligibility survives modern load and starting another company",()=>
+{
+    var(s,e,c,p)=SpeedFixture();s.RetainedDevelopmentEligibility=1;TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    e.Office!.SpeedBoostTicks=23;s=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(s.RetainedDevelopmentEligibility==1 && s.Employees[0].Office is {SpeedBoostTicks:23,TechnologyApplication.IsSpeedBoost:true});
+    var session=new GameSession();Check(session.StartNewGame("First","Owner",GameMode.Normal).RetainedDevelopmentEligibility==0);
+    session.Restore(s);Check(session.StartNewGame("Next","Owner",GameMode.Normal).RetainedDevelopmentEligibility==1);
+});
+Test("speed save guards reject invalid counters while retaining zero shared speed units",()=>
+{
+    var(s,e,c,p)=SpeedFixture();TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).Employees[0].Office!.TechnologyApplication!.RemainingUnits==0);
+    e.Office!.SpeedBoostTicks=151;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    e.Office.SpeedBoostTicks=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    e.Office.SpeedBoostTicks=50;s.RetainedDevelopmentEligibility=2;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.RetainedDevelopmentEligibility=0;e.Office.TechnologyApplication!.IsSpeedBoost=false;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("speed expiry retains the shared unit cell for a later reactivation",()=>
+{
+    var(s,e,c,p)=SpeedFixture();e.Office!.WorkTier=4;e.Office.WorkTicks=3;
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    for(int i=0;i<50;i++)TechnologyApplicationService.TickSpeed(e);
+    Check(e.Office.SharedWorkUnits==2 && e.Office.TechnologyApplication is null);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[4]);
+    Check(e.Office!.TechnologyApplication!.RemainingUnits==2 && e.Office.SpeedBoostTicks==50);
+});
+Test("a generic technology selected mid-burst replaces the same native accumulation cell",()=>
+{
+    var(s,e,c,p)=SpeedFixture();e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    e.Office.BurstCount=37;e.Office.BurstTicks=119;TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);
+    DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Quality.Fun==102 && Math.Abs(p.Progress-2/3.0)<1e-10 && e.Office.SharedWorkUnits==2 && e.Office.TechnologyApplication!.RemainingUnits==2);
+    for(int i=0;i<21;i++)DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(e.Office.SharedWorkUnits==0 && e.Office.TechnologyApplication is null && p.TechnologyApplicationCounts![0]==1);
+});
+Test("shared burst units update a selected application and survive ordinary completion",()=>
+{
+    var(s,e,c,p)=SpeedFixture();e.Office!.WorkTier=3;e.Office.WorkTicks=32;e.Office.WorkCategory=DevelopmentWorkCategory.Fun;
+    e.Office.BurstCount=37;e.Office.BurstTicks=0;TechnologyApplicationService.TryUse(s,e,c.Technologies[0]);
+    DevelopmentSimulation.TickEmployee(s,e,c,new BurstRandom());
+    Check(e.Office.BurstCount==3 && e.Office.SharedWorkUnits==3 && e.Office.TechnologyApplication!.RemainingUnits==3 && e.Office.BurstDisplayCount==2);
+    e.Office.BurstTicks=119;DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+    Check(p.Quality.Fun==103 && e.Office.SharedWorkUnits==3 && e.Office.TechnologyApplication!.RemainingUnits==3);
 });
 Test("top-level stress relief spends selected experience but clears a different slot-zero employee",()=>
 {

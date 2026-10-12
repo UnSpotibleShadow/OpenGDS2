@@ -28,6 +28,7 @@ public sealed class GameSession
             SalesFee1 = 1500, SalesFee2 = 1500,
             CompanyActivityTicks=0,CompanyActivityPerformed=false,
             ProductionPerformedThisWeek=false,
+            RetainedDevelopmentEligibility=Current is null ? 0 : Current.RetainedDevelopmentEligibility,
             AvailableHardware = catalog?.Hardware.Where(x => x.RawMembers["0F1C"] == 1).Select(x => x.SourceIndex).ToHashSet(),
         };
         state.Initial.StartingMoney = state.Money;
@@ -124,7 +125,8 @@ public sealed class GameSession
         if (MysteryLabService.Tick(state)) return;
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         if (SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
-        foreach (var employee in state.Employees)
+        // Module2 +0A52/CE64 visits actor slots, including reused hire slots.
+        foreach (var employee in state.Employees.OrderBy(x=>x.Office?.SlotIndex ?? int.MaxValue))
         {
             OfficeStaffRules.Tick(employee, _random);
             OfficeBurstFlameRules.Tick(state,employee);
@@ -139,6 +141,7 @@ public sealed class GameSession
                     return;
                 }
             }
+            TechnologyApplicationService.TickSpeed(employee);
             SecretaryPolicyRules.TickEmployee(state,employee,_random);
             if (employee.Office is not null) OfficeVisualRules.TickBubble(employee.Office);
             // Original employees refer back to the source arrays. Keep the

@@ -40,6 +40,9 @@ public sealed class GameState
     public Dictionary<int,int>? OriginalTypeRosterMap { get; set; }
     // Sparse original sourceIndex+99 cells; old modern saves keep these unknown.
     public Dictionary<int,int>? OriginalAccuracyCells { get; set; }
+    // Continuous Module2 frame local -04A4, assigned only by non-speed work
+    // before debugging. Modern saves retain it; older saves leave it unknown.
+    public int? RetainedDevelopmentEligibility {get;set;}
 
     public GameMode Mode { get; set; } = GameMode.Normal;
     public GameModeRules Rules { get; set; } = GameModeRules.For(GameMode.Normal);
