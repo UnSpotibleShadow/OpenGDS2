@@ -1331,6 +1331,65 @@ Test("failed shipment creates no commentary and consumes no lottery draws",()=>
     return(s,p,CoreCatalog());
 }
 void DrainMeeting(GameState s,DevelopmentProjectState p) {while(CheckpointMeetingRules.Acknowledge(s,p)) {}}
+void AddDialogueSources(GameState s)
+{
+    s.SourceUpperBound=3;s.MinimumSourceIndex=0;s.MaximumSourceIndex=2;
+    s.EmployeeSources=Enumerable.Range(0,3).Select(i=>new RecruitmentSourceRecord
+        {SourceIndex=i,GateValue=i==1 ? 0 : 1,Employee=new() {Name=$"Synthetic speaker {i}",SourceIndex=i,PortraitId=i+1,RawParameter40=1000+100*i}}).ToList();
+    s.Employees=s.EmployeeSources.Where(x=>x.GateValue==1).Select(x=>x.Employee).ToList();
+}
+Test("random dialogue portraits rebuild payroll scratch and use source-ordered employed gates",()=>
+{
+    var(s,p,c)=CheckpointFixture();AddDialogueSources(s);s.OriginalPayrollScratchIndex=19;
+    var r=new DialogueSequenceRandom([], .9f);var speaker=RandomDialogueSpeakerRules.Pick(s,r);
+    Check(speaker==new RandomDialogueSpeaker(2,3) && r.SingleCalls==1 && s.OriginalPayrollScratchIndex==2);
+    Check(OriginalPayrollRules.MonthlyDebit(s)==2400 && OriginalPayrollRules.StaffSalaryTotal(s.EmployeeSources)==2200 && s.Money==100000);
+});
+Test("random dialogue protects unknown and empty maps without inventing a speaker",()=>
+{
+    var(s,p,c)=CheckpointFixture();s.OriginalPayrollScratchIndex=19;var r=new DialogueSequenceRandom([]);
+    Check(RandomDialogueSpeakerRules.Pick(s,r) is null && s.OriginalPayrollScratchIndex is null && r.SingleCalls==0);
+    AddDialogueSources(s);foreach(var row in s.EmployeeSources)row.GateValue=0;
+    Check(RandomDialogueSpeakerRules.Pick(s,r) is null && s.OriginalPayrollScratchIndex==0 && r.SingleCalls==0);
+});
+Test("checkpoint speaker draws interleave with candidate remarks in original order",()=>
+{
+    var(s,p,c)=CheckpointFixture();AddDialogueSources(s);
+    var r=new DialogueSequenceRandom([0,0,0,1,2,2,2],.9f,0);CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(p.CheckpointMeeting!.Lines.Select(x=>x.EmployeeSourceIndex).SequenceEqual(new int?[]{2,0}));
+    Check(r.Order.SequenceEqual(new[]{"N3","N6","S","N3","N6","S","N3","N3","N3"}) && s.OriginalPayrollScratchIndex==2);
+});
+Test("beta meeting selects a portrait for every employee call before showing the saved queue",()=>
+{
+    var(s,p,c)=CheckpointFixture();AddDialogueSources(s);p.OriginalStage=1;p.GameTypeSourceIndex=0;p.Progress=81;p.PendingDecision=DevelopmentMilestone.SelectGenre;
+    var r=new DialogueSequenceRandom([],0,.9f,0,.9f);CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(r.SingleCalls==4 && p.CheckpointMeeting!.Lines.Select(x=>x.EmployeeSourceIndex).SequenceEqual(new int?[]{0,2,0,2}) && s.OriginalPayrollScratchIndex==2);
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).DevelopmentProjects[0].CheckpointMeeting!.Lines.SequenceEqual(p.CheckpointMeeting.Lines));
+});
+Test("checkpoint selected speakers and payroll scratch survive load without another draw",()=>
+{
+    var(s,p,c)=CheckpointFixture();AddDialogueSources(s);
+    CheckpointMeetingRules.Prepare(s,p,c,new DialogueSequenceRandom([0,0,2,2,2,2],.9f));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];var r=new DialogueSequenceRandom([]);
+    CheckpointMeetingRules.Prepare(s,p,c,r);
+    Check(p.CheckpointMeeting!.Lines[0] is {EmployeeSourceIndex:2,EmployeePortraitId:3} && s.OriginalPayrollScratchIndex==2 && r.SingleCalls==0);
+});
+Test("type confirmation chooses one employee and publicity uses the secretary bypass",()=>
+{
+    var(s,p,c)=CheckpointFixture();AddDialogueSources(s);p.CheckpointMeeting=new() {Milestone=DevelopmentMilestone.SelectType};
+    var r=new DialogueSequenceRandom([],.9f);
+    Check(CheckpointMeetingRules.TrySelectType(s,p,c,0,r)==DevelopmentSelectionResult.Success && r.SingleCalls==1);
+    Check(p.CheckpointMeeting!.Lines[0] is {EmployeeSourceIndex:2,EmployeePortraitId:3} && p.CheckpointMeeting.Lines[1].EmployeeSourceIndex is null);
+    Check(CheckpointMeetingRules.IsSecretary(CheckpointMeetingMessage.Publicity) && CheckpointMeetingRules.IsSecretary(CheckpointMeetingMessage.FunBonus));
+    Check(s.OriginalPayrollScratchIndex==2);
+});
+Test("saved checkpoint speakers reject incomplete identities and secretary employee overrides",()=>
+{
+    var(s,p,c)=CheckpointFixture();p.CheckpointMeeting=new() {Milestone=DevelopmentMilestone.SelectType,Lines=[new(CheckpointMeetingMessage.TypeSuggestion,0,0,null)]};
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.CheckpointMeeting.Lines=[new(CheckpointMeetingMessage.TypeSuggestion,0,-1,1)];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    p.CheckpointMeeting.Lines=[new(CheckpointMeetingMessage.Publicity,null,0,1)];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("checkpoint introduction gates end after the third product while completion remains unconditional",()=>
 {
     var(s,p,_)=CheckpointFixture();
@@ -5539,6 +5598,27 @@ sealed class WorkRandom : Random
 {
     public override int Next(int maxValue)=>maxValue switch {130=>1,300=>0,50=>1,_=>0};
     public override double NextDouble()=>.99;
+}
+
+sealed class DialogueSequenceRandom(int[] integers,params float[] singles) : Random
+{
+    private int integerIndex;
+    public int SingleCalls {get;private set;}
+    public List<string> Order {get;}=[];
+    public override int Next(int maxValue)
+    {
+        if(integerIndex>=integers.Length)throw new Exception("Unexpected dialogue integer draw");
+        int value=integers[integerIndex++];
+        if(value<0 || value>=maxValue)throw new Exception("Invalid dialogue integer draw");
+        Order.Add("N"+maxValue);return value;
+    }
+    public override float NextSingle()
+    {
+        if(SingleCalls>=singles.Length)throw new Exception("Unexpected dialogue portrait draw");
+        float value=singles[SingleCalls++];
+        if(value<0 || value>=1)throw new Exception("Invalid dialogue portrait draw");
+        Order.Add("S");return value;
+    }
 }
 
 sealed class BurstRandom : Random

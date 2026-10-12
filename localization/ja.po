@@ -605,6 +605,9 @@ msgstr "活動費用"
 msgid "GENRE_RESEARCH"
 msgstr "ジャンル開拓"
 
+msgid "CHECKPOINT_EMPLOYEE_NAMED"
+msgstr "社員 {0}"
+
 msgid "SPEED_TECHNOLOGY_NOTE"
 msgstr "通常作業の開始待ち時間を短縮します。デバッグは加速しません。選択中の技術を置き換えます。"
 

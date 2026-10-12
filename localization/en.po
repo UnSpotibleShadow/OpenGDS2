@@ -605,6 +605,9 @@ msgstr "Activity cost"
 msgid "GENRE_RESEARCH"
 msgstr "Genre research"
 
+msgid "CHECKPOINT_EMPLOYEE_NAMED"
+msgstr "Employee {0}"
+
 msgid "SPEED_TECHNOLOGY_NOTE"
 msgstr "Accelerates starts of ordinary work, but not debugging. Replaces the selected technology."
 

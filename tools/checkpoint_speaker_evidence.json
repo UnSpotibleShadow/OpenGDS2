@@ -1,0 +1,245 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "spans": {
+    "Module1-009933DC": {
+      "address": 10040284,
+      "size": 708,
+      "sha256": "a9fd513a653091c9156bdb8e043792932a0c8dc76dca65ae783221ca222fada8"
+    },
+    "fGMalpha-009D2F68": {
+      "address": 10301288,
+      "size": 5780,
+      "sha256": "c201f753bd8c7c35a2f2afa8aaf9bca54645c44b9959cc492a6f2c9f6673d4ef"
+    },
+    "fGMalpha-009ACF14": {
+      "address": 10145556,
+      "size": 2254,
+      "sha256": "11019be55803c1c9e3270550fc00cb4d184fef732985a902fb0c619daa2a1bf9"
+    },
+    "fGMbeta-009B00D8": {
+      "address": 10158296,
+      "size": 2504,
+      "sha256": "8c88ade7c3a74a02a80aacaa5c494e62dbbbb3ee1995203f15d9dc7d78225c9f"
+    },
+    "fGMbeta-009C7860": {
+      "address": 10254432,
+      "size": 4508,
+      "sha256": "6f483a4b333bc9c065d9d85dfcf44e7625ddb36c63d13bf2e63bcfb33ee29990"
+    },
+    "fGMTenantTechSel-0099F9A4": {
+      "address": 10090916,
+      "size": 1460,
+      "sha256": "de0db7228144911af2e6ae682a56f8cddcb493d2a5e723d028616ddb8eab3452"
+    }
+  },
+  "anchors": [
+    {
+      "label": "random employee portrait sentinel -1",
+      "address": 10040335,
+      "hex": "fd1618003cff285cffffff5dfb331cee00"
+    },
+    {
+      "label": "reset payroll scratch 3018",
+      "address": 10040352,
+      "hex": "285cff0000fde608001830"
+    },
+    {
+      "label": "employed gate one filter",
+      "address": 10040396,
+      "hex": "070800840cfc96285cff01005dfb331ca700"
+    },
+    {
+      "label": "source ordered roster map",
+      "address": 10040414,
+      "hex": "042cff0708001830fc220708004c30fcb0"
+    },
+    {
+      "label": "increment scratch count",
+      "address": 10040431,
+      "hex": "0708001830285cff0100fb944cfffde608001830"
+    },
+    {
+      "label": "single random draw times count and floor",
+      "address": 10040460,
+      "hex": "274cff0a55000400fd6a3cff0708001830fbb4ecfefbe9dcfefc"
+    },
+    {
+      "label": "secretary portrait bypass -2",
+      "address": 10040522,
+      "hex": "fd1618003cff285cfffeff5dfb331c16010708009008fc220708003809fc96fdf00800ec3b"
+    },
+    {
+      "label": "random employee call fGMalpha-009ACF14 0x7f7",
+      "address": 10147595,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMalpha-009D2F68 0x6c0",
+      "address": 10303016,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMalpha-009D2F68 0x73c",
+      "address": 10303140,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMalpha-009D2F68 0x7b8",
+      "address": 10303264,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMalpha-009D2F68 0x849",
+      "address": 10303409,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMalpha-009D2F68 0x8e5",
+      "address": 10303565,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009B00D8 0x88e",
+      "address": 10160486,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009B00D8 0x98f",
+      "address": 10160743,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x1b7",
+      "address": 10254871,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x221",
+      "address": 10254977,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x28e",
+      "address": 10255086,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x2e6",
+      "address": 10255174,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x33b",
+      "address": 10255259,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "random employee call fGMbeta-009C7860 0x3a8",
+      "address": 10255368,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "secretary bypass call fGMalpha-009ACF14 0x86d",
+      "address": 10147713,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "secretary bypass call fGMbeta-009B00D8 0x8e9",
+      "address": 10160577,
+      "hex": "0a02002000"
+    },
+    {
+      "label": "already connected school capacity selector scratch reset",
+      "address": 10091613,
+      "hex": "fdb61800"
+    },
+    {
+      "label": "school capacity selector scratch increment",
+      "address": 10091702,
+      "hex": "fdb61800"
+    }
+  ],
+  "checkpoint_random_call_sites": [
+    {
+      "procedure": "fGMalpha-009ACF14",
+      "offset": 2039,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMalpha-009D2F68",
+      "offset": 1728,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMalpha-009D2F68",
+      "offset": 1852,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMalpha-009D2F68",
+      "offset": 1976,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMalpha-009D2F68",
+      "offset": 2121,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMalpha-009D2F68",
+      "offset": 2277,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009B00D8",
+      "offset": 2190,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009B00D8",
+      "offset": 2447,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 439,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 545,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 654,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 742,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 827,
+      "portrait": -1
+    },
+    {
+      "procedure": "fGMbeta-009C7860",
+      "offset": 936,
+      "portrait": -1
+    }
+  ],
+  "all_direct_literal_random_portrait_call_counts": {
+    "fGMKansei-0099B554": 12,
+    "fGMKikakuKaigi-009EFA40": 37,
+    "fGMKontesuto-009CEE10": 15,
+    "fGMOuri-009B4F34": 1,
+    "fGMSyukka-009B4344": 2,
+    "fGMalpha-009ACF14": 1,
+    "fGMalpha-009D2F68": 5,
+    "fGMbeta-009B00D8": 2,
+    "fGMbeta-009C7860": 6
+  }
+}

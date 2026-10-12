@@ -64,7 +64,7 @@ Recovered writers reset the scratch count and increment it once per employed rec
 | Writer | Trigger |
 | --- | --- |
 | Staff list `009B0B60 +0051/+00AA` | Opening/refreshing staff list |
-| Technology selector `0099F9A4 +02B9/+0312` | Building employed selection maps |
+| School-capacity selector `fGMTenantTechSel 0099F9A4 +02B9/+0312` | Building employed selection maps; already connected in M70 |
 | Dialogue helper `009933DC +0049/+00A1` | Portrait argument -1, selecting a random employed person; secretary -2 bypasses this path |
 | Secondary dialogue helper `009930BC` | Same random-person behavior; no resolved direct call-thunk caller found |
 | Periodic routine `009E3830 +1AA7..1B03` | Poaching/emergency employee selection after its counter and random gate |
