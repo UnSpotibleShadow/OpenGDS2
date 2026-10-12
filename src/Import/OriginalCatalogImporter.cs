@@ -224,6 +224,7 @@ public static class OriginalCatalogImporter
             result.Manga.Add(new() {SourceIndex=index,Title=title,Author=author,
                 PopularityDescription=description,Popularity=popularity,Publisher=publisher,RightsFee=fee});
         }
+        HorseCatalogImporter.Extract(pe,result);
         return result;
     }
 }

@@ -124,7 +124,7 @@ public static class OwnHardwareService
         return new() {SchemaVersion=catalog.SchemaVersion,SourceHash=catalog.SourceHash,Genres=catalog.Genres,Audiences=catalog.Audiences,
             DevelopmentComputers=catalog.DevelopmentComputers,Hardware=catalog.Hardware.Where(x=>x.SourceIndex!=11).Append(own).ToList(),
             GameTypes=catalog.GameTypes,Technologies=catalog.Technologies,InitialRivalProducts=catalog.InitialRivalProducts,
-            StagedRivalProducts=catalog.StagedRivalProducts,RivalCompanies=catalog.RivalCompanies,Manga=catalog.Manga,Secretaries=catalog.Secretaries};
+            StagedRivalProducts=catalog.StagedRivalProducts,RivalCompanies=catalog.RivalCompanies,Manga=catalog.Manga,Secretaries=catalog.Secretaries,Horses=catalog.Horses,Jockeys=catalog.Jockeys};
     }
     private static bool ValidFlags(Dictionary<int,int>? flags)=>flags is not null && flags.Keys.Order().SequenceEqual(RequiredTechnologies) && flags.Values.All(x=>x is 0 or 1);
     public static void Validate(GameState state)
