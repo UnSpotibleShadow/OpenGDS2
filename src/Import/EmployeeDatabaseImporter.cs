@@ -110,6 +110,11 @@ public static class EmployeeDatabaseImporter
             Require(pos, 0x28, (byte)local, (byte)(local >> 8));
             int value = BitConverter.ToInt16(data, pos + 3); pos += 5; return value;
         }
+        public double LiteralDouble(ref int pos,ushort local)
+        {
+            Require(pos,0xFE,0xC4,(byte)local,(byte)(local>>8));
+            double value=BitConverter.ToDouble(data,pos+4);pos+=12;return value;
+        }
         public int Literal32(ref int pos, ushort local)
         {
             Require(pos, 0xFE, 0xC1, (byte)local, (byte)(local >> 8));

@@ -18,6 +18,13 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("own-console catalog composition preserves locally imported race definitions",()=>
+{
+    var s=new GameState();s.OwnHardware.Launched=new HardwareDefinition {SourceIndex=11};
+    var c=new OriginalCatalog {Horses=[new HorseDefinition {SourceIndex=0,Name="Synthetic runner",Strength=.13}],Jockeys=[new JockeyDefinition {SourceIndex=0,Name="Synthetic rider"}]};
+    var combined=OwnHardwareService.Catalog(s,c);Check(ReferenceEquals(combined.Horses,c.Horses) && ReferenceEquals(combined.Jockeys,c.Jockeys));
+    var legacy=System.Text.Json.JsonSerializer.Deserialize<OriginalCatalog>("{}")!;Check(legacy.Horses.Count==0 && legacy.Jockeys.Count==0);
+});
 GameState CardChainFixture()
 {
     var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Casino.Coins=100;
@@ -4967,6 +4974,17 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original horse and jockey append tables recover all source records locally",()=>
+    {
+        var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        Check(c.Horses.Count==44 && c.Jockeys.Count==10);
+        Check(c.Horses.Select(h=>h.SourceIndex).SequenceEqual(Enumerable.Range(0,44)));
+        Check(c.Jockeys.Select(j=>j.SourceIndex).SequenceEqual(Enumerable.Range(0,10)));
+        Check(c.Horses.All(h=>!string.IsNullOrWhiteSpace(h.Name) && h.Strength==h.SourceIndex+h.RawParameter/100));
+        Check(c.Jockeys.All(j=>!string.IsNullOrWhiteSpace(j.Name)));
+        Check(c.Horses[5].RawParameter==15.4 && c.Horses[5].Strength==5.154);
+    });
+
     Test("optional original catalog supports own-console launch and subsequent software planning",()=>
     {
         var db=EmployeeDatabaseImporter.Extract(File.ReadAllBytes(args[0]));var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));

@@ -16,6 +16,8 @@ public sealed class OriginalCatalog
     public List<string> RivalCompanies {get;set;}=[];
     public List<MangaDefinition> Manga {get;set;}=[];
     public List<SecretaryDefinition> Secretaries {get;set;}=[];
+    public List<HorseDefinition> Horses {get;set;}=[];
+    public List<JockeyDefinition> Jockeys {get;set;}=[];
 }
 
 /// <summary>Six columns written by Module1 helper 0098128C; loaded locally.</summary>
@@ -104,4 +106,20 @@ public sealed class TechnologyDefinition
     public List<int> ExperienceCosts { get; set; } = [];
     public List<int> RawTable158C { get; set; } = [];
     public List<int> RawTable1568 { get; set; } = [];
+}
+
+public sealed class HorseDefinition
+{
+    public int SourceIndex {get;set;}
+    public string Name {get;set;}=string.Empty;
+    public int RawWeight {get;set;}
+    public int RawKind {get;set;}
+    public double RawParameter {get;set;}
+    public double Strength {get;set;}
+}
+public sealed class JockeyDefinition
+{
+    public int SourceIndex {get;set;}
+    public string Name {get;set;}=string.Empty;
+    public int RawValue {get;set;}
 }
