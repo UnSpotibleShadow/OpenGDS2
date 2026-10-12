@@ -605,6 +605,15 @@ msgstr "Activity cost"
 msgid "GENRE_RESEARCH"
 msgstr "Genre research"
 
+msgid "SPEED_TECHNOLOGY_NOTE"
+msgstr "Accelerates starts of ordinary work, but not debugging. Replaces the selected technology."
+
+msgid "SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"
+msgstr "Replacing an application already in progress with speed can stall this worker. Change their assignment to reset stalled work."
+
+msgid "SPEED_TECHNOLOGY_REMAINING"
+msgstr "Speed boost remaining: {0:0.00} s of office simulation"
+
 msgid "PUBLIC_RELATIONS"
 msgstr "Public relations"
 

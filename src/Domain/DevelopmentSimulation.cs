@@ -12,10 +12,10 @@ public static class DevelopmentSimulation
         if (project is null)
         {
             // Original +4886..48EA cancels a workspace application when its room is empty.
-            office.TechnologyApplication=null;ReleaseService.ResetWork(office);return;
+            office.TechnologyApplication=null;office.SharedWorkUnits=0;ReleaseService.ResetWork(office);return;
         }
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) || project.OriginalRoomState is not (1 or 2) ||
-            office.TechnologyApplication is not null && project.TechnologyApplicationCounts is null) return;
+            office.TechnologyApplication is {IsSpeedBoost:false} && project.TechnologyApplicationCounts is null) return;
         if (employee.Stress is not double stress || employee.DevelopmentSpeed is not int speed ||
             employee.Inspiration is not int inspiration || employee.Experience is null || employee.Level is null)
             return; // Unknown imported/legacy employee fields cannot be guessed.
@@ -41,8 +41,15 @@ public static class DevelopmentSimulation
             if (office.ActionTicks>=28) {office.Frame=15+3*(office.Facing-1);office.ActionTicks=0;}
             office.ActionTicks++;
         }
+        bool boosted=office.TechnologyApplication?.IsSpeedBoost==true;
+        if (project.OriginalStage<3 && !boosted)
+            state.RetainedDevelopmentEligibility=office.TechnologyApplication is null ? 0 : 1;
         double idleThreshold=project.OriginalStage==3 ? 2*(10+(100-speed)/10.0) : DevelopmentWorkRules.RequiredIdleTicks(speed);
-        if (office.TechnologyApplication is null && !office.IdleBreak && office.WorkTicks==0 && office.WorkIdleTicks>=idleThreshold)
+        // Speed substitutes 10000 for the idle-counter comparison and skips
+        // assigning the shared frame local. Debugging uses neither shortcut.
+        bool eligible=project.OriginalStage==3 ? office.TechnologyApplication is null : state.RetainedDevelopmentEligibility==0;
+        int idleComparison=project.OriginalStage<3 && boosted ? 10000 : office.WorkIdleTicks;
+        if (eligible && !office.IdleBreak && office.WorkTicks==0 && idleComparison>=idleThreshold)
         {
             if (project.OriginalStage==3)
             {
@@ -66,12 +73,18 @@ public static class DevelopmentSimulation
         if (office.WorkTier is 1 or 2 && office.WorkTicks==16) complete=true;
         if (office.WorkTier==3 && office.WorkTicks>=32)
         {
+            // Both consumers use A138F8. A technology selected mid-burst
+            // replaces the accumulated value before the next burst pass.
+            office.BurstCount=office.SharedWorkUnits ?? office.TechnologyApplication?.RemainingUnits ?? office.BurstCount;
             office.BurstDisplayCount=office.BurstCount;
             office.BurstTicks++;
             if (office.BurstCount<50 && office.BurstTicks<=100 &&
                 DevelopmentWorkRules.IncreasesBurstCounter(office.WorkCategory,Stat(office.WorkCategory),office.BurstCount,office.BurstTicks,random.NextDouble()))
                 office.BurstCount++;
             if (office.BurstTicks>=120) complete=true;
+            office.SharedWorkUnits=office.BurstCount;
+            if (office.TechnologyApplication is { } application)
+                application.RemainingUnits=office.BurstCount;
         }
         if (complete)
         {
@@ -121,6 +134,8 @@ public static class DevelopmentSimulation
             }
             office.WorkCategory=category;office.WorkTicks=1;office.WorkIdleTicks=0;
             office.BurstTicks=0;office.BurstCount=0;office.BurstDisplayCount=0;office.WorkTier=0;
+            office.SharedWorkUnits=0;
+            if (office.TechnologyApplication is {IsSpeedBoost:true} application) application.RemainingUnits=0;
             // Ordinary work sets tier zero at stress 100; debugging has its own branch.
             if (employee.Stress<100)
             {

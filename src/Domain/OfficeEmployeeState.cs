@@ -25,6 +25,11 @@ public sealed class OfficeEmployeeState
     public int OffsetY { get; set; }
     public int DepthAdjustment { get; set; }
     public TechnologyApplicationState? TechnologyApplication { get; set; }
+    // Original A13A64/member 2A48; retained even when another technology is selected.
+    public int SpeedBoostTicks {get;set;}
+    // A138F8/member 28DC is shared by burst accumulation and application units.
+    // Null migrates older modern projections at the next known read/write.
+    public int? SharedWorkUnits {get;set;}
     public EmployeeTrainingState? Training { get; set; }
     public int TrainingIdleTicks { get; set; }
     public int WorkTicks { get; set; }

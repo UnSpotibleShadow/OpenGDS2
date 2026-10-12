@@ -1,5 +1,13 @@
 # Remaining reconstruction work
 
+Current fidelity checkpoint, M91 (2026-10-12): speed technology is implemented
+with its separate timer, retained frame eligibility and actor-slot ordering;
+level-three stress relief was completed in M90. See
+[speed evidence](speed-technology-m91.md) and [stress evidence](stress-relief-m90.md).
+Next work is the remaining payroll scratch writers and automatic conversations,
+then original-save import and whole-session native RNG integration. The M90
+owner testing ZIP predates M91. Older milestone tables below are historical.
+
 For current Early Access scope, release gates and every unresolved decision/evidence item, see [the decision register](early-access-decisions.md). Full reconstruction targets below remain open even when deferred from the first candidate.
 
 M68 adds verified project cancellation: a paused confirmation, assigned-room staff stress +20 capped at 99, no refund, and safe room reuse. M69 adds the seven staff reactions, ordered room summaries and a saved dialogue cursor; Japanese text comes from local LZH reimport. See [cancellation dialogue](cancellation-dialogue-m69.md). See [cancellation evidence and compatibility](project-cancellation-m68.md).

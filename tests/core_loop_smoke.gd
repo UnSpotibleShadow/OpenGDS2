@@ -239,6 +239,9 @@ func run() -> void:
     fresh_audio.set_value("music", "volume", 30)
     fresh_audio.set_value("music", "seasonal", true)
     check(fresh_audio.save("user://audio.cfg") == OK,"Reset audio fixture for repeated release/debug runs")
+    var fresh_interface := ConfigFile.new()
+    fresh_interface.set_value("language","locale","en")
+    check(fresh_interface.save("user://interface.cfg")==OK,"Reset English fixture after bilingual checks")
     main = load("res://scenes/Main.tscn").instantiate()
     root.add_child(main)
     await process_frame
@@ -547,6 +550,7 @@ func run() -> void:
     burst_worker.WorkTicks = 151
     burst_worker.BurstTicks = 119
     burst_worker.BurstCount = 37
+    burst_worker.SharedWorkUnits = 37
     burst_worker.BurstDisplayCount = 37
     var original_fun: float = before_burst.State.DevelopmentProjects[0].Quality.Fun
     var original_progress: float = before_burst.State.DevelopmentProjects[0].Progress

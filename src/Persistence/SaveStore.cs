@@ -72,6 +72,8 @@ public static class SaveStore
     }
     private static void Validate(GameState state)
     {
+        if (state.RetainedDevelopmentEligibility is not (null or 0 or 1))
+            throw new InvalidDataException("Invalid retained development eligibility.");
         if (!Enum.IsDefined(state.Mode) || state.Company is null || state.Initial is null || state.Recruitment is null ||
             state.Employees is null || state.EmployeeSources is null || state.Recruitment.Candidates is null || state.DevelopmentProjects is null || state.ReleasedGames is null ||
             string.IsNullOrWhiteSpace(state.Company.Name) || string.IsNullOrWhiteSpace(state.Company.PresidentName))
@@ -162,7 +164,9 @@ public static class SaveStore
             if (employee.TechnologyLevels?.Any(x=>x.Key is <0 or >7 || x.Value is <0 or >3)==true || employee.MaximumTechnologies<0)
                 throw new InvalidDataException("Invalid employee technologies.");
             if (employee.Office?.TechnologyApplication is TechnologyApplicationState application &&
-                (application.TechnologySourceIndex is <0 or >7 || application.RemainingUnits<=0 ||
+                (application.TechnologySourceIndex is <0 or >7 || application.RemainingUnits<0 ||
+                (!application.IsSpeedBoost && application.RemainingUnits==0) ||
+                (application.IsSpeedBoost && employee.Office!.SpeedBoostTicks<=0) ||
                 employee.TechnologyLevels is null || !employee.TechnologyLevels.TryGetValue(application.TechnologySourceIndex,out int learned) || learned is <1 or >3))
                 throw new InvalidDataException("Invalid active technology application.");
             if (employee.Office?.Training is EmployeeTrainingState training && (training.TechnologySourceIndex is <0 or >7 ||
@@ -244,6 +248,8 @@ public static class SaveStore
             office.MovementState is 0 or 3 or 4 or 6 or 10 && office.Facing is >= 0 and <= 4 &&
             office.IdleAnimation is >= 0 and <= 3 && office.OffsetX is >= -6 and <= 8 &&
             office.TrainingIdleTicks>=0 && office.WorkTicks>=0 && office.WorkIdleTicks>=0 && office.WorkTier is >=0 and <=4 &&
+            office.SpeedBoostTicks is >=0 and <=150 &&
+            office.SharedWorkUnits is not (<0) &&
             office.BurstTicks is >=0 and <=120 && office.BurstCount is >=0 and <=50 && office.BurstDisplayCount is not (<0 or >50) && Enum.IsDefined(office.WorkCategory) &&
             office.PendingSpeechBubble is >=0 and <=16 && office.SpeechBubble is >=0 and <=16 &&
             office.SpeechBubbleTicks is >=0 and <=OfficeVisualRules.BubbleLifetime &&
