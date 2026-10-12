@@ -3062,15 +3062,53 @@ Test("technology pauses away from desks and cancels when its room is empty",()=>
     s.DevelopmentProjects.Clear();DevelopmentSimulation.TickEmployee(s,e,c,new SequenceRandom());
     Check(e.Office.TechnologyApplication is null && e.Experience==95);
 });
-Test("stress relief floors the selected employee stress and leaves unresolved branches untouched",()=>
+Test("stress relief floors selected lower levels and preserves the slot-zero top-level target",()=>
 {
     var (s,e,c,p)=UseFixture();e.Stress=99.9;
     Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==49 && e.Experience==95);
     e.TechnologyLevels![5]=2;e.Stress=99.9;
     Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==19 && e.Experience==85);
     e.TechnologyLevels[5]=3;e.Stress=100;
-    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.UnresolvedBehavior && e.Stress==100 && e.Experience==85);
-    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.UnresolvedBehavior && e.Experience==85);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==0 && e.Experience==70);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[4])==TechnologyApplicationResult.UnresolvedBehavior && e.Experience==70);
+});
+Test("top-level stress relief spends selected experience but clears a different slot-zero employee",()=>
+{
+    var (s,e,c,p)=UseFixture();e.Office!.SlotIndex=1;e.TechnologyLevels![5]=3;e.Stress=77.7;
+    var first=Worker(18,7);first.Office!.SlotIndex=0;first.Stress=88;s.Employees.Add(first);
+    var firstSource=Worker(18,7);firstSource.Stress=88;s.EmployeeSources.Add(new() {SourceIndex=7,GateValue=1,Employee=firstSource});
+    var selectedSource=Worker(6,0);selectedSource.Experience=100;selectedSource.Stress=77.7;s.EmployeeSources.Add(new() {SourceIndex=0,GateValue=1,Employee=selectedSource});
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success);
+    Check(first.Stress==0 && firstSource.Stress==0 && e.Stress==77.7 && e.Experience==85 && selectedSource.Experience==85 && selectedSource.Stress==77.7);
+    Check(e.Office.TechnologyApplication is null && first.Office.TechnologyApplication is null);
+});
+Test("top-level stress target follows actor slot zero rather than source index or list order",()=>
+{
+    var (s,e,c,p)=UseFixture();e.Office!.SlotIndex=2;e.TechnologyLevels![5]=3;
+    var first=Worker(18,15);first.Office!.SlotIndex=0;first.Stress=70;
+    var other=Worker(18,3);other.Office!.SlotIndex=1;other.Stress=80;s.Employees.Add(other);s.Employees.Add(first);
+    Check(ReferenceEquals(TechnologyApplicationService.LevelThreeStressTarget(s),first));
+    TechnologyApplicationService.TryUse(s,e,c.Technologies[5]);Check(first.Stress==0 && other.Stress==80);
+});
+Test("top-level stress relief disables unknown slot mapping before consuming experience",()=>
+{
+    var (s,e,c,p)=UseFixture();e.Office!.SlotIndex=1;e.TechnologyLevels![5]=3;
+    Check(TechnologyApplicationService.CheckUse(s,e,c.Technologies[5])==TechnologyApplicationResult.StateUnknown);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.StateUnknown && e.Experience==100);
+    var unknown=new EmployeeState {Name="Legacy synthetic",SourceIndex=null,Office=new(){SlotIndex=0}};s.Employees.Add(unknown);
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.StateUnknown && e.Experience==100);
+});
+Test("top-level direct stress writer resolves an unknown target stress without borrowing selected stress",()=>
+{
+    var (s,e,c,p)=UseFixture();e.TechnologyLevels![5]=3;e.Stress=null;
+    Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[5])==TechnologyApplicationResult.Success && e.Stress==0 && e.Experience==85);
+});
+Test("top-level stress effects and selected costs survive modern save reconstruction",()=>
+{
+    var (s,e,c,p)=UseFixture();e.Office!.SlotIndex=1;e.TechnologyLevels![5]=3;e.Stress=75;
+    var first=Worker(18,7);first.Office!.SlotIndex=0;first.Stress=80;s.Employees.Add(first);TechnologyApplicationService.TryUse(s,e,c.Technologies[5]);
+    var copy=System.Text.Json.JsonSerializer.Deserialize<GameState>(System.Text.Json.JsonSerializer.Serialize(s))!;
+    Check(copy.Employees.Single(x=>x.Office!.SlotIndex==0).Stress==0 && copy.Employees.Single(x=>x.Office!.SlotIndex==1).Stress==75 && copy.Employees.Single(x=>x.Office!.SlotIndex==1).Experience==85);
 });
 Test("new plans initialize all technology counters while legacy plans remain unknown",()=>
 {

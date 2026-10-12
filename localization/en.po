@@ -3404,3 +3404,9 @@ msgstr "Original quirks are preserved: pair wagers use mismatched indices, and w
 
 msgid "HORSE_CLOSE_NOTE"
 msgstr "Closing discards an unstarted draft. Stakes committed by Start remain spent."
+
+msgid "STRESS_RELIEF_SLOT_ZERO"
+msgstr "Original behavior: level 3 clears stress for the employee in office slot 0: {0}. The selected employee pays the experience cost."
+
+msgid "STRESS_RELIEF_MAPPING_UNKNOWN"
+msgstr "Office slot 0 has no known original employee mapping. This action is unavailable; no experience is spent."
