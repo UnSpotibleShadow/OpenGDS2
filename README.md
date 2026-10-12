@@ -20,7 +20,7 @@ Release downloads will be announced here when available. Historical GitHub Actio
 - Read reviews, track sales and sales history, and produce more copies.
 - Take loans, participate in calendar events, exhibitions and awards, and use the implemented facilities, including mystery-lab experiments.
 - Develop and launch your own console, then make games for its growing market.
-- Buy casino coins and play poker, blackjack and card-chain, including payouts and their distinct double-up games.
+- Buy casino coins and play poker, blackjack and card-chain, including their distinct double-up games. Cash-wager horse races are also playable; their original wager and discarded-winnings defects are preserved and disclosed.
 - Save and resume supported workflows, with a previous-valid-save recovery option.
 - Use English or Japanese text and adjust music and audio settings.
 
@@ -28,7 +28,7 @@ Release downloads will be announced here when available. Historical GitHub Actio
 
 ### What is still missing
 
-Horse racing and original-game save importing remain outside the supported Early Access scope. Some dialogue, original presentation, Japanese bitmap text and English name readings still need work. Modern saves are separate from the original game's saves.
+Original-game save importing remains outside the supported Early Access scope. Casino rules retain documented original quirks; horse results display winnings that the original next-race path discards. Some dialogue, original presentation, Japanese bitmap text and English name readings still need work. Modern saves are separate from the original game's saves.
 
 Recent research has recovered more of the original systems, but recovered evidence does not mean those systems are implemented.
 

@@ -10,7 +10,8 @@ public partial class Main
     private Action? _refreshPoker;
     private void TickPokerInterface(double delta)
     {
-        if (!_pokerInterfaceVisible || _session.Current is not { } state || !state.Casino.CardGameOpen) return;
+        if (!_pokerInterfaceVisible || _session.Current is not { } state || !state.Casino.ActivityOpen) return;
+        if (state.Casino.HorseOpen) {TickHorseInterface(state,delta);return;}
         _pokerElapsed+=delta;
         if (_pokerElapsed>=(state.Casino.BlackjackOpen ? CasinoBlackjackService.TickSeconds : state.Casino.CardChainOpen ? CasinoCardChainService.TickSeconds : CasinoPokerService.TickSeconds))
         {
@@ -23,6 +24,7 @@ public partial class Main
         if (state.Casino.PokerOpen) {ShowPoker(state);return;}
         if (state.Casino.BlackjackOpen) {ShowBlackjack(state);return;}
         if (state.Casino.CardChainOpen) {ShowCardChain(state);return;}
+        if (state.Casino.HorseOpen) {ShowHorseRacing(state);return;}
         ClearContent();CompactManagementWindow("CasinoSelector",new Vector2(370,325),350);
         AddHeading(Tr("CASINO_ENTER"),24);AddHeading(string.Format(Tr("CASINO_COINS"),state.Casino.Coins),18);
         AddHeading(Tr("CASINO_AVAILABLE_GAMES"),14);
@@ -44,6 +46,13 @@ public partial class Main
             var result=CasinoCardChainService.Open(state);
             if (result==CasinoResult.Success) ShowCardChain(state);else _status.Text=Tr($"CASINO_RESULT_{result}");
         };
+        var horse=new Button {Name="CasinoHorse",Text=Tr("CASINO_HORSE"),Disabled=FacilityService.HasPendingDecision(state) || state.Money is null || !CasinoHorseService.HasCatalog(_activeCatalog)};
+        _content.AddChild(horse);horse.Pressed+=()=>
+        {
+            var result=_session.OpenHorse(_activeCatalog);
+            if (result==CasinoResult.Success) ShowHorseRacing(state);else _status.Text=Tr($"CASINO_RESULT_{result}");
+        };
+        if (!CasinoHorseService.HasCatalog(_activeCatalog)) AddHeading(Tr("CASINO_RESULT_CatalogMissing"),12);
         var purchase=new Button {Name="CasinoBuyCoins",Text=Tr("CASINO_BUY_COINS"),Disabled=FacilityService.HasPendingDecision(state) || state.Money is null};
         _content.AddChild(purchase);purchase.Pressed+=()=>ShowCoinPurchase(state);
         _status=new Label {Name="CasinoStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
