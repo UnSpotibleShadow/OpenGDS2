@@ -21,10 +21,11 @@ replace their documented native quirks with guessed behavior:
   and temporary winnings overwritten by the next setup; see
   `docs/casino-horse-racing-m89.md`. Verified main before M90:
   `83277904a7424741cd2c1232cff051597cc43156`.
-- M90: level-three stress relief resolves office actor slot 0 under the documented
+- M90, PR #90 (merged at `1d285806bede5bc981075fd31983d768359d7d09`):
+  level-three stress relief resolves office actor slot 0 under the documented
   VB6 Empty-frame premise, charges the selected employee and names the actual
   recipient. Missing source mapping disables use before charging experience.
-  See `docs/stress-relief-m90.md` and check its PR/merge state before resuming.
+  See `docs/stress-relief-m90.md`.
 
 M90 validation: 459 domain checks with the optional original fixture; clean
 application build; English/Japanese stress-relief smoke checks including save/load
@@ -55,8 +56,17 @@ adding them. Private traces, original PE and validation logs may be under
 original PE SHA-256 is
 `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`.
 
-Release target is Friday 2026-10-16, 19:00 CEST. RC.4 predates M86–M90 and is
-unchanged: a final-source Windows export is still required. The owner chose
+Release target is Friday 2026-10-16, 19:00 CEST. The previously shared RC.4 artifact
+predates M86–M90 and is unchanged. At the owner's request, a fresh M90 Windows
+release-template testing export was produced from the exact PR #90 merge above:
+`builds/OpenGDS2-Windows-M90-testing.zip` (111887862 bytes), SHA-256
+`8e77e2ccebc6ac81c2a81576a0f5a0f40815c13da4f198225104223f98f971f5`.
+This generated package is not committed. Its internal version remains RC.4;
+`M90_TEST_BUILD.txt` and `BUILD_MANIFEST.json` distinguish it from the old artifact.
+All 25 community audio sources matched Git blob hashes; export/startup passed on
+a disposable Linux host using the unchanged Windows assembly/PCK, with 198 PCK
+payloads and 202 archive checksums verified. Native Windows execution is pending.
+A final public-release version/export and review are still required. The owner chose
 community native playthrough testing and plans to make the repository public;
 do not change visibility, export packages or enable Actions without instruction.
 Keep README's Ko-fi section and original LZH requirement. Issue #55 is the living
