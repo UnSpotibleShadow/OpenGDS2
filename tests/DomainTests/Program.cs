@@ -18,6 +18,200 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+GameState BlackjackFixture()
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Casino.Coins=100;
+    Check(CasinoBlackjackService.Open(s)==CasinoResult.Success);return s;
+}
+CasinoCard[] BlackjackDeck()=>Enumerable.Range(0,18).Select(i=>new CasinoCard(i/13,i%13)).ToArray();
+BlackjackRoundState BlackjackDecision(GameState s,int count=2)
+{
+    var b=s.Casino.Blackjack;s.Casino.Bet=1;b.Cards=BlackjackDeck().ToList();b.UsedCards=b.Cards.Select(c=>c.Identifier).ToHashSet();
+    b.PlayerCount=count;b.DealerCount=1;b.PlayerTotal=17;b.Phase=2;return b;
+}
+Test("blackjack source ace retries differ from optimal scoring",()=>
+{
+    Check(CasinoBlackjackService.InitialTotal(new(0,0),new(1,0))==12);
+    Check(CasinoBlackjackService.InitialTotal(new(0,9),new(1,0))==21);
+    Check(CasinoBlackjackService.Score([new(0,0),new(1,0),new(2,8)])==11);
+    Check(CasinoBlackjackService.Score([new(0,0),new(1,5)])==17);
+    Check(CasinoBlackjackService.Score([new(0,9),new(1,12),new(2,5)])==26);
+});
+Test("blackjack dealer compares before requesting a draw to seventeen",()=>
+{
+    Check(CasinoBlackjackService.DealerOutcome(14,15)==-1);
+    Check(CasinoBlackjackService.DealerOutcome(15,15)==0);
+    Check(CasinoBlackjackService.DealerOutcome(20,16)==-2);
+    Check(CasinoBlackjackService.DealerOutcome(20,17)==1);
+    Check(CasinoBlackjackService.DealerOutcome(20,22)==1);
+});
+Test("blackjack stay-triggered awards and pay table match the source",()=>
+{
+    Check(CasinoBlackjackService.Multipliers.SequenceEqual(new[]{1,2,4,6,20,25,100}));
+    for (int n=2;n<=9;n++)
+    {
+        int expected=n switch {5=>2,6=>3,7=>4,>=8=>6,_=>-1};
+        Check(CasinoBlackjackService.StayAward(BlackjackDeck().Take(n).ToArray())==expected);
+    }
+    Check(CasinoBlackjackService.StayAward([new(0,5),new(1,5),new(2,5)])==5);
+});
+Test("blackjack opening resets shared bet but retains pending payout and bonus",()=>
+{
+    var s=PokerFixture();CasinoPokerService.Command(s,0,new FailureRandom(0));s.Casino.PendingPayout=37;s.Casino.ChainBonus=19;
+    Check(CasinoBlackjackService.Open(s)==CasinoResult.EventPending);CasinoPokerService.Close(s);
+    Check(CasinoBlackjackService.Open(s)==CasinoResult.Success && s.Casino.Bet==0 && s.Casino.PendingPayout==37 && s.Casino.ChainBonus==19);
+    CasinoPokerService.Validate(s);Check(CasinoPokerService.Open(s)==CasinoResult.EventPending);
+    Check(CasinoBlackjackService.Close(s) && s.CompanyActivityPerformed==true);
+});
+Test("blackjack bets debit immediately, cap at fifty and consume no unused random draw",()=>
+{
+    var s=BlackjackFixture();var r=new FailureRandom();
+    Check(CasinoBlackjackService.Command(s,1,r)==CasinoResult.InvalidAction && r.Calls==0);
+    for (int i=0;i<50;i++) Check(CasinoBlackjackService.Command(s,2,r)==CasinoResult.Success);
+    Check(s.Casino.Coins==50 && s.Casino.Bet==50 && r.Calls==0);
+    Check(CasinoBlackjackService.Command(s,2,r)==CasinoResult.InvalidAction);
+    CasinoBlackjackService.Close(s);CasinoBlackjackService.Open(s);Check(s.Casino.Coins==50 && s.Casino.Bet==0);
+});
+Test("blackjack predeals eighteen cards in side order and uses source reveal callbacks",()=>
+{
+    var s=BlackjackFixture();CasinoBlackjackService.Command(s,2,new FailureRandom());var deck=BlackjackDeck();
+    var r=new FailureRandom(CardDraws(deck));CasinoBlackjackService.Command(s,1,r);var b=s.Casino.Blackjack;
+    Check(r.Calls==36 && b.Cards.SequenceEqual(deck) && b.UsedCards.Count==18);
+    for (int i=1;i<=75;i++)
+    {
+        CasinoBlackjackService.Tick(s,new FailureRandom());
+        Check(b.PlayerCount==(i<18 ? 0 : i<36 ? 1 : 2));Check(b.DealerCount==(i<54 ? 0 : 1));CasinoPokerService.Validate(s);
+    }
+    Check(b.Phase==2 && b.PlayerTotal==13 && CasinoBlackjackService.CanCommand(s,1));
+});
+Test("blackjack natural waits for callback seventy-five and awards two times",()=>
+{
+    var s=BlackjackFixture();CasinoBlackjackService.Command(s,2,new FailureRandom());
+    var deck=BlackjackDeck();(deck[1],deck[9])=(deck[9],deck[1]);CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(deck)));
+    for (int i=0;i<74;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(s.Casino.Blackjack.Natural && !s.Casino.Blackjack.Win);
+    CasinoBlackjackService.Tick(s,new FailureRandom());Check(s.Casino.PendingPayout==2 && s.Casino.Blackjack.AwardTick==2);
+    for (int i=0;i<28;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(s.Casino.Blackjack.AwardReady);CasinoPokerService.Validate(s);
+});
+Test("blackjack more uses a predealt card with no random draws",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s);var r=new FailureRandom();CasinoBlackjackService.Command(s,1,r);
+    for (int i=0;i<9;i++) CasinoBlackjackService.Tick(s,r);Check(b.PlayerCount==2);
+    CasinoBlackjackService.Tick(s,r);Check(b.PlayerCount==3 && b.PlayerTotal==16 && r.Calls==0 && b.Phase==2);
+});
+Test("blackjack bust discards active stake without refunding or erasing retained pending",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s);b.Cards[0]=new(2,9);b.Cards[1]=new(2,10);b.Cards[2]=new(2,11);
+    b.UsedCards=b.Cards.Select(c=>c.Identifier).ToHashSet();s.Casino.PendingPayout=71;
+    CasinoBlackjackService.Command(s,1,new FailureRandom());for(int i=0;i<10;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(b.Phase==0 && s.Casino.Bet==0 && s.Casino.PendingPayout==71 && s.Casino.Coins==100);CasinoPokerService.Validate(s);
+});
+Test("blackjack stay bonuses are not automatically awarded on hitting the count",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);Check(!b.Win);
+    CasinoBlackjackService.Command(s,2,new FailureRandom());Check(b.Win && s.Casino.PendingPayout==4 && !b.AwardReady);
+    for(int i=0;i<29;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.AwardReady);
+    CasinoBlackjackService.Command(s,2,new FailureRandom());CasinoBlackjackService.Tick(s,new FailureRandom());Check(s.Casino.Coins==100);
+    for(int i=0;i<7;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(s.Casino.Coins==104 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("blackjack dealer redraw delay retains negative-nine timer restart",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s);b.PlayerTotal=20;
+    b.Cards[9]=new(2,4);b.Cards[10]=new(2,5);b.Cards[11]=new(2,6);b.UsedCards=b.Cards.Select(c=>c.Identifier).ToHashSet();
+    CasinoBlackjackService.Command(s,2,new FailureRandom());for(int i=0;i<10;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(b.DealerCount==2 && b.DealerTotal==11 && b.Tick==-9);
+    for(int i=0;i<18;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.DealerCount==2);
+    CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.DealerCount==3 && b.DealerTotal==18 && b.Win && s.Casino.PendingPayout==2);
+});
+Test("blackjack double-up predeals five cards and compares the two choices",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<29;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    CasinoCard[] cards=[new(0,2),new(1,3),new(2,7),new(3,9),new(0,0)];var r=new FailureRandom(CardDraws(cards));
+    CasinoBlackjackService.Command(s,1,r);Check(r.Calls==10 && b.Phase==5);
+    Check(CasinoBlackjackService.SelectCard(s,0) && b.Phase==6);Check(CasinoBlackjackService.SelectCard(s,4));
+    for(int i=0;i<37;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(s.Casino.PendingPayout==4);
+    CasinoBlackjackService.Tick(s,new FailureRandom());Check(s.Casino.PendingPayout==8 && b.AwardReady);CasinoPokerService.Validate(s);
+});
+Test("blackjack double-up tie redeals and direct same-index selection remains handler-reachable",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);b.Win=true;b.AwardReady=true;b.AwardTick=30;s.Casino.PendingPayout=4;
+    CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(BlackjackDeck().Take(5).ToArray())));
+    Check(CasinoBlackjackService.SelectCard(s,0) && CasinoBlackjackService.SelectCard(s,0));
+    for(int i=0;i<38;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.TieTick==2 && s.Casino.PendingPayout==4);
+    for(int i=0;i<27;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.Phase==7);
+    var r=new FailureRandom(CardDraws(BlackjackDeck().Skip(5).Take(5).ToArray()));CasinoBlackjackService.Tick(s,r);
+    Check(b.Phase==5 && r.Calls==10 && s.Casino.PendingPayout==4);CasinoPokerService.Validate(s);
+});
+Test("blackjack double-up loss retains inactive payout storage",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);b.Win=true;b.AwardReady=true;s.Casino.PendingPayout=4;
+    CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(BlackjackDeck().Take(5).ToArray())));
+    CasinoBlackjackService.SelectCard(s,0);CasinoBlackjackService.SelectCard(s,1);
+    for(int i=0;i<38;i++) CasinoBlackjackService.Tick(s,new FailureRandom());Check(b.Phase==0 && s.Casino.Bet==0 && s.Casino.PendingPayout==4);
+    CasinoPokerService.Validate(s);
+});
+Test("blackjack refuses overflowing awards before mutation and closes without draining",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);b.Win=true;b.AwardReady=true;s.Casino.PendingPayout=long.MaxValue;
+    Check(CasinoBlackjackService.Command(s,1,new FailureRandom())==CasinoResult.NumericLimit && b.Phase==2);
+    Check(CasinoBlackjackService.Command(s,2,new FailureRandom())==CasinoResult.NumericLimit && s.Casino.Coins==100);
+    CasinoBlackjackService.Close(s);Check(s.Casino.Bet==1 && s.Casino.PendingPayout==long.MaxValue);
+});
+Test("blackjack active saves roundtrip predealt cards and reject conflicting casino forms",()=>
+{
+    var s=BlackjackFixture();CasinoBlackjackService.Command(s,2,new FailureRandom());CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(BlackjackDeck())));
+    for(int i=0;i<36;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    var json=System.Text.Json.JsonSerializer.Serialize(s);var copy=System.Text.Json.JsonSerializer.Deserialize<GameState>(json)!;
+    CasinoPokerService.Validate(copy);Check(copy.Casino.Blackjack.Tick==36 && copy.Casino.Blackjack.Cards.SequenceEqual(s.Casino.Blackjack.Cards));
+    copy.Casino.PokerOpen=true;Throws<InvalidDataException>(()=>CasinoPokerService.Validate(copy));
+    copy.Casino.PokerOpen=false;copy.Casino.Blackjack.Cards.RemoveAt(0);Throws<InvalidDataException>(()=>CasinoPokerService.Validate(copy));
+});
+Test("blackjack reaching the predealt-array boundary stops without inventing a card or award",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,9);CasinoBlackjackService.Command(s,1,new FailureRandom());
+    Check(b.BoundaryReached && s.Casino.PendingPayout==0 && s.Casino.Bet==1);CasinoPokerService.Validate(s);
+    Check(CasinoBlackjackService.Command(s,0,new FailureRandom())==CasinoResult.Success);
+});
+
+Test("blackjack reopen retains its win gate and allows collection with a reset stake",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<29;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    CasinoBlackjackService.Close(s);CasinoBlackjackService.Open(s);b=s.Casino.Blackjack;
+    Check(b.Win && b.ReopenedWin && s.Casino.Bet==0 && !CasinoBlackjackService.CanCommand(s,1) && CasinoBlackjackService.CanCommand(s,2));
+    CasinoPokerService.Validate(s);CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<8;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(s.Casino.Coins==104 && !b.Win && s.Casino.PendingPayout==0);CasinoPokerService.Validate(s);
+});
+Test("blackjack retained zero payout remains safely closable after another game's collection",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);b.Win=true;b.AwardTick=30;b.AwardReady=true;s.Casino.PendingPayout=4;
+    CasinoBlackjackService.Close(s);Check(CasinoPokerService.Open(s)==CasinoResult.Success);
+    CasinoPokerService.Close(s);s.Casino.PendingPayout=0;
+    CasinoBlackjackService.Open(s);Check(s.Casino.Blackjack.ReopenedWin && !CasinoBlackjackService.CanCommand(s,1));
+    CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<100;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(s.Casino.Blackjack.Phase==4 && s.Casino.Coins==100);CasinoPokerService.Validate(s);
+    CasinoBlackjackService.Close(s);
+});
+Test("blackjack pauses session progression and blocks conflicting company actions",()=>
+{
+    var s=BlackjackFixture();var session=new GameSession(new FailureRandom());session.Restore(s);
+    var tick=s.CompanyActivityTicks;session.TickOffice();Check(s.CompanyActivityTicks==tick);
+    Check(FacilityService.HasPendingDecision(s) && !FacilityService.HasPendingDecision(s,ignoreCasino:true));
+    s.Casino.Blackjack.Win=true;s.Casino.Blackjack.AwardTick=30;s.Casino.PendingPayout=7;
+    var next=session.StartNewGame("Next","Owner",GameMode.Normal);
+    Check(next.Casino.Coins==0 && next.Casino.PendingPayout==7 && next.Casino.Blackjack.Win && !next.Casino.CardGameOpen);
+});
+Test("blackjack save validation refuses impossible predealt maps and overflowing collection",()=>
+{
+    var s=BlackjackFixture();var b=BlackjackDecision(s,5);b.Win=true;b.AwardReady=true;s.Casino.PendingPayout=4;
+    CasinoBlackjackService.Command(s,2,new FailureRandom());s.Casino.Coins=long.MaxValue;
+    Throws<InvalidDataException>(()=>CasinoPokerService.Validate(s));
+    s.Casino.Coins=100;b.UsedCards.Remove(b.Cards[0].Identifier);Throws<InvalidDataException>(()=>CasinoPokerService.Validate(s));
+});
 GameState PokerFixture(long coins=100)
 {
     var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=(int)FacilityKind.Casino;s.Casino.Coins=coins;

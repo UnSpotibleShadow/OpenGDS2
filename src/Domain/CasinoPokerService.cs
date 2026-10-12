@@ -16,6 +16,10 @@ public sealed class CasinoState
     [JsonRequired] public long ChainBonus {get;set;}
     [JsonRequired] public bool PokerOpen {get;set;}
     [JsonRequired] public PokerRoundState Poker {get;set;}=new();
+    // Optional additions permit pre-M86 modern saves to load.
+    public bool BlackjackOpen {get;set;}
+    public BlackjackRoundState Blackjack {get;set;}=new();
+    [JsonIgnore] public bool CardGameOpen=>PokerOpen || BlackjackOpen;
 }
 public sealed class PokerRoundState
 {
@@ -59,7 +63,7 @@ public static class CasinoPokerService
         if (FacilityService.HasPendingDecision(state)) return CasinoResult.EventPending;
         if (state.Casino.Coins<=0) return CasinoResult.NoCoins;
         // Native Form_Load resets phase/outcome; retains shared bet and payout.
-        state.Casino.Poker=new() {Phase=0,Tick=0,Outcome=0};state.Casino.PokerOpen=true;
+        state.Casino.Blackjack=CasinoBlackjackService.ResetForm(state.Casino.Blackjack);state.Casino.Poker=new() {Phase=0,Tick=0,Outcome=0};state.Casino.PokerOpen=true;
         return CasinoResult.Success;
     }
     public static bool Close(GameState state)
@@ -233,6 +237,7 @@ public static class CasinoPokerService
     }
     public static void Validate(GameState state)
     {
+        CasinoBlackjackService.Validate(state);
         if (state.Casino is not { } c || c.Poker is not { } p || c.Coins<0 || c.Bet is <0 or >50 || c.PendingPayout<0 || c.ChainBonus<0 ||
             p.Phase is <0 or >6 || p.Tick is <0 or >46 || p.Phase==2 && p.Tick>45 || p.Phase==4 && p.Tick>1 || p.Phase==5 && p.Tick>19 || p.Phase==6 && p.Tick>28 || p.Outcome is <0 or >9 || p.AwardTick is <0 or >34 || p.TieTick is <0 or >30 ||
             p.Cards is null || p.UsedCards is null || p.Holds is null || p.Revealed is null || p.RevealOrder is null ||

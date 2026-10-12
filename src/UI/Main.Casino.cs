@@ -10,17 +10,18 @@ public partial class Main
     private Action? _refreshPoker;
     private void TickPokerInterface(double delta)
     {
-        if (!_pokerInterfaceVisible || _session.Current is not { } state || !state.Casino.PokerOpen) return;
+        if (!_pokerInterfaceVisible || _session.Current is not { } state || !state.Casino.CardGameOpen) return;
         _pokerElapsed+=delta;
-        if (_pokerElapsed>=CasinoPokerService.TickSeconds)
+        if (_pokerElapsed>=(state.Casino.BlackjackOpen ? CasinoBlackjackService.TickSeconds : CasinoPokerService.TickSeconds))
         {
             // One callback, no elapsed-time catch-up burst. Native callbacks rearm after return.
-            _pokerElapsed=0;_session.TickPoker();_refreshPoker?.Invoke();
+            _pokerElapsed=0;if (state.Casino.BlackjackOpen) _session.TickBlackjack();else _session.TickPoker();_refreshPoker?.Invoke();
         }
     }
     private void ShowCasino(GameState state)
     {
         if (state.Casino.PokerOpen) {ShowPoker(state);return;}
+        if (state.Casino.BlackjackOpen) {ShowBlackjack(state);return;}
         ClearContent();CompactManagementWindow("CasinoSelector",new Vector2(370,325),350);
         AddHeading(Tr("CASINO_ENTER"),24);AddHeading(string.Format(Tr("CASINO_COINS"),state.Casino.Coins),18);
         AddHeading(Tr("CASINO_AVAILABLE_GAMES"),14);
@@ -29,6 +30,12 @@ public partial class Main
         {
             var result=CasinoPokerService.Open(state);
             if (result==CasinoResult.Success) ShowPoker(state);else _status.Text=Tr($"CASINO_RESULT_{result}");
+        };
+        var blackjack=new Button {Name="CasinoBlackjack",Text=Tr("CASINO_BLACKJACK"),Disabled=state.Casino.Coins<=0 || FacilityService.HasPendingDecision(state)};
+        _content.AddChild(blackjack);blackjack.Pressed+=()=>
+        {
+            var result=CasinoBlackjackService.Open(state);
+            if (result==CasinoResult.Success) ShowBlackjack(state);else _status.Text=Tr($"CASINO_RESULT_{result}");
         };
         var purchase=new Button {Name="CasinoBuyCoins",Text=Tr("CASINO_BUY_COINS"),Disabled=FacilityService.HasPendingDecision(state) || state.Money is null};
         _content.AddChild(purchase);purchase.Pressed+=()=>ShowCoinPurchase(state);

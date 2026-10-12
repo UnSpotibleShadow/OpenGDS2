@@ -168,7 +168,7 @@ public partial class Main
         facilities.AddThemeFontSizeOverride("font_size",11);company.Body.AddChild(facilities);
         facilities.Pressed+=()=>{if (_dialog is null) ShowFacilities(state);};
         var staff = ChildWindow("EmployeeWindow", Tr("EMPLOYEE_WINDOW"), new Vector2(720, 130), new Vector2(390, 150));
-        if (state.FinancialFailure is null && !state.Casino.PokerOpen) OriginalPayrollRules.CaptureStaffList(state);
+        if (state.FinancialFailure is null && !state.Casino.CardGameOpen) OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
             "SHORT_MUSIC", "SHORT_ACCURACY", "SHORT_SPEED", "SHORT_INSPIRATION", "SHORT_EXPERIENCE"], [86, 32, 22, 22, 22, 22, 22, 22, 22, 50]);
         staff.Body.AddChild(_staffTable); _staffTable.ItemActivated += () =>
@@ -240,7 +240,7 @@ public partial class Main
 
     private bool DesktopActionEnabled(string key)
     {
-        if (_desktopState?.Casino.PokerOpen==true && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
+        if (_desktopState?.Casino.CardGameOpen==true && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState?.FinancialFailure is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;
         // Original weekly forms are modal. Modern save/load/settings remain

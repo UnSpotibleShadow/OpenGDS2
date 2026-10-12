@@ -2882,7 +2882,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "この社員はすでに退職しています。"
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "コインの購入とポーカーに対応しています。他のカジノゲームは未対応です。"
+msgstr "コインの購入、ポーカー、ブラックジャックに対応しています。カードチェーンと競馬は未対応です。"
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "弁護士と運送費や販売手数料の引き下げを交渉します。"
@@ -2972,10 +2972,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。どちらのモードでも所持金がマイナスになると会社を解散します。原作の演出やキャンペーン全体の完全な再現は未完成です。"
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、カジノのコイン購入とポーカー、現代形式のセーブ。"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、カジノのコイン購入、ポーカー、ブラックジャック、現代形式のセーブ。"
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "未対応または未完成：ブラックジャック・カードチェーン・競馬、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
+msgstr "未対応または未完成：カードチェーン・競馬、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
 
 msgid "MYSTERY_LAB_START"
 msgstr "実験を開始"
@@ -3151,7 +3151,7 @@ msgid "CASINO_COINS"
 msgstr "コイン：{0:N0}枚"
 
 msgid "CASINO_AVAILABLE_GAMES"
-msgstr "ポーカーをプレイできます。ブラックジャック、カードチェーン、競馬は再現作業中です。"
+msgstr "ポーカーとブラックジャックをプレイできます。カードチェーンと競馬は再現作業中です。"
 
 msgid "CASINO_POKER"
 msgstr "ポーカー"
@@ -3263,3 +3263,33 @@ msgstr "ストレートフラッシュ"
 
 msgid "POKER_OUTCOME_9"
 msgstr "ロイヤルフラッシュ"
+
+msgid "CASINO_BLACKJACK"
+msgstr "ブラックジャック"
+
+msgid "BLACKJACK_MORE"
+msgstr "もう1枚"
+
+msgid "BLACKJACK_STAY"
+msgstr "勝負する"
+
+msgid "BLACKJACK_FIRST"
+msgstr "最初の伏せたカードを選んでください。"
+
+msgid "BLACKJACK_SECOND"
+msgstr "2枚目を選んでください。最初のカードより高いランクなら勝ちです。"
+
+msgid "BLACKJACK_DECISION"
+msgstr "もう1枚引くか、勝負してください。"
+
+msgid "BLACKJACK_PLAYER"
+msgstr "自分のカード：{0}　合計：{1}"
+
+msgid "BLACKJACK_DEALER"
+msgstr "ディーラーのカード：{0}　合計：{1}"
+
+msgid "BLACKJACK_RULES"
+msgstr "原作のルール：最初の21は2倍。5・6・7枚で勝負すると4・6・20倍、6が3枚なら25倍、8枚以上なら100倍。再計算ではAをまとめて1にします。"
+
+msgid "BLACKJACK_CARD_BOUNDARY"
+msgstr "原作は各側に9枚まで先に配ります。次のカードは配列の範囲外になるため、この台を閉じて続行してください。"
