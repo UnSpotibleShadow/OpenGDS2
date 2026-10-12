@@ -88,6 +88,7 @@ public static class SaveStore
         CasinoPokerService.Validate(state);
         FinancialFailureService.Validate(state);
         MysteryLabService.Validate(state);
+        PromotionService.Validate(state);
         OwnHardwareService.Validate(state);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);
         if (state.PendingFeeNegotiation is { } negotiation)
@@ -229,6 +230,7 @@ public static class SaveStore
             throw new InvalidDataException("Invalid project technology counters.");
         DevelopmentWorkRules.ValidateQuality(project.Quality);
         CheckpointMeetingRules.Validate(project);
+        if(project.PromotionUseCount<0) throw new InvalidDataException("Invalid promotion history.");
         if (project.PendingDecision is DevelopmentMilestone decision &&
             (decision switch
             {

@@ -33,6 +33,7 @@ public partial class Main
     }
     private void ShowProject(GameState state,DevelopmentProjectState project)
     {
+        if (ShowPendingPromotion(state)) return;
         if (project.OriginalRoomState==2) {ShowHardwareProject(state,project);return;}
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
         ClearContent();AddHeading(project.Title,28);
@@ -48,6 +49,7 @@ public partial class Main
         AddHeading(Tr("DEVELOPMENT_STAFF_NOTE"),16);
         AddAction("STAFF",()=>ShowStaff(state));
         if (project.OriginalStage==3) AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
+        AddAction("PAID_PROMOTION",()=>ShowPromotionSelector(state,project));
         AddAction("CANCEL_PROJECT",()=>ShowProjectCancellation(state,project));
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
         _activeCatalog=_importer.LoadCatalog();_clockRunning=true;

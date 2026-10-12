@@ -30,6 +30,8 @@ public sealed class DevelopmentProjectState
     public HardwareDesignState? HardwareDesign {get;set;}
     public DevelopmentQuality? PolishingTargets {get;set;}
     public int Bugs {get;set;}
+    // A12AC4: shared across media; absent legacy history stays unknown.
+    public int? PromotionUseCount {get;set;}
     public double Recognition {get;set;}
     public double DataSize {get;set;}
     public DevelopmentFocus? Focus {get;set;}
