@@ -18,6 +18,58 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("room panel follows native counter thresholds and is independent of employees",()=>
+{
+    var s=new GameState {DevelopmentProjects=[new() {RoomIndex=0,RequiredPoints=100,Focus=new(25,25,25,25)}]};
+    for(int n=0;n<12;n++) OfficeRoomPresentationRules.Tick(s);
+    Check(s.OfficeRoomPresentation.PanelTicks[0]==12 && s.OfficeRoomPresentation.PanelSourceX[0]==259);
+    OfficeRoomPresentationRules.Tick(s);
+    Check(s.OfficeRoomPresentation.PanelTicks[0]==1 && s.OfficeRoomPresentation.PanelSourceX[0]==321);
+    s.DevelopmentProjects[0].OriginalRoomPaused=true;
+    OfficeRoomPresentationRules.Tick(s);Check(s.OfficeRoomPresentation.PanelTicks[0]==1);
+    Check(s.OfficeRoomPresentation.PanelTicks[1]==0);
+});
+Test("room projections hide empty rooms and preserve native panel depth",()=>
+{
+    var s=new GameState();var panel=new OfficeSpriteDefinition(91,-1000,131,259,226,62,31,26);
+    Check(OfficeRoomPresentationRules.Project(panel,s).Y==0);
+    s.DevelopmentProjects.Add(new() {RoomIndex=0,RequiredPoints=100,Progress=49.99,Focus=new(25,25,25,25)});
+    Check(OfficeRoomPresentationRules.Project(panel,s)==panel with {X=162});
+    var digit=OfficeRoomPresentationRules.Project(new(88,-70,129,0,0,17,12,255),s);
+    Check(digit.SourceX==383+17*4 && digit.SourceY==226+12*9);
+    s.DevelopmentProjects[0].OriginalStage=3;
+    Check(OfficeRoomPresentationRules.Project(digit,s).Y==0);
+});
+Test("completion labels share native phase across rooms",()=>
+{
+    var s=new GameState {DevelopmentProjects=[new() {RoomIndex=1,OriginalStage=3,RequiredPoints=100,Focus=new(25,25,25,25)},new() {RoomIndex=0,OriginalStage=3,RequiredPoints=100,Focus=new(25,25,25,25)}]};
+    for(int n=0;n<4;n++) OfficeRoomPresentationRules.Tick(s);
+    Check(s.OfficeRoomPresentation.CompletionTicks==8 && s.OfficeRoomPresentation.CompletionSourceX[1]==1005 && s.OfficeRoomPresentation.CompletionSourceX[0]==948);
+});
+Test("room phase persists and malformed phase rejects before save",()=>
+{
+    var s=new GameState {Company=new() {Name="Synthetic company",PresidentName="Tester"}};s.OfficeRoomPresentation.PanelTicks[1]=11;s.OfficeRoomPresentation.PanelSourceX[1]=321;
+    var loaded=SaveStore.Deserialize(SaveStore.Serialize(s));
+    Check(loaded.OfficeRoomPresentation.PanelTicks[1]==11 && loaded.OfficeRoomPresentation.PanelSourceX[1]==321);
+    s.OfficeRoomPresentation.PanelTicks[0]=13;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("desk targets use distinct native strict diamonds",()=>
+{
+    var centers=new (int Action,double X,double Y)[] {(6,200,133.5),(7,232,149.5),(8,169,141),(9,217,164.5),(10,152,157.5),(11,184,173.5),(12,296,181.5),(13,328,197.5),(14,265,189),(15,313,212.5),(16,248,205.5),(17,280,221.5)};
+    foreach(var d in centers) Check(OfficeInteractionRules.DeskAt(d.X,d.Y)==d.Action);
+    Check(OfficeInteractionRules.DeskAt(double.NaN,0)==null && OfficeInteractionRules.DeskAt(0,0)==null);
+    Check(OfficeInteractionRules.DeskAt(200,112)==null);
+});
+Test("right-click assignment resets timer before occupied rejection without clearing burst units",()=>
+{
+    var e=new EmployeeState {Name="Synthetic selected",Office=new() {Action=6,SeatedAction=6,WorkTicks=17,SharedWorkUnits=37,BurstCount=37}};
+    var other=new EmployeeState {Name="Synthetic occupant",Office=new() {Action=7}};
+    var s=new GameState {Employees=[e,other]};
+    Check(OfficeAssignmentService.TryAssignDeskFromOffice(s,e,7)==OfficeAssignmentResult.Occupied);
+    Check(e.Office.WorkTicks==0 && e.Office.SharedWorkUnits==37 && e.Office.Action==6);
+    Check(OfficeAssignmentService.TryAssignDeskFromOffice(s,e,12)==OfficeAssignmentResult.Success);
+    Check(e.Office.Action==12 && e.Office.MovementState==3 && e.Office.SeatedAction==0);
+});
 Test("own-console catalog composition preserves locally imported race definitions",()=>
 {
     var s=new GameState();s.OwnHardware.Launched=new HardwareDefinition {SourceIndex=11};

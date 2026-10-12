@@ -125,6 +125,7 @@ public sealed class GameSession
         if (MysteryLabService.Tick(state)) return;
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         if (SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
+        OfficeRoomPresentationRules.Tick(state);
         // Module2 +0A52/CE64 visits actor slots, including reused hire slots.
         foreach (var employee in state.Employees.OrderBy(x=>x.Office?.SlotIndex ?? int.MaxValue))
         {

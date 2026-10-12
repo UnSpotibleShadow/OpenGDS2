@@ -15,6 +15,18 @@ public static class OfficeAssignmentService
         if (action is <6 or >17) throw new ArgumentOutOfRangeException(nameof(action));
         return TryAssignSeat(state,employee,action);
     }
+    public static OfficeAssignmentResult TryAssignDeskFromOffice(GameState state,EmployeeState employee,int action)
+    {
+        if(action is <6 or >17) throw new ArgumentOutOfRangeException(nameof(action));
+        if(!state.Employees.Contains(employee) || employee.Office is not { } office)
+            return OfficeAssignmentResult.UnknownWorkspace;
+        if(state.SecretaryPolicies is { } policy &&
+            SecretaryPolicyRules.BreakThreshold(policy.Break) is int threshold && employee.Stress>threshold)
+            return OfficeAssignmentResult.RestRequired;
+        // Native mouse-down clears this cell before the helper rejects an occupied desk.
+        office.WorkTicks=0;
+        return TryAssignDesk(state,employee,action);
+    }
     private static OfficeAssignmentResult TryAssignSeat(GameState state, EmployeeState employee, int action)
     {
         if (!state.Employees.Contains(employee) || employee.Office is not OfficeEmployeeState office)
