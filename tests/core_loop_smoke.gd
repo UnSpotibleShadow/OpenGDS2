@@ -233,6 +233,9 @@ func run() -> void:
     var meeting_file = FileAccess.open("user://original/Graphic/Embedded/PlanningMeeting.bmp",FileAccess.WRITE)
     meeting_file.store_buffer(meeting_bmp)
     meeting_file.close()
+    var proposal_file = FileAccess.open("user://original/Graphic/Embedded/PlanningProposal.bmp",FileAccess.WRITE)
+    proposal_file.store_buffer(meeting_bmp)
+    proposal_file.close()
     create_music_fixture()
     var fresh_audio := ConfigFile.new()
     fresh_audio.set_value("music", "enabled", true)
@@ -531,10 +534,8 @@ func run() -> void:
     var meeting_state = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(meeting_state.State.Money == state.Money and meeting_state.State.DevelopmentProjects.is_empty(),"Entering meeting does not debit funds")
     check(not main.find_child("AcceptPlan",true,false).disabled,"Planning can begin")
-    main.find_child("PlanningTitle",true,false).text = "Synthetic UI Game"
-    var title_input = main.find_child("PlanningTitle",true,false)
-    check(title_input.get_theme_color("caret_color") == Color.BLACK,"Text fields have a contrasting black caret")
-    check(title_input.get_theme_color("font_selected_color") == Color.WHITE,"Selected input text remains legible")
+    check(main.find_child("PlanningTitle",true,false) == null,"Proposal does not enter the shipment title early")
+    check(main.find_child("ProposalIllustration",true,false).texture != null,"Proposal loads its separate locally imported illustration")
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
     check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Accepting a plan ends planning music")
@@ -563,8 +564,8 @@ func run() -> void:
     await press_node("TogglePause")
     var burst_applied := false
     for frame in range(60):
-        var report = main.find_child("DevelopmentReport",true,false)
-        if report != null and report.text.contains(tr("STAT_FUN")+": "+str(int(original_fun+37))):
+        var report = main.find_child("ProjectQuality0",true,false)
+        if report != null and report.text == str(int(original_fun+37)):
             burst_applied = true
             break
         await process_frame
@@ -577,7 +578,7 @@ func run() -> void:
     check(is_equal_approx(committed_project.Progress,original_progress+37.0/3.0),"Saved progress receives the original one-third quality-burst gain")
     await press("LOAD_GAME")
     await press_node("OpenProject0")
-    check(main.find_child("DevelopmentReport",true,false).text.contains(tr("STAT_FUN")+": "+str(int(original_fun+37))),"Reloaded report retains the committed burst")
+    check(main.find_child("ProjectQuality0",true,false).text == str(int(original_fun+37)),"Reloaded report retains the committed burst")
     # Restore the preceding fixture so the remaining core loop tests keep their
     # ordinary development path and random progression.
     write_json("user://saves/slot1.json",before_burst)
@@ -638,7 +639,7 @@ func run() -> void:
     await await_node("SelectType0")
     await press_node("SelectType0")
     check(main.find_child("SelectType0",true,false).button_pressed,"Type preview retains its radio selection")
-    check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 505,"Type choices fit the four name/points/fee/example columns in a compact meeting panel")
+    check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 770,"Type choices fit the project summary and four name/points/fee/example columns")
     await press("SAVE_GAME")
     var type_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(type_preview.State.Money == checkpoint.State.Money and type_preview.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Previewing type never charges or confirms it")
@@ -707,8 +708,8 @@ func run() -> void:
     check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Continuing work ends final meeting music")
     var debugged := false
     for frame in range(15000):
-        var report = main.find_child("DevelopmentReport",true,false)
-        if report != null and report.text.contains(tr("BUGS") + ": 0"):
+        var report = main.find_child("ProjectBugCount",true,false)
+        if report != null and report.text == "0":
             debugged = true
             break
         await process_frame
@@ -717,8 +718,17 @@ func run() -> void:
         quit(1)
         return
     await press("RELEASE_GAME")
+    main.find_child("ReleaseTitle",true,false).text = "Synthetic UI Game"
+    var title_input = main.find_child("ReleaseTitle",true,false)
+    check(title_input.get_theme_color("caret_color") == Color.BLACK,"Shipment title has a contrasting black caret")
+    check(title_input.get_theme_color("font_selected_color") == Color.WHITE,"Selected title text remains legible")
     check(main.find_child("ReleasePrice",true,false).value == 5800,"Original default price")
     check(main.find_child("ReleaseCopies",true,false).value == 5000,"Original default production")
+    check(main.find_child("ShipmentUnitCost",true,false).text == "¥500" and main.find_child("ShipmentTotalCost",true,false).text == "¥2,500,000","Shipment cost table uses media plus packaging")
+    check(main.find_child("ShipmentNetCopy",true,false).text == "¥2,800" and main.find_child("ShipmentAllSold",true,false).text == "¥14,000,000","Distribution receipts exclude only the two shares")
+    main.find_child("ReleaseCopies",true,false).value = 1000
+    check(main.find_child("ShipmentTotalCost",true,false).text == "¥500,000" and main.find_child("ShipmentAllSold",true,false).text == "¥2,800,000","Quantity changes refresh both tables without a transaction")
+    main.find_child("ReleaseCopies",true,false).value = 5000
     await press_node("ConfirmRelease")
     check(main.find_child("ConversationWindow",true,false) != null,"Shipment commentary precedes reviews")
     await press("SAVE_GAME")
@@ -768,6 +778,11 @@ func run() -> void:
     check(product.NetSalesReceipts == product.UnitsSold * 2800,"Revenue uses original per-copy fees")
     await press("LOAD_GAME")
     await press("SALES")
+    await press_node("OpenProduct0")
+    check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
+    check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
+    check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
+    await press("BACK_TO_SALES")
     await press_node("SalesHistoryProduct0")
     check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
     check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
@@ -787,7 +802,6 @@ func run() -> void:
     await press_node("PlanningMeeting")
     check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
     await finish_conversation()
-    main.find_child("PlanningTitle",true,false).text = "Synthetic Second Game"
     await press_node("AcceptPlan")
     check(main.find_child("DevelopmentProgress",true,false) != null,"Room accepts another project")
     await press("BACK_TO_OFFICE")
@@ -1311,7 +1325,11 @@ func run() -> void:
     write_json("user://saves/slot1.json",renewal_save)
     await press("LOAD_GAME")
     check(main.find_child("RenewEmployee1",true,false).button_pressed,"Renewal initially selects employed staff")
+    check(main.find_child("RenewalAbilityChart",true,false) != null and main.find_child("RenewalSelectedTotal",true,false).text.ends_with("¥30"),"Renewal shows selected details and total fees")
+    await press_node("SelectRenewalEmployee2")
+    check(main.find_child("RenewalSelectedName",true,false).text == main.find_child("SelectRenewalEmployee2",true,false).text,"Renewal selection follows the actual employee source")
     main.find_child("RenewEmployee2",true,false).button_pressed = false
+    check(main.find_child("RenewalSelectedTotal",true,false).text.ends_with("¥10"),"Renewal checkbox refreshes total without charging")
     await press_node("ConfirmContractRenewal")
     Engine.time_scale = 100
     if not await await_node("ExhibitionSelection"):
@@ -1568,7 +1586,7 @@ func run() -> void:
     await press_node("PlanningMeeting")
     check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
     await finish_conversation()
-    check(main.find_child("PlanningTitle",true,false).text == predecessor.Title + "2","Original series-based sequel title is suggested")
+    check(main.find_child("PlanningTitle",true,false) == null,"Sequel proposal defers the title input until shipment")
     await press_node("AcceptPlan")
     await press("BACK_TO_OFFICE")
     await press("SAVE_GAME")
@@ -1674,7 +1692,6 @@ func run() -> void:
     check(main.find_child("PlanningQuote",true,false).text.contains("130"),"Manga quote includes the rights fee")
     await press_node("PlanningMeeting")
     await finish_conversation()
-    main.find_child("PlanningTitle",true,false).text = "Synthetic Manga Game"
     await press_node("AcceptPlan")
     await press("SAVE_GAME")
     var accepted_manga = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))

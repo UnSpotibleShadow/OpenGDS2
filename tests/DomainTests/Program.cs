@@ -5427,6 +5427,19 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original proposal import keeps the separate serialized document image",()=>
+    {
+        string directory=Path.Combine(Path.GetTempPath(),"opengds2-proposal-"+Guid.NewGuid().ToString("N"));
+        try
+        {
+            EmbeddedGraphicsImporter.Extract(File.ReadAllBytes(args[0]),directory);
+            byte[] proposal=File.ReadAllBytes(Path.Combine(directory,"PlanningProposal.bmp"));
+            Check(proposal.Length==42036 && Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(proposal)).ToLowerInvariant()==
+                "68b9527b0fca162503e367eabe8f03b0114e92857c1926160ffa994de8073447");
+            Check(!proposal.SequenceEqual(File.ReadAllBytes(Path.Combine(directory,"PlanningMeeting.bmp"))));
+        }
+        finally {if(Directory.Exists(directory))Directory.Delete(directory,true);}
+    });
     Test("optional original horse and jockey append tables recover all source records locally",()=>
     {
         var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
@@ -5623,6 +5636,15 @@ if (args.Length == 2)
         }
     });
 }
+Test("compact product chart preserves its five distinct native scale boundaries",()=>
+{
+    var history=SalesHistoryRules.NewHistory();history[12]=9999999;
+    foreach(var item in new[]{(0L,20000L),(19999L,20000L),(20000L,40000L),(39999L,40000L),(40000L,80000L),(99999L,80000L),(100000L,200000L),(199999L,200000L),(200000L,400000L)})
+    {history[0]=item.Item1;Check(SalesHistoryRules.CompactChartCeiling(history)==item.Item2);}
+    history[0]=30000;Check(SalesHistoryRules.ChartCeiling(history)==80000 && SalesHistoryRules.CompactChartCeiling(history)==40000);
+    Throws<InvalidDataException>(()=>SalesHistoryRules.CompactChartCeiling(new long[12]));
+});
+
 Console.WriteLine($"{passed} tests passed");
 sealed class ConstantRandom(int value) : Random { public override int Next(int maxValue) => value; }
 sealed class UncheckedDoubleRandom(double value) : Random { public override double NextDouble() => value; }

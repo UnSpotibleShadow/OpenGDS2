@@ -36,6 +36,8 @@ public partial class Main
         if (project.OriginalRoomState==2) {ShowHardwareProject(state,project);return;}
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
         ClearContent();AddHeading(project.Title,28);
+        CompactManagementWindow("DevelopmentProjectWindow",new Vector2(430,470),410);
+        var refreshPanel=ProjectPanel(_content,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
         if (project.OriginalMode==1)
         {
             AddHeading(Tr("SEQUEL_DEVELOPMENT"),16);
@@ -51,12 +53,9 @@ public partial class Main
         _activeCatalog=_importer.LoadCatalog();_clockRunning=true;
         _refreshCoreStatus=()=>
         {
+            refreshPanel();
             progress.Value=project.Progress/project.RequiredPoints*100;
-            var q=project.Quality;
             report.Text=$"{Tr("DEVELOPMENT_POINTS")}: {project.Progress:N1} / {project.RequiredPoints:N0}\n"+
-                $"{Tr("STAT_FUN")}: {q.Fun:N0} · {Tr("STAT_NOVELTY")}: {q.Novelty:N0}\n"+
-                $"{Tr("STAT_GRAPHICS")}: {q.Graphics:N0} · {Tr("STAT_MUSIC")}: {q.Music:N0}\n"+
-                $"{Tr("BUGS")}: {project.Bugs}\n"+
                 string.Join("\n",state.Employees.Where(x=>x.Office?.Action is >=6 and <=17 && (x.Office.Action-6)/6==project.RoomIndex)
                     .Select(x=>$"{EmployeeName(x)} · {Tr("STRESS")}: {x.Stress:N0}%"));
         };
@@ -134,7 +133,7 @@ public partial class Main
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
         if (project.PendingDecision==DevelopmentMilestone.SelectType)
         {
-            CompactManagementWindow("TypeMeetingWindow",new Vector2(505,345),485);
+            CheckpointPanel(state,project,catalog,"TypeMeetingWindow",DialogueText("CHECKPOINT_ALPHA_MEETING"));
             _dialog?.SetTitle(DialogueText("CHECKPOINT_ALPHA_MEETING"));
             AddHeading(Tr("SELECT_GAME_TYPE"),16);
             try
@@ -172,7 +171,7 @@ public partial class Main
         }
         else if (project.PendingDecision==DevelopmentMilestone.SelectGenre)
         {
-            CompactManagementWindow("GenreMeetingWindow",new Vector2(430,345),410);
+            CheckpointPanel(state,project,catalog,"GenreMeetingWindow",DialogueText("CHECKPOINT_BETA_MEETING"));
             _dialog?.SetTitle(DialogueText("CHECKPOINT_BETA_MEETING"));
             AddHeading(Tr("SELECT_GENRE"),16);
             if (state.Company.OriginalMember90 is not int companyValue) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");return;}
@@ -203,8 +202,10 @@ public partial class Main
         }
         else
         {
-            AddProjectMetrics(project);
+            CompactManagementWindow("CompletionWindow",new Vector2(450,510),430);
             AddHeading(Tr("DEVELOPMENT_COMPLETE"),22);
+            _content.AddChild(Picture("CompletionIllustration",OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),new(256,160)));
+            ProjectPanel(_content,state,project,catalog);
             if (project.Bugs>=60) AddHeading(Tr("RELEASE_BUG_WARNING"),16);
             AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
             AddAction("CONTINUE_DEBUGGING",()=>{project.PendingDecision=null;ShowProject(state,project);});
@@ -295,24 +296,27 @@ public partial class Main
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         // Release controls can follow the final meeting. Keep its recording
         // through this form; opening release from ordinary work has no phase.
-        ClearContent(keepMeetingMusic:true);AddHeading(Tr("RELEASE_GAME"),28);AddProjectMetrics(project);
+        ClearContent(keepMeetingMusic:true);CompactManagementWindow("ShipmentWindow",new Vector2(460,490),440);
+        _dialog?.SetTitle(Tr("RELEASE_GAME"));
         if (state.Company.ProductionCapacity is null || state.SalesFee1 is null || state.SalesFee2 is null)
         {
             AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;
         }
         var defaultTitle=project.OriginalMode==1 && project.PredecessorProductIndex is int predecessor
             ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
-        var title=AddField(Tr("GAME_TITLE"),defaultTitle,128);title.Name="ReleaseTitle";
-        AddHeading(Tr("RETAIL_PRICE"),18);
-        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=ReleaseService.DefaultPrice};_content.AddChild(price);
-        AddHeading(Tr("PRODUCTION_COPIES"),18);
-        var copies=ProductionQuantity(state,"ReleaseCopies");
+        var title=new LineEdit {Name="ReleaseTitle",Text=defaultTitle,MaxLength=128};
+        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=ReleaseService.DefaultPrice};
+        var copies=ProductionQuantity(state,"ReleaseCopies");_content.RemoveChild(copies);
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize);
-        var quote=new Label {Name="ReleaseQuote",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(quote);
+        ShipmentBreakdown(state,unit,price,copies);
+        var controls=new HBoxContainer();_content.AddChild(controls);
+        controls.AddChild(Picture("ShipmentHardwarePicture",HardwarePicture(state,project.HardwareSourceIndex),new(64,64)));
+        var fields=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};controls.AddChild(fields);
+        fields.AddChild(new Label {Text=Tr("GAME_TITLE")});fields.AddChild(title);
+        var numbers=new GridContainer {Columns=2};fields.AddChild(numbers);
+        numbers.AddChild(new Label {Text=Tr("PRODUCTION_COPIES")});numbers.AddChild(copies);
+        numbers.AddChild(new Label {Text=Tr("RETAIL_PRICE")});numbers.AddChild(price);
         _status=new Label();_content.AddChild(_status);
-        void Quote()=>quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}\n"+
-            $"{Tr("NET_PER_COPY")}: ¥{(long)price.Value-state.SalesFee1-state.SalesFee2:N0}";
-        price.ValueChanged+=_=>Quote();copies.ValueChanged+=_=>Quote();Quote();
         var confirm=new Button {Name="ConfirmRelease",Text=Tr("RELEASE_GAME")};_content.AddChild(confirm);
         title.TextChanged+=value=>confirm.Disabled=string.IsNullOrWhiteSpace(value);
         confirm.Pressed+=()=>
@@ -339,6 +343,8 @@ public partial class Main
         foreach (var product in state.ReleasedGames.OrderByDescending(x=>x.ProductIndex))
         {
             AddHeading(product.Title,22);
+            var individual=new Button {Name=$"OpenProduct{product.ProductIndex}",Text=Tr("PRODUCT_DETAILS")};
+            individual.Pressed+=()=>ShowCompactProduct(state,product);_content.AddChild(individual);
             var report=new Label {Name=$"SalesProduct{product.ProductIndex}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
             var button=new Button {Name=$"ProduceProduct{product.ProductIndex}",Text=Tr("PRODUCE_MORE"),Disabled=state.Company.ProductionCapacity is null};
             button.Pressed+=()=>ShowProduction(state,product);_content.AddChild(button);

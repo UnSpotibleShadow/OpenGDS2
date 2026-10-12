@@ -7,6 +7,9 @@ namespace OpenGDS2.UI;
 public partial class SalesHistoryChart : Control
 {
     private long[] _history=[];
+    public bool Compact {get;set;}
+    public long Ceiling=>_history.Length==SalesHistoryRules.CellCount
+        ? Compact ? SalesHistoryRules.CompactChartCeiling(_history) : SalesHistoryRules.ChartCeiling(_history) : 0;
     public void SetHistory(IReadOnlyList<long> history)
     {
         SalesHistoryRules.Validate(history);_history=history.ToArray();QueueRedraw();
@@ -20,7 +23,7 @@ public partial class SalesHistoryChart : Control
         if (right<=left || bottom<=top) return;
         var area=new Rect2(left,top,right-left,bottom-top);
         DrawRect(area,Colors.White);
-        long ceiling=SalesHistoryRules.ChartCeiling(_history);
+        long ceiling=Ceiling;
         for (int i=0;i<=4;i++)
         {
             float y=bottom-(bottom-top)*i/4;
@@ -37,7 +40,8 @@ public partial class SalesHistoryChart : Control
         for (int i=1;i<SalesHistoryRules.CellCount;i++)
             DrawLine(Point(i-1),Point(i),new Color(.65f,.05f,.05f),2);
         DrawRect(area,Colors.Black,false);
-        DrawString(font,new(left,bottom+22),Tr("SALES_HISTORY_OLDEST"),HorizontalAlignment.Left,(right-left)/2,fontSize,Colors.Black);
-        DrawString(font,new(left+(right-left)/2,bottom+22),Tr("SALES_HISTORY_CURRENT"),HorizontalAlignment.Right,(right-left)/2,fontSize,Colors.Black);
+        DrawString(font,new(left,bottom+22),Tr(Compact ? "COMPACT_HISTORY_OLDEST" : "SALES_HISTORY_OLDEST"),HorizontalAlignment.Left,(right-left)/2,fontSize,Colors.Black);
+        DrawString(font,new(left+(right-left)/2,bottom+22),Tr(Compact ? "COMPACT_HISTORY_NEWEST" : "SALES_HISTORY_CURRENT"),HorizontalAlignment.Right,(right-left)/2,fontSize,Colors.Black);
+        if(Compact) DrawString(font,new(left,bottom+22),Tr("COMPACT_HISTORY_MIDDLE"),HorizontalAlignment.Center,right-left,fontSize,Colors.Black);
     }
 }

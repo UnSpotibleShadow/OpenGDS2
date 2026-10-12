@@ -2,6 +2,7 @@ extends "res://tests/stress_relief_smoke.gd"
 
 # Author-created blank bitmap fixtures; no original artwork is required.
 func blank_bmp(path: String, width: int, height: int, white: bool) -> void:
+    DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
     var stride: int=(width*3+3)&~3
     var pixels := PackedByteArray()
     pixels.resize(54+stride*height)
