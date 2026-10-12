@@ -1,0 +1,1296 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "literal_checks": [
+    {
+      "label": "desk 6 bound 1",
+      "address": 10252782,
+      "size": 2,
+      "value": 178
+    },
+    {
+      "label": "desk 6 bound 2",
+      "address": 10252790,
+      "size": 2,
+      "value": 223
+    },
+    {
+      "label": "desk 6 bound 3",
+      "address": 10252796,
+      "size": 2,
+      "value": 212
+    },
+    {
+      "label": "desk 6 bound 4",
+      "address": 10252814,
+      "size": 2,
+      "value": 255
+    },
+    {
+      "label": "desk 6 bound 5",
+      "address": 10252832,
+      "size": 1,
+      "value": 20
+    },
+    {
+      "label": "desk 6 bound 6",
+      "address": 10252849,
+      "size": 1,
+      "value": 47
+    },
+    {
+      "label": "desk 7 bound 1",
+      "address": 10252881,
+      "size": 2,
+      "value": 210
+    },
+    {
+      "label": "desk 7 bound 2",
+      "address": 10252889,
+      "size": 2,
+      "value": 255
+    },
+    {
+      "label": "desk 7 bound 3",
+      "address": 10252895,
+      "size": 2,
+      "value": 244
+    },
+    {
+      "label": "desk 7 bound 4",
+      "address": 10252913,
+      "size": 2,
+      "value": 287
+    },
+    {
+      "label": "desk 7 bound 5",
+      "address": 10252931,
+      "size": 1,
+      "value": 20
+    },
+    {
+      "label": "desk 7 bound 6",
+      "address": 10252948,
+      "size": 1,
+      "value": 47
+    },
+    {
+      "label": "desk 8 bound 1",
+      "address": 10252980,
+      "size": 2,
+      "value": 146
+    },
+    {
+      "label": "desk 8 bound 2",
+      "address": 10252988,
+      "size": 2,
+      "value": 191
+    },
+    {
+      "label": "desk 8 bound 3",
+      "address": 10252994,
+      "size": 2,
+      "value": 212
+    },
+    {
+      "label": "desk 8 bound 4",
+      "address": 10253012,
+      "size": 2,
+      "value": 239
+    },
+    {
+      "label": "desk 8 bound 5",
+      "address": 10253030,
+      "size": 1,
+      "value": 36
+    },
+    {
+      "label": "desk 8 bound 6",
+      "address": 10253047,
+      "size": 1,
+      "value": 77
+    },
+    {
+      "label": "desk 9 bound 1",
+      "address": 10253079,
+      "size": 2,
+      "value": 193
+    },
+    {
+      "label": "desk 9 bound 2",
+      "address": 10253087,
+      "size": 2,
+      "value": 238
+    },
+    {
+      "label": "desk 9 bound 3",
+      "address": 10253093,
+      "size": 2,
+      "value": 260
+    },
+    {
+      "label": "desk 9 bound 4",
+      "address": 10253111,
+      "size": 2,
+      "value": 287
+    },
+    {
+      "label": "desk 9 bound 5",
+      "address": 10253129,
+      "size": 1,
+      "value": 36
+    },
+    {
+      "label": "desk 9 bound 6",
+      "address": 10253146,
+      "size": 1,
+      "value": 77
+    },
+    {
+      "label": "desk 10 bound 1",
+      "address": 10253178,
+      "size": 2,
+      "value": 130
+    },
+    {
+      "label": "desk 10 bound 2",
+      "address": 10253186,
+      "size": 2,
+      "value": 175
+    },
+    {
+      "label": "desk 10 bound 3",
+      "address": 10253192,
+      "size": 2,
+      "value": 212
+    },
+    {
+      "label": "desk 10 bound 4",
+      "address": 10253210,
+      "size": 2,
+      "value": 255
+    },
+    {
+      "label": "desk 10 bound 5",
+      "address": 10253228,
+      "size": 1,
+      "value": 68
+    },
+    {
+      "label": "desk 10 bound 6",
+      "address": 10253245,
+      "size": 1,
+      "value": 95
+    },
+    {
+      "label": "desk 11 bound 1",
+      "address": 10253277,
+      "size": 2,
+      "value": 162
+    },
+    {
+      "label": "desk 11 bound 2",
+      "address": 10253285,
+      "size": 2,
+      "value": 207
+    },
+    {
+      "label": "desk 11 bound 3",
+      "address": 10253291,
+      "size": 2,
+      "value": 244
+    },
+    {
+      "label": "desk 11 bound 4",
+      "address": 10253309,
+      "size": 2,
+      "value": 287
+    },
+    {
+      "label": "desk 11 bound 5",
+      "address": 10253327,
+      "size": 1,
+      "value": 68
+    },
+    {
+      "label": "desk 11 bound 6",
+      "address": 10253344,
+      "size": 1,
+      "value": 95
+    },
+    {
+      "label": "desk 12 bound 1",
+      "address": 10253376,
+      "size": 2,
+      "value": 274
+    },
+    {
+      "label": "desk 12 bound 2",
+      "address": 10253384,
+      "size": 2,
+      "value": 319
+    },
+    {
+      "label": "desk 12 bound 3",
+      "address": 10253390,
+      "size": 2,
+      "value": 308
+    },
+    {
+      "label": "desk 12 bound 4",
+      "address": 10253408,
+      "size": 2,
+      "value": 351
+    },
+    {
+      "label": "desk 12 bound 5",
+      "address": 10253426,
+      "size": 1,
+      "value": 20
+    },
+    {
+      "label": "desk 12 bound 6",
+      "address": 10253443,
+      "size": 1,
+      "value": 47
+    },
+    {
+      "label": "desk 13 bound 1",
+      "address": 10253475,
+      "size": 2,
+      "value": 306
+    },
+    {
+      "label": "desk 13 bound 2",
+      "address": 10253483,
+      "size": 2,
+      "value": 351
+    },
+    {
+      "label": "desk 13 bound 3",
+      "address": 10253489,
+      "size": 2,
+      "value": 340
+    },
+    {
+      "label": "desk 13 bound 4",
+      "address": 10253507,
+      "size": 2,
+      "value": 383
+    },
+    {
+      "label": "desk 13 bound 5",
+      "address": 10253525,
+      "size": 1,
+      "value": 20
+    },
+    {
+      "label": "desk 13 bound 6",
+      "address": 10253542,
+      "size": 1,
+      "value": 47
+    },
+    {
+      "label": "desk 14 bound 1",
+      "address": 10253574,
+      "size": 2,
+      "value": 242
+    },
+    {
+      "label": "desk 14 bound 2",
+      "address": 10253582,
+      "size": 2,
+      "value": 287
+    },
+    {
+      "label": "desk 14 bound 3",
+      "address": 10253588,
+      "size": 2,
+      "value": 308
+    },
+    {
+      "label": "desk 14 bound 4",
+      "address": 10253606,
+      "size": 2,
+      "value": 335
+    },
+    {
+      "label": "desk 14 bound 5",
+      "address": 10253624,
+      "size": 1,
+      "value": 36
+    },
+    {
+      "label": "desk 14 bound 6",
+      "address": 10253641,
+      "size": 1,
+      "value": 77
+    },
+    {
+      "label": "desk 15 bound 1",
+      "address": 10253673,
+      "size": 2,
+      "value": 289
+    },
+    {
+      "label": "desk 15 bound 2",
+      "address": 10253681,
+      "size": 2,
+      "value": 334
+    },
+    {
+      "label": "desk 15 bound 3",
+      "address": 10253687,
+      "size": 2,
+      "value": 356
+    },
+    {
+      "label": "desk 15 bound 4",
+      "address": 10253705,
+      "size": 2,
+      "value": 383
+    },
+    {
+      "label": "desk 15 bound 5",
+      "address": 10253723,
+      "size": 1,
+      "value": 36
+    },
+    {
+      "label": "desk 15 bound 6",
+      "address": 10253740,
+      "size": 1,
+      "value": 77
+    },
+    {
+      "label": "desk 16 bound 1",
+      "address": 10253772,
+      "size": 2,
+      "value": 226
+    },
+    {
+      "label": "desk 16 bound 2",
+      "address": 10253780,
+      "size": 2,
+      "value": 271
+    },
+    {
+      "label": "desk 16 bound 3",
+      "address": 10253786,
+      "size": 2,
+      "value": 308
+    },
+    {
+      "label": "desk 16 bound 4",
+      "address": 10253804,
+      "size": 2,
+      "value": 351
+    },
+    {
+      "label": "desk 16 bound 5",
+      "address": 10253822,
+      "size": 1,
+      "value": 68
+    },
+    {
+      "label": "desk 16 bound 6",
+      "address": 10253839,
+      "size": 1,
+      "value": 95
+    },
+    {
+      "label": "desk 17 bound 1",
+      "address": 10253871,
+      "size": 2,
+      "value": 258
+    },
+    {
+      "label": "desk 17 bound 2",
+      "address": 10253879,
+      "size": 2,
+      "value": 303
+    },
+    {
+      "label": "desk 17 bound 3",
+      "address": 10253885,
+      "size": 2,
+      "value": 340
+    },
+    {
+      "label": "desk 17 bound 4",
+      "address": 10253903,
+      "size": 2,
+      "value": 383
+    },
+    {
+      "label": "desk 17 bound 5",
+      "address": 10253921,
+      "size": 1,
+      "value": 68
+    },
+    {
+      "label": "desk 17 bound 6",
+      "address": 10253938,
+      "size": 1,
+      "value": 95
+    },
+    {
+      "label": "promotion media 0 fee",
+      "address": 10487644,
+      "size": 4,
+      "value": 5000000
+    },
+    {
+      "label": "promotion media 1 fee",
+      "address": 10487685,
+      "size": 4,
+      "value": 10000000
+    },
+    {
+      "label": "promotion media 2 fee",
+      "address": 10487726,
+      "size": 4,
+      "value": 20000000
+    },
+    {
+      "label": "promotion media 3 fee",
+      "address": 10487767,
+      "size": 4,
+      "value": 25000000
+    },
+    {
+      "label": "promotion media 4 fee",
+      "address": 10487808,
+      "size": 4,
+      "value": 20000000
+    },
+    {
+      "label": "promotion media 5 fee",
+      "address": 10487849,
+      "size": 4,
+      "value": 25000000
+    }
+  ],
+  "spans": {
+    "fGMKikakusyo-0099BA80": {
+      "address": 10074752,
+      "size": 1228,
+      "sha256": "71d2bfc58f55a55b01a8213c93329ef8bb2c080dc1751796ca820fab73923a54"
+    },
+    "fGMKikakusyo-0099CFCC": {
+      "address": 10080204,
+      "size": 1392,
+      "sha256": "513b529a09dabdc7b88e1aca8959fdeeb74d993f4289a5dbec77dd9305141829"
+    },
+    "fGMKansei-0097D3CC": {
+      "address": 9950156,
+      "size": 76,
+      "sha256": "51d312f33d85bcbf22fa232ab3b90db3eb34f0b400382c5c4a4f1a0674bde701"
+    },
+    "fGMKansei-0097C484": {
+      "address": 9946244,
+      "size": 60,
+      "sha256": "cbb3618562103c2c387efc6584f3fb0b41531af6e7be99e402d11fbccd0b3959"
+    },
+    "fGMKansei-00982A24": {
+      "address": 9972260,
+      "size": 180,
+      "sha256": "55f329a9a38b1344f3dca4b2f132d43a56a61a32771ed8d8ea1d891d421f18d2"
+    },
+    "fGMKansei-009974D8": {
+      "address": 10056920,
+      "size": 1024,
+      "sha256": "0cdbabf10c7b593e4aba676fb143e0441df2e4f37e178f47bb0f222dae68c018"
+    },
+    "fGMKansei-0099B554": {
+      "address": 10073428,
+      "size": 1232,
+      "sha256": "8968f4d9f580babb62459d31af94799440caf2e703a706a44b7513561ea336a8"
+    },
+    "fGMSyukka-009A4D78": {
+      "address": 10112376,
+      "size": 1924,
+      "sha256": "0e084b303127ae4327094fe2327fab2436faf5e36375e4887192058145939fef"
+    },
+    "fGMSyukka-009C9CB8": {
+      "address": 10263736,
+      "size": 4776,
+      "sha256": "b0a2123bfaefda036cf372a41f2e9db98105687b5b56c7a9533ab3f3a5f7af1b"
+    },
+    "fGMSyukka-009B4344": {
+      "address": 10175300,
+      "size": 2932,
+      "sha256": "5a7befe9a1026d70cb6976fd0f27dd2d7413ba5bed696d0a56878abb6d6a018f"
+    },
+    "fGMZishaKW-00984940": {
+      "address": 9980224,
+      "size": 228,
+      "sha256": "b04a06ccb08902124fa1159740399cca72b10387396038cda6f561dff99b28e5"
+    },
+    "fGMZishaKW-009C4570": {
+      "address": 10241392,
+      "size": 4080,
+      "sha256": "030d5e9ab217cbc67e894b23e8bed8f1af4421c392502b92bba5c4599e1fb2c6"
+    },
+    "fGMZishaK-009C2568": {
+      "address": 10233192,
+      "size": 3968,
+      "sha256": "3df68a55b1f4cffde1850cb2c0118226279e42b256f2000f94f3bc79715f5888"
+    },
+    "fGMDevW1-009AAA8C": {
+      "address": 10136204,
+      "size": 2108,
+      "sha256": "048a6b63daecd62c59f8df20a69286809547b19870e3e051a5f625abe515373d"
+    },
+    "fGMSendenBaitai-00982064": {
+      "address": 9969764,
+      "size": 144,
+      "sha256": "b99400dd7fe82d0b4783a43e22519bdb2ee5790a1af99c85901b057ba36d8d91"
+    },
+    "fGMSendenBaitai-00980A38": {
+      "address": 9964088,
+      "size": 128,
+      "sha256": "8ca88dfff6278bf2034820d8ed84587cfa0985b7118dbed0b913ebed17cf12ef"
+    },
+    "fGMSendenBaitai-0099A1C0": {
+      "address": 10068416,
+      "size": 1112,
+      "sha256": "b97dc342c787e5d5df04e6682140fc49723f1e971ae913e8f48d7b89f5651420"
+    },
+    "fGMKikakuKaigi-009EFA40": {
+      "address": 10418752,
+      "size": 27016,
+      "sha256": "873bf218fd41a10dfbac8ff7e394f68ceb018df513a432033c8cfc5d088f936b"
+    },
+    "fMainVisual-009C66BC": {
+      "address": 10249916,
+      "size": 4372,
+      "sha256": "c8ebe33d176e563208a9fc3ae85c4f74423684963da77b9fa56514793953d089"
+    },
+    "Module2-009AF6BC": {
+      "address": 10155708,
+      "size": 2456,
+      "sha256": "e4c1fb9aa52ef78dd8b9e044c6572b0d5c8f5c47dfefae7d884f5301a1aefa85"
+    },
+    "Module2-00A0283C": {
+      "address": 10496060,
+      "size": 56604,
+      "sha256": "2a02c38bb853e37b5e616f4251350a25d12e0d27d19406098f5037b29a678ff4"
+    },
+    "Module1-0098C930": {
+      "address": 10012976,
+      "size": 460,
+      "sha256": "f6d413b8516983db3aa729ab7848e15ef6731f3e6d702cce23e72393b199115f"
+    },
+    "Module1-009F651C": {
+      "address": 10446108,
+      "size": 49712,
+      "sha256": "2902473f246aa29c33497c24435ae9b92e35092f25115d619c22e1e47d40f88f"
+    },
+    "fGMCrossR-009CAFCC": {
+      "address": 10268620,
+      "size": 5000,
+      "sha256": "aec7fbb43eb6c907ecc0b051496f0284a005d504d1aa4c00f5318ab6845f41a5"
+    },
+    "fGMCrossR-00986D54": {
+      "address": 9989460,
+      "size": 328,
+      "sha256": "9444be9789f07e03334afc6541c95ded25f5570bcbc7d4b1f90641bd740d42ad"
+    },
+    "fGMGameDexKs-0098B810": {
+      "address": 10008592,
+      "size": 460,
+      "sha256": "fc592a1f1cad819549c1988ede8a77433974825ac79334d37b09ea4e25221e16"
+    },
+    "fGMGameDexSn-00989C5C": {
+      "address": 10001500,
+      "size": 396,
+      "sha256": "3c99ece3b7493c0152e1fe14f0b90ef5ed232252f80e6a094818619900403338"
+    },
+    "fGMKontesuto-00996CB8": {
+      "address": 10054840,
+      "size": 928,
+      "sha256": "35e559bcb55b6a419353c987f9738eb9e0f202512b86ca8b634e6bf0d6ce685e"
+    },
+    "fGMSKoyouKz-009837BC": {
+      "address": 9975740,
+      "size": 200,
+      "sha256": "0216030d7a6a6389569c62ea3f789dee701b79aa99934cd3a53ea3b6b7cc3de0"
+    },
+    "fGMSKoyouKz-00995CDC": {
+      "address": 10050780,
+      "size": 884,
+      "sha256": "2b4f91d481e9c6823790e3ee8b17068f9811f5dc263b628213a3ff18356655c8"
+    },
+    "fGMalpha-009ACF14": {
+      "address": 10145556,
+      "size": 2256,
+      "sha256": "f492bfd5541b2a29537b327fccdc58ede812b5186a0958a41ce3ef2a894aade7"
+    },
+    "fGMbeta-009B00D8": {
+      "address": 10158296,
+      "size": 2504,
+      "sha256": "8c88ade7c3a74a02a80aacaa5c494e62dbbbb3ee1995203f15d9dc7d78225c9f"
+    }
+  },
+  "anchors": [
+    {
+      "label": "proposal accept control index",
+      "address": 10074752,
+      "hex": "7f 0c 00 f4 00 c6"
+    },
+    {
+      "label": "proposal acceptance debit",
+      "address": 10074799,
+      "hex": "0a 04 00 08 00 36 04 00 58 ff 48 ff 28 38 ff 01 00"
+    },
+    {
+      "label": "proposal repeat control index",
+      "address": 10075814,
+      "hex": "7f 0c 00 f4 01 c6"
+    },
+    {
+      "label": "proposal repeat meeting mode zero",
+      "address": 10075923,
+      "hex": "28 68 ff 00 00 04 58 ff 0a 41 00 08 00"
+    },
+    {
+      "label": "proposal cancel control index",
+      "address": 10075946,
+      "hex": "7f 0c 00 f4 02 c6"
+    },
+    {
+      "label": "completion opens shipment form",
+      "address": 9950209,
+      "hex": "27 48 ff 25 28 68 ff 01 00"
+    },
+    {
+      "label": "completion postpone helper",
+      "address": 9946244,
+      "hex": "0a 08 00 00 00 05 03 00 28 6c ff 0c 00"
+    },
+    {
+      "label": "completion warning threshold sixty",
+      "address": 9972265,
+      "hex": "05 0a 00 fc 96 28 6c ff 3c 00"
+    },
+    {
+      "label": "completion uses planning scene zero",
+      "address": 10057876,
+      "hex": "04 44 ff f4 00 05 0f 00"
+    },
+    {
+      "label": "completion praise priority fun",
+      "address": 10073577,
+      "hex": "1c f0 00 28 9c fe 00 00 28 bc fe 00 00"
+    },
+    {
+      "label": "completion high bug branch",
+      "address": 10074010,
+      "hex": "1c f6 02 28 9c fe 00 00 28 bc fe 00 00"
+    },
+    {
+      "label": "completion medium bug branch",
+      "address": 10074204,
+      "hex": "1c b8 03 28 9c fe 00 00 28 bc fe 00 00"
+    },
+    {
+      "label": "completion low bug branch",
+      "address": 10074398,
+      "hex": "1c 7a 04 28 9c fe 01 00 28 bc fe 00 00"
+    },
+    {
+      "label": "released ship recall guard",
+      "address": 9980224,
+      "hex": "05 00 00 fc 22 05 01 00"
+    },
+    {
+      "label": "released ship company production guard",
+      "address": 9980333,
+      "hex": "05 05 00 28 6c ff 01 00 5d"
+    },
+    {
+      "label": "released ship opens reproduction",
+      "address": 9980429,
+      "hex": "27 4c ff 25 28 6c ff 01 00"
+    },
+    {
+      "label": "compact award marker read",
+      "address": 10242265,
+      "hex": "fd 00 08 ff 04 08 ff 28 50 ff 00 00"
+    },
+    {
+      "label": "compact hall of fame read",
+      "address": 10243034,
+      "hex": "05 00 00 fc 22 05 23 00"
+    },
+    {
+      "label": "compact graph threshold 200000",
+      "address": 10243393,
+      "hex": "fe c1 50 ff 40 0d 03 00 5d fb 5a"
+    },
+    {
+      "label": "compact graph high scale branch",
+      "address": 10243827,
+      "hex": "1c 1c 0b 1b 28 00 04 74 ff"
+    },
+    {
+      "label": "compact graph medium scale branch",
+      "address": 10244250,
+      "hex": "1c bf 0c 1b 2e 00 04 74 ff"
+    },
+    {
+      "label": "compact graph low scale branch",
+      "address": 10244666,
+      "hex": "1c 5f 0e 1b 30 00 04 74 ff"
+    },
+    {
+      "label": "promotion requires alpha stage",
+      "address": 10136457,
+      "hex": "f5 00 00 00 00 05 00 00 fc 96"
+    },
+    {
+      "label": "promotion selected fee affordability",
+      "address": 9969764,
+      "hex": "05 00 00 fc 22 05 01 00"
+    },
+    {
+      "label": "promotion opens meeting mode one",
+      "address": 9969864,
+      "hex": "28 6c ff 01 00 04 3c ff 0a 06 00 08 00"
+    },
+    {
+      "label": "promotion media selection writer",
+      "address": 9964088,
+      "hex": "7f 0c 00 44 6c ff fd b6 00 00"
+    },
+    {
+      "label": "promotion unwritten local scope read",
+      "address": 10422782,
+      "hex": "04 98 fd 28 6c ff 00 00 5d"
+    },
+    {
+      "label": "promotion first medium first-use draw",
+      "address": 10422859,
+      "hex": "1c 2e 10 27 5c ff 0a 27 00 04 00"
+    },
+    {
+      "label": "promotion room recognition cap",
+      "address": 10423774,
+      "hex": "1c b8 13 28 6c ff 63 00 05 5d 00"
+    },
+    {
+      "label": "promotion recognition commit",
+      "address": 10424682,
+      "hex": "52 35 5c ff 05 5d 00"
+    },
+    {
+      "label": "promotion deferred fee debit",
+      "address": 10424780,
+      "hex": "05 0c 00 fc 22 05 6e 00"
+    },
+    {
+      "label": "right mouse input guard",
+      "address": 10252170,
+      "hex": "7f 0c 00 f4 02 c6"
+    },
+    {
+      "label": "right mouse rest-policy threshold",
+      "address": 10254097,
+      "hex": "28 6c ff 00 00 fc f6 18 fd 05 2f 00"
+    },
+    {
+      "label": "right mouse resets work timer before assignment",
+      "address": 10254238,
+      "hex": "28 6c ff 00 00 05 24 00 fc 22"
+    },
+    {
+      "label": "right mouse assignment helper",
+      "address": 10254261,
+      "hex": "0a 32 00 0c 00 35 5c ff 1e 12 11"
+    },
+    {
+      "label": "room panel first frame threshold",
+      "address": 10497760,
+      "hex": "28 6c ff 03 00 05 31 00 fb b4 2c ff"
+    },
+    {
+      "label": "room panel frame source 259",
+      "address": 10497777,
+      "hex": "f3 03 01 04 60 fe fc 22"
+    },
+    {
+      "label": "room panel frame source 321",
+      "address": 10497826,
+      "hex": "f3 41 01 04 60 fe fc 22"
+    },
+    {
+      "label": "room panel pause flag",
+      "address": 10497869,
+      "hex": "28 6c ff 00 00 5d fb 33"
+    },
+    {
+      "label": "room progress floor",
+      "address": 10497622,
+      "hex": "fc f6 30 fe 28 cc fe 7f 01 28 fc fe 11 00"
+    },
+    {
+      "label": "debugging label checks remaining bugs",
+      "address": 10497392,
+      "hex": "1c 60 05 f3 cb 01 04 60 fe"
+    },
+    {
+      "label": "room panel allocation dimensions",
+      "address": 10462938,
+      "hex": "28 1c fe 1a 00 28 3c fe 1f 00 28 5c fe 3e 00"
+    },
+    {
+      "label": "room panel allocation array binding",
+      "address": 10463005,
+      "hex": "07 08 00 88 23 f5 00 00 00 00 07 08 00 dc 22"
+    },
+    {
+      "label": "separate computer vertical frame read",
+      "address": 10506178,
+      "hex": "05 66 00 fc 96 28 6c ff 1e 00"
+    },
+    {
+      "label": "separate computer frame timer first threshold",
+      "address": 10013197,
+      "hex": "1c fc 00 28 2c ff 00 00 fd 16 10 00 5c ff"
+    },
+    {
+      "label": "review first score reveal callback",
+      "address": 10268699,
+      "hex": "1c 70 00 28 4c ff 00 00 fc f6 34 ff"
+    },
+    {
+      "label": "review total before summary",
+      "address": 10269092,
+      "hex": "fc f6 e4 fe 36 04 00 14 ff 04 ff 04 e4 fe"
+    },
+    {
+      "label": "review score image indexed minus one",
+      "address": 10271166,
+      "hex": "04 44 ff 04 34 ff fc 22"
+    },
+    {
+      "label": "review comments lowest band",
+      "address": 10271272,
+      "hex": "1c 9f 0b 27 14 ff 0a 23 00 04 00"
+    },
+    {
+      "label": "review comments second band",
+      "address": 10271613,
+      "hex": "1c ba 0c 27 14 ff 0a 23 00 04 00"
+    },
+    {
+      "label": "review comments third band",
+      "address": 10271896,
+      "hex": "1c 45 0e 27 14 ff 0a 23 00 04 00"
+    },
+    {
+      "label": "review comments fourth band",
+      "address": 10272291,
+      "hex": "1c d1 0f 27 14 ff 0a 23 00 04 00"
+    },
+    {
+      "label": "review comments score nine band",
+      "address": 10272687,
+      "hex": "1c cb 10 27 14 ff 0a 23 00 04 00"
+    },
+    {
+      "label": "review score ten reaction exact test",
+      "address": 10273490,
+      "hex": "28 4c ff 0a 00 5d fb 33"
+    },
+    {
+      "label": "exhibition booth graphic index 26",
+      "address": 10008884,
+      "hex": "04 64 ff f4 1a 05 03 00"
+    },
+    {
+      "label": "awards stage graphic index four",
+      "address": 10055137,
+      "hex": "04 64 ff f4 04 05 04 00"
+    },
+    {
+      "label": "renewal checked row fee sum",
+      "address": 9975821,
+      "hex": "1c 70 00 04 6c ff 04 4c ff"
+    },
+    {
+      "label": "renewal total affordability",
+      "address": 10050909,
+      "hex": "1c d6 00 28 50 fe 01 00 28 70 fe 00 00"
+    },
+    {
+      "label": "renewal unchecked row dismiss helper",
+      "address": 10051088,
+      "hex": "0a 0e 00 08 00 35 3c ff 27 3c ff"
+    },
+    {
+      "label": "renewal aggregate debit",
+      "address": 10051617,
+      "hex": "fc f6 e0 fe 04 e0 fe 04 d0 fe"
+    }
+  ],
+  "event_bindings": [
+    {
+      "form": "fGMKikakusyo",
+      "object_info": 6220232,
+      "control": "Command1",
+      "event_slot": 0,
+      "procedure": 10074752
+    },
+    {
+      "form": "fGMKansei",
+      "object_info": 6241632,
+      "control": "Command1",
+      "event_slot": 0,
+      "procedure": 9950156
+    },
+    {
+      "form": "fGMKansei",
+      "object_info": 6241632,
+      "control": "Command2",
+      "event_slot": 0,
+      "procedure": 9946244
+    },
+    {
+      "form": "fGMKansei",
+      "object_info": 6241632,
+      "control": "Command3",
+      "event_slot": 0,
+      "procedure": 9972260
+    },
+    {
+      "form": "fGMZishaKW",
+      "object_info": 6268924,
+      "control": "BGraphic",
+      "event_slot": 0,
+      "procedure": 9980224
+    },
+    {
+      "form": "fGMDevW1",
+      "object_info": 6286784,
+      "control": "BGraphic",
+      "event_slot": 0,
+      "procedure": 10136204
+    },
+    {
+      "form": "fGMSendenBaitai",
+      "object_info": 6252872,
+      "control": "Command1",
+      "event_slot": 0,
+      "procedure": 9969764
+    },
+    {
+      "form": "fGMSendenBaitai",
+      "object_info": 6252872,
+      "control": "LabelT1",
+      "event_slot": 8,
+      "procedure": 9964088
+    },
+    {
+      "form": "fMainVisual",
+      "object_info": 6280524,
+      "control": "Form",
+      "event_slot": 19,
+      "procedure": 10249916
+    },
+    {
+      "form": "fGMCrossR",
+      "object_info": 6263372,
+      "control": "Timer1",
+      "event_slot": 0,
+      "procedure": 10268620
+    },
+    {
+      "form": "fGMGameDexSn",
+      "object_info": 6293180,
+      "control": "Command1",
+      "event_slot": 0,
+      "procedure": 10001500
+    },
+    {
+      "form": "fGMGameDexKs",
+      "object_info": 6209388,
+      "control": "Timer1",
+      "event_slot": 0,
+      "procedure": 10070864
+    },
+    {
+      "form": "fGMKontesuto",
+      "object_info": 6248004,
+      "control": "Timer1",
+      "event_slot": 0,
+      "procedure": 10284560
+    },
+    {
+      "form": "fGMSKoyouKz",
+      "object_info": 6344808,
+      "control": "Check1",
+      "event_slot": 0,
+      "procedure": 9975740
+    },
+    {
+      "form": "fGMSKoyouKz",
+      "object_info": 6344808,
+      "control": "Command1",
+      "event_slot": 0,
+      "procedure": 10050780
+    }
+  ],
+  "resources": [
+    {
+      "label": "proposal document bitmap",
+      "file_offset": 2809977,
+      "size": 42036,
+      "sha256": "68b9527b0fca162503e367eabe8f03b0114e92857c1926160ffa994de8073447",
+      "width": 256,
+      "height": 160
+    },
+    {
+      "label": "planning and completion scene bitmap",
+      "file_offset": 1618312,
+      "size": 122936,
+      "sha256": "897361341d284f88147213f03e06d55f1f87f1357b6e147de2e5ff94b378e8d0",
+      "width": 256,
+      "height": 160
+    },
+    {
+      "label": "exhibition scene GIF",
+      "file_offset": 70211,
+      "size": 21264,
+      "sha256": "ff29319cecbf8b9a4cc282916483d3ab45d1a53274faea123fa32289dddad141",
+      "width": 256,
+      "height": 160
+    },
+    {
+      "label": "awards scene GIF",
+      "file_offset": 1271768,
+      "size": 19520,
+      "sha256": "72d9b891d0960086c649728091a45120b55267b14d142e280bf4f7d7e0540dd9",
+      "width": 256,
+      "height": 160
+    }
+  ],
+  "desk_bounds_columns": [
+    "action",
+    "x_min_inclusive",
+    "x_max_inclusive",
+    "sum_lower_exclusive",
+    "sum_upper_exclusive",
+    "difference_lower_exclusive",
+    "difference_upper_exclusive"
+  ],
+  "desk_bounds": [
+    [
+      6,
+      178,
+      223,
+      212,
+      255,
+      20,
+      47
+    ],
+    [
+      7,
+      210,
+      255,
+      244,
+      287,
+      20,
+      47
+    ],
+    [
+      8,
+      146,
+      191,
+      212,
+      239,
+      36,
+      77
+    ],
+    [
+      9,
+      193,
+      238,
+      260,
+      287,
+      36,
+      77
+    ],
+    [
+      10,
+      130,
+      175,
+      212,
+      255,
+      68,
+      95
+    ],
+    [
+      11,
+      162,
+      207,
+      244,
+      287,
+      68,
+      95
+    ],
+    [
+      12,
+      274,
+      319,
+      308,
+      351,
+      20,
+      47
+    ],
+    [
+      13,
+      306,
+      351,
+      340,
+      383,
+      20,
+      47
+    ],
+    [
+      14,
+      242,
+      287,
+      308,
+      335,
+      36,
+      77
+    ],
+    [
+      15,
+      289,
+      334,
+      356,
+      383,
+      36,
+      77
+    ],
+    [
+      16,
+      226,
+      271,
+      308,
+      351,
+      68,
+      95
+    ],
+    [
+      17,
+      258,
+      303,
+      340,
+      383,
+      68,
+      95
+    ]
+  ],
+  "room_panel": {
+    "sprite_ids": [
+      91,
+      92
+    ],
+    "source_x_frames": [
+      259,
+      321
+    ],
+    "source_y": 226,
+    "width": 62,
+    "height": 31,
+    "transition_ticks": 6
+  },
+  "promotion": {
+    "fees": [
+      5000000,
+      10000000,
+      20000000,
+      25000000,
+      20000000,
+      25000000
+    ],
+    "random_span": [
+      9,
+      9,
+      9,
+      9,
+      11,
+      13
+    ],
+    "first_use_base": [
+      6,
+      7,
+      10,
+      8,
+      11,
+      12
+    ],
+    "second_use_base": [
+      3,
+      3,
+      5,
+      4,
+      5,
+      6
+    ],
+    "later_use_base": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "recognition_cap": 99,
+    "scope_boundary": "local -616 has only reads in decoded timer; native Empty frame premise yields room path"
+  },
+  "compact_graph": {
+    "thresholds": [
+      20000,
+      40000,
+      100000,
+      200000
+    ],
+    "ceilings": [
+      20000,
+      40000,
+      80000,
+      200000,
+      400000
+    ]
+  },
+  "review_comments": {
+    "score_band_upper": [
+      2,
+      4,
+      6,
+      8,
+      9,
+      10
+    ],
+    "draw_counts": [
+      9,
+      8,
+      11,
+      9,
+      8,
+      4
+    ],
+    "reaction_sources": {
+      "1-2": 4,
+      "3-4": 8,
+      "5-6": 9,
+      "7-8": 6,
+      "9": "no final reaction image write",
+      "10": 7
+    }
+  }
+}

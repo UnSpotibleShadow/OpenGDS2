@@ -1,6 +1,41 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M92
+## Current handoff — 2026-10-12, M93 research
+
+The owner requested investigation of presentation ticket #95 before implementing
+its missing handlers/actions. M93 is an analysis/evidence milestone; it changes
+no gameplay or UI. See `docs/presentation-handler-audit-m93.md` and the
+`codex/m93-presentation-handler-audit` PR/issue #55 for publication state.
+Baseline for comparison is M92 main `71aaa1dac96c31894a8a64ddc2102b69f298f16f`.
+Verification passes 32 procedure fingerprints, 60 bounded anchors, 15 control
+event bindings, four local resource fingerprints and 78 numeric literals.
+
+Resolved #95 actions: proposal accept/redo/cancel; completion shipment versus
+postpone/debugging; initial shipment title/price/quantity and breakdown; compact
+post-launch reproduction; right-click desk geometry; room state/progress and
+two-frame panel behind the PC; paid six-media promotion; magazine comment/reaction
+bands and reveal callbacks; annual renewal's actual selector. The owner's red
+outline is room-panel sprites 91/92 at atlas X=259/321, Y=226, 62x31, six ticks
+per half-cycle. It is not the separate vertical computer-frame effect. Existing
+flames/bubbles/contribution sprites remain implemented. Do not reopen these as
+unidentified effects.
+
+Important corrections/boundaries: the compact product window uses graph ceilings
+20k/40k/80k/200k/400k, unlike the larger report's implemented variant. Its second
+award pane is cross-review Hall of Fame, not a dedicated worst-game pane.
+Annual renewal is fGMSKoyouKz, not the graduate/individual fGMKeiyakuS selector.
+Paid promotion has an unwritten local scope Variant; fresh Empty selects room
+promotion, and the dormant released-product branches use inconsistent indices.
+Do not silently implement cleaned-up released promotion as native fidelity.
+Review score 9 has no final reaction-image write. Exhibit/awards backgrounds
+are GIF ImageFormG[26]/[4], not the currently imported BMP subset. All artwork
+stays locally imported. Native frame lifetime, exact scene motion/window stacking
+and original timing remain runtime comparison limits. The video was not reviewed
+because its attachment exceeded the 32 MiB transfer limit.
+
+Issue #95 remains an implementation backlog, not a completed UI milestone.
+Keep pacing issue #94 separate; the owner deferred it. M92 validation below is
+historical application validation; M93 required only evidence/Python checks.
 
 Start by reading GitHub issue #55 and checking current `main` and open PRs through
 the owner's connector. This workspace can be a snapshot without `.git`; remote
