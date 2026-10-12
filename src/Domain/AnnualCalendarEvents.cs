@@ -10,8 +10,12 @@ public sealed class ExhibitionState
     [JsonRequired] public List<int> SelectedProducts { get; set; } = [];
     public int? Visitors { get; set; }
     public double? ReportedAwarenessGain { get; set; }
+    public List<int>? VisitorSteps {get;set;}
+    public int? DisplayCallbacks {get;set;}
+    public int? PreviousVisitorRecord {get;set;}
 }
 public enum GameAward { Music, Graphics, Design, Worst, GrandPrize }
+public sealed record AwardOutcome(GameAward Category,int? ProductIndex,int? RivalIndex);
 public sealed class AwardCeremonyState
 {
     [JsonRequired] public int Year { get; set; }
@@ -25,6 +29,8 @@ public sealed class AwardCeremonyState
     public List<int>? RivalEntries {get;set;}
     public int? WinningRival {get;set;}
     public List<int>? AnimationProducts {get;set;}
+    // Older mid-ceremony saves cannot recover previous category winners.
+    public List<AwardOutcome>? Outcomes {get;set;}
 }
 public sealed class GraduateEventState
 {
@@ -55,8 +61,10 @@ public static class ExhibitionService
         // release order, regardless of the order in which boxes were clicked.
         var selected=e.EligibleProducts.Where(selection.Contains).ToList();
         int visitors=0;
+        var visitorSteps=new List<int>();
         // Timer 0099AB50: 90 ticks; +0092 runs every fourth tick (22 draws).
-        for (int tick=4;tick<=90;tick+=4) visitors=checked(visitors+random.Next(350)+450);
+        for (int tick=4;tick<=90;tick+=4)
+        {int step=random.Next(350)+450;visitorSteps.Add(step);visitors=checked(visitors+step);}
         double gain=visitors/500;
         var changes=new List<(int Id,double Value)>();
         foreach (int id in selected)
@@ -70,6 +78,7 @@ public static class ExhibitionService
         finance.Commit(state);t.DialoguePage=null;
         foreach (var change in changes) SetAwareness(state,change.Id,change.Value);
         e.SelectedProducts=selected;e.Visitors=visitors;e.ReportedAwarenessGain=gain;
+        e.VisitorSteps=visitorSteps;e.DisplayCallbacks=0;e.PreviousVisitorRecord=state.Calendar!.ExhibitionVisitorRecord;
         var c=state.Calendar!;
         if (c.ExhibitionVisitorRecord is int record && visitors>record) c.ExhibitionVisitorRecord=visitors;
         return ExhibitionResult.Success;
@@ -81,6 +90,13 @@ public static class ExhibitionService
         t.DialoguePage=null;t.Exhibition=null;t.PendingEvent=null;t.Phase=CalendarPhase.Loans;
         return true;
     }
+    public static bool AdvanceDisplay(ExhibitionState exhibition)
+    {
+        if(exhibition.DisplayCallbacks is not int callbacks || callbacks>=90)return false;
+        exhibition.DisplayCallbacks=callbacks+1;return true;
+    }
+    public static int DisplayVisitors(ExhibitionState exhibition)=>exhibition.VisitorSteps is { } steps && exhibition.DisplayCallbacks is int callbacks
+        ? steps.Take(callbacks/4).Sum() : exhibition.Visitors ?? 0;
     private static double Awareness(GameState state,int id)=>id<0 ?
         state.DevelopmentProjects.Single(p=>p.RoomIndex==-id-1).Recognition : state.ReleasedGames.Single(p=>p.ProductIndex==id).Recognition;
     private static void SetAwareness(GameState state,int id,double value)
@@ -97,7 +113,7 @@ public static class AwardService
     public static long Prize(GameAward award)=>award switch
     {GameAward.Music or GameAward.Graphics=>100_000_000,GameAward.Design=>300_000_000,GameAward.Worst=>-200_000_000,GameAward.GrandPrize=>500_000_000,_=>throw new ArgumentOutOfRangeException(nameof(award))};
     public static int OriginalCode(GameAward award)=>award switch
-    {GameAward.Music=>3,GameAward.Graphics=>2,GameAward.Design=>4,GameAward.Worst=>1,GameAward.GrandPrize=>5,_=>throw new ArgumentOutOfRangeException(nameof(award))};
+    {GameAward.Music=>3,GameAward.Graphics=>4,GameAward.Design=>2,GameAward.Worst=>5,GameAward.GrandPrize=>1,_=>throw new ArgumentOutOfRangeException(nameof(award))};
     public static int? DrawWinner(GameAward award,IReadOnlyList<ReleasedGameState> entries,Random random)
     {
         int? winner=null;
@@ -150,6 +166,7 @@ public static class AwardService
                 state.Calendar.FirstGrandPrizeDate=new(a.Year,12,4);
         }
         finance?.Commit(state);t.DialoguePage=null;a.WinningProduct=winner;a.WinningRival=rival;a.AnimationProducts=animation;a.ResultReady=true;
+        (a.Outcomes??=[]).Add(new(category,winner,rival));
         if (winner is not null && category==GameAward.GrandPrize) RankingService.Queue(state,RankingKind.GrandPrize);
         return true;
     }
@@ -237,10 +254,21 @@ internal static class AnnualCalendarValidation
                 e.Visitors is not null && (e.Visitors is <9900 or >17578 || e.SelectedProducts.Count==0 ||
                     e.ReportedAwarenessGain is not double gain || !double.IsFinite(gain) || gain>e.Visitors/500))
                 throw new InvalidDataException("Invalid exhibition selection or saved result.");
+            if(e.DisplayCallbacks is <0 or >90 || e.PreviousVisitorRecord is <0 ||
+                e.VisitorSteps is { } steps && (e.Visitors is null || e.DisplayCallbacks is null || steps.Count!=22 || steps.Any(s=>s is <450 or >799) || steps.Sum()!=e.Visitors) ||
+                e.DisplayCallbacks is not null && e.Visitors is null)
+                throw new InvalidDataException("Invalid saved exhibition display.");
         }
         if (t.Awards is AwardCeremonyState a)
         {
             var products=state.Competition?.Products;
+            if(a.Outcomes is { } outcomes && (a.CategoryIndex is <0 or >4 || a.Entries is null || outcomes.Count>5 || outcomes.Any(o=>o is null) ||
+                outcomes.Select(o=>o.Category).Distinct().Count()!=outcomes.Count ||
+                outcomes.Any(o=>!Enum.IsDefined(o.Category) || AwardService.Order.ToList().IndexOf(o.Category)>a.CategoryIndex ||
+                    AwardService.Order[a.CategoryIndex]==o.Category && (a.ResultReady!=true || o.ProductIndex!=a.WinningProduct || o.RivalIndex!=a.WinningRival) ||
+                    o.ProductIndex is int p && !a.Entries.Contains(p) || o.RivalIndex is int r && a.RivalEntries?.Contains(r)!=true ||
+                    o.ProductIndex is not null && o.RivalIndex is not null)))
+                throw new InvalidDataException("Invalid saved award row outcomes.");
             if (a.RivalEntries is not null && (products is null || a.RivalEntries.Count!=31 ||
                 a.RivalEntries.Any(id=>id<0 || id>=products.Count || products[id].Owner<0)) ||
                 a.WinningRival is int rival && (a.ResultReady!=true || a.WinningProduct is not null || a.RivalEntries?.Contains(rival)!=true) ||

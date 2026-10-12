@@ -1,0 +1,968 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "resources": [
+    {
+      "tag": "reviewer-0",
+      "form": "fGMCrossR",
+      "control": "Image1",
+      "index": 0,
+      "file_offset": 3263268,
+      "size": 5172,
+      "width": 64,
+      "height": 64,
+      "sha256": "7c8e5d66d3f7973c9f687d1df4a21a65d7a8b3112add5b6c672e26dbdf875959"
+    },
+    {
+      "tag": "reviewer-1",
+      "form": "fGMCrossR",
+      "control": "Image1",
+      "index": 1,
+      "file_offset": 3258050,
+      "size": 5172,
+      "width": 64,
+      "height": 64,
+      "sha256": "fe12ba14436439b9aa9e6c8e900341ce835e0eff422ba259fa2f00e05df7173f"
+    },
+    {
+      "tag": "reviewer-2",
+      "form": "fGMCrossR",
+      "control": "Image1",
+      "index": 2,
+      "file_offset": 3252832,
+      "size": 5172,
+      "width": 64,
+      "height": 64,
+      "sha256": "f5f0b0c9d7e98feef53d6fb77ea1f25782faef060bcbc613970ab60550e545d3"
+    },
+    {
+      "tag": "reviewer-3",
+      "form": "fGMCrossR",
+      "control": "Image1",
+      "index": 3,
+      "file_offset": 3247614,
+      "size": 5172,
+      "width": 64,
+      "height": 64,
+      "sha256": "3d044b1b0a7489ef33b67fea21a2e61e9bc29362b338d812f1c4a691c6529610"
+    },
+    {
+      "tag": "score-1",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 0,
+      "file_offset": 3221542,
+      "size": 1998,
+      "width": 64,
+      "height": 64,
+      "sha256": "aa3f07c4b8bb6d02fb4f909e7c1d75a4b207f57c10c87a4e0d1498562145553b"
+    },
+    {
+      "tag": "score-2",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 1,
+      "file_offset": 3219274,
+      "size": 2222,
+      "width": 64,
+      "height": 64,
+      "sha256": "94f0817425ce66b74f4ebd0f62ec54943dd8c83909f8a08107a59f85ca003ab3"
+    },
+    {
+      "tag": "score-3",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 2,
+      "file_offset": 3216846,
+      "size": 2382,
+      "width": 64,
+      "height": 64,
+      "sha256": "0e405d9ca3c6128fbb847b1d1e056447892c55fedebd15d91c5c0d56399953d2"
+    },
+    {
+      "tag": "score-4",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 3,
+      "file_offset": 3214578,
+      "size": 2222,
+      "width": 64,
+      "height": 64,
+      "sha256": "2164f51622b2a363467774a16f9d4368a588fb587fd81c025776e24c0b85ba98"
+    },
+    {
+      "tag": "score-5",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 4,
+      "file_offset": 3212278,
+      "size": 2254,
+      "width": 64,
+      "height": 64,
+      "sha256": "05adb5b32e0a057a268738be27331921e2fd02c7b224cd9cfb1d853d352218dd"
+    },
+    {
+      "tag": "score-6",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 5,
+      "file_offset": 3209786,
+      "size": 2446,
+      "width": 64,
+      "height": 64,
+      "sha256": "ad98b9b97c05f120d86a918168764ba1782106c7027c75911f0c1431d9dc7a94"
+    },
+    {
+      "tag": "score-7",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 6,
+      "file_offset": 3207710,
+      "size": 2030,
+      "width": 64,
+      "height": 64,
+      "sha256": "6e0b0d76547937f4286631d3c256d01b8291bd1b398c3650692dabef2f892551"
+    },
+    {
+      "tag": "score-8",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 7,
+      "file_offset": 3205218,
+      "size": 2446,
+      "width": 64,
+      "height": 64,
+      "sha256": "466e929dcac1ff4e0de0eeeecd85c4453cf429b26389d5ce4f9588d1b6c3918a"
+    },
+    {
+      "tag": "score-9",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 8,
+      "file_offset": 3202694,
+      "size": 2478,
+      "width": 64,
+      "height": 64,
+      "sha256": "d0fac0d88238aee004216165445e466201351b3a4b44e5e792dce327691e2841"
+    },
+    {
+      "tag": "score-10",
+      "form": "fGMCrossR",
+      "control": "Image4",
+      "index": 9,
+      "file_offset": 3199434,
+      "size": 3214,
+      "width": 64,
+      "height": 64,
+      "sha256": "5c461ff47d1f7836b1c5c86556caa8752545e5ee0d3cc880c7aa172699790c21"
+    },
+    {
+      "tag": "visible-score-slot-0",
+      "form": "fGMCrossR",
+      "control": "Image2",
+      "index": 0,
+      "file_offset": 3194056,
+      "size": 5174,
+      "width": 64,
+      "height": 64,
+      "sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "tag": "visible-score-slot-1",
+      "form": "fGMCrossR",
+      "control": "Image2",
+      "index": 1,
+      "file_offset": 3188731,
+      "size": 5174,
+      "width": 64,
+      "height": 64,
+      "sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "tag": "visible-score-slot-2",
+      "form": "fGMCrossR",
+      "control": "Image2",
+      "index": 2,
+      "file_offset": 3178081,
+      "size": 5174,
+      "width": 64,
+      "height": 64,
+      "sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "tag": "visible-score-slot-3",
+      "form": "fGMCrossR",
+      "control": "Image2",
+      "index": 3,
+      "file_offset": 3183406,
+      "size": 5174,
+      "width": 64,
+      "height": 64,
+      "sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "tag": "reaction-0",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 0,
+      "file_offset": 3245210,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "tag": "reaction-1",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 1,
+      "file_offset": 3242806,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "tag": "reaction-2",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 2,
+      "file_offset": 3240402,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "tag": "reaction-3",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 3,
+      "file_offset": 3237998,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "tag": "reaction-4",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 4,
+      "file_offset": 3230792,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "9fefae69aed51dc43acc62d995b41b9e2c292d702f743c4d0ab573b9d645fe83"
+    },
+    {
+      "tag": "reaction-5",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 5,
+      "file_offset": 3235596,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "tag": "reaction-6",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 6,
+      "file_offset": 3233194,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "09f67adab75fbd775c28d107284961ece5c15930fd36a4dd9adad15ef04871fa"
+    },
+    {
+      "tag": "reaction-7",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 7,
+      "file_offset": 3228390,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "1fa8a1604c5658d192fdd3683df97de927d17f9e9eb7c03d352dd1eea7ff02ac"
+    },
+    {
+      "tag": "reaction-8",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 8,
+      "file_offset": 3225988,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "ee97b040563ca787c812b516d8e0bcc5d1639dc9062e7531ba52de74fe922979"
+    },
+    {
+      "tag": "reaction-9",
+      "form": "fGMCrossR",
+      "control": "Image3",
+      "index": 9,
+      "file_offset": 3223586,
+      "size": 2358,
+      "width": 18,
+      "height": 64,
+      "sha256": "2fd25bc701d2d299aad749fc515e7f4fea279a0503522fef9f990ca84a739919"
+    },
+    {
+      "tag": "trophy-0",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 0,
+      "file_offset": 34794,
+      "size": 4854,
+      "width": 40,
+      "height": 40,
+      "sha256": "b43ac5f8404992abb58fc2813226cdcbe12d1c2c573113342f7a50e3ef4265df"
+    },
+    {
+      "tag": "trophy-1",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 1,
+      "file_offset": 39695,
+      "size": 4854,
+      "width": 40,
+      "height": 40,
+      "sha256": "e2153a78e522ba62dd392ae57fd99548efbf34b089beed2f57c42d16e7a5eb23"
+    },
+    {
+      "tag": "trophy-2",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 2,
+      "file_offset": 49497,
+      "size": 4854,
+      "width": 40,
+      "height": 40,
+      "sha256": "197b84c1cc9a7600eb7b593f402a5a040b38a84501b75518ae64bc84c8a095ef"
+    },
+    {
+      "tag": "trophy-3",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 3,
+      "file_offset": 44596,
+      "size": 4854,
+      "width": 40,
+      "height": 40,
+      "sha256": "197b84c1cc9a7600eb7b593f402a5a040b38a84501b75518ae64bc84c8a095ef"
+    },
+    {
+      "tag": "trophy-4",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 4,
+      "file_offset": 54398,
+      "size": 4854,
+      "width": 40,
+      "height": 40,
+      "sha256": "0b1466df1a0c3fa35aad747fdbc62544dba3bea11cc297fc5df79f8c019fd07a"
+    },
+    {
+      "tag": "empty-badge",
+      "form": "MDIForm1",
+      "control": "ImageTF",
+      "index": 5,
+      "file_offset": 33885,
+      "size": 862,
+      "width": 40,
+      "height": 40,
+      "sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "tag": "exhibition-scene",
+      "form": "MDIForm1",
+      "control": "ImageFormG",
+      "index": 26,
+      "file_offset": 70211,
+      "size": 21264,
+      "width": 256,
+      "height": 160,
+      "sha256": "ff29319cecbf8b9a4cc282916483d3ab45d1a53274faea123fa32289dddad141"
+    },
+    {
+      "tag": "awards-scene",
+      "form": "MDIForm1",
+      "control": "ImageFormG",
+      "index": 4,
+      "file_offset": 1271768,
+      "size": 19520,
+      "width": 256,
+      "height": 160,
+      "sha256": "72d9b891d0960086c649728091a45120b55267b14d142e280bf4f7d7e0540dd9"
+    }
+  ],
+  "anchors": [
+    {
+      "address": 10271190,
+      "label": "hidden Image4 score getter",
+      "hex": "0f 10 03"
+    },
+    {
+      "address": 10271220,
+      "label": "visible Image2 row getter",
+      "hex": "0f 00 03"
+    },
+    {
+      "address": 10285276,
+      "label": "award marker writer 3",
+      "hex": "28 5c ff 03 00 05 26 00 fc 22 05 2c 00 52"
+    },
+    {
+      "address": 10286083,
+      "label": "award marker writer 4",
+      "hex": "28 5c ff 04 00 05 38 00 fc 22 05 2c 00 52"
+    },
+    {
+      "address": 10286890,
+      "label": "award marker writer 2",
+      "hex": "28 5c ff 02 00 05 3e 00 fc 22 05 2c 00 52"
+    },
+    {
+      "address": 10287697,
+      "label": "award marker writer 5",
+      "hex": "28 5c ff 05 00 05 45 00 fc 22 05 2c 00 52"
+    },
+    {
+      "address": 10288589,
+      "label": "award marker writer 1",
+      "hex": "28 5c ff 01 00 05 4f 00 fc 22 05 2c 00 52"
+    },
+    {
+      "address": 10242400,
+      "label": "compact award reader 1",
+      "hex": "28 50 ff 01 00"
+    },
+    {
+      "address": 10242528,
+      "label": "compact award reader 2",
+      "hex": "28 50 ff 02 00"
+    },
+    {
+      "address": 10242656,
+      "label": "compact award reader 3",
+      "hex": "28 50 ff 03 00"
+    },
+    {
+      "address": 10242784,
+      "label": "compact award reader 4",
+      "hex": "28 50 ff 04 00"
+    },
+    {
+      "address": 10242912,
+      "label": "compact award reader 5",
+      "hex": "28 50 ff 05 00"
+    },
+    {
+      "address": 10243058,
+      "label": "Hall of Fame uses trophy 2",
+      "hex": "f4 02"
+    },
+    {
+      "address": 10243172,
+      "label": "No Hall of Fame uses empty slot 5",
+      "hex": "f4 05"
+    }
+  ],
+  "comment_pool": 6263492,
+  "comment_templates": [
+    [
+      {
+        "offset": 2690,
+        "tokens": [
+          43
+        ],
+        "body_address": 10271305,
+        "body_size": 9,
+        "body_sha256": "b01749f8f14b715a92bebdcefd5a2d1bcd138ca4922a76e059575db0e688c542"
+      },
+      {
+        "offset": 2772,
+        "tokens": [
+          44,
+          -1,
+          47,
+          -2,
+          49
+        ],
+        "body_address": 10271327,
+        "body_size": 69,
+        "body_sha256": "4f0f4f610a7010c08a3b547958e9c8c88c50f1d087affaa6a5f526c1761b7af6"
+      },
+      {
+        "offset": 2803,
+        "tokens": [
+          50
+        ],
+        "body_address": 10271418,
+        "body_size": 9,
+        "body_sha256": "fd31046eec04d2cc267a97d7bfc5ad6878ab2aa2213999ec59f9afa5ffb00cd4"
+      },
+      {
+        "offset": 2825,
+        "tokens": [
+          51
+        ],
+        "body_address": 10271440,
+        "body_size": 9,
+        "body_sha256": "404ac20d54671250a61d8788fd9bf4087f961a347dbd819f648cf8628a365026"
+      },
+      {
+        "offset": 2847,
+        "tokens": [
+          52
+        ],
+        "body_address": 10271462,
+        "body_size": 9,
+        "body_sha256": "c10aac2624bfe90ebed1b1135825e79a4ced1735e26bddbcb9c1e23df96d9e90"
+      },
+      {
+        "offset": 2869,
+        "tokens": [
+          53
+        ],
+        "body_address": 10271484,
+        "body_size": 9,
+        "body_sha256": "2d3acb25747fb2f5d57386e552f045740ac9acb2e802a2f0f539ba445b66f641"
+      },
+      {
+        "offset": 2891,
+        "tokens": [
+          54
+        ],
+        "body_address": 10271506,
+        "body_size": 9,
+        "body_sha256": "45b9aa39f4f38cf4c18858927c059c539e8235b3f9fd501f2cdb58496d4eb2af"
+      },
+      {
+        "offset": 2943,
+        "tokens": [
+          55,
+          -1,
+          56
+        ],
+        "body_address": 10271528,
+        "body_size": 39,
+        "body_sha256": "1ac78edc1c46cac6e9b46cc888a64ce408f5167574f5d5cba68be06b974caf3d"
+      },
+      {
+        "offset": 2968,
+        "tokens": [
+          57
+        ],
+        "body_address": 10271583,
+        "body_size": 9,
+        "body_sha256": "8bc0ea07fe27c26fb0e47b692a91bc6d55a6b01d3b0cd35381c1b1673e643532"
+      }
+    ],
+    [
+      {
+        "offset": 3031,
+        "tokens": [
+          58
+        ],
+        "body_address": 10271646,
+        "body_size": 9,
+        "body_sha256": "81214cc73e4d851d28622de5d69a6309f3e0e75a4d28f19d784bbf8ba7d5585d"
+      },
+      {
+        "offset": 3053,
+        "tokens": [
+          59
+        ],
+        "body_address": 10271668,
+        "body_size": 9,
+        "body_sha256": "074f5baefb212f7e3f2d0d8138b6f4625923b9b1f15f1b06d55802c4b39e1b3d"
+      },
+      {
+        "offset": 3075,
+        "tokens": [
+          60
+        ],
+        "body_address": 10271690,
+        "body_size": 9,
+        "body_sha256": "8341380b280de10d2d96db753d58d8767a5265d40c11ce42bcf69d781bc61cb3"
+      },
+      {
+        "offset": 3127,
+        "tokens": [
+          61,
+          -2,
+          62
+        ],
+        "body_address": 10271712,
+        "body_size": 39,
+        "body_sha256": "042f3ee8027ebdc58583db811761f46a23d3aed81b2917e0d5e38f4dae2fb199"
+      },
+      {
+        "offset": 3152,
+        "tokens": [
+          63
+        ],
+        "body_address": 10271767,
+        "body_size": 9,
+        "body_sha256": "95c970da2627977804b3e47e0b9d18e0013c5b96e72e98f124f8dbbba815e418"
+      },
+      {
+        "offset": 3174,
+        "tokens": [
+          64
+        ],
+        "body_address": 10271789,
+        "body_size": 9,
+        "body_sha256": "5dca2c9ddde4e34f911aa94954a49a62c520df7f3f7f7c89275436f26fa7adc6"
+      },
+      {
+        "offset": 3196,
+        "tokens": [
+          65
+        ],
+        "body_address": 10271811,
+        "body_size": 9,
+        "body_sha256": "015161431b3028bc7047c8fb1d9f5b17a2d376c6c2cfe97cb6393bac5d8965e0"
+      },
+      {
+        "offset": 3248,
+        "tokens": [
+          66,
+          -2,
+          67
+        ],
+        "body_address": 10271833,
+        "body_size": 39,
+        "body_sha256": "f2d34741bc48881c1ccce87abcf8fadddf5f42c4a90e94ef6e9b7bc369558fde"
+      }
+    ],
+    [
+      {
+        "offset": 3314,
+        "tokens": [
+          58
+        ],
+        "body_address": 10271929,
+        "body_size": 9,
+        "body_sha256": "81214cc73e4d851d28622de5d69a6309f3e0e75a4d28f19d784bbf8ba7d5585d"
+      },
+      {
+        "offset": 3387,
+        "tokens": [
+          -1,
+          68,
+          -2,
+          69
+        ],
+        "body_address": 10271951,
+        "body_size": 60,
+        "body_sha256": "cfc316bd74f5eb7d6ebb567ed6a07d1349b63a391c6e27f8e4aa4d945be94ace"
+      },
+      {
+        "offset": 3416,
+        "tokens": [
+          70
+        ],
+        "body_address": 10272031,
+        "body_size": 9,
+        "body_sha256": "cad2591783505f6ebea0f509faf8455aede7bafdc14590c5b7a5b33d40ed8350"
+      },
+      {
+        "offset": 3438,
+        "tokens": [
+          71
+        ],
+        "body_address": 10272053,
+        "body_size": 9,
+        "body_sha256": "603aca621da5c90b1c381d3a1b9fdaaeb2c78ab775e7509da2e60d6e68da4bfc"
+      },
+      {
+        "offset": 3460,
+        "tokens": [
+          72
+        ],
+        "body_address": 10272075,
+        "body_size": 9,
+        "body_sha256": "18ced89eca3ffeab7622cb759e11e5d25a2e172c3c8f9f02ed2489bc5be46903"
+      },
+      {
+        "offset": 3482,
+        "tokens": [
+          73
+        ],
+        "body_address": 10272097,
+        "body_size": 9,
+        "body_sha256": "b49695d5dd3ba46e4533d3dc1da2550364ebd695e37fc023b8cca4f9ed49be17"
+      },
+      {
+        "offset": 3504,
+        "tokens": [
+          74
+        ],
+        "body_address": 10272119,
+        "body_size": 9,
+        "body_sha256": "1a6d3db634dbf7e7afebe725ca921567fc0d7d1c19a717061c848a1189a7db9c"
+      },
+      {
+        "offset": 3526,
+        "tokens": [
+          75
+        ],
+        "body_address": 10272141,
+        "body_size": 9,
+        "body_sha256": "9161fa065f94b9ace447bd5367d864f36e10f1f43e4410b89694b591c4820f65"
+      },
+      {
+        "offset": 3548,
+        "tokens": [
+          76
+        ],
+        "body_address": 10272163,
+        "body_size": 9,
+        "body_sha256": "8b0029c9f59c426a0b8af79f39392d653f9469c46b9acce7ff61360567a1525f"
+      },
+      {
+        "offset": 3591,
+        "tokens": [
+          -2,
+          77
+        ],
+        "body_address": 10272185,
+        "body_size": 30,
+        "body_sha256": "d08999a002d1bcdf7c50d582686f6241d407b676621636c24d37ab883867adb3"
+      },
+      {
+        "offset": 3643,
+        "tokens": [
+          78,
+          -1,
+          79
+        ],
+        "body_address": 10272228,
+        "body_size": 39,
+        "body_sha256": "f87a38ef804d4bdc1e725dace1a58576c241bd42095f98923f8a3e3da386b877"
+      }
+    ],
+    [
+      {
+        "offset": 3709,
+        "tokens": [
+          80
+        ],
+        "body_address": 10272324,
+        "body_size": 9,
+        "body_sha256": "708555272f1b890891b0326b27e0c007dccf39bb33fe53ff64b5b3bcd2bcb5d8"
+      },
+      {
+        "offset": 3782,
+        "tokens": [
+          -1,
+          68,
+          -2,
+          81
+        ],
+        "body_address": 10272346,
+        "body_size": 60,
+        "body_sha256": "8e82bad5466e529c25d6ba8552be9e24afae3b3a4a4552f95e945e1e4e8be68f"
+      },
+      {
+        "offset": 3811,
+        "tokens": [
+          82
+        ],
+        "body_address": 10272426,
+        "body_size": 9,
+        "body_sha256": "4758e1ba3d5051180cf4ab7263116830360b511a6932b176bbde4a0c3fcd4a59"
+      },
+      {
+        "offset": 3833,
+        "tokens": [
+          83
+        ],
+        "body_address": 10272448,
+        "body_size": 9,
+        "body_sha256": "486ffccbaa2a36fcc84f2d0ec4f1440ed581675983da9718c7bea3484cd27b23"
+      },
+      {
+        "offset": 3885,
+        "tokens": [
+          84,
+          -1,
+          85
+        ],
+        "body_address": 10272470,
+        "body_size": 39,
+        "body_sha256": "673cb2fce6898a6fb53058dc70f27bf5a2dd67fc7eb420d2504ba2f92819458a"
+      },
+      {
+        "offset": 3940,
+        "tokens": [
+          86,
+          -2,
+          87
+        ],
+        "body_address": 10272525,
+        "body_size": 39,
+        "body_sha256": "d2fc356793a6f80c8b60c1f706ea1b4a634cdd622854e6e3f8f574c70e00376c"
+      },
+      {
+        "offset": 3965,
+        "tokens": [
+          88
+        ],
+        "body_address": 10272580,
+        "body_size": 9,
+        "body_sha256": "f03a567d02d1304b499bb05bed25a07659597de17ccc1be47545b897e95ddc35"
+      },
+      {
+        "offset": 4017,
+        "tokens": [
+          89,
+          -1,
+          90
+        ],
+        "body_address": 10272602,
+        "body_size": 39,
+        "body_sha256": "56c85ddaae671cc9630f03ba38615fca34a2272c01355d481eb6eee59055f2a9"
+      },
+      {
+        "offset": 4042,
+        "tokens": [
+          91
+        ],
+        "body_address": 10272657,
+        "body_size": 9,
+        "body_sha256": "da36c48d0c4ad6dc612d121bd3d1c1de745e7c919d9f4db75cb0365d4188988b"
+      }
+    ],
+    [
+      {
+        "offset": 4105,
+        "tokens": [
+          92
+        ],
+        "body_address": 10272720,
+        "body_size": 9,
+        "body_sha256": "1e92bae36c80e731d24755ff07d6fa4a1a085c6a81fe897b2f720bff009395ea"
+      },
+      {
+        "offset": 4127,
+        "tokens": [
+          93
+        ],
+        "body_address": 10272742,
+        "body_size": 9,
+        "body_sha256": "3c902cb1a6f6b948da5812885cde50d64e18171b7b971181bd1f7bba97353a7c"
+      },
+      {
+        "offset": 4149,
+        "tokens": [
+          94
+        ],
+        "body_address": 10272764,
+        "body_size": 9,
+        "body_sha256": "9d724972736cd12a0a5dd6e84142c7135763482f614ad6ffd64bd46a1bc118c8"
+      },
+      {
+        "offset": 4171,
+        "tokens": [
+          95
+        ],
+        "body_address": 10272786,
+        "body_size": 9,
+        "body_sha256": "389bf0e03079239ab1434c9294960bb1724de89c892a9908fbd5254bdabc6fc7"
+      },
+      {
+        "offset": 4209,
+        "tokens": [
+          96,
+          -3,
+          98
+        ],
+        "body_address": 10272808,
+        "body_size": 25,
+        "body_sha256": "8445ce3efa1ba9ab41ae2f390f2885fe210184d6c8ac3b2fe0b73a6a0208c04c"
+      },
+      {
+        "offset": 4241,
+        "tokens": [
+          -3,
+          99
+        ],
+        "body_address": 10272849,
+        "body_size": 16,
+        "body_sha256": "ed7bbced13a6c3c337040c5bc7576e4235a96513f5df04b8af1cb9962651727e"
+      },
+      {
+        "offset": 4263,
+        "tokens": [
+          100
+        ],
+        "body_address": 10272878,
+        "body_size": 9,
+        "body_sha256": "ec64b13c61ef2396a837d7a371ceb6f3662d73add233aa0a9a3c0acea42c6f30"
+      },
+      {
+        "offset": 4292,
+        "tokens": [
+          -3,
+          101
+        ],
+        "body_address": 10272900,
+        "body_size": 16,
+        "body_sha256": "b6ca1e5e5447c45bc803cbbec864ad95bcb748c0d6753f4a98c793ad744f85cf"
+      }
+    ],
+    [
+      {
+        "offset": 4334,
+        "tokens": [
+          102
+        ],
+        "body_address": 10272949,
+        "body_size": 9,
+        "body_sha256": "8fd282065e8ab4f800ca5360890efd1e9930dcc3887dccb340b0866d7df19a84"
+      },
+      {
+        "offset": 4356,
+        "tokens": [
+          103
+        ],
+        "body_address": 10272971,
+        "body_size": 9,
+        "body_sha256": "aacf91586d51660b22a890fba22f70328bdbccd7c64c5b5dd4aabc9038e11f4a"
+      },
+      {
+        "offset": 4378,
+        "tokens": [
+          104
+        ],
+        "body_address": 10272993,
+        "body_size": 9,
+        "body_sha256": "c1ca982d3f7a904e37c3c207b074bf623f28d0eb10f6e88b69f44ad6cfb38a0e"
+      },
+      {
+        "offset": 4416,
+        "tokens": [
+          105,
+          -3,
+          106
+        ],
+        "body_address": 10273015,
+        "body_size": 25,
+        "body_sha256": "dfeb9e2ef75382a83ca57896488f256650cbd41491338756f23924243097defa"
+      }
+    ]
+  ],
+  "award_markers": {
+    "GrandPrize": 1,
+    "Design": 2,
+    "Music": 3,
+    "Graphics": 4,
+    "Worst": 5
+  },
+  "blank_badge_rgba_sha256": "e202c0cf84a7cd41ca821495e47ca8ebdc68b32b8c6f4ea1724e6b64fcda46c2"
+}

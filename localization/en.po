@@ -3488,3 +3488,195 @@ msgstr "Selected renewal fees"
 
 msgid "PROPOSAL_ARTWORK_REIMPORT"
 msgstr "Reimport your original archive from the title screen to show the proposal illustration."
+
+msgid "REVIEW_COMMENT_0_0"
+msgstr "I've reviewed many games. This is one to avoid."
+
+msgid "REVIEW_COMMENT_0_1"
+msgstr "This {genre} game about {type} misses what makes either appealing."
+
+msgid "REVIEW_COMMENT_0_2"
+msgstr "I stopped playing quickly. Even the graphics are a letdown."
+
+msgid "REVIEW_COMMENT_0_3"
+msgstr "The developers have achieved something: a remarkably bad game."
+
+msgid "REVIEW_COMMENT_0_4"
+msgstr "The packaging worried me. Playing it gave me nothing better to say."
+
+msgid "REVIEW_COMMENT_0_5"
+msgstr "A serious contender for the worst-game award."
+
+msgid "REVIEW_COMMENT_0_6"
+msgstr "Buy it beside a better game and you'll appreciate the other one more."
+
+msgid "REVIEW_COMMENT_0_7"
+msgstr "It wastes the potential of {genre}; the controls and manual don't help."
+
+msgid "REVIEW_COMMENT_0_8"
+msgstr "Interesting for the wrong reasons. Start again with the basics."
+
+msgid "REVIEW_COMMENT_1_0"
+msgstr "It looks complete, but offers little for today's players."
+
+msgid "REVIEW_COMMENT_1_1"
+msgstr "The simple system wears thin. It needs more thought."
+
+msgid "REVIEW_COMMENT_1_2"
+msgstr "The presentation has promise, but the balance shuts out ordinary players."
+
+msgid "REVIEW_COMMENT_1_3"
+msgstr "The {type} premise and awkward controls need a thorough rethink."
+
+msgid "REVIEW_COMMENT_1_4"
+msgstr "A good foundation undermined by poor balance. What a missed chance."
+
+msgid "REVIEW_COMMENT_1_5"
+msgstr "The developers' ideas don't come across clearly enough."
+
+msgid "REVIEW_COMMENT_1_6"
+msgstr "Bugs and poor balance spoil it, though I like the music."
+
+msgid "REVIEW_COMMENT_1_7"
+msgstr "There's some fun here, but {type} deserves more study. Perhaps next time."
+
+msgid "REVIEW_COMMENT_2_0"
+msgstr "It looks complete, but offers little for today's players."
+
+msgid "REVIEW_COMMENT_2_1"
+msgstr "{genre} and {type} fit together well, but the game is too easy."
+
+msgid "REVIEW_COMMENT_2_2"
+msgstr "Easy to start, easy to tire of. A competitive element might help."
+
+msgid "REVIEW_COMMENT_2_3"
+msgstr "Competent work that needs a more distinctive idea."
+
+msgid "REVIEW_COMMENT_2_4"
+msgstr "I enjoyed playing it; the graphics brought my score down."
+
+msgid "REVIEW_COMMENT_2_5"
+msgstr "The developers seem pleased with it. Now give the players more attention."
+
+msgid "REVIEW_COMMENT_2_6"
+msgstr "Still enjoyable, but too much like the games we've already played."
+
+msgid "REVIEW_COMMENT_2_7"
+msgstr "Ambitious work. Clearer explanations would make it easier to enjoy."
+
+msgid "REVIEW_COMMENT_2_8"
+msgstr "Unusually strong graphics for this kind of game, with a sound system too."
+
+msgid "REVIEW_COMMENT_2_9"
+msgstr "I was looking forward to {type}, and this holds together well. Take it further."
+
+msgid "REVIEW_COMMENT_2_10"
+msgstr "A familiar formula with little progress. {genre} needs a stronger design."
+
+msgid "REVIEW_COMMENT_3_0"
+msgstr "Regular players will enjoy it. Beginners could use a little guidance."
+
+msgid "REVIEW_COMMENT_3_1"
+msgstr "{genre} and {type} are a good match, with appealing balance. Explain the system better."
+
+msgid "REVIEW_COMMENT_3_2"
+msgstr "A well-developed game with plenty to do and handsome graphics."
+
+msgid "REVIEW_COMMENT_3_3"
+msgstr "Everything fits well, though a more original idea would help."
+
+msgid "REVIEW_COMMENT_3_4"
+msgstr "I enjoy {genre}, and this might win other people over too."
+
+msgid "REVIEW_COMMENT_3_5"
+msgstr "I didn't expect {type} to be this funny. Keep going in this direction."
+
+msgid "REVIEW_COMMENT_3_6"
+msgstr "The character and music draw me into its world. The interface needs more care."
+
+msgid "REVIEW_COMMENT_3_7"
+msgstr "An ordinary {genre} made surprisingly engaging. Polish it a little further."
+
+msgid "REVIEW_COMMENT_3_8"
+msgstr "A rewarding system and thoughtful story. Better controls should be next."
+
+msgid "REVIEW_COMMENT_4_0"
+msgstr "An excellent game. I'd happily buy my own copy."
+
+msgid "REVIEW_COMMENT_4_1"
+msgstr "Familiar foundations, exceptional presentation. A Hall of Fame contender."
+
+msgid "REVIEW_COMMENT_4_2"
+msgstr "The unexpected competitive play makes a good game even better."
+
+msgid "REVIEW_COMMENT_4_3"
+msgstr "After years of reviewing, playing this before release is a real pleasure."
+
+msgid "REVIEW_COMMENT_4_4"
+msgstr "I'm still playing while writing this. That's how much fun {company} has made it."
+
+msgid "REVIEW_COMMENT_4_5"
+msgstr "Fine work from {company}. Please give us more games like this."
+
+msgid "REVIEW_COMMENT_4_6"
+msgstr "Give it a try, but don't blame me if you can't stop playing."
+
+msgid "REVIEW_COMMENT_4_7"
+msgstr "{company} has made a game to be proud of. I'm glad I got to play it."
+
+msgid "REVIEW_COMMENT_5_0"
+msgstr "Congratulations. Few games in my reviewing career have impressed me this much."
+
+msgid "REVIEW_COMMENT_5_1"
+msgstr "I'd cancel tomorrow's plans just to keep playing this."
+
+msgid "REVIEW_COMMENT_5_2"
+msgstr "Remarkable entertainment that goes beyond what I expect from a game."
+
+msgid "REVIEW_COMMENT_5_3"
+msgstr "This feels like the culmination of {company}'s work. Try it for yourself."
+
+msgid "REVIEW_COMMENT_UNAVAILABLE"
+msgstr "This save has no recorded individual comment."
+
+msgid "REVIEW_REACTION_4"
+msgstr "Poor"
+
+msgid "REVIEW_REACTION_8"
+msgstr "Fair"
+
+msgid "REVIEW_REACTION_9"
+msgstr "Okay"
+
+msgid "REVIEW_REACTION_6"
+msgstr "Good"
+
+msgid "REVIEW_REACTION_7"
+msgstr "Best"
+
+msgid "REVIEW_ARTWORK_REIMPORT"
+msgstr "Reimport the original archive to restore the reviewer and score artwork."
+
+msgid "EXHIBITION_PREVIOUS_RECORD"
+msgstr "Previous booth attendance record"
+
+msgid "EXHIBITION_VISITORS"
+msgstr "Company booth visitors"
+
+msgid "EXHIBITION_DEVELOPING"
+msgstr "Games in development"
+
+msgid "EXHIBITION_PROGRESS"
+msgstr "Completion"
+
+msgid "EXHIBITION_RELEASED"
+msgstr "Released games"
+
+msgid "EXHIBITION_ROOM"
+msgstr "Development room {room}"
+
+msgid "PRODUCT_SHIP"
+msgstr "Ship"
+
+msgid "EVENT_ARTWORK_REIMPORT"
+msgstr "Reimport your original archive to restore this scene."

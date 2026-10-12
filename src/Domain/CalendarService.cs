@@ -58,7 +58,7 @@ public static class CalendarService
                     if (t.ClosingDate.Month==12 && t.ClosingDate.Week==3)
                     {
                         if (state.ReleasedGames.Any(p=>p.ReleasedOn is null)) return Block(CalendarBlock.Awards);
-                        t.Awards=new() {Year=t.ClosingDate.Year,RivalEntries=state.Competition is null ? null : CompetitionService.DrawContestEntries(state,random),Entries=state.ReleasedGames
+                        t.Awards=new() {Year=t.ClosingDate.Year,Outcomes=[],RivalEntries=state.Competition is null ? null : CompetitionService.DrawContestEntries(state,random),Entries=state.ReleasedGames
                             .Where(p=>p.ReleasedOn!.Value.Year==t.ClosingDate.Year).OrderBy(p=>p.ProductIndex).Select(p=>p.ProductIndex).ToList()};
                         return Event(CalendarEvent.Awards);
                     }

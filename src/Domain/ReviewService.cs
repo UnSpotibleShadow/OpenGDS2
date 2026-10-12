@@ -1,6 +1,6 @@
 namespace OpenGDS2.Domain;
 
-/// <summary>fGMCrossR 009CAFCC +065F..09F2. Cosmetic/comment RNG is not reproduced.</summary>
+/// <summary>fGMCrossR 009CAFCC +065F..09F2. Cosmetic RNG is not reproduced.</summary>
 public static class ReviewService
 {
     public static double Basis(ReleasedGameState product,OriginalCatalog catalog)
@@ -37,6 +37,7 @@ public static class ReviewService
         bool hallOfFame=product.ReviewScores.Sum()>=32;
         int? count=hallOfFame && state.Company.HallOfFameCount is int current ? checked(current+1) : state.Company.HallOfFameCount;
         product.HallOfFame=hallOfFame;product.ReviewPending=false;state.Company.HallOfFameCount=count;
+        if(product.ReviewDisplayCallbacks is not null)product.ReviewDisplayCallbacks=90;
         return true;
     }
 }

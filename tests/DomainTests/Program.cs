@@ -5361,7 +5361,8 @@ Test("save rejects invalid or future formats", () =>
 {
     Throws<InvalidDataException>(() => SaveStore.Deserialize("{}"));
     Throws<InvalidDataException>(() => SaveStore.Deserialize("{"));
-    Throws<InvalidDataException>(() => SaveStore.Deserialize(SaveStore.Serialize(State()).Replace("\"SchemaVersion\": 1", "\"SchemaVersion\": 99")));
+    var future=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(State()))!;future["SchemaVersion"]=99;
+    Throws<InvalidDataException>(() => SaveStore.Deserialize(future.ToJsonString()));
     var state = State(); state.Month = 13;
     Throws<InvalidDataException>(() => SaveStore.Serialize(state));
 });
@@ -5427,6 +5428,35 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original raster pixels match independent decoded references",()=>
+    {
+        byte[] source=File.ReadAllBytes(args[0]);
+        (string Name,int Offset,int Length,int Width,int Height,string Hash)[] resources=[
+            ("exhibition",0x11243,21264,256,160,"409f289681a426dd8402885ff27d3b9283aefb5dbd4e03fb912cfd5f121d9e67"),
+            ("awards",0x1367d8,19520,256,160,"4610a16cb67c2d5568c405eee08841fe703fa40488e32476561c48ed797a1f20"),
+            ("hall",0x845d,862,40,40,"e202c0cf84a7cd41ca821495e47ca8ebdc68b32b8c6f4ea1724e6b64fcda46c2"),
+            ("score1",0x312826,1998,64,64,"587ab427e571c9350134764ef832ab945ac5fdfffd706ffdd8d46e0bbfb004a2"),
+            ("score2",0x311f4a,2222,64,64,"17b7d43bf6fa1aef81dd2b95c3d63ca85b58036c5a0e1003286ba591b1b9dc2d"),
+            ("score3",0x3115ce,2382,64,64,"d95eb7b228eaf6e2bd6e1083cfa975376c06986eae1649977cfc5d84bed29b83"),
+            ("score4",0x310cf2,2222,64,64,"766436e815ec6a85ae12f73453f4010e7b156bfe6056187b162e8844c5c09e13"),
+            ("score5",0x3103f6,2254,64,64,"238978b7da3bf77fb80db3689e4a629de35812c50d0509b2ded8629272cbf8c7"),
+            ("score6",0x30fa3a,2446,64,64,"a39037f36fde4b7e1d46d15978ecebf2487e6205000bd0c16ab7f857eb022151"),
+            ("score7",0x30f21e,2030,64,64,"1efbc3c677422f5533cb3f18983b2d516c8471c1100f920aa7956cad6256dfd6"),
+            ("score8",0x30e862,2446,64,64,"66b82b9c43a8c09622c5332fae5a9d65ae6db61bcef36cc88e2d4dbf23fdabbf"),
+            ("score9",0x30de86,2478,64,64,"f0e0f99fb4792ae7101bcf2483049da7a0585461a0b06644d3b436c6b9498b2f"),
+            ("score10",0x30d1ca,3214,64,64,"31f9b078370558139ec37f7ecd0185cf171f5eee35669397c781da865d0912b5")
+        ];
+        foreach(var r in resources)
+        {
+            byte[] bytes=source.AsSpan(r.Offset,r.Length).ToArray();
+            var image=r.Name.StartsWith("score") ? LocalRasterDecoder.Rle8(bytes,r.Width,r.Height) : LocalRasterDecoder.Gif(bytes,r.Width,r.Height);
+            Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(image.Rgba)).ToLowerInvariant()==r.Hash);
+        }
+        var dialogue=OriginalDialogueImporter.Extract(source);
+        for(int band=0;band<6;band++)for(int v=0;v<ReviewPresentationRules.CommentCounts[band];v++)
+            Check(!string.IsNullOrWhiteSpace(dialogue.Entries[$"REVIEW_COMMENT_{band}_{v}"]));
+        Check(dialogue.Entries["REVIEW_COMMENT_0_1"].Contains("{genre}") && dialogue.Entries["REVIEW_COMMENT_4_4"].Contains("{company}"));
+    });
     Test("optional original proposal import keeps the separate serialized document image",()=>
     {
         string directory=Path.Combine(Path.GetTempPath(),"opengds2-proposal-"+Guid.NewGuid().ToString("N"));
@@ -5540,7 +5570,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==186 && dialogue.SchemaVersion==11 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==235 && dialogue.SchemaVersion==12 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
@@ -5643,6 +5673,86 @@ Test("compact product chart preserves its five distinct native scale boundaries"
     {history[0]=item.Item1;Check(SalesHistoryRules.CompactChartCeiling(history)==item.Item2);}
     history[0]=30000;Check(SalesHistoryRules.ChartCeiling(history)==80000 && SalesHistoryRules.CompactChartCeiling(history)==40000);
     Throws<InvalidDataException>(()=>SalesHistoryRules.CompactChartCeiling(new long[12]));
+});
+
+Test("review comments and callback stages preserve score bands and one-time draws",()=>
+{
+    var g=new ReleasedGameState {ReviewScores=[2,4,6,10],ReviewPending=true};
+    var rng=new DialogueSequenceRandom([],0,.999f,0,.999f);ReviewPresentationRules.Prepare(g,rng);
+    Check(g.ReviewCommentVariants!.SequenceEqual(new[]{0,7,0,3}) && rng.SingleCalls==4);
+    for(int i=0;i<10;i++)Check(ReviewPresentationRules.Advance(g));
+    Check(ReviewPresentationRules.Previewed(g,0) && !ReviewPresentationRules.Revealed(g,0));
+    for(int i=10;i<20;i++)ReviewPresentationRules.Advance(g);
+    Check(ReviewPresentationRules.Revealed(g,0) && !ReviewPresentationRules.Previewed(g,1));
+    while(ReviewPresentationRules.Advance(g)){}
+    Check(g.ReviewDisplayCallbacks==90 && ReviewPresentationRules.Revealed(g,3) && ReviewPresentationRules.Finished(g) && rng.SingleCalls==4);
+    Check(ReviewPresentationRules.Reaction(9) is null && ReviewPresentationRules.Reaction(10)==7);
+    Throws<InvalidOperationException>(()=>ReviewPresentationRules.Prepare(g,rng));
+});
+Test("review presentation saves partial progress and rejects out-of-band comments",()=>
+{
+    var s=State();var g=new ReleasedGameState {Title="Synthetic",ReviewScores=[2,4,6,10],ReviewPending=true,ReviewCommentVariants=[8,7,10,3],ReviewDisplayCallbacks=39};s.ReleasedGames.Add(g);
+    var copy=SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0];
+    Check(copy.ReviewDisplayCallbacks==39 && copy.ReviewCommentVariants!.SequenceEqual(g.ReviewCommentVariants!));
+    g.ReviewCommentVariants[0]=9;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));g.ReviewCommentVariants[0]=8;
+    g.ReviewDisplayCallbacks=91;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    g.ReviewDisplayCallbacks=null;g.ReviewCommentVariants=null;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ReviewDisplayCallbacks is null);
+});
+Test("exhibition display replays saved visitor increments without repeating its transaction",()=>
+{
+    var (s,c)=CalendarFixture(new(3,9,4),100000000);s.Calendar!.ExhibitionVisitorRecord=123;
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic"}];Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));
+    var rng=new SequenceRandom(Enumerable.Repeat(0,22).ToArray());Check(ExhibitionService.Participate(s,new HashSet<int>{0},rng)==ExhibitionResult.Success);
+    var e=s.Calendar!.Pending!.Exhibition!;Check(e.PreviousVisitorRecord==123 && ExhibitionService.DisplayVisitors(e)==0);
+    for(int i=0;i<23;i++)ExhibitionService.AdvanceDisplay(e);
+    Check(ExhibitionService.DisplayVisitors(e)==2250 && s.Money==90000000 && rng.Calls==22);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Calendar!.Pending!.Exhibition!;
+    Check(e.DisplayCallbacks==23 && e.VisitorSteps!.Count==22);
+    while(ExhibitionService.AdvanceDisplay(e)){}
+    Check(ExhibitionService.DisplayVisitors(e)==9900 && s.Money==90000000);
+    Check(ExhibitionService.Participate(s,new HashSet<int>{0},new SequenceRandom())==ExhibitionResult.NotPending);
+    e.VisitorSteps![0]=449;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("award row history survives marker overwrites without repeating prizes",()=>
+{
+    var (s,c)=CalendarFixture(new(3,12,3),1000);
+    s.ReleasedGames=[new() {ProductIndex=0,Title="Synthetic",ReleasedOn=new(3,6,1),Quality=new(30,140,70,70),OriginalAwardCode=0,UnitsSold=1000000}];
+    Check(!CalendarService.BeginWeek(s,c,new SequenceRandom()));Check(AwardService.Reveal(s,new SequenceRandom(1)));Check(AwardService.Continue(s));
+    Check(AwardService.Reveal(s,new SequenceRandom(1)));long money=s.Money!.Value;
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));var a=s.Calendar!.Pending!.Awards!;
+    Check(a.Outcomes!.Select(o=>o.Category).SequenceEqual(new[]{GameAward.Music,GameAward.Graphics}) && a.Outcomes!.All(o=>o.ProductIndex==0));
+    Check(!AwardService.Reveal(s,new SequenceRandom()) && s.Money==money);
+    a.Outcomes.Add(a.Outcomes[0]);Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("portable local GIF RLE8 and PNG decoding preserves authored pixels and rejects truncation",()=>
+{
+    byte[] gif=[71,73,70,56,55,97,1,0,1,0,128,0,0,255,255,255,0,0,0,44,0,0,0,0,1,0,1,0,0,2,2,68,1,0,59];
+    var raster=LocalRasterDecoder.Gif(gif,1,1);Check(raster.Rgba.SequenceEqual(new byte[]{255,255,255,255}));
+    byte[] png=LocalRasterDecoder.Png(raster);Check(png.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10}));
+    int pos=8;byte[]? zipped=null;
+    while(pos<png.Length){int n=System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(png.AsSpan(pos));if(System.Text.Encoding.ASCII.GetString(png,pos+4,4)=="IDAT")zipped=png.AsSpan(pos+8,n).ToArray();pos+=12+n;}
+    using(var zip=new System.IO.Compression.ZLibStream(new MemoryStream(zipped!),System.IO.Compression.CompressionMode.Decompress))
+    {using var output=new MemoryStream();zip.CopyTo(output);Check(output.ToArray().SequenceEqual(new byte[]{0,255,255,255,255}));}
+    Throws<InvalidDataException>(()=>LocalRasterDecoder.Gif(gif[..^1],1,1));
+    Throws<InvalidDataException>(()=>LocalRasterDecoder.Gif(gif,2,1));
+    var bmp=new byte[72];bmp[0]=66;bmp[1]=77;
+    void I32(int at,int value)=>System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(bmp.AsSpan(at),value);
+    I32(2,72);I32(10,62);I32(14,40);I32(18,2);I32(22,2);bmp[26]=1;bmp[28]=8;I32(30,1);I32(46,2);
+    bmp[54]=bmp[55]=bmp[56]=255;new byte[]{2,1,0,0,2,0,0,0,0,1}.CopyTo(bmp,62);
+    var rle=LocalRasterDecoder.Rle8(bmp,2,2);Check(rle.Rgba.Take(8).All(v=>v==255) && rle.Rgba.Skip(8).Where((v,i)=>i%4!=3).All(v=>v==0));
+    Throws<InvalidDataException>(()=>LocalRasterDecoder.Rle8(bmp[..^1],2,2));
+});
+
+Test("schema-one award markers migrate once while preserving legacy meanings and funds",()=>
+{
+    var s=State();s.Money=123;s.ReleasedGames=Enumerable.Range(0,6).Select(i=>new ReleasedGameState {ProductIndex=i,Title="Synthetic "+i,OriginalAwardCode=i}).ToList();
+    var json=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(s))!;json["SchemaVersion"]=1;
+    var copy=SaveStore.Deserialize(json.ToJsonString());
+    Check(copy.ReleasedGames.Select(p=>p.OriginalAwardCode).SequenceEqual(new int?[]{0,5,4,3,2,1}) && copy.Money==123);
+    copy=SaveStore.Deserialize(SaveStore.Serialize(copy));
+    Check(copy.ReleasedGames.Select(p=>p.OriginalAwardCode).SequenceEqual(new int?[]{0,5,4,3,2,1}));
+    Check(AwardService.OriginalCode(GameAward.GrandPrize)==1 && AwardService.OriginalCode(GameAward.Design)==2 && AwardService.OriginalCode(GameAward.Graphics)==4 && AwardService.OriginalCode(GameAward.Worst)==5);
+    Check(s.ReleasedGames[1].OriginalAwardCode==1); // Serialization does not mutate the caller.
 });
 
 Console.WriteLine($"{passed} tests passed");

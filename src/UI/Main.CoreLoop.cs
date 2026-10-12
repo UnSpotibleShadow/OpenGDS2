@@ -390,28 +390,8 @@ public partial class Main
             return;
         }
         ClearContent();AddHeading(Tr("MAGAZINE_REVIEWS"),28);AddHeading(product.Title,22);
-        var scores=product.ReviewScores ?? throw new InvalidOperationException("Reviews are unknown for this product.");
-        var row=new HBoxContainer();row.AddThemeConstantOverride("separation",24);_content.AddChild(row);
-        for (int i=0;i<scores.Count;i++)
-        {
-            var column=new VBoxContainer();row.AddChild(column);
-            column.AddChild(new Label {Text=$"{Tr("REVIEWER")} {i+1}"});
-            var score=new Label {Name=$"ReviewScore{i}",Text=$"{scores[i]} / 10"};score.AddThemeFontSizeOverride("font_size",32);column.AddChild(score);
-        }
-        int total=scores.Sum();
-        var result=new Label {Name="ReviewTotal",Text=$"{Tr("REVIEW_TOTAL")}: {total} / 40"};_content.AddChild(result);
-        AddHeading(Tr(total>=32 ? "REVIEW_HALL_OF_FAME" : total>=24 ? "REVIEW_GOOD" : total>=12 ? "REVIEW_LOW" : "REVIEW_POOR"),20);
-        if (total>=32 && !product.HasReleasedSequel) AddHeading(Tr("SEQUEL_UNLOCKED"),16);
-        else if (total<32 && product.OriginalMode==1) AddHeading(Tr("SEQUEL_SERIES_ENDED"),16);
-        _status=new Label();_content.AddChild(_status);
-        AddAction("SAVE_GAME",()=>
-        {
-            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
-            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
-        });
-        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-        var acknowledge=new Button {Name="AcknowledgeReviews",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
-        acknowledge.Pressed+=()=>{ReviewService.Acknowledge(state,product);ShowSales(state);};
+        if(product.ReviewScores is not {Count:4})throw new InvalidOperationException("Reviews are unknown for this product.");
+        ReviewRows(state,product);
     }
     private bool ShowPendingProductEvent(GameState state)
     {

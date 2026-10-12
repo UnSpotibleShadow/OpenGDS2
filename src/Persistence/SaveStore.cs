@@ -17,7 +17,7 @@ public static class SaveStore
     public static string Serialize(GameState state)
     {
         Validate(state);
-        string text = JsonSerializer.Serialize(new Envelope { Format = "OpenGDS2", SchemaVersion = 1, State = state }, Options);
+        string text = JsonSerializer.Serialize(new Envelope { Format = "OpenGDS2", SchemaVersion = 2, State = state }, Options);
         // A successful write must remain readable by the same format's loader.
         // Reject before Save creates a temporary file or replaces an old slot.
         if (System.Text.Encoding.UTF8.GetByteCount(text) > MaxBytes)
@@ -30,8 +30,14 @@ public static class SaveStore
         Envelope save;
         try { save = JsonSerializer.Deserialize<Envelope>(text, Options) ?? throw new InvalidDataException("Empty save."); }
         catch (JsonException ex) { throw new InvalidDataException("Malformed save.", ex); }
-        if (save.Format != "OpenGDS2" || save.SchemaVersion != 1 || save.State is null)
+        if (save.Format != "OpenGDS2" || save.SchemaVersion is not (1 or 2) || save.State is null)
             throw new InvalidDataException("Unsupported save format or version.");
+        // Pre-M96 modern markers reflected a mistaken category mapping. Keep
+        // their award meanings while adopting the native A12F74 values once.
+        if(save.SchemaVersion==1 && save.State.ReleasedGames is { } products)
+            foreach(var product in products)
+                if(product is not null)product.OriginalAwardCode=product.OriginalAwardCode switch
+                {1=>5,2=>4,4=>2,5=>1,_=>product.OriginalAwardCode};
         Validate(save.State);
         // Derived mode rules cannot be overwritten by a malformed/stale save.
         save.State.Rules = GameModeRules.For(save.State.Mode);
@@ -135,6 +141,7 @@ public static class SaveStore
             if (product.WeeklySalesHistory is not null) SalesHistoryRules.Validate(product.WeeklySalesHistory);
             RecallService.Validate(product);
             ShipmentDialogueRules.Validate(product);
+            ReviewPresentationRules.Validate(product);
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
                 (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
                 product.PendingSalesMilestones.Count>4 ||

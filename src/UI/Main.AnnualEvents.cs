@@ -27,20 +27,24 @@ public partial class Main
         AutowrapMode=TextServer.AutowrapMode.WordSmart,CustomMinimumSize=new Vector2(540,0)});
     private void ShowExhibition(GameState state,ExhibitionState exhibition)
     {
-        AddHeading(Tr("GAME_EXHIBITION"),24);
-        if (exhibition.Visitors is int visitors)
-        {
-            AnnualMessage("ExhibitionResult",string.Format(Tr("EXHIBITION_RESULT"),visitors,exhibition.ReportedAwarenessGain));
-            AnnualButton("CloseExhibition","CONTINUE",()=>{ExhibitionService.Close(state);ShowOfficeReconstruction(state);});
-            return;
-        }
+        if(exhibition.Visitors is not null){ExhibitionScene(state,exhibition);return;}
+        ClearContent();CompactManagementWindow("ExhibitionSelectionWindow",new(520,390),500);_dialog?.SetTitle(Tr("GAME_EXHIBITION"));
         AnnualMessage("ExhibitionSelection",Tr("EXHIBITION_SELECTION"));
         var boxes=new Dictionary<int,CheckBox>();
         var total=new Label {Name="ExhibitionFee",Text=$"{Tr("EXHIBITION_FEE")}: ¥0"};
+        var developing=new VBoxContainer {Name="ExhibitionDevelopingList"};_content.AddChild(developing);
+        developing.AddChild(new Label {Text=Tr("EXHIBITION_DEVELOPING")+"   "+Tr("EXHIBITION_PROGRESS")});
+        var released=new VBoxContainer {Name="ExhibitionReleasedList"};_content.AddChild(released);
+        released.AddChild(new Label {Text=Tr("EXHIBITION_RELEASED")+"   "+Tr("PRODUCT_RELEASE_DATE")});
         foreach (int id in exhibition.EligibleProducts)
         {
-            string title=id<0 ? state.DevelopmentProjects.Single(p=>p.RoomIndex==-id-1).Title : state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
-            var box=new CheckBox {Name=$"ExhibitProduct{id}",Text=title};boxes.Add(id,box);_content.AddChild(box);
+            string title=id<0 ? Tr("EXHIBITION_ROOM").Replace("{room}",(-id).ToString()) : state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
+            var box=new CheckBox {Name=$"ExhibitProduct{id}",Text=title};boxes.Add(id,box);
+            var row=new HBoxContainer();(id<0 ? developing : released).AddChild(row);box.SizeFlagsHorizontal=SizeFlags.ExpandFill;row.AddChild(box);
+            string value;
+            if(id<0)value=OfficeRoomPresentationRules.Percentage(state.DevelopmentProjects.Single(p=>p.RoomIndex==-id-1))+"%";
+            else{var date=state.ReleasedGames.Single(p=>p.ProductIndex==id).ReleasedOn;value=date is { } d ? $"{d.Year}/{d.Month}/{d.Week}" : "?";}
+            row.AddChild(new Label {Name=$"ExhibitDetail{id}",Text=value,HorizontalAlignment=HorizontalAlignment.Right,CustomMinimumSize=new(90,0)});
             box.Toggled+=selected=>
             {
                 if (selected && boxes.Values.Count(b=>b.ButtonPressed)>5)
@@ -49,6 +53,7 @@ public partial class Main
             };
         }
         _content.AddChild(total);
+        _status=new Label {Name="ExhibitionSelectionStatus"};_content.AddChild(_status);
         AnnualButton("ParticipateExhibition","EXHIBITION_PARTICIPATE",()=>
         {
             var result=ExhibitionService.Participate(state,boxes.Where(b=>b.Value.ButtonPressed).Select(b=>b.Key).ToHashSet(),Random.Shared);
@@ -59,6 +64,7 @@ public partial class Main
     }
     private void ShowAwards(GameState state,AwardCeremonyState awards)
     {
+        AwardScene(state,awards);
         AddHeading(Tr("ANNUAL_GAME_AWARDS"),24);
         var category=AwardService.Order[awards.CategoryIndex];
         AddHeading(Tr($"AWARD_{category}"),22);
@@ -95,6 +101,8 @@ public partial class Main
         var next=_content.FindChild("ContinueAwards",true,false) as Button;
         if (reel is null || result is null || next is null || state.Competition is null) return;
         result.Visible=false;next.Disabled=true;
+        var currentRow=_dialog?.FindChild($"AwardWinner{AwardService.Order[awards.CategoryIndex]}",true,false) as Label;
+        if(currentRow is not null)currentRow.Visible=false;
         foreach (int id in awards.AnimationProducts!)
         {
             if (!GodotObject.IsInstanceValid(reel) || !reel.IsInsideTree()) return;
@@ -106,6 +114,7 @@ public partial class Main
         }
         if (!GodotObject.IsInstanceValid(result) || !result.IsInsideTree()) return;
         reel.Text=string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count);result.Visible=true;next.Disabled=false;
+        if(currentRow is not null && GodotObject.IsInstanceValid(currentRow))currentRow.Visible=true;
     }
     private void ShowGraduate(GameState state,GraduateEventState graduates)
     {

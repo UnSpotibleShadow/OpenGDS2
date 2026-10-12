@@ -53,6 +53,12 @@ func press(key: String) -> void:
     await process_frame
 
 func press_node(name: String) -> void:
+    if name in ["AcknowledgeReviews","CloseExhibition"]:
+        for frame in range(600):
+            var pending = main.find_child(name,true,false)
+            if pending != null and not pending.disabled:
+                break
+            await process_frame
     var button = main.find_child(name, true, false)
     check(button != null and not button.disabled, name)
     if button != null and not button.disabled:
@@ -1453,7 +1459,7 @@ func run() -> void:
     await press_node("RevealAward")
     await press("SAVE_GAME")
     var grand = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
-    check(grand.State.Money == grand_save.State.Money+500000000 and grand.State.ReleasedGames[0].OriginalAwardCode == 5,"Grand prize credits the proven reward and product marker")
+    check(grand.State.Money == grand_save.State.Money+500000000 and grand.State.ReleasedGames[0].OriginalAwardCode == 1,"Grand prize credits the proven reward and product marker")
     await press("LOAD_GAME")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == grand.State.Money,"Grand prize reload does not duplicate its payout")

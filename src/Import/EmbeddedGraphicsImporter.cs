@@ -21,6 +21,27 @@ public static class EmbeddedGraphicsImporter
         WriteBitmap(executable,meetingOffset,256,160,destination,"PlanningMeeting.bmp");
         // fGMKikakusyo.Picture1: proposal document, not ImageFormG[0].
         WriteBitmap(executable,0x2AE079,256,160,destination,"PlanningProposal.bmp");
+        WriteGif(executable,0x11243,21264,destination,"ExhibitionBooth.png");
+        WriteGif(executable,0x1367D8,19520,destination,"AwardsStage.png");
+        int[] trophies=[0x87EA,0x9B0F,0xC159,0xAE34,0xD47E];
+        for(int index=0;index<5;index++)
+        {SerializedImageBinding(executable,trophies[index],"ImageTF",index);WriteBitmap(executable,trophies[index],40,40,destination,$"Trophy{index}.bmp");}
+        SerializedImageBinding(executable,0x845D,"ImageTF",5);WriteGif(executable,0x845D,862,destination,"EmptyBadge.png",40,40);
+        int[] reviewers=[0x31CB24,0x31B6C2,0x31A260,0x318DFE];
+        int[] scores=[0x312826,0x311F4A,0x3115CE,0x310CF2,0x3103F6,0x30FA3A,0x30F21E,0x30E862,0x30DE86,0x30D1CA];
+        int[] reactions=[0x31849A,0x317B36,0x3171D2,0x31686E,0x314C48,0x315F0C,0x3155AA,0x3142E6,0x313984,0x313022];
+        for(int index=0;index<4;index++)
+        {SerializedImageBinding(executable,reviewers[index],"Image1",index);WriteBitmap(executable,reviewers[index],64,64,destination,$"Reviewer{index}.bmp");}
+        for(int index=0;index<10;index++)
+        {
+            SerializedImageBinding(executable,scores[index],"Image4",index);
+            int size=BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(scores[index]+2));
+            if(size<54 || size>executable.Length-scores[index])throw new InvalidDataException("Invalid review score resource.");
+            var raster=LocalRasterDecoder.Rle8(executable.AsSpan(scores[index],size).ToArray(),64,64);
+            File.WriteAllBytes(Path.Combine(destination,$"ReviewScore{index+1}.png"),LocalRasterDecoder.Png(raster));
+            SerializedImageBinding(executable,reactions[index],"Image3",index);
+            WriteBitmap(executable,reactions[index],18,64,destination,$"ReviewReaction{index}.bmp");
+        }
         // MDIForm1 BGraphicH picture properties, verified in the supplied build.
         int[] toolbar = [0x1AD1, 0x216A, 0x2803, 0x2E9C, 0x3535, 0x3BCC, 0x4265, 0x48FE,
             0x4F97, 0x5630, 0x5CC9, 0x6362, 0x69FB, 0x7094, 0x772D, 0x7DC6];
@@ -37,6 +58,21 @@ public static class EmbeddedGraphicsImporter
                 throw new InvalidDataException("Unsupported embedded hardware picture array.");
             WriteBitmap(executable, offset, 64, 64, destination, $"Hardware{index}.bmp");
         }
+    }
+
+    private static void SerializedImageBinding(byte[] bytes,int offset,string control,int index)
+    {
+        int prefix=control.Length+18;
+        if(offset<prefix || offset>bytes.Length-54 ||
+            !bytes.AsSpan(offset-prefix,control.Length+3).SequenceEqual(System.Text.Encoding.ASCII.GetBytes(control+"\0\x18\x01")) ||
+            BinaryPrimitives.ReadUInt16LittleEndian(bytes.AsSpan(offset-15))!=index)
+            throw new InvalidDataException("Unsupported serialized review artwork.");
+    }
+    private static void WriteGif(byte[] bytes,int offset,int size,string destination,string name,int width=256,int height=160)
+    {
+        if(offset<0 || size<13 || offset>bytes.Length-size)throw new InvalidDataException("Missing scene GIF.");
+        var raster=LocalRasterDecoder.Gif(bytes.AsSpan(offset,size).ToArray(),width,height);
+        File.WriteAllBytes(Path.Combine(destination,name),LocalRasterDecoder.Png(raster));
     }
 
     private static void WriteBitmap(byte[] bytes, int offset, int width, int height, string destination, string name)

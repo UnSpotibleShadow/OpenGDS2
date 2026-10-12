@@ -1,46 +1,47 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M95 development screens
+## Current handoff — 2026-10-12, M96 reviews and events
 
-M94 is merged in PR #98 at `9d9a844ee3b5d22ade1c025ea8e377f94032f2e2`:
-right-click desk assignment, room labels/progress, saved room panel/blink phases,
-checkpoint added-point columns and runner-up Grand Prix wording. Do not redo it.
+M94 is merged in PR #98 (`9d9a844ee3b5d22ade1c025ea8e377f94032f2e2`):
+right-click desk assignment, room label/progress/panel phases and point columns.
+M95 is merged in PR #99 (`7aa9f7983cf99d3dcb0a324856adccd3cdc0a6b5`): proposal
+artwork/title timing, combined development/checkpoint/completion panels, detailed
+shipment tables, compact product chart/report and annual renewal details.
+Do not redo these. See their milestone documents.
 
-M95 on `codex/m95-development-panels` restores the proposal document bitmap,
-defers title entry to shipment, combines hardware/audience/type/genre/size,
-quality/focus/bugs/recognition/progress in live and checkpoint/completion panels,
-adds the completion meeting illustration and separate yellow/cyan shipment tables,
-adds the compact individual-product chart/report using its separate five-scale
-rule, and restores annual renewal roster selection/details/radar/checked totals.
-Transactions and saved outcomes retain their existing services. Reimport the
-original archive to populate the newly recovered proposal image in older caches;
-missing optional artwork does not discard a save or block development. See
-`docs/development-panels-m95.md`. Verify #55/PR/main for publication state.
+M96 on `codex/m96-review-event-artwork` restores vertical reviewer rows, saved
+comment choices/reveal phases, local reviewer/score/reaction artwork, booth and
+stage GIF conversion, exhibition lists/attendance display and persistent five-row
+award results. Original sprites/messages remain local. Reimporting the original
+archive supplies new artwork and Japanese comment templates to older caches.
+See `docs/review-event-presentation-m96.md`; verify PR/#55/main publication state.
 
-#95 MUST stay open at the owner's request. Remaining work: paid six-media
-promotion with M93's native Empty-frame scope boundary; reviewer portraits,
-score/reaction/comment rows and callback presentation; exhibition selection/
-attendance presentation and GIF booth artwork; persistent awards rows and GIF
-stage artwork. Exact native font/window stacking/timing and scene motion require
-runtime comparisons; do not claim these are already equivalent.
+Important corrected evidence: Image2 has four visible score slots, while Image4
+has ten hidden RLE8 digit sources. ImageTF[5] is an empty white GIF, not a Hall
+of Fame badge; that pane reuses ImageTF[2]. A12F74 markers are 1 Grand Prix,
+2 runner-up, 3 music, 4 graphics, 5 worst. The old port's marker transcription is
+fixed without changing selection/prizes. Modern save schema 2 migrates schema-1
+marker meanings once; do not reapply the old mapping to schema 2. Older missing
+comment phases, visitor steps and previous category winners stay unknown.
 
-The owner corrected the atlas scope: the shown 1600×530 sheet is the full OFFICE
-sprite atlas, not all game graphics. Device pictures, archive staff portraits,
-meeting/dialog pictures and serialized controls are separate. The resource-family
-index is `docs/artwork-reference-index.md`; `tools/local_artwork_reference.py`
-generates a private HTML reference of all images currently present in a cache,
-without embedding or copying pixels. Exhaustive atlas AND separate-resource review
-remain deferred to #97; pacing is separate #94. No original graphics are committed.
+M96 validation: 498 optional-original domain checks, including thirteen independent
+RGBA references and save migration; clean app build/import; full core-loop UI;
+bilingual partial review/save-load/score-nine/local artwork and booth checks.
+M96 evidence verifies 36 resource bindings, 14 anchors and 49 bounded comment
+branches; M93 still verifies 32 fingerprints/60 anchors/15 events/4 resources/78
+literals. Rendering/phase replay draws no outcomes and repeats no transactions.
+Cosmetic cycling/native RNG ordering, retained-frame lifetime, exact scene motion,
+font rendering and Windows window stacking remain runtime comparison limits.
 
-M95 validation: 491 optional-original domain checks (including exact proposal
-resource identity and both graph variants), clean application build/import,
-core-loop UI checks covering proposal/title timing, both shipment tables and
-reprints, compact product report, and renewal selection/fees. Bilingual project
-panel checks cover completion/shipment preview/cancel/reload and renewal details.
-M93 source verifier still passes 32 fingerprints, 60 anchors, 15 event bindings,
-four resources and 78 numeric literals. M94's bilingual office/native-pixel checks
-remain the preceding milestone's evidence. `OriginalRoomPaused` is the recovered
-room disruption flag only; no automatic disaster workflow was invented.
+#95 MUST stay open for further native walkthrough findings. Remaining source-backed
+workflow: paid six-media promotion, using M93's documented fresh-Empty room scope
+boundary; do not invent a cleaned-up released-game target selector. #94 office
+pacing and #97 exhaustive artwork review remain deferred. The shown atlas is the
+full OFFICE sprite sheet, not all game graphics. Device images, staff portraits,
+dialog images and serialized controls are separate; the resource-family index and
+private local HTML generator are in `docs/artwork-reference-index.md` and
+`tools/local_artwork_reference.py`. Do not publish generated references/pixels.
+`OriginalRoomPaused` remains the native disruption flag, not a new disaster system.
 
 The owner requested investigation of presentation ticket #95 before implementing
 its missing handlers/actions. M93 is an analysis/evidence milestone; it changes
