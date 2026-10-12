@@ -21,6 +21,9 @@ public sealed class CasinoState
     public BlackjackRoundState Blackjack {get;set;}=new();
     public bool CardChainOpen {get;set;}
     public CardChainRoundState CardChain {get;set;}=new();
+    public bool HorseOpen {get;set;}
+    public HorseRaceState Horse {get;set;}=new();
+    [JsonIgnore] public bool ActivityOpen=>CardGameOpen || HorseOpen;
     [JsonIgnore] public bool CardGameOpen=>PokerOpen || BlackjackOpen || CardChainOpen;
 }
 public sealed class PokerRoundState
@@ -40,7 +43,7 @@ public sealed class PokerRoundState
     [JsonRequired] public int TieTick {get;set;}
     [JsonRequired] public bool TieRedeal {get;set;}
 }
-public enum CasinoResult { Success, NotOwned, EventPending, NoCoins, MoneyUnknown, InvalidAction, NumericLimit }
+public enum CasinoResult { Success, NotOwned, EventPending, NoCoins, MoneyUnknown, InvalidAction, NumericLimit, CatalogMissing }
 
 public static class CasinoPokerService
 {
@@ -245,6 +248,7 @@ public static class CasinoPokerService
     {
         CasinoBlackjackService.Validate(state);
         CasinoCardChainService.Validate(state);
+        CasinoHorseService.Validate(state);
         if (state.Casino is not { } c || c.Poker is not { } p || c.Coins<0 || c.Bet is <0 or >50 || c.PendingPayout<0 || c.ChainBonus<0 ||
             p.Phase is <0 or >6 || p.Tick is <0 or >46 || p.Phase==2 && p.Tick>45 || p.Phase==4 && p.Tick>1 || p.Phase==5 && p.Tick>19 || p.Phase==6 && p.Tick>28 || p.Outcome is <0 or >9 || p.AwardTick is <0 or >34 || p.TieTick is <0 or >30 ||
             p.Cards is null || p.UsedCards is null || p.Holds is null || p.Revealed is null || p.RevealOrder is null ||

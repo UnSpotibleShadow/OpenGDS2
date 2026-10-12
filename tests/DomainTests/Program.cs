@@ -25,6 +25,157 @@ Test("own-console catalog composition preserves locally imported race definition
     var combined=OwnHardwareService.Catalog(s,c);Check(ReferenceEquals(combined.Horses,c.Horses) && ReferenceEquals(combined.Jockeys,c.Jockeys));
     var legacy=System.Text.Json.JsonSerializer.Deserialize<OriginalCatalog>("{}")!;Check(legacy.Horses.Count==0 && legacy.Jockeys.Count==0);
 });
+OriginalCatalog HorseCatalog()=>new() {Horses=Enumerable.Range(0,44).Select(i=>new HorseDefinition {SourceIndex=i,Name=$"Synthetic runner {i}",RawParameter=13,Strength=i+.13}).ToList(),Jockeys=Enumerable.Range(0,10).Select(i=>new JockeyDefinition {SourceIndex=i,Name=$"Synthetic rider {i}"}).ToList()};
+float[] HorseSetupDraws()=>new[]{0f,0f}.Concat(Enumerable.Range(0,8).Select(i=>(i+.01f)/44)).Concat(Enumerable.Range(0,8).Select(i=>(i+.01f)/10)).Concat(Enumerable.Repeat(0f,40)).ToArray();
+GameState HorseFixture(long money=10000)
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Money=money;
+    Check(CasinoHorseService.Open(s,HorseCatalog(),new FailureRandom(HorseSetupDraws()))==CasinoResult.Success);return s;
+}
+void HorseFinished(GameState s)
+{
+    var r=s.Casino.Horse;r.Stage=1;r.Tick=361;r.RacePhase=2;r.Camera=-1010;r.Performance=Enumerable.Repeat(0d,8).ToList();r.FinishCoordinates=Enumerable.Repeat(-1919d,8).ToList();
+    CasinoHorseService.TickRace(s,new FailureRandom());Check(r.Stage==2 && r.Arrival.SequenceEqual(Enumerable.Range(0,8)));
+}
+Test("horse racing requires complete recovered records but not casino coins",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Money=10000;s.Casino.Coins=0;
+    Check(CasinoHorseService.Open(s,new OriginalCatalog(),new FailureRandom())==CasinoResult.CatalogMissing);
+    Check(CasinoHorseService.Open(s,HorseCatalog(),new FailureRandom(HorseSetupDraws()))==CasinoResult.Success && s.Casino.Coins==0);CasinoPokerService.Validate(s);
+    Check(CasinoPokerService.Open(s)==CasinoResult.EventPending);Check(CasinoHorseService.Close(s));
+});
+Test("horse setup preserves unused draws, unique source selections, forecasts and cosmetics",()=>
+{
+    var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Money=10000;
+    var random=new FailureRandom(HorseSetupDraws());CasinoHorseService.Open(s,HorseCatalog(),random);var r=s.Casino.Horse;
+    Check(random.Calls==58 && r.Runners.Select(h=>h.SourceIndex).SequenceEqual(Enumerable.Range(0,8)) && r.Runners.Select(h=>h.JockeySourceIndex).Distinct().Count()==8);
+    Check(r.ForecastRanks.All(row=>row.SequenceEqual(Enumerable.Range(0,8).Reverse())) && r.Runners.All(h=>h.WeightChange==-1));
+    Check(r.WinOdds.SequenceEqual(CasinoHorseService.Odds.Reverse()) && r.PairOdds.All(row=>row[7]==0));
+});
+Test("horse wager drafts close without committing and start debits funds without accounting helper",()=>
+{
+    var s=HorseFixture();var weekly=s.Company!.WeeklyNet;CasinoHorseService.AdjustWager(s,1);Check(s.Money==10000 && s.Casino.Horse.DraftCash==9900);
+    CasinoHorseService.Close(s);Check(s.Money==10000 && s.CompanyActivityPerformed==true);
+    CasinoHorseService.Open(s,HorseCatalog(),new FailureRandom(HorseSetupDraws()));CasinoHorseService.AdjustWager(s,1);
+    var random=new FailureRandom(new[]{0f}.Concat(Enumerable.Repeat(.1f,8)).ToArray());CasinoHorseService.Start(s,random);
+    Check(s.Money==9900 && s.Company.WeeklyNet==weekly && random.Calls==9);CasinoHorseService.Close(s);Check(s.Money==9900);
+});
+Test("horse positive cash guard can overspend the final fraction of a wager",()=>
+{
+    var s=HorseFixture(1);Check(CasinoHorseService.AdjustWager(s,1)==CasinoResult.Success && s.Casino.Horse.DraftCash==-99);
+    Check(CasinoHorseService.AdjustWager(s,1)==CasinoResult.InvalidAction && s.Casino.Horse.SingleStakes[0]==100);
+});
+Test("horse single cap retains the debit after clamping a hundred-thousand stake",()=>
+{
+    var s=HorseFixture(10000);s.Casino.Horse.SingleStakes[0]=99900;
+    Check(CasinoHorseService.AdjustWager(s,1)==CasinoResult.Success && s.Casino.Horse.SingleStakes[0]==99900 && s.Casino.Horse.DraftCash==9900);
+});
+Test("horse pair odds display is compressed but payout reads raw arrival columns",()=>
+{
+    var s=HorseFixture();var r=s.Casino.Horse;r.Arrival=[0,1,2,3,4,5,6,7];r.PairStakes[0][1]=100;
+    Check(r.PairOdds[0][0]==r.WinOdds[0]*r.WinOdds[1]/2.4 && r.PairOdds[0][1]==r.WinOdds[0]*r.WinOdds[2]/2.4);
+    Check(CasinoHorseService.Award(r)==100*(decimal)Math.Round(r.PairOdds[0][1],1,MidpointRounding.ToEven));
+    r.Arrival=[0,7,1,2,3,4,5,6];r.PairStakes[0][7]=100;Check(CasinoHorseService.Award(r)==0);
+});
+Test("horse pair diagonal typo and compressed removal guard preserve wrong-cell behavior",()=>
+{
+    var s=HorseFixture();var r=s.Casino.Horse;r.PairSelected=true;r.SelectedFirst=4;r.SelectedSecond=3;
+    CasinoHorseService.AdjustWager(s,1);Check(r.PairStakes[4][4]==100 && r.PairStakes[4][3]==0 && r.DraftCash==9900);
+    Check(CasinoHorseService.AdjustWager(s,-1)==CasinoResult.InvalidAction);
+    r.SelectedSecond=5;Check(CasinoHorseService.AdjustWager(s,-1)==CasinoResult.Success && r.PairStakes[4][5]==-100 && r.DraftCash==10000 && r.PairStakes[4][4]==100);
+    Check(CasinoHorseService.AdjustWager(s,-1)==CasinoResult.Success && r.PairStakes[4][5]==-200 && r.DraftCash==10100);CasinoPokerService.Validate(s);
+});
+Test("horse pair cap can clamp an adjacent column instead of the updated stake",()=>
+{
+    var s=HorseFixture();var r=s.Casino.Horse;r.PairSelected=true;r.SelectedFirst=0;r.SelectedSecond=1;r.PairStakes[0][1]=99900;
+    CasinoHorseService.AdjustWager(s,1);Check(r.PairStakes[0][1]==100000 && r.PairStakes[0][0]==0 && r.DraftCash==9900);
+});
+Test("horse performance uses successive random tests and consumes one to three draws",()=>
+{
+    var s=HorseFixture();var draws=new List<float>{0f,.1f,0f,.2f,0f,0f,.9f};draws.AddRange(Enumerable.Repeat(.1f,5));var random=new FailureRandom(draws.ToArray());
+    CasinoHorseService.Start(s,random);var p=s.Casino.Horse.Performance;
+    Check(random.Calls==12 && p[0]==.13/1.2+6 && p[1]==1.13/1.2+4 && p[2]==2.13/1.2+3);
+});
+Test("horse phase-one windows and mode-specific signed divisions match recovered vectors",()=>
+{
+    Check(CasinoHorseService.PhaseOneDelta(64,0,0,72)==0 && CasinoHorseService.PhaseOneDelta(65,0,0,72)==-14.4);
+    Check(CasinoHorseService.PhaseOneDelta(80,0,4,72)==-18 && CasinoHorseService.PhaseOneDelta(81,0,4,72)==0);
+    Check(CasinoHorseService.PhaseOneDelta(110,1,7,72)==28.8 && CasinoHorseService.PhaseOneDelta(140,1,1,70)==-10);
+});
+Test("horse overlapping tick two-ninety executes both movement blocks and camera steps",()=>
+{
+    var a=CasinoHorseService.PhaseTwoDelta(289,0,0,72,0);var b=CasinoHorseService.PhaseTwoDelta(290,0,0,72,0);var c=CasinoHorseService.PhaseTwoDelta(291,0,0,72,0);
+    Check(a==(-8d,-18d) && b==(-26d,-46d) && c==(-18d,-28d));
+    Check(CasinoHorseService.PhaseTwoDelta(290,0,0,72,10)==(-46d,-46d));
+    Check(CasinoHorseService.PhaseTwoDelta(231,1,6,72,0)==(-6d,-16d));
+});
+Test("horse transitions select mode at forty-five and preserve unique-maximum tie behavior",()=>
+{
+    Check(CasinoHorseService.UniqueMaximum(new[]{1d,2d,2d}) is null && CasinoHorseService.UniqueMaximum(new[]{1d,3d,2d})==1);
+    var s=HorseFixture();var random=new FailureRandom(new[]{0f}.Concat(Enumerable.Repeat(.1f,8)).Concat(new[]{.9f}).ToArray());CasinoHorseService.Start(s,random);
+    for(int i=0;i<45;i++) CasinoHorseService.TickRace(s,random);Check(s.Casino.Horse.Mode==1 && s.Casino.Horse.RacePhase==1 && random.Calls==10);
+    for(int i=45;i<200;i++) CasinoHorseService.TickRace(s,random);
+    var r=s.Casino.Horse;Check(r.RacePhase==2 && r.Camera==700 && r.FinishCoordinates.Min()==0 && r.Positions.SequenceEqual(r.FinishCoordinates));CasinoPokerService.Validate(s);
+});
+Test("horse finish ties follow ascending runner visitation rather than an outcome sort",()=>
+{
+    var s=HorseFixture();HorseFinished(s);Check(s.Casino.Horse.Arrival.SequenceEqual(Enumerable.Range(0,8)));CasinoPokerService.Validate(s);
+});
+Test("horse result timer waits one hundred callbacks and source settlement discards winnings",()=>
+{
+    var s=HorseFixture();CasinoHorseService.AdjustWager(s,1);CasinoHorseService.Start(s,new FailureRandom(new[]{0f}.Concat(Enumerable.Repeat(.1f,8)).ToArray()));HorseFinished(s);
+    var r=s.Casino.Horse;for(int i=0;i<99;i++) CasinoHorseService.TickResult(s,HorseCatalog(),new FailureRandom());Check(r.Stage==2);
+    CasinoHorseService.TickResult(s,HorseCatalog(),new FailureRandom());Check(r.Stage==3 && r.DisplayedAward==4770 && s.Money==9900);CasinoPokerService.Validate(s);
+    var random=new FailureRandom(HorseSetupDraws().Skip(1).ToArray());Check(CasinoHorseService.AcceptPayout(s,HorseCatalog(),random));
+    Check(s.Money==9900 && s.Casino.Horse.DraftCash==9900 && s.Casino.Horse.TemporaryBalance==9900 && s.Casino.Horse.RaceCounter==1 && random.Calls==57);
+    Check(!CasinoHorseService.AcceptPayout(s,HorseCatalog(),new FailureRandom()));
+});
+Test("horse losing result opens the next card without inventing a payout",()=>
+{
+    var s=HorseFixture();HorseFinished(s);for(int i=0;i<99;i++) CasinoHorseService.TickResult(s,HorseCatalog(),new FailureRandom());
+    CasinoHorseService.TickResult(s,HorseCatalog(),new FailureRandom(HorseSetupDraws().Skip(1).ToArray()));Check(s.Casino.Horse.Stage==0 && s.Money==10000);
+});
+Test("horse save continuity does not resume held physical input and rejects malformed runner data",()=>
+{
+    var s=HorseFixture();s.Casino.Horse.HeldAdjustment=1;var copy=System.Text.Json.JsonSerializer.Deserialize<GameState>(System.Text.Json.JsonSerializer.Serialize(s))!;
+    CasinoPokerService.Validate(copy);Check(copy.Casino.Horse.HeldAdjustment==0 && copy.Casino.Horse.Runners[0].Name==s.Casino.Horse.Runners[0].Name);
+    copy.Casino.Horse.Runners[1].SourceIndex=copy.Casino.Horse.Runners[0].SourceIndex;Throws<InvalidDataException>(()=>CasinoPokerService.Validate(copy));
+});
+Test("horse missing future catalog suspends next-card setup and resumes after recovery",()=>
+{
+    var s=HorseFixture();HorseFinished(s);for(int i=0;i<100;i++) CasinoHorseService.TickResult(s,null,new FailureRandom());
+    Check(s.Casino.Horse.CatalogBoundary && s.Casino.Horse.Stage==2);CasinoPokerService.Validate(s);
+    Check(CasinoHorseService.ResumeCatalogBoundary(s,HorseCatalog(),new FailureRandom(HorseSetupDraws().Skip(1).ToArray())) && s.Casino.Horse.Stage==0);
+});
+Test("horse numeric guards preserve ledger when wrong-cell refunds reach integer limits",()=>
+{
+    var s=HorseFixture();var r=s.Casino.Horse;r.PairSelected=true;r.SelectedFirst=4;r.SelectedSecond=5;r.PairStakes[4][4]=100;r.DraftCash=long.MaxValue;
+    Check(CasinoHorseService.AdjustWager(s,-1)==CasinoResult.NumericLimit && r.PairStakes[4][5]==0 && r.DraftCash==long.MaxValue);
+});
+Test("horse activity blocks office updates and conflicting facility actions",()=>
+{
+    var s=HorseFixture();var session=new GameSession(new FailureRandom());session.Restore(s);var before=s.CompanyActivityTicks;session.TickOffice();
+    Check(s.CompanyActivityTicks==before && FacilityService.HasPendingDecision(s) && CasinoCardChainService.Open(s)==CasinoResult.EventPending);
+});
+Test("horse ordinary full races finish with eight distinct arrivals under both modes",()=>
+{
+    foreach(float mode in new[]{0f,.9f})
+    {
+        var s=HorseFixture();var random=new FailureRandom(new[]{0f}.Concat(Enumerable.Repeat(.1f,8)).Concat(new[]{mode}).ToArray());CasinoHorseService.Start(s,random);
+        for(int tick=0;tick<1200 && s.Casino.Horse.Stage==1;tick++) CasinoHorseService.TickRace(s,random);
+        Check(s.Casino.Horse.Stage==2 && s.Casino.Horse.Arrival.Distinct().Count()==8);CasinoPokerService.Validate(s);
+    }
+});
+
+Test("horse ordinary pair odds agree with bounded decimal vectors away from midpoints",()=>
+{
+    foreach(double a in CasinoHorseService.Odds) foreach(double b in CasinoHorseService.Odds)
+    {
+        decimal exact=(decimal)a*(decimal)b/2.4m;decimal scaled=exact*10;
+        Check(Math.Abs((scaled-decimal.Floor(scaled))-.5m)>.0001m);
+        Check((decimal)Math.Round(a*b/2.4,1,MidpointRounding.ToEven)==decimal.Round(exact,1));
+    }
+});
 GameState CardChainFixture()
 {
     var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=4;s.Casino.Coins=100;
@@ -4977,7 +5128,7 @@ if (args.Length == 2)
     Test("optional original horse and jockey append tables recover all source records locally",()=>
     {
         var c=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(c.Horses.Count==44 && c.Jockeys.Count==10);
+        Check(c.Horses.Count==44 && c.Jockeys.Count==10 && CasinoHorseService.HasCatalog(c));
         Check(c.Horses.Select(h=>h.SourceIndex).SequenceEqual(Enumerable.Range(0,44)));
         Check(c.Jockeys.Select(j=>j.SourceIndex).SequenceEqual(Enumerable.Range(0,10)));
         Check(c.Horses.All(h=>!string.IsNullOrWhiteSpace(h.Name) && h.Strength==h.SourceIndex+h.RawParameter/100));

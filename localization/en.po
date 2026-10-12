@@ -2912,7 +2912,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "This employee is no longer employed."
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "Buy casino coins and play poker. Blackjack and card-chain are also available; horse racing is not available yet."
+msgstr "Buy coins for poker, blackjack and card-chain, or wager cash on horse racing. Original horse-settlement quirks are preserved."
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
@@ -3002,10 +3002,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution in either mode. Original presentation and full campaign parity remain incomplete."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins, poker, blackjack and card-chain; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins, poker, blackjack, card-chain and horse racing with original settlement quirks; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+msgstr "Unavailable or incomplete: original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
 
 msgid "MYSTERY_LAB_START"
 msgstr "Start an experiment"
@@ -3181,7 +3181,7 @@ msgid "CASINO_COINS"
 msgstr "Coins: {0:N0}"
 
 msgid "CASINO_AVAILABLE_GAMES"
-msgstr "Poker, blackjack and card-chain are available. Horse racing is being reconstructed."
+msgstr "Poker, blackjack, card-chain and horse racing are available. Original quirks are disclosed in each activity."
 
 msgid "CASINO_POKER"
 msgstr "Poker"
@@ -3347,3 +3347,60 @@ msgstr "The shortcut selected the dealer card. The original comparison only reso
 
 msgid "CARD_CHAIN_ZERO_WAIT"
 msgstr "The retained award is zero. Original collection waits without crediting coins; close this table to continue."
+
+msgid "CASINO_HORSE"
+msgstr "Horse racing"
+
+msgid "CASINO_RESULT_CatalogMissing"
+msgstr "Reimport your original LZH to load the recovered runner and jockey records before starting another race."
+
+msgid "HORSE_SINGLE"
+msgstr "Win wager"
+
+msgid "HORSE_PAIR"
+msgstr "Ordered pair"
+
+msgid "HORSE_ADD"
+msgstr "Hold: add 100"
+
+msgid "HORSE_REMOVE"
+msgstr "Hold: remove 100"
+
+msgid "HORSE_START"
+msgstr "Start race"
+
+msgid "HORSE_ACCEPT_RESULT"
+msgstr "Continue to next race"
+
+msgid "HORSE_TOTALS"
+msgstr "Company cash: {0:N0}   Draft balance: {1:N0}   Race: {2}"
+
+msgid "HORSE_BETTING"
+msgstr "Choose a win wager or ordered first/second pair. Hold add/remove to change the draft by 100 per callback. Start commits the stakes."
+
+msgid "HORSE_RUNNING"
+msgstr "Race in progress."
+
+msgid "HORSE_RESULTS_WAIT"
+msgstr "The finish order is being announced."
+
+msgid "HORSE_PAYOUT"
+msgstr "Winning wager result. Continuing follows the original temporary-balance settlement."
+
+msgid "HORSE_FINISH"
+msgstr "Finish order: {0}"
+
+msgid "HORSE_AWARD"
+msgstr "Displayed winnings: {0:N1}"
+
+msgid "HORSE_RUNNER"
+msgstr "{0}. {1} / {2}   Forecasts: {3}   Win odds: {4:0.0}   Stake: {5:N0}"
+
+msgid "HORSE_SELECTED_WAGER"
+msgstr "Selected stake: {0:N0}   Displayed odds: {1:0.0}"
+
+msgid "HORSE_ORIGINAL_DEFECTS"
+msgstr "Original quirks are preserved: pair wagers use mismatched indices, and winnings are overwritten when the next race opens. Displayed winnings do not increase company cash."
+
+msgid "HORSE_CLOSE_NOTE"
+msgstr "Closing discards an unstarted draft. Stakes committed by Start remain spent."

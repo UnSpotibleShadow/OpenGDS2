@@ -2882,7 +2882,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "この社員はすでに退職しています。"
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "コインの購入、ポーカー、ブラックジャック、カードチェーンに対応しています。競馬は未対応です。"
+msgstr "コインを購入してポーカー、ブラックジャック、カードチェーンを遊ぶか、現金で競馬に賭けます。原作の精算処理の不具合も再現しています。"
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "弁護士と運送費や販売手数料の引き下げを交渉します。"
@@ -2972,10 +2972,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "初心者モードは2年12月4週の終了後に終わります。通常モードは実験的な継続プレイです。どちらのモードでも所持金がマイナスになると会社を解散します。原作の演出やキャンペーン全体の完全な再現は未完成です。"
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、カジノのコイン購入、ポーカー、ブラックジャック、カードチェーン、現代形式のセーブ。"
+msgstr "対応：採用、席とPC、通常開発、条件を満たす続編と漫画、会議、中止、デバッグ、出荷、評価、販売、追加生産、暦のイベントと借入、学校、温泉、リサイクル、技術容量、生産容量、弁護士相談、謎の研究所の実験、自社ハードの開発と発売、カジノのコイン購入、ポーカー、ブラックジャック、カードチェーン、原作の精算処理を再現した競馬、現代形式のセーブ。"
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "未対応または未完成：競馬、原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
+msgstr "未対応または未完成：原作セーブの取り込み、会社の成長、会話や成長効果の一部。Windowsでの通しプレイ検証はコミュニティで行います。"
 
 msgid "MYSTERY_LAB_START"
 msgstr "実験を開始"
@@ -3151,7 +3151,7 @@ msgid "CASINO_COINS"
 msgstr "コイン：{0:N0}枚"
 
 msgid "CASINO_AVAILABLE_GAMES"
-msgstr "ポーカー、ブラックジャック、カードチェーンをプレイできます。競馬は再現作業中です。"
+msgstr "ポーカー、ブラックジャック、カードチェーン、競馬をプレイできます。原作の特殊な挙動は各画面で説明します。"
 
 msgid "CASINO_POKER"
 msgstr "ポーカー"
@@ -3317,3 +3317,60 @@ msgstr "キーでディーラーのカードを選びました。原作では2�
 
 msgid "CARD_CHAIN_ZERO_WAIT"
 msgstr "持ち越した賞金が0です。原作の受け取り処理はコインを加算せず待機します。この台を閉じて続行してください。"
+
+msgid "CASINO_HORSE"
+msgstr "競馬"
+
+msgid "CASINO_RESULT_CatalogMissing"
+msgstr "次のレースを始める前に、原作のLZHを再取り込みして馬と騎手のデータを読み込んでください。"
+
+msgid "HORSE_SINGLE"
+msgstr "単勝"
+
+msgid "HORSE_PAIR"
+msgstr "1・2着の順序付き組み合わせ"
+
+msgid "HORSE_ADD"
+msgstr "長押し：100追加"
+
+msgid "HORSE_REMOVE"
+msgstr "長押し：100取り消し"
+
+msgid "HORSE_START"
+msgstr "レース開始"
+
+msgid "HORSE_ACCEPT_RESULT"
+msgstr "次のレースへ"
+
+msgid "HORSE_TOTALS"
+msgstr "会社の所持金：{0:N0}　仮残高：{1:N0}　レース：{2}"
+
+msgid "HORSE_BETTING"
+msgstr "単勝か1・2着の順序付き組み合わせを選びます。追加・取り消しを長押しして100ずつ変更します。開始時に賭け金を確定します。"
+
+msgid "HORSE_RUNNING"
+msgstr "レース中です。"
+
+msgid "HORSE_RESULTS_WAIT"
+msgstr "着順を発表中です。"
+
+msgid "HORSE_PAYOUT"
+msgstr "的中した賭けの結果です。続行すると原作の仮残高による精算処理を行います。"
+
+msgid "HORSE_FINISH"
+msgstr "着順：{0}"
+
+msgid "HORSE_AWARD"
+msgstr "表示される払戻金：{0:N1}"
+
+msgid "HORSE_RUNNER"
+msgstr "{0}. {1}／{2}　予想：{3}　単勝倍率：{4:0.0}　賭け金：{5:N0}"
+
+msgid "HORSE_SELECTED_WAGER"
+msgstr "選択中の賭け金：{0:N0}　表示倍率：{1:0.0}"
+
+msgid "HORSE_ORIGINAL_DEFECTS"
+msgstr "原作の不具合を再現しています：組み合わせの添字に不一致があり、次のレースで払戻金が上書きされます。表示される払戻金は会社の所持金を増やしません。"
+
+msgid "HORSE_CLOSE_NOTE"
+msgstr "開始前に閉じると仮の賭けを破棄します。開始時に確定した賭け金は戻りません。"
