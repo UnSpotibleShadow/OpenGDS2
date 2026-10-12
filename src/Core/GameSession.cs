@@ -153,6 +153,8 @@ public sealed class GameSession
     public void TickPoker()=>CasinoPokerService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
     public CasinoResult BlackjackCommand(int command)=>CasinoBlackjackService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random);
     public void TickBlackjack()=>CasinoBlackjackService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
+    public CasinoResult CardChainCommand(int command,bool direct=false)=>CasinoCardChainService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random,direct);
+    public void TickCardChain()=>CasinoCardChainService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
     public bool AcknowledgeFinancialFailure()=>Current is { } state && FinancialFailureService.Acknowledge(state,_random);
     public void Restore(GameState state) => Current = state ?? throw new ArgumentNullException(nameof(state));
     public void Clear() => Current = null;

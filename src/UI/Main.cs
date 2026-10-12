@@ -148,7 +148,7 @@ public partial class Main : Control
 
     private void ShowTitleScreen()
     {
-        if (_session.Current is { } old) {CasinoPokerService.Close(old);CasinoBlackjackService.Close(old);}
+        if (_session.Current is { } old) {CasinoPokerService.Close(old);CasinoBlackjackService.Close(old);CasinoCardChainService.Close(old);}
         DestroyDesktop();
         _music?.SetTitleActive();
         ClearContent();
@@ -300,6 +300,7 @@ public partial class Main : Control
         if (ShowPendingFinancialFailure(state)) return;
         if (state.Casino.PokerOpen) {ShowPoker(state);return;}
         if (state.Casino.BlackjackOpen) {ShowBlackjack(state);return;}
+        if (state.Casino.CardChainOpen) {ShowCardChain(state);return;}
         // M35 persisted these two stops before their form behavior was mapped.
         // Resume the existing cursor, without replaying a week boundary.
         if (state.Calendar?.Pending?.Block is CalendarBlock.Exhibition or CalendarBlock.BeginnerEnding)
