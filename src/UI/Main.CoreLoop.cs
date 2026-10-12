@@ -275,7 +275,13 @@ public partial class Main
             var genre=catalog.Genres.Single(x=>x.SourceIndex==genreSource);
             body=body.Replace("{genre}",CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name));
         }
-        ShowConversation(DialogueText(meeting.Milestone==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),[new(DialogueText(CheckpointMeetingRules.IsSecretary(line.Message) ? "CORE_SECRETARY" : "CORE_EMPLOYEE"),body)],()=>
+        bool secretary=CheckpointMeetingRules.IsSecretary(line.Message);
+        var speaker=line.EmployeeSourceIndex is int speakerSource
+            ? state.Employees.FirstOrDefault(x=>x.SourceIndex==speakerSource) ?? state.EmployeeSources.FirstOrDefault(x=>x.SourceIndex==speakerSource)?.Employee : null;
+        string speakerName=secretary ? DialogueText("CORE_SECRETARY") : speaker is null ? DialogueText("CORE_EMPLOYEE") :
+            string.Format(Tr("CHECKPOINT_EMPLOYEE_NAMED"),EmployeeName(speaker));
+        int? portrait=secretary ? SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex) : line.EmployeePortraitId;
+        ShowConversation(DialogueText(meeting.Milestone==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),[new(speakerName,body,portrait)],()=>
         {
             CheckpointMeetingRules.Acknowledge(state,project);
             if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) ShowProjectDecision(state,project);

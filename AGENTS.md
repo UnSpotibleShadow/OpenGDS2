@@ -1,6 +1,6 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M91
+## Current handoff — 2026-10-12, M92
 
 Start by reading GitHub issue #55 and checking current `main` and open PRs through
 the owner's connector. This workspace can be a snapshot without `.git`; remote
@@ -31,6 +31,16 @@ replace their documented native quirks with guessed behavior:
   debugging. Original in-flight application stalls and unused timer retention
   are preserved and disclosed. See `docs/speed-technology-m91.md`; check issue
   #55 and the `codex/m91-speed-technology` PR for publication state.
+- M91 is merged in PR #92 at `875fb52993bd129f29d1ee16cfcc65948718fc66`.
+- M92: checkpoint meetings select saved random employee portraits and rebuild
+  payroll scratch; publicity/fun-bonus secretary calls bypass the writer. See
+  `docs/checkpoint-speakers-m92.md` and the `codex/m92-checkpoint-speakers` PR.
+
+M92 validation: 483 optional-original domain checks, clean build/import and
+English/Japanese checkpoint-speaker UI checks. Evidence verifies six fingerprints,
+25 anchors and 14 random-employee checkpoint calls. The saved queue contains
+speaker source/portrait snapshots; re-render/load must not draw again. Empty
+native portrait maps are unestablished and have a documented modern guard.
 
 M91 validation: 476 optional-original domain checks, clean application build and
 English/Japanese speed UI checks; speed evidence checks two procedure fingerprints
@@ -51,8 +61,12 @@ Next fidelity work, in priority order:
 
 1. Payroll scratch writers and automatic conversations: the original uses
    employed count times salary at the scratch index, not a salary sum. Trace the
-   technology-employee selector, portrait-dialogue helper `009933DC` and periodic
-   poaching `009E3830`, including queue/completion order. Do not reintroduce
+   remaining portrait-dialogue helper `009933DC` callers and periodic poaching
+   `009E3830`, including queue/completion order. The selector `0099F9A4` is the
+   already-connected school-capacity roster; do not treat it as another ordinary
+   technology selector. Checkpoint calls are connected by M92. Remaining direct
+   literal -1 sites: planning 37, final completion 12, awards 15, sales commentary
+   1 and shipment 2. Do not reintroduce
    unsupported resets removed in M80.
 2. Original save import and whole-session native RNG integration remain separate
    work. Local draw ordering is recovered; the application still uses shared

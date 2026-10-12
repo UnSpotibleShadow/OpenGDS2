@@ -52,7 +52,10 @@ capacity-selector writers remain active. This is a source change after RC.4;
 the existing RC.4 ZIP does not contain this fix.
 
 M76 maps the Module1 `009933DC/009930BC` random-employee portrait (-1) writers
-and periodic `009E3830` employee selection. Those paths remain unconnected;
+and periodic `009E3830` employee selection. M92 connects the 14 alpha/beta
+checkpoint call sites to source-ordered portraits and payroll scratch capture;
+planning, final completion, awards, sales commentary, shipment and periodic
+poaching remain separate integration work. See [M92 evidence](checkpoint-speakers-m92.md).
 secretary (-2) dialogue bypasses the random-employee writer. See
 [workflow research](workflow-verification-m76.md#shared-payroll-scratch-writer-lifecycle-and-order).
 Modern save/load retains the snapshot for continuity; no original save/load/reset
@@ -62,7 +65,7 @@ reference to member 3018 was found.
 
 - A startup/reset value for 3018 has not been proven; fresh sessions do not set zero.
 - Original runtime values and the apparent stale-count payroll defect.
-- Integration of the recovered random-employee and periodic scratch writers; source-slot runtime comparison.
+- Remaining random-employee/periodic scratch writers beyond M92 checkpoint meetings; source-slot runtime comparison.
 - Bankruptcy and remaining original economy/runtime fidelity. M35 already connects monthly debit and renewal ordering.
 
 Signed values are retained by the pure arithmetic; checked modern arithmetic
