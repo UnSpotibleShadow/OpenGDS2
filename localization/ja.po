@@ -1336,7 +1336,7 @@ msgid "AWARD_Graphics"
 msgstr "グラフィック賞"
 
 msgid "AWARD_Design"
-msgstr "ゲームデザイン賞"
+msgstr "準グランプリ"
 
 msgid "AWARD_Worst"
 msgstr "クソゲー賞"
@@ -3392,3 +3392,9 @@ msgstr "原作の挙動：レベル3ではオフィスの0番スロットの社�
 
 msgid "STRESS_RELIEF_MAPPING_UNKNOWN"
 msgstr "オフィスの0番スロットに対応する原作の社員が不明なため、この操作はできません。経験値は消費しません。"
+
+msgid "CHECKPOINT_POINTS"
+msgstr "開発量"
+
+msgid "OFFICE_ASSIGN_HINT"
+msgstr "社員を選んで机を右クリックすると、配置できます。"

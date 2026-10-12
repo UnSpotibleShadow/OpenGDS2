@@ -14,7 +14,7 @@ public static class DevelopmentSimulation
             // Original +4886..48EA cancels a workspace application when its room is empty.
             office.TechnologyApplication=null;office.SharedWorkUnits=0;ReleaseService.ResetWork(office);return;
         }
-        if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) || project.OriginalRoomState is not (1 or 2) ||
+        if (project.OriginalRoomPaused || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) || project.OriginalRoomState is not (1 or 2) ||
             office.TechnologyApplication is {IsSpeedBoost:false} && project.TechnologyApplicationCounts is null) return;
         if (employee.Stress is not double stress || employee.DevelopmentSpeed is not int speed ||
             employee.Inspiration is not int inspiration || employee.Experience is null || employee.Level is null)

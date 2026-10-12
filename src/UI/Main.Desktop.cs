@@ -189,7 +189,7 @@ public partial class Main
 
     private void OnOfficeInput(GameState state,TextureRect image,InputEvent input)
     {
-        if (image.Texture is null || _dialog is not null) return;
+        if (image.Texture is null || _dialog is not null && !_clockRunning) return;
         Vector2 position;
         if (input is InputEventMouseButton button) position = button.Position;
         else if (input is InputEventMouseMotion motion) position = motion.Position;
@@ -200,11 +200,29 @@ public partial class Main
         Vector2 offset = (image.Size-native*scale)/2;
         Vector2 pixel = (position-offset)/scale;
         if (pixel.X < 0 || pixel.Y < 0 || pixel.X >= native.X || pixel.Y >= native.Y) return;
+        if(input is InputEventMouseButton {ButtonIndex:MouseButton.Right,Pressed:true})
+        {
+            if(_selectedEmployee is { } selected && state.Employees.Contains(selected) &&
+                OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is int desk && !CalendarService.HasPending(state))
+            {
+                image.AcceptEvent();
+                var result=OfficeAssignmentService.TryAssignDeskFromOffice(state,selected,desk);
+                RefreshDesktop();RefreshEmployeeDetails();
+                if(_desktopStatus is not null) _desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{result}");
+            }
+            return;
+        }
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
         var tenants=OfficeInteractionRules.TenantSlotsAt(pixel.X,pixel.Y);
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
-        image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary ? CursorShape.Arrow : CursorShape.PointingHand;
+        bool deskTarget=_selectedEmployee is not null && OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is not null;
+        image.TooltipText=Tr("OFFICE_ASSIGN_HINT");
+        image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
+        if(employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
+        {
+            image.AcceptEvent();ShowEmployeeDetails(state,employee);return;
+        }
         if (secretary && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();ShowSecretaryAdvice(state);return;
@@ -218,12 +236,7 @@ public partial class Main
             else if (room is int index) ShowDevelopmentRoomActions(state,index);
             return;
         }
-        if (employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
-        {
-            image.AcceptEvent();
-            ShowEmployeeDetails(state,employee);
-        }
-        else if (employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true}) CloseEmployeeDetails();
+        if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true}) CloseEmployeeDetails();
     }
 
     private void Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)

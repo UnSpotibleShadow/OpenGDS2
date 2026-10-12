@@ -26,7 +26,7 @@ public static class LocalOfficeArtworkPatches
             Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(background))).ToLowerInvariant()!=BackgroundHash) return null;
         var captions=CaptionIds.ToDictionary(id=>id,id=>TranslationServer.Translate($"BITMAP_BUBBLE_{id}").ToString());
         string facilityCaption=TranslationServer.Translate("BITMAP_FACILITY_AVAILABLE").ToString();
-        string revision=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes("m60-lettering-v2\n"+facilityCaption+"\n"+string.Join("\n",captions.Select(x=>$"{x.Key}:{x.Value}"))))).ToLowerInvariant();
+        string revision=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes("m94-room-lettering-v1\n"+facilityCaption+"\n"+string.Join("\n",captions.Select(x=>$"{x.Key}:{x.Value}"))))).ToLowerInvariant();
         string root=ProjectSettings.GlobalizePath(Root+"/"+revision);
         string output=System.IO.Path.Combine(root,"Graphic","Embedded","OfficeSprites.png");
         string backgroundOutput=System.IO.Path.Combine(root,"Graphic","Embedded","OfficeBase.png");
@@ -35,6 +35,7 @@ public static class LocalOfficeArtworkPatches
         if (colors.Load(source)!=Error.Ok || masks.Load(mask)!=Error.Ok) return null;
         colors.Convert(Image.Format.Rgb8);masks.Convert(Image.Format.Rgb8);
         var patched=LocalBitmapLetteringRules.PatchOfficeCaptions(colors.GetData(),masks.GetData(),colors.GetWidth(),colors.GetHeight(),captions);
+        patched=LocalBitmapLetteringRules.PatchRoomCaptions(patched,masks.GetData(),colors.GetWidth(),colors.GetHeight());
         using var image=Image.CreateFromData(colors.GetWidth(),colors.GetHeight(),false,Image.Format.Rgb8,patched);
         Directory.CreateDirectory(System.IO.Path.GetDirectoryName(output)!);
         if (image.SavePng(output)!=Error.Ok) throw new IOException("Could not write local English bitmap patch.");

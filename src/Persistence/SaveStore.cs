@@ -197,6 +197,7 @@ public static class SaveStore
         CalendarService.Validate(state);
         BankLoanService.Validate(state);
         OfficeBurstFlameRules.Validate(state);
+        OfficeRoomPresentationRules.Validate(state);
     }
 
     private static void ValidateProject(DevelopmentProjectState project)

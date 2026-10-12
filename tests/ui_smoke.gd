@@ -198,7 +198,12 @@ func check_local_artwork_patch() -> void:
             var last: int = first+(region[2]-6)*3
             for offset in range(first,last):
                 restored[offset] = source[offset]
-    check(restored == source,"Every pixel outside the fourteen caption interiors stays original")
+    for region in [[264,361,27],[572,359,51],[462,382,51],[951,362,51],[1008,362,51],[795,371,27]]:
+        for y in range(region[1],region[1]+8):
+            var first: int=(y*1600+region[0])*3
+            for offset in range(first,first+region[2]*3):
+                restored[offset]=source[offset]
+    check(restored == source,"Every pixel outside the speech and room-caption interiors stays original")
     var base_original := Image.load_from_file("user://original/Graphic/Embedded/OfficeBase.bmp")
     var base_patched := Image.load_from_file("user://localized-artwork/en/%s/Graphic/Embedded/OfficeBase.png" % patches[0])
     base_original.convert(Image.FORMAT_RGB8);base_patched.convert(Image.FORMAT_RGB8)

@@ -15,6 +15,9 @@ public sealed class DevelopmentProjectState
     public int? GameTypeSourceIndex {get;set;}
     public int? GenreSourceIndex {get;set;}
     public int OriginalRoomState {get;set;}=1;
+    // Recovered disruption flag A12A8C. Existing modern projects were never disrupted.
+    // Presentation support does not introduce the native disaster event workflow.
+    public bool OriginalRoomPaused {get;set;}
     public int OriginalStage {get;set;}
     public int OriginalMode {get;set;}
     public int? PredecessorProductIndex {get;set;}

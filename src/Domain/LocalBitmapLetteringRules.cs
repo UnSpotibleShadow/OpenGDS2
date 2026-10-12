@@ -72,6 +72,39 @@ public static class LocalBitmapLetteringRules
         }
         return output;
     }
+    public static readonly (string Text,int X,int Y,int Width)[] RoomCaptionInteriors=[
+        ("DEV",264,361,27),("PAUSED",572,359,51),("DEBUG",462,382,51),
+        ("COMPLETE",951,362,51),("COMPLETE",1008,362,51),("HARD",795,371,27)];
+
+    public static byte[] PatchRoomCaptions(byte[] colors,byte[] masks,int width,int height)
+    {
+        if(width!=1600 || height!=530 || colors.Length!=width*height*3 || masks.Length!=colors.Length)
+            throw new InvalidDataException("Unexpected local office atlas dimensions.");
+        var output=(byte[])colors.Clone();
+        foreach(var r in RoomCaptionInteriors)
+        {
+            for(int y=0;y<8;y++) for(int x=0;x<r.Width;x++)
+            {
+                int pos=((r.Y+y)*width+r.X+x)*3;
+                if(masks[pos]!=0 || masks[pos+1]!=0 || masks[pos+2]!=0)
+                    throw new InvalidDataException("Room caption interior is not opaque.");
+                byte[] fill=r.Text=="PAUSED" ? [246,82,79] : y<4 ? [213,243,255] : y<6 ? [197,233,254] : [187,211,251];
+                Array.Copy(fill,0,output,pos,3);
+            }
+            int origin=r.X+(r.Width-(r.Text.Length*6-1))/2;
+            for(int i=0;i<r.Text.Length;i++)
+            {
+                var glyph=Glyphs[r.Text[i]].Split('/');
+                for(int y=0;y<7;y++) for(int x=0;x<5;x++) if(glyph[y][x]=='1')
+                {
+                    int pos=((r.Y+y)*width+origin+i*6+x)*3;
+                    output[pos]=output[pos+1]=output[pos+2]=0;
+                }
+            }
+        }
+        return output;
+    }
+
     public static readonly (int X,int Y,int Width,int Height)[] FacilitySignInteriors=[
         (35,186,60,13),(116,227,60,13),(372,227,60,13)];
 

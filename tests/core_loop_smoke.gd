@@ -603,6 +603,7 @@ func run() -> void:
     var offered_types = checkpoint.State.DevelopmentProjects[0].TypeCandidates
     check(main.find_child("CheckpointColumnHeadings",true,false) != null,"Checkpoint choice columns have headings")
     check(tr("CHECKPOINT_FEE") == "Fee" and tr("CHECKPOINT_EXAMPLES") == "Example titles","English checkpoint column headings are translated")
+    check(main.find_child("SelectType0Points",true,false).text.begins_with("+"),"Type choices display additional development points")
     check(main.find_child("SelectType0",true,false).has_focus(),"Type choices start with keyboard focus")
     for index in range(offered_types.size()):
         check(main.find_child("SelectType%d" % index,true,false).text.begins_with(tr("CATALOG_TYPE_%d" % offered_types[index])),"Each randomized type label matches its saved source ID")
@@ -612,7 +613,7 @@ func run() -> void:
         check(main.find_child("TypeExamples%d" % index,true,false).text == expected_examples,"Example column preserves the selected source's imported titles and order")
         check(main.find_child("SelectType%dFee" % index,true,false).text.begins_with("¥"),"Fees have their own aligned column")
         var row_fee = main.find_child("SelectType%dFee" % index,true,false)
-        var header_fee = main.find_child("CheckpointColumnHeadings",true,false).get_child(1)
+        var header_fee = main.find_child("CheckpointFeeHeading",true,false)
         check(is_equal_approx(row_fee.position.x,header_fee.position.x),"Header and fee cells stay aligned inside the scrolling list")
     # Reload checkpoint through the actual office controls before selecting.
     await press("LOAD_GAME")
@@ -637,7 +638,7 @@ func run() -> void:
     await await_node("SelectType0")
     await press_node("SelectType0")
     check(main.find_child("SelectType0",true,false).button_pressed,"Type preview retains its radio selection")
-    check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 450,"Type choices use a compact meeting panel")
+    check(main.find_child("TypeMeetingWindow",true,false) != null and main.find_child("TypeMeetingWindow",true,false).size.x <= 505,"Type choices fit the four name/points/fee/example columns in a compact meeting panel")
     await press("SAVE_GAME")
     var type_preview = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(type_preview.State.Money == checkpoint.State.Money and type_preview.State.DevelopmentProjects[0].GameTypeSourceIndex == null,"Previewing type never charges or confirms it")
@@ -663,6 +664,7 @@ func run() -> void:
     check(main.find_child("SelectGenre0",true,false).text.begins_with(tr("CATALOG_GENRE_0")),"Genre selection uses English catalog labels")
     check(main.find_child("SelectGenre0",true,false).has_focus(),"Genre choices start with keyboard focus")
     check(main.find_child("TypeExamples0",true,false) == null,"Genre panel contains no unrelated type-example column")
+    check(main.find_child("SelectGenre0Points",true,false).text.begins_with("+"),"Genre choices display additional development points")
     await press_node("SelectGenre0")
     check(main.find_child("SelectGenre0",true,false).button_pressed,"Genre preview retains its radio selection")
     await press("SAVE_GAME")

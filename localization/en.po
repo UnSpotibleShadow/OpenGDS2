@@ -1336,7 +1336,7 @@ msgid "AWARD_Graphics"
 msgstr "Graphics award"
 
 msgid "AWARD_Design"
-msgstr "Game design award"
+msgstr "Runner-up Grand Prix"
 
 msgid "AWARD_Worst"
 msgstr "Worst game award"
@@ -3422,3 +3422,9 @@ msgstr "Original behavior: level 3 clears stress for the employee in office slot
 
 msgid "STRESS_RELIEF_MAPPING_UNKNOWN"
 msgstr "Office slot 0 has no known original employee mapping. This action is unavailable; no experience is spent."
+
+msgid "CHECKPOINT_POINTS"
+msgstr "Dev. points"
+
+msgid "OFFICE_ASSIGN_HINT"
+msgstr "Select an employee, then right-click a desk to assign them."

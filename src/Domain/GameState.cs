@@ -50,6 +50,7 @@ public sealed class GameState
     public CompanyState Company { get; set; } = new();
     // Modern presentation snapshot; older saves start a fresh flame phase.
     public OfficeBurstFlameState OfficeBurstFlames {get;set;}=new();
+    public OfficeRoomPresentationState OfficeRoomPresentation {get;set;}=new();
     public List<EmployeeState> Employees { get; set; } = [];
     public RecruitmentState Recruitment { get; set; } = new();
     public HireGreetingState? PendingHireGreeting { get; set; }

@@ -1,6 +1,33 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M93 research
+## Current handoff — 2026-10-12, M94 office presentation
+
+M94 implements the first #95 group on `codex/m94-office-presentation`:
+selected employee + right-click desk assignment with all twelve native regions,
+rest-policy guard and occupied-target work-timer reset; room-label/digit/panel
+sprites 87–92, independent panel clocks and shared completed-room blink; saved
+presentation phase; alpha/beta added-development-point columns; corrected
+runner-up Grand Prix translation. Original artwork stays in local imports;
+English room lettering patches only six verified caption interiors. Native
+Japanese labels/digits and all other pixels remain unchanged.
+
+Issue #95 MUST stay open at the owner's request. The full 1600×530 OFFICE atlas was
+shown in chat; device pictures, staff portraits and dialog illustrations are
+separate resources. The owner corrected any implication that it covered all
+game artwork. A combined resource reference index belongs to the #97 todo. Exhaustive atlas review is deferred to #97; pacing is separate
+#94. Remaining #95 implementation: combined proposal/completion/project forms,
+initial shipment breakdown, compact post-launch graph/report, annual renewal
+roster/details, review rows/reveals and locally imported event artwork, and
+source-backed paid promotion with M93's documented Empty-frame boundary.
+M94 does not introduce an automatic disaster workflow: `OriginalRoomPaused`
+represents the recovered per-room disruption flag only. Do not confuse it with
+the global pause or a checkpoint meeting.
+
+M94 validation: 489 optional-original domain checks, clean application build,
+English/Japanese office assignment and save/load smoke, private original-artwork
+check verifying every pixel outside the fourteen bubble and six room-caption
+interiors, and the core-loop UI suite. Check issue #55 and the milestone PR for
+verified remote publication state before continuing from a snapshot.
 
 The owner requested investigation of presentation ticket #95 before implementing
 its missing handlers/actions. M93 is an analysis/evidence milestone; it changes
@@ -33,7 +60,7 @@ stays locally imported. Native frame lifetime, exact scene motion/window stackin
 and original timing remain runtime comparison limits. The video was not reviewed
 because its attachment exceeded the 32 MiB transfer limit.
 
-Issue #95 remains an implementation backlog, not a completed UI milestone.
+Issue #95 remains an implementation backlog; M94 completes only the office/columns group.
 Keep pacing issue #94 separate; the owner deferred it. M92 validation below is
 historical application validation; M93 required only evidence/Python checks.
 

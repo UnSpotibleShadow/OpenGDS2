@@ -134,7 +134,7 @@ public partial class Main
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
         if (project.PendingDecision==DevelopmentMilestone.SelectType)
         {
-            CompactManagementWindow("TypeMeetingWindow",new Vector2(430,345),410);
+            CompactManagementWindow("TypeMeetingWindow",new Vector2(505,345),485);
             _dialog?.SetTitle(DialogueText("CHECKPOINT_ALPHA_MEETING"));
             AddHeading(Tr("SELECT_GAME_TYPE"),16);
             try
@@ -151,7 +151,7 @@ public partial class Main
                     var type=catalog.GameTypes.Single(x=>x.SourceIndex==source);
                     int rowIndex=listIndex++;
                     var button=AddCheckpointOption(options,$"SelectType{rowIndex}",CatalogName(catalog,"TYPE",type.SourceIndex,type.Name),
-                        type.SelectionFee,group,type.ExampleTitles,$"TypeExamples{rowIndex}");
+                        type.SelectionFee,type.SelectionPoints,group,type.ExampleTitles,$"TypeExamples{rowIndex}");
                     button.Pressed+=()=>
                     {
                         selected=source;chosen.Text=CatalogName(catalog,"TYPE",type.SourceIndex,type.Name);
@@ -184,7 +184,7 @@ public partial class Main
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
                 var button=AddCheckpointOption(options,$"SelectGenre{genre.SourceIndex}",CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name),
-                    genre.SelectionFee,group);
+                    genre.SelectionFee,genre.SelectionPoints,group);
                 button.Pressed+=()=>
                 {
                     selected=genre.SourceIndex;chosen.Text=CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name);
@@ -228,7 +228,8 @@ public partial class Main
         headings.AddThemeConstantOverride("separation",4);
         headings.AddChild(new Label {Text=Tr(includeExamples ? "SELECT_GAME_TYPE" : "SELECT_GENRE"),
             ClipText=true,CustomMinimumSize=new Vector2(120,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
-        headings.AddChild(new Label {Text=Tr("CHECKPOINT_FEE"),CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
+        headings.AddChild(new Label {Text=Tr("CHECKPOINT_POINTS"),CustomMinimumSize=new Vector2(100,0),HorizontalAlignment=HorizontalAlignment.Right});
+        headings.AddChild(new Label {Name="CheckpointFeeHeading",Text=Tr("CHECKPOINT_FEE"),CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
         if (includeExamples) headings.AddChild(new Label {Text=Tr("CHECKPOINT_EXAMPLES"),
             ClipText=true,CustomMinimumSize=new Vector2(130,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
         var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new Vector2(0,175),
@@ -236,16 +237,17 @@ public partial class Main
         var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",1);
         scroll.AddChild(options);options.AddChild(headings);return options;
     }
-    private Button AddCheckpointOption(VBoxContainer options,string nodeName,string caption,long fee,ButtonGroup group,
+    private Button AddCheckpointOption(VBoxContainer options,string nodeName,string caption,long fee,int points,ButtonGroup group,
         System.Collections.Generic.IReadOnlyList<string>? examples=null,string? examplesNodeName=null)
     {
         var row=new HBoxContainer();row.AddThemeConstantOverride("separation",4);options.AddChild(row);
         string feeText=$"¥{fee:N0}";
         var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,
-            CustomMinimumSize=new Vector2(120,28),SizeFlagsHorizontal=SizeFlags.ExpandFill,TooltipText=$"{caption}\n{Tr("CHECKPOINT_FEE")}: {feeText}"};
+            CustomMinimumSize=new Vector2(120,28),SizeFlagsHorizontal=SizeFlags.ExpandFill,TooltipText=$"{caption}\n{Tr("CHECKPOINT_POINTS")}: +{points:N0}\n{Tr("CHECKPOINT_FEE")}: {feeText}"};
         row.AddChild(button);
         // Explicitly retain the preview selection even when a test/accessibility caller emits Pressed directly.
         button.Pressed+=()=>button.ButtonPressed=true;
+        row.AddChild(new Label {Name=$"{nodeName}Points",Text=$"+{points:N0}",CustomMinimumSize=new Vector2(100,0),HorizontalAlignment=HorizontalAlignment.Right});
         row.AddChild(new Label {Name=$"{nodeName}Fee",Text=feeText,CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
         if (examples is not null)
         {
