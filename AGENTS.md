@@ -1,6 +1,21 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M96 reviews and events
+## Current handoff — 2026-10-12, M97 room promotion
+
+M96 is merged in PR #100 at `b9e131c67009026822ba43edbc19396ee04084ef`.
+M97 on `codex/m97-room-promotion` implements the remaining paid promotion path:
+six media, alpha gate, target-wide diminishing returns, callback-27 recognition/
+accounting commit and saved result/phase. Verify PR/#55/main publication status.
+No released-product targeting is invented. Old saves lacking promotion counts
+show an explicit history warning rather than receiving guessed first-use gains.
+See `docs/room-promotion-m97.md`. Keep #95 open.
+
+Owner's testing preference: batch related edits before running relevant checks;
+repeat checks after failures or later changes warranting verification. Do not
+rerun successful checks solely for publication. Usage percentage is not exposed;
+if the owner reports 15% remaining, finish a safe step and update handoff notes.
+
+## Previous handoff — M96 reviews and events
 
 M94 is merged in PR #98 (`9d9a844ee3b5d22ade1c025ea8e377f94032f2e2`):
 right-click desk assignment, room label/progress/panel phases and point columns.

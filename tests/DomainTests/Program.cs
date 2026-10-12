@@ -18,6 +18,46 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("promotion delays transaction until callback 27 and resumes without duplicate draws",()=>
+{
+    var p=new DevelopmentProjectState {RoomIndex=0,Title="Test",OriginalStage=1,GameTypeSourceIndex=0,PromotionUseCount=0,Recognition=90,RequiredPoints=100,Focus=new(25,25,25,25)};
+    var s=new GameState {Company=new() {Name="Test",PresidentName="Test",WeeklyNet=0,MonthlyNet=0,YearlyNet=0},Money=30_000_000,DevelopmentProjects=[p]};
+    var rng=new FailureRandom(.99f);
+    Check(PromotionService.Start(s,p,0)==PromotionResult.Success && s.Money==30_000_000);
+    for(int i=0;i<26;i++)PromotionService.Advance(s,rng);
+    Check(rng.Calls==0 && p.Recognition==90 && !PromotionService.Acknowledge(s));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.DevelopmentProjects[0];
+    PromotionService.Advance(s,rng);
+    Check(p.Recognition==99 && p.PromotionUseCount==1 && rng.Calls==1 && s.Money==25_000_000 && s.Company.WeeklyNet==-5_000_000);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(!PromotionService.Advance(s,rng) && rng.Calls==1);
+    Check(PromotionService.Acknowledge(s) && !PromotionService.Acknowledge(s));
+});
+Test("promotion use count is per target across media and retains negative cap",()=>
+{
+    var p=new DevelopmentProjectState {OriginalStage=1,PromotionUseCount=1};
+    var s=new GameState {Money=100_000_000,DevelopmentProjects=[p]};var rng=new FailureRandom(0,0,0);
+    Check(PromotionService.Start(s,p,5)==PromotionResult.Success);
+    for(int i=0;i<27;i++)PromotionService.Advance(s,rng);
+    Check(p.Recognition==6 && p.PromotionUseCount==2);PromotionService.Acknowledge(s);
+    PromotionService.Start(s,p,2);for(int i=0;i<27;i++)PromotionService.Advance(s,rng);
+    Check(p.Recognition==6 && p.PromotionUseCount==3);PromotionService.Acknowledge(s);
+    p.Recognition=105;PromotionService.Start(s,p,0);for(int i=0;i<27;i++)PromotionService.Advance(s,rng);
+    Check(p.Recognition==99 && s.PendingPromotion!.Gain==-6 && s.Money==50_000_000);
+});
+Test("promotion refuses pre-alpha, unknown legacy history and unaffordable media without mutation",()=>
+{
+    var p=new DevelopmentProjectState {PromotionUseCount=0};var s=new GameState {Money=0,DevelopmentProjects=[p]};
+    Check(PromotionService.Start(s,p,0)==PromotionResult.AlphaRequired);p.OriginalStage=1;p.PromotionUseCount=null;
+    Check(PromotionService.Start(s,p,0)==PromotionResult.HistoryUnknown);p.PromotionUseCount=0;
+    Check(PromotionService.Start(s,p,0)==PromotionResult.InsufficientFunds && s.PendingPromotion is null && s.Money==0);
+});
+Test("promotion malformed pending save rejects before serialization",()=>
+{
+    var p=new DevelopmentProjectState {RoomIndex=0,Title="Test",OriginalStage=1,GameTypeSourceIndex=0,PromotionUseCount=0,RequiredPoints=100,Focus=new(25,25,25,25)};
+    var s=new GameState {Company=new() {Name="Test",PresidentName="Test"},Money=10_000_000,DevelopmentProjects=[p]};
+    PromotionService.Start(s,p,0);s.PendingPromotion!.Gain=1;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("room panel follows native counter thresholds and is independent of employees",()=>
 {
     var s=new GameState {DevelopmentProjects=[new() {RoomIndex=0,RequiredPoints=100,Focus=new(25,25,25,25)}]};

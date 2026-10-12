@@ -3680,3 +3680,48 @@ msgstr "Ship"
 
 msgid "EVENT_ARTWORK_REIMPORT"
 msgstr "Reimport your original archive to restore this scene."
+
+msgid "PAID_PROMOTION"
+msgstr "Promotion"
+
+msgid "PROMOTION_IN_PROGRESS"
+msgstr "The promotion meeting is in progress…"
+
+msgid "PROMOTION_COMPLETED"
+msgstr "Recognition change: {0:+0;-0;0}%\nPromotion cost: {1:N0}"
+
+msgid "PROMOTION_RESULT_AlphaRequired"
+msgstr "Promotion becomes available after alpha development."
+
+msgid "PROMOTION_RESULT_HistoryUnknown"
+msgstr "This older save has no promotion history; its diminishing returns cannot be recovered."
+
+msgid "PROMOTION_RESULT_MoneyUnknown"
+msgstr "Company funds are unknown."
+
+msgid "PROMOTION_RESULT_InsufficientFunds"
+msgstr "There is not enough money for this promotion."
+
+msgid "PROMOTION_RESULT_EventPending"
+msgstr "Finish the pending event first."
+
+msgid "PROMOTION_RESULT_InvalidTarget"
+msgstr "Promotion requires an active software project."
+
+msgid "PROMOTION_MEDIA_0"
+msgstr "Magazine"
+
+msgid "PROMOTION_MEDIA_1"
+msgstr "Radio"
+
+msgid "PROMOTION_MEDIA_2"
+msgstr "Television"
+
+msgid "PROMOTION_MEDIA_3"
+msgstr "Cinema"
+
+msgid "PROMOTION_MEDIA_4"
+msgstr "Internet"
+
+msgid "PROMOTION_MEDIA_5"
+msgstr "Newspaper"

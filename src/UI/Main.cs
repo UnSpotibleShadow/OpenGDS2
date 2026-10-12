@@ -47,7 +47,8 @@ public partial class Main : Control
             PersistPendingRankings(state);
             _officeElapsed -= OfficeStaffRules.TickSeconds;
             if (ShowPendingFinancialFailure(state)) return;
-            if (ShowPendingMysteryLabResult(state)) return;
+            if (ShowPendingPromotion(state)) return;
+        if (ShowPendingMysteryLabResult(state)) return;
             if (ShowPendingOwnHardware(state)) return;
             if (ShowPendingCalendarEvent(state)) return;
             if (ShowPendingProductEvent(state)) return;
@@ -309,6 +310,7 @@ public partial class Main : Control
             _session.TickOffice(_activeCatalog);
             PersistPendingRankings(state);
         }
+        if (ShowPendingPromotion(state)) return;
         if (ShowPendingMysteryLabResult(state)) return;
             if (ShowPendingOwnHardware(state)) return;
         if (ShowPendingProjectCancellation(state)) return;

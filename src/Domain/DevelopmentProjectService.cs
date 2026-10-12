@@ -82,6 +82,7 @@ public static class DevelopmentProjectService
         if (result!=DevelopmentPlanningResult.Success) return result;
         var project=new DevelopmentProjectState
         {
+            PromotionUseCount=0,
             TechnologyApplicationCounts=TechnologyApplicationService.NewProjectCounters(),
             RoomIndex=roomIndex,HardwareSourceIndex=hardwareSourceIndex,
             AudienceSourceIndex=audienceSourceIndex,Title=title.Trim(),RequiredPoints=quote.Points,Focus=focus

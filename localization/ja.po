@@ -3503,3 +3503,48 @@ msgstr "出荷する"
 
 msgid "EVENT_ARTWORK_REIMPORT"
 msgstr "この場面の画像を表示するには、オリジナルのアーカイブを再インポートしてください。"
+
+msgid "PAID_PROMOTION"
+msgstr "宣伝活動"
+
+msgid "PROMOTION_IN_PROGRESS"
+msgstr "宣伝の打ち合わせ中…"
+
+msgid "PROMOTION_COMPLETED"
+msgstr "知名度の変化: {0:+0;-0;0}%\n宣伝費用: {1:N0}"
+
+msgid "PROMOTION_RESULT_AlphaRequired"
+msgstr "アルファ版完成後に宣伝できます。"
+
+msgid "PROMOTION_RESULT_HistoryUnknown"
+msgstr "旧セーブに宣伝履歴がないため、効果を確定できません。"
+
+msgid "PROMOTION_RESULT_MoneyUnknown"
+msgstr "資金が不明です。"
+
+msgid "PROMOTION_RESULT_InsufficientFunds"
+msgstr "宣伝費用が足りません。"
+
+msgid "PROMOTION_RESULT_EventPending"
+msgstr "進行中のイベントを完了してください。"
+
+msgid "PROMOTION_RESULT_InvalidTarget"
+msgstr "開発中のゲームを選択してください。"
+
+msgid "PROMOTION_MEDIA_0"
+msgstr "雑誌"
+
+msgid "PROMOTION_MEDIA_1"
+msgstr "ラジオ"
+
+msgid "PROMOTION_MEDIA_2"
+msgstr "テレビ"
+
+msgid "PROMOTION_MEDIA_3"
+msgstr "映画"
+
+msgid "PROMOTION_MEDIA_4"
+msgstr "インターネット"
+
+msgid "PROMOTION_MEDIA_5"
+msgstr "新聞"
