@@ -2912,7 +2912,7 @@ msgid "FACILITY_RESULT_NotEmployed"
 msgstr "This employee is no longer employed."
 
 msgid "FACILITY_DESCRIPTION_Casino"
-msgstr "Buy casino coins and play poker. Other casino activities are not available yet."
+msgstr "Buy casino coins and play poker. Blackjack is also available; card-chain and horse racing are not available yet."
 
 msgid "FACILITY_DESCRIPTION_Lawyer"
 msgstr "Ask a lawyer to negotiate lower transport or retail costs per copy."
@@ -3002,10 +3002,10 @@ msgid "EARLY_ACCESS_BOUNDARY"
 msgstr "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution in either mode. Original presentation and full campaign parity remain incomplete."
 
 msgid "EARLY_ACCESS_FEATURES"
-msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins and poker; modern saves."
+msgstr "Supported: hiring and desks/PCs; original projects, eligible sequels and manga; meetings, cancellation, debugging and shipment; reviews, sales and reprints; calendar events and loans; school, hot springs, recycling, technology capacity, production capacity, lawyer consultations and mystery-lab experiments; own-console development and launch; casino coins, poker and blackjack; modern saves."
 
 msgid "EARLY_ACCESS_DEFERRED"
-msgstr "Unavailable or incomplete: blackjack, card-chain, horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
+msgstr "Unavailable or incomplete: card-chain, horse racing, original save import, full company progression and some original conversation/growth effects. Full native Windows playthrough testing is assigned to the community."
 
 msgid "MYSTERY_LAB_START"
 msgstr "Start an experiment"
@@ -3181,7 +3181,7 @@ msgid "CASINO_COINS"
 msgstr "Coins: {0:N0}"
 
 msgid "CASINO_AVAILABLE_GAMES"
-msgstr "Poker is available. Blackjack, card-chain and horse racing are being reconstructed."
+msgstr "Poker and blackjack are available. Card-chain and horse racing are being reconstructed."
 
 msgid "CASINO_POKER"
 msgstr "Poker"
@@ -3293,3 +3293,33 @@ msgstr "Straight flush"
 
 msgid "POKER_OUTCOME_9"
 msgstr "Royal flush"
+
+msgid "CASINO_BLACKJACK"
+msgstr "Blackjack"
+
+msgid "BLACKJACK_MORE"
+msgstr "More"
+
+msgid "BLACKJACK_STAY"
+msgstr "Stay"
+
+msgid "BLACKJACK_FIRST"
+msgstr "Choose the first hidden card."
+
+msgid "BLACKJACK_SECOND"
+msgstr "Choose a second card. It must rank higher than the first."
+
+msgid "BLACKJACK_DECISION"
+msgstr "Take another card, or stay to resolve the hand."
+
+msgid "BLACKJACK_PLAYER"
+msgstr "Your cards: {0}   Total: {1}"
+
+msgid "BLACKJACK_DEALER"
+msgstr "Dealer cards: {0}   Total: {1}"
+
+msgid "BLACKJACK_RULES"
+msgstr "Original rules: natural 21 pays 2×. Stay with 5/6/7 cards pays 4×/6×/20×; three sixes pays 25×; 8+ cards pays 100×. Ace retries lower all aces together."
+
+msgid "BLACKJACK_CARD_BOUNDARY"
+msgstr "The original only predeals nine cards per side. This next draw reaches an unsupported array boundary; close this table to continue."

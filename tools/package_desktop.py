@@ -172,7 +172,7 @@ The original LZH requirement and game rules are the same as the release export.
             f"Data folder: %APPDATA%\\{data_directory}. Back up saves before upgrading.\n"
             "Modern JSON saves and previous-valid-save recovery are supported; original saves are not.\n"
             "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play.\n"
-            "Mystery lab, own hardware, negative-funds dissolution, casino coins and poker are supported. Blackjack, card-chain, horse racing and original saves remain deferred.\n\n"
+            "Mystery lab, own hardware, negative-funds dissolution, casino coins, poker and blackjack are supported. Card-chain, horse racing and original saves remain deferred.\n\n"
             "Read RELEASE_NOTES.md, KNOWN_ISSUES.md and the community TEST_CHECKLIST.md.\n"
             "Full native Windows acceptance remains incomplete; community testing is welcome.\n"
             f"Report bugs: {report_url}\n"
