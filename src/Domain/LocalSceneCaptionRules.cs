@@ -5,6 +5,18 @@ public static class LocalSceneCaptionRules
 {
     public static readonly (int X,int Y,int Width,int Height) HallRegion=(20,68,222,66);
     public static readonly (int X,int Y,int Width,int Height) ExhibitionRegion=(60,0,137,22);
+    public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);
+    public static byte[] PatchAwards(byte[] source)
+    {
+        const int width=256,height=160;
+        if(source.Length!=width*height*3)throw new InvalidDataException("Unexpected scene caption dimensions.");
+        var output=(byte[])source.Clone();var r=AwardsRegion;
+        for(int y=r.Y;y<r.Y+r.Height;y++)for(int x=r.X;x<r.X+r.Width;x++)
+        {int i=(y*width+x)*3;output[i]=224;output[i+1]=224;output[i+2]=224;}
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"GAME CONTEST",49,6,2,2,(0,0,0),1);
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"GAME CONTEST",49,6,2,2,(120,160,255));
+        return output;
+    }
     public static byte[] Patch(byte[] source,bool hall)
     {
         const int width=256,height=160;

@@ -808,7 +808,7 @@ func run() -> void:
     await press("SALES")
     check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
     check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
-    check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
+    check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).tooltip_text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
     main.find_child("ProductReportActions",true,false).get_popup().id_pressed.emit(0)
     await process_frame
     check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")

@@ -64,10 +64,7 @@ public partial class Main
     }
     private void ShowAwards(GameState state,AwardCeremonyState awards)
     {
-        AwardScene(state,awards);var canvas=(Control)_content.GetChild(0);
         var category=AwardService.Order[awards.CategoryIndex];
-        var entries=NativeText(canvas,"AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,19),10);
-        entries.TooltipText=Tr("ANNUAL_GAME_AWARDS")+" — "+Tr($"AWARD_{category}")+"\n"+entries.Text;
         string resultText=Tr($"AWARD_{category}");
         if(awards.ResultReady==true)
         {
@@ -76,14 +73,22 @@ public partial class Main
             else if(awards.WinningRival is int rival && state.Competition is CompetitionState competition)
             {var p=competition.Products[rival];string company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED");resultText=string.Format(Tr("AWARD_RIVAL_RESULT"),p.Title,company);}
             else resultText=Tr("AWARD_OTHER_COMPANY");
-            NativeAction(canvas,"ContinueAwards","CONTINUE",new(4,221,252,25),()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
         }
-        else NativeAction(canvas,"RevealAward","AWARD_REVEAL",new(4,221,252,25),()=>
+        float resultHeight=Math.Max(36,MathF.Ceiling(_dialog!.GetThemeFont("font","Label").GetMultilineStringSize(
+            resultText,HorizontalAlignment.Left,246,10,-1,
+            TextServer.LineBreakFlag.Mandatory|TextServer.LineBreakFlag.WordBound|TextServer.LineBreakFlag.Adaptive).Y)+4);
+        AwardScene(state,awards,resultHeight);var canvas=(Control)_content.GetChild(0);
+        var entries=NativeText(canvas,"AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,19),10);
+        entries.TooltipText=Tr("ANNUAL_GAME_AWARDS")+" — "+Tr($"AWARD_{category}")+"\n"+entries.Text;
+        if(awards.ResultReady==true)
+            NativeAction(canvas,"ContinueAwards","CONTINUE",new(4,193+resultHeight+6,252,25),()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
+        else NativeAction(canvas,"RevealAward","AWARD_REVEAL",new(4,193+resultHeight+6,252,25),()=>
         {
             if(AwardService.Reveal(state,_session.Random)){ShowOfficeReconstruction(state);if(awards.AnimationProducts is not null)_=AnimateAwardReveal(state,awards);}
             else _status.Text=Tr("HIRE_RESULT_MoneyUnknown");
         });
-        NativeText(canvas,"AwardResult",resultText,new(8,193,246,22),10);
+        var result=NativeText(canvas,"AwardResult",resultText,new(8,193,246,resultHeight),10);
+        result.AutowrapMode=TextServer.AutowrapMode.WordSmart;result.VerticalAlignment=VerticalAlignment.Top;
     }
     private async System.Threading.Tasks.Task AnimateAwardReveal(GameState state,AwardCeremonyState awards)
     {

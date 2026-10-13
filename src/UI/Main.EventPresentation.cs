@@ -34,12 +34,12 @@ public partial class Main
             ExhibitionService.AdvanceDisplay(exhibition);refresh();
         }
     }
-    private void AwardScene(GameState state,AwardCeremonyState awards)
+    private void AwardScene(GameState state,AwardCeremonyState awards,float resultHeight)
     {
-        ClearContent();var canvas=NativeWindow("AwardCeremonyWindow",Tr("ANNUAL_GAME_AWARDS"),new(530,250));
+        ClearContent();var canvas=NativeWindow("AwardCeremonyWindow",Tr("ANNUAL_GAME_AWARDS"),new(530,Math.Max(250,193+resultHeight+35)));
         var stage=OriginalAssetStore.LoadTexture("Graphic/Embedded/AwardsStage.png");
         NativePlace(canvas,Picture("AwardStagePicture",stage,new(256,160)),new(4,4,256,160));
-        NativeFill(canvas,"AwardMessagePanel",new(4,170,252,47),Colors.White,true);
+        NativeFill(canvas,"AwardMessagePanel",new(4,170,252,27+resultHeight),Colors.White,true);
         var results=new VBoxContainer {Name="AwardCategoryRows"};results.AddThemeConstantOverride("separation",2);NativePlace(canvas,results,new(268,4,258,220));
         GameAward[] order=[GameAward.GrandPrize,GameAward.Design,GameAward.Music,GameAward.Graphics,GameAward.Worst];
         Color[] colors=[new(1,1,.7f),new(1,.85f,.68f),new(.68f,1,1),new(1,.7f,1),new(1,.42f,.54f)];
@@ -60,7 +60,7 @@ public partial class Main
             else if(outcome?.RivalIndex is int rival && state.Competition is { } competition)
             {var rivalProduct=competition.Products[rival];winner=rivalProduct.Title+"\n"+(_activeCatalog?.RivalCompanies.ElementAtOrDefault(rivalProduct.Owner) ?? "?");}
             else if(outcome is not null)winner=Tr("AWARD_OTHER_COMPANY");
-            text.AddThemeFontSizeOverride("font_size",10);text.Text=Tr($"AWARD_{category}")+"\n"+winner;
+            text.AddThemeFontSizeOverride("font_size",10);text.Text=Tr($"AWARD_{category}")+"\n"+winner;text.TooltipText=text.Text;
         }
         _status=NativeText(canvas,"AwardStatus",stage is null?Tr("EVENT_ARTWORK_REIMPORT"):"",new(268,227,258,19),10);
     }
