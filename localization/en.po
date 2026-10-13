@@ -3878,3 +3878,27 @@ msgstr "I hope this helps the whole team."
 
 msgid "PROGRAMMING_COMMENT_SUCCESS_2"
 msgstr "I hope you’ll renew my contract next year."
+
+msgid "NATIVE_RECOGNITION"
+msgstr "Recognition"
+
+msgid "NATIVE_SKIP"
+msgstr "Skip"
+
+msgid "NATIVE_HALL_TITLE"
+msgstr "Hall of Fame"
+
+msgid "NATIVE_CONGRATULATIONS"
+msgstr "Congratulations!"
+
+msgid "NATIVE_MEDIA"
+msgstr "Media"
+
+msgid "NATIVE_DEBUG"
+msgstr "Debug"
+
+msgid "NATIVE_SHIP_READY"
+msgstr "Ready"
+
+msgid "NATIVE_SHIP_UNAVAILABLE"
+msgstr "Unavailable"

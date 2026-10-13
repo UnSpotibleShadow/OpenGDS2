@@ -149,36 +149,39 @@ public partial class Main
     {
         ClearContent(keepMeetingMusic:true);
         _music.SetMeetingPhase((int)MeetingMusicPhase.Planning);
-        CompactManagementWindow("PlanningMeetingWindow",new Vector2(430,510),410);
-        _dialog!.SetTitle(Tr("PLANNING_MEETING"));
+        var canvas=NativeWindow("PlanningMeetingWindow",Tr("PLANNING_MEETING"),new(310,350));
         var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : mangaSourceIndex is int manga ? MangaText(catalog,manga,"TITLE") : Tr("NEW_PROJECT_TITLE");
         var illustration=OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningProposal.bmp");
-        _content.AddChild(Picture("ProposalIllustration",illustration,new(256,160)));
-        if(illustration is null)_content.AddChild(new Label {Text=Tr("PROPOSAL_ARTWORK_REIMPORT"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
-        var device=new HBoxContainer();_content.AddChild(device);
-        device.AddChild(Picture("ProposalHardwarePicture",HardwarePicture(state,hardwareId),new(64,64)));
-        device.AddChild(new Label {Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}",SizeFlagsVertical=SizeFlags.ShrinkCenter});
-        AddHeading(CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),16);
-        AddHeading(CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name),16);
-        var quote=new Label {Name="PlanningQuote",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(quote);
-        var gate=new Label {Name="PlanningGate",HorizontalAlignment=HorizontalAlignment.Center};_content.AddChild(gate);
-        var grid=new GridContainer {Name="PlanningFocus",Columns=2};_content.AddChild(grid);
-        var start=new Button {Name="AcceptPlan",Text=Tr("START_GAME_DEVELOPMENT"),CustomMinimumSize=new Vector2(0,42)};
+        NativePlace(canvas,Picture("ProposalIllustration",illustration,new(256,160)),new(27,4,256,160));
+        NativePlace(canvas,Picture("ProposalHardwarePicture",HardwarePicture(state,hardwareId),new(64,64)),new(4,176,64,64));
+        NativeText(canvas,"ProposalHardwareName",CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),new(2,238,72,18),10,HorizontalAlignment.Center);
+        NativeFill(canvas,"ProposalTerms",new(78,174,228,74),new(.77f,1,.77f));
+        NativeText(canvas,"ProposalHardware",Tr("TARGET_HARDWARE")+": "+CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),new(80,176,224,18));
+        NativeText(canvas,"ProposalAudience",Tr("PROJECT_AUDIENCE")+": "+CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name),new(80,194,224,18));
+        var quote=NativeText(canvas,"PlanningQuote","",new(80,213,224,32),10);quote.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var gate=NativeText(canvas,"PlanningGate","",new(4,329,144,18),10);
+        var grid=new Control {Name="PlanningFocus"};NativePlace(canvas,grid,new(4,260,140,64));
+        var start=NativeAction(canvas,"AcceptPlan","START_GAME_DEVELOPMENT",new(156,259,150,25),()=>{});
         void ShowFocus()
         {
-            foreach (Node child in grid.GetChildren()) {grid.RemoveChild(child);child.QueueFree();}
-            foreach (var item in new[] {("STAT_FUN",focus.Fun),("STAT_NOVELTY",focus.Novelty),("STAT_GRAPHICS",focus.Graphics),("STAT_MUSIC",focus.Music)})
-                AddMetric(grid,Tr(item.Item1),$"{item.Item2}%");
+            string[] keys=["STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"];int[] values=[focus.Fun,focus.Novelty,focus.Graphics,focus.Music];
+            Color[] colors=[Colors.Blue,Colors.Yellow,new(.7f,0,.8f),Colors.Cyan];
+            for(int i=0;i<4;i++)
+            {
+                var dot=NativeText(grid,"ProposalDot"+i,"●",new(0,i*16,12,16));dot.AddThemeColorOverride("font_color",colors[i]);
+                NativeText(grid,"ProposalFocusCaption"+i,Tr(keys[i]),new(14,i*16,82,16));
+                var value=NativeText(grid,"ProposalFocus"+i,values[i]+"%",new(94,i*16,42,16),11,HorizontalAlignment.Right);value.AddThemeColorOverride("font_color",Colors.Red);
+            }
         }
         void RefreshQuote()
         {
             var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
-            quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}   {Tr("DEVELOPMENT_POINTS")}: {value.Points}";
-            gate.Text=Tr($"PLANNING_RESULT_{result}");
+            quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}\n{Tr("DEVELOPMENT_POINTS")}: {value.Points}";
+            gate.Text=Tr($"PLANNING_RESULT_{result}");gate.Visible=result!=DevelopmentPlanningResult.Success;
             start.Disabled=result!=DevelopmentPlanningResult.Success;
         }
         RefreshQuote();ShowFocus();
-        AddAction("PLANNING_NEW_PROPOSAL",()=>ShowPlanningMeeting(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex));
+        NativeAction(canvas,"AnotherProposal","PLANNING_NEW_PROPOSAL",new(156,287,150,25),()=>ShowPlanningMeeting(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,mangaSourceIndex));
         start.Pressed+=()=>
         {
             var result=predecessorProductIndex is int predecessor
@@ -188,7 +191,6 @@ public partial class Main
             if (result==DevelopmentPlanningResult.Success) ShowProject(state,state.DevelopmentProjects.Single(x=>x.RoomIndex==roomIndex));
             else gate.Text=Tr($"PLANNING_RESULT_{result}");
         };
-        _content.AddChild(start);
-        AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
+        NativeAction(canvas,"CancelProposal","CANCEL",new(156,315,150,25),()=>ShowOfficeReconstruction(state));
     }
 }

@@ -82,8 +82,10 @@ public partial class BackgroundMusic : Node
             if (!ResourceLoader.Exists($"res://{path}")) continue;
             var track = GD.Load<AudioStreamOggVorbis>($"res://{path}");
             if (track is null) continue;
-            if (track.GetLength() <= 0) { track.Dispose(); continue; }
-            track.Loop = false; tracks.Add(track); _ownedTracks.Add(track);
+            if (track.GetLength() <= 0) continue;
+            // GD.Load streams belong to the shared resource cache. Disposing
+            // them here can return a dead wrapper to the next scene instance.
+            track.Loop = false; tracks.Add(track);
         }
         return tracks;
     }
@@ -131,8 +133,7 @@ public partial class BackgroundMusic : Node
         _meetingPlayer.Stop(); _meetingPlayer.Stream = null;
         foreach (var track in _ownedTracks) track.Dispose();
         _ownedTracks.Clear(); _seasonTracks.Clear(); _officeTracks.Clear(); _tracks.Clear();
-        _titleTheme?.Dispose(); _titleTheme = null;
-        foreach (var track in _meetingTracks.Values) track.Dispose();
+        _titleTheme = null;
         _meetingTracks.Clear();
     }
 

@@ -28,71 +28,62 @@ public partial class Main
     private void ShowExhibition(GameState state,ExhibitionState exhibition)
     {
         if(exhibition.Visitors is not null){ExhibitionScene(state,exhibition);return;}
-        ClearContent();CompactManagementWindow("ExhibitionSelectionWindow",new(520,390),500);_dialog?.SetTitle(Tr("GAME_EXHIBITION"));
-        AnnualMessage("ExhibitionSelection",Tr("EXHIBITION_SELECTION"));
-        var boxes=new Dictionary<int,CheckBox>();
-        var total=new Label {Name="ExhibitionFee",Text=$"{Tr("EXHIBITION_FEE")}: ¥0"};
-        var developing=new VBoxContainer {Name="ExhibitionDevelopingList"};_content.AddChild(developing);
-        developing.AddChild(new Label {Text=Tr("EXHIBITION_DEVELOPING")+"   "+Tr("EXHIBITION_PROGRESS")});
-        var released=new VBoxContainer {Name="ExhibitionReleasedList"};_content.AddChild(released);
-        released.AddChild(new Label {Text=Tr("EXHIBITION_RELEASED")+"   "+Tr("PRODUCT_RELEASE_DATE")});
-        foreach (int id in exhibition.EligibleProducts)
+        ClearContent();var canvas=NativeWindow("ExhibitionSelectionWindow",Tr("GAME_EXHIBITION"),new(350,315));
+        var instruction=NativeText(canvas,"ExhibitionSelection",Tr("EXHIBITION_SELECTION"),new(4,2,342,30),10);instruction.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var selected=new HashSet<int>();
+        var total=NativeText(canvas,"ExhibitionFee",$"{Tr("EXHIBITION_FEE")}: ¥0",new(4,266,342,18));
+        _status=NativeText(canvas,"ExhibitionSelectionStatus","",new(4,285,178,26),10);_status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var developing=CreateTable("ExhibitionDevelopingList",["EXHIBITION_DEVELOPING","EXHIBITION_PROGRESS"],[242,78]);
+        NativePlace(canvas,developing,new(4,38,342,77));developing.SelectMode=Tree.SelectModeEnum.Multi;
+        var released=CreateTable("ExhibitionReleasedList",["EXHIBITION_RELEASED","PRODUCT_RELEASE_DATE"],[242,78]);
+        NativePlace(canvas,released,new(4,123,342,139));released.SelectMode=Tree.SelectModeEnum.Multi;
+        foreach(int id in exhibition.EligibleProducts)
         {
-            string title=id<0 ? Tr("EXHIBITION_ROOM").Replace("{room}",(-id).ToString()) : state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
-            var box=new CheckBox {Name=$"ExhibitProduct{id}",Text=title};boxes.Add(id,box);
-            var row=new HBoxContainer();(id<0 ? developing : released).AddChild(row);box.SizeFlagsHorizontal=SizeFlags.ExpandFill;row.AddChild(box);
-            string value;
-            if(id<0)value=OfficeRoomPresentationRules.Percentage(state.DevelopmentProjects.Single(p=>p.RoomIndex==-id-1))+"%";
-            else{var date=state.ReleasedGames.Single(p=>p.ProductIndex==id).ReleasedOn;value=date is { } d ? $"{d.Year}/{d.Month}/{d.Week}" : "?";}
-            row.AddChild(new Label {Name=$"ExhibitDetail{id}",Text=value,HorizontalAlignment=HorizontalAlignment.Right,CustomMinimumSize=new(90,0)});
-            box.Toggled+=selected=>
-            {
-                if (selected && boxes.Values.Count(b=>b.ButtonPressed)>5)
-                {box.SetPressedNoSignal(false);_status.Text=Tr("EXHIBITION_TooManyProducts");}
-                total.Text=$"{Tr("EXHIBITION_FEE")}: ¥{boxes.Values.Count(b=>b.ButtonPressed)*ExhibitionService.ProductFee:N0}";
-            };
+            var table=id<0?developing:released;var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,id);
+            string title=id<0?Tr("EXHIBITION_ROOM").Replace("{room}",(-id).ToString()):state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
+            row.SetText(0,title);
+            if(id<0)row.SetText(1,OfficeRoomPresentationRules.Percentage(state.DevelopmentProjects.Single(p=>p.RoomIndex==-id-1))+"%");
+            else {var date=state.ReleasedGames.Single(p=>p.ProductIndex==id).ReleasedOn;row.SetText(1,date is { } d?$"{d.Year}/{d.Month}/{d.Week}":"?");}
+            row.SetTextAlignment(1,HorizontalAlignment.Right);
         }
-        _content.AddChild(total);
-        _status=new Label {Name="ExhibitionSelectionStatus"};_content.AddChild(_status);
-        AnnualButton("ParticipateExhibition","EXHIBITION_PARTICIPATE",()=>
+        void Select(TreeItem item,long column,bool enabled)
         {
-            var result=ExhibitionService.Participate(state,boxes.Where(b=>b.Value.ButtonPressed).Select(b=>b.Key).ToHashSet(),_session.Random);
-            if (result==ExhibitionResult.Success) ShowOfficeReconstruction(state);
-            else _status.Text=Tr($"EXHIBITION_{result}");
+            int id=item.GetMetadata(0).AsInt32();
+            if(enabled && !selected.Contains(id) && selected.Count==5)
+            {item.Deselect((int)column);_status.Text=Tr("EXHIBITION_TooManyProducts");return;}
+            if(enabled)selected.Add(id);else selected.Remove(id);
+            total.Text=$"{Tr("EXHIBITION_FEE")}: ¥{selected.Count*ExhibitionService.ProductFee:N0}";
+        }
+        developing.MultiSelected+=Select;released.MultiSelected+=Select;
+        NativeAction(canvas,"ParticipateExhibition","EXHIBITION_PARTICIPATE",new(186,283,78,27),()=>
+        {
+            var result=ExhibitionService.Participate(state,selected,_session.Random);
+            if(result==ExhibitionResult.Success)ShowOfficeReconstruction(state);else _status.Text=Tr($"EXHIBITION_{result}");
         });
-        AnnualButton("SkipExhibition","EXHIBITION_SKIP",()=>{ExhibitionService.Close(state);ShowOfficeReconstruction(state);});
+        NativeAction(canvas,"SkipExhibition","NATIVE_SKIP",new(270,283,76,27),()=>{ExhibitionService.Close(state);ShowOfficeReconstruction(state);});
     }
     private void ShowAwards(GameState state,AwardCeremonyState awards)
     {
-        AwardScene(state,awards);
-        AddHeading(Tr("ANNUAL_GAME_AWARDS"),24);
+        AwardScene(state,awards);var canvas=(Control)_content.GetChild(0);
         var category=AwardService.Order[awards.CategoryIndex];
-        AddHeading(Tr($"AWARD_{category}"),22);
-        AnnualMessage("AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count));
-        if (awards.ResultReady==true)
+        var entries=NativeText(canvas,"AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,19),10);
+        entries.TooltipText=Tr("ANNUAL_GAME_AWARDS")+" — "+Tr($"AWARD_{category}")+"\n"+entries.Text;
+        string resultText=Tr($"AWARD_{category}");
+        if(awards.ResultReady==true)
         {
-            if (awards.WinningProduct is int id)
-            {
-                string title=state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;
-                AnnualMessage("AwardResult",string.Format(Tr("AWARD_OWN_RESULT"),title,AwardService.Prize(category)));
-            }
-            else if (awards.WinningRival is int rival && state.Competition is CompetitionState competition)
-            {
-                var product=competition.Products[rival];string company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner) ?? Tr("NOT_YET_DECODED");
-                AnnualMessage("AwardResult",string.Format(Tr("AWARD_RIVAL_RESULT"),product.Title,company));
-            }
-            else AnnualMessage("AwardResult",Tr("AWARD_OTHER_COMPANY"));
-            AnnualButton("ContinueAwards","CONTINUE",()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
+            if(awards.WinningProduct is int id)
+            {string title=state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;resultText=string.Format(Tr("AWARD_OWN_RESULT"),title,AwardService.Prize(category));}
+            else if(awards.WinningRival is int rival && state.Competition is CompetitionState competition)
+            {var p=competition.Products[rival];string company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED");resultText=string.Format(Tr("AWARD_RIVAL_RESULT"),p.Title,company);}
+            else resultText=Tr("AWARD_OTHER_COMPANY");
+            NativeAction(canvas,"ContinueAwards","CONTINUE",new(4,221,252,25),()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
         }
-        else AnnualButton("RevealAward","AWARD_REVEAL",()=>
+        else NativeAction(canvas,"RevealAward","AWARD_REVEAL",new(4,221,252,25),()=>
         {
-            if (AwardService.Reveal(state,_session.Random))
-            {
-                ShowOfficeReconstruction(state);
-                if (awards.AnimationProducts is not null) _=AnimateAwardReveal(state,awards);
-            }
+            if(AwardService.Reveal(state,_session.Random)){ShowOfficeReconstruction(state);if(awards.AnimationProducts is not null)_=AnimateAwardReveal(state,awards);}
             else _status.Text=Tr("HIRE_RESULT_MoneyUnknown");
         });
+        NativeText(canvas,"AwardResult",resultText,new(8,193,246,22),10);
     }
     private async System.Threading.Tasks.Task AnimateAwardReveal(GameState state,AwardCeremonyState awards)
     {

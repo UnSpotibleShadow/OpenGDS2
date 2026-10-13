@@ -4,15 +4,16 @@ namespace OpenGDS2.UI;
 public partial class Main
 {
     private int _heldShipmentGeneration;
-    private void HeldShipmentButtons(SpinBox value,bool quantity)
+    private Control HeldShipmentButtons(SpinBox value,bool quantity)
     {
-        var row=new HBoxContainer {Name=value.Name+"HeldControls"};_content.AddChild(row);var window=_dialog;
+        var row=new HBoxContainer {Name=value.Name+"HeldControls"};var window=_dialog;
         foreach(int sign in new[]{-1,1})
         {
-            int direction=sign;var button=new Button {Name=value.Name+(sign<0?"DecreaseHeld":"IncreaseHeld"),Text=sign<0?"−":"+",CustomMinimumSize=new(36,24)};row.AddChild(button);
+            int direction=sign;var button=new Button {Name=value.Name+(sign<0?"DecreaseHeld":"IncreaseHeld"),Text=sign<0?"−":"+",CustomMinimumSize=new(24,22)};row.AddChild(button);
             button.ButtonDown+=()=>AdvanceHeldShipment(value,quantity,direction,++_heldShipmentGeneration,window!);
             button.ButtonUp+=()=>_heldShipmentGeneration++;
         }
+        return row;
     }
     private async void AdvanceHeldShipment(SpinBox value,bool quantity,int direction,int generation,DesktopWindow window)
     {

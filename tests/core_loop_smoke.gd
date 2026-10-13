@@ -26,7 +26,7 @@ func check_meeting_transition(previous_music: AudioStream) -> void:
         phase = "beta"
     else:
         for button in main.find_children("*","Button",true,false):
-            if button.is_visible_in_tree() and button.text == tr("CONTINUE_DEBUGGING"):
+            if button.is_visible_in_tree() and button.name == "CompletionDebug":
                 phase = "final"
     if main.find_child("ConversationWindow",true,false) != null or not phase.is_empty():
         check(music.stream == previous_music,"Meeting sequence keeps its stream across pages and forms")
@@ -49,6 +49,14 @@ func press(key: String) -> void:
                 button.pressed.emit()
             found = true
             break
+    if not found and key=="RELEASE_GAME" and main.find_child("ProjectRelease",true,false)!=null:
+        await press_node("ProjectRelease")
+        found=true
+    if not found and key=="BACK_TO_OFFICE" and main.find_child("NativeDialogCanvas",true,false)!=null:
+        var canvas=main.find_child("NativeDialogCanvas",true,false)
+        var dialog=canvas.get_parent().get_parent().get_parent().get_parent()
+        dialog.find_child("CloseWindow",true,false).pressed.emit()
+        found=true
     check(found, "Button exists: " + key)
     await process_frame
 
@@ -62,6 +70,8 @@ func press_node(name: String) -> void:
     var button = main.find_child(name, true, false)
     check(button != null and not button.disabled, name)
     if button != null and not button.disabled:
+        if name.begins_with("SelectType") or name.begins_with("SelectGenre"):
+            button.button_pressed=true
         button.pressed.emit()
     await process_frame
     if name=="AcknowledgeReviews":
@@ -555,7 +565,7 @@ func run() -> void:
     check(main.find_child("PlanningTitle",true,false) == null,"Proposal does not enter the shipment title early")
     check(main.find_child("ProposalIllustration",true,false).texture != null,"Proposal loads its separate locally imported illustration")
     await press_node("AcceptPlan")
-    check(main.find_child("DevelopmentProgress",true,false) != null,"Live development screen")
+    check(main.find_child("ProjectSummaryProgress",true,false) != null,"Live development screen")
     check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Accepting a plan ends planning music")
     # Issue #61: inject a synthetic, numbered burst immediately before its
     # verified commit, then observe the actual live report and saved project.
@@ -629,7 +639,7 @@ func run() -> void:
         var expected_examples = "\n".join(catalog.GameTypes[offered_types[index]].get("ExampleTitles",[]))
         if expected_examples.is_empty():
             expected_examples = "—"
-        check(main.find_child("TypeExamples%d" % index,true,false).text == expected_examples,"Example column preserves the selected source's imported titles and order")
+        check(main.find_child("SelectType%d" % index,true,false).tooltip_text.ends_with(expected_examples) if expected_examples!="—" else true,"Type tooltip preserves imported examples without widening the native table")
         check(main.find_child("SelectType%dFee" % index,true,false).text.begins_with("¥"),"Fees have their own aligned column")
         var row_fee = main.find_child("SelectType%dFee" % index,true,false)
         var header_fee = main.find_child("CheckpointFeeHeading",true,false)
@@ -722,7 +732,7 @@ func run() -> void:
     if not ready:
         quit(1)
         return
-    await press("CONTINUE_DEBUGGING")
+    await press_node("CompletionDebug")
     check(main.find_child("MeetingMusicPlayer",true,false).stream == null,"Continuing work ends final meeting music")
     var debugged := false
     for frame in range(15000):
@@ -780,8 +790,8 @@ func run() -> void:
     await press("LOAD_GAME")
     check(main.find_child("ReviewScore3",true,false) != null,"Load restores review ceremony")
     await press_node("AcknowledgeReviews")
-    check(main.find_child("SalesProduct0",true,false) != null,"Review acknowledgement opens sales screen")
-    check(main.find_child("ProduceProduct0",true,false).disabled,"Reprint waits for the next budget week")
+    check(main.find_child("CompactProductSales",true,false) != null,"Review acknowledgement opens sales screen")
+    check(main.find_child("CompactProduceMore",true,false).disabled,"Reprint waits for the next budget week")
     Engine.time_scale = 100
     for frame in range(2500):
         await process_frame
@@ -796,20 +806,19 @@ func run() -> void:
     check(product.NetSalesReceipts == product.UnitsSold * 2800,"Revenue uses original per-copy fees")
     await press("LOAD_GAME")
     await press("SALES")
-    await press_node("OpenProduct0")
     check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
     check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
     check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
-    await press("BACK_TO_SALES")
-    await press_node("SalesHistoryProduct0")
+    main.find_child("ProductReportActions",true,false).get_popup().id_pressed.emit(0)
+    await process_frame
     check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
     check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
     await press("BACK_TO_SALES")
-    await press_node("ProduceProduct0")
+    await press_node("CompactProduceMore")
     check(main.find_child("ProductionCopies",true,false) != null,"Reprint controls")
     main.find_child("ProductionCopies",true,false).value = 1000
     await press_node("ConfirmProduction")
-    check(main.find_child("ProduceProduct0",true,false).disabled,"Reprint consumes the shared weekly allowance")
+    check(main.find_child("CompactProduceMore",true,false).disabled,"Reprint consumes the shared weekly allowance")
     await press("BACK_TO_OFFICE")
     await press("SAVE_GAME")
     var reprinted = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -821,7 +830,7 @@ func run() -> void:
     check(main.find_child("ConversationWindow",true,false) != null and main.find_child("AcceptPlan",true,false) == null,"Planning discussion precedes proposal acceptance")
     await finish_conversation()
     await press_node("AcceptPlan")
-    check(main.find_child("DevelopmentProgress",true,false) != null,"Room accepts another project")
+    check(main.find_child("ProjectSummaryProgress",true,false) != null,"Room accepts another project")
     await press("BACK_TO_OFFICE")
     await press("SAVE_GAME")
     # Synthetic boundary fixture drives the real modal/event UI without adding
@@ -848,7 +857,7 @@ func run() -> void:
     for stage in range(4):
         check(main.find_child("AcknowledgeSalesMilestone",true,false) != null,"Sequential sales milestone ceremony")
         await press_node("AcknowledgeSalesMilestone")
-    check(main.find_child("SalesProduct0",true,false) != null,"Sales resume after all milestone acknowledgements")
+    check(main.find_child("CompactProductSales",true,false) != null,"Sales resume after all milestone acknowledgements")
     await press("BACK_TO_OFFICE")
     await press("SAVE_GAME")
     var completed_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -908,7 +917,7 @@ func run() -> void:
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == decision_save.State.Money,"Result reload does not charge a second refund")
     await press_node("AcknowledgeRecall")
-    check(main.find_child("ProduceProduct0",true,false).disabled == (decision_recall.OriginalState == 2),"Recall result controls reprint eligibility")
+    check(main.find_child("CompactProduceMore",true,false).disabled == (decision_recall.OriginalState == 2),"Recall result controls reprint eligibility")
     await press("BACK_TO_OFFICE")
     await press("TECHNOLOGIES")
     await press_node("PurchaseTechnology0")
@@ -1381,7 +1390,10 @@ func run() -> void:
     write_json("user://saves/slot1.json",exhibition_save)
     await press("LOAD_GAME")
     check(main.find_child("ExhibitionSelection",true,false) != null,"Exhibition selection survives loading")
-    main.find_child("ExhibitProduct0",true,false).button_pressed = true
+    var exhibit_table=main.find_child("ExhibitionReleasedList",true,false)
+    var exhibit_row=exhibit_table.get_root().get_child(0)
+    exhibit_row.select(0)
+    exhibit_table.multi_selected.emit(exhibit_row,0,true)
     check(main.find_child("ExhibitionFee",true,false).text.ends_with("10,000,000"),"Exhibition checkbox displays the proven fee")
     await press_node("ParticipateExhibition")
     await press("SAVE_GAME")
@@ -1390,7 +1402,7 @@ func run() -> void:
     check(attendance >= 9900 and attendance <= 17578,"Exhibition attendance stays within original timer bounds")
     check(exhibited.State.Money == es.Money-10000000 and exhibited.State.ReleasedGames[0].Recognition == 95+floor(attendance/500),"Exhibition fee and uncapped product awareness commit together")
     await press("LOAD_GAME")
-    check(main.find_child("ExhibitionResult",true,false) != null,"Exhibition result survives loading without another fee")
+    check(main.find_child("ExhibitionVisitors",true,false) != null,"Exhibition result survives loading without another fee")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == exhibited.State.Money,"Loading exhibition result never repeats payment")
     await press_node("CloseExhibition")
@@ -1622,7 +1634,7 @@ func run() -> void:
     sequel_office.gui_input.emit(room_click)
     await process_frame
     Engine.time_scale = 100
-    if not await await_node("DevelopmentReport"):
+    if not await await_node("ProjectSummaryPanel"):
         quit(1)
         return
     var sequel_ready := false
@@ -1671,7 +1683,7 @@ func run() -> void:
     write_json("user://saves/slot1.json",shipped_sequel)
     await press("LOAD_GAME")
     await press_node("AcknowledgeReviews")
-    check(main.find_child("SalesProduct1",true,false) != null,"Sequel joins normal sales screen")
+    check(main.find_child("CompactProductSales",true,false) != null,"Sequel joins normal sales screen")
     Engine.time_scale = 100
     for frame in range(2500):
         await process_frame

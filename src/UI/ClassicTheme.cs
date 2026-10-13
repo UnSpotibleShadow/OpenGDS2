@@ -27,6 +27,7 @@ public static class ClassicTheme
             focus.SetBorderWidthAll(1);
             theme.SetStylebox("focus", type, focus);
         }
+        theme.SetColor("default_color", "RichTextLabel", Colors.Black);
         theme.SetStylebox("panel", "PopupMenu", Bevel(Face, false));
         theme.SetStylebox("normal", "LineEdit", Bevel(Colors.White, true));
         // The engine's default caret is pale against this classic white input.

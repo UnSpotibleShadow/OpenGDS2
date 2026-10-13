@@ -182,7 +182,13 @@ public partial class Main
         };
         var products = ChildWindow("ProductWindow", Tr("PRODUCT_WINDOW"), new Vector2(30, 356), new Vector2(390, 150));
         _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [150, 65, 70, 70]);
-        products.Body.AddChild(_productTable); _productTable.ItemActivated += () => {if (DesktopActionEnabled("SALES")) ShowSales(state);};
+        products.Body.AddChild(_productTable); _productTable.ItemActivated += () =>
+        {
+            if(!DesktopActionEnabled("SALES"))return;
+            var selected=_productTable.GetSelected();
+            var product=selected is null?null:state.ReleasedGames.FirstOrDefault(p=>p.ProductIndex==selected.GetMetadata(0).AsInt32());
+            if(product is null)ShowSales(state);else ShowCompactProduct(state,product);
+        };
         _desktopStatus = new Label { Name = "OfficeStatus", CustomMinimumSize = new Vector2(0, 22), ClipText = true };
         layout.AddChild(_desktopStatus);
         RefreshDesktop();
@@ -359,7 +365,7 @@ public partial class Main
         SyncRows(_productTable, _productRows, state.ReleasedGames.Count);
         for (int index = 0; index < state.ReleasedGames.Count; index++)
         {
-            var game = state.ReleasedGames[index]; string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
+            var game = state.ReleasedGames[index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
             for (int col = 0; col < values.Length; col++) _productRows[index].SetText(col, values[col]);
         }
     }

@@ -1,3 +1,8 @@
+> M101 status: M100 playthrough feedback led to compact native dialog layouts,
+> individual sales routing and locally generated English Hall/booth caption patches.
+> See [layout corrections and limits](native-screen-layouts-m101.md). #95 remains
+> open; implemented handlers/artwork did not prove matching presentation.
+
 > M100 status: the ten M98 presentation/workflow gaps, shared saved VB-family
 > RNG and the confirmed office catch-up difference are implemented. See
 > [M100 completion and limits](presentation-completion-m100.md) and AGENTS.md.

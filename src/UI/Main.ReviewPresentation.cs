@@ -8,49 +8,35 @@ public partial class Main
 {
     private void ReviewRows(GameState state,ReleasedGameState product)
     {
-        CompactManagementWindow("MagazineReviewsWindow",new(560,490),540);
-        var window=_dialog;
-        var scores=product.ReviewScores!;
+        var canvas=NativeWindow("MagazineReviewsWindow",Tr("MAGAZINE_REVIEWS"),new(420,306));
+        var window=_dialog;var scores=product.ReviewScores!;
         var scoreLabels=new Label[4];var scoreImages=new TextureRect[4];
         var reactions=new Label[4];var reactionImages=new TextureRect[4];var comments=new RichTextLabel[4];
         bool english=TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase);
-        var catalog=_importer.LoadCatalog();
-        bool artworkMissing=false;
+        var catalog=_importer.LoadCatalog();bool artworkMissing=false;
         for(int i=0;i<4;i++)
         {
-            var row=new HBoxContainer {Name=$"ReviewerRow{i}"};row.AddThemeConstantOverride("separation",4);_content.AddChild(row);
+            var row=new Control {Name=$"ReviewerRow{i}"};NativePlace(canvas,row,new(4,4+i*69,412,65));
             var portrait=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Reviewer{i}.bmp");artworkMissing|=portrait is null;
-            var face=Picture($"ReviewerPortrait{i}",portrait,new(64,64));face.TooltipText=$"{Tr("REVIEWER")} {i+1}";row.AddChild(face);
-            var reactionCell=new VBoxContainer {CustomMinimumSize=new(18,64)};row.AddChild(reactionCell);
-            reactionImages[i]=Picture($"ReviewReactionImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewReaction{i}.bmp"),new(18,64));
-            reactionImages[i].Visible=!english;reactionCell.AddChild(reactionImages[i]);
-            reactions[i]=new Label {Name=$"ReviewReaction{i}",Text="…",HorizontalAlignment=HorizontalAlignment.Center,Visible=english};
-            reactions[i].AddThemeFontSizeOverride("font_size",10);reactionCell.AddChild(reactions[i]);
-            var number=new VBoxContainer {CustomMinimumSize=new(64,64)};row.AddChild(number);
-            scoreImages[i]=Picture($"ReviewScoreImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewScore{scores[i]}.png"),new(64,64));
-            artworkMissing|=scoreImages[i].Texture is null;number.AddChild(scoreImages[i]);
-            scoreLabels[i]=new Label {Name=$"ReviewScore{i}",HorizontalAlignment=HorizontalAlignment.Center,Text="?"};
-            scoreLabels[i].AddThemeFontSizeOverride("font_size",48);scoreLabels[i].AddThemeColorOverride("font_color",new(.67f,.79f,.94f));number.AddChild(scoreLabels[i]);
-            comments[i]=new RichTextLabel {Name=$"ReviewComment{i}",BbcodeEnabled=false,FitContent=false,
-                CustomMinimumSize=new(0,64),SizeFlagsHorizontal=SizeFlags.ExpandFill,ScrollActive=true};row.AddChild(comments[i]);
+            NativeFill(row,$"ReviewerFrame{i}",new(0,0,66,65),Colors.White,true);
+            NativePlace(row,Picture($"ReviewerPortrait{i}",portrait,new(64,64)),new(1,0,64,64));
+            NativeFill(row,$"ReviewReactionFrame{i}",new(72,0,19,65),Colors.White,true);
+            reactionImages[i]=NativePlace(row,Picture($"ReviewReactionImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewReaction{i}.bmp"),new(18,64)),new(72,0,18,64));reactionImages[i].Visible=!english;
+            reactions[i]=NativeText(row,$"ReviewReaction{i}","…",new(72,0,18,64),9,HorizontalAlignment.Center);reactions[i].Visible=english;
+            NativeFill(row,$"ReviewCommentPanel{i}",new(96,0,316,65),Colors.White,true);
+            scoreImages[i]=NativePlace(row,Picture($"ReviewScoreImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewScore{scores[i]}.png"),new(64,64)),new(97,0,64,64));artworkMissing|=scoreImages[i].Texture is null;
+            scoreLabels[i]=NativeText(row,$"ReviewScore{i}","?",new(97,0,64,64),48,HorizontalAlignment.Center);scoreLabels[i].AddThemeColorOverride("font_color",new(.67f,.79f,.94f));
+            comments[i]=new RichTextLabel {Name=$"ReviewComment{i}",BbcodeEnabled=false,FitContent=false,ScrollActive=true};
+            comments[i].AddThemeColorOverride("default_color",Colors.Black);comments[i].AddThemeFontSizeOverride("normal_font_size",11);
+            NativePlace(row,comments[i],new(166,3,241,59));
         }
-        var total=new Label {Name="ReviewTotal"};_content.AddChild(total);
-        var assessment=new Label {Name="ReviewAssessment",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(assessment);
-        var sequel=new Label {Name="ReviewSequelEligibility",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(sequel);
-        if(artworkMissing)_content.AddChild(new Label {Text=Tr("REVIEW_ARTWORK_REIMPORT"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
-        _status=new Label();_content.AddChild(_status);
-        AddAction("SAVE_GAME",()=>
-        {
-            try{Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
-            catch(Exception ex){_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
-        });
-        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-        var acknowledge=new Button {Name="AcknowledgeReviews",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
+        _status=NativeText(canvas,"ReviewArtworkStatus",artworkMissing?Tr("REVIEW_ARTWORK_REIMPORT"):"",new(4,282,310,21),10);
+        var acknowledge=NativeAction(canvas,"AcknowledgeReviews","CONTINUE",new(320,279,96,24),()=>{});
         acknowledge.Pressed+=()=>
         {
             if(acknowledge.Disabled)return;
             if(product.ReviewPending){product.ReviewSummaryPage=0;ShowReviewSummary(state,product);}
-            else ShowSales(state);
+            else ShowCompactProduct(state,product);
         };
         string Comment(int row)
         {
@@ -68,7 +54,7 @@ public partial class Main
                 bool final=ReviewPresentationRules.Revealed(product,i);
                 scoreImages[i].Visible=final && scoreImages[i].Texture is not null;
                 scoreLabels[i].Visible=!scoreImages[i].Visible && ReviewPresentationRules.Previewed(product,i);scoreLabels[i].Text=final ? scores[i].ToString() : "?";
-                comments[i].Text=final ? Comment(i) : "";
+                comments[i].Text=final ? Comment(i) : "";comments[i].TooltipText=comments[i].Text;
                 // Score 9 has no final reaction write. Retain the initial row image/text.
                 if(final && ReviewPresentationRules.Reaction(scores[i]) is int source)
                 {
@@ -77,9 +63,7 @@ public partial class Main
                 }
             }
             bool done=ReviewPresentationRules.Finished(product);int sum=scores.Sum();
-            total.Text=done ? $"{Tr("REVIEW_TOTAL")}: {sum} / 40" : "";
-            assessment.Text=done ? Tr(sum>=32 ? "REVIEW_HALL_OF_FAME" : sum>=24 ? "REVIEW_GOOD" : sum>=12 ? "REVIEW_LOW" : "REVIEW_POOR") : "";
-            sequel.Text=!done ? "" : sum>=32 && !product.HasReleasedSequel ? Tr("SEQUEL_UNLOCKED") : sum<32 && product.OriginalMode==1 ? Tr("SEQUEL_SERIES_ENDED") : "";
+            acknowledge.TooltipText=done?$"{Tr("REVIEW_TOTAL")}: {sum}/40":Tr("CONTINUE");
             acknowledge.Disabled=!done;
         }
         Refresh();

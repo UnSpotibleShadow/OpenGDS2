@@ -3701,3 +3701,27 @@ msgstr "仲間の開発にも役立つと嬉しいです。"
 
 msgid "PROGRAMMING_COMMENT_SUCCESS_2"
 msgstr "来年も契約してもらえると嬉しいです。"
+
+msgid "NATIVE_RECOGNITION"
+msgstr "知名度"
+
+msgid "NATIVE_SKIP"
+msgstr "中止"
+
+msgid "NATIVE_HALL_TITLE"
+msgstr "殿堂入り"
+
+msgid "NATIVE_CONGRATULATIONS"
+msgstr "おめでとう！"
+
+msgid "NATIVE_MEDIA"
+msgstr "メディア"
+
+msgid "NATIVE_DEBUG"
+msgstr "バグ取り"
+
+msgid "NATIVE_SHIP_READY"
+msgstr "出荷可能"
+
+msgid "NATIVE_SHIP_UNAVAILABLE"
+msgstr "出荷不可"

@@ -108,7 +108,7 @@ func run() -> void:
         await advance_page()
         await press_node("ToolbarSAVE_GAME")
         check(saved().ReleasedGames[0].PendingSalesMilestones.is_empty(),"Milestone completes once")
-        await press_node("ProduceProduct0")
+        await press_node("CompactProduceMore")
         main.find_child("ProductionCopies",true,false).value=1200
         check(main.find_child("ProductionTotalCost",true,false).text=="¥600,000","Reproduction displays actual per-copy breakdown")
         await press("MEDIA_INFORMATION")

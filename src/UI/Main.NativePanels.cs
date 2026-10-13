@@ -18,55 +18,57 @@ public partial class Main
         ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,
         CustomMinimumSize=size,MouseFilter=MouseFilterEnum.Ignore
     };
-    private Action ProjectPanel(Container parent,GameState state,DevelopmentProjectState project,OriginalCatalog catalog)
+    private Action ProjectPanel(Control parent,GameState state,DevelopmentProjectState project,OriginalCatalog catalog)
     {
-        var panel=new VBoxContainer {Name="ProjectSummaryPanel",CustomMinimumSize=new(245,0)};parent.AddChild(panel);
-        var top=new HBoxContainer();panel.AddChild(top);
-        var device=new VBoxContainer();top.AddChild(device);
-        device.AddChild(Picture("ProjectHardwarePicture",HardwarePicture(state,project.HardwareSourceIndex),new(64,64)));
-        device.AddChild(new Label {Text=CatalogName(catalog,"HARDWARE",project.HardwareSourceIndex,catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex).Name),AutowrapMode=TextServer.AutowrapMode.WordSmart});
-        var summary=new Label {Name="ProjectCatalogSummary",AutowrapMode=TextServer.AutowrapMode.WordSmart,SizeFlagsHorizontal=SizeFlags.ExpandFill};top.AddChild(summary);
-        var quality=new GridContainer {Columns=2};panel.AddChild(quality);
+        var panel=new Control {Name="ProjectSummaryPanel",CustomMinimumSize=new(288,204),Size=new(288,204)};parent.AddChild(panel);
+        NativePlace(panel,Picture("ProjectHardwarePicture",HardwarePicture(state,project.HardwareSourceIndex),new(64,64)),new(4,6,64,64));
+        NativeText(panel,"ProjectHardwareName",CatalogName(catalog,"HARDWARE",project.HardwareSourceIndex,catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex).Name),new(2,70,72,20),10,HorizontalAlignment.Center);
+        var summary=NativeText(panel,"ProjectCatalogSummary","",new(78,4,208,66),10);summary.AddThemeConstantOverride("line_spacing",0);summary.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeFill(panel,"ProjectAudienceFields",new(78,4,208,50),new(1,.75f,1));summary.MoveToFront();
         string[] keys=["STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"];
-        Color[] colors=[new(.12f,.12f,.85f),new(.7f,.6f,0),new(.65f,.08f,.85f),new(0,.65f,.7f)];
-        var values=new Label[4];
-        var weights=new Label[4];
+        Color[] colors=[new(.1f,.1f,.9f),new(.8f,.7f,0),new(.7f,.05f,.85f),new(0,.7f,.7f)];
+        var values=new Label[4];var weights=new Label[4];
+        NativeFill(panel,"ProjectQualityFields",new(78,74,208,77),new(.77f,.77f,1));
         for(int i=0;i<4;i++)
         {
-            var row=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};quality.AddChild(row);
-            var label=new Label {Text="● "+Tr(keys[i])};label.AddThemeColorOverride("font_color",colors[i]);row.AddChild(label);
-            var numbers=new HBoxContainer();row.AddChild(numbers);
-            values[i]=new Label {Name=$"ProjectQuality{i}",SizeFlagsHorizontal=SizeFlags.ExpandFill};numbers.AddChild(values[i]);
-            weights[i]=new Label {Name=$"ProjectFocus{i}"};weights[i].AddThemeColorOverride("font_color",Colors.Red);numbers.AddChild(weights[i]);
+            int x=78+(i%2)*106,y=74+(i/2)*38;
+            var dot=NativeText(panel,$"ProjectQualityDot{i}","●",new(x,y,12,16));dot.AddThemeColorOverride("font_color",colors[i]);
+            NativeText(panel,$"ProjectQualityCaption{i}",Tr(keys[i]),new(x+13,y,90,16));
+            values[i]=NativeText(panel,$"ProjectQuality{i}","",new(x+3,y+16,54,21),18);
+            weights[i]=NativeText(panel,$"ProjectFocus{i}","",new(x+61,y+20,39,16),10,HorizontalAlignment.Right);weights[i].AddThemeColorOverride("font_color",Colors.Red);
         }
-        var bugsRow=new HBoxContainer();panel.AddChild(bugsRow);
-        bugsRow.AddChild(new Label {Text=Tr("BUGS")});
-        var bugBox=new PanelContainer();bugBox.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=Colors.Red});bugsRow.AddChild(bugBox);
-        var bugs=new Label {Name="ProjectBugCount",HorizontalAlignment=HorizontalAlignment.Center,CustomMinimumSize=new(42,24)};bugs.AddThemeColorOverride("font_color",Colors.Black);bugBox.AddChild(bugs);
-        var recognition=new Label {Name="ProjectRecognition"};bugsRow.AddChild(recognition);
-        var progress=new Label {Name="ProjectPointSummary"};panel.AddChild(progress);
-        var bar=new ProgressBar {Name="ProjectSummaryProgress",MinValue=0,MaxValue=100,ShowPercentage=true};panel.AddChild(bar);
+        NativeText(panel,"ProjectBugsCaption",Tr("BUGS"),new(78,152,40,19));
+        NativeFill(panel,"ProjectBugBox",new(118,152,36,20),Colors.Red);
+        var bugs=NativeText(panel,"ProjectBugCount","",new(118,152,36,20),14,HorizontalAlignment.Center);
+        var recognition=NativeText(panel,"ProjectRecognition","",new(165,152,121,20),10);
+        var progress=NativeText(panel,"ProjectPointSummary","",new(78,173,208,16),10);
+        var bar=new ProgressBar {Name="ProjectSummaryProgress",MinValue=0,MaxValue=100,ShowPercentage=false};
+        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=Colors.White});bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=Colors.Green});
+        NativePlace(panel,bar,new(78,190,166,8));
+        var percent=NativeText(panel,"ProjectProgressPercent","",new(246,184,42,18),10,HorizontalAlignment.Right);
         void Refresh()
         {
             string audience=CatalogName(catalog,"AUDIENCE",project.AudienceSourceIndex,catalog.Audiences.Single(x=>x.SourceIndex==project.AudienceSourceIndex).Name);
             string genre=project.GenreSourceIndex is int g ? CatalogName(catalog,"GENRE",g,catalog.Genres.Single(x=>x.SourceIndex==g).Name) : "—";
             string type=project.GameTypeSourceIndex is int t ? CatalogName(catalog,"TYPE",t,catalog.GameTypes.Single(x=>x.SourceIndex==t).Name) : "—";
-            summary.Text=$"{Tr("PROJECT_AUDIENCE")}: {audience}\n{Tr("PROJECT_GENRE")}: {genre}\n{Tr("PROJECT_CONTENT")}: {type}\n{Tr("PROJECT_SIZE")}: {Math.Floor(project.DataSize):N0} KB";
+            summary.Text=$"{Tr("PROJECT_AUDIENCE")}: {audience}\n{Tr("PROJECT_GENRE")}: {genre}\n{Tr("PROJECT_CONTENT")}: {type}\n{Tr("PROJECT_SIZE")}: {Math.Floor(project.DataSize):N0} KB";summary.TooltipText=summary.Text;
             double[] q=[project.Quality.Fun,project.Quality.Novelty,project.Quality.Graphics,project.Quality.Music];
             int?[] f=[project.Focus?.Fun,project.Focus?.Novelty,project.Focus?.Graphics,project.Focus?.Music];
             for(int i=0;i<4;i++){values[i].Text=$"{q[i]:N0}";weights[i].Text=$"{f[i]?.ToString() ?? "?"}%";}
-            bugs.Text=project.Bugs.ToString();recognition.Text=$"{Tr("GAME_RECOGNITION")}: {project.Recognition:N0}%";
+            bugs.Text=project.Bugs.ToString();recognition.Text=$"{Tr("NATIVE_RECOGNITION")}: {project.Recognition:N0}%";
             progress.Text=$"{Tr("DEVELOPMENT_POINTS")}: {Math.Floor(project.Progress):N0}/{project.RequiredPoints:N0}";
-            bar.Value=OfficeRoomPresentationRules.Percentage(project);
+            int value=OfficeRoomPresentationRules.Percentage(project);bar.Value=value;percent.Text=value+"%";
         }
         Refresh();return Refresh;
     }
     private void CheckpointPanel(GameState state,DevelopmentProjectState project,OriginalCatalog catalog,string name,string heading)
     {
-        CompactManagementWindow(name,new(770,410),750);_dialog?.SetTitle(heading);
-        var row=new HBoxContainer();row.AddThemeConstantOverride("separation",12);_content.AddChild(row);
-        ProjectPanel(row,state,project,catalog);
-        var choices=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};row.AddChild(choices);_content=choices;
+        var canvas=NativeWindow(name,heading,new(562,212));ProjectPanel(canvas,state,project,catalog);
+        NativeAction(canvas,"CheckpointCancelProject","CANCEL",new(4,122,70,28),()=>ShowProjectCancellation(state,project));
+        var choices=new VBoxContainer {Name="CheckpointChoicePane",CustomMinimumSize=new(266,204)};
+        choices.AddThemeConstantOverride("separation",2);NativePlace(canvas,choices,new(294,4,266,204));_content=choices;
+        _status=new Label {Name="CheckpointStatus",ClipText=true};_status.AddThemeFontSizeOverride("font_size",10);
+        choices.AddChild(_status);
     }
     private static Label MoneyCell(GridContainer grid,string name,string caption)
     {

@@ -8,11 +8,10 @@ public partial class Main
     private void ShowHallCelebration(GameState state,ReleasedGameState product)
     {
         var scene=product.HallCelebration!;
-        ClearContent();CompactManagementWindow("HallCelebrationWindow",new(370,310),350);
-        AddHeading(Tr("REVIEW_HALL_OF_FAME"),22);AddHeading(product.Title,16);
-        var picture=Picture("HallCelebrationPicture",null,new(256,160));_content.AddChild(picture);
-        var fallback=new Label {Name="HallCelebrationFallback",Text=Tr("REVIEW_ARTWORK_REIMPORT"),AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(fallback);
-        var close=new Button {Name="AcknowledgeHallCelebration",Text=Tr("CONTINUE")};_content.AddChild(close);
+        ClearContent();var canvas=NativeWindow("HallCelebrationWindow",Tr("NATIVE_CONGRATULATIONS"),new(268,192));
+        var picture=NativePlace(canvas,Picture("HallCelebrationPicture",null,new(256,160)),new(6,4,256,160));
+        var fallback=NativeText(canvas,"HallCelebrationFallback",Tr("REVIEW_ARTWORK_REIMPORT"),new(6,4,256,160));fallback.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var close=NativeAction(canvas,"AcknowledgeHallCelebration","CONTINUE",new(170,166,92,23),()=>{});
         close.Pressed+=()=>
         {
             if(!ReferenceEquals(_session.Current,state) || !ReferenceEquals(product.HallCelebration,scene))return;
