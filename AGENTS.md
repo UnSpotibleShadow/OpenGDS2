@@ -1,6 +1,20 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-13, M101 native screen layouts
+## Current handoff — 2026-10-13, M102 awards follow-ups
+
+M101 is merged in PR #105 at `b29103aec9af301c292c75cabf09d6c52d9fec54`.
+M102 on `codex/m102-awards-presentation` adds a locally generated English
+GAME CONTEST title-plate patch and wraps/measures the winner/payment message,
+keeping acknowledgment below every line. See `docs/awards-presentation-m102.md`.
+Verify PR/#55/main state. **Keep #95 open.** No award draw, payment or saved
+ceremony ordering changes. Original stage/scenery stays untouched outside the
+182×18 caption region; Japanese and explicit overlays retain their paths.
+
+M102 validation: 518 optional-original domain checks; clean app build/import;
+six rendered English/Japanese short/long/rival cases with complete-line and
+save/reload checks; complete core-loop regression. M101 checks remain historical.
+
+## Previous handoff — 2026-10-13, M101 native screen layouts
 
 M100 is merged in PR #104 at `9579c392af6bd49976ef78f7480b26df03608237`.
 M101 on `codex/m101-native-screen-layouts` addresses the owner's M100 playthrough

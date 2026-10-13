@@ -188,7 +188,7 @@ func run() -> void:
         awards.State.Month=12;awards.State.Week=4
         awards.State.Calendar.Pending={"ClosingDate":{"Year":3,"Month":12,"Week":3},"Phase":0,"Index":0,"PendingEvent":8,"Awards":{"Year":3,"Entries":[0],"CategoryIndex":0,"ResultReady":true,"WinningProduct":0}}
         await load_fixture(awards)
-        await window("AwardCeremonyWindow",550,295)
+        await window("AwardCeremonyWindow",550,335)
         await dispose()
     print("Native layout smoke failures: ",failures)
     quit(0 if failures==0 else 1)

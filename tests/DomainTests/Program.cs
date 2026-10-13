@@ -42,6 +42,16 @@ Test("local scene captions change only their declared area and preserve source p
     Throws<InvalidDataException>(()=>LocalSceneCaptionRules.Patch(new byte[1],true));
 });
 
+Test("award caption preserves its source and every pixel outside the title plate",()=>
+{
+    byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray(),copy=(byte[])source.Clone();
+    byte[] patch=LocalSceneCaptionRules.PatchAwards(source);var r=LocalSceneCaptionRules.AwardsRegion;
+    Check(source.SequenceEqual(copy) && !patch.SequenceEqual(source) && patch.SequenceEqual(LocalSceneCaptionRules.PatchAwards(source)));
+    for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<r.X||x>=r.X+r.Width||y<r.Y||y>=r.Y+r.Height)
+    {int i=(y*256+x)*3;Check(source.AsSpan(i,3).SequenceEqual(patch.AsSpan(i,3)));}
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchAwards(new byte[1]));
+});
+
 Test("office cadence retains nominal wall time without replaying stalled iterations",()=>
 {
     double remainder=0;int ticks=0;
@@ -5616,6 +5626,15 @@ if (args.Length == 2)
         byte[] original=booth.Rgba.Where((v,i)=>i%4!=3).ToArray(),translated=LocalSceneCaptionRules.Patch(original,false);
         Check(!translated.SequenceEqual(original));
         for(int y=22;y<160;y++)Check(original.AsSpan(y*256*3,256*3).SequenceEqual(translated.AsSpan(y*256*3,256*3)));
+    });
+    Test("optional original awards caption fingerprint and scenery match",()=>
+    {
+        byte[] exe=File.ReadAllBytes(args[0]);var scene=LocalRasterDecoder.Gif(exe.AsSpan(0x1367D8,19520).ToArray(),256,160);
+        byte[] rgb=scene.Rgba.Where((v,i)=>i%4!=3).ToArray();
+        Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(rgb)).ToLowerInvariant()=="d81ae783132d1866c722c3aa4e4ada3de3bd1cf43cfa6bd15108fbc75ea06463");
+        var patch=LocalSceneCaptionRules.PatchAwards(rgb);Check(!patch.SequenceEqual(rgb));var r=LocalSceneCaptionRules.AwardsRegion;
+        for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<r.X||x>=r.X+r.Width||y<r.Y||y>=r.Y+r.Height)
+        {int i=(y*256+x)*3;Check(rgb.AsSpan(i,3).SequenceEqual(patch.AsSpan(i,3)));}
     });
     Test("optional original help and every bounded serialized artwork resource are recovered locally",()=>
     {
