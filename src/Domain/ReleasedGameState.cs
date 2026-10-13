@@ -42,6 +42,8 @@ public sealed class ReleasedGameState
     public List<ShipmentMessage>? ShipmentMessages {get;set;}
     public int ShipmentMessageIndex {get;set;}
     public bool HallOfFame {get;set;}
+    // New review acknowledgments only; legacy Hall records are not replayed.
+    public HallCelebrationState? HallCelebration {get;set;}
     public GameDate? ReleasedOn {get;set;}
     public int? OriginalAwardCode {get;set;}
     public int? SalesMilestoneStage {get;set;}

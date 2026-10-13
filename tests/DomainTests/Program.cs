@@ -18,6 +18,30 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("Hall celebration is queued once by new qualifying review acknowledgment",()=>
+{
+    var p=new ReleasedGameState {ProductIndex=0,Title="Test",ReviewScores=[8,8,8,8],ReviewPending=true};
+    var s=new GameState {ReleasedGames=[p],Company=new() {Name="Test",PresidentName="Test",HallOfFameCount=0}};
+    Check(ReviewService.Acknowledge(s,p) && p.HallCelebration is not null && s.Company.HallOfFameCount==1);
+    Check(!ReviewService.Acknowledge(s,p) && s.Company.HallOfFameCount==1);
+    for(int n=0;n<3;n++)HallCelebrationRules.Advance(s,p);
+    Check(p.HallCelebration!.Ticks==3 && p.HallCelebration.Frame==0);
+    HallCelebrationRules.Advance(s,p);Check(p.HallCelebration.Frame==1);
+    HallCelebrationRules.Advance(s,p);HallCelebrationRules.Advance(s,p);
+    Check(p.HallCelebration.Frame==2 && p.HallCelebration.Ticks==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));p=s.ReleasedGames[0];
+    Check(p.HallCelebration!.Frame==2 && p.HallCelebration.Ticks==1 && s.Company.HallOfFameCount==1);
+    Check(HallCelebrationRules.Acknowledge(p) && !HallCelebrationRules.Acknowledge(p) && s.Company.HallOfFameCount==1);
+    var next=new ReleasedGameState {ProductIndex=1,Title="Next",ReviewScores=[8,8,8,8],ReviewPending=true};s.ReleasedGames.Add(next);
+    Check(ReviewService.Acknowledge(s,next) && next.HallCelebration!.Ticks==1 && next.HallCelebration.Frame==0 && s.Company.HallOfFameCount==2);
+});
+Test("legacy Hall status does not invent a pending celebration and malformed frames reject",()=>
+{
+    var p=new ReleasedGameState {ProductIndex=0,Title="Test",HallOfFame=true,ReviewScores=[8,8,8,8]};
+    var s=new GameState {Company=new() {Name="Test",PresidentName="Test"},ReleasedGames=[p]};
+    Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].HallCelebration is null);
+    p.HallCelebration=new() {Frame=3};Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
 Test("promotion delays transaction until callback 27 and resumes without duplicate draws",()=>
 {
     var p=new DevelopmentProjectState {RoomIndex=0,Title="Test",OriginalStage=1,GameTypeSourceIndex=0,PromotionUseCount=0,Recognition=90,RequiredPoints=100,Focus=new(25,25,25,25)};
@@ -3461,7 +3485,8 @@ Test("pending reviews survive save/load and pause simulation until acknowledged"
     session.TickOffice(CoreCatalog());Check(s.SalesTicks==0 && s.CompanyActivityTicks==0);
     Check(AcknowledgeReviews(s,g) && g.HallOfFame && !g.ReviewPending && s.Company.HallOfFameCount==1);
     Check(!AcknowledgeReviews(s,g) && s.Company.HallOfFameCount==1);
-    session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
+    session.TickOffice(CoreCatalog());Check(s.SalesTicks==0 && g.HallCelebration is not null);
+    Check(HallCelebrationRules.Acknowledge(g));session.TickOffice(CoreCatalog());Check(s.SalesTicks==1);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.ReleasedGames[0].HallOfFame && s.Company.HallOfFameCount==1);
 });
 Test("review validation and legacy unknown values",()=>
@@ -3475,7 +3500,7 @@ Test("review validation and legacy unknown values",()=>
     g.ReviewScores=[8,8,8,8];g.ReviewPending=true;
     Check(AcknowledgeReviews(s,g) && s.Company.HallOfFameCount is null && g.HallOfFame);
     g.ReviewScores=[1,1,1,1];Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
-    g.HallOfFame=false;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ReviewScores!.Sum()==4);
+    HallCelebrationRules.Acknowledge(g);g.HallOfFame=false;Check(SaveStore.Deserialize(SaveStore.Serialize(s)).ReleasedGames[0].ReviewScores!.Sum()==4);
 });
 Test("sales milestone thresholds queue in order without bonuses or duplicate announcements",()=>
 {

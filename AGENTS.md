@@ -1,6 +1,23 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-12, M98 original-window census
+## Current handoff — 2026-10-13, M99 challenge audit and Hall scene
+
+M98 is merged in PR #102 at `2507317c6ea5c1b5a2fde10c0698642cc8927564`.
+M99 on `codex/m99-programming-audit` resolves challenge trigger/reels/actor,
+result effects and return. Failure is mode 6, not M98's incorrectly transcribed 9.
+Success/super are modes 10/17. Read `docs/programming-challenge-m99.md` and
+verify PR/#55/main publication state. Nine fingerprints, 36 anchors and fifty
+reel writes are checked by the new research verifier. Do not re-trace these.
+
+Challenge integration still needs a saved mid-actor-pass continuation; re-running
+an employee tick after its modal result would repeat stress/counters/RNG. No
+challenge gameplay is wired in this batch. Hall celebration is implemented:
+new qualifying reviews queue the two locally imported banner frames; frame/counter
+resume from saves; closing does not repeat the existing Hall count. Legacy Hall
+flags do not replay historical scenes. Reimport for new artwork. Exact native
+secretary/sequel ordering remains pending; #95 MUST stay open.
+
+## Previous handoff — M98 original-window census
 
 M97 is merged in PR #101 at `39a3158c399221634f6e7c193ce21936f3e65650`.
 M98 research on `codex/m98-window-census` inventories every native form:
@@ -14,7 +31,7 @@ advanced-programming start/stop challenge (workflow, not just decoration), media
 information, reproduction tables, third-party hardware launch card, activity
 confirmation/results, help topics, numbered save/load previews and live charts/
 record panes. Do not reimplement already recovered simulation. Before coding
-advanced programming, trace its reel weights/actor mapping/meeting modes 9/10/17
+advanced programming, trace its reel weights/actor mapping/meeting modes 6/10/17
 and resume mutations; existing ordinary bursts are not its equivalent.
 `fGMZishaNet` is reachable but its displayed data has no recovered writers in
 our decoded reference index; do not invent working multiplayer from its name.

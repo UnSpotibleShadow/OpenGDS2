@@ -1,0 +1,326 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "fingerprints": [
+    {
+      "name": "Module1",
+      "start": "0x0097BDB8",
+      "size": 40,
+      "sha256": "103b028fa7f43b01e8255d2996cbdbcdeef782da3b5c7524c8e34f552119066f"
+    },
+    {
+      "name": "Module1",
+      "start": "0x0097B500",
+      "size": 28,
+      "sha256": "a4e8b0057464404f978935ee53497b72162bbefa14b23b76d8006f72b167ee0d"
+    },
+    {
+      "name": "Module1",
+      "start": "0x0097B410",
+      "size": 28,
+      "sha256": "a68523641a2339de65f9a1b9833f1368606f8b1980a676c294c0fe9f2f68dc2c"
+    },
+    {
+      "name": "fGMKikakuKaigi",
+      "start": "0x009EFA40",
+      "size": 27016,
+      "sha256": "873bf218fd41a10dfbac8ff7e394f68ceb018df513a432033c8cfc5d088f936b"
+    },
+    {
+      "name": "Module2",
+      "start": "0x00A0283C",
+      "size": 56604,
+      "sha256": "2a02c38bb853e37b5e616f4251350a25d12e0d27d19406098f5037b29a678ff4"
+    },
+    {
+      "name": "fGMKoudo",
+      "start": "0x00980EB8",
+      "size": 140,
+      "sha256": "ff00f2a47e07b49a2bb2432e258b4e3f2766c25166270e14122059ca40bb9185"
+    },
+    {
+      "name": "fGMKoudo",
+      "start": "0x009A19A0",
+      "size": 1696,
+      "sha256": "df1614a9948a1184a88a5d972348b4eed646d5586927b197c4405fea68b3f053"
+    },
+    {
+      "name": "fGMKoudo",
+      "start": "0x00978044",
+      "size": 8,
+      "sha256": "4e15195a19d87b8ff1e4d4f75f254e37964257f36090d1a1cf9c5e004a0aee30"
+    },
+    {
+      "name": "fGMKoudo",
+      "start": "0x0098F68C",
+      "size": 580,
+      "sha256": "aa67903959f6b34023d54f030765a2110d5817556e8dad0d0d13340ab69a140f"
+    }
+  ],
+  "anchors": [
+    {
+      "start": "0xa0283c",
+      "relative": "0x50bc",
+      "hex": "054c00fc96"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x50d1",
+      "hex": "054e00fc96"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x5128",
+      "hex": "286cffa861"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x5144",
+      "hex": "28ccfe1027"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x517d",
+      "hex": "fdb6820004"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x5184",
+      "hex": "fdc0830028"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x5469",
+      "hex": "248c000db0"
+    },
+    {
+      "start": "0xa0283c",
+      "relative": "0x5471",
+      "hex": "041cfcfc22"
+    },
+    {
+      "start": "0x980eb8",
+      "relative": "0x13",
+      "hex": "fdb600001b"
+    },
+    {
+      "start": "0x980eb8",
+      "relative": "0x3d",
+      "hex": "286cff0200"
+    },
+    {
+      "start": "0x980eb8",
+      "relative": "0x73",
+      "hex": "286cff0500"
+    },
+    {
+      "start": "0x980eb8",
+      "relative": "0x7f",
+      "hex": "286cff0600"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x1e",
+      "hex": "051000286c"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0xa1",
+      "hex": "050f00286c"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0xc8",
+      "hex": "051000286c"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x13a",
+      "hex": "050400286c"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x172",
+      "hex": "050400286c"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x1aa",
+      "hex": "285cff0600"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x1eb",
+      "hex": "285cff0a00"
+    },
+    {
+      "start": "0x98f68c",
+      "relative": "0x22c",
+      "hex": "285cff1100"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x2032",
+      "hex": "05a000fc96"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x2037",
+      "hex": "286cff3c00"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x2051",
+      "hex": "05a100fc96"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x2056",
+      "hex": "286cff0600"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x3487",
+      "hex": "286cff2800"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x351f",
+      "hex": "286cff2800"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x35b7",
+      "hex": "286cff2800"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x364f",
+      "hex": "286cff2800"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x6584",
+      "hex": "945cff0598"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x661c",
+      "hex": "945cff0598"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x66b4",
+      "hex": "945cff0598"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x674c",
+      "hex": "945cff0598"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x382a",
+      "hex": "05e9005235"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x384e",
+      "hex": "05ea00fc96"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x690c",
+      "hex": "286cff1e00"
+    },
+    {
+      "start": "0x9efa40",
+      "relative": "0x6945",
+      "hex": "05ea00fc96"
+    }
+  ],
+  "reel_load": {
+    "start": "0x009A19A0",
+    "size": 1696,
+    "minimum_inspiration": [
+      80,
+      60,
+      40,
+      20,
+      0
+    ],
+    "tables": [
+      [
+        2,
+        0,
+        1,
+        0,
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        1,
+        0,
+        2,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "result_modes": [
+    6,
+    10,
+    17
+  ],
+  "result_gains": {
+    "failure_bugs": 60,
+    "failure_size": 6,
+    "success_quality": 40,
+    "super_quality": 100,
+    "success_experience": 30
+  }
+}

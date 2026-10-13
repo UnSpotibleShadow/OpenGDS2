@@ -36,7 +36,7 @@ public static class ReviewService
         if (!state.ReleasedGames.Contains(product) || !product.ReviewPending || product.ReviewScores is null || ShipmentDialogueRules.HasPending(product)) return false;
         bool hallOfFame=product.ReviewScores.Sum()>=32;
         int? count=hallOfFame && state.Company.HallOfFameCount is int current ? checked(current+1) : state.Company.HallOfFameCount;
-        product.HallOfFame=hallOfFame;product.ReviewPending=false;state.Company.HallOfFameCount=count;
+        product.HallOfFame=hallOfFame;product.HallCelebration=hallOfFame ? new() {Ticks=state.HallCelebrationTicks ?? 0} : null;product.ReviewPending=false;state.Company.HallOfFameCount=count;
         if(product.ReviewDisplayCallbacks is not null)product.ReviewDisplayCallbacks=90;
         return true;
     }
