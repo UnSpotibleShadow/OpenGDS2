@@ -1,6 +1,48 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-13, M99 challenge audit and Hall scene
+## Current handoff — 2026-10-13, M100 presentation completion
+
+M99 is merged in PR #103 at `a6e35c0e83c643e86d9f53fb0fa52cbb083c09a3`.
+M100 on `codex/m100-presentation-completion` implements the ten M98 gap groups:
+programming challenge and saved mid-actor continuation; review assessment/Hall/
+sequel sequence; four illustrated sales milestones; media and reproduction
+breakdowns/held controls; hardware launch card; activity confirmations/receipts;
+five help topics; numbered modern slots/previews; live charts and record table.
+See `docs/presentation-completion-m100.md`. Verify PR/#55/main publication state.
+**Keep #95 open.** Do not redo the completed M93–M100 handler research.
+
+Reimport the original archive for all 91 local help captions, new scene images
+and the 422-resource serialized BMP/GIF inventory. #97 now has an inventory
+foundation, not certified image-to-handler coverage. Original files/text/pixels
+and generated HTML/contact sheets stay private and outside this repository.
+
+The default session now owns a saved shared 24-bit VB-family RNG; UI callers use
+it. Draw recurrence/save continuation are checked independently. Modern initial
+seed and missing cosmetic/native ordering remain fidelity limits. Do not claim
+whole-session original RNG equivalence. Legacy random history remains unknown.
+
+#94's proven missed-tick replay difference is fixed: one office pass maximum per
+frame, no stalled-frame catch-up, normal frame quantization retained at nominal
+40 ms / 200 ticks per week. Do not arbitrarily slow the calendar. Original Windows
+wall-clock comparison is still needed to establish actual perceived-speed parity.
+
+Native GD2 remains unsupported: two verified sequential Write/Input procedures,
+130 matching record templates and 40 loops each are inventoried in the new save
+evidence manifest/verifier. No genuine GD2 fixture is available here. Complete
+field mapping, Variant/Empty conversions and dirty-slot comparison before exposing
+an importer. The modern numbered JSON picker is not an original-save importer.
+Exact native fonts/stacking/control focus/timer delivery need a Windows host;
+this managed Linux workspace cannot certify those by static tracing alone.
+
+M100 validation: 514 optional-original domain checks; clean app build/import; bilingual
+challenge/review/Hall/milestone/activity/media/help/slot/hardware/chart/cadence
+smoke; complete core-loop UI; census/programming/native-save/office evidence
+verifiers; eleven Python checks. Integrated UI verifies 25 nominal ticks/second.
+Do not rerun passing checks purely to publish. Owner prefers related changes batched
+before checks. Usage percentage is unavailable; if reported at 15%, finish a safe
+step, persist state and update this handoff.
+
+## Previous handoff — M99 challenge audit and Hall scene
 
 M98 is merged in PR #102 at `2507317c6ea5c1b5a2fde10c0698642cc8927564`.
 M99 on `codex/m99-programming-audit` resolves challenge trigger/reels/actor,

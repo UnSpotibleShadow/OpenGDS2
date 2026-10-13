@@ -7,6 +7,7 @@ public partial class Main
 {
     private void ShowCompanyActivities(GameState state)
     {
+        if(ShowPendingCompanyActivity(state))return;
         ClearContent();AddHeading(Tr("COMPANY_ACTIVITIES"),28);
         AddAction("BANK",()=>ShowBank(state),BankLoanService.CheckBorrow(state) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
@@ -22,8 +23,7 @@ public partial class Main
             var button=new Button {Name=$"CompanyActivity{(int)kind}",Text=Tr(key),Disabled=state.CompanyActivityPerformed!=false};_content.AddChild(button);
             button.Pressed+=()=>
             {
-                var result=CompanyActivityService.TryPerform(state,kind,new Random());
-                ShowCompanyActivities(state);AddHeading(Tr($"COMPANY_ACTIVITY_RESULT_{result}"),18);
+                state.PendingCompanyActivity=new() {Activity=kind};ShowPendingCompanyActivity(state);
             };
         }
         var catalog=_importer.LoadCatalog();

@@ -6,7 +6,12 @@ namespace OpenGDS2.Core;
 public sealed class GameSession
 {
     private readonly Random _random;
-    public GameSession(Random? random = null) => _random = random ?? new Random();
+    public Random Random=>_random;
+    public GameSession(Random? random = null)
+    {
+        _random=random ?? new VbSimulationRandom((uint)System.Security.Cryptography.RandomNumberGenerator.GetInt32(1<<24));
+        if(_random is VbSimulationRandom stream)stream.StateChanged=seed=>{if(Current is { } state)state.SimulationRandomState=seed;};
+    }
     public GameState? Current { get; private set; }
     public ProjectCancellationResult CancelProject(DevelopmentProjectState project)
         =>ProjectCancellationService.TryCancel(Current ?? throw new InvalidOperationException("No current session."),project,_random);
@@ -26,6 +31,7 @@ public sealed class GameSession
             DevelopmentComputerIndex = 0,
             HardwareLicenses = [0],
             SalesFee1 = 1500, SalesFee2 = 1500,
+            ProgrammingActorPasses=Current?.ProgrammingActorPasses ?? 0,
             HallCelebrationTicks=Current?.HallCelebrationTicks ?? 0,
             CompanyActivityTicks=0,CompanyActivityPerformed=false,
             ProductionPerformedThisWeek=false,
@@ -71,6 +77,7 @@ public sealed class GameSession
                 state.OriginalAccuracyCells=Enumerable.Range(99,60).ToDictionary(x=>x,_=>0);
             }
         }
+        state.SimulationRandomState=(_random as VbSimulationRandom)?.State;
         Current = state;
         return state;
     }
@@ -83,7 +90,7 @@ public sealed class GameSession
     public RecruitmentState OpenRecruitment()
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) throw new InvalidOperationException("A conversation is pending.");
+        if (state.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(state) || state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) throw new InvalidOperationException("A conversation is pending.");
         state.Recruitment.Candidates.Clear();
         if (state.MinimumSourceIndex is int minimum && state.SourceUpperBound is int upper)
             state.Recruitment.Candidates.AddRange(RecruitmentGenerator.BuildRoster(state.EmployeeSources, minimum, upper, _random));
@@ -92,7 +99,7 @@ public sealed class GameSession
     public HireResult Hire(EmployeeState candidate)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
-        if (state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return HireResult.ConversationPending;
+        if (state.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(state) || state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return HireResult.ConversationPending;
         var result = HiringService.TryHire(state, candidate, _random);
         if (result == HireResult.Success && candidate.SourceIndex is int source && source is >=0 and <=59 && candidate.PortraitId is >=1 and <=10)
             state.PendingHireGreeting = new() {EmployeeSourceIndex=source,Variant=(int)Math.Floor(_random.NextSingle()*10)};
@@ -107,15 +114,18 @@ public sealed class GameSession
     }
 
     public SecretaryAdviceResult AskSecretary(OriginalCatalog? catalog)
-        =>Current is { } ownState && (ownState.ReleasedGames.Any(p=>p.HallCelebration is not null) || ownState.PendingPromotion is not null || ownState.Casino.ActivityOpen || ownState.FinancialFailure is not null || OwnHardwareService.HasPending(ownState)) || Current?.PendingBankLoanReceipt is not null || Current?.PendingProjectCancellation is not null || (Current?.PendingFacilityReceipt is not null || Current?.PendingFeeNegotiation is not null || Current?.PendingMysteryLabResult is not null) ? SecretaryAdviceResult.EventPending :
+        =>Current is { } ownState && (ownState.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(ownState) || ownState.ReleasedGames.Any(p=>p.HallCelebration is not null) || ownState.PendingPromotion is not null || ownState.Casino.ActivityOpen || ownState.FinancialFailure is not null || OwnHardwareService.HasPending(ownState)) || Current?.PendingBankLoanReceipt is not null || Current?.PendingProjectCancellation is not null || (Current?.PendingFacilityReceipt is not null || Current?.PendingFeeNegotiation is not null || Current?.PendingMysteryLabResult is not null) ? SecretaryAdviceResult.EventPending :
             SecretaryAdviceRules.Prepare(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
 
     public void TickOffice(OriginalCatalog? catalog = null)
     {
         var state = Current ?? throw new InvalidOperationException("No current session.");
         if (catalog is not null) catalog=OwnHardwareService.Catalog(state,catalog);
-        if (state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return;
-        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
+        if (state.PendingCompanyActivity is not null || state.PendingProgrammingChallenge is not null || state.ReleasedGames.Any(p=>p.HallCelebration is not null) || state.PendingPromotion is not null || state.Casino.ActivityOpen || state.FinancialFailure is not null || OwnHardwareService.HasPending(state) || state.PendingBankLoanReceipt is not null || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || state.PendingProjectCancellation is not null || (state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingMysteryLabResult is not null)) return;
+        if (state.DevelopmentProjects.Any(x=>x.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(x)) || state.ReleasedGames.Any(x=>x.ReviewPending || x.ReviewSummaryPage is not null) || SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
+        var continuation=state.OfficeActorContinuation;
+        if(continuation is null)
+        {
         if (CalendarService.HasPending(state))
         {
             if (!CalendarService.Resume(state,catalog,_random)) return;
@@ -127,22 +137,29 @@ public sealed class GameSession
         if (catalog is not null) SalesService.Tick(state,catalog,_random);
         if (SalesMilestoneService.HasPending(state) || RecallService.HasPending(state)) return;
         OfficeRoomPresentationRules.Tick(state);
+        }
         // Module2 +0A52/CE64 visits actor slots, including reused hire slots.
         foreach (var employee in state.Employees.OrderBy(x=>x.Office?.SlotIndex ?? int.MaxValue))
         {
+            if(continuation is not null && (employee.Office?.SlotIndex ?? int.MaxValue)<continuation.ActorSlot)continue;
+            bool resuming=continuation is not null && employee.Office?.SlotIndex==continuation.ActorSlot;
+            if(!resuming)
+            {
             OfficeStaffRules.Tick(employee, _random);
             OfficeBurstFlameRules.Tick(state,employee);
+            }
             if (catalog is not null)
             {
-                TrainingService.Tick(state,employee,catalog,_random);
+                if(!resuming)TrainingService.Tick(state,employee,catalog,_random);
                 DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
-                if (OwnHardwareService.HasPending(state))
+                if (OwnHardwareService.HasPending(state) || state.PendingProgrammingChallenge is not null)
                 {
                     var pendingSource=state.EmployeeSources.FirstOrDefault(x=>x.SourceIndex==employee.SourceIndex);
                     if (pendingSource is not null) {pendingSource.Employee.Stress=employee.Stress;pendingSource.Employee.Experience=employee.Experience;}
                     return;
                 }
             }
+            if(resuming){state.OfficeActorContinuation=null;continuation=null;}
             TechnologyApplicationService.TickSpeed(employee);
             SecretaryPolicyRules.TickEmployee(state,employee,_random);
             if (employee.Office is not null) OfficeVisualRules.TickBubble(employee.Office);
@@ -167,6 +184,10 @@ public sealed class GameSession
     public bool AcceptHorsePayout(OriginalCatalog? catalog)=>CasinoHorseService.AcceptPayout(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
     public bool ResumeHorseCatalog(OriginalCatalog? catalog)=>CasinoHorseService.ResumeCatalogBoundary(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
     public bool AcknowledgeFinancialFailure()=>Current is { } state && FinancialFailureService.Acknowledge(state,_random);
-    public void Restore(GameState state) => Current = state ?? throw new ArgumentNullException(nameof(state));
+    public void Restore(GameState state)
+    {
+        Current=state ?? throw new ArgumentNullException(nameof(state));
+        if(_random is VbSimulationRandom stream && state.SimulationRandomState is uint seed)stream.Restore(seed);
+    }
     public void Clear() => Current = null;
 }

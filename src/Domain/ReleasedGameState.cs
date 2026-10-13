@@ -34,6 +34,8 @@ public sealed class ReleasedGameState
     public ProductRecallState? Recall {get;set;}
     // Older modern saves have unknown reviews; loading must not reroll them.
     public List<int>? ReviewScores {get;set;}
+    public int? ReviewSummaryPage {get;set;}
+    public int SalesMilestonePage {get;set;}
     public bool ReviewPending {get;set;}
     // Null preserves unknown comment/reveal history in pre-M96 modern saves.
     public List<int>? ReviewCommentVariants {get;set;}

@@ -16,6 +16,8 @@ artwork. The owner's device and staff examples are separate resources.
 | Reviewer portraits/names, score and reaction images | `Reviewer0…3.bmp`, `ReviewScore1…10.png`, `ReviewReaction0…9.bmp` in `Graphic/Embedded` | M96 binds Image1 portraits, hidden Image4 digits (RLE8), and Image3 reactions |
 | Trophies and Hall of Fame badge | `Trophy0…4.bmp`, `EmptyBadge.png` | Separate shared ImageTF resources; Hall of Fame reuses Trophy2, slot 5 is blank |
 | Hall of Fame celebration | `HallCelebration1.bmp`, `HallCelebration2.bmp` in `Graphic/Embedded` | M99 imports two 256×160 Image1 banner sources; separate from the compact trophy badge |
+| Sales achievements and help title | `SalesAchievement1…4.bmp`, `HelpTitle.bmp` in `Graphic/Embedded` | M100 imports the four 256×160 milestones and separate 250×171 help illustration |
+| Serialized executable inventory | `Graphic/Recovered/resource-OFFSET.*`, `index.json` | M100 inventories 400 bounded BMP and 22 GIF resources; RLE8 BMPs are converted locally to PNG |
 | Other archive graphics | Imported `Graphic` files | Local index lists whatever is present without guessing their purpose |
 
 For a quick visual reference of **all currently imported images**, run:
@@ -30,7 +32,14 @@ The cache is the game's `user://original` folder under its application data
 directory. Keep generated references private and outside this repository.
 
 Issue #97's later exhaustive review must inspect both the office atlas and the
-separate resource families, including serialized controls not yet imported.
+separate resource families, including the newly inventoried serialized controls.
 An index of the current cache does not prove that every original image has been
 recovered, or that every animation/frame has been implemented. Issue #95 stays
 open for the native walkthrough's presentation findings.
+
+M100 reimports the bounded serialized BMP/GIF inventory. The index records each
+file offset, format and dimensions, keeping duplicated resources distinct. These
+422 resources do not include archive-only portraits and do not prove that every
+VB picture format or every unused graphic has a reachable gameplay purpose. A
+resource inventory is complete for these established encodings; visual inspection
+and handler binding remain necessary before calling all artwork implemented.

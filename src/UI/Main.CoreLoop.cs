@@ -49,6 +49,7 @@ public partial class Main
         AddHeading(Tr("DEVELOPMENT_STAFF_NOTE"),16);
         AddAction("STAFF",()=>ShowStaff(state));
         if (project.OriginalStage==3) AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
+        AddAction("MEDIA_INFORMATION",()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
         AddAction("PAID_PROMOTION",()=>ShowPromotionSelector(state,project));
         AddAction("CANCEL_PROJECT",()=>ShowProjectCancellation(state,project));
         AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
@@ -124,7 +125,7 @@ public partial class Main
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
         {
-            try {CheckpointMeetingRules.Prepare(state,project,catalog,new Random());}
+            try {CheckpointMeetingRules.Prepare(state,project,catalog,_session.Random);}
             catch (InvalidOperationException) {ClearContent();AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;}
         }
         if (CheckpointMeetingRules.HasPending(project)) {ShowCheckpointMeeting(state,project,catalog);return;}
@@ -140,7 +141,7 @@ public partial class Main
             AddHeading(Tr("SELECT_GAME_TYPE"),16);
             try
             {
-                var candidates=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,new Random());
+                var candidates=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,_session.Random);
                 int? selected=null;
                 var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
                 var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true};
@@ -293,7 +294,7 @@ public partial class Main
             else ShowOfficeReconstruction(state);
         },scene:OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),musicPhase:MeetingMusicRules.ForMilestone(meeting.Milestone));
     }
-    private void ShowRelease(GameState state,DevelopmentProjectState project)
+    private void ShowRelease(GameState state,DevelopmentProjectState project,string? draftTitle=null,long? draftPrice=null,long? draftCopies=null)
     {
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         // Release controls can follow the final meeting. Keep its recording
@@ -306,9 +307,10 @@ public partial class Main
         }
         var defaultTitle=project.OriginalMode==1 && project.PredecessorProductIndex is int predecessor
             ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
-        var title=new LineEdit {Name="ReleaseTitle",Text=defaultTitle,MaxLength=128};
-        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=ReleaseService.DefaultPrice};
-        var copies=ProductionQuantity(state,"ReleaseCopies");_content.RemoveChild(copies);
+        var title=new LineEdit {Name="ReleaseTitle",Text=draftTitle ?? defaultTitle,MaxLength=128};
+        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=draftPrice ?? ReleaseService.DefaultPrice};
+        HeldShipmentButtons(price,false);
+        var copies=ProductionQuantity(state,"ReleaseCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;_content.RemoveChild(copies);
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize);
         ShipmentBreakdown(state,unit,price,copies);
         var controls=new HBoxContainer();_content.AddChild(controls);
@@ -323,17 +325,22 @@ public partial class Main
         title.TextChanged+=value=>confirm.Disabled=string.IsNullOrWhiteSpace(value);
         confirm.Pressed+=()=>
         {
-            var result=ReleaseService.TryRelease(state,project,catalog,title.Text,(long)price.Value,(long)copies.Value,new Random());
+            var result=ReleaseService.TryRelease(state,project,catalog,title.Text,(long)price.Value,(long)copies.Value,_session.Random);
             if (result==ReleaseResult.Success) ShowReviews(state,state.ReleasedGames[^1]);
             else _status.Text=Tr($"RELEASE_RESULT_{result}");
         };
+        AddAction("MEDIA_INFORMATION",()=>
+        {
+            string savedTitle=title.Text;long savedPrice=(long)price.Value,savedCopies=(long)copies.Value;
+            ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowRelease(state,project,savedTitle,savedPrice,savedCopies));
+        });
         AddAction("CANCEL",()=>ShowProject(state,project));
     }
     private SpinBox ProductionQuantity(GameState state,string name)
     {
         // Same 100-copy floor and capacity×100 ceiling as the original spinner.
         var copies=new SpinBox {Name=name,MinValue=100,MaxValue=Math.Max(100,(state.Company.ProductionCapacity ?? throw new InvalidOperationException("Unknown production capacity."))*100L),
-            Step=100,Value=ReleaseService.DefaultCopies};_content.AddChild(copies);return copies;
+            Step=100,Value=ReleaseService.DefaultCopies};_content.AddChild(copies);HeldShipmentButtons(copies,true);return copies;
     }
     private void ShowSales(GameState state)
     {
@@ -399,6 +406,8 @@ public partial class Main
     {
         var celebration=state.ReleasedGames.FirstOrDefault(x=>x.HallCelebration is not null);
         if(celebration is not null){ShowHallCelebration(state,celebration);return true;}
+        var summary=state.ReleasedGames.FirstOrDefault(p=>p.ReviewSummaryPage is not null);
+        if(summary is not null){ShowReviewSummary(state,summary);return true;}
         var review=state.ReleasedGames.FirstOrDefault(x=>x.ReviewPending);
         if (review is not null) {ShowReviews(state,review);return true;}
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
@@ -410,20 +419,9 @@ public partial class Main
     }
     private void ShowSalesMilestone(GameState state,ReleasedGameState product)
     {
-        ClearContent();AddHeading(Tr("SALES_MILESTONE"),28);AddHeading(product.Title,22);
-        int stage=product.PendingSalesMilestones[0];
-        AddHeading($"{Tr("UNITS_SOLD")}: {SalesMilestoneService.Threshold(stage):N0}",24);
-        _status=new Label();_content.AddChild(_status);
-        AddAction("SAVE_GAME",()=>
-        {
-            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
-            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
-        });
-        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-        var acknowledge=new Button {Name="AcknowledgeSalesMilestone",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
-        acknowledge.Pressed+=()=>{SalesMilestoneService.Acknowledge(state,product);ShowSales(state);};
+        ShowSalesAchievement(state,product);
     }
-    private void ShowProduction(GameState state,ReleasedGameState product)
+    private void ShowProduction(GameState state,ReleasedGameState product,long? draftCopies=null)
     {
         var availability=ReleaseService.CheckProduction(state,product);
         if (availability!=ReleaseResult.Success)
@@ -433,8 +431,9 @@ public partial class Main
         }
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         ClearContent();AddHeading(product.Title,28);AddHeading(Tr("PRODUCE_MORE"),22);
-        var copies=ProductionQuantity(state,"ProductionCopies");
+        var copies=ProductionQuantity(state,"ProductionCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize);
+        ReproductionBreakdown(state,product,unit,copies);
         var quote=new Label();_content.AddChild(quote);quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}";
         copies.ValueChanged+=_=>quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}";
         _status=new Label();_content.AddChild(_status);

@@ -36,16 +36,14 @@ public partial class Main : Control
         if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
         RefreshEmployeeSelectionArrow();
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
-        _officeElapsed += delta;
-        // Keep at most one second of backlog after a suspended window.
-        _officeElapsed = Math.Min(_officeElapsed, 1);
         bool updated = false;
-        while (_officeElapsed >= OfficeStaffRules.TickSeconds)
+        if (OfficeTickScheduler.Advance(ref _officeElapsed,delta))
         {
             _session.TickOffice(_activeCatalog);
             _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
-            _officeElapsed -= OfficeStaffRules.TickSeconds;
+            if(ShowPendingCompanyActivity(state))return;
+            if(ShowPendingProgrammingChallenge(state))return;
             if (ShowPendingFinancialFailure(state)) return;
             if (ShowPendingPromotion(state)) return;
         if (ShowPendingMysteryLabResult(state)) return;
@@ -180,6 +178,8 @@ public partial class Main : Control
             if (key == "SETTINGS") button.Pressed += ShowSettings;
             _content.AddChild(button);
         }
+        AddAction("GAME_HELP",()=>ShowHelp());
+        AddAction("LOAD_SAVE_SLOTS",()=>ShowSaveSlots(null,true));
         AddAction("GLOBAL_RANKINGS",()=>ShowRankings());
         var previous = new Button { Name = "LoadPreviousSave", Text = Tr("LOAD_PREVIOUS_SAVE"),
             TooltipText = Tr("LOAD_PREVIOUS_SAVE_NOTE"), Disabled = !System.IO.File.Exists(SaveStore.BackupPath(SavePath)),
@@ -287,7 +287,8 @@ public partial class Main : Control
         }
     }
 
-    private string SavePath => ProjectSettings.GlobalizePath("user://saves/slot1.json");
+    private int _activeSaveSlot=1;
+    private string SavePath => ProjectSettings.GlobalizePath($"user://saves/slot{_activeSaveSlot}.json");
 
     private void ShowOfficeReconstruction(GameState state)
     {
@@ -298,7 +299,9 @@ public partial class Main : Control
         _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
         PersistPendingRankings(state);
         EnsureDesktop(state);
-        if (ShowPendingFinancialFailure(state)) return;
+        if(ShowPendingCompanyActivity(state))return;
+            if(ShowPendingProgrammingChallenge(state))return;
+            if (ShowPendingFinancialFailure(state)) return;
         if (state.Casino.PokerOpen) {ShowPoker(state);return;}
         if (state.Casino.BlackjackOpen) {ShowBlackjack(state);return;}
         if (state.Casino.CardChainOpen) {ShowCardChain(state);return;}
@@ -485,7 +488,7 @@ public partial class Main : Control
             AddAction("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(x=>x.Value>0)==true);
             AddAction("TAKE_BREAK",()=>
             {
-                var result=OfficeAssignmentService.TryTakeBreak(state,employee,new Random());
+                var result=OfficeAssignmentService.TryTakeBreak(state,employee,_session.Random);
                 if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
                 else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
             },workspace.Action is >=1 and <=17);
@@ -493,7 +496,7 @@ public partial class Main : Control
         if (employee.SourceIndex is int source)
             AddAction("LEVEL_UP", () =>
             {
-                var random = new Random();
+                var random = _session.Random;
                 var result = EmployeeLevelUpService.TryLevelUp(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
                 ShowStaff(state);
                 if (result != LevelUpResult.Success) AddHeading(Tr("LEVEL_UP_FAILED") + " " + Tr($"LEVEL_UP_RESULT_{result}"), 16);
@@ -519,8 +522,11 @@ public partial class Main : Control
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
     }
 
+    private bool SaveSlotsExist()=>System.IO.Directory.Exists(ProjectSettings.GlobalizePath("user://saves")) &&
+        System.IO.Directory.EnumerateFiles(ProjectSettings.GlobalizePath("user://saves"),"slot*.json").Any();
     private void LoadSession()
     {
+        if(!System.IO.File.Exists(SavePath)){ShowSaveSlots(_session.Current,true);return;}
         try { var state = SaveStore.Load(SavePath); _session.Restore(state); ShowOfficeReconstruction(state); }
         catch (Exception ex) { ShowTitleScreen(); _status.Text = $"{Tr("LOAD_FAILED")}: {ex.Message}"; }
     }

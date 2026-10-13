@@ -65,11 +65,12 @@ public partial class Main
         _screen.Hide(); _desktopState = state; _desktopLocale = TranslationServer.GetLocale();
         _music.SetGameplayActive(true);
         _desktop = new Control { Name = "GameDesktop", MouseFilter = MouseFilterEnum.Ignore };
+        _desktop.Theme=new Theme {DefaultFont=new SystemFont {FontNames=["MS UI Gothic","MS Gothic","Noto Sans CJK JP","sans-serif"]},DefaultFontSize=13};
         _desktop.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); AddChild(_desktop);
         var layout = new VBoxContainer(); layout.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         layout.AddThemeConstantOverride("separation", 0); _desktop.AddChild(layout);
         var menus = new HBoxContainer { CustomMinimumSize = new Vector2(0, 24) }; layout.AddChild(menus);
-        Menu(menus, "MENU_GAME", [("SAVE_GAME", SaveDesktop), ("LOAD_GAME", LoadSession),
+        Menu(menus, "MENU_GAME", [("SAVE_GAME", ()=>ShowSaveSlots(state,false)), ("LOAD_GAME", ()=>ShowSaveSlots(state,true)),
             ("SETTINGS", ShowSettings), ("IMPORT_BUTTON", ShowImporter), ("BACK_TO_TITLE", ShowTitleScreen)]);
         Menu(menus, "MENU_COMPANY", [("COMPANY_ACTIVITIES", () => ShowCompanyActivities(state)),("BANK",()=>ShowBank(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
@@ -83,7 +84,7 @@ public partial class Main
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
             ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
-        Menu(menus, "MENU_HELP", [("CALENDAR_INSPECTOR", () => ShowCalendar(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
+        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("CALENDAR_INSPECTOR", () => ShowCalendar(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0, 28) };
         toolbar.AddThemeConstantOverride("separation", 1); layout.AddChild(toolbar);
@@ -258,11 +259,11 @@ public partial class Main
         if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (current.ReleasedGames.Any(p=>p.HallCelebration is not null) || current.PendingPromotion is not null || current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || (current.PendingFacilityReceipt is not null || current.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(current) || current.PendingMysteryLabResult is not null)) &&
+        if (_desktopState is GameState current && (current.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(current) || current.ReleasedGames.Any(p=>p.HallCelebration is not null) || current.PendingPromotion is not null || current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || (current.PendingFacilityReceipt is not null || current.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(current) || current.PendingMysteryLabResult is not null)) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {
-        "LOAD_GAME" => System.IO.File.Exists(SavePath),
+        "LOAD_GAME" => SaveSlotsExist(),
         "START_GAME_DEVELOPMENT" or "DEVELOPMENT_PLANNING" or "SALES" => _activeCatalog is not null,
         "HIRE_EMPLOYEES" => _desktopState?.Recruitment.CandidateDatabaseDecoded == true,
         "DEVELOPMENT_COMPUTERS" => _activeCatalog?.DevelopmentComputers.Count == 4,

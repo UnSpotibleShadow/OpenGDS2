@@ -484,7 +484,7 @@ func run() -> void:
             await press("SAVE_GAME")
             var after_room_clicks = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
             check(after_room_clicks.State.DevelopmentProjects.is_empty() and after_room_clicks.State.Money == 450000000,"Office action previews do not start work or spend funds")
-            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
+            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(3)
             await process_frame
             var sales_ranking = main.find_child("SalesRankingTable",true,false)
             check(sales_ranking != null and sales_ranking.get_column_title(2) == tr("UNITS_SOLD") and sales_ranking.get_column_title(3) == tr("COMPANY_NAME"),"Sales rankings follow original units-before-company columns")

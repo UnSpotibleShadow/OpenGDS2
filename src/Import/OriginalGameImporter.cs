@@ -63,6 +63,8 @@ public sealed class OriginalGameImporter
                 count++;
             }
             File.WriteAllText(Path.Combine(staging, "employees.json"), JsonSerializer.Serialize(database));
+            File.WriteAllText(Path.Combine(staging,"help.json"),JsonSerializer.Serialize(OriginalHelpImporter.Extract(bytes)));
+            SerializedArtworkImporter.Extract(bytes,Path.Combine(staging,"Graphic","Recovered"));
             EmbeddedGraphicsImporter.Extract(bytes, Path.Combine(staging, "Graphic", "Embedded"));
             File.WriteAllText(Path.Combine(staging, "office.json"), JsonSerializer.Serialize(office));
             File.WriteAllText(Path.Combine(staging, "catalog.json"), JsonSerializer.Serialize(catalog));

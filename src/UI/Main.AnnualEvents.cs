@@ -56,7 +56,7 @@ public partial class Main
         _status=new Label {Name="ExhibitionSelectionStatus"};_content.AddChild(_status);
         AnnualButton("ParticipateExhibition","EXHIBITION_PARTICIPATE",()=>
         {
-            var result=ExhibitionService.Participate(state,boxes.Where(b=>b.Value.ButtonPressed).Select(b=>b.Key).ToHashSet(),Random.Shared);
+            var result=ExhibitionService.Participate(state,boxes.Where(b=>b.Value.ButtonPressed).Select(b=>b.Key).ToHashSet(),_session.Random);
             if (result==ExhibitionResult.Success) ShowOfficeReconstruction(state);
             else _status.Text=Tr($"EXHIBITION_{result}");
         });
@@ -86,7 +86,7 @@ public partial class Main
         }
         else AnnualButton("RevealAward","AWARD_REVEAL",()=>
         {
-            if (AwardService.Reveal(state,Random.Shared))
+            if (AwardService.Reveal(state,_session.Random))
             {
                 ShowOfficeReconstruction(state);
                 if (awards.AnimationProducts is not null) _=AnimateAwardReveal(state,awards);
@@ -134,7 +134,7 @@ public partial class Main
         AddEmployeeCard(employee);
         AnnualButton("HireGraduate","HIRE_CONFIRM",()=>
         {
-            var result=GraduateService.Hire(state,Random.Shared);
+            var result=GraduateService.Hire(state,_session.Random);
             if (result==HireResult.Success) ShowOfficeReconstruction(state);
             else _status.Text=Tr($"HIRE_RESULT_{result}");
         });

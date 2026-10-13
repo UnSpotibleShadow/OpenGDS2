@@ -78,6 +78,7 @@ public static class SaveStore
     }
     private static void Validate(GameState state)
     {
+        if(state.SimulationRandomState>VbSimulationRandom.Mask)throw new InvalidDataException("Invalid simulation random state.");
         if(state.HallCelebrationTicks is <0 or >5) throw new InvalidDataException("Invalid retained Hall timer.");
         if (state.RetainedDevelopmentEligibility is not (null or 0 or 1))
             throw new InvalidDataException("Invalid retained development eligibility.");
@@ -90,6 +91,8 @@ public static class SaveStore
         FinancialFailureService.Validate(state);
         MysteryLabService.Validate(state);
         PromotionService.Validate(state);
+        ProgrammingChallengeService.Validate(state);
+        CompanyActivityPresentation.Validate(state);
         OwnHardwareService.Validate(state);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);
         if (state.PendingFeeNegotiation is { } negotiation)
@@ -145,6 +148,10 @@ public static class SaveStore
             ShipmentDialogueRules.Validate(product);
             ReviewPresentationRules.Validate(product);
             HallCelebrationRules.Validate(product);
+            if(product.ReviewSummaryPage is <0 or >1 || product.ReviewSummaryPage==0 && !product.ReviewPending ||
+                product.ReviewSummaryPage==1 && (!product.HallOfFame || product.ReviewPending) ||
+                product.SalesMilestonePage is <0 or >1 || product.SalesMilestonePage!=0 && (product.PendingSalesMilestones is null || product.PendingSalesMilestones.Count==0))
+                throw new InvalidDataException("Invalid event presentation cursor.");
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
                 (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
                 product.PendingSalesMilestones.Count>4 ||

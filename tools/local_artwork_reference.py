@@ -7,6 +7,8 @@ from pathlib import Path
 
 def family(relative):
     name = relative.name.lower()
+    if 'recovered' in [part.lower() for part in relative.parts]:
+        return 'Serialized executable resources (offset inventory)'
     if name.startswith('office'):
         return 'Office base, sprite atlas and masks'
     if name.startswith('hardware'):
