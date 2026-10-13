@@ -21,6 +21,8 @@ public static class EmbeddedGraphicsImporter
         WriteBitmap(executable,meetingOffset,256,160,destination,"PlanningMeeting.bmp");
         // fGMKikakusyo.Picture1: proposal document, not ImageFormG[0].
         WriteBitmap(executable,0x2AE079,256,160,destination,"PlanningProposal.bmp");
+        SerializedImageBinding(executable,0x2F2EA1,"Image1",2);WriteBitmap(executable,0x2F2EA1,256,160,destination,"HallCelebration2.bmp");
+        SerializedImageBinding(executable,0x2FD305,"Image1",1);WriteBitmap(executable,0x2FD305,256,160,destination,"HallCelebration1.bmp");
         WriteGif(executable,0x11243,21264,destination,"ExhibitionBooth.png");
         WriteGif(executable,0x1367D8,19520,destination,"AwardsStage.png");
         int[] trophies=[0x87EA,0x9B0F,0xC159,0xAE34,0xD47E];

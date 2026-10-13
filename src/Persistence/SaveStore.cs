@@ -78,6 +78,7 @@ public static class SaveStore
     }
     private static void Validate(GameState state)
     {
+        if(state.HallCelebrationTicks is <0 or >5) throw new InvalidDataException("Invalid retained Hall timer.");
         if (state.RetainedDevelopmentEligibility is not (null or 0 or 1))
             throw new InvalidDataException("Invalid retained development eligibility.");
         if (!Enum.IsDefined(state.Mode) || state.Company is null || state.Initial is null || state.Recruitment is null ||
@@ -143,6 +144,7 @@ public static class SaveStore
             RecallService.Validate(product);
             ShipmentDialogueRules.Validate(product);
             ReviewPresentationRules.Validate(product);
+            HallCelebrationRules.Validate(product);
             if (product.SalesMilestoneStage is <0 or >4 || product.PendingSalesMilestones is null ||
                 (product.SalesMilestoneStage is null && product.PendingSalesMilestones.Count>0) ||
                 product.PendingSalesMilestones.Count>4 ||

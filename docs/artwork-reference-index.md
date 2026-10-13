@@ -15,6 +15,7 @@ artwork. The owner's device and staff examples are separate resources.
 | Exhibition and awards | `Graphic/Embedded/ExhibitionBooth.png`, `AwardsStage.png` | M96 locally decodes the known single-frame ImageFormG[26]/[4] GIFs |
 | Reviewer portraits/names, score and reaction images | `Reviewer0…3.bmp`, `ReviewScore1…10.png`, `ReviewReaction0…9.bmp` in `Graphic/Embedded` | M96 binds Image1 portraits, hidden Image4 digits (RLE8), and Image3 reactions |
 | Trophies and Hall of Fame badge | `Trophy0…4.bmp`, `EmptyBadge.png` | Separate shared ImageTF resources; Hall of Fame reuses Trophy2, slot 5 is blank |
+| Hall of Fame celebration | `HallCelebration1.bmp`, `HallCelebration2.bmp` in `Graphic/Embedded` | M99 imports two 256×160 Image1 banner sources; separate from the compact trophy badge |
 | Other archive graphics | Imported `Graphic` files | Local index lists whatever is present without guessing their purpose |
 
 For a quick visual reference of **all currently imported images**, run:

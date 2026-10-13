@@ -397,6 +397,8 @@ public partial class Main
     }
     private bool ShowPendingProductEvent(GameState state)
     {
+        var celebration=state.ReleasedGames.FirstOrDefault(x=>x.HallCelebration is not null);
+        if(celebration is not null){ShowHallCelebration(state,celebration);return true;}
         var review=state.ReleasedGames.FirstOrDefault(x=>x.ReviewPending);
         if (review is not null) {ShowReviews(state,review);return true;}
         foreach (var product in state.ReleasedGames.OrderBy(x=>x.ProductIndex))
