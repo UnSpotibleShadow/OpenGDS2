@@ -64,6 +64,18 @@ func press_node(name: String) -> void:
     if button != null and not button.disabled:
         button.pressed.emit()
     await process_frame
+    if name=="AcknowledgeReviews":
+        await finish_conversation()
+        if main.find_child("AcknowledgeHallCelebration",true,false)!=null:
+            await press_node("AcknowledgeHallCelebration")
+            await finish_conversation()
+    elif name=="AcknowledgeCalendar":
+        await finish_conversation()
+    elif name=="AcknowledgeSalesMilestone":
+        await finish_conversation()
+    elif name.begins_with("CompanyActivity"):
+        await press_node("ConfirmCompanyActivity")
+        await finish_conversation()
 
 func write_json(path: String, value: Variant) -> void:
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
@@ -771,7 +783,7 @@ func run() -> void:
     check(main.find_child("SalesProduct0",true,false) != null,"Review acknowledgement opens sales screen")
     check(main.find_child("ProduceProduct0",true,false).disabled,"Reprint waits for the next budget week")
     Engine.time_scale = 100
-    for frame in range(100):
+    for frame in range(2500):
         await process_frame
     Engine.time_scale = 1
     await press("BACK_TO_OFFICE")
@@ -871,7 +883,7 @@ func run() -> void:
     check(investigation_save.State.ReleasedGames[0].Recall.PendingEvent == 0,"Investigation modal persists")
     var paused_budget = investigation_save.State.CompanyActivityTicks
     Engine.time_scale = 100
-    for frame in range(20):
+    for frame in range(500):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -909,7 +921,7 @@ func run() -> void:
     await press("STAFF")
     await press("TAKE_BREAK")
     Engine.time_scale = 100
-    for frame in range(20):
+    for frame in range(500):
         await process_frame
     Engine.time_scale = 1
     await press("STAFF")
@@ -923,7 +935,7 @@ func run() -> void:
     check(training_save.State.Employees[0].Office.Training != null,"Active course is saved")
     await press("LOAD_GAME")
     Engine.time_scale = 100
-    for frame in range(25):
+    for frame in range(625):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -975,7 +987,7 @@ func run() -> void:
     check(use_pending.State.Employees[0].Office.TechnologyApplication != null,"Active technology is saved")
     await press("LOAD_GAME")
     Engine.time_scale = 100
-    for frame in range(5):
+    for frame in range(125):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1009,7 +1021,7 @@ func run() -> void:
     check(main.find_child("CompanyActivity0",true,false).disabled,"Used budget survives save/load")
     await press("BACK_TO_OFFICE")
     Engine.time_scale = 100
-    for frame in range(12):
+    for frame in range(300):
         await process_frame
     Engine.time_scale = 1
     await press("COMPANY_ACTIVITIES")
@@ -1019,7 +1031,7 @@ func run() -> void:
     check(research_save.State.Company.OriginalMember90 >= 25 and research_save.State.Company.OriginalMember90 <= 27,"Genre research raises unlock threshold")
     await press("BACK_TO_OFFICE")
     Engine.time_scale = 100
-    for frame in range(12):
+    for frame in range(300):
         await process_frame
     Engine.time_scale = 1
     await press("COMPANY_ACTIVITIES")
@@ -1065,7 +1077,7 @@ func run() -> void:
     var pause_saved = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(main.find_child("TogglePause",true,false).text == tr("RESUME"),"Rebuilding the office retains the correct pause label")
     Engine.time_scale = 100
-    for frame in range(20):
+    for frame in range(500):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1076,7 +1088,7 @@ func run() -> void:
     check(main.find_child("TogglePause",true,false).text == tr("PAUSE"),"Resumed office immediately offers Pause")
     check(not main.find_child("OfficeStatus",true,false).text.contains(tr("PAUSED")),"Resume clears pause status immediately")
     Engine.time_scale = 100
-    for frame in range(3):
+    for frame in range(75):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1149,7 +1161,7 @@ func run() -> void:
     check(staff_menu.is_item_disabled(0) and staff_menu.is_item_disabled(1),"Calendar modal disables employee menu actions")
     check(main.find_child("TogglePause",true,false).disabled,"Calendar modal owns the pause state")
     Engine.time_scale = 100
-    for frame in range(20):
+    for frame in range(500):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1159,7 +1171,7 @@ func run() -> void:
     await press("LOAD_GAME")
     await press_node("AcknowledgeCalendar")
     Engine.time_scale = 100
-    for frame in range(3):
+    for frame in range(75):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1211,7 +1223,7 @@ func run() -> void:
             check(main.find_child("ConversationWindow",true,false).position == moved_dialogue_position,"Loading a conversation keeps the chosen position: "+key)
             await advance_conversation_page()
         Engine.time_scale = 100
-        for frame in range(3):
+        for frame in range(75):
             await process_frame
         Engine.time_scale = 1
         await press("SAVE_GAME")
@@ -1305,7 +1317,7 @@ func run() -> void:
     await press("LOAD_GAME")
     check(abs(player.stream.get_length()-11.0) < 0.01,"Loading a May save restores spring while seasonal music is enabled")
     Engine.time_scale = 100
-    for frame in range(3):
+    for frame in range(75):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")
@@ -1469,9 +1481,12 @@ func run() -> void:
     for frame in range(8):
         await process_frame
     var help_menu = main.find_child("MENU_HELP",true,false).get_popup()
-    help_menu.id_pressed.emit(1)
+    help_menu.id_pressed.emit(2)
     await process_frame
-    check(main.find_child("RankingRecord4",true,false).text.contains("Synthetic UI Company"),"Global rankings display winning company")
+    var record=main.find_child("ReachTimeRecords",true,false).get_root().get_first_child()
+    for i in range(4):
+        record=record.get_next()
+    check(record.get_text(1)=="Synthetic UI Company","Global rankings display winning company")
     await press("SALES_CHART")
     check(main.find_child("CompetitionUnknown",true,false) != null,"Legacy rival data stays explicitly unknown")
     await press("BACK_TO_OFFICE")
@@ -1658,7 +1673,7 @@ func run() -> void:
     await press_node("AcknowledgeReviews")
     check(main.find_child("SalesProduct1",true,false) != null,"Sequel joins normal sales screen")
     Engine.time_scale = 100
-    for frame in range(100):
+    for frame in range(2500):
         await process_frame
     Engine.time_scale = 1
     await press("BACK_TO_OFFICE")
@@ -1741,7 +1756,7 @@ func run() -> void:
     await finish_conversation()
     await press_node("AcknowledgeReviews")
     Engine.time_scale = 100
-    for frame in range(100):
+    for frame in range(2500):
         await process_frame
     Engine.time_scale = 1
     await press("SAVE_GAME")

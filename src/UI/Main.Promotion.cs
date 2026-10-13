@@ -56,7 +56,7 @@ public partial class Main
             await ToSignal(GetTree().CreateTimer(.025),SceneTreeTimer.SignalName.Timeout);
             if(!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingPromotion,meeting) ||
                 !ReferenceEquals(_dialog,window) || !GodotObject.IsInstanceValid(window) || !window.IsInsideTree())return;
-            PromotionService.Advance(state,Random.Shared);refresh();
+            PromotionService.Advance(state,_session.Random);refresh();
         }
     }
 }

@@ -18,6 +18,97 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+GameState ProgrammingFixture(int index=5)
+{
+    var actor=new EmployeeState {Name="Actor",SourceIndex=0,PortraitId=1,Level=1,Experience=20,Stress=10,Inspiration=80,DevelopmentSpeed=50,
+        Fun=20,Novelty=20,Graphics=20,Music=20,Accuracy=50,
+        Office=new() {SlotIndex=0,Action=6,SeatedAction=6,WorkEngaged=true,MovementState=0,WorkTicks=5,ActionTicks=11}};
+    return new() {Company=new() {Name="Fixture",PresidentName="Test"},Money=100,ProgrammingActorPasses=0,CompanyActivityTicks=0,
+        Employees=[actor],DevelopmentProjects=[new() {Title="Game",RoomIndex=0,RequiredPoints=100,Progress=5,Focus=new(25,25,25,25)}],
+        OfficeActorContinuation=new() {ActorSlot=0,EmployeeSourceIndex=0,RoomIndex=0},
+        PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2,Mode=4,Index=index,Outcome=index==1?0:1,QualityIndex=index==1?null:0,CommentVariant=0}};
+}
+Test("office cadence retains nominal wall time without replaying stalled iterations",()=>
+{
+    double remainder=0;int ticks=0;
+    for(int frame=0;frame<600;frame++)if(OfficeTickScheduler.Advance(ref remainder,1.0/60))ticks++;
+    Check(ticks==250);
+    Check(OfficeTickScheduler.Advance(ref remainder,1.0));
+    Check(!OfficeTickScheduler.Advance(ref remainder,.01));
+    Check(!OfficeTickScheduler.Advance(ref remainder,.01));
+    Check(!OfficeTickScheduler.Advance(ref remainder,.01));
+    Check(OfficeTickScheduler.Advance(ref remainder,.01));
+    Check(OfficeTickScheduler.Advance(ref remainder,.16));
+    Check(!OfficeTickScheduler.Advance(ref remainder,.01));
+});
+
+Test("programming result saves between quality and experience and resumes same actor without prefix replay",()=>
+{
+    var s=ProgrammingFixture();ProgrammingChallengeService.AcknowledgeResult(s);ProgrammingChallengeService.AcknowledgeResult(s);
+    Check(s.DevelopmentProjects[0].Quality.Fun==40 && s.Employees[0].Experience==20);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));ProgrammingChallengeService.AcknowledgeResult(s);
+    Check(s.Employees[0].Experience==50 && s.PendingProgrammingChallenge is null && s.OfficeActorContinuation is not null);
+    var session=new GameSession(new FailureRandom());session.Restore(s);session.TickOffice(CoreCatalog());
+    Check(s.OfficeActorContinuation is null && s.Employees[0].Office!.ActionTicks==11 && s.Employees[0].Stress==10 &&
+        s.Employees[0].Office!.WorkTicks==6 && s.CompanyActivityTicks==0 && s.ProgrammingActorPasses==0);
+});
+Test("programming failure adds bugs and size exactly once after final message",()=>
+{
+    var s=ProgrammingFixture(1);for(int i=0;i<3;i++)ProgrammingChallengeService.AcknowledgeResult(s);
+    Check(s.DevelopmentProjects[0].Bugs==60 && s.DevelopmentProjects[0].DataSize==6 && s.Employees[0].Experience==20);
+    Check(!ProgrammingChallengeService.AcknowledgeResult(s));
+});
+Test("programming reel stop consumes one draw and final result choices survive reload",()=>
+{
+    var s=ProgrammingFixture();s.PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2};var rng=new FailureRandom(0,.5f,.7f);
+    Check(ProgrammingChallengeService.Command(s,rng) && rng.Calls==0);Check(ProgrammingChallengeService.Command(s,rng));
+    for(int n=0;n<15;n++)ProgrammingChallengeService.Advance(s,rng);
+    Check(s.PendingProgrammingChallenge.Mode==3 && s.PendingProgrammingChallenge.Index==5);
+    for(int n=0;n<13;n++)ProgrammingChallengeService.Advance(s,rng);
+    Check(s.PendingProgrammingChallenge.Outcome==1 && s.PendingProgrammingChallenge.QualityIndex==2 && rng.Calls==3);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(!ProgrammingChallengeService.Advance(s,rng) && rng.Calls==3);
+});
+Test("programming trigger draws eagerly and captures current actor rather than selection",()=>
+{
+    var s=ProgrammingFixture();s.PendingProgrammingChallenge=null;s.OfficeActorContinuation=null;var rng=new FailureRandom(0,.00006f);
+    Check(!ProgrammingChallengeService.TryTrigger(s,s.Employees[0],s.DevelopmentProjects[0],rng) && rng.Calls==1 && s.ProgrammingActorPasses==1);
+    s.ProgrammingActorPasses=50000;Check(ProgrammingChallengeService.TryTrigger(s,s.Employees[0],s.DevelopmentProjects[0],rng) && s.ProgrammingActorPasses==0);
+    Check(s.OfficeActorContinuation!.EmployeeSourceIndex==0 && s.OfficeActorContinuation.ActorSlot==0);
+    s.OfficeActorContinuation.ActorSlot=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+Test("activity confirmation charges once and persists reported before and after values",()=>
+{
+    var s=State();s.CompanyActivityTicks=0;s.CompanyActivityPerformed=false;s.Company.ActivityCost=5;s.Company.Fame=12;
+    s.PendingCompanyActivity=new() {Activity=CompanyActivity.PublicRelations};
+    Check(CompanyActivityPresentation.Confirm(s,null,new ConstantRandom(1))==CompanyActivityResult.Success && s.Money==95);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.PendingCompanyActivity!.Before==12 && s.PendingCompanyActivity.After==14);
+    Check(CompanyActivityPresentation.Confirm(s,null,new FailureRandom())==CompanyActivityResult.AlreadyActed && s.Money==95);
+});
+Test("held shipment controls use recovered acceleration thresholds",()=>
+{
+    Check(HeldShipmentRules.Step(10,true)==100 && HeldShipmentRules.Step(11,true)==1000 && HeldShipmentRules.Step(31,true)==30000 &&
+        HeldShipmentRules.Step(61,true)==1000000 && HeldShipmentRules.Step(20,false)==10 && HeldShipmentRules.Step(21,false)==100);
+});
+Test("VB-family random recurrence agrees with framework reference and shared stream resumes from saves",()=>
+{
+    float first=Microsoft.VisualBasic.VBMath.Rnd(-1f);var rng=new VbSimulationRandom((uint)(first*16777216f));
+    for(int i=0;i<100;i++)Check(rng.NextSingle()==Microsoft.VisualBasic.VBMath.Rnd());
+    var session=new GameSession(rng);var s=session.StartNewGame("Company","Test",GameMode.Normal);
+    session.Random.NextSingle();string saved=SaveStore.Serialize(s);float expected=session.Random.NextSingle();session.Restore(SaveStore.Deserialize(saved));
+    Check(session.Random.NextSingle()==expected);
+});
+Test("numbered save preview distinguishes damaged files and preserves backup metadata",()=>
+{
+    string root=Path.Combine(Path.GetTempPath(),"opengds-slots-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(root);
+    try
+    {
+        var s=State();SaveStore.Save(SaveSlotStore.PathFor(root,1),s);s.Money=200;SaveStore.Save(SaveSlotStore.PathFor(root,1),s);
+        File.WriteAllText(SaveSlotStore.PathFor(root,2),"damaged");var slots=SaveSlotStore.Read(root,true);
+        Check(slots.Count==3 && slots[0].State!.Money==200 && slots[0].BackupAvailable && slots[1].Error is not null && slots[2].Slot==3);
+        Throws<ArgumentOutOfRangeException>(()=>SaveSlotStore.PathFor(root,0));
+    }
+    finally{Directory.Delete(root,true);}
+});
 Test("Hall celebration is queued once by new qualifying review acknowledgment",()=>
 {
     var p=new ReleasedGameState {ProductIndex=0,Title="Test",ReviewScores=[8,8,8,8],ReviewPending=true};
@@ -5493,6 +5584,15 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original help and every bounded serialized artwork resource are recovered locally",()=>
+    {
+        byte[] original=File.ReadAllBytes(args[0]);var help=OriginalHelpImporter.Extract(original);
+        Check(help.Paragraphs.Count==91 && help.Paragraphs.Select(p=>p.Topic).Distinct().Count()==5);
+        string root=Path.Combine(Path.GetTempPath(),"opengds-art-"+Guid.NewGuid().ToString("N"));
+        try{var art=SerializedArtworkImporter.Extract(original,root);Check(art.Count==422 && art.Count(a=>a.Format=="GIF")==22);}
+        finally{if(Directory.Exists(root))Directory.Delete(root,true);}
+    });
+
     Test("optional original raster pixels match independent decoded references",()=>
     {
         byte[] source=File.ReadAllBytes(args[0]);

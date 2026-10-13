@@ -3548,3 +3548,156 @@ msgstr "インターネット"
 
 msgid "PROMOTION_MEDIA_5"
 msgstr "新聞"
+
+msgid "PROGRAMMING_CHALLENGE"
+msgstr "高度なプログラム"
+
+msgid "PROGRAMMING_INTRO"
+msgstr "{0}さんが高度なプログラムに挑戦します。"
+
+msgid "PROGRAMMING_INSPIRATION"
+msgstr "ひらめき度: {0}。成功の候補はこの能力で変わります。"
+
+msgid "PROGRAMMING_START"
+msgstr "スタート"
+
+msgid "PROGRAMMING_STOP"
+msgstr "ストップ"
+
+msgid "PROGRAMMING_REEL_0"
+msgstr "失敗"
+
+msgid "PROGRAMMING_REEL_1"
+msgstr "成功"
+
+msgid "PROGRAMMING_REEL_2"
+msgstr "超成功"
+
+msgid "PROGRAMMING_RESULT_0"
+msgstr "{0}さんの挑戦は失敗しました。"
+
+msgid "PROGRAMMING_RESULT_1"
+msgstr "{0}さんの挑戦は成功しました！"
+
+msgid "PROGRAMMING_RESULT_2"
+msgstr "{0}さんの挑戦は超成功しました！"
+
+msgid "PROGRAMMING_FAILURE_EFFECT"
+msgstr "開発室のバグが60、容量が6KB増えます。"
+
+msgid "PROGRAMMING_QUALITY_EFFECT"
+msgstr "{0}が{1}増えます。"
+
+msgid "REVIEW_HALL_MESSAGE"
+msgstr "「{0}」は合計{1}点で殿堂入りしました！"
+
+msgid "REVIEW_SUMMARY_MESSAGE"
+msgstr "「{0}」の雑誌レビューは合計{1}点でした。"
+
+msgid "REVIEW_SEQUEL_MESSAGE"
+msgstr "殿堂入りしたこのゲームの続編を開発できるようになりました。"
+
+msgid "SALES_ACHIEVEMENT_MESSAGE"
+msgstr "「{0}」の出荷本数が{1:N0}本に達しました！"
+
+msgid "HARDWARE_LAUNCH_LICENSE_MESSAGE"
+msgstr "新しいゲーム機が発売されました。ライセンスの取得を検討しましょう。"
+
+msgid "ACTIVITY_DESCRIPTION_0"
+msgstr "会社の広報活動で知名度を高めます。"
+
+msgid "ACTIVITY_DESCRIPTION_1"
+msgstr "ジャンルを開拓し、開発できるゲームの幅を広げます。"
+
+msgid "ACTIVITY_DESCRIPTION_2"
+msgstr "生産力を増強し、一度に出荷できる本数を増やします。"
+
+msgid "ACTIVITY_RESULT"
+msgstr "{0}: {1} → {2}。費用: ¥{3:N0}。"
+
+msgid "ACTIVITY_SUPER_RESULT"
+msgstr "生産力が大きく増えました！ {0}: {1} → {2}。費用: ¥{3:N0}。"
+
+msgid "ACTIVITY_UNLOCKED_GENRES"
+msgstr "新しく開発できるジャンル:"
+
+msgid "MEDIA_INFORMATION"
+msgstr "メディアと容量"
+
+msgid "MEDIA_CAPACITY"
+msgstr "容量"
+
+msgid "GAME_HELP"
+msgstr "ゲームのヘルプ"
+
+msgid "HELP_TOPIC_0"
+msgstr "ゲームの説明"
+
+msgid "HELP_TOPIC_1"
+msgstr "ゲームの流れ"
+
+msgid "HELP_TOPIC_2"
+msgstr "テナントの説明"
+
+msgid "HELP_TOPIC_3"
+msgstr "ゲームについて"
+
+msgid "HELP_TOPIC_4"
+msgstr "ゲームソフトの開発"
+
+msgid "HELP_BODY_0"
+msgstr "社員を雇用し、ライセンスを取得してゲームを開発・出荷します。給与と契約更新費用を見ながら会社を経営してください。"
+
+msgid "HELP_BODY_1"
+msgstr "社員を選び、机を右クリックして配置します。勉強席では研修、休憩ではストレス回復ができます。資金・借入・生産力・在庫を確認しましょう。"
+
+msgid "HELP_BODY_2"
+msgstr "3つのテナント区画があります。学校・温泉・リサイクル・修行所・カジノ・弁護士・生産力開発・ハード研究・実験施設を利用できます。"
+
+msgid "HELP_BODY_3"
+msgstr "OpenGDS2は2001年のPCゲームを再現します。原作のヘルプ本文は再インポートで復元できます。現在のセーブ形式はJSONです。"
+
+msgid "HELP_BODY_4"
+msgstr "企画会議でハード・対象ユーザー・開発方針を選びます。アルファ版で内容、ベータ版でジャンルを決定し、完成後はデバッグまたは出荷を行います。出荷時にタイトル・本数・価格を設定します。"
+
+msgid "SAVE_SAVE_SLOTS"
+msgstr "セーブ先を選択"
+
+msgid "LOAD_SAVE_SLOTS"
+msgstr "ロードする会社を選択"
+
+msgid "SAVE_SLOT_EMPTY"
+msgstr "空きスロット"
+
+msgid "SAVE_SLOT_DAMAGED"
+msgstr "読み込めないセーブ"
+
+msgid "RANKING_CATEGORY"
+msgstr "記録"
+
+msgid "RANKING_REACHED_ON"
+msgstr "到達日"
+
+msgid "RANKING_RECORDED_ON"
+msgstr "記録日時"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_0"
+msgstr "大きな失敗をしてしまいました。申し訳ありません。"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_1"
+msgstr "うまくいきませんでした…"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_2"
+msgstr "仲間に迷惑をかけてしまいました。"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_3"
+msgstr "今回は手が思うように動きませんでした。"
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_0"
+msgstr "危ないところでしたが、成功しました！"
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_1"
+msgstr "仲間の開発にも役立つと嬉しいです。"
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_2"
+msgstr "来年も契約してもらえると嬉しいです。"

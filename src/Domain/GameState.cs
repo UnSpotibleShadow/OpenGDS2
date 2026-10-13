@@ -31,6 +31,11 @@ public sealed class GameState
     public List<ReleasedGameState> ReleasedGames { get; set; } = [];
     // A143FC is shared across Hall windows; legacy phase remains unknown.
     public int? HallCelebrationTicks {get;set;}
+    public CompanyActivityPresentation? PendingCompanyActivity {get;set;}
+    public uint? SimulationRandomState {get;set;}
+    public int? ProgrammingActorPasses {get;set;}
+    public ProgrammingChallengeState? PendingProgrammingChallenge {get;set;}
+    public OfficeActorContinuationState? OfficeActorContinuation {get;set;}
     public int SalesTicks { get; set; }
     public int? CompanyActivityTicks { get; set; }
     public bool? CompanyActivityPerformed { get; set; }

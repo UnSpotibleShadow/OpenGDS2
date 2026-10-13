@@ -19,6 +19,8 @@ public static class DevelopmentSimulation
         if (employee.Stress is not double stress || employee.DevelopmentSpeed is not int speed ||
             employee.Inspiration is not int inspiration || employee.Experience is null || employee.Level is null)
             return; // Unknown imported/legacy employee fields cannot be guessed.
+        if(state.OfficeActorContinuation?.ActorSlot!=office.SlotIndex)
+        {
         if (project.OriginalStage<3) employee.Stress=Math.Min(100,stress+(random.Next(3)+1)/60.0);
         if (office.WorkTicks==0 && !office.IdleBreak && random.Next(130)==0)
         {
@@ -40,6 +42,8 @@ public static class DevelopmentSimulation
             if (office.ActionTicks==14) office.Frame=14+3*(office.Facing-1);
             if (office.ActionTicks>=28) {office.Frame=15+3*(office.Facing-1);office.ActionTicks=0;}
             office.ActionTicks++;
+        }
+        if(ProgrammingChallengeService.TryTrigger(state,employee,project,random))return;
         }
         bool boosted=office.TechnologyApplication?.IsSpeedBoost==true;
         if (project.OriginalStage<3 && !boosted)

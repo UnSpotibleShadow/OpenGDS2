@@ -17,7 +17,7 @@ public static class SalesMilestoneService
         if (!state.ReleasedGames.Contains(product) || product.PendingSalesMilestones.Count==0) return false;
         int stage=product.PendingSalesMilestones[0];
         if (stage>=2) RankingService.Queue(state,(RankingKind)(stage-2));
-        product.SalesMilestoneStage=stage;product.PendingSalesMilestones.RemoveAt(0);
+        product.SalesMilestonePage=0;product.SalesMilestoneStage=stage;product.PendingSalesMilestones.RemoveAt(0);
         return true;
     }
     public static bool HasPending(GameState state)=>state.ReleasedGames.Any(x=>x.PendingSalesMilestones.Count>0);

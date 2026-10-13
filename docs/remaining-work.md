@@ -1,3 +1,9 @@
+> M100 status: the ten M98 presentation/workflow gaps, shared saved VB-family
+> RNG and the confirmed office catch-up difference are implemented. See
+> [M100 completion and limits](presentation-completion-m100.md) and AGENTS.md.
+> Older pending statements below are historical. GD2 state import, Windows
+> pacing/pixel acceptance and exhaustive image-to-handler review remain open.
+
 # Remaining reconstruction work
 
 Current fidelity checkpoint, M91 (2026-10-12): speed technology is implemented

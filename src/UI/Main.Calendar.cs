@@ -9,6 +9,7 @@ public partial class Main
     {
         var calendar=state.Calendar;var pending=calendar?.Pending;
         if (pending is null || pending.PendingEvent is null && pending.Block is null) return false;
+        if(pending.PendingEvent==CalendarEvent.HardwareLaunch){ShowHardwareLaunchCard(state,pending);return true;}
         if (pending.DialoguePage is not null)
         {
             string text=DialogueText(CalendarDialogueRules.MessageKey(state));

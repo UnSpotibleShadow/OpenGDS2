@@ -49,8 +49,8 @@ public partial class Main
         acknowledge.Pressed+=()=>
         {
             if(acknowledge.Disabled)return;
-            ReviewService.Acknowledge(state,product);
-            if(!ShowPendingProductEvent(state))ShowSales(state);
+            if(product.ReviewPending){product.ReviewSummaryPage=0;ShowReviewSummary(state,product);}
+            else ShowSales(state);
         };
         string Comment(int row)
         {

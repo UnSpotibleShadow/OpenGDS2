@@ -207,11 +207,12 @@ public partial class Main
         try
         {
             var book=RankingStore.Load(RankingsPath);
-            for (int i=0;i<6;i++)
+            var table=CreateTable("ReachTimeRecords",["RANKING_CATEGORY","COMPANY_NAME","RANKING_REACHED_ON","RANKING_RECORDED_ON"],[180,130,130,140]);_content.AddChild(table);
+            var root=table.GetRoot();
+            for(int i=0;i<6;i++)
             {
-                var record=book.Records[i];AddHeading(Tr($"RANKING_{(RankingKind)i}"),20);
-                AnnualMessage($"RankingRecord{i}",record.AchievedOn is GameDate date ?
-                    $"{record.Company} — {string.Format(Tr("RANKING_DATE"),date.Year,date.Month,date.Week)}\n{record.RecordedOn}" : Tr("RANKING_NOT_REACHED"));
+                var record=book.Records[i];var row=table.CreateItem(root);row.SetText(0,Tr($"RANKING_{(RankingKind)i}"));row.SetText(1,record.Company);
+                row.SetText(2,record.AchievedOn is { } d?$"{d.Year}/{d.Month}/{d.Week}":Tr("RANKING_NOT_REACHED"));row.SetText(3,record.RecordedOn);
             }
         }
         catch (Exception ex) {AnnualMessage("RankingError",$"{Tr("RANKINGS_LOAD_FAILED")}: {ex.Message}");}
@@ -242,13 +243,34 @@ public partial class Main
         else
         {
             var table=CreateTable("SalesRankingTable",["COMPANY_RANK","GAME_TITLE","UNITS_SOLD","COMPANY_NAME"],[40,220,100,150]);_content.AddChild(table);
-            var root=table.CreateItem();int rank=1;
-            foreach (int id in CompetitionService.Chart(state))
+            int? selected=null;
+            table.ItemSelected+=()=>{var row=table.GetSelected();if(row is not null)selected=(int)row.GetMetadata(0);};
+            var rows=new Dictionary<int,TreeItem>();int[] previous=[];
+            void Refresh()
             {
-                var p=state.Competition.Products[id];var row=table.CreateItem(root);row.SetText(0,(rank++).ToString());row.SetText(1,p.Title);
-                row.SetText(2,p.UnitsSold.ToString("N0"));row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
-                row.SetText(3,p.Owner==-1 ? state.Company.Name : _activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner) ?? Tr("NOT_YET_DECODED"));
+                int[] ids=CompetitionService.Chart(state).ToArray();
+                if(!previous.SequenceEqual(ids))
+                {
+                    Vector2 scroll=table.GetScroll();table.Clear();rows.Clear();var root=table.CreateItem();
+                    foreach(int id in ids){var row=table.CreateItem(root);row.SetMetadata(0,id);rows[id]=row;}
+                    previous=ids;
+                    Callable.From(()=>
+                    {
+                        if(!GodotObject.IsInstanceValid(table)||!table.IsInsideTree())return;
+                        foreach(var bar in table.GetChildren(true).OfType<VScrollBar>())bar.Value=scroll.Y;
+                        foreach(var bar in table.GetChildren(true).OfType<HScrollBar>())bar.Value=scroll.X;
+                    }).CallDeferred();
+                }
+                int rank=1;
+                foreach(int id in ids)
+                {
+                    var p=state.Competition.Products[id];var row=rows[id];row.SetText(0,(rank++).ToString());row.SetText(1,p.Title);
+                    row.SetText(2,p.UnitsSold.ToString("N0"));row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
+                    row.SetText(3,p.Owner==-1?state.Company.Name:_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED"));
+                    if(selected==id)row.Select(0);
+                }
             }
+            Refresh();_clockRunning=true;_activeCatalog=_importer.LoadCatalog();_refreshCoreStatus=Refresh;
         }
         AddAction("GLOBAL_RANKINGS",()=>ShowRankings(state));AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
     }

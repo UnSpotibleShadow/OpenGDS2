@@ -86,7 +86,7 @@ public partial class Main
         _employeeLevelUp=EmployeeDetailButton(footer,"EmployeeLevelUp","LEVEL_UP",()=>
         {
             if (employee.SourceIndex is not int source) return;
-            var result=EmployeeLevelUpService.TryLevelUp(state,source,Enumerable.Range(0,8).Select(_=>Random.Shared.NextSingle()).ToArray());
+            var result=EmployeeLevelUpService.TryLevelUp(state,source,Enumerable.Range(0,8).Select(_=>_session.Random.NextSingle()).ToArray());
             RefreshEmployeeDetails();if (result!=LevelUpResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"LEVEL_UP_RESULT_{result}");
         });
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
@@ -97,7 +97,7 @@ public partial class Main
             ("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee),employee.Office is not null),
             ("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _activeCatalog?.Technologies.Count>0),
             ("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(p=>p.Value>0)==true),
-            ("TAKE_BREAK",()=> {var result=OfficeAssignmentService.TryTakeBreak(state,employee,Random.Shared);RefreshEmployeeDetails();
+            ("TAKE_BREAK",()=> {var result=OfficeAssignmentService.TryTakeBreak(state,employee,_session.Random);RefreshEmployeeDetails();
                 if (result!=OfficeAssignmentResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{result}");},employee.Office?.Action is >=1 and <=17),
             ("STAFF",()=>ShowStaff(state),true)];
         for (int i=0;i<choices.Length;i++) {more.GetPopup().AddItem(Tr(choices[i].Key),i);more.GetPopup().SetItemDisabled(i,!choices[i].Enabled);}

@@ -47,6 +47,7 @@ public sealed class CalendarTenantState
 }
 public sealed class CalendarTransaction
 {
+    public int HardwareLaunchPage {get;set;}
     [JsonRequired]
     public GameDate ClosingDate { get; set; }
     [JsonRequired]

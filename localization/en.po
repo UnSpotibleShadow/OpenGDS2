@@ -3725,3 +3725,156 @@ msgstr "Internet"
 
 msgid "PROMOTION_MEDIA_5"
 msgstr "Newspaper"
+
+msgid "PROGRAMMING_CHALLENGE"
+msgstr "Advanced programming"
+
+msgid "PROGRAMMING_INTRO"
+msgstr "{0} will attempt an advanced program."
+
+msgid "PROGRAMMING_INSPIRATION"
+msgstr "Inspiration: {0}. This affects the reel’s success slots."
+
+msgid "PROGRAMMING_START"
+msgstr "Start"
+
+msgid "PROGRAMMING_STOP"
+msgstr "Stop"
+
+msgid "PROGRAMMING_REEL_0"
+msgstr "Fail"
+
+msgid "PROGRAMMING_REEL_1"
+msgstr "Win"
+
+msgid "PROGRAMMING_REEL_2"
+msgstr "Super"
+
+msgid "PROGRAMMING_RESULT_0"
+msgstr "{0} failed the programming challenge."
+
+msgid "PROGRAMMING_RESULT_1"
+msgstr "{0} succeeded in the programming challenge!"
+
+msgid "PROGRAMMING_RESULT_2"
+msgstr "{0} achieved a super success!"
+
+msgid "PROGRAMMING_FAILURE_EFFECT"
+msgstr "The development room gains 60 bugs and 6 KB."
+
+msgid "PROGRAMMING_QUALITY_EFFECT"
+msgstr "{0} increases by {1}."
+
+msgid "REVIEW_HALL_MESSAGE"
+msgstr "“{0}” scored {1} points and entered the magazine’s Hall of Fame!"
+
+msgid "REVIEW_SUMMARY_MESSAGE"
+msgstr "“{0}” received {1} points from the magazines."
+
+msgid "REVIEW_SEQUEL_MESSAGE"
+msgstr "A sequel to this Hall of Fame game can now be developed."
+
+msgid "SALES_ACHIEVEMENT_MESSAGE"
+msgstr "“{0}” has reached {1:N0} shipped copies! Keep those sales going."
+
+msgid "HARDWARE_LAUNCH_LICENSE_MESSAGE"
+msgstr "A new device has launched. Consider acquiring its license for future games."
+
+msgid "ACTIVITY_DESCRIPTION_0"
+msgstr "Promote the company to increase its fame and market presence."
+
+msgid "ACTIVITY_DESCRIPTION_1"
+msgstr "Research new genres to broaden the games the company can develop."
+
+msgid "ACTIVITY_DESCRIPTION_2"
+msgstr "Increase the number of copies the company can produce at once."
+
+msgid "ACTIVITY_RESULT"
+msgstr "{0}: {1} → {2}. Cost: ¥{3:N0}."
+
+msgid "ACTIVITY_SUPER_RESULT"
+msgstr "Super production increase! {0}: {1} → {2}. Cost: ¥{3:N0}."
+
+msgid "ACTIVITY_UNLOCKED_GENRES"
+msgstr "New genres are now available:"
+
+msgid "MEDIA_INFORMATION"
+msgstr "Media and capacity"
+
+msgid "MEDIA_CAPACITY"
+msgstr "Capacity"
+
+msgid "GAME_HELP"
+msgstr "Game help"
+
+msgid "HELP_TOPIC_0"
+msgstr "Game overview"
+
+msgid "HELP_TOPIC_1"
+msgstr "Running the company"
+
+msgid "HELP_TOPIC_2"
+msgstr "Tenants and facilities"
+
+msgid "HELP_TOPIC_3"
+msgstr "About the game"
+
+msgid "HELP_TOPIC_4"
+msgstr "Developing games"
+
+msgid "HELP_BODY_0"
+msgstr "Manage a game company: hire employees, acquire hardware licenses, develop software, and ship it to earn money. Employee salaries and annual contract renewals are recurring costs. The office continues working while live management reports are open; modal decisions pause progress."
+
+msgid "HELP_BODY_1"
+msgstr "Choose employees with suitable skills, then select an employee and right-click a desk to assign them. Study seats provide training. Rest reduces stress. Review company funds, loans, production capacity and stock regularly. Hardware availability changes with the calendar; retired hardware cannot be chosen for a new project."
+
+msgid "HELP_BODY_2"
+msgstr "Three tenant plots support the company. School graduates arrive in April. The hot spring relieves stress; recycling handles stock; technology training expands employee capacity; casino games provide optional recreation. The lawyer negotiates sales fees. Other facilities offer production expansion, hardware research and experiments. Each service retains its own costs and conditions."
+
+msgid "HELP_BODY_3"
+msgstr "OpenGDS2 recreates the 2001 PC game from locally imported original assets. Original Japanese help captions are recovered locally when the archive is reimported. Save slots use the modern JSON format; the numbered picker does not import native GD2 saves."
+
+msgid "HELP_BODY_4"
+msgstr "Choose a device, audience and development focus in the planning meeting. Accepting a proposal starts the project and pays its cost. At alpha choose content; at beta choose a genre. Development reports show quality, bugs, recognition, size and completion. After completion, continue debugging or arrange initial shipment. Set title, copies and price in shipment setup. Magazine reviews follow release; strong scores unlock sequels. Additional production consumes the weekly production allowance."
+
+msgid "SAVE_SAVE_SLOTS"
+msgstr "Choose a save slot"
+
+msgid "LOAD_SAVE_SLOTS"
+msgstr "Choose a saved company"
+
+msgid "SAVE_SLOT_EMPTY"
+msgstr "Empty slot"
+
+msgid "SAVE_SLOT_DAMAGED"
+msgstr "Unreadable save"
+
+msgid "RANKING_CATEGORY"
+msgstr "Record"
+
+msgid "RANKING_REACHED_ON"
+msgstr "Reached on"
+
+msgid "RANKING_RECORDED_ON"
+msgstr "Recorded on"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_0"
+msgstr "I made a serious mistake. I’m sorry."
+
+msgid "PROGRAMMING_COMMENT_FAILURE_1"
+msgstr "That did not go as planned…"
+
+msgid "PROGRAMMING_COMMENT_FAILURE_2"
+msgstr "I hate causing trouble for the team."
+
+msgid "PROGRAMMING_COMMENT_FAILURE_3"
+msgstr "My hands let me down this time."
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_0"
+msgstr "That was close, but it worked!"
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_1"
+msgstr "I hope this helps the whole team."
+
+msgid "PROGRAMMING_COMMENT_SUCCESS_2"
+msgstr "I hope you’ll renew my contract next year."

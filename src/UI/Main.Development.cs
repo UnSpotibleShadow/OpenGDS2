@@ -136,7 +136,7 @@ public partial class Main
     private void ShowPlanningMeeting(GameState state,OriginalCatalog catalog,int roomIndex,int hardwareId,int audienceId,
         int? predecessorProductIndex=null,int? mangaSourceIndex=null)
     {
-        var proposal=DevelopmentFocusRules.GenerateProposal(new Random());
+        var proposal=DevelopmentFocusRules.GenerateProposal(_session.Random);
         string hardware=CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name);
         string audience=CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name);
         var pages=DevelopmentFocusRules.DialogueKeys(proposal.Profile,state.ReleasedGames.Count).Select(key=>new ConversationPage(

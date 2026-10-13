@@ -188,7 +188,7 @@ public static class CalendarService
             FinancialRules.Apply(state,checked(-t.Amount!.Value));
             c!.Loans[t.Index].OriginalType=0;t.Index++;
         }
-        t.DialoguePage=null;t.PendingEvent=null;t.Amount=null;return true;
+        t.HardwareLaunchPage=0;t.DialoguePage=null;t.PendingEvent=null;t.Amount=null;return true;
     }
     public static ContractRenewalResult RenewContracts(GameState state,IReadOnlySet<int> selected)
     {
@@ -219,6 +219,8 @@ public static class CalendarService
         AnnualCalendarValidation.Validate(state);
         CalendarDialogueRules.Validate(state);
         var p=c.Pending;if (p is null) return;
+        if(p.HardwareLaunchPage is <0 or >1 || p.HardwareLaunchPage!=0 && p.PendingEvent!=CalendarEvent.HardwareLaunch)
+            throw new InvalidDataException("Invalid hardware announcement cursor.");
         try {CalendarRules.Validate(p.ClosingDate);} catch (ArgumentOutOfRangeException ex) {throw new InvalidDataException("Invalid closing date.",ex);}
         if (!Enum.IsDefined(p.Phase) || p.PendingEvent is not null && !Enum.IsDefined(p.PendingEvent.Value) ||
             p.Block is not null && !Enum.IsDefined(p.Block.Value) || p.PendingEvent is not null && p.Block is not null ||

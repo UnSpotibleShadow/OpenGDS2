@@ -18,6 +18,8 @@
     <Compile Include="../../src/Import/LhaArchive.cs" Link="Import/LhaArchive.cs" />
     <Compile Include="../../src/Import/OfficeSceneImporter.cs" Link="Import/OfficeSceneImporter.cs" />
     <Compile Include="../../src/Import/EmbeddedGraphicsImporter.cs" Link="Import/EmbeddedGraphicsImporter.cs" />
+    <Compile Include="../../src/Import/SerializedArtworkImporter.cs" Link="Import/SerializedArtworkImporter.cs" />
+    <Compile Include="../../src/Import/OriginalHelpImporter.cs" Link="Import/OriginalHelpImporter.cs" />
     <Compile Include="../../src/Import/LocalRasterDecoder.cs" Link="Import/LocalRasterDecoder.cs" />
   </ItemGroup>
 </Project>
