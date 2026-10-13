@@ -47,6 +47,20 @@ public static class EmbeddedGraphicsImporter
             SerializedImageBinding(executable,reactions[index],"Image3",index);
             WriteBitmap(executable,reactions[index],18,64,destination,$"ReviewReaction{index}.bmp");
         }
+        // Hidden BGraphic skins contain the original button glyphs and captions.
+        // Recover every bounded 63x22 skin, plus shipment arrow and roster icons.
+        byte[] signature=System.Text.Encoding.ASCII.GetBytes("BGraphic\0\x18\x01");
+        for(int at=0;at<executable.Length-signature.Length-80;at++)
+            if(executable.AsSpan(at,signature.Length).SequenceEqual(signature))
+            {
+                int offset=at+26;
+                if(executable[offset]=='B'&&executable[offset+1]=='M'&&
+                    BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(offset+18,4)) is >=8 and <=256&&
+                    BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(offset+22,4)) is >=8 and <=256)
+                    WriteBitmap(executable,offset,BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(offset+18,4)),BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(offset+22,4)),destination,$"Button-{offset:X6}.bmp");
+            }
+        foreach(int offset in new[]{0x26511E,0x265680,0x265C47,0x2661A9,0x2668F5,0x266E59,0x2673BD,0x267921})
+            WriteBitmap(executable,offset,16,16,destination,$"Button-{offset:X6}.bmp");
         // MDIForm1 BGraphicH picture properties, verified in the supplied build.
         int[] toolbar = [0x1AD1, 0x216A, 0x2803, 0x2E9C, 0x3535, 0x3BCC, 0x4265, 0x48FE,
             0x4F97, 0x5630, 0x5CC9, 0x6362, 0x69FB, 0x7094, 0x772D, 0x7DC6];

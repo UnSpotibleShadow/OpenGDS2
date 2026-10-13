@@ -53,7 +53,7 @@ func press(key: String) -> void:
         await press_node("ProjectRelease")
         found=true
     if not found and key=="BACK_TO_OFFICE" and main.find_child("NativeDialogCanvas",true,false)!=null:
-        var canvas=main.find_child("NativeDialogCanvas",true,false)
+        var canvas=main.find_children("NativeDialogCanvas","Control",true,false)[-1]
         var dialog=canvas.get_parent().get_parent().get_parent().get_parent()
         dialog.find_child("CloseWindow",true,false).pressed.emit()
         found=true

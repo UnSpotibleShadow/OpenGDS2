@@ -6,6 +6,18 @@ public static class LocalSceneCaptionRules
     public static readonly (int X,int Y,int Width,int Height) HallRegion=(20,68,222,66);
     public static readonly (int X,int Y,int Width,int Height) ExhibitionRegion=(60,0,137,22);
     public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);
+    public static byte[] PatchReviewer(byte[] source,int index)
+    {
+        if(source.Length!=64*64*3 || index is <0 or >3)throw new InvalidDataException("Unexpected reviewer picture.");
+        var output=(byte[])source.Clone();
+        for(int y=48;y<64;y++)for(int x=0;x<64;x++)
+        {int i=(y*64+x)*3;output[i]=255;output[i+1]=255;output[i+2]=255;}
+        // Authored role labels identify the four bitmap-only reviewers without
+        // guessing personal-name transliterations from stylized source lettering.
+        LocalBitmapLetteringRules.DrawLettering(output,64,64,"REVIEWER "+(index+1),3,53,1,1,(0,0,0),1);
+        LocalBitmapLetteringRules.DrawLettering(output,64,64,"REVIEWER "+(index+1),3,53,1,1,(224,24,24));
+        return output;
+    }
     public static byte[] PatchAwards(byte[] source)
     {
         const int width=256,height=160;

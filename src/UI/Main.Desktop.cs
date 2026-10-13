@@ -15,6 +15,12 @@ public partial class Main
     private Control? _workspace;
     private DesktopWindow? _dialog;
     private Vector2? _conversationPosition;
+    private readonly Dictionary<string,Vector2> _dialogPositions=new();
+    private string? _dialogPositionKey;
+    private readonly Dictionary<int,(DesktopWindow Window,Action Refresh)> _retainedProjectReports=new();
+    private int? _projectReportRoom;
+    private Action? _projectReportRefresh;
+    private bool _closingProjectReport;
     private GameState? _desktopState;
     private string _desktopLocale = string.Empty;
     private Label? _desktopFunds;
@@ -41,6 +47,7 @@ public partial class Main
         CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
+        _retainedProjectReports.Clear();_projectReportRoom=null;_projectReportRefresh=null;_dialogPositionKey=null;
         _desktopFunds = null; _desktopStatus = null; _desktopPause = null; _desktopLoad = null;
         _staffTable = null; _productTable = null; _staffRows.Clear(); _productRows.Clear();
         _windows.Clear(); _companyMetrics.Clear(); _projectButtons = null; _projectSignature = string.Empty;
@@ -288,6 +295,8 @@ public partial class Main
         button.TextureFilter = TextureFilterEnum.Nearest;
         button.AddThemeStyleboxOverride("normal", ClassicTheme.CompactButton());
         button.AddThemeStyleboxOverride("pressed", ClassicTheme.CompactButton(true));
+        foreach(string mode in new[]{"hover","disabled"})button.AddThemeStyleboxOverride(mode,ClassicTheme.CompactButton());
+        var focus=new StyleBoxFlat {BgColor=Colors.Transparent,BorderColor=new(.15f,.24f,.45f),ContentMarginLeft=3,ContentMarginRight=3,ContentMarginTop=1,ContentMarginBottom=1};focus.SetBorderWidthAll(1);button.AddThemeStyleboxOverride("focus",focus);
         button.AddThemeFontSizeOverride("font_size", 1);
         foreach (string color in new[] { "font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color" })
             button.AddThemeColorOverride(color, Colors.Transparent);
@@ -318,6 +327,7 @@ public partial class Main
     private void RefreshDesktop()
     {
         if (_desktopState is not GameState state || _desktopFunds is null || _desktopStatus is null) return;
+        RefreshRetainedProjectReports(state);
         if (_desktopLoad is not null) _desktopLoad.Disabled = !System.IO.File.Exists(SavePath);
         if (_desktopPause is not null) _desktopPause.Disabled=!DesktopActionEnabled("PAUSE");
         foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
@@ -389,11 +399,32 @@ public partial class Main
         _conversationReveal=null;_conversationElapsed=0;
         if (_dialog is null) return;
         RememberConversationPosition();
+        if(!_closingProjectReport && _projectReportRoom is int room && _projectReportRefresh is Action refresh &&
+            _session.Current?.DevelopmentProjects.Any(p=>p.RoomIndex==room)==true)
+        {
+            var report=_dialog;_retainedProjectReports[room]=(report,refresh);
+            report.CloseRequested=()=>CloseRetainedProjectReport(room);
+            _dialog=null;_projectReportRoom=null;_projectReportRefresh=null;_dialogPositionKey=null;return;
+        }
         _workspace!.RemoveChild(_dialog); _dialog.QueueFree(); _dialog = null;
+        _projectReportRoom=null;_projectReportRefresh=null;_dialogPositionKey=null;
     }
 
+    private void CloseRetainedProjectReport(int room)
+    {
+        if(!_retainedProjectReports.Remove(room,out var retained))return;
+        _dialogPositions["DevelopmentProjectWindow:"+room]=retained.Window.Position;
+        retained.Window.GetParent()?.RemoveChild(retained.Window);retained.Window.QueueFree();
+    }
+    private void RefreshRetainedProjectReports(GameState state)
+    {
+        foreach(var pair in _retainedProjectReports.ToArray())
+            if(state.DevelopmentProjects.Any(p=>p.RoomIndex==pair.Key))pair.Value.Refresh();
+            else CloseRetainedProjectReport(pair.Key);
+    }
     private void RememberConversationPosition()
     {
+        if(_dialog is not null && _dialogPositionKey is string key)_dialogPositions[key]=_dialog.Position;
         if (_dialog is not null && UsesConversationPosition(_dialog.Name.ToString()))
             _conversationPosition = _dialog.Position;
     }
@@ -408,6 +439,7 @@ public partial class Main
         CloseDesktopDialog();
         _dialog = new DesktopWindow { Name = "ManagementWindow" }; _workspace!.AddChild(_dialog);
         _dialog.Initialize(Tr("APP_TITLE"), new Vector2(430, 36), new Vector2(670, 520));
+        if(_session.Current is GameState current)RefreshRetainedProjectReports(current);
         // Close behaves like the screen's existing explicit back action, including pending decisions.
         _dialog.CloseRequested = () => { if (_session.Current is GameState state) ShowOfficeReconstruction(state); };
         var scroll = new ScrollContainer { SizeFlagsVertical = SizeFlags.ExpandFill, SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -416,7 +448,7 @@ public partial class Main
         _content.AddThemeConstantOverride("separation", 5); scroll.AddChild(_content);
     }
 
-    private void CompactManagementWindow(string name, Vector2 size, float contentWidth)
+    private void CompactManagementWindow(string name, Vector2 size, float contentWidth,string? positionKey=null)
     {
         _content.CustomMinimumSize = new Vector2(contentWidth, 0);
         if (_dialog is null || _workspace is null) return;
@@ -425,7 +457,9 @@ public partial class Main
         // Prefer the free space beside the office, keeping the office visible.
         _dialog.Position = new Vector2(Math.Min(480, Math.Max(0, _workspace.Size.X - size.X)),
             Math.Min(36, Math.Max(0, _workspace.Size.Y - size.Y)));
-        if (UsesConversationPosition(name) && _conversationPosition is Vector2 position)
+        _dialogPositionKey=positionKey??(UsesConversationPosition(name)?null:name);
+        if(_dialogPositionKey is string key && _dialogPositions.TryGetValue(key,out var saved))_dialog.SetPositionInsideWorkspace(saved);
+        else if (UsesConversationPosition(name) && _conversationPosition is Vector2 position)
             _dialog.SetPositionInsideWorkspace(position);
     }
 }

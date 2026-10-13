@@ -5,7 +5,7 @@ public partial class Main
 {
     // Dialog content uses bounded desktop pixels, independently of the surrounding
     // office's responsive management panes. No outer scrolling or expanding rows.
-    private Control NativeWindow(string name,string title,Vector2 client)
+    private Control NativeWindow(string name,string title,Vector2 client,string? positionKey=null)
     {
         if(_dialog is null)throw new InvalidOperationException("A desktop dialog is required.");
         foreach(Node child in _dialog.Body.GetChildren()){_dialog.Body.RemoveChild(child);child.QueueFree();}
@@ -14,7 +14,7 @@ public partial class Main
         _content.AddThemeConstantOverride("separation",0);_dialog.Body.AddChild(_content);
         var canvas=new Control {Name="NativeDialogCanvas",CustomMinimumSize=client,
             SizeFlagsHorizontal=Control.SizeFlags.ShrinkBegin,SizeFlagsVertical=Control.SizeFlags.ShrinkBegin};_content.AddChild(canvas);
-        CompactManagementWindow(name,client+new Vector2(8,32),client.X);_dialog.SetTitle(title);
+        CompactManagementWindow(name,client+new Vector2(8,32),client.X,positionKey);_dialog.SetTitle(title);
         return canvas;
     }
     private static T NativePlace<T>(Control parent,T control,Rect2 rect) where T:Control
@@ -31,6 +31,9 @@ public partial class Main
         var button=new Button {Name=name,Text=Tr(key),TooltipText=Tr(key),Disabled=!enabled,ClipText=true};
         button.AddThemeFontSizeOverride("font_size",11);
         button.AddThemeStyleboxOverride("normal",ClassicTheme.CompactButton());button.AddThemeStyleboxOverride("pressed",ClassicTheme.CompactButton(true));
+        int? glyph=name switch {"ProjectPromotion"=>0x289EF9,"ProjectCancel"=>0x28814D,
+            "ProjectRelease" or "CompactProduceMore"=>0x28A8DD,"CheckpointCancelProject"=>0x28814D,_=>null};
+        if(glyph is int offset)NativeButtonArtwork.Apply(button,offset);
         NativePlace(parent,button,rect);button.Pressed+=()=>{if(!button.Disabled)action();};return button;
     }
     private static Control NativeFill(Control parent,string name,Rect2 rect,Color color,bool border=false)

@@ -20,12 +20,12 @@ public partial class Main
             var portrait=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Reviewer{i}.bmp");artworkMissing|=portrait is null;
             NativeFill(row,$"ReviewerFrame{i}",new(0,0,66,65),Colors.White,true);
             NativePlace(row,Picture($"ReviewerPortrait{i}",portrait,new(64,64)),new(1,0,64,64));
-            NativeFill(row,$"ReviewReactionFrame{i}",new(72,0,19,65),Colors.White,true);
+            NativePlace(row,new ReviewSpeechBubble {Name=$"ReviewReactionFrame{i}"},new(70,0,22,65));
             reactionImages[i]=NativePlace(row,Picture($"ReviewReactionImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewReaction{i}.bmp"),new(18,64)),new(72,0,18,64));reactionImages[i].Visible=!english;
-            reactions[i]=NativeText(row,$"ReviewReaction{i}","…",new(72,0,18,64),9,HorizontalAlignment.Center);reactions[i].Visible=english;
+            reactions[i]=NativeText(row,$"ReviewReaction{i}","…",new(75,3,14,58),9,HorizontalAlignment.Center);reactions[i].Visible=english;
             NativeFill(row,$"ReviewCommentPanel{i}",new(96,0,316,65),Colors.White,true);
-            scoreImages[i]=NativePlace(row,Picture($"ReviewScoreImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewScore{scores[i]}.png"),new(64,64)),new(97,0,64,64));artworkMissing|=scoreImages[i].Texture is null;
-            scoreLabels[i]=NativeText(row,$"ReviewScore{i}","?",new(97,0,64,64),48,HorizontalAlignment.Center);scoreLabels[i].AddThemeColorOverride("font_color",new(.67f,.79f,.94f));
+            scoreImages[i]=NativePlace(row,Picture($"ReviewScoreImage{i}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/ReviewScore{scores[i]}.png"),new(56,56)),new(101,4,56,56));artworkMissing|=scoreImages[i].Texture is null;
+            scoreLabels[i]=NativeText(row,$"ReviewScore{i}","?",new(101,4,56,56),42,HorizontalAlignment.Center);scoreLabels[i].AddThemeColorOverride("font_color",new(.67f,.79f,.94f));
             comments[i]=new RichTextLabel {Name=$"ReviewComment{i}",BbcodeEnabled=false,FitContent=false,ScrollActive=true};
             comments[i].AddThemeColorOverride("default_color",Colors.Black);comments[i].AddThemeFontSizeOverride("normal_font_size",11);
             NativePlace(row,comments[i],new(166,3,241,59));

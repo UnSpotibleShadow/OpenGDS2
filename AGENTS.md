@@ -1,5 +1,44 @@
 # Development execution safeguards
 
+## Current handoff — M103 second playthrough feedback
+
+Owner authorized this completed review round. Branch
+`codex/m103-playthrough-presentation` is based on PR #106 merge
+`f4b767e8d0f517dc44ad4be625aab483f46914c7`. Verify remote PR/main publication
+before continuing; use the durable `/workspace/scratch/m103-*.json` receipts.
+**Keep #95 open.** See `docs/playthrough-presentation-m103.md`.
+
+Implemented: wider checkpoint names; compact media columns without horizontal
+scrolling; wider numeric inputs; recovered 80ms shipment repetition with one-step
+ordinary clicks; review speech bubbles, padded score art and bounded English
+Reviewer 1–4 role labels; compact white sales graph; aligned exhibition counts
+and centered button; boxed trophies; compact renewal; stable toolbar hover
+margins; generic dialog positions and per-room reports retained behind meetings,
+with actions blocked until the active dialog closes.
+
+Original comments use independent score-band draws from a shared pool, so repeats
+are valid; do not enforce uniqueness. Native report timers close on empty rooms;
+original screenshots show reports beneath checkpoint selectors. BGraphic skins
+are recovered locally and glyphs applied only where bindings support them. Plain
+native command buttons remain text controls. All original assets/captures stay
+private. Personal-name translations of reviewer captions are not established.
+
+Validation: 521 optional-original domain checks; clean build (zero warnings and
+errors); bilingual focused rendered regression and complete native layout sweep;
+complete core-loop, review/event and presentation-continuation regressions;
+original procedure/button/timer evidence verifier. Failed fixture attempts were
+corrected (required staff stats, retained development eligibility, valid candidate
+roster, production cap and deferred input text refresh). No successful check needs
+repeating absent a relevant source change.
+
+Rendering display startup previously stalled before a process was launched.
+Use detached Popen with a bounded readiness loop; avoid foreground service calls
+and redundant additional-permission overrides. Current check display is :44;
+stop only the PID recorded in `m103-display-start.json`. SDK/Godot invocations
+remain sequential and bounded. Remote writes require durable intent, expected
+SHA/read-back and reconciliation of unknown outcomes before retry.
+No release/export/Actions/visibility change was authorized in this batch.
+
 ## Current handoff — 2026-10-13, M102 awards follow-ups
 
 M101 is merged in PR #105 at `b29103aec9af301c292c75cabf09d6c52d9fec54`.

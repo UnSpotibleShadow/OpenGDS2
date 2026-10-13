@@ -63,10 +63,10 @@ public partial class Main
     }
     private void CheckpointPanel(GameState state,DevelopmentProjectState project,OriginalCatalog catalog,string name,string heading)
     {
-        var canvas=NativeWindow(name,heading,new(562,212));ProjectPanel(canvas,state,project,catalog);
+        var canvas=NativeWindow(name,heading,new(640,212));ProjectPanel(canvas,state,project,catalog);
         NativeAction(canvas,"CheckpointCancelProject","CANCEL",new(4,122,70,28),()=>ShowProjectCancellation(state,project));
-        var choices=new VBoxContainer {Name="CheckpointChoicePane",CustomMinimumSize=new(266,204)};
-        choices.AddThemeConstantOverride("separation",2);NativePlace(canvas,choices,new(294,4,266,204));_content=choices;
+        var choices=new VBoxContainer {Name="CheckpointChoicePane",CustomMinimumSize=new(344,204)};
+        choices.AddThemeConstantOverride("separation",2);NativePlace(canvas,choices,new(294,4,344,204));_content=choices;
         _status=new Label {Name="CheckpointStatus",ClipText=true};_status.AddThemeFontSizeOverride("font_size",10);
         choices.AddChild(_status);
     }

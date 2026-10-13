@@ -1,0 +1,114 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "spans": {
+    "dev1_refresh": {
+      "address": 10153136,
+      "size": 2484,
+      "sha256": "4487ac4f62112156cf045727ffc18bcbd2e7984969971f893b12105e610d9013"
+    },
+    "dev2_refresh": {
+      "address": 10150564,
+      "size": 2484,
+      "sha256": "756523368369363c553640eddce5b604626d8f5bc111ef4c9914e0d343dcd3c4"
+    },
+    "shipment_repeat": {
+      "address": 10112376,
+      "size": 1924,
+      "sha256": "0e084b303127ae4327094fe2327fab2436faf5e36375e4887192058145939fef"
+    },
+    "review_draws": {
+      "address": 10268620,
+      "size": 5000,
+      "sha256": "aec7fbb43eb6c907ecc0b051496f0284a005d504d1aa4c00f5318ab6845f41a5"
+    }
+  },
+  "resources": [
+    {
+      "label": "cancel",
+      "file_offset": 2654541,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "label": "promotion",
+      "file_offset": 2662137,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "0457612af2710b3aa8f1bcbd630940e335966aa58295799792d5e6e5021b37b8"
+    },
+    {
+      "label": "ship",
+      "file_offset": 2664669,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "label": "alpha_confirm",
+      "file_offset": 2612248,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "label": "alpha_cancel",
+      "file_offset": 2604652,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "label": "beta_confirm",
+      "file_offset": 2558577,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "label": "beta_cancel",
+      "file_offset": 2566173,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "label": "compact_ship",
+      "file_offset": 2503130,
+      "size": 2486,
+      "width": 63,
+      "height": 22,
+      "sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "label": "up_arrow",
+      "file_offset": 2515369,
+      "size": 1334,
+      "width": 16,
+      "height": 16,
+      "sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "label": "down_arrow",
+      "file_offset": 2513991,
+      "size": 1334,
+      "width": 16,
+      "height": 16,
+      "sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    }
+  ],
+  "file_anchors": [
+    {
+      "label": "shipment_timer_80ms",
+      "file_offset": 2516789,
+      "hex": "54696d657231000b0350000000070000"
+    }
+  ]
+}
