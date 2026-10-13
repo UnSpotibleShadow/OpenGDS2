@@ -137,4 +137,21 @@ public static class LocalBitmapLetteringRules
         return output;
     }
 
+    public static void DrawLettering(byte[] pixels,int width,int height,string text,int x,int y,int scaleX,int scaleY,(byte R,byte G,byte B) color,int outline=0)
+    {
+        if(pixels.Length!=width*height*3 || scaleX<1 || scaleY<1 || outline<0)throw new InvalidDataException("Invalid lettering canvas.");
+        text=text.ToUpperInvariant();if(text.Any(c=>!Glyphs.ContainsKey(c)))throw new InvalidDataException("Unsupported authored glyph.");
+        for(int letter=0;letter<text.Length;letter++)
+        {
+            var rows=Glyphs[text[letter]].Split('/');
+            for(int row=0;row<7;row++)for(int column=0;column<5;column++)if(rows[row][column]=='1')
+            for(int dy=-outline;dy<scaleY+outline;dy++)for(int dx=-outline;dx<scaleX+outline;dx++)
+            {
+                int px=x+(letter*6+column)*scaleX+dx,py=y+row*scaleY+dy;
+                if(px<0||py<0||px>=width||py>=height)throw new InvalidDataException("Authored lettering exceeds its canvas.");
+                int index=(py*width+px)*3;pixels[index]=color.R;pixels[index+1]=color.G;pixels[index+2]=color.B;
+            }
+        }
+    }
+
 }

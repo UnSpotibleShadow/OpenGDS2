@@ -17,7 +17,10 @@ public static class OriginalAssetStore
         string original=ProjectSettings.GlobalizePath(OriginalGameImporter.CacheRoot);
         string path=LocalAssetOverlay.Resolve(original,ProjectSettings.GlobalizePath(OverlayRoot),relative);
         string imported=System.IO.Path.Combine(original,relative.Replace('/',System.IO.Path.DirectorySeparatorChar));
-        if (path!=imported || _englishArtworkRoot is null || !TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase)) return path;
+        if(path!=imported || !TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase))return path;
+        try {if(LocalSceneArtworkPatches.Ensure(relative,imported) is { } scene)return scene;}
+        catch(Exception error){GD.PushWarning("Local English scene patch could not be generated: "+error.Message);}
+        if(_englishArtworkRoot is null)return path;
         return LocalAssetOverlay.Resolve(original,_englishArtworkRoot,relative);
     }
 

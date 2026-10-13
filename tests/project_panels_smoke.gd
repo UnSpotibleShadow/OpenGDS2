@@ -35,7 +35,7 @@ func run() -> void:
         await load_fixture(value)
         check(main.find_child("CompletionIllustration",true,false).texture != null,"Completion loads the meeting illustration")
         var summary = main.find_child("ProjectCatalogSummary",true,false)
-        check(summary.text.contains(tr("PROJECT_AUDIENCE")) and not summary.text.contains("PROJECT_AUDIENCE"),"Combined project summary is localized")
+        check(summary.text.contains(tr("TARGET_HARDWARE")) and not summary.text.contains("TARGET_HARDWARE"),"Combined project summary is localized")
         check(main.find_child("ProjectBugCount",true,false).text == "22" and main.find_child("ProjectRecognition",true,false).text.contains("81%"),"Completion shows saved bug count and recognition")
         await press("RELEASE_GAME")
         check(main.find_child("ShipmentHardwarePicture",true,false).texture != null,"Shipment has its actual hardware picture")

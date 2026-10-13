@@ -72,7 +72,7 @@ public partial class Main
             var acknowledge=new Button {Name="AcknowledgeCalendar",Text=Tr("CONTINUE")};_content.AddChild(acknowledge);
             acknowledge.Pressed+=()=>{CalendarService.Acknowledge(state);ShowOfficeReconstruction(state);};
         }
-        AddSaveActions(state);
+        if (_dialog?.FindChild("NativeDialogCanvas",true,false) is null) AddSaveActions(state);
         return true;
     }
 }

@@ -1,46 +1,44 @@
 # Development execution safeguards
 
-## Current handoff — 2026-10-13, M100 presentation completion
+## Current handoff — 2026-10-13, M101 native screen layouts
 
-M99 is merged in PR #103 at `a6e35c0e83c643e86d9f53fb0fa52cbb083c09a3`.
-M100 on `codex/m100-presentation-completion` implements the ten M98 gap groups:
-programming challenge and saved mid-actor continuation; review assessment/Hall/
-sequel sequence; four illustrated sales milestones; media and reproduction
-breakdowns/held controls; hardware launch card; activity confirmations/receipts;
-five help topics; numbered modern slots/previews; live charts and record table.
-See `docs/presentation-completion-m100.md`. Verify PR/#55/main publication state.
-**Keep #95 open.** Do not redo the completed M93–M100 handler research.
+M100 is merged in PR #104 at `9579c392af6bd49976ef78f7480b26df03608237`.
+M101 on `codex/m101-native-screen-layouts` addresses the owner's M100 playthrough
+feedback: fixed compact proposal/project/checkpoint/completion/review/Hall/media/
+product/exhibition/awards clients; aligned selection lists and shipment hold controls;
+Sales defaults to the individual graph. See `docs/native-screen-layouts-m101.md`.
+Verify PR/#55/main publication state. **Keep #95 open.** Implemented handlers and
+available artwork did not establish matching layouts; do not repeat M93–M100
+research or claim pixel parity from those milestones. Hall has no confirmed native
+screenshot here; its recovered form/art dimensions guide the compact layout.
 
-Reimport the original archive for all 91 local help captions, new scene images
-and the 422-resource serialized BMP/GIF inventory. #97 now has an inventory
-foundation, not certified image-to-handler coverage. Original files/text/pixels
-and generated HTML/contact sheets stay private and outside this repository.
+English Hall/booth signage uses bounded, fingerprint-guarded patches generated
+from locally imported artwork. Japanese and explicit user overlays retain their
+original paths. Reimport for missing pictures. Never commit original pixels,
+private caches or rendered captures. #97's 422-resource inventory still needs
+exhaustive image-to-handler coverage. The OFFICE atlas is not every game image.
 
-The default session now owns a saved shared 24-bit VB-family RNG; UI callers use
-it. Draw recurrence/save continuation are checked independently. Modern initial
-seed and missing cosmetic/native ordering remain fidelity limits. Do not claim
-whole-session original RNG equivalence. Legacy random history remains unknown.
+Rendered checks found cached GD.Load audio disposed across Main lifetimes. M101
+leaves those shared resources to Godot while retaining ownership of independently
+loaded local tracks. Playlist selection and RNG are unchanged.
 
-#94's proven missed-tick replay difference is fixed: one office pass maximum per
-frame, no stalled-frame catch-up, normal frame quantization retained at nominal
-40 ms / 200 ticks per week. Do not arbitrarily slow the calendar. Original Windows
-wall-clock comparison is still needed to establish actual perceived-speed parity.
+M101 validation: 516 optional-original domain checks; clean app build/import;
+English/Japanese rendered layout checks for twelve windows; full core-loop and
+review/event save-resume checks. Original captures stay private.
 
-Native GD2 remains unsupported: two verified sequential Write/Input procedures,
-130 matching record templates and 40 loops each are inventoried in the new save
-evidence manifest/verifier. No genuine GD2 fixture is available here. Complete
-field mapping, Variant/Empty conversions and dirty-slot comparison before exposing
-an importer. The modern numbered JSON picker is not an original-save importer.
-Exact native fonts/stacking/control focus/timer delivery need a Windows host;
-this managed Linux workspace cannot certify those by static tracing alone.
+Related edits are batched before checks. Check logs/checkpoints outside the repo
+before repeating validation. Usage percentage is unavailable; if the owner reports
+15%, finish a safe step, persist state and update this handoff.
 
-M100 validation: 514 optional-original domain checks; clean app build/import; bilingual
-challenge/review/Hall/milestone/activity/media/help/slot/hardware/chart/cadence
-smoke; complete core-loop UI; census/programming/native-save/office evidence
-verifiers; eleven Python checks. Integrated UI verifies 25 nominal ticks/second.
-Do not rerun passing checks purely to publish. Owner prefers related changes batched
-before checks. Usage percentage is unavailable; if reported at 15%, finish a safe
-step, persist state and update this handoff.
+The shared saved 24-bit VB-family RNG does not establish whole-session native draw
+ordering or initial-seed equivalence. Native GD2 import remains unavailable without
+complete field mapping and a genuine fixture. #94 missed-tick replay is fixed;
+original Windows wall-clock comparison is still needed for perceived-speed parity.
+Exact native fonts, stacking, focus and timer delivery require Windows acceptance.
+
+Release target remains Friday 2026-10-16, 19:00 CEST. Do not generate another build,
+change visibility, publish releases or enable Actions unless requested. Preserve
+README's Ko-fi and original LZH requirement. The M100 testing build predates M101.
 
 ## Previous handoff — M99 challenge audit and Hall scene
 

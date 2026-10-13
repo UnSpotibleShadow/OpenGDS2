@@ -36,33 +36,13 @@ public partial class Main
         if (ShowPendingPromotion(state)) return;
         if (project.OriginalRoomState==2) {ShowHardwareProject(state,project);return;}
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
-        ClearContent();AddHeading(project.Title,28);
-        CompactManagementWindow("DevelopmentProjectWindow",new Vector2(430,470),410);
-        var refreshPanel=ProjectPanel(_content,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
-        if (project.OriginalMode==1)
-        {
-            AddHeading(Tr("SEQUEL_DEVELOPMENT"),16);
-            AddHeading(Tr("SEQUEL_INHERITANCE_NOTE"),14);
-        }
-        var progress=new ProgressBar {Name="DevelopmentProgress",MinValue=0,MaxValue=100};_content.AddChild(progress);
-        var report=new Label {Name="DevelopmentReport",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
-        AddHeading(Tr("DEVELOPMENT_STAFF_NOTE"),16);
-        AddAction("STAFF",()=>ShowStaff(state));
-        if (project.OriginalStage==3) AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
-        AddAction("MEDIA_INFORMATION",()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
-        AddAction("PAID_PROMOTION",()=>ShowPromotionSelector(state,project));
-        AddAction("CANCEL_PROJECT",()=>ShowProjectCancellation(state,project));
-        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
-        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;
-        _refreshCoreStatus=()=>
-        {
-            refreshPanel();
-            progress.Value=project.Progress/project.RequiredPoints*100;
-            report.Text=$"{Tr("DEVELOPMENT_POINTS")}: {project.Progress:N1} / {project.RequiredPoints:N0}\n"+
-                string.Join("\n",state.Employees.Where(x=>x.Office?.Action is >=6 and <=17 && (x.Office.Action-6)/6==project.RoomIndex)
-                    .Select(x=>$"{EmployeeName(x)} · {Tr("STRESS")}: {x.Stress:N0}%"));
-        };
-        _refreshCoreStatus();
+        ClearContent();var canvas=NativeWindow("DevelopmentProjectWindow",project.Title,new(290,212));
+        var refreshPanel=ProjectPanel(canvas,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
+        NativeAction(canvas,"ProjectPromotion","PAID_PROMOTION",new(4,103,70,25),()=>ShowPromotionSelector(state,project));
+        NativeAction(canvas,"ProjectCancel","CANCEL",new(4,132,70,25),()=>ShowProjectCancellation(state,project));
+        NativeAction(canvas,"ProjectRelease","PRODUCT_SHIP",new(4,161,70,25),()=>ShowRelease(state,project),project.OriginalStage==3);
+        NativeAction(canvas,"ProjectMedia","NATIVE_MEDIA",new(4,188,70,20),()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
+        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;_refreshCoreStatus=refreshPanel;
     }
     private void ShowProjectCancellation(GameState state,DevelopmentProjectState project)
     {
@@ -132,19 +112,18 @@ public partial class Main
         ClearContent(keepMeetingMusic:true);
         if (project.PendingDecision is DevelopmentMilestone phase)
             _music.SetMeetingPhase((int)MeetingMusicRules.ForMilestone(phase));
-        AddHeading(project.Title,18);
         _status=new Label {AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(_status);
         if (project.PendingDecision==DevelopmentMilestone.SelectType)
         {
             CheckpointPanel(state,project,catalog,"TypeMeetingWindow",DialogueText("CHECKPOINT_ALPHA_MEETING"));
             _dialog?.SetTitle(DialogueText("CHECKPOINT_ALPHA_MEETING"));
-            AddHeading(Tr("SELECT_GAME_TYPE"),16);
+
             try
             {
                 var candidates=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,_session.Random);
                 int? selected=null;
-                var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
-                var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true};
+                var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
+                var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true,CustomMinimumSize=new(86,24),SizeFlagsHorizontal=SizeFlags.ShrinkEnd};
                 var group=new ButtonGroup();
                 var options=CheckpointOptions(includeExamples:true);
                 int listIndex=0;
@@ -176,11 +155,11 @@ public partial class Main
         {
             CheckpointPanel(state,project,catalog,"GenreMeetingWindow",DialogueText("CHECKPOINT_BETA_MEETING"));
             _dialog?.SetTitle(DialogueText("CHECKPOINT_BETA_MEETING"));
-            AddHeading(Tr("SELECT_GENRE"),16);
+
             if (state.Company.OriginalMember90 is not int companyValue) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");return;}
             int? selected=null;
-            var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),AutowrapMode=TextServer.AutowrapMode.WordSmart};
-            var confirm=new Button {Name="ConfirmGenreChoice",Text=Tr("CONFIRM"),Disabled=true};
+            var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
+            var confirm=new Button {Name="ConfirmGenreChoice",Text=Tr("CONFIRM"),Disabled=true,CustomMinimumSize=new(86,24),SizeFlagsHorizontal=SizeFlags.ShrinkEnd};
             var group=new ButtonGroup();
             var options=CheckpointOptions();
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
@@ -205,64 +184,40 @@ public partial class Main
         }
         else
         {
-            CompactManagementWindow("CompletionWindow",new Vector2(450,510),430);
-            AddHeading(Tr("DEVELOPMENT_COMPLETE"),22);
-            _content.AddChild(Picture("CompletionIllustration",OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),new(256,160)));
-            ProjectPanel(_content,state,project,catalog);
-            if (project.Bugs>=60) AddHeading(Tr("RELEASE_BUG_WARNING"),16);
-            AddAction("RELEASE_GAME",()=>ShowRelease(state,project));
-            AddAction("CONTINUE_DEBUGGING",()=>{project.PendingDecision=null;ShowProject(state,project);});
-        }
-        if (project.PendingDecision==DevelopmentMilestone.StartDebugging) AddAction("SAVE_GAME",()=>
-        {
-            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
-            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
-        });
-        if (project.PendingDecision==DevelopmentMilestone.StartDebugging)
-        {
-            AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-            AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+            var canvas=NativeWindow("CompletionWindow",Tr("DEVELOPMENT_COMPLETE"),new(368,316));
+            NativeText(canvas,"CompletionCaption",Tr("DEVELOPMENT_COMPLETE"),new(4,3,360,18),12,HorizontalAlignment.Center);
+            NativePlace(canvas,Picture("CompletionIllustration",OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),new(256,160)),new(56,26,256,160));
+            NativeCompletionSummary(canvas,state,project,catalog);
+            NativeAction(canvas,"CompletionRelease","RELEASE_GAME",new(254,245,110,27),()=>ShowRelease(state,project));
+            NativeAction(canvas,"CompletionDebug","NATIVE_DEBUG",new(254,278,110,27),()=>{project.PendingDecision=null;ShowProject(state,project);});
+            if(project.Bugs>=60)NativeText(canvas,"CompletionBugWarning",Tr("RELEASE_BUG_WARNING"),new(4,298,240,16),9);
         }
         if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
             ShowMeetingScene(DialogueText(project.PendingDecision==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),()=>ShowOfficeReconstruction(state));
     }
     private VBoxContainer CheckpointOptions(bool includeExamples=false)
     {
-        var headings=new HBoxContainer {Name="CheckpointColumnHeadings"};
-        headings.AddThemeConstantOverride("separation",4);
-        headings.AddChild(new Label {Text=Tr(includeExamples ? "SELECT_GAME_TYPE" : "SELECT_GENRE"),
-            ClipText=true,CustomMinimumSize=new Vector2(120,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
-        headings.AddChild(new Label {Text=Tr("CHECKPOINT_POINTS"),CustomMinimumSize=new Vector2(100,0),HorizontalAlignment=HorizontalAlignment.Right});
-        headings.AddChild(new Label {Name="CheckpointFeeHeading",Text=Tr("CHECKPOINT_FEE"),CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
-        if (includeExamples) headings.AddChild(new Label {Text=Tr("CHECKPOINT_EXAMPLES"),
-            ClipText=true,CustomMinimumSize=new Vector2(130,0),SizeFlagsHorizontal=SizeFlags.ExpandFill});
-        var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new Vector2(0,175),
-            HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};_content.AddChild(scroll);
-        var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",1);
-        scroll.AddChild(options);options.AddChild(headings);return options;
+        var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new(264,158),HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};
+        _content.AddChild(scroll);var frame=new PanelContainer();frame.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=Colors.White});scroll.AddChild(frame);
+        var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",0);frame.AddChild(options);
+        var headings=new HBoxContainer {Name="CheckpointColumnHeadings"};headings.AddThemeConstantOverride("separation",4);options.AddChild(headings);
+        foreach(var (key,width,name) in new[]{(includeExamples?"PROJECT_CONTENT":"PROJECT_GENRE",102,"CheckpointNameHeading"),("CHECKPOINT_POINTS",50,"CheckpointPointsHeading"),("CHECKPOINT_FEE",84,"CheckpointFeeHeading")})
+        {var label=new Label {Name=name,Text=Tr(key),ClipText=true,CustomMinimumSize=new(width,18),HorizontalAlignment=key=="CHECKPOINT_FEE"?HorizontalAlignment.Right:HorizontalAlignment.Left};label.AddThemeFontSizeOverride("font_size",10);headings.AddChild(label);}
+        return options;
     }
     private Button AddCheckpointOption(VBoxContainer options,string nodeName,string caption,long fee,int points,ButtonGroup group,
         System.Collections.Generic.IReadOnlyList<string>? examples=null,string? examplesNodeName=null)
     {
-        var row=new HBoxContainer();row.AddThemeConstantOverride("separation",4);options.AddChild(row);
-        string feeText=$"¥{fee:N0}";
-        var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,
-            CustomMinimumSize=new Vector2(120,28),SizeFlagsHorizontal=SizeFlags.ExpandFill,TooltipText=$"{caption}\n{Tr("CHECKPOINT_POINTS")}: +{points:N0}\n{Tr("CHECKPOINT_FEE")}: {feeText}"};
-        row.AddChild(button);
-        // Explicitly retain the preview selection even when a test/accessibility caller emits Pressed directly.
-        button.Pressed+=()=>button.ButtonPressed=true;
-        row.AddChild(new Label {Name=$"{nodeName}Points",Text=$"+{points:N0}",CustomMinimumSize=new Vector2(100,0),HorizontalAlignment=HorizontalAlignment.Right});
-        row.AddChild(new Label {Name=$"{nodeName}Fee",Text=feeText,CustomMinimumSize=new Vector2(90,0),HorizontalAlignment=HorizontalAlignment.Right});
-        if (examples is not null)
-        {
-            // Show all locally imported examples without drawing from the simulation's random stream.
-            string text=string.Join("\n",examples.Where(x=>!string.IsNullOrWhiteSpace(x)));
-            if (text.Length==0) text="—";
-            row.AddChild(new Label {Name=examplesNodeName!,Text=text,TooltipText=text,CustomMinimumSize=new Vector2(130,0),
-                SizeFlagsHorizontal=SizeFlags.ExpandFill,AutowrapMode=TextServer.AutowrapMode.WordSmart});
-        }
-        if (options.GetChildCount()==2) button.CallDeferred(Control.MethodName.GrabFocus);
-        return button;
+        var row=new HBoxContainer {Name=nodeName+"Row"};row.AddThemeConstantOverride("separation",4);options.AddChild(row);
+        var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,CustomMinimumSize=new(102,19)};
+        button.AddThemeFontSizeOverride("font_size",11);
+        foreach(string mode in new[]{"normal","hover","pressed"})button.AddThemeStyleboxOverride(mode,new StyleBoxFlat {BgColor=mode=="pressed"?new(.7f,1,.7f):Colors.White,ContentMarginTop=0,ContentMarginBottom=0,ContentMarginLeft=2});
+        string exampleText=examples is null?"":string.Join("\n",examples.Where(x=>!string.IsNullOrWhiteSpace(x)));
+        button.TooltipText=caption+(exampleText.Length==0?"":"\n"+exampleText);row.AddChild(button);
+        var point=new Label {Name=nodeName+"Points",Text=$"+{points:N0}",CustomMinimumSize=new(50,19),HorizontalAlignment=HorizontalAlignment.Right};point.AddThemeFontSizeOverride("font_size",11);row.AddChild(point);
+        var price=new Label {Name=nodeName+"Fee",Text=$"¥{fee:N0}",CustomMinimumSize=new(84,19),HorizontalAlignment=HorizontalAlignment.Right};price.AddThemeFontSizeOverride("font_size",11);row.AddChild(price);
+        row.GuiInput+=e=>{if(e is InputEventMouseButton {Pressed:true,ButtonIndex:MouseButton.Left}){button.ButtonPressed=true;button.EmitSignal(Button.SignalName.Pressed);}};
+        if(options.GetChildCount()==2)button.CallDeferred(Control.MethodName.GrabFocus);return button;
     }
     private void ShowCheckpointMeeting(GameState state,DevelopmentProjectState project,OriginalCatalog catalog)
     {
@@ -309,7 +264,7 @@ public partial class Main
             ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
         var title=new LineEdit {Name="ReleaseTitle",Text=draftTitle ?? defaultTitle,MaxLength=128};
         var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=draftPrice ?? ReleaseService.DefaultPrice};
-        HeldShipmentButtons(price,false);
+
         var copies=ProductionQuantity(state,"ReleaseCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;_content.RemoveChild(copies);
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize);
         ShipmentBreakdown(state,unit,price,copies);
@@ -318,8 +273,10 @@ public partial class Main
         var fields=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};controls.AddChild(fields);
         fields.AddChild(new Label {Text=Tr("GAME_TITLE")});fields.AddChild(title);
         var numbers=new GridContainer {Columns=2};fields.AddChild(numbers);
-        numbers.AddChild(new Label {Text=Tr("PRODUCTION_COPIES")});numbers.AddChild(copies);
-        numbers.AddChild(new Label {Text=Tr("RETAIL_PRICE")});numbers.AddChild(price);
+        numbers.AddChild(new Label {Text=Tr("PRODUCTION_COPIES")});
+        var quantityField=new HBoxContainer {Name="ReleaseQuantityField"};quantityField.AddChild(copies);quantityField.AddChild(HeldShipmentButtons(copies,true));numbers.AddChild(quantityField);
+        numbers.AddChild(new Label {Text=Tr("RETAIL_PRICE")});
+        var priceField=new HBoxContainer {Name="ReleasePriceField"};priceField.AddChild(price);priceField.AddChild(HeldShipmentButtons(price,false));numbers.AddChild(priceField);
         _status=new Label();_content.AddChild(_status);
         var confirm=new Button {Name="ConfirmRelease",Text=Tr("RELEASE_GAME")};_content.AddChild(confirm);
         title.TextChanged+=value=>confirm.Disabled=string.IsNullOrWhiteSpace(value);
@@ -340,54 +297,16 @@ public partial class Main
     {
         // Same 100-copy floor and capacity×100 ceiling as the original spinner.
         var copies=new SpinBox {Name=name,MinValue=100,MaxValue=Math.Max(100,(state.Company.ProductionCapacity ?? throw new InvalidOperationException("Unknown production capacity."))*100L),
-            Step=100,Value=ReleaseService.DefaultCopies};_content.AddChild(copies);HeldShipmentButtons(copies,true);return copies;
+            Step=100,Value=ReleaseService.DefaultCopies};_content.AddChild(copies);return copies;
     }
     private void ShowSales(GameState state)
     {
-        if (ShowPendingProductEvent(state)) return;
-        ClearContent();AddHeading(Tr("SALES"),28);
-        var funds=new Label {Name="SalesFunds"};_content.AddChild(funds);
-        var budget=new Label {Name="ProductionAvailability"};_content.AddChild(budget);
-        var rows=new List<(ReleasedGameState Product,Label Report,Button Production)>();
-        foreach (var product in state.ReleasedGames.OrderByDescending(x=>x.ProductIndex))
-        {
-            AddHeading(product.Title,22);
-            var individual=new Button {Name=$"OpenProduct{product.ProductIndex}",Text=Tr("PRODUCT_DETAILS")};
-            individual.Pressed+=()=>ShowCompactProduct(state,product);_content.AddChild(individual);
-            var report=new Label {Name=$"SalesProduct{product.ProductIndex}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
-            var button=new Button {Name=$"ProduceProduct{product.ProductIndex}",Text=Tr("PRODUCE_MORE"),Disabled=state.Company.ProductionCapacity is null};
-            button.Pressed+=()=>ShowProduction(state,product);_content.AddChild(button);
-            rows.Add((product,report,button));
-            var history=new Button {Name=$"SalesHistoryProduct{product.ProductIndex}",Text=Tr("SALES_HISTORY")};
-            history.Pressed+=()=>ShowSalesHistory(state,product);_content.AddChild(history);
-            if (product.ReviewScores is not null)
-            {
-                var reviews=new Button {Name=$"ReviewsProduct{product.ProductIndex}",Text=Tr("MAGAZINE_REVIEWS")};
-                reviews.Pressed+=()=>ShowReviews(state,product);_content.AddChild(reviews);
-            }
-        }
-        if (rows.Count==0) AddHeading(Tr("NO_RELEASED_GAMES"),18);
-        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
-        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;
-        _refreshCoreStatus=()=>
-        {
-            funds.Text=$"{Tr("FUNDS")}: ¥{state.Money:N0}";
-            var availability=ReleaseService.CheckProduction(state);
-            budget.Text=availability==ReleaseResult.Success ? Tr("PRODUCTION_READY") : Tr($"RELEASE_RESULT_{availability}");
-            foreach (var (p,label,production) in rows)
-            {
-                production.Disabled=state.Company.ProductionCapacity is null || ReleaseService.CheckProduction(state,p)!=ReleaseResult.Success;
-                label.Text=$"{Tr("RETAIL_PRICE")}: ¥{p.Price:N0} · {Tr("STOCK")}: {p.Stock:N0}\n"+
-                $"{Tr("UNITS_SOLD")}: {p.UnitsSold:N0} · {Tr("LAST_SALES_BATCH")}: {p.LastBatchSold:N0}\n"+
-                $"{Tr("NET_SALES_RECEIPTS")}: ¥{p.NetSalesReceipts:N0}\n{Tr("PRODUCTION_COST")}: ¥{p.ProductionSpending:N0}\n{Tr("DEMAND")}: {p.Demand}";
-                var result=ReleaseService.CheckProduction(state,p);
-                if (result is ReleaseResult.Recalled or ReleaseResult.StateUnknown) label.Text+="\n"+Tr($"RELEASE_RESULT_{result}");
-                if (p.Recall?.OriginalState==1 && p.Recall.WeeksRemaining>0)
-                    label.Text+=$"\n{Tr("RECALL_WEEKS_REMAINING")}: {p.Recall.WeeksRemaining}";
-                if (p.Recall?.RefundAmount is long refund) label.Text+=$"\n{Tr("RECALL_REFUND")}: ¥{refund:N0}";
-            }
-        };
-        _refreshCoreStatus();
+        if(ShowPendingProductEvent(state))return;
+        var product=state.ReleasedGames.OrderByDescending(p=>p.ProductIndex).FirstOrDefault();
+        if(product is not null){ShowCompactProduct(state,product);return;}
+        ClearContent();var canvas=NativeWindow("NoReleasedGamesWindow",Tr("SALES"),new(260,94));
+        NativeText(canvas,"NoReleasedGames",Tr("NO_RELEASED_GAMES"),new(4,8,252,24));
+        NativeAction(canvas,"CloseEmptySales","BACK_TO_OFFICE",new(80,51,176,26),()=>ShowOfficeReconstruction(state));
     }
     private void ShowReviews(GameState state,ReleasedGameState product)
     {
@@ -432,6 +351,7 @@ public partial class Main
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
         ClearContent();AddHeading(product.Title,28);AddHeading(Tr("PRODUCE_MORE"),22);
         var copies=ProductionQuantity(state,"ProductionCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;
+        _content.RemoveChild(copies);var productionField=new HBoxContainer {Name="ProductionQuantityField"};_content.AddChild(productionField);productionField.AddChild(copies);productionField.AddChild(HeldShipmentButtons(copies,true));
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize);
         ReproductionBreakdown(state,product,unit,copies);
         var quote=new Label();_content.AddChild(quote);quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}";

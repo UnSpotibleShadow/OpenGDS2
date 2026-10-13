@@ -28,6 +28,20 @@ GameState ProgrammingFixture(int index=5)
         OfficeActorContinuation=new() {ActorSlot=0,EmployeeSourceIndex=0,RoomIndex=0},
         PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2,Mode=4,Index=index,Outcome=index==1?0:1,QualityIndex=index==1?null:0,CommentVariant=0}};
 }
+Test("local scene captions change only their declared area and preserve source pixels",()=>
+{
+    byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray();byte[] original=(byte[])source.Clone();
+    foreach(bool hall in new[]{true,false})
+    {
+        byte[] patched=LocalSceneCaptionRules.Patch(source,hall);var r=hall?LocalSceneCaptionRules.HallRegion:LocalSceneCaptionRules.ExhibitionRegion;
+        Check(source.SequenceEqual(original) && !source.SequenceEqual(patched));
+        Check(patched.SequenceEqual(LocalSceneCaptionRules.Patch(source,hall)));
+        for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<r.X||x>=r.X+r.Width||y<r.Y||y>=r.Y+r.Height)
+        {int i=(y*256+x)*3;Check(source.AsSpan(i,3).SequenceEqual(patched.AsSpan(i,3)));}
+    }
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.Patch(new byte[1],true));
+});
+
 Test("office cadence retains nominal wall time without replaying stalled iterations",()=>
 {
     double remainder=0;int ticks=0;
@@ -5584,6 +5598,25 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original scene patches preserve animation and scenery outside captions",()=>
+    {
+        byte[] exe=File.ReadAllBytes(args[0]);var patches=new List<byte[]>();
+        foreach(int offset in new[]{0x2FD305,0x2F2EA1})
+        {
+            int start=BitConverter.ToInt32(exe,offset+10);byte[] rgb=new byte[256*160*3];
+            for(int y=0;y<160;y++)for(int x=0;x<256;x++)
+            {int color=exe[offset+start+(159-y)*256+x],pal=offset+54+color*4,i=(y*256+x)*3;rgb[i]=exe[pal+2];rgb[i+1]=exe[pal+1];rgb[i+2]=exe[pal];}
+            var patch=LocalSceneCaptionRules.Patch(rgb,true);Check(!patch.SequenceEqual(rgb));patches.Add(patch);
+            var r=LocalSceneCaptionRules.HallRegion;
+            for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<r.X||x>=r.X+r.Width||y<r.Y||y>=r.Y+r.Height)
+            {int i=(y*256+x)*3;Check(rgb.AsSpan(i,3).SequenceEqual(patch.AsSpan(i,3)));}
+        }
+        Check(!patches[0].SequenceEqual(patches[1]));
+        var booth=LocalRasterDecoder.Gif(exe.AsSpan(0x11243,21264).ToArray(),256,160);
+        byte[] original=booth.Rgba.Where((v,i)=>i%4!=3).ToArray(),translated=LocalSceneCaptionRules.Patch(original,false);
+        Check(!translated.SequenceEqual(original));
+        for(int y=22;y<160;y++)Check(original.AsSpan(y*256*3,256*3).SequenceEqual(translated.AsSpan(y*256*3,256*3)));
+    });
     Test("optional original help and every bounded serialized artwork resource are recovered locally",()=>
     {
         byte[] original=File.ReadAllBytes(args[0]);var help=OriginalHelpImporter.Extract(original);
