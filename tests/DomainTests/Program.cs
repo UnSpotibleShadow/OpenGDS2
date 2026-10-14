@@ -5626,6 +5626,21 @@ Test("LHA validates data CRC and stored size", () =>
 });
 if (args.Length == 2)
 {
+    Test("optional original native window icons match independent decoded pixels",()=>
+    {
+        var exe=File.ReadAllBytes(args[0]);
+        (int Offset,string Hash)[] cases=[(0x3B574B,"266501a9e11edbb992eca2cb90e29f8842a99b16906a475815369416024ad142"),(0x297CB2,"8b68d7723299348a3326cf989a7813f6ceae15293fd9d4b6e6178e1082bafb82"),(0x25127F,"cfd2518a264aae014654812d40733e3d2aaff65ede481819e1bcf918cefa2a7f"),(0x274C52,"c4d94d7c2ab04f612c22c920b3f136e41990e9934224262fee6b4f87474ce719")];
+        foreach(var (offset,hash) in cases)
+        {
+            int size=BitConverter.ToInt32(exe,offset-4);var raster=NativePresentationAssetImporter.Icon(exe.AsSpan(offset,size).ToArray());
+            Check(raster.Width==16&&raster.Height==16);
+            var pixels=raster.Rgba;for(int i=0;i<pixels.Length;i+=4)if(pixels[i+3]==0){pixels[i]=pixels[i+1]=pixels[i+2]=0;}
+            Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(pixels)).ToLowerInvariant()==hash);
+        }
+        string root=Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString());Directory.CreateDirectory(root);
+        try{NativePresentationAssetImporter.Extract(exe,root);Check(Directory.GetFiles(root,"WindowIcon-*.png").Length==83);Check(Directory.GetFiles(root,"Facility-*").Length==9);}
+        finally{Directory.Delete(root,true);}
+    });
     Test("optional original scene patches preserve animation and scenery outside captions",()=>
     {
         byte[] exe=File.ReadAllBytes(args[0]);var patches=new List<byte[]>();
@@ -5816,7 +5831,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==235 && dialogue.SchemaVersion==12 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==273 && dialogue.SchemaVersion==13 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));

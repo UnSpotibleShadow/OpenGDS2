@@ -38,8 +38,7 @@ public partial class SalesHistoryChart : Control
         }
         Vector2 Point(int i)=>new(left+(right-left)*i/(SalesHistoryRules.CellCount-1),
             bottom-(float)((double)_history[SalesHistoryRules.CellCount-1-i]/ceiling)*(bottom-top));
-        for (int i=1;i<SalesHistoryRules.CellCount;i++)
-            DrawLine(Point(i-1),Point(i),Compact?new Color(0,.55f,0):new Color(.65f,.05f,.05f),Compact?1:2);
+        for(int i=1;i<SalesHistoryRules.CellCount;i++)DrawLine(new(Point(i).X,bottom),Point(i),Compact?new Color(0,.55f,0):new Color(.65f,.05f,.05f),Compact?1:2);
         if(Compact){DrawLine(new(left,top),new(left,bottom),Colors.Black);DrawLine(new(left,bottom),new(right,bottom),Colors.Black);}
         else DrawRect(area,Colors.Black,false);
         DrawString(font,new(left,bottom+(Compact?16:22)),Tr(Compact ? "COMPACT_HISTORY_OLDEST" : "SALES_HISTORY_OLDEST"),HorizontalAlignment.Left,(right-left)/2,fontSize,Colors.Black);

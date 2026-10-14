@@ -1,5 +1,18 @@
 # Development execution safeguards
 
+## Current M104 — third review implementation
+
+Owner approved the complete plan in docs/review-round-plan-m104.md. See
+docs/review-round-implementation-m104.md for implementation, evidence and testing.
+Branch codex/m104-third-review-presentation starts at M103 PR #107 merge
+f1da985d014f9b622011be89910bb54437699bdf. Keep #95 open for the next owner review.
+Reimport the original archive for the added native icons, facility/computer art and
+Japanese awards dialogue. Original pixels and private captures are not published.
+Local build, 522 domain checks, bilingual rendered review, core loop, saved awards
+continuation, native layout, review/event and presentation completion checks pass. Publication receipts live externally
+in /workspace/scratch/m104-*.json; verify remote state before recovering a write.
+No new exported release, Actions dispatch or visibility change is authorized.
+
 ## Current handoff — M103 second playthrough feedback
 
 Owner authorized this completed review round. Branch

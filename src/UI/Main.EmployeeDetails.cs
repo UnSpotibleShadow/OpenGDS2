@@ -86,8 +86,8 @@ public partial class Main
         _employeeLevelUp=EmployeeDetailButton(footer,"EmployeeLevelUp","LEVEL_UP",()=>
         {
             if (employee.SourceIndex is not int source) return;
-            var result=EmployeeLevelUpService.TryLevelUp(state,source,Enumerable.Range(0,8).Select(_=>_session.Random.NextSingle()).ToArray());
-            RefreshEmployeeDetails();if (result!=LevelUpResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"LEVEL_UP_RESULT_{result}");
+            var result=LevelUpWithPresentation(state,source,Enumerable.Range(0,8).Select(_=>_session.Random.NextSingle()).ToArray());
+            RefreshEmployeeDetails();if(result==LevelUpResult.Success)ShowPendingLevelUp(state);if (result!=LevelUpResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"LEVEL_UP_RESULT_{result}");
         });
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
         dismiss.TooltipText=Tr("DISMISS_EMPLOYEE");dismiss.Disabled=employee.SourceIndex is null;

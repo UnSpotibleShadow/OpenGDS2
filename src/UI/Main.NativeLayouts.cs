@@ -31,6 +31,7 @@ public partial class Main
         var button=new Button {Name=name,Text=Tr(key),TooltipText=Tr(key),Disabled=!enabled,ClipText=true};
         button.AddThemeFontSizeOverride("font_size",11);
         button.AddThemeStyleboxOverride("normal",ClassicTheme.CompactButton());button.AddThemeStyleboxOverride("pressed",ClassicTheme.CompactButton(true));
+        button.AddThemeStyleboxOverride("hover",ClassicTheme.CompactButton());button.AddThemeStyleboxOverride("focus",new StyleBoxFlat {DrawCenter=false,ContentMarginLeft=3,ContentMarginRight=3,ContentMarginTop=1,ContentMarginBottom=1});
         int? glyph=name switch {"ProjectPromotion"=>0x289EF9,"ProjectCancel"=>0x28814D,
             "ProjectRelease" or "CompactProduceMore"=>0x28A8DD,"CheckpointCancelProject"=>0x28814D,_=>null};
         if(glyph is int offset)NativeButtonArtwork.Apply(button,offset);

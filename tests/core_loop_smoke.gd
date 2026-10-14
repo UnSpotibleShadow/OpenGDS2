@@ -43,7 +43,7 @@ func check(condition: bool, message: String) -> void:
 func press(key: String) -> void:
     var found := false
     for button in main.find_children("*", "Button", true, false):
-        if button.text == tr(key) and button.is_visible_in_tree():
+        if button.text == tr(key) and button.is_visible_in_tree() and not button.disabled:
             check(not button.disabled, "Enabled: " + key)
             if not button.disabled:
                 button.pressed.emit()
@@ -59,8 +59,21 @@ func press(key: String) -> void:
         found=true
     check(found, "Button exists: " + key)
     await process_frame
+    if key=="SALES" and main.find_child("CompactProductWindow",true,false)==null:
+        var table=main.find_child("DesktopProductTable",true,false)
+        var row=table.get_root().get_first_child() if table!=null else null
+        if row!=null:
+            row.select(0);table.item_activated.emit();await process_frame
+    if key=="LEVEL_UP" and main.find_child("LevelUpResultWindow",true,false)!=null:
+        main.find_child("LevelUpResultWindow",true,false).find_child("CloseWindow",true,false).pressed.emit();await process_frame
 
 func press_node(name: String) -> void:
+    if name=="RevealAward":
+        await await_award_result()
+        return
+    if name=="ContinueAwards":
+        await continue_award_conversation()
+        return
     if name in ["AcknowledgeReviews","CloseExhibition"]:
         for frame in range(600):
             var pending = main.find_child(name,true,false)
@@ -86,6 +99,25 @@ func press_node(name: String) -> void:
     elif name.begins_with("CompanyActivity"):
         await press_node("ConfirmCompanyActivity")
         await finish_conversation()
+
+func await_award_result() -> void:
+    for frame in range(600):
+        var talk=main.find_child("ConversationWindow",true,false)
+        if talk!=null and talk.get_meta("award_phase",-1)==3:return
+        if talk!=null:await advance_conversation_page()
+        else:await process_frame
+    check(false,"Award conversation reaches result")
+
+func continue_award_conversation() -> void:
+    var initial=main.find_child("ConversationWindow",true,false)
+    var category=initial.get_meta("award_category",-1) if initial!=null else -1
+    for frame in range(600):
+        var talk=main.find_child("ConversationWindow",true,false)
+        if main.find_child("AwardCeremonyWindow",true,false)==null:return
+        if talk!=null and talk.get_meta("award_category",category)!=category:return
+        if talk!=null:await advance_conversation_page()
+        else:await process_frame
+    check(false,"Award conversation advances category")
 
 func write_json(path: String, value: Variant) -> void:
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
@@ -809,7 +841,7 @@ func run() -> void:
     check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
     check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
     check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).tooltip_text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
-    main.find_child("ProductReportActions",true,false).get_popup().id_pressed.emit(0)
+    main.find_child("MENU_PRODUCTS",true,false).get_popup().id_pressed.emit(1)
     await process_frame
     check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
     check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
@@ -1441,7 +1473,7 @@ func run() -> void:
     write_json("user://saves/slot1.json",awards_save)
     await press("LOAD_GAME")
     for category in range(5):
-        check(main.find_child("RevealAward",true,false) != null,"Award category awaits announcement")
+        check(main.find_child("AwardCeremonyWindow",true,false)!=null and main.find_child("RevealAward",true,false)==null,"Award board waits through dialogue without action buttons")
         await press_node("RevealAward")
         await press("SAVE_GAME")
         var announced = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1461,15 +1493,15 @@ func run() -> void:
     write_json("user://saves/slot1.json",rival_awards_save)
     await press("LOAD_GAME")
     await press_node("RevealAward")
-    check(main.find_child("ContinueAwards",true,false).disabled and not main.find_child("AwardResult",true,false).visible,"Rival reel precedes winner presentation")
+    check(main.find_child("ConversationWindow",true,false).get_meta("award_phase")==3 and main.find_child("ContinueAwards",true,false)==null,"Rival reel completes into host dialogue")
     await create_timer(1.3).timeout
-    check(not main.find_child("ContinueAwards",true,false).disabled and main.find_child("AwardResult",true,false).visible,"Rival reel reveals winner and continuation")
-    check(main.find_child("AwardResult",true,false).text.contains("Synthetic rival") and main.find_child("AwardResult",true,false).text.contains("Synthetic rival company"),"Award presents actual rival game and company")
+    check(main.find_child("AwardCeremonyWindow",true,false)!=null,"Awards board remains behind the result conversation")
+    check(main.find_child("ConversationMessage",true,false).text.contains("Synthetic rival") and main.find_child("ConversationMessage",true,false).text.contains("Synthetic rival company"),"Award presents actual rival game and company")
     await press("SAVE_GAME")
     var rival_award = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(rival_award.State.Calendar.Pending.Awards.AnimationProducts.size() == 13 and rival_award.State.Money == rival_awards_save.State.Money,"Rival award persists all thirteen draws without payment")
     await press("LOAD_GAME")
-    check(not main.find_child("ContinueAwards",true,false).disabled and main.find_child("AwardResult",true,false).text.contains("Synthetic rival"),"Saved rival result opens immediately without replaying reel")
+    check(main.find_child("AwardAnnouncementWindow",true,false)==null and main.find_child("ConversationMessage",true,false).text.contains("Synthetic rival"),"Saved rival result opens immediately without replaying reel")
     await press_node("ContinueAwards")
     # Force only a proven sales override for a deterministic grand prize.
     var grand_save = awards_save.duplicate(true)

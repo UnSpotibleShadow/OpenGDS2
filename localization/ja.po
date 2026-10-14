@@ -3725,3 +3725,150 @@ msgstr "出荷可能"
 
 msgid "NATIVE_SHIP_UNAVAILABLE"
 msgstr "出荷不可"
+
+msgid "PRODUCT_LIST_INSTRUCTION"
+msgstr "自社から発売したゲーム一覧"
+
+msgid "COMPUTER_PROCESSING"
+msgstr "処理能力"
+
+msgid "TECHNOLOGY_NAME"
+msgstr "技術名"
+
+msgid "TECHNOLOGY_CAPACITY"
+msgstr "技術数"
+
+msgid "LEVEL_UP_SUPER"
+msgstr "特別レベルアップ"
+
+msgid "NEGOTIATION_SERVICE_FEE"
+msgstr "交渉料金: ¥{0:N0}"
+
+msgid "COMPUTER_DESCRIPTION"
+msgstr "{0}ビットまでの開発に対応します。"
+
+msgid "TECHNOLOGY_DESCRIPTION"
+msgstr "{0}の研修を利用できるようになります。"
+
+msgid "AWARD_HOST"
+msgstr "司会"
+
+msgid "AWARD_INTRO_COUNT"
+msgstr "今年の応募作品は{count}本です。"
+
+msgid "AWARD_WELCOME"
+msgstr "第{year}回ゲームコンテストへようこそ。"
+
+msgid "AWARD_GRAND_SUSPENSE"
+msgstr "グランプリはどの作品でしょうか。"
+
+msgid "AWARD_RANKING"
+msgstr "グランプリの記録が更新されました。"
+
+msgid "AWARD_INTRO_0"
+msgstr "次はMusic awardです。"
+
+msgid "AWARD_PRIZE_0"
+msgstr "賞金は¥100,000,000です。"
+
+msgid "AWARD_WINNER_0"
+msgstr "Music awardは{company}の{title}です。"
+
+msgid "AWARD_REACTION_0_0"
+msgstr "結果が発表されました。"
+
+msgid "AWARD_REACTION_0_1"
+msgstr "開発を振り返りましょう。"
+
+msgid "AWARD_REACTION_0_2"
+msgstr "次も頑張りましょう。"
+
+msgid "AWARD_INTRO_1"
+msgstr "次はGraphics awardです。"
+
+msgid "AWARD_PRIZE_1"
+msgstr "賞金は¥100,000,000です。"
+
+msgid "AWARD_WINNER_1"
+msgstr "Graphics awardは{company}の{title}です。"
+
+msgid "AWARD_REACTION_1_0"
+msgstr "結果が発表されました。"
+
+msgid "AWARD_REACTION_1_1"
+msgstr "開発を振り返りましょう。"
+
+msgid "AWARD_REACTION_1_2"
+msgstr "次も頑張りましょう。"
+
+msgid "AWARD_INTRO_2"
+msgstr "次はRunner-up Grand Prixです。"
+
+msgid "AWARD_PRIZE_2"
+msgstr "賞金は¥300,000,000です。"
+
+msgid "AWARD_WINNER_2"
+msgstr "Runner-up Grand Prixは{company}の{title}です。"
+
+msgid "AWARD_REACTION_2_0"
+msgstr "結果が発表されました。"
+
+msgid "AWARD_REACTION_2_1"
+msgstr "開発を振り返りましょう。"
+
+msgid "AWARD_REACTION_2_2"
+msgstr "次も頑張りましょう。"
+
+msgid "AWARD_INTRO_3"
+msgstr "次はWorst game awardです。"
+
+msgid "AWARD_PRIZE_3"
+msgstr "罰金は¥200,000,000です。"
+
+msgid "AWARD_WINNER_3"
+msgstr "Worst game awardは{company}の{title}です。"
+
+msgid "AWARD_REACTION_3_0"
+msgstr "結果が発表されました。"
+
+msgid "AWARD_REACTION_3_1"
+msgstr "開発を振り返りましょう。"
+
+msgid "AWARD_REACTION_3_2"
+msgstr "次も頑張りましょう。"
+
+msgid "AWARD_INTRO_4"
+msgstr "次はGrand Prizeです。"
+
+msgid "AWARD_PRIZE_4"
+msgstr "賞金は¥500,000,000です。"
+
+msgid "AWARD_WINNER_4"
+msgstr "Grand Prizeは{company}の{title}です。"
+
+msgid "AWARD_REACTION_4_0"
+msgstr "結果が発表されました。"
+
+msgid "AWARD_REACTION_4_1"
+msgstr "開発を振り返りましょう。"
+
+msgid "AWARD_REACTION_4_2"
+msgstr "次も頑張りましょう。"
+
+msgid "AWARD_CLOSING_0"
+msgstr "今年のコンテストは終了です。"
+
+msgid "AWARD_CLOSING_1"
+msgstr "参加いただきありがとうございました。"
+
+msgid "AWARD_CLOSING_2"
+msgstr "また来年お会いしましょう。"
+
+msgid "OWN_HARDWARE_DESIGN"
+msgstr "設計"
+
+msgid "OWN_HARDWARE_MEDIUM"
+msgstr "媒体"
+
+msgid "PURCHASE_PRICE"
+msgstr "価格"

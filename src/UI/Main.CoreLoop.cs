@@ -40,6 +40,7 @@ public partial class Main
         _closingProjectReport=_projectReportRoom==project.RoomIndex;
         try{ClearContent();}finally{_closingProjectReport=false;}
         var canvas=NativeWindow("DevelopmentProjectWindow",project.Title,new(290,212),"DevelopmentProjectWindow:"+project.RoomIndex);
+        if(project.RoomIndex==1)_dialog!.SetNativeIcon("DevelopmentProjectWindow2");
         var refreshPanel=ProjectPanel(canvas,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
         var promotion=NativeAction(canvas,"ProjectPromotion","PAID_PROMOTION",new(4,103,70,25),()=>ShowPromotionSelector(state,project));
         var cancel=NativeAction(canvas,"ProjectCancel","CANCEL",new(4,132,70,25),()=>ShowProjectCancellation(state,project));

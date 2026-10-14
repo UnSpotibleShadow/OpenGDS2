@@ -13,17 +13,31 @@ public partial class DesktopWindow : PanelContainer
     private Vector2 _dragOrigin;
     private Vector2 _mouseOrigin;
     private bool _dragging;
+    public bool IsDragging=>_dragging;
+    private TextureRect? _icon;
+    public void SetNativeIcon(string windowName)
+    {
+        var texture=NativeWindowArtwork.Load(windowName);
+        if(_icon is null){_icon=new TextureRect {Name="WindowTitleIcon",Position=new(2,3),Size=new(16,16),ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,TextureFilter=TextureFilterEnum.Nearest,MouseFilter=MouseFilterEnum.Ignore};_caption.AddChild(_icon);}
+        _icon.Texture=texture;_icon.Visible=texture is not null;_title.Position=new(texture is null?5:21,1);
+        _title.Size=new(Math.Max(0,Size.X-_title.Position.X-_captionReserve),20);
+    }
+    public override void _Input(InputEvent input)
+    {if(_dragging&&input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:false})_dragging=false;}
+    public override void _Notification(int what)
+    {if(what==NotificationApplicationFocusOut||what==NotificationVisibilityChanged&&!IsVisibleInTree())_dragging=false;}
     private bool _minimized;
     private Rect2? _restore;
     private Vector2 _expandedSize;
     private Control? _bounds;
+    private int _captionReserve=70;
 
     public void Initialize(string title, Vector2 position, Vector2 size, bool canMaximize = true)
     {
-        Position = position; Size = size; _expandedSize = size;
+        _captionReserve=canMaximize?70:48;AddToGroup("GameplayWindows");Position = position; Size = size; _expandedSize = size;
         AddThemeStyleboxOverride("panel", ClassicTheme.WindowFrame());
         var layout = new VBoxContainer(); layout.AddThemeConstantOverride("separation", 2); AddChild(layout);
-        _caption = new Control { CustomMinimumSize = new Vector2(0, 22), MouseFilter = MouseFilterEnum.Stop };
+        _caption = new Control { Name="WindowCaption",CustomMinimumSize = new Vector2(0, 22), MouseFilter = MouseFilterEnum.Stop };
         layout.AddChild(_caption);
         var tint = new ColorRect { Color = new Color(0.68f, 0.77f, 0.85f), MouseFilter = MouseFilterEnum.Ignore };
         tint.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); _caption.AddChild(tint);
@@ -49,18 +63,18 @@ public partial class DesktopWindow : PanelContainer
         Body.AddThemeConstantOverride("separation", 2); layout.AddChild(Body);
         _caption.GuiInput += OnCaptionInput;
         GuiInput += e => { if (e is InputEventMouseButton { Pressed: true }) MoveToFront(); };
-        Resized += () => _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
+        Resized += () => _title.Size = new Vector2(Math.Max(0, Size.X - _title.Position.X - _captionReserve), 20);
         _title.ClipText = true;
-        _title.Size = new Vector2(Math.Max(0, Size.X - (canMaximize ? 80 : 58)), 20);
+        _title.Size = new Vector2(Math.Max(0, Size.X - _title.Position.X - _captionReserve), 20);
         _bounds = GetParent() as Control;
         if (_bounds is not null) _bounds.Resized += FitInsideWorkspace;
-        FitInsideWorkspace();
+        FitInsideWorkspace();SetNativeIcon(Name.ToString());
     }
 
     public override void _ExitTree()
     {
         if (_bounds is not null && GodotObject.IsInstanceValid(_bounds)) _bounds.Resized -= FitInsideWorkspace;
-        _bounds = null;
+        _bounds = null;_dragging=false;
     }
 
     private void FitInsideWorkspace()

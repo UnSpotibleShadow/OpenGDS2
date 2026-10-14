@@ -41,6 +41,7 @@ public partial class Main
 
     private void DestroyDesktop()
     {
+        CloseAwardBoard();
         _music?.SetMeetingPhase(-1);
         RememberConversationPosition();
         CloseConversationScene();
@@ -86,7 +87,7 @@ public partial class Main
         Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
         Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state)),
             ("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state))]);
-        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowSales(state))]);
+        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state))]);
         Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
@@ -104,7 +105,7 @@ public partial class Main
         ToolbarAction(toolbar, "TECHNOLOGIES", () => ShowTechnologies(state), 12, _activeCatalog?.Technologies.Count > 0);
         ToolbarAction(toolbar, "DEVELOPMENT_COMPUTERS", () => ShowComputers(state), 10, _activeCatalog?.DevelopmentComputers.Count == 4);
         ToolbarAction(toolbar, "START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), null, _activeCatalog is not null);
-        ToolbarAction(toolbar, "SALES", () => ShowSales(state), 6, _activeCatalog is not null);
+        ToolbarAction(toolbar, "SALES", () => ShowProductList(state), 6, _activeCatalog is not null);
         ToolbarAction(toolbar, "STAFF", () => ShowStaff(state), 7);
         ToolbarAction(toolbar, "HARDWARE_LICENSES", () => ShowLicenses(state), 9, state.AvailableHardware is not null && state.HardwareLicenses is not null);
         ToolbarAction(toolbar, "IMPORT_BUTTON", ShowImporter, null);
@@ -189,6 +190,8 @@ public partial class Main
         };
         var products = ChildWindow("ProductWindow", Tr("PRODUCT_WINDOW"), new Vector2(30, 356), new Vector2(390, 150));
         _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [150, 65, 70, 70]);
+        StyleSelection(_productTable,new(1,.68f,1));
+        var instruction=new Label {Text=Tr("PRODUCT_LIST_INSTRUCTION"),HorizontalAlignment=HorizontalAlignment.Center};instruction.AddThemeFontSizeOverride("font_size",10);products.Body.AddChild(instruction);
         products.Body.AddChild(_productTable); _productTable.ItemActivated += () =>
         {
             if(!DesktopActionEnabled("SALES"))return;
@@ -372,11 +375,13 @@ public partial class Main
                 employee.Experience?.ToString("N0") ?? "?"];
             for (int col = 0; col < values.Length; col++) _staffRows[index].SetText(col, values[col]);
         }
+        int? selectedProductId=_productTable.GetSelected()?.GetMetadata(0).AsInt32();
         SyncRows(_productTable, _productRows, state.ReleasedGames.Count);
         for (int index = 0; index < state.ReleasedGames.Count; index++)
         {
             var game = state.ReleasedGames[index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
             for (int col = 0; col < values.Length; col++) _productRows[index].SetText(col, values[col]);
+            if(game.ProductIndex==selectedProductId)_productRows[index].Select(0);
         }
     }
 
@@ -452,7 +457,7 @@ public partial class Main
     {
         _content.CustomMinimumSize = new Vector2(contentWidth, 0);
         if (_dialog is null || _workspace is null) return;
-        _dialog.Name = name;
+        _dialog.Name = name;_dialog.SetNativeIcon(name);
         _dialog.Size = size;
         // Prefer the free space beside the office, keeping the office visible.
         _dialog.Position = new Vector2(Math.Min(480, Math.Max(0, _workspace.Size.X - size.X)),

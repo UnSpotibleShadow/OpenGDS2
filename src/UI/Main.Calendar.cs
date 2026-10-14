@@ -37,6 +37,7 @@ public partial class Main
         }
         if (pending.Graduates is {GreetingVariant:not null} greeting)
         {ShowGraduate(state,greeting);return true;}
+        if(pending.PendingEvent==CalendarEvent.Awards && pending.Awards is { } awards){ShowAwards(state,awards);return true;}
         ClearContent();AddHeading(Tr("CALENDAR_TRANSACTIONS"),28);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
         if (pending.Block is CalendarBlock block)

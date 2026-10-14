@@ -3902,3 +3902,150 @@ msgstr "Ready"
 
 msgid "NATIVE_SHIP_UNAVAILABLE"
 msgstr "Unavailable"
+
+msgid "PRODUCT_LIST_INSTRUCTION"
+msgstr "Games released by your company"
+
+msgid "COMPUTER_PROCESSING"
+msgstr "Power"
+
+msgid "TECHNOLOGY_NAME"
+msgstr "Technology"
+
+msgid "TECHNOLOGY_CAPACITY"
+msgstr "Skill capacity"
+
+msgid "LEVEL_UP_SUPER"
+msgstr "Super level up!"
+
+msgid "NEGOTIATION_SERVICE_FEE"
+msgstr "Negotiation fee: ¥{0:N0}"
+
+msgid "COMPUTER_DESCRIPTION"
+msgstr "Supports development for devices up to {0} bits."
+
+msgid "TECHNOLOGY_DESCRIPTION"
+msgstr "Purchase {0} to make its training available to employees."
+
+msgid "AWARD_HOST"
+msgstr "Ceremony host"
+
+msgid "AWARD_INTRO_COUNT"
+msgstr "{count} of our games released this year are entered."
+
+msgid "AWARD_WELCOME"
+msgstr "Welcome to the annual game contest, year {year}."
+
+msgid "AWARD_GRAND_SUSPENSE"
+msgstr "Which game will take the Grand Prize?"
+
+msgid "AWARD_RANKING"
+msgstr "Our first Grand Prize has been recorded in the achievement rankings."
+
+msgid "AWARD_INTRO_0"
+msgstr "Next is the Music award."
+
+msgid "AWARD_PRIZE_0"
+msgstr "The Music award carries a prize of ¥100,000,000."
+
+msgid "AWARD_WINNER_0"
+msgstr "The Music award goes to {title} from {company}."
+
+msgid "AWARD_REACTION_0_0"
+msgstr "Our game was chosen!"
+
+msgid "AWARD_REACTION_0_1"
+msgstr "The team’s work has paid off."
+
+msgid "AWARD_REACTION_0_2"
+msgstr "Let’s keep doing our best."
+
+msgid "AWARD_INTRO_1"
+msgstr "Next is the Graphics award."
+
+msgid "AWARD_PRIZE_1"
+msgstr "The Graphics award carries a prize of ¥100,000,000."
+
+msgid "AWARD_WINNER_1"
+msgstr "The Graphics award goes to {title} from {company}."
+
+msgid "AWARD_REACTION_1_0"
+msgstr "Our game was chosen!"
+
+msgid "AWARD_REACTION_1_1"
+msgstr "The team’s work has paid off."
+
+msgid "AWARD_REACTION_1_2"
+msgstr "Let’s keep doing our best."
+
+msgid "AWARD_INTRO_2"
+msgstr "Next is the Runner-up Grand Prix."
+
+msgid "AWARD_PRIZE_2"
+msgstr "The Runner-up Grand Prix carries a prize of ¥300,000,000."
+
+msgid "AWARD_WINNER_2"
+msgstr "The Runner-up Grand Prix goes to {title} from {company}."
+
+msgid "AWARD_REACTION_2_0"
+msgstr "Our game was chosen!"
+
+msgid "AWARD_REACTION_2_1"
+msgstr "The team’s work has paid off."
+
+msgid "AWARD_REACTION_2_2"
+msgstr "Let’s keep doing our best."
+
+msgid "AWARD_INTRO_3"
+msgstr "Next is the Worst game award."
+
+msgid "AWARD_PRIZE_3"
+msgstr "The Worst game award carries a ¥200,000,000 penalty."
+
+msgid "AWARD_WINNER_3"
+msgstr "The Worst game award goes to {title} from {company}."
+
+msgid "AWARD_REACTION_3_0"
+msgstr "Our game received the Worst Game award."
+
+msgid "AWARD_REACTION_3_1"
+msgstr "We need to learn from this result."
+
+msgid "AWARD_REACTION_3_2"
+msgstr "We will aim higher next year."
+
+msgid "AWARD_INTRO_4"
+msgstr "Next is the Grand Prize."
+
+msgid "AWARD_PRIZE_4"
+msgstr "The Grand Prize carries a prize of ¥500,000,000."
+
+msgid "AWARD_WINNER_4"
+msgstr "The Grand Prize goes to {title} from {company}."
+
+msgid "AWARD_REACTION_4_0"
+msgstr "Our game was chosen!"
+
+msgid "AWARD_REACTION_4_1"
+msgstr "The team’s work has paid off."
+
+msgid "AWARD_REACTION_4_2"
+msgstr "Let’s keep doing our best."
+
+msgid "AWARD_CLOSING_0"
+msgstr "This year’s game contest is now over."
+
+msgid "AWARD_CLOSING_1"
+msgstr "Thank you to every team that entered."
+
+msgid "AWARD_CLOSING_2"
+msgstr "See you next year!"
+
+msgid "OWN_HARDWARE_DESIGN"
+msgstr "Design"
+
+msgid "OWN_HARDWARE_MEDIUM"
+msgstr "Medium"
+
+msgid "PURCHASE_PRICE"
+msgstr "Price"

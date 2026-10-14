@@ -9,6 +9,9 @@ public static class EmbeddedGraphicsImporter
 {
     public static void Extract(byte[] executable, string destination)
     {
+        Directory.CreateDirectory(destination);NativePresentationAssetImporter.Extract(executable,destination);
+        int[] computers=[0x278842,0x2777B4,0x27670A,0x27566C];
+        for(int i=0;i<4;i++)WriteBitmap(executable,computers[i],64,64,destination,$"Computer{i}.bmp");
         WriteBitmap(executable, 0x3B5DC6, 466, 290, destination, "OfficeBase.bmp");
         WriteBitmap(executable, 0x3D7469, 1600, 530, destination, "OfficeSprites.bmp");
         WriteBitmap(executable, 0x4A6960, 1600, 530, destination, "OfficeMasks.bmp");

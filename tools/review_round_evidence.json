@@ -1,0 +1,796 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "icons": [
+    {
+      "form": "MainForm3",
+      "offset": 2288201,
+      "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
+      "size": 318
+    },
+    {
+      "form": "MainForm16",
+      "offset": 2288201,
+      "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
+      "size": 318
+    },
+    {
+      "form": "fKeibaModosi",
+      "offset": 2289203,
+      "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
+      "size": 318
+    },
+    {
+      "form": "fGMKikakuKaigi",
+      "offset": 2290821,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKontesutoHp",
+      "offset": 2292493,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameKaishi",
+      "offset": 2294242,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHikinukiKnS",
+      "offset": 2296061,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHikinukiKeS",
+      "offset": 2298007,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantGameS",
+      "offset": 2299963,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSeisanZ",
+      "offset": 2301947,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMMedia",
+      "offset": 2303957,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKoudou",
+      "offset": 2305972,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantCasino",
+      "offset": 2308024,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameDexKs",
+      "offset": 2310083,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantHard",
+      "offset": 2312130,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantReS",
+      "offset": 2314193,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameNew",
+      "offset": 2316245,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKaiwa2",
+      "offset": 2318300,
+      "sha256": "e034a7306dc516efd988819329b4951e3a4320a5cdbeff15d76c2f35de20b0ca",
+      "size": 1406
+    },
+    {
+      "form": "fGMKaiwaC",
+      "offset": 2320400,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKaihatuS",
+      "offset": 2322538,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantCasinoSn",
+      "offset": 2324690,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantNazoP",
+      "offset": 2326839,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSendenBaitai",
+      "offset": 2329030,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantTechS",
+      "offset": 2331228,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantSeisan",
+      "offset": 2333424,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantTechSel",
+      "offset": 2335632,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantBengo",
+      "offset": 2337885,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantOnsen",
+      "offset": 2340161,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTechKau",
+      "offset": 2342453,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameSave",
+      "offset": 2344776,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameLoad",
+      "offset": 2347178,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMZishaH",
+      "offset": 2349584,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenaSel",
+      "offset": 2352033,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameHardInfo",
+      "offset": 2354500,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKoudo",
+      "offset": 2357025,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMZishaNet",
+      "offset": 2359678,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMWSTech",
+      "offset": 2362347,
+      "sha256": "628f8b2d298e0c2201513c707124e71ece144a013475a5de23376c2c37192c59",
+      "size": 1406
+    },
+    {
+      "form": "fGMLevelUP",
+      "offset": 2365041,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHisyoSet",
+      "offset": 2367806,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMGameDexSn",
+      "offset": 2370805,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHLicense",
+      "offset": 2373878,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMBank",
+      "offset": 2376958,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHisyoK",
+      "offset": 2380134,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMTenantHardS",
+      "offset": 2383341,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKontesuto",
+      "offset": 2387001,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKansei",
+      "offset": 2390680,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKaiwa",
+      "offset": 2394375,
+      "sha256": "e034a7306dc516efd988819329b4951e3a4320a5cdbeff15d76c2f35de20b0ca",
+      "size": 1406
+    },
+    {
+      "form": "fGMManga",
+      "offset": 2398141,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMToutatuRank",
+      "offset": 2401983,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMDevH",
+      "offset": 2405904,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKeiyakuS",
+      "offset": 2410022,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMZokuhen",
+      "offset": 2414171,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMRank100",
+      "offset": 2418398,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKaihatu",
+      "offset": 2422778,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMZisha",
+      "offset": 2429567,
+      "sha256": "ebe1a63dbbe0fc486b6fb515a580101aa13b46ce83b16fe0f190a00c740c0270",
+      "size": 1718
+    },
+    {
+      "form": "fGMZishaK",
+      "offset": 2436966,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHikinukiSel",
+      "offset": 2444487,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSKoyou",
+      "offset": 2456476,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSKoyouKz",
+      "offset": 2468482,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSyukkaSai",
+      "offset": 2480853,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMZishaKW",
+      "offset": 2493743,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMSyukka",
+      "offset": 2507276,
+      "sha256": "628f8b2d298e0c2201513c707124e71ece144a013475a5de23376c2c37192c59",
+      "size": 1406
+    },
+    {
+      "form": "fGMSyain",
+      "offset": 2522921,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHikinuki",
+      "offset": 2539070,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMbeta",
+      "offset": 2555494,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMComK",
+      "offset": 2575442,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMalpha",
+      "offset": 2595419,
+      "sha256": "628f8b2d298e0c2201513c707124e71ece144a013475a5de23376c2c37192c59",
+      "size": 1406
+    },
+    {
+      "form": "fGMDevW2",
+      "offset": 2615518,
+      "sha256": "a302be45703951810e11c6041fa5a0c825ae3fe46ab82a5446a5aef9a4ba40bc",
+      "size": 1406
+    },
+    {
+      "form": "fGMDevW1",
+      "offset": 2645170,
+      "sha256": "a302be45703951810e11c6041fa5a0c825ae3fe46ab82a5446a5aef9a4ba40bc",
+      "size": 1406
+    },
+    {
+      "form": "fGMSyukkaH",
+      "offset": 2674861,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMInfo",
+      "offset": 2718898,
+      "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
+      "size": 318
+    },
+    {
+      "form": "fGMHardHatubai",
+      "offset": 2763631,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMKikakusyo",
+      "offset": 2808509,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fCasinoPoker",
+      "offset": 2854219,
+      "sha256": "e4b8d75082483dfee99cb320a8c56a9d8c0a6d80a35906a36e83152819bd8bc1",
+      "size": 318
+    },
+    {
+      "form": "fCasinoBJ",
+      "offset": 2928040,
+      "sha256": "e4b8d75082483dfee99cb320a8c56a9d8c0a6d80a35906a36e83152819bd8bc1",
+      "size": 318
+    },
+    {
+      "form": "fCasinoCC",
+      "offset": 3004962,
+      "sha256": "e4b8d75082483dfee99cb320a8c56a9d8c0a6d80a35906a36e83152819bd8bc1",
+      "size": 318
+    },
+    {
+      "form": "fGMCrossRDen",
+      "offset": 3090561,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMCrossR",
+      "offset": 3176564,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fMainAbout",
+      "offset": 3268602,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fGMHelp",
+      "offset": 3401052,
+      "sha256": "60aa1385c14d94ba3c375c91c2c714115c7b95bfe1469cc054c53a07cd451dcd",
+      "size": 318
+    },
+    {
+      "form": "fGMOuri",
+      "offset": 3545334,
+      "sha256": "2d139ee5dca989554022195a7c854141b4ecbd7ef94e80272c22c3e8c16c40d7",
+      "size": 1406
+    },
+    {
+      "form": "fKeibaMain",
+      "offset": 3715427,
+      "sha256": "3d19bc1eee0abba7f77e590f53fe3f68c4dc40d588f722f082ab60a1e4baea84",
+      "size": 318
+    },
+    {
+      "form": "fMainVisual",
+      "offset": 3888971,
+      "sha256": "8982105bc222859d11a26cea3305a1bdd26354fb89dda42e87e701b9f0756487",
+      "size": 1406
+    }
+  ],
+  "facilities": [
+    {
+      "kind": "School",
+      "form": "fGMTenantGameS",
+      "image_form_g_index": 13,
+      "art": {
+        "offset": 576305,
+        "width": 256,
+        "height": 160,
+        "sha256": "eaacb87569ca7303da31e9693c7ece7e0f5f7ef919c068f3973bcf92f094da5c"
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00984480"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B9B0"
+        }
+      ]
+    },
+    {
+      "kind": "Hot Spring",
+      "form": "fGMTenantOnsen",
+      "image_form_g_index": 14,
+      "art": {
+        "offset": 560660,
+        "width": 256,
+        "height": 160,
+        "sha256": "cceca1da302d3e2784d4a06565efa8ca567564a32df6fb84821d9f8456ba484d"
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B960"
+        },
+        {
+          "name": "Command2",
+          "click": "0x0099E164"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00983D78"
+        }
+      ]
+    },
+    {
+      "kind": "Recycling",
+      "form": "fGMTenantReS",
+      "image_form_g_index": 19,
+      "art": {
+        "offset": 285050,
+        "width": 256,
+        "height": 160,
+        "sha256": "47bf8f5c9b233e2de63f8b61bd8ffee5b0c33878bd4b3c0a526bac36481e869d"
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00983FD0"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B820"
+        },
+        {
+          "name": "Command2",
+          "click": "0x0098DDC4"
+        }
+      ]
+    },
+    {
+      "kind": "Technology School",
+      "form": "fGMTenantTechS",
+      "image_form_g_index": 24,
+      "art": {
+        "offset": 214511,
+        "width": 256,
+        "height": 160,
+        "sha256": "07be0e26edd5fcd77c8b06606ddba6f9c3c5d69d3dd0e4c4df4c47fb6d9cd88f"
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097BA50"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00983B20"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00983C4C"
+        }
+      ]
+    },
+    {
+      "kind": "Casino",
+      "form": "fGMTenantCasino",
+      "image_form_g_index": 21,
+      "art": {
+        "offset": 264950,
+        "width": 256,
+        "height": 160,
+        "sha256": "6a928c1043686d48feebf31977a43db60386cf3c874d759dda01ff928c5f57bd"
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x0097A494"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B870"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00983EA4"
+        }
+      ]
+    },
+    {
+      "kind": "Law Office",
+      "form": "fGMTenantBengo",
+      "image_form_g_index": 20,
+      "art": {
+        "offset": 271768,
+        "width": 256,
+        "height": 160,
+        "sha256": "8e8c1a469ffad519b9620c6d5ea0bc9efd91bf2f5ba0c9f3c9b44bc5ab5a83bb"
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B8C0"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00987810"
+        },
+        {
+          "name": "Command4",
+          "click": "0x00987678"
+        },
+        {
+          "name": "Command3",
+          "click": "0x009839F4"
+        }
+      ]
+    },
+    {
+      "kind": "Mystery Lab",
+      "form": "fGMTenantNazoP",
+      "image_form_g_index": 17,
+      "art": {
+        "offset": 414639,
+        "width": 256,
+        "height": 160,
+        "sha256": "d52be360e966c72a2d5d4492788662ab2148ed562b8b3956057dff3cd49a0de6"
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B6E0"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00987B40"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00984354"
+        }
+      ]
+    },
+    {
+      "kind": "Production Lab",
+      "form": "fGMTenantSeisan",
+      "image_form_g_index": 22,
+      "art": {
+        "offset": 241444,
+        "width": 256,
+        "height": 160,
+        "sha256": "317f9a7818585cca0df10c1ac6ec4722a5ef1bf14fe4c685e0dd219f83fa8bb2"
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B550"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00988DAC"
+        },
+        {
+          "name": "Command3",
+          "click": "0x009840FC"
+        }
+      ]
+    },
+    {
+      "kind": "Hardware Lab",
+      "form": "fGMTenantHard",
+      "image_form_g_index": 23,
+      "art": {
+        "offset": 226997,
+        "width": 256,
+        "height": 160,
+        "sha256": "784c5b2c116d285cce5e52465426ab8e8c138a6d18ab3cf75ceeb989db38b5c8"
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00984228"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B690"
+        },
+        {
+          "name": "Command2",
+          "click": "0x009864AC"
+        }
+      ]
+    }
+  ],
+  "computers": [
+    {
+      "source_index": 3,
+      "control_index": 4,
+      "offset": 2578028,
+      "width": 64,
+      "height": 64,
+      "sha256": "6e55e6fbf862ebdd59550655b51b33aa0987a34b414dc56a35b1588aa6dc19b3"
+    },
+    {
+      "source_index": 2,
+      "control_index": 3,
+      "offset": 2582282,
+      "width": 64,
+      "height": 64,
+      "sha256": "489cddb110fc6d6081d663cbb79b0194198192ca15e63873ccb5044780bf2693"
+    },
+    {
+      "source_index": 1,
+      "control_index": 2,
+      "offset": 2586548,
+      "width": 64,
+      "height": 64,
+      "sha256": "237f89b772ee270216415b59f676528921c0260b4cb832bbf7740b3e60c4d523"
+    },
+    {
+      "source_index": 0,
+      "control_index": 1,
+      "offset": 2590786,
+      "width": 64,
+      "height": 64,
+      "sha256": "a06d7b924825ed57bc0dfe06b5aeb14fb9a57c0d372982eb5eefb928ba527ed4"
+    }
+  ],
+  "procedures": [
+    {
+      "name": "compact_sales",
+      "address": 10241392,
+      "size": 4080,
+      "sha256": "030d5e9ab217cbc67e894b23e8bed8f1af4421c392502b92bba5c4599e1fb2c6"
+    },
+    {
+      "name": "level_up",
+      "address": 10172252,
+      "size": 2940,
+      "sha256": "9c74eec8769917df95a70430f0a4cc9368e311784e5ced78f9fd6b90ded71c82"
+    },
+    {
+      "name": "awards",
+      "address": 10284560,
+      "size": 5356,
+      "sha256": "8f3c5242e41fd594ddee421113c0936810ced112774d08f3455b86d2896aea37"
+    },
+    {
+      "name": "announcement",
+      "address": 10213112,
+      "size": 3664,
+      "sha256": "1176b21e0885bd1da63ded471af399c0475fd4e51d35cd477c17dc6945c18b0c"
+    },
+    {
+      "name": "larger_sales",
+      "address": 10233192,
+      "size": 3968,
+      "sha256": "3df68a55b1f4cffde1850cb2c0118226279e42b256f2000f94f3bc79715f5888"
+    }
+  ]
+}

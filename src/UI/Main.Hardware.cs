@@ -9,39 +9,23 @@ public partial class Main
     private void ShowHardwarePlan(GameState state,int slot)
     {
         var catalog=_activeCatalog;if (catalog is null) {ShowFacilities(state,slot);return;}
-        ClearContent();CompactManagementWindow("HardwarePlanWindow",new Vector2(430,370),410);
-        AddHeading(Tr("OWN_HARDWARE_START"),20);
-        AnnualMessage("HardwarePlanRules",Tr("OWN_HARDWARE_PLAN_RULES"));
-        var room=new OptionButton {Name="HardwareRoom"};
-        for (int i=0;i<2;i++) room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
-        _content.AddChild(room);
-        var design=new OptionButton {Name="HardwareDesign"};design.AddItem(Tr("OWN_HARDWARE_DESIGN_0"),0);design.AddItem(Tr("OWN_HARDWARE_DESIGN_1"),1);
-        design.Select(state.OwnHardware.SelectedDesign);_content.AddChild(design);
-        var medium=new OptionButton {Name="HardwareMedium"};medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_0"),0);medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_1"),1);
-        medium.Select(state.OwnHardware.SelectedMedium);_content.AddChild(medium);
-        var picture=new TextureRect {Name="HardwareDesignPicture",CustomMinimumSize=new Vector2(64,64),
-            ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,TextureFilter=TextureFilterEnum.Nearest};_content.AddChild(picture);
-        var quote=new Label {Name="HardwareQuote"};_content.AddChild(quote);
-        var gate=new Label {Name="HardwarePlanGate",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(gate);
-        var accept=new Button {Name="AcceptHardwarePlan",Text=Tr("ACCEPT")};_content.AddChild(accept);
+        ClearContent();var canvas=NativeWindow("HardwarePlanWindow",Tr("OWN_HARDWARE_START"),new(310,218));
+        var room=new OptionButton {Name="HardwareRoom"};for(int i=0;i<2;i++)room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
+        var design=new OptionButton {Name="HardwareDesign"};design.AddItem(Tr("OWN_HARDWARE_DESIGN_0"),0);design.AddItem(Tr("OWN_HARDWARE_DESIGN_1"),1);design.Select(state.OwnHardware.SelectedDesign);
+        var medium=new OptionButton {Name="HardwareMedium"};medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_0"),0);medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_1"),1);medium.Select(state.OwnHardware.SelectedMedium);
+        int y=6;foreach(var (key,field) in new[]{("DEVELOPMENT_ROOM",room),("OWN_HARDWARE_DESIGN",design),("OWN_HARDWARE_MEDIUM",medium)})
+        {NativeText(canvas,key,Tr(key),new(4,y,108,26),10);field.AddThemeFontSizeOverride("font_size",10);NativePlace(canvas,field,new(114,y,192,26));y+=33;}
+        var cost=NativeText(canvas,"HardwarePlanCost","",new(4,109,302,24),11);
+        var gate=NativeText(canvas,"HardwarePlanStatus","",new(4,139,302,40),10);gate.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var accept=NativeAction(canvas,"StartHardwareDevelopment","CONFIRM",new(111,188,94,26),()=>{});
+        NativeAction(canvas,"CancelHardwarePlan","CANCEL",new(211,188,95,26),()=>ShowFacilities(state,slot));
         void Refresh()
         {
-            int d=design.GetSelectedId(),m=medium.GetSelectedId();
-            // Native radio handlers retain shared design/medium choices even when leaving the form.
-            state.OwnHardware.SelectedDesign=d;state.OwnHardware.SelectedMedium=m;
-            int index=OwnHardwareService.OwnPictureIndex(d,m);picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{index}.bmp");picture.SetMeta("hardware_picture_index",index);
-            quote.Text=$"{Tr("PLANNING_COST")}: ¥{OwnHardwareService.Quote(d,m):N0}";
-            var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),d,m);
-            gate.Text=result==OwnHardwareResult.Success ? "" : Tr($"OWN_HARDWARE_RESULT_{result}");accept.Disabled=result!=OwnHardwareResult.Success;
+            cost.Text=$"{Tr("PLANNING_COST")}: ¥{OwnHardwareService.Quote(design.GetSelectedId(),medium.GetSelectedId()):N0}";
+            var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId());gate.Text=result==OwnHardwareResult.Success?"":Tr("OWN_HARDWARE_RESULT_"+result);accept.Disabled=result!=OwnHardwareResult.Success;
         }
         design.ItemSelected+=_=>Refresh();medium.ItemSelected+=_=>Refresh();room.ItemSelected+=_=>Refresh();Refresh();
-        accept.Pressed+=()=>
-        {
-            if (!ReferenceEquals(_session.Current,state) || accept.Disabled) return;
-            var result=OwnHardwareService.Start(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId(),Tr("OWN_HARDWARE_PROJECT"));
-            if (result==OwnHardwareResult.Success) ShowOfficeReconstruction(state);else {Refresh();gate.Text=Tr($"OWN_HARDWARE_RESULT_{result}");}
-        };
-        AddSaveActions(state);AddAction("CANCEL",()=>ShowFacilities(state,slot));
+        accept.Pressed+=()=>{if(accept.Disabled)return;var result=OwnHardwareService.Start(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId(),Tr("OWN_HARDWARE_PROJECT"));if(result==OwnHardwareResult.Success)ShowOfficeReconstruction(state);else{Refresh();gate.Text=Tr("OWN_HARDWARE_RESULT_"+result);}};
     }
     private void ShowHardwareProject(GameState state,DevelopmentProjectState project)
     {

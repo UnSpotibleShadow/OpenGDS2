@@ -62,56 +62,6 @@ public partial class Main
         });
         NativeAction(canvas,"SkipExhibition","NATIVE_SKIP",new(270,283,76,27),()=>{ExhibitionService.Close(state);ShowOfficeReconstruction(state);});
     }
-    private void ShowAwards(GameState state,AwardCeremonyState awards)
-    {
-        var category=AwardService.Order[awards.CategoryIndex];
-        string resultText=Tr($"AWARD_{category}");
-        if(awards.ResultReady==true)
-        {
-            if(awards.WinningProduct is int id)
-            {string title=state.ReleasedGames.Single(p=>p.ProductIndex==id).Title;resultText=string.Format(Tr("AWARD_OWN_RESULT"),title,AwardService.Prize(category));}
-            else if(awards.WinningRival is int rival && state.Competition is CompetitionState competition)
-            {var p=competition.Products[rival];string company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED");resultText=string.Format(Tr("AWARD_RIVAL_RESULT"),p.Title,company);}
-            else resultText=Tr("AWARD_OTHER_COMPANY");
-        }
-        float resultHeight=Math.Max(36,MathF.Ceiling(_dialog!.GetThemeFont("font","Label").GetMultilineStringSize(
-            resultText,HorizontalAlignment.Left,246,10,-1,
-            TextServer.LineBreakFlag.Mandatory|TextServer.LineBreakFlag.WordBound|TextServer.LineBreakFlag.Adaptive).Y)+4);
-        AwardScene(state,awards,resultHeight);var canvas=(Control)_content.GetChild(0);
-        var entries=NativeText(canvas,"AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,19),10);
-        entries.TooltipText=Tr("ANNUAL_GAME_AWARDS")+" — "+Tr($"AWARD_{category}")+"\n"+entries.Text;
-        if(awards.ResultReady==true)
-            NativeAction(canvas,"ContinueAwards","CONTINUE",new(4,193+resultHeight+6,252,25),()=>{AwardService.Continue(state);ShowOfficeReconstruction(state);});
-        else NativeAction(canvas,"RevealAward","AWARD_REVEAL",new(4,193+resultHeight+6,252,25),()=>
-        {
-            if(AwardService.Reveal(state,_session.Random)){ShowOfficeReconstruction(state);if(awards.AnimationProducts is not null)_=AnimateAwardReveal(state,awards);}
-            else _status.Text=Tr("HIRE_RESULT_MoneyUnknown");
-        });
-        var result=NativeText(canvas,"AwardResult",resultText,new(8,193,246,resultHeight),10);
-        result.AutowrapMode=TextServer.AutowrapMode.WordSmart;result.VerticalAlignment=VerticalAlignment.Top;
-    }
-    private async System.Threading.Tasks.Task AnimateAwardReveal(GameState state,AwardCeremonyState awards)
-    {
-        var reel=_content.FindChild("AwardEntries",true,false) as Label;
-        var result=_content.FindChild("AwardResult",true,false) as Label;
-        var next=_content.FindChild("ContinueAwards",true,false) as Button;
-        if (reel is null || result is null || next is null || state.Competition is null) return;
-        result.Visible=false;next.Disabled=true;
-        var currentRow=_dialog?.FindChild($"AwardWinner{AwardService.Order[awards.CategoryIndex]}",true,false) as Label;
-        if(currentRow is not null)currentRow.Visible=false;
-        foreach (int id in awards.AnimationProducts!)
-        {
-            if (!GodotObject.IsInstanceValid(reel) || !reel.IsInsideTree()) return;
-            var product=state.Competition.Products[id];
-            reel.Text=string.Format(Tr("AWARD_REEL_ENTRY"),product.Title,_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner) ?? Tr("NOT_YET_DECODED"));
-            // Modern display pacing. The thirteen catalog selections and final
-            // winner are already persisted; loading never repeats the lottery.
-            await ToSignal(GetTree().CreateTimer(.08),SceneTreeTimer.SignalName.Timeout);
-        }
-        if (!GodotObject.IsInstanceValid(result) || !result.IsInsideTree()) return;
-        reel.Text=string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count);result.Visible=true;next.Disabled=false;
-        if(currentRow is not null && GodotObject.IsInstanceValid(currentRow))currentRow.Visible=true;
-    }
     private void ShowGraduate(GameState state,GraduateEventState graduates)
     {
         var employee=state.EmployeeSources.Single(p=>p.SourceIndex==graduates.Candidates[graduates.CandidateIndex]).Employee;

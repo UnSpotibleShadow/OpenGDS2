@@ -22,6 +22,7 @@ public partial class Main
     }
     private void ShowFacilities(GameState state,int? selectedSlot=null)
     {
+        if(selectedSlot is int nativeSlot && state.Calendar is not null){ShowNativeFacility(state,nativeSlot);return;}
         RefreshDesktop();
         if (_officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture,state);
         ClearContent();AddHeading(Tr("COMPANY_FACILITIES"),26);
@@ -118,22 +119,7 @@ public partial class Main
         });
         AddAction("CANCEL",()=>ShowFacilities(state,slot));
     }
-    private void ShowFacilityTechnologyRoster(GameState state,int slot)
-    {
-        var roster=FacilityService.OpenTechnologyRoster(state,slot);
-        ClearContent();CompactManagementWindow("FacilityStudyWindow",new Vector2(410,360),390);
-        AddHeading(Tr("FACILITY_STUDY_ACTION"),22);
-        if (roster is null) AnnualMessage("FacilityRosterUnknown",Tr("FACILITY_RESULT_StateUnknown"));
-        else if (roster.Count==0) AnnualMessage("FacilityRosterEmpty",Tr("FACILITY_RESULT_NoEmployees"));
-        else foreach (var employee in roster)
-        {
-            var student=employee;
-            var button=new Button {Name=$"StudyCapacity{employee.SourceIndex}",Text=$"{EmployeeName(employee)} · {employee.MaximumTechnologies} → {employee.MaximumTechnologies+1} · ¥{FacilityService.TechnologyStudyCost:N0}"};
-            _content.AddChild(button);button.Pressed+=()=>ConfirmFacilityService(state,slot,FacilityKind.TechnologySchool,
-                FacilityService.TechnologyStudyCost,()=>FacilityService.Study(state,slot,student));
-        }
-        AddSaveActions(state);AddAction("CANCEL",()=>ShowFacilities(state,slot));
-    }
+    private void ShowFacilityTechnologyRoster(GameState state,int slot)=>ShowNativeStudyRoster(state,slot);
     private bool ShowPendingFacilityReceipt(GameState state)
     {
         if (state.PendingFacilityReceipt is not { } receipt) return false;
@@ -162,17 +148,11 @@ public partial class Main
     }
     private void ShowFeeNegotiationConfirmation(GameState state,int slot,FeeNegotiationTarget target)
     {
-        ClearContent();CompactManagementWindow("NegotiationConfirmationWindow",new Vector2(410,280),390);
-        AddHeading(Tr($"NEGOTIATION_TARGET_{target}"),22);
-        AnnualMessage("NegotiationConfirmation",string.Format(Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds));
-        AnnualButton("ConfirmFeeNegotiation","CONFIRM",()=>
-        {
-            if (!ReferenceEquals(_session.Current,state)) return;
-            var result=_session.BeginFeeNegotiation(slot,target);
-            if (result==FacilityResult.Success) ShowOfficeReconstruction(state);
-            else {ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");}
-        });
-        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+        ClearContent();var canvas=NativeWindow("NegotiationConfirmationWindow",Tr("NEGOTIATION_TARGET_"+target),new(310,152));
+        NativeFill(canvas,"NegotiationConfirmationBox",new(4,4,302,91),Colors.White,true);NativeText(canvas,"NegotiationConfirmation",string.Format(Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds),new(8,7,294,85),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeAction(canvas,"ConfirmFeeNegotiation","CONFIRM",new(112,120,94,26),()=>
+        {if(!ReferenceEquals(_session.Current,state))return;var result=_session.BeginFeeNegotiation(slot,target);if(result==FacilityResult.Success)ShowOfficeReconstruction(state);else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}});
+        NativeAction(canvas,"CancelFeeNegotiation","CANCEL",new(212,120,94,26),()=>ShowFacilities(state,slot));
     }
     private bool ShowPendingFeeNegotiation(GameState state)
     {
