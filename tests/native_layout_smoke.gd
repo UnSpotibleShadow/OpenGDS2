@@ -138,7 +138,7 @@ func run() -> void:
                 # The room report is opened by the actual office room button.
                 await press_node("OpenProject0")
             var target=["DevelopmentProjectWindow","TypeMeetingWindow","GenreMeetingWindow","CompletionWindow"][phase+1]
-            await window(target,580 if phase in [0,1] else 385 if phase==2 else 310,365 if phase==2 else 250)
+            await window(target,660 if phase in [0,1] else 385 if phase==2 else 310,365 if phase==2 else 250)
             if phase==-1:
                 check(main.find_children("ProjectSummaryProgress","ProgressBar",true,false).size()==1 and main.find_child("DevelopmentProgress",true,false)==null,"One project progress display")
                 await press_node("ProjectMedia")

@@ -11,13 +11,15 @@ public partial class Main
         ClearContent();var canvas=NativeWindow("ExhibitionAttendanceWindow",Tr("GAME_EXHIBITION"),new(300,238));
         var booth=OriginalAssetStore.LoadTexture("Graphic/Embedded/ExhibitionBooth.png");
         NativePlace(canvas,Picture("ExhibitionBoothPicture",booth,new(256,160)),new(22,4,256,160));
-        var visitors=NativeText(canvas,"ExhibitionVisitors","",new(4,167,292,19));
-        NativeText(canvas,"ExhibitionPreviousRecord",Tr("EXHIBITION_PREVIOUS_RECORD")+": "+(exhibition.PreviousVisitorRecord?.ToString("N0")??"?"),new(4,186,292,18));
-        var close=NativeAction(canvas,"CloseExhibition","CONTINUE",new(196,209,100,25),()=>{});
+        NativeText(canvas,"ExhibitionVisitorsCaption",Tr("EXHIBITION_VISITORS")+":",new(4,167,236,19),10);
+        var visitors=NativeText(canvas,"ExhibitionVisitors","",new(241,167,55,19),10,HorizontalAlignment.Right);
+        NativeText(canvas,"ExhibitionRecordCaption",Tr("EXHIBITION_PREVIOUS_RECORD")+":",new(4,186,236,18),10);
+        NativeText(canvas,"ExhibitionPreviousRecord",exhibition.PreviousVisitorRecord?.ToString("N0")??"?",new(241,186,55,18),10,HorizontalAlignment.Right);
+        var close=NativeAction(canvas,"CloseExhibition","CONTINUE",new(100,209,100,25),()=>{});
         close.Pressed+=()=>{if(!close.Disabled){ExhibitionService.Close(state);ShowOfficeReconstruction(state);}};
         void Refresh()
         {
-            visitors.Text=$"{Tr("EXHIBITION_VISITORS")}: {ExhibitionService.DisplayVisitors(exhibition):N0}";
+            visitors.Text=$"{ExhibitionService.DisplayVisitors(exhibition):N0}";
             bool done=exhibition.DisplayCallbacks is null or >=90;
             visitors.TooltipText=done?string.Format(Tr("EXHIBITION_RESULT"),exhibition.Visitors,exhibition.ReportedAwarenessGain):visitors.Text;
             close.Disabled=!done;
@@ -48,7 +50,9 @@ public partial class Main
             var category=order[i];var box=new PanelContainer {Name=$"AwardCategory{category}",CustomMinimumSize=new(258,42)};
             box.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=colors[i],ContentMarginLeft=4,ContentMarginRight=4});results.AddChild(box);
             var line=new HBoxContainer();box.AddChild(line);
-            line.AddChild(Picture($"AwardTrophy{category}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/Trophy{AwardService.OriginalCode(category)-1}.bmp"),new(40,40)));
+            var trophyBox=new PanelContainer {Name=$"AwardTrophyFrame{category}",CustomMinimumSize=new(42,42)};
+            var border=new StyleBoxFlat {BgColor=Colors.White,BorderColor=new(.5f,.5f,.5f)};border.SetBorderWidthAll(1);trophyBox.AddThemeStyleboxOverride("panel",border);line.AddChild(trophyBox);
+            trophyBox.AddChild(Picture($"AwardTrophy{category}",OriginalAssetStore.LoadTexture($"Graphic/Embedded/Trophy{AwardService.OriginalCode(category)-1}.bmp"),new(40,40)));
             var text=new Label {Name=$"AwardWinner{category}",ClipText=true,SizeFlagsHorizontal=SizeFlags.ExpandFill};line.AddChild(text);
             var outcome=awards.Outcomes?.SingleOrDefault(o=>o.Category==category);
             int position=AwardService.Order.ToList().IndexOf(category);

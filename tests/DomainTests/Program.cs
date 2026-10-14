@@ -52,6 +52,24 @@ Test("award caption preserves its source and every pixel outside the title plate
     Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchAwards(new byte[1]));
 });
 
+Test("English reviewer role labels preserve every face pixel",()=>
+{
+    byte[] source=Enumerable.Range(0,64*64*3).Select(i=>(byte)(i%251)).ToArray(),copy=(byte[])source.Clone();
+    for(int row=0;row<4;row++)
+    {
+        var patch=LocalSceneCaptionRules.PatchReviewer(source,row);Check(source.SequenceEqual(copy));
+        Check(patch.AsSpan(0,48*64*3).SequenceEqual(source.AsSpan(0,48*64*3)) && !patch.SequenceEqual(source));
+        Check(patch.SequenceEqual(LocalSceneCaptionRules.PatchReviewer(source,row)));
+    }
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchReviewer(source,4));
+});
+Test("independent native review comment draws allow repeated comments",()=>
+{
+    var product=new ReleasedGameState {Title="Fixture",ReviewScores=[5,5,5,5]};var random=new GreetingRandom(.4f);
+    ReviewPresentationRules.Prepare(product,random);
+    Check(random.GreetingCalls==4 && product.ReviewCommentVariants!.SequenceEqual(new[]{4,4,4,4}));
+});
+
 Test("office cadence retains nominal wall time without replaying stalled iterations",()=>
 {
     double remainder=0;int ticks=0;
@@ -5635,6 +5653,17 @@ if (args.Length == 2)
         var patch=LocalSceneCaptionRules.PatchAwards(rgb);Check(!patch.SequenceEqual(rgb));var r=LocalSceneCaptionRules.AwardsRegion;
         for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<r.X||x>=r.X+r.Width||y<r.Y||y>=r.Y+r.Height)
         {int i=(y*256+x)*3;Check(rgb.AsSpan(i,3).SequenceEqual(patch.AsSpan(i,3)));}
+    });
+    Test("optional original button skins and arrows are recovered exactly",()=>
+    {
+        byte[] exe=File.ReadAllBytes(args[0]);string root=Path.Combine(Path.GetTempPath(),"opengds-buttons-"+Guid.NewGuid().ToString("N"));
+        try
+        {
+            EmbeddedGraphicsImporter.Extract(exe,root);Check(Directory.GetFiles(root,"Button-*.bmp").Length>=40);
+            foreach(int offset in new[]{0x28814D,0x289EF9,0x28A8DD,0x27DC18,0x270A71,0x2631DA,0x265C47,0x2661A9})
+            {int size=BitConverter.ToInt32(exe,offset+2);Check(File.ReadAllBytes(Path.Combine(root,$"Button-{offset:X6}.bmp")).SequenceEqual(exe.AsSpan(offset,size).ToArray()));}
+        }
+        finally{if(Directory.Exists(root))Directory.Delete(root,true);}
     });
     Test("optional original help and every bounded serialized artwork resource are recovered locally",()=>
     {

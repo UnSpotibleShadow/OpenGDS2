@@ -36,13 +36,24 @@ public partial class Main
         if (ShowPendingPromotion(state)) return;
         if (project.OriginalRoomState==2) {ShowHardwareProject(state,project);return;}
         if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) {ShowProjectDecision(state,project);return;}
-        ClearContent();var canvas=NativeWindow("DevelopmentProjectWindow",project.Title,new(290,212));
+        CloseRetainedProjectReport(project.RoomIndex);
+        _closingProjectReport=_projectReportRoom==project.RoomIndex;
+        try{ClearContent();}finally{_closingProjectReport=false;}
+        var canvas=NativeWindow("DevelopmentProjectWindow",project.Title,new(290,212),"DevelopmentProjectWindow:"+project.RoomIndex);
         var refreshPanel=ProjectPanel(canvas,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
-        NativeAction(canvas,"ProjectPromotion","PAID_PROMOTION",new(4,103,70,25),()=>ShowPromotionSelector(state,project));
-        NativeAction(canvas,"ProjectCancel","CANCEL",new(4,132,70,25),()=>ShowProjectCancellation(state,project));
-        NativeAction(canvas,"ProjectRelease","PRODUCT_SHIP",new(4,161,70,25),()=>ShowRelease(state,project),project.OriginalStage==3);
-        NativeAction(canvas,"ProjectMedia","NATIVE_MEDIA",new(4,188,70,20),()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
-        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;_refreshCoreStatus=refreshPanel;
+        var promotion=NativeAction(canvas,"ProjectPromotion","PAID_PROMOTION",new(4,103,70,25),()=>ShowPromotionSelector(state,project));
+        var cancel=NativeAction(canvas,"ProjectCancel","CANCEL",new(4,132,70,25),()=>ShowProjectCancellation(state,project));
+        var shipment=NativeAction(canvas,"ProjectRelease","PRODUCT_SHIP",new(4,161,70,25),()=>ShowRelease(state,project),project.OriginalStage==3);
+        var media=NativeAction(canvas,"ProjectMedia","NATIVE_MEDIA",new(4,188,70,20),()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
+        var report=_dialog!;
+        Action refreshReport=()=>
+        {
+            refreshPanel();bool blocked=_dialog is not null&&!ReferenceEquals(_dialog,report);
+            promotion.Disabled=cancel.Disabled=media.Disabled=blocked;shipment.Disabled=blocked||project.OriginalStage!=3;
+        };
+        _projectReportRoom=project.RoomIndex;_projectReportRefresh=refreshReport;
+        _dialog!.CloseRequested=()=>{_closingProjectReport=true;try{ShowOfficeReconstruction(state);}finally{_closingProjectReport=false;}};
+        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;_refreshCoreStatus=refreshReport;
     }
     private void ShowProjectCancellation(GameState state,DevelopmentProjectState project)
     {
@@ -124,6 +135,7 @@ public partial class Main
                 int? selected=null;
                 var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
                 var confirm=new Button {Name="ConfirmTypeChoice",Text=Tr("CONFIRM"),Disabled=true,CustomMinimumSize=new(86,24),SizeFlagsHorizontal=SizeFlags.ShrinkEnd};
+                NativeButtonArtwork.Apply(confirm,project.PendingDecision==DevelopmentMilestone.SelectType?0x27DC18:0x270A71);
                 var group=new ButtonGroup();
                 var options=CheckpointOptions(includeExamples:true);
                 int listIndex=0;
@@ -160,7 +172,8 @@ public partial class Main
             int? selected=null;
             var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
             var confirm=new Button {Name="ConfirmGenreChoice",Text=Tr("CONFIRM"),Disabled=true,CustomMinimumSize=new(86,24),SizeFlagsHorizontal=SizeFlags.ShrinkEnd};
-            var group=new ButtonGroup();
+            NativeButtonArtwork.Apply(confirm,project.PendingDecision==DevelopmentMilestone.SelectType?0x27DC18:0x270A71);
+                var group=new ButtonGroup();
             var options=CheckpointOptions();
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
@@ -197,11 +210,11 @@ public partial class Main
     }
     private VBoxContainer CheckpointOptions(bool includeExamples=false)
     {
-        var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new(264,158),HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};
+        var scroll=new ScrollContainer {Name="CheckpointOptions",CustomMinimumSize=new(342,158),HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled};
         _content.AddChild(scroll);var frame=new PanelContainer();frame.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=Colors.White});scroll.AddChild(frame);
         var options=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};options.AddThemeConstantOverride("separation",0);frame.AddChild(options);
         var headings=new HBoxContainer {Name="CheckpointColumnHeadings"};headings.AddThemeConstantOverride("separation",4);options.AddChild(headings);
-        foreach(var (key,width,name) in new[]{(includeExamples?"PROJECT_CONTENT":"PROJECT_GENRE",102,"CheckpointNameHeading"),("CHECKPOINT_POINTS",50,"CheckpointPointsHeading"),("CHECKPOINT_FEE",84,"CheckpointFeeHeading")})
+        foreach(var (key,width,name) in new[]{(includeExamples?"PROJECT_CONTENT":"PROJECT_GENRE",162,"CheckpointNameHeading"),("CHECKPOINT_POINTS",56,"CheckpointPointsHeading"),("CHECKPOINT_FEE",94,"CheckpointFeeHeading")})
         {var label=new Label {Name=name,Text=Tr(key),ClipText=true,CustomMinimumSize=new(width,18),HorizontalAlignment=key=="CHECKPOINT_FEE"?HorizontalAlignment.Right:HorizontalAlignment.Left};label.AddThemeFontSizeOverride("font_size",10);headings.AddChild(label);}
         return options;
     }
@@ -209,13 +222,13 @@ public partial class Main
         System.Collections.Generic.IReadOnlyList<string>? examples=null,string? examplesNodeName=null)
     {
         var row=new HBoxContainer {Name=nodeName+"Row"};row.AddThemeConstantOverride("separation",4);options.AddChild(row);
-        var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,CustomMinimumSize=new(102,19)};
+        var button=new Button {Name=nodeName,Text=caption,ToggleMode=true,ButtonGroup=group,ClipText=true,CustomMinimumSize=new(162,19)};
         button.AddThemeFontSizeOverride("font_size",11);
         foreach(string mode in new[]{"normal","hover","pressed"})button.AddThemeStyleboxOverride(mode,new StyleBoxFlat {BgColor=mode=="pressed"?new(.7f,1,.7f):Colors.White,ContentMarginTop=0,ContentMarginBottom=0,ContentMarginLeft=2});
         string exampleText=examples is null?"":string.Join("\n",examples.Where(x=>!string.IsNullOrWhiteSpace(x)));
         button.TooltipText=caption+(exampleText.Length==0?"":"\n"+exampleText);row.AddChild(button);
-        var point=new Label {Name=nodeName+"Points",Text=$"+{points:N0}",CustomMinimumSize=new(50,19),HorizontalAlignment=HorizontalAlignment.Right};point.AddThemeFontSizeOverride("font_size",11);row.AddChild(point);
-        var price=new Label {Name=nodeName+"Fee",Text=$"¥{fee:N0}",CustomMinimumSize=new(84,19),HorizontalAlignment=HorizontalAlignment.Right};price.AddThemeFontSizeOverride("font_size",11);row.AddChild(price);
+        var point=new Label {Name=nodeName+"Points",Text=$"+{points:N0}",CustomMinimumSize=new(56,19),HorizontalAlignment=HorizontalAlignment.Right};point.AddThemeFontSizeOverride("font_size",11);row.AddChild(point);
+        var price=new Label {Name=nodeName+"Fee",Text=$"¥{fee:N0}",CustomMinimumSize=new(94,19),HorizontalAlignment=HorizontalAlignment.Right};price.AddThemeFontSizeOverride("font_size",11);row.AddChild(price);
         row.GuiInput+=e=>{if(e is InputEventMouseButton {Pressed:true,ButtonIndex:MouseButton.Left}){button.ButtonPressed=true;button.EmitSignal(Button.SignalName.Pressed);}};
         if(options.GetChildCount()==2)button.CallDeferred(Control.MethodName.GrabFocus);return button;
     }
@@ -263,7 +276,7 @@ public partial class Main
         var defaultTitle=project.OriginalMode==1 && project.PredecessorProductIndex is int predecessor
             ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
         var title=new LineEdit {Name="ReleaseTitle",Text=draftTitle ?? defaultTitle,MaxLength=128};
-        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,Value=draftPrice ?? ReleaseService.DefaultPrice};
+        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,CustomMinimumSize=new(112,24),Value=draftPrice ?? ReleaseService.DefaultPrice};
 
         var copies=ProductionQuantity(state,"ReleaseCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;_content.RemoveChild(copies);
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize);
@@ -297,7 +310,7 @@ public partial class Main
     {
         // Same 100-copy floor and capacity×100 ceiling as the original spinner.
         var copies=new SpinBox {Name=name,MinValue=100,MaxValue=Math.Max(100,(state.Company.ProductionCapacity ?? throw new InvalidOperationException("Unknown production capacity."))*100L),
-            Step=100,Value=ReleaseService.DefaultCopies};_content.AddChild(copies);return copies;
+            Step=100,CustomMinimumSize=new(112,24),Value=ReleaseService.DefaultCopies};_content.AddChild(copies);return copies;
     }
     private void ShowSales(GameState state)
     {
