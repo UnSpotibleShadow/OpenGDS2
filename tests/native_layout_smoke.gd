@@ -31,8 +31,12 @@ func setup_catalog() -> void:
     blank_bmp("user://original/Graphic/Embedded/PlanningProposal.bmp",256,160,false)
     var private_art=OS.get_environment("OPENGDS2_PRIVATE_NATIVE_ART")
     if not private_art.is_empty():
+        var copied=true
         for filename in DirAccess.get_files_at(private_art.path_join("Graphic/Embedded")):
-            check(DirAccess.copy_absolute(private_art.path_join("Graphic/Embedded").path_join(filename),ProjectSettings.globalize_path("user://original/Graphic/Embedded/"+filename))==OK,"Copy private local artwork")
+            copied=copied and DirAccess.copy_absolute(private_art.path_join("Graphic/Embedded").path_join(filename),ProjectSettings.globalize_path("user://original/Graphic/Embedded/"+filename))==OK
+        check(copied,"Copy private local artwork batch")
+        if FileAccess.file_exists(private_art.path_join("dialogue.json")):
+            check(DirAccess.copy_absolute(private_art.path_join("dialogue.json"),ProjectSettings.globalize_path("user://original/dialogue.json"))==OK,"Private native dialogue cache")
 
 func value() -> Dictionary:
     var state=neutral()
@@ -71,6 +75,7 @@ func window(name: String,width: float,height: float) -> void:
             continue
         var rect=control.get_global_rect()
         var bounds=canvas.get_global_rect().grow(1)
+        if not bounds.encloses(rect):print("OUTSIDE ",control.name," rect ",rect," bounds ",bounds)
         check(bounds.encloses(rect),"Client contains "+str(control.name)+" in "+name)
     var output=OS.get_environment("OPENGDS2_PRIVATE_UI_CAPTURE")
     if not output.is_empty() and DisplayServer.get_name()!="headless":

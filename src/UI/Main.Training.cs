@@ -8,33 +8,11 @@ public partial class Main
     private string TechnologyName(TechnologyDefinition technology)
         => CatalogName(_activeCatalog,"TECHNOLOGY",technology.SourceIndex,technology.Name);
 
-    private void ShowTechnologies(GameState state)
-    {
-        ClearContent();AddHeading(Tr("TECHNOLOGIES"),28);
-        AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
-        var catalog=_importer.LoadCatalog();
-        if (catalog is not null)
-        foreach (var technology in catalog.Technologies)
-        {
-            var panel=new VBoxContainer();_content.AddChild(panel);
-            panel.AddChild(new Label {Text=$"{TechnologyName(technology)} — ¥{technology.PurchaseFee:N0}"});
-            var button=new Button {Name=$"PurchaseTechnology{technology.SourceIndex}",Text=Tr("PURCHASE_TECHNOLOGY"),
-                Disabled=state.TechnologyOwnershipLevels is null ||
-                    !state.TechnologyOwnershipLevels.TryGetValue(technology.SourceIndex,out int owned) || owned>=1};
-            panel.AddChild(button);
-            button.Pressed+=()=>
-            {
-                var result=TechnologyService.TryPurchase(state,technology);
-                ShowTechnologies(state);AddHeading(Tr($"TECHNOLOGY_PURCHASE_{result}"),16);
-            };
-        }
-        AddSaveActions(state);
-        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
-    }
+    private void ShowTechnologies(GameState state)=>ShowTechnologyPurchase(state);
 
     private void ShowTraining(GameState state,EmployeeState employee)
     {
-        ClearContent();AddHeading(Tr("TRAINING"),28);AddEmployeeCard(employee);
+        ClearContent();_dialog?.SetNativeIcon("TrainingWindow");AddHeading(Tr("TRAINING"),28);AddEmployeeCard(employee);
         AddHeading($"{Tr("EXPERIENCE")}: {employee.Experience:0.0} / {Tr("MAXIMUM_TECHNOLOGIES")}: {employee.MaximumTechnologies}",18);
         var seats=new HBoxContainer();_content.AddChild(seats);
         for (int action=1;action<=5;action++)

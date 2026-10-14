@@ -108,8 +108,8 @@ public sealed class OriginalGameImporter
         string path = Path.Combine(ProjectSettings.GlobalizePath(CacheRoot), "dialogue.json");
         if (!File.Exists(path)) return null; // Older caches can be refreshed by reimporting.
         var result = JsonSerializer.Deserialize<OriginalDialogueCatalog>(File.ReadAllText(path));
-        if (result?.SchemaVersion is not (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12) || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
-            result.Entries is null || result.Entries.Count != (result.SchemaVersion switch {1=>11,2=>50,3=>73,4=>92,5=>106,6=>109,7=>136,8=>146,9=>164,10=>173,11=>186,_=>235}) || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
+        if (result?.SchemaVersion is not (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13) || result.SourceHash != EmployeeDatabaseImporter.ExpectedHash ||
+            result.Entries is null || result.Entries.Count != (result.SchemaVersion switch {1=>11,2=>50,3=>73,4=>92,5=>106,6=>109,7=>136,8=>146,9=>164,10=>173,11=>186,12=>235,_=>273}) || result.Entries.Values.Any(string.IsNullOrWhiteSpace) ||
             !result.Entries.ContainsKey("NEW_EMPLOYEE") || Enumerable.Range(0,10).Any(i=>!result.Entries.ContainsKey($"HIRE_GREETING_{i}")) ||
             result.SchemaVersion>=3 && (new[]{"CORE_SECRETARY","CHECKPOINT_TYPE_INTRO","CHECKPOINT_GENRE_INTRO","CHECKPOINT_COMPLETE_INTRO"}
                 .Concat(Enum.GetValues<ShipmentMessage>().Select(ShipmentDialogueRules.MessageKey)).Any(key=>!result.Entries.ContainsKey(key))) ||

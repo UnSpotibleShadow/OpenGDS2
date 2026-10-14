@@ -78,6 +78,8 @@ public static class SaveStore
     }
     private static void Validate(GameState state)
     {
+        if(state.Calendar?.Pending?.Awards is { } awardFlow && (awardFlow.PresentationPhase is <0 or >6||awardFlow.PresentationPage is <0 or >4||awardFlow.ReelIndex is <0 or >13||awardFlow.PresentationPhase>=3&&awardFlow.ResultReady!=true))throw new InvalidDataException("Invalid awards presentation cursor.");
+        if(state.PendingLevelUpResult is { } levelUp && (levelUp.EmployeeSourceIndex<0||string.IsNullOrWhiteSpace(levelUp.Name)||levelUp.Level is <2 or >10||levelUp.Gains is not {Length:7}||levelUp.Gains.Any(x=>x is <0 or >99)))throw new InvalidDataException("Invalid level-up presentation.");
         if(state.SimulationRandomState>VbSimulationRandom.Mask)throw new InvalidDataException("Invalid simulation random state.");
         if(state.HallCelebrationTicks is <0 or >5) throw new InvalidDataException("Invalid retained Hall timer.");
         if (state.RetainedDevelopmentEligibility is not (null or 0 or 1))

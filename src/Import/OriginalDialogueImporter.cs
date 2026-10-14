@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=12,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=13,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         // fGMCrossR comment branches: 49 reachable variants, local strings only.
         const int reviewPool=0x5F92C4;
         int[][][] reviewComments=[
@@ -28,6 +28,22 @@ public static class OriginalDialogueImporter
             for(int variant=0;variant<reviewComments[band].Length;variant++)
                 result.Entries.Add($"REVIEW_COMMENT_{band}_{variant}",string.Concat(reviewComments[band][variant].Select(token=>
                     token switch {-1=>"{genre}",-2=>"{type}",-3=>"{company}",_=>pe.String(reviewPool,token)})));
+        const int awardPool=0x5F56BC;
+        result.Entries.Add("AWARD_INTRO_COUNT",pe.String(awardPool,0x18)+"{count}"+pe.String(awardPool,0x19));
+        result.Entries.Add("AWARD_HOST",pe.String(awardPool,0x1B));
+        result.Entries.Add("AWARD_WELCOME",pe.String(awardPool,0x1E)+"{year}"+pe.String(awardPool,0x1F));
+        int[] intros=[0x20,0x35,0x3B,0x42,0x4B],prizes=[0x21,0x36,0x3C,0x43,0x4C],winners=[0x28,0x39,0x3F,0x46,0x50];
+        int[][] reactions=[[0x31,0x32,0x33],[0x31,0x3A,0x33],[0x31,0x40,0x41],[0x48,0x49,0x4A],[0x52,0x53,0x54]];
+        for(int category=0;category<5;category++)
+        {
+            result.Entries.Add("AWARD_INTRO_"+category,pe.String(awardPool,intros[category]));
+            result.Entries.Add("AWARD_PRIZE_"+category,pe.String(awardPool,prizes[category]));
+            result.Entries.Add("AWARD_WINNER_"+category,pe.String(awardPool,winners[category])+"{company}"+pe.String(awardPool,0x29)+"{title}"+pe.String(awardPool,0x2B));
+            for(int page=0;page<3;page++)result.Entries.Add($"AWARD_REACTION_{category}_{page}",pe.String(awardPool,reactions[category][page]));
+        }
+        result.Entries.Add("AWARD_GRAND_SUSPENSE",pe.String(awardPool,0x4D));
+        result.Entries.Add("AWARD_RANKING",pe.String(awardPool,0x59));
+        for(int page=0;page<3;page++)result.Entries.Add("AWARD_CLOSING_"+page,pe.String(awardPool,0x65+page));
         const int pool = 0x60C264;
         for (int variant = 0; variant < 9; variant++)
             result.Entries.Add($"HIRE_GREETING_{variant}",pe.String(pool,0x11+variant));

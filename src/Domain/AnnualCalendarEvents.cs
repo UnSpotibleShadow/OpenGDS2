@@ -18,6 +18,10 @@ public enum GameAward { Music, Graphics, Design, Worst, GrandPrize }
 public sealed record AwardOutcome(GameAward Category,int? ProductIndex,int? RivalIndex);
 public sealed class AwardCeremonyState
 {
+    public int PresentationPhase {get;set;}
+    public int PresentationPage {get;set;}
+    public int ReelIndex {get;set;}
+    public bool FirstGrandPrizePresentation {get;set;}
     [JsonRequired] public int Year { get; set; }
     [JsonRequired] public List<int> Entries { get; set; } = [];
     [JsonRequired] public int CategoryIndex { get; set; }
@@ -174,7 +178,7 @@ public static class AwardService
     {
         var t=state.Calendar?.Pending;var a=t?.Awards;
         if (t?.PendingEvent!=CalendarEvent.Awards || a?.ResultReady!=true) return false;
-        a.CategoryIndex++;a.ResultReady=null;a.WinningProduct=null;a.WinningRival=null;a.AnimationProducts=null;
+        a.CategoryIndex++;a.PresentationPhase=1;a.PresentationPage=0;a.ReelIndex=0;a.FirstGrandPrizePresentation=false;a.ResultReady=null;a.WinningProduct=null;a.WinningRival=null;a.AnimationProducts=null;
         if (a.CategoryIndex==Order.Count)
         {t.Awards=null;t.PendingEvent=null;t.Phase=CalendarPhase.TenantsAndPayroll;}
         return true;

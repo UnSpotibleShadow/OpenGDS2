@@ -35,6 +35,7 @@ public partial class Main : Control
         TickPokerInterface(delta);
         if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
         RefreshEmployeeSelectionArrow();
+        if (GetTree().GetNodesInGroup("GameplayWindows").OfType<DesktopWindow>().Any(w=>w.IsDragging&&w.IsVisibleInTree())){_officeElapsed=0;return;}
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
         bool updated = false;
         if (OfficeTickScheduler.Advance(ref _officeElapsed,delta))
@@ -42,7 +43,8 @@ public partial class Main : Control
             _session.TickOffice(_activeCatalog);
             _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
-            if(ShowPendingCompanyActivity(state))return;
+            if(ShowPendingLevelUp(state))return;
+        if(ShowPendingCompanyActivity(state))return;
             if(ShowPendingProgrammingChallenge(state))return;
             if (ShowPendingFinancialFailure(state)) return;
             if (ShowPendingPromotion(state)) return;
@@ -299,6 +301,7 @@ public partial class Main : Control
         _activeEmployeeDatabase = _importer.LoadEmployeeDatabase();
         PersistPendingRankings(state);
         EnsureDesktop(state);
+        if(ShowPendingLevelUp(state))return;
         if(ShowPendingCompanyActivity(state))return;
             if(ShowPendingProgrammingChallenge(state))return;
             if (ShowPendingFinancialFailure(state)) return;
@@ -425,23 +428,7 @@ public partial class Main : Control
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
     }
 
-    private void ShowComputers(GameState state)
-    {
-        ClearContent(); AddHeading(Tr("DEVELOPMENT_COMPUTERS"), 30);
-        var catalog = _importer.LoadCatalog();
-        if (catalog is not null)
-            foreach (var computer in catalog.DevelopmentComputers)
-            {
-                AddHeading($"{CatalogName(catalog,"COMPUTER",computer.SourceIndex,computer.Name)} · {computer.BitWidth} {Tr("BIT_UNIT")} · {computer.PurchasePrice:N0}", 18);
-                if (computer.SourceIndex == state.DevelopmentComputerIndex) AddHeading(Tr("COMPUTER_CURRENT"), 14);
-                else AddAction("COMPUTER_BUY", () =>
-                {
-                    var result = DevelopmentComputerService.TryPurchase(state, catalog, computer.SourceIndex);
-                    ShowComputers(state); AddHeading(Tr($"COMPUTER_RESULT_{result}"), 16);
-                });
-            }
-        AddAction("CANCEL", () => ShowOfficeReconstruction(state));
-    }
+    private void ShowComputers(GameState state)=>ShowComputerPurchase(state);
 
     private void ShowStaff(GameState state)
     {
@@ -497,8 +484,8 @@ public partial class Main : Control
             AddAction("LEVEL_UP", () =>
             {
                 var random = _session.Random;
-                var result = EmployeeLevelUpService.TryLevelUp(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
-                ShowStaff(state);
+                var result = LevelUpWithPresentation(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
+                if(result==LevelUpResult.Success)ShowPendingLevelUp(state);else ShowStaff(state);
                 if (result != LevelUpResult.Success) AddHeading(Tr("LEVEL_UP_FAILED") + " " + Tr($"LEVEL_UP_RESULT_{result}"), 16);
             }, employee.Level is >= 1 and < 10 && employee.Experience >= EmployeeLevelUpService.RequiredExperience(employee.Level.Value));
         return panel;

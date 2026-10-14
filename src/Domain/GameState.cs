@@ -3,6 +3,8 @@ namespace OpenGDS2.Domain;
 /// <summary>Engine-owned state. Keep this independent from Godot UI nodes so rules can be regression-tested.</summary>
 public sealed class GameState
 {
+    public LevelUpPresentationState? PendingLevelUpResult {get;set;}
+
     // Unknown original values stay nullable. Do not turn missing reverse-engineering evidence into zeroes.
     public int? Year { get; set; }
     public int? Week { get; set; }
