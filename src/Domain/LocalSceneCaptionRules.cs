@@ -21,15 +21,39 @@ public static class LocalSceneCaptionRules
     {
         if(source.Length!=256*152*3)throw new InvalidDataException("Unexpected television scene.");
         var output=(byte[])source.Clone();
-        // The monitor's inner panel is a trapezoid. Keep its frame, stand and room.
-        for(int y=34;y<=108;y++)
+        // Measured inside the CRT glass, not the rectangular TV cabinet:
+        // (85,33), (176,40), (173,92), (88,84). Keep the source edge pixels.
+        // Letter a separate flat title card, then project it into that screen.
+        const int cardWidth=92,cardHeight=54;
+        var ink=new byte[cardWidth*cardHeight*3];
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"GAME",23,7,2,2,(255,255,255),1);
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"DEV",29,24,2,2,(255,255,255),1);
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"STORY II",23,44,1,1,(255,255,255),1);
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"GAME",23,7,2,2,(180,20,20));
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"DEV",29,24,2,2,(180,20,20));
+        LocalBitmapLetteringRules.DrawLettering(ink,cardWidth,cardHeight,"STORY II",23,44,1,1,(180,20,20));
+        for(int y=33;y<=92;y++)for(int x=85;x<=176;x++)
         {
-            int left=85-(y-34)/37,right=179-(y-34)/7;
-            for(int x=left;x<=right;x++){int i=(y*256+x)*3;output[i]=250;output[i+1]=238;output[i+2]=238;}
+            // Invert the bilinear quadrilateral. The inset keeps every changed
+            // pixel off the bezel and preserves its original antialiased edge.
+            double u=0,v=0;
+            for(int n=0;n<6;n++){u=(x-85-3*v)/(91-6*v);v=(y-33-7*u)/(51+u);}
+            if(u<0||u>1||v<0||v>1)continue;
+            int i=(y*256+x)*3,letter=((int)Math.Round(v*(cardHeight-1))*cardWidth+(int)Math.Round(u*(cardWidth-1)))*3;
+            // Recover the diagonal red broadcast background from an unlettered
+            // strip at the right of the native screen, with its pale lower shade.
+            double diagonal=Math.Clamp(x+y-174,30,90);
+            int low=diagonal<40?30:(int)diagonal,high=Math.Min(90,low==30?40:low+1);
+            double blend=(diagonal-low)/(high-low==0?1:high-low);
+            for(int c=0;c<3;c++)
+            {
+                int from=low==30?source[(40*256+90)*3+c]:source[(low*256+174)*3+c];
+                int to=source[(high*256+174)*3+c];
+                double background=from+(to-from)*blend;
+                if(x+y<214)background*=1-.12*Math.Clamp((v-.62)/.38,0,1);
+                output[i+c]=ink[letter]!=0?ink[letter+c]:(byte)Math.Round(background);
+            }
         }
-        LocalBitmapLetteringRules.DrawLettering(output,256,152,"GAME",106,48,2,2,(180,20,20));
-        LocalBitmapLetteringRules.DrawLettering(output,256,152,"DEV",111,68,2,2,(180,20,20));
-        LocalBitmapLetteringRules.DrawLettering(output,256,152,"STORY II",94,90,1,1,(180,20,20));
         return output;
     }
     public static byte[] PatchActivity(byte[] source)
