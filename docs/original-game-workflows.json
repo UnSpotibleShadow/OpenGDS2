@@ -4664,7 +4664,7 @@
       "objects": [
         "object:fGMZishaNet"
       ],
-      "entry": "MDI information command",
+      "entry": "MDI procedure 00979C44 references fGMZishaNet; exact user entry/control routing remains unresolved",
       "sequence": "Open original pane; read its data sources; determine whether any initializer/load writer populates them",
       "understanding": "unresolved",
       "adaptation": "unresolved",
