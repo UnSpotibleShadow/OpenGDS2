@@ -4154,3 +4154,6 @@ msgstr "Enable original sound effects"
 
 msgid "EFFECTS_VOLUME"
 msgstr "Effects volume"
+
+msgid "FACILITY_BUY"
+msgstr "Buy facility"

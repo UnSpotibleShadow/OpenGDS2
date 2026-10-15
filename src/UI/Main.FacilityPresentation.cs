@@ -53,7 +53,7 @@ public partial class Main
         var table=CreateTable("FacilityPickerTable",["EMPLOYEE_NAME","CONTRACT_FEE"],[169,108]);table.ScrollHorizontalEnabled=false;StyleSelection(table,new(.72f,1,.72f));NativePlace(canvas,table,new(4,4,292,166));
         NativeFill(canvas,"FacilityPickerDescriptionPanel",new(4,176,292,61),Colors.White,true);var text=NativeText(canvas,"FacilityPickerDescription","",new(7,178,286,57),10);text.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         _status=NativeText(canvas,"FacilityPickerStatus","",new(4,237,292,16),9);FacilityKind? selected=null;
-        var buy=NativeAction(canvas,$"OpenSchool{slot}","COMPUTER_BUY",new(80,255,94,24),()=>{});NativeAction(canvas,"CancelFacilityPicker","CANCEL",new(180,255,116,24),()=>ShowOfficeReconstruction(state));
+        var buy=NativeAction(canvas,$"OpenSchool{slot}","FACILITY_BUY",new(80,255,94,24),()=>{});NativeAction(canvas,"CancelFacilityPicker","CANCEL",new(180,255,116,24),()=>ShowOfficeReconstruction(state));
         void Select(){if(table.GetSelected() is not { } row)return;selected=(FacilityKind)row.GetMetadata(0).AsInt32();text.Text=Tr("FACILITY_DESCRIPTION_"+selected);buy.Name=selected==FacilityKind.School?$"OpenSchool{slot}":$"OpenFacility{slot}_{(int)selected}";buy.Disabled=state.Calendar!.OriginalSlots0444.Contains((int)selected)||FacilityService.HasPendingDecision(state);}
         table.ItemSelected+=Select;
         foreach(var kind in Enum.GetValues<FacilityKind>()){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,(int)kind);row.SetText(0,FacilityName((int)kind));row.SetText(1,$"¥{FacilityService.PurchasePrice(kind):N0}");row.SetTextAlignment(1,HorizontalAlignment.Right);if(kind==FacilityKind.School)row.Select(0);}
