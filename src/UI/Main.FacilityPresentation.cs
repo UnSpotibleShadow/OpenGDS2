@@ -17,7 +17,7 @@ public partial class Main
         int y=224;
         if(law)
         {
-            NativeText(canvas,"NegotiationServiceFee",string.Format(Tr("NEGOTIATION_SERVICE_FEE"),FeeNegotiationService.RequiredFunds),new(5,y,260,20),10);y+=24;
+            NativeText(canvas,"NegotiationServiceFee",string.Format(DisplayNumbers.Provider,Tr("NEGOTIATION_SERVICE_FEE"),FeeNegotiationService.RequiredFunds),new(5,y,260,20),10);y+=24;
             foreach(var target in Enum.GetValues<FeeNegotiationTarget>())
             {var choice=target;NativeAction(canvas,$"Negotiate{target}{slot}","NEGOTIATION_TARGET_"+target,new(target==FeeNegotiationTarget.Transport?64:166,y,99,25),()=>ShowFeeNegotiationConfirmation(state,slot,choice));}
             y+=32;
@@ -25,7 +25,7 @@ public partial class Main
         else if(fee)
         {
             long cost=kind switch {FacilityKind.HotSpring=>EmployeeCareService.HotSpringCost,FacilityKind.TechnologySchool=>FacilityService.TechnologyStudyCost,FacilityKind.ProductionLab=>FacilityService.ProductionExpansionCost,_=>MysteryLabService.ExperimentCost};
-            NativeText(canvas,"FacilityServiceFee",kind==FacilityKind.MysteryLab&&state.MysteryLab.Progress>0?string.Format(Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)):$"{Tr("CONTRACT_FEE")}: ¥{cost:N0}",new(5,y,260,19),10);y+=20;
+            NativeText(canvas,"FacilityServiceFee",kind==FacilityKind.MysteryLab&&state.MysteryLab.Progress>0?string.Format(DisplayNumbers.Provider,Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)):$"{Tr("CONTRACT_FEE")}: ¥{DisplayNumbers.Format(cost)}",new(5,y,260,19),10);y+=20;
         }
         NativeAction(canvas,"CloseFacilityView","BACK_TO_OFFICE",new(5,y,82,26),()=>ShowOfficeReconstruction(state));
         NativeAction(canvas,kind==FacilityKind.School?$"CloseSchool{slot}":$"CloseFacility{slot}","FACILITY_CLOSE",new(181,y,84,26),()=>ShowFacilityClosure(state,slot,kind));
@@ -56,14 +56,14 @@ public partial class Main
         var buy=NativeAction(canvas,$"OpenSchool{slot}","FACILITY_BUY",new(80,255,94,24),()=>{});NativeAction(canvas,"CancelFacilityPicker","CANCEL",new(180,255,116,24),()=>ShowOfficeReconstruction(state));
         void Select(){if(table.GetSelected() is not { } row)return;selected=(FacilityKind)row.GetMetadata(0).AsInt32();text.Text=Tr("FACILITY_DESCRIPTION_"+selected);buy.Name=selected==FacilityKind.School?$"OpenSchool{slot}":$"OpenFacility{slot}_{(int)selected}";buy.Disabled=state.Calendar!.OriginalSlots0444.Contains((int)selected)||FacilityService.HasPendingDecision(state);}
         table.ItemSelected+=Select;
-        foreach(var kind in Enum.GetValues<FacilityKind>()){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,(int)kind);row.SetText(0,FacilityName((int)kind));row.SetText(1,$"¥{FacilityService.PurchasePrice(kind):N0}");row.SetTextAlignment(1,HorizontalAlignment.Right);if(kind==FacilityKind.School)row.Select(0);}
+        foreach(var kind in Enum.GetValues<FacilityKind>()){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,(int)kind);row.SetText(0,FacilityName((int)kind));row.SetText(1,$"¥{DisplayNumbers.Format(FacilityService.PurchasePrice(kind))}");row.SetTextAlignment(1,HorizontalAlignment.Right);if(kind==FacilityKind.School)row.Select(0);}
         Select();buy.Pressed+=()=>{if(buy.Disabled||selected is not { } kind)return;var result=FacilityService.Open(state,slot,kind);ShowFacilities(state,slot);if(result!=FacilityResult.Success)_status.Text=Tr("FACILITY_RESULT_"+result);};
     }
     private void ShowNativeStudyRoster(GameState state,int slot)
     {
         var roster=FacilityService.OpenTechnologyRoster(state,slot);ClearContent();var canvas=NativeWindow("FacilityStudyWindow",Tr("FACILITY_STUDY_ACTION"),new(318,226));
         var table=CreateTable("FacilityStudyTable",["EMPLOYEE_NAME","TECHNOLOGY_CAPACITY"],[212,82]);table.ScrollHorizontalEnabled=false;StyleSelection(table,new(.72f,1,.72f));NativePlace(canvas,table,new(4,4,310,155));int? selected=null;
-        NativeText(canvas,"FacilityStudyFee",$"{Tr("CONTRACT_FEE")}: ¥{FacilityService.TechnologyStudyCost:N0}",new(4,164,310,21),10);
+        NativeText(canvas,"FacilityStudyFee",$"{Tr("CONTRACT_FEE")}: ¥{DisplayNumbers.Format(FacilityService.TechnologyStudyCost)}",new(4,164,310,21),10);
         var study=NativeAction(canvas,"ConfirmFacilityStudy","FACILITY_STUDY_ACTION",new(110,194,100,26),()=>{},false);NativeAction(canvas,"CancelFacilityStudy","CANCEL",new(216,194,98,26),()=>ShowFacilities(state,slot));
         table.ItemSelected+=()=>{if(table.GetSelected() is { } row){selected=row.GetMetadata(0).AsInt32();study.Disabled=false;study.Name="StudyCapacity"+selected;}};
         foreach(var person in roster??[]){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,person.SourceIndex!.Value);row.SetText(0,EmployeeName(person));row.SetText(1,person.MaximumTechnologies+" → "+(person.MaximumTechnologies+1));}

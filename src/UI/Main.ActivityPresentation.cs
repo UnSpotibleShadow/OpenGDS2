@@ -6,7 +6,7 @@ public partial class Main
 {
     private void BeginCompanyActivity(GameState state,CompanyActivity activity)
     {
-        if(!ReferenceEquals(_session.Current,state) || state.CompanyActivityPerformed!=false || state.Company.ActivityCost is null || state.PendingCompanyActivity is not null)return;
+        if(!ReferenceEquals(_session.Current,state) || state.CompanyActivityPerformed!=false || state.Company.ActivityCost is null || CompanyEventService.HasPending(state) || state.PendingCompanyActivity is not null)return;
         state.PendingCompanyActivity=new(){Activity=activity};ShowPendingCompanyActivity(state);
     }
     private bool ShowPendingCompanyActivity(GameState state)
@@ -15,7 +15,7 @@ public partial class Main
         string key=scene.Activity switch {CompanyActivity.PublicRelations=>"PUBLIC_RELATIONS",CompanyActivity.GenreResearch=>"GENRE_RESEARCH",_=>"EXPAND_PRODUCTION"};
         if(scene.Confirmed)
         {
-            string text=scene.Page==0?string.Format(Tr(scene.Activity==CompanyActivity.ProductionExpansion && scene.After-scene.Before>=17 ?
+            string text=scene.Page==0?string.Format(DisplayNumbers.Provider,Tr(scene.Activity==CompanyActivity.ProductionExpansion && scene.After-scene.Before>=17 ?
                 "ACTIVITY_SUPER_RESULT":"ACTIVITY_RESULT"),Tr(key),scene.Before,scene.After,scene.Cost):
                 Tr("ACTIVITY_UNLOCKED_GENRES")+"\n"+string.Join("\n",scene.UnlockedGenres.Select(id=>
                 {var c=_importer.LoadCatalog()!;return CatalogName(c,"GENRE",id,c.Genres.Single(g=>g.SourceIndex==id).Name);}));
@@ -32,7 +32,7 @@ public partial class Main
         if(artwork is null)NativeText(canvas,"ActivityArtworkMissing",Tr("EVENT_ARTWORK_REIMPORT"),new(17,60,256,50),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         NativeFill(canvas,"ActivityMessageBox",new(8,176,274,53),Colors.White,true);
         NativeText(canvas,"ActivityExplanation",Tr("ACTIVITY_DESCRIPTION_"+(int)scene.Activity),new(12,179,266,47),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        NativeText(canvas,"ActivityCost",$"{Tr("COMPANY_ACTIVITY_COST")}: ¥{state.Company.ActivityCost:N0}",new(8,231,274,18),10,HorizontalAlignment.Right);
+        NativeText(canvas,"ActivityCost",$"{Tr("COMPANY_ACTIVITY_COST")}: ¥{DisplayNumbers.Format(state.Company.ActivityCost)}",new(8,231,274,18),10,HorizontalAlignment.Right);
         var status=NativeText(canvas,"ActivityConfirmationStatus","",new(8,251,86,29),10);status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         var confirm=NativeAction(canvas,"ConfirmCompanyActivity","CONFIRM",new(98,253,84,25),()=>{});
         confirm.Pressed+=()=>

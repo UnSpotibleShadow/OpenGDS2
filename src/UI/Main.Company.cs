@@ -11,7 +11,7 @@ public partial class Main
         var canvas=ManagementCanvas("CompanyActivitiesWindow",Tr("COMPANY_ACTIVITIES"),new(390,325));
         NativeFill(canvas,"CompanyActivityMetricsBox",new(4,4,382,95),new(.77f,1,1),true);
         string[] labels=["FUNDS","COMPANY_ACTIVITY_COST","COMPANY_FAME","GENRE_RESEARCH","PRODUCTION_CAPACITY"];
-        string[] values=[$"¥{state.Money:N0}",$"¥{state.Company.ActivityCost:N0}",$"{state.Company.Fame}%",$"{state.Company.OriginalMember90}",$"{state.Company.ProductionCapacity}"];
+        string[] values=[$"¥{DisplayNumbers.Format(state.Money)}",$"¥{DisplayNumbers.Format(state.Company.ActivityCost)}",$"{state.Company.Fame}%",$"{state.Company.OriginalMember90}",$"{state.Company.ProductionCapacity}"];
         for(int i=0;i<labels.Length;i++){NativeText(canvas,"ActivityMetricLabel"+i,Tr(labels[i]),new(8,6+18*i,265,18));NativeText(canvas,"ActivityMetricValue"+i,values[i],new(275,6+18*i,107,18),11,HorizontalAlignment.Right);}
         int y=105;
         foreach(var (kind,key) in new[] {(CompanyActivity.PublicRelations,"PUBLIC_RELATIONS"),(CompanyActivity.GenreResearch,"GENRE_RESEARCH"),(CompanyActivity.ProductionExpansion,"EXPAND_PRODUCTION")})

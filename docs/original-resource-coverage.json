@@ -1,0 +1,3859 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "raster_properties_verified": 422,
+  "remaining_picture_formats": {
+    "ICO": 114,
+    "CUR": 1
+  },
+  "root_icon_exports": 82,
+  "raster_properties": [
+    {
+      "owner": "instance:MDIForm1:00001AAC",
+      "property": "Picture",
+      "source_offset": 6857,
+      "private_file": "Graphic/Recovered/resource-001AD1.bmp",
+      "file_sha256": "950e719cfa7a24568c78d9b28610193ceedb61de72fd324ba9e8661a5ac45a2d"
+    },
+    {
+      "owner": "instance:MDIForm1:00002145",
+      "property": "Picture",
+      "source_offset": 8546,
+      "private_file": "Graphic/Recovered/resource-00216A.bmp",
+      "file_sha256": "5ad1fe56f228781be815fc3d6c91c764ff7053d700ed1f9cbadae695085e55ef"
+    },
+    {
+      "owner": "instance:MDIForm1:000027DE",
+      "property": "Picture",
+      "source_offset": 10235,
+      "private_file": "Graphic/Recovered/resource-002803.bmp",
+      "file_sha256": "d16f2f3c2f7a45444d91af8d546a72d74d3e19b2f6bc9f299e40ea8bcb2e83f8"
+    },
+    {
+      "owner": "instance:MDIForm1:00002E77",
+      "property": "Picture",
+      "source_offset": 11924,
+      "private_file": "Graphic/Recovered/resource-002E9C.bmp",
+      "file_sha256": "c1cd55184bef099ed574b95c7ef3f99f102cf3487a726f93299bdf948c9893af"
+    },
+    {
+      "owner": "instance:MDIForm1:00003510",
+      "property": "Picture",
+      "source_offset": 13613,
+      "private_file": "Graphic/Recovered/resource-003535.bmp",
+      "file_sha256": "4c82d96ee8f6590cec57262e098a041f40d28cce27e82393aaaa0393891d15b7"
+    },
+    {
+      "owner": "instance:MDIForm1:00003BA7",
+      "property": "Picture",
+      "source_offset": 15300,
+      "private_file": "Graphic/Recovered/resource-003BCC.bmp",
+      "file_sha256": "8b968b5331a85631dea3a109bf323682c3d70fde63292f4ad7dfa6ca6c15cc60"
+    },
+    {
+      "owner": "instance:MDIForm1:00004240",
+      "property": "Picture",
+      "source_offset": 16989,
+      "private_file": "Graphic/Recovered/resource-004265.bmp",
+      "file_sha256": "9ba6b89bb0b6f674dededda6e9af5f9bb9dc0ca030e564f32a171aca0bcd23fa"
+    },
+    {
+      "owner": "instance:MDIForm1:000048D9",
+      "property": "Picture",
+      "source_offset": 18678,
+      "private_file": "Graphic/Recovered/resource-0048FE.bmp",
+      "file_sha256": "75b36ff61f27c5090bbfab6bf7b9f1bc906f9e77401c3beebaa101c92c9daea3"
+    },
+    {
+      "owner": "instance:MDIForm1:00004F72",
+      "property": "Picture",
+      "source_offset": 20367,
+      "private_file": "Graphic/Recovered/resource-004F97.bmp",
+      "file_sha256": "29f1d1f07913727e4794f3466cb92be1657372bd49c0502e91492e52e6983086"
+    },
+    {
+      "owner": "instance:MDIForm1:0000560B",
+      "property": "Picture",
+      "source_offset": 22056,
+      "private_file": "Graphic/Recovered/resource-005630.bmp",
+      "file_sha256": "afa9f940cb555a1a7aec4533c5c697576bdf597048b982d8f525b68a63523ab3"
+    },
+    {
+      "owner": "instance:MDIForm1:00005CA4",
+      "property": "Picture",
+      "source_offset": 23745,
+      "private_file": "Graphic/Recovered/resource-005CC9.bmp",
+      "file_sha256": "3def512535f539627f5a916e8e91b43890d067cdadcf14896d47dcab792beef2"
+    },
+    {
+      "owner": "instance:MDIForm1:0000633D",
+      "property": "Picture",
+      "source_offset": 25434,
+      "private_file": "Graphic/Recovered/resource-006362.bmp",
+      "file_sha256": "548bbdbd5431e1396d0d9dd503d6ed620a4aadbc2bab21bec0915cbc3772c862"
+    },
+    {
+      "owner": "instance:MDIForm1:000069D6",
+      "property": "Picture",
+      "source_offset": 27123,
+      "private_file": "Graphic/Recovered/resource-0069FB.bmp",
+      "file_sha256": "6afa4639d5a78c367514097dca240840669aa6752fa6b8de3615ac28e8db6229"
+    },
+    {
+      "owner": "instance:MDIForm1:0000706F",
+      "property": "Picture",
+      "source_offset": 28812,
+      "private_file": "Graphic/Recovered/resource-007094.bmp",
+      "file_sha256": "2b38b54066a56dc1ccaaaddb78a1fe2349de0646ab2d81b224934a1c1108a5bd"
+    },
+    {
+      "owner": "instance:MDIForm1:00007708",
+      "property": "Picture",
+      "source_offset": 30501,
+      "private_file": "Graphic/Recovered/resource-00772D.bmp",
+      "file_sha256": "cd4f20686cf8ba25fcbd6f70d98041959747c7fd507cd783603785d98c9c36ba"
+    },
+    {
+      "owner": "instance:MDIForm1:00007DA1",
+      "property": "Picture",
+      "source_offset": 32190,
+      "private_file": "Graphic/Recovered/resource-007DC6.bmp",
+      "file_sha256": "3aca88f3a31ae428e333ed1e3175bba8c0e6f4406b52c27134c50ddb9696f030"
+    },
+    {
+      "owner": "instance:MDIForm1:0000843A",
+      "property": "Picture",
+      "source_offset": 33877,
+      "private_file": "Graphic/Recovered/resource-00845D.gif",
+      "file_sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "owner": "instance:MDIForm1:000087C7",
+      "property": "Picture",
+      "source_offset": 34786,
+      "private_file": "Graphic/Recovered/resource-0087EA.bmp",
+      "file_sha256": "b43ac5f8404992abb58fc2813226cdcbe12d1c2c573113342f7a50e3ef4265df"
+    },
+    {
+      "owner": "instance:MDIForm1:00009AEC",
+      "property": "Picture",
+      "source_offset": 39687,
+      "private_file": "Graphic/Recovered/resource-009B0F.bmp",
+      "file_sha256": "e2153a78e522ba62dd392ae57fd99548efbf34b089beed2f57c42d16e7a5eb23"
+    },
+    {
+      "owner": "instance:MDIForm1:0000AE11",
+      "property": "Picture",
+      "source_offset": 44588,
+      "private_file": "Graphic/Recovered/resource-00AE34.bmp",
+      "file_sha256": "197b84c1cc9a7600eb7b593f402a5a040b38a84501b75518ae64bc84c8a095ef"
+    },
+    {
+      "owner": "instance:MDIForm1:0000C136",
+      "property": "Picture",
+      "source_offset": 49489,
+      "private_file": "Graphic/Recovered/resource-00C159.bmp",
+      "file_sha256": "197b84c1cc9a7600eb7b593f402a5a040b38a84501b75518ae64bc84c8a095ef"
+    },
+    {
+      "owner": "instance:MDIForm1:0000D45B",
+      "property": "Picture",
+      "source_offset": 54390,
+      "private_file": "Graphic/Recovered/resource-00D47E.bmp",
+      "file_sha256": "0b1466df1a0c3fa35aad747fdbc62544dba3bea11cc297fc5df79f8c019fd07a"
+    },
+    {
+      "owner": "instance:MDIForm1:0000E780",
+      "property": "Picture",
+      "source_offset": 59293,
+      "private_file": "Graphic/Recovered/resource-00E7A5.bmp",
+      "file_sha256": "b8e871c05aae2520c1b2dfeb6f121ffb65499585c1b9f1cf16e71fc8da421972"
+    },
+    {
+      "owner": "instance:MDIForm1:0000EE19",
+      "property": "Picture",
+      "source_offset": 60982,
+      "private_file": "Graphic/Recovered/resource-00EE3E.bmp",
+      "file_sha256": "472be194b88e8b69502238d1b6bac59764d2a6f128eac53990407c7142d4d300"
+    },
+    {
+      "owner": "instance:MDIForm1:0000F4B2",
+      "property": "Picture",
+      "source_offset": 62671,
+      "private_file": "Graphic/Recovered/resource-00F4D7.bmp",
+      "file_sha256": "6d48f1b9cb530ef4cff586961332970126522555ac1a78eeccabeadbaa11f3f0"
+    },
+    {
+      "owner": "instance:MDIForm1:0000FB4B",
+      "property": "Picture",
+      "source_offset": 64361,
+      "private_file": "Graphic/Recovered/resource-00FB71.gif",
+      "file_sha256": "be4a2ebf8d1347b9c4236b66acef457717d103d07d17957a96c6a0f142dceb51"
+    },
+    {
+      "owner": "instance:MDIForm1:0001121D",
+      "property": "Picture",
+      "source_offset": 70203,
+      "private_file": "Graphic/Recovered/resource-011243.gif",
+      "file_sha256": "ff29319cecbf8b9a4cc282916483d3ab45d1a53274faea123fa32289dddad141"
+    },
+    {
+      "owner": "instance:MDIForm1:0001655F",
+      "property": "Picture",
+      "source_offset": 91517,
+      "private_file": "Graphic/Recovered/resource-016585.bmp",
+      "file_sha256": "ce7cd638357a22ea7778492cc84348305b6d6d2c773610f85bc55a7877503579"
+    },
+    {
+      "owner": "instance:MDIForm1:000345C9",
+      "property": "Picture",
+      "source_offset": 214503,
+      "private_file": "Graphic/Recovered/resource-0345EF.gif",
+      "file_sha256": "07be0e26edd5fcd77c8b06606ddba6f9c3c5d69d3dd0e4c4df4c47fb6d9cd88f"
+    },
+    {
+      "owner": "instance:MDIForm1:0003768F",
+      "property": "Picture",
+      "source_offset": 226989,
+      "private_file": "Graphic/Recovered/resource-0376B5.gif",
+      "file_sha256": "784c5b2c116d285cce5e52465426ab8e8c138a6d18ab3cf75ceeb989db38b5c8"
+    },
+    {
+      "owner": "instance:MDIForm1:0003AEFE",
+      "property": "Picture",
+      "source_offset": 241436,
+      "private_file": "Graphic/Recovered/resource-03AF24.gif",
+      "file_sha256": "317f9a7818585cca0df10c1ac6ec4722a5ef1bf14fe4c685e0dd219f83fa8bb2"
+    },
+    {
+      "owner": "instance:MDIForm1:00040AD0",
+      "property": "Picture",
+      "source_offset": 264942,
+      "private_file": "Graphic/Recovered/resource-040AF6.gif",
+      "file_sha256": "6a928c1043686d48feebf31977a43db60386cf3c874d759dda01ff928c5f57bd"
+    },
+    {
+      "owner": "instance:MDIForm1:00042572",
+      "property": "Picture",
+      "source_offset": 271760,
+      "private_file": "Graphic/Recovered/resource-042598.gif",
+      "file_sha256": "8e8c1a469ffad519b9620c6d5ea0bc9efd91bf2f5ba0c9f3c9b44bc5ab5a83bb"
+    },
+    {
+      "owner": "instance:MDIForm1:00045954",
+      "property": "Picture",
+      "source_offset": 285042,
+      "private_file": "Graphic/Recovered/resource-04597A.gif",
+      "file_sha256": "47bf8f5c9b233e2de63f8b61bd8ffee5b0c33878bd4b3c0a526bac36481e869d"
+    },
+    {
+      "owner": "instance:MDIForm1:0004731F",
+      "property": "Picture",
+      "source_offset": 291645,
+      "private_file": "Graphic/Recovered/resource-047345.bmp",
+      "file_sha256": "6e259387b3209f41b00bcf7beecaea99f1d6e5a54947207c03188c042a646531"
+    },
+    {
+      "owner": "instance:MDIForm1:00065389",
+      "property": "Picture",
+      "source_offset": 414631,
+      "private_file": "Graphic/Recovered/resource-0653AF.bmp",
+      "file_sha256": "d52be360e966c72a2d5d4492788662ab2148ed562b8b3956057dff3cd49a0de6"
+    },
+    {
+      "owner": "instance:MDIForm1:000833F3",
+      "property": "Picture",
+      "source_offset": 537617,
+      "private_file": "Graphic/Recovered/resource-083419.gif",
+      "file_sha256": "1c1167cf18f19b23508e7c7e8f5d5a7bb69fb27cf27a0df5cf80d9cf7b9f28a3"
+    },
+    {
+      "owner": "instance:MDIForm1:00087543",
+      "property": "Picture",
+      "source_offset": 554337,
+      "private_file": "Graphic/Recovered/resource-087569.gif",
+      "file_sha256": "5afa7154d167bc7d7500b0aa8195e16c2af3df7a486fb4f517bc6367c9af1450"
+    },
+    {
+      "owner": "instance:MDIForm1:00088DEE",
+      "property": "Picture",
+      "source_offset": 560652,
+      "private_file": "Graphic/Recovered/resource-088E14.gif",
+      "file_sha256": "cceca1da302d3e2784d4a06565efa8ca567564a32df6fb84821d9f8456ba484d"
+    },
+    {
+      "owner": "instance:MDIForm1:0008CB0B",
+      "property": "Picture",
+      "source_offset": 576297,
+      "private_file": "Graphic/Recovered/resource-08CB31.gif",
+      "file_sha256": "eaacb87569ca7303da31e9693c7ece7e0f5f7ef919c068f3973bcf92f094da5c"
+    },
+    {
+      "owner": "instance:MDIForm1:0008FCAA",
+      "property": "Picture",
+      "source_offset": 589000,
+      "private_file": "Graphic/Recovered/resource-08FCD0.gif",
+      "file_sha256": "2d5229dd16a26dea098f31d4f04e673a1ea651e2745bc8d9ff25c65eed670d47"
+    },
+    {
+      "owner": "instance:MDIForm1:00092759",
+      "property": "Picture",
+      "source_offset": 599927,
+      "private_file": "Graphic/Recovered/resource-09277F.gif",
+      "file_sha256": "f8ee68edfaa5f48f9b7e5703f8f9672d4f29362887841922ee849b24413dd648"
+    },
+    {
+      "owner": "instance:MDIForm1:00094279",
+      "property": "Picture",
+      "source_offset": 606871,
+      "private_file": "Graphic/Recovered/resource-09429F.gif",
+      "file_sha256": "8d47ff48642d0ee1947461db9214dc4e457a8e2414411c6f2169580b1ce8de3d"
+    },
+    {
+      "owner": "instance:MDIForm1:000969A0",
+      "property": "Picture",
+      "source_offset": 616894,
+      "private_file": "Graphic/Recovered/resource-0969C6.bmp",
+      "file_sha256": "fce427b8465a57c173fe7b2a6b034a2d072485d283342df78a421484d92fbd35"
+    },
+    {
+      "owner": "instance:MDIForm1:000BEA0A",
+      "property": "Picture",
+      "source_offset": 780840,
+      "private_file": "Graphic/Recovered/resource-0BEA30.bmp",
+      "file_sha256": "02e8ce8f6ec99cf2585a176315dd826e701e109461836c0120b599c8dcda72f4"
+    },
+    {
+      "owner": "instance:MDIForm1:000C8674",
+      "property": "Picture",
+      "source_offset": 820882,
+      "private_file": "Graphic/Recovered/resource-0C869A.bmp",
+      "file_sha256": "458ef3a4211fd5e2dc21668b1c57b8cae83dce7850841dffba1eb53f0a06a224"
+    },
+    {
+      "owner": "instance:MDIForm1:000F06DE",
+      "property": "Picture",
+      "source_offset": 984828,
+      "private_file": "Graphic/Recovered/resource-0F0704.bmp",
+      "file_sha256": "d295d00d8aa9c042af2fb50c77136ff1d21875486ea17a52eda385dddaf84d67"
+    },
+    {
+      "owner": "instance:MDIForm1:0010E748",
+      "property": "Picture",
+      "source_offset": 1107814,
+      "private_file": "Graphic/Recovered/resource-10E76E.bmp",
+      "file_sha256": "a42748f1e430bbb3993ca16dbb06636d1c1189179fa0d1f8a36cff2a0c3fbb4a"
+    },
+    {
+      "owner": "instance:MDIForm1:001367B2",
+      "property": "Picture",
+      "source_offset": 1271760,
+      "private_file": "Graphic/Recovered/resource-1367D8.gif",
+      "file_sha256": "72d9b891d0960086c649728091a45120b55267b14d142e280bf4f7d7e0540dd9"
+    },
+    {
+      "owner": "instance:MDIForm1:0013B424",
+      "property": "Picture",
+      "source_offset": 1291330,
+      "private_file": "Graphic/Recovered/resource-13B44A.bmp",
+      "file_sha256": "a42748f1e430bbb3993ca16dbb06636d1c1189179fa0d1f8a36cff2a0c3fbb4a"
+    },
+    {
+      "owner": "instance:MDIForm1:0016348E",
+      "property": "Picture",
+      "source_offset": 1455276,
+      "private_file": "Graphic/Recovered/resource-1634B4.bmp",
+      "file_sha256": "7512024e4267a284aee8196a9730acf7d8015e11bc2a1b6281b36659003eef9e"
+    },
+    {
+      "owner": "instance:MDIForm1:001814F8",
+      "property": "Picture",
+      "source_offset": 1578262,
+      "private_file": "Graphic/Recovered/resource-18151E.bmp",
+      "file_sha256": "82426682f60d7e41ea72b9c5ad45edd8e6b0cb5f06c1d6afaf8e2fbcc2b6ec65"
+    },
+    {
+      "owner": "instance:MDIForm1:0018B162",
+      "property": "Picture",
+      "source_offset": 1618304,
+      "private_file": "Graphic/Recovered/resource-18B188.bmp",
+      "file_sha256": "897361341d284f88147213f03e06d55f1f87f1357b6e147de2e5ff94b378e8d0"
+    },
+    {
+      "owner": "instance:MDIForm1:001A91CC",
+      "property": "Picture",
+      "source_offset": 1741288,
+      "private_file": "Graphic/Recovered/resource-1A91F0.bmp",
+      "file_sha256": "984b4ad3e6a5469bcc379f8c30b2c338ad7fc3c6af8552250f6128ad4d92e6c4"
+    },
+    {
+      "owner": "instance:MDIForm1:001A9862",
+      "property": "Picture",
+      "source_offset": 1742974,
+      "private_file": "Graphic/Recovered/resource-1A9886.bmp",
+      "file_sha256": "944ea0ea5ee2cb9f67d5f7ba418d2a8495fd9501f2fba0816d56ea5a1113dbc4"
+    },
+    {
+      "owner": "instance:MDIForm1:001A9F19",
+      "property": "Picture",
+      "source_offset": 1744694,
+      "private_file": "Graphic/Recovered/resource-1A9F3E.bmp",
+      "file_sha256": "75e5098b1796f6495ae4c43d1f68cec71fa601f073c5e248797a188d510f47b0"
+    },
+    {
+      "owner": "instance:MDIForm1:001ACF82",
+      "property": "Picture",
+      "source_offset": 1757087,
+      "private_file": "Graphic/Recovered/resource-1ACFA7.bmp",
+      "file_sha256": "470c5cc936230a89b4e928a1163a3512507986759497ce215ea9fd0f2788e0ba"
+    },
+    {
+      "owner": "instance:MDIForm1:001AFFEB",
+      "property": "Picture",
+      "source_offset": 1769480,
+      "private_file": "Graphic/Recovered/resource-1B0010.bmp",
+      "file_sha256": "b706c57412aae428dd84a1b756e458e0a48728eb8e4802f4e9aec53bbcb82bba"
+    },
+    {
+      "owner": "instance:MDIForm1:001B3054",
+      "property": "Picture",
+      "source_offset": 1781873,
+      "private_file": "Graphic/Recovered/resource-1B3079.bmp",
+      "file_sha256": "a4d22182c19b3c4d8496e7b07af442886a9ab6b16872143c294b4ff6c0dd1eb6"
+    },
+    {
+      "owner": "instance:MDIForm1:001B60BD",
+      "property": "Picture",
+      "source_offset": 1794266,
+      "private_file": "Graphic/Recovered/resource-1B60E2.bmp",
+      "file_sha256": "69277c5c8fab10b5cfe81a4f9b8f73c43a56fe619fba919e06083a466b6382fc"
+    },
+    {
+      "owner": "instance:MDIForm1:001B9126",
+      "property": "Picture",
+      "source_offset": 1806659,
+      "private_file": "Graphic/Recovered/resource-1B914B.bmp",
+      "file_sha256": "5be163c443a43790d9411d832aa9fc20ec95b675603679a3ad1f5cc0fa240c4f"
+    },
+    {
+      "owner": "instance:MDIForm1:001BC18F",
+      "property": "Picture",
+      "source_offset": 1819052,
+      "private_file": "Graphic/Recovered/resource-1BC1B4.bmp",
+      "file_sha256": "5472fffb5ef3693cf6f81c166743cf74d28c4cc28913c41e5383ca6a4f375546"
+    },
+    {
+      "owner": "instance:MDIForm1:001BF1F8",
+      "property": "Picture",
+      "source_offset": 1831445,
+      "private_file": "Graphic/Recovered/resource-1BF21D.bmp",
+      "file_sha256": "2f2d8a6b3e40c7cf34892991b7aef4190dfa5f20a86ce871c579d7659ea08d31"
+    },
+    {
+      "owner": "instance:MDIForm1:001C2261",
+      "property": "Picture",
+      "source_offset": 1843838,
+      "private_file": "Graphic/Recovered/resource-1C2286.bmp",
+      "file_sha256": "0a802a6ac63734c765ea3aad7312464d39ce0ecc16037af779ac213462fde126"
+    },
+    {
+      "owner": "instance:MDIForm1:001C52CA",
+      "property": "Picture",
+      "source_offset": 1856231,
+      "private_file": "Graphic/Recovered/resource-1C52EF.bmp",
+      "file_sha256": "4e37e436555fb037455e59be3fd9a2ef1fca63a86cb3cfcc6f5aa8ec0a9d9e4a"
+    },
+    {
+      "owner": "instance:MDIForm1:001C8333",
+      "property": "Picture",
+      "source_offset": 1868624,
+      "private_file": "Graphic/Recovered/resource-1C8358.bmp",
+      "file_sha256": "3428532bd8ebf493dfb6da945203f5571043c3539257da95844120b4f09ef808"
+    },
+    {
+      "owner": "instance:MDIForm1:001CB39C",
+      "property": "Picture",
+      "source_offset": 1881017,
+      "private_file": "Graphic/Recovered/resource-1CB3C1.bmp",
+      "file_sha256": "8962f80af10ca27e3113a4d897b386834a465435497c1b8cde7fa1b36ab17e04"
+    },
+    {
+      "owner": "instance:MDIForm1:001CE405",
+      "property": "Picture",
+      "source_offset": 1893410,
+      "private_file": "Graphic/Recovered/resource-1CE42A.bmp",
+      "file_sha256": "f091b727311cd230cef91520f8fb13fb416f14cc7b3e76dda4d965dbb4599d2c"
+    },
+    {
+      "owner": "instance:MDIForm1:001D146E",
+      "property": "Picture",
+      "source_offset": 1905803,
+      "private_file": "Graphic/Recovered/resource-1D1493.bmp",
+      "file_sha256": "af90ce88626fb1367a3f2cdf6b0f5abfaa7848200e149e816f8b3dba449a5577"
+    },
+    {
+      "owner": "instance:MDIForm1:001D44D7",
+      "property": "Picture",
+      "source_offset": 1918196,
+      "private_file": "Graphic/Recovered/resource-1D44FC.bmp",
+      "file_sha256": "21b9fbfdd95163534cbed57f887b103fc7380fbe3f541ad12aa3f8f925654497"
+    },
+    {
+      "owner": "instance:MDIForm1:001D7540",
+      "property": "Picture",
+      "source_offset": 1930588,
+      "private_file": "Graphic/Recovered/resource-1D7564.bmp",
+      "file_sha256": "c0139b1f474eeb03b97b46cb7639eba55bed5561288e5a6bfd1413e082b7967a"
+    },
+    {
+      "owner": "instance:MDIForm1:001D7BD6",
+      "property": "Picture",
+      "source_offset": 1932274,
+      "private_file": "Graphic/Recovered/resource-1D7BFA.bmp",
+      "file_sha256": "3e479873cce3ad2123396b9eb47df0a9d10c216950eabace1e386e09bf3582cc"
+    },
+    {
+      "owner": "instance:MDIForm1:001D828D",
+      "property": "Picture",
+      "source_offset": 1933993,
+      "private_file": "Graphic/Recovered/resource-1D82B1.bmp",
+      "file_sha256": "6e59701fa37d892b15f6dbcbc3ee54ad29e062e0cb45eb99e63f444aa7ffde32"
+    },
+    {
+      "owner": "instance:MDIForm1:001D8923",
+      "property": "Picture",
+      "source_offset": 1935679,
+      "private_file": "Graphic/Recovered/resource-1D8947.bmp",
+      "file_sha256": "4cc682d68cb34ef62e418426ea8f59e181c128545077d1d39cfedb6901b69736"
+    },
+    {
+      "owner": "instance:MDIForm1:001D8FDA",
+      "property": "Picture",
+      "source_offset": 1937398,
+      "private_file": "Graphic/Recovered/resource-1D8FFE.bmp",
+      "file_sha256": "6d5e455be84f655d8ca388d0f39f3d9d621ec35945e533881963fb2ebab8ed28"
+    },
+    {
+      "owner": "instance:MDIForm1:001D9670",
+      "property": "Picture",
+      "source_offset": 1939084,
+      "private_file": "Graphic/Recovered/resource-1D9694.bmp",
+      "file_sha256": "43fd0acae6e6665969e5abb7dcb5318d774583e05c16ea0818172a2d8e895238"
+    },
+    {
+      "owner": "instance:MDIForm1:001D9D27",
+      "property": "Picture",
+      "source_offset": 1940803,
+      "private_file": "Graphic/Recovered/resource-1D9D4B.bmp",
+      "file_sha256": "cbe2b88a71c749c2e3da15feb13ad4cea87c9e9bf81d52f7beb36335e1fd8afe"
+    },
+    {
+      "owner": "instance:MDIForm1:001DA39B",
+      "property": "Picture",
+      "source_offset": 1942455,
+      "private_file": "Graphic/Recovered/resource-1DA3BF.bmp",
+      "file_sha256": "bd54adc412240dcfc4a0b3f0bd9f0d166dc0416daa0a1ae2e72bbc6b04aebb27"
+    },
+    {
+      "owner": "instance:MDIForm1:001DAA30",
+      "property": "Picture",
+      "source_offset": 1944140,
+      "private_file": "Graphic/Recovered/resource-1DAA54.bmp",
+      "file_sha256": "5b77b94964a063866aa52265da1b22d8b3b491d0f95b504566ec6745e38996c4"
+    },
+    {
+      "owner": "instance:MDIForm1:001DB0C6",
+      "property": "Picture",
+      "source_offset": 1945826,
+      "private_file": "Graphic/Recovered/resource-1DB0EA.bmp",
+      "file_sha256": "6cc757d247d8c68ae46f5fc1f4077bca38fceb7109869f724af354b1b57c3c67"
+    },
+    {
+      "owner": "instance:MDIForm1:001DB77D",
+      "property": "Picture",
+      "source_offset": 1947545,
+      "private_file": "Graphic/Recovered/resource-1DB7A1.bmp",
+      "file_sha256": "ff029d32c5e537dd275f2fdeafabeefe0e5a96db54a149da4b7160fb07db30a3"
+    },
+    {
+      "owner": "instance:MDIForm1:001DBE13",
+      "property": "Picture",
+      "source_offset": 1949231,
+      "private_file": "Graphic/Recovered/resource-1DBE37.bmp",
+      "file_sha256": "83dc5e9549a05796939491bce4dd004eb18fe1e972ff8c1e66b243db12cdbb92"
+    },
+    {
+      "owner": "instance:MDIForm1:001DC4CA",
+      "property": "Picture",
+      "source_offset": 1950950,
+      "private_file": "Graphic/Recovered/resource-1DC4EE.bmp",
+      "file_sha256": "259eee71ae3347c3f942229dcb4f030eeb83f8558128c6e6160249743e8d8125"
+    },
+    {
+      "owner": "instance:MDIForm1:001DCB60",
+      "property": "Picture",
+      "source_offset": 1952636,
+      "private_file": "Graphic/Recovered/resource-1DCB84.bmp",
+      "file_sha256": "98219982890a28f69c69c92edcc0a38f314a87e8d42818e758ce3731cb1bb6ce"
+    },
+    {
+      "owner": "instance:MDIForm1:001DD217",
+      "property": "Picture",
+      "source_offset": 1954355,
+      "private_file": "Graphic/Recovered/resource-1DD23B.bmp",
+      "file_sha256": "aaec6016010df78118e69b84aba87f7035ccf93cd749f3074e7e9968fe8941ff"
+    },
+    {
+      "owner": "instance:MDIForm1:001DD8AD",
+      "property": "Picture",
+      "source_offset": 1956041,
+      "private_file": "Graphic/Recovered/resource-1DD8D1.bmp",
+      "file_sha256": "27939747119bfac690696b257e692875fe8d80fd10dd7b7b1bc21bf469123a8b"
+    },
+    {
+      "owner": "instance:MDIForm1:001DDF43",
+      "property": "Picture",
+      "source_offset": 1957727,
+      "private_file": "Graphic/Recovered/resource-1DDF67.bmp",
+      "file_sha256": "50b2dbc58406a955031db2b9beeddba1cc48bf013bbc8974fba2c67ac0e28128"
+    },
+    {
+      "owner": "instance:MDIForm1:001DE5FA",
+      "property": "Picture",
+      "source_offset": 1959446,
+      "private_file": "Graphic/Recovered/resource-1DE61E.bmp",
+      "file_sha256": "0e9aa055f5bf2d22de0e4293ee98dd649e9613ce38ea5970eb6187d65fed87f7"
+    },
+    {
+      "owner": "instance:MDIForm1:001DECD2",
+      "property": "Picture",
+      "source_offset": 1961198,
+      "private_file": "Graphic/Recovered/resource-1DECF6.bmp",
+      "file_sha256": "3c7b205140a5fd66a77ad3c1cf01a08743cca4a4f0f55642b6ec9bbf10584815"
+    },
+    {
+      "owner": "instance:MDIForm1:001DF36A",
+      "property": "Picture",
+      "source_offset": 1962886,
+      "private_file": "Graphic/Recovered/resource-1DF38E.bmp",
+      "file_sha256": "6ee38f9644c9f7413d700e64fc816cbf40f086e43ea837426bf28ac7941a7405"
+    },
+    {
+      "owner": "instance:MDIForm1:001DFA02",
+      "property": "Picture",
+      "source_offset": 1964574,
+      "private_file": "Graphic/Recovered/resource-1DFA26.bmp",
+      "file_sha256": "43d6048379c616c2fcfa56b825f391f1c34e9a29f42db2c8d326cdffe517075c"
+    },
+    {
+      "owner": "instance:MDIForm1:001E009A",
+      "property": "Picture",
+      "source_offset": 1966262,
+      "private_file": "Graphic/Recovered/resource-1E00BE.bmp",
+      "file_sha256": "905b46a676a294d41ff66ab3b7e04065dbb2e0dfcf3ee4e1898ce76a4f7896f4"
+    },
+    {
+      "owner": "instance:MDIForm1:001E0753",
+      "property": "Picture",
+      "source_offset": 1967983,
+      "private_file": "Graphic/Recovered/resource-1E0777.bmp",
+      "file_sha256": "36bca3ede26350cdc29698efccc5f9da53831e26da324ac9a554d17634bd6f20"
+    },
+    {
+      "owner": "instance:MDIForm1:001E0DEB",
+      "property": "Picture",
+      "source_offset": 1969671,
+      "private_file": "Graphic/Recovered/resource-1E0E0F.bmp",
+      "file_sha256": "9fd9dc603e910523a79bef036c9a772eacf6f28a22c6b752122b15f0ad14a301"
+    },
+    {
+      "owner": "instance:MDIForm1:001E699A",
+      "property": "Picture",
+      "source_offset": 1993142,
+      "private_file": "Graphic/Recovered/resource-1E69BE.bmp",
+      "file_sha256": "60869abb08a7d50a848c94afb754093afac45350353285bdf7b92f5272f27fb2"
+    },
+    {
+      "owner": "instance:MDIForm1:001E7032",
+      "property": "Picture",
+      "source_offset": 1994830,
+      "private_file": "Graphic/Recovered/resource-1E7056.bmp",
+      "file_sha256": "a7eb5e8f57ce7eb4fd0726d80fedc6b9d03152df5b5136c9bd44d2946ba148cf"
+    },
+    {
+      "owner": "instance:MDIForm1:001E770C",
+      "property": "Picture",
+      "source_offset": 1996584,
+      "private_file": "Graphic/Recovered/resource-1E7730.bmp",
+      "file_sha256": "7e2717e81412326fbb5a95d3bd798b8ad460e1e2a42896f5a67f35b663f2b610"
+    },
+    {
+      "owner": "instance:MDIForm1:001E7DA4",
+      "property": "Picture",
+      "source_offset": 1998272,
+      "private_file": "Graphic/Recovered/resource-1E7DC8.bmp",
+      "file_sha256": "34949f6a3d5483cd8cfc9ca75e1424b2300ba729c186be7c4b4501d63fafc606"
+    },
+    {
+      "owner": "instance:MDIForm1:001E845D",
+      "property": "Picture",
+      "source_offset": 1999993,
+      "private_file": "Graphic/Recovered/resource-1E8481.bmp",
+      "file_sha256": "367f221db07476bb154278f673821caa08d2c13e680608f10a2f48045583804e"
+    },
+    {
+      "owner": "instance:MDIForm1:001E8AF5",
+      "property": "Picture",
+      "source_offset": 2001681,
+      "private_file": "Graphic/Recovered/resource-1E8B19.bmp",
+      "file_sha256": "2e3021d9bb134fdb5f69a30a6e3fa7960af5e19228af1872c3a119fca8449a7b"
+    },
+    {
+      "owner": "instance:fGMKaiwa:00249033",
+      "property": "Picture",
+      "source_offset": 2396237,
+      "private_file": "Graphic/Recovered/resource-249055.bmp",
+      "file_sha256": "c6d0be951cd6c3a5c80dc620a9f314d6ed0af1a424e0f8fda397b93c9bc7286c"
+    },
+    {
+      "owner": "instance:fGMKaihatu:00250244",
+      "property": "Picture",
+      "source_offset": 2425438,
+      "private_file": "Graphic/Recovered/resource-250266.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMKaihatu:002507A6",
+      "property": "Picture",
+      "source_offset": 2426816,
+      "private_file": "Graphic/Recovered/resource-2507C8.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMZishaK:00253E7F",
+      "property": "Picture",
+      "source_offset": 2440857,
+      "private_file": "Graphic/Recovered/resource-253EA1.gif",
+      "file_sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "owner": "instance:fGMZishaK:0025420B",
+      "property": "Picture",
+      "source_offset": 2441765,
+      "private_file": "Graphic/Recovered/resource-25422D.gif",
+      "file_sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "owner": "instance:fGMHikinukiSel:0025552C",
+      "property": "Picture",
+      "source_offset": 2446663,
+      "private_file": "Graphic/Recovered/resource-25554F.bmp",
+      "file_sha256": "392ce36b2460811b321cef6ac13e90c494eac4fd3504425d812f0e226ed8878f"
+    },
+    {
+      "owner": "instance:fGMHikinukiSel:00255A91",
+      "property": "Picture",
+      "source_offset": 2448044,
+      "private_file": "Graphic/Recovered/resource-255AB4.bmp",
+      "file_sha256": "969b08c7e81ca1be2202fcab006d4557c7a8490ba56fe69b5e5a45df5a92a71b"
+    },
+    {
+      "owner": "instance:fGMHikinukiSel:00256006",
+      "property": "Picture",
+      "source_offset": 2449441,
+      "private_file": "Graphic/Recovered/resource-256029.bmp",
+      "file_sha256": "18b6284adff148463d79fcaed502d8dba3e7eaafd74dd7839872afbdcb920345"
+    },
+    {
+      "owner": "instance:fGMHikinukiSel:0025656B",
+      "property": "Picture",
+      "source_offset": 2450822,
+      "private_file": "Graphic/Recovered/resource-25658E.bmp",
+      "file_sha256": "210120c825bd833b80b29eacb67cf52e50feee7a28f44847272c6f68167bd4bc"
+    },
+    {
+      "owner": "instance:fGMHikinukiSel:00256AD0",
+      "property": "Picture",
+      "source_offset": 2452203,
+      "private_file": "Graphic/Recovered/resource-256AF3.bmp",
+      "file_sha256": "a9c365937336ea58519fb16767b4c74cd2934e210ae88538065ac273330bc4b2"
+    },
+    {
+      "owner": "instance:fGMSKoyou:00258C82",
+      "property": "Picture",
+      "source_offset": 2460829,
+      "private_file": "Graphic/Recovered/resource-258CA5.bmp",
+      "file_sha256": "8ae21458d419e2a982dd958d1efac66a59d73760f36e95d603f640ce5f7b6b1a"
+    },
+    {
+      "owner": "instance:fGMSKoyou:002591F7",
+      "property": "Picture",
+      "source_offset": 2462226,
+      "private_file": "Graphic/Recovered/resource-25921A.bmp",
+      "file_sha256": "210120c825bd833b80b29eacb67cf52e50feee7a28f44847272c6f68167bd4bc"
+    },
+    {
+      "owner": "instance:fGMSKoyou:0025975C",
+      "property": "Picture",
+      "source_offset": 2463607,
+      "private_file": "Graphic/Recovered/resource-25977F.bmp",
+      "file_sha256": "18b6284adff148463d79fcaed502d8dba3e7eaafd74dd7839872afbdcb920345"
+    },
+    {
+      "owner": "instance:fGMSKoyou:00259CC1",
+      "property": "Picture",
+      "source_offset": 2464988,
+      "private_file": "Graphic/Recovered/resource-259CE4.bmp",
+      "file_sha256": "969b08c7e81ca1be2202fcab006d4557c7a8490ba56fe69b5e5a45df5a92a71b"
+    },
+    {
+      "owner": "instance:fGMSKoyou:0025A236",
+      "property": "Picture",
+      "source_offset": 2466385,
+      "private_file": "Graphic/Recovered/resource-25A259.bmp",
+      "file_sha256": "392ce36b2460811b321cef6ac13e90c494eac4fd3504425d812f0e226ed8878f"
+    },
+    {
+      "owner": "instance:fGMSKoyouKz:0025BB96",
+      "property": "Picture",
+      "source_offset": 2472881,
+      "private_file": "Graphic/Recovered/resource-25BBB9.bmp",
+      "file_sha256": "8ae21458d419e2a982dd958d1efac66a59d73760f36e95d603f640ce5f7b6b1a"
+    },
+    {
+      "owner": "instance:fGMSKoyouKz:0025C10B",
+      "property": "Picture",
+      "source_offset": 2474278,
+      "private_file": "Graphic/Recovered/resource-25C12E.bmp",
+      "file_sha256": "210120c825bd833b80b29eacb67cf52e50feee7a28f44847272c6f68167bd4bc"
+    },
+    {
+      "owner": "instance:fGMSKoyouKz:0025C670",
+      "property": "Picture",
+      "source_offset": 2475659,
+      "private_file": "Graphic/Recovered/resource-25C693.bmp",
+      "file_sha256": "18b6284adff148463d79fcaed502d8dba3e7eaafd74dd7839872afbdcb920345"
+    },
+    {
+      "owner": "instance:fGMSKoyouKz:0025CBD5",
+      "property": "Picture",
+      "source_offset": 2477040,
+      "private_file": "Graphic/Recovered/resource-25CBF8.bmp",
+      "file_sha256": "969b08c7e81ca1be2202fcab006d4557c7a8490ba56fe69b5e5a45df5a92a71b"
+    },
+    {
+      "owner": "instance:fGMSKoyouKz:0025D14A",
+      "property": "Picture",
+      "source_offset": 2478437,
+      "private_file": "Graphic/Recovered/resource-25D16D.bmp",
+      "file_sha256": "392ce36b2460811b321cef6ac13e90c494eac4fd3504425d812f0e226ed8878f"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:0025E0DF",
+      "property": "Picture",
+      "source_offset": 2482425,
+      "private_file": "Graphic/Recovered/resource-25E101.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:0025E641",
+      "property": "Picture",
+      "source_offset": 2483803,
+      "private_file": "Graphic/Recovered/resource-25E663.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:0025F6D6",
+      "property": "Picture",
+      "source_offset": 2488048,
+      "private_file": "Graphic/Recovered/resource-25F6F8.bmp",
+      "file_sha256": "1dff85239783021c2c132f7fff04193d25a9e1b68675b0a46dbf345d02a6cf30"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:0025FC3A",
+      "property": "Picture",
+      "source_offset": 2489428,
+      "private_file": "Graphic/Recovered/resource-25FC5C.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:0026019E",
+      "property": "Picture",
+      "source_offset": 2490808,
+      "private_file": "Graphic/Recovered/resource-2601C0.bmp",
+      "file_sha256": "271f7bf1cb23f0a80bcffac34a0f531aa548b1df339bece222b108aaa635171c"
+    },
+    {
+      "owner": "instance:fGMSyukkaSai:00260702",
+      "property": "Picture",
+      "source_offset": 2492188,
+      "private_file": "Graphic/Recovered/resource-260724.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMZishaKW:002618E2",
+      "property": "Picture",
+      "source_offset": 2496766,
+      "private_file": "Graphic/Recovered/resource-261906.bmp",
+      "file_sha256": "a381f1ee0f279d425f97fadc6126799143c5e32a459045cca6c6a86c25d09ffe"
+    },
+    {
+      "owner": "instance:fGMZishaKW:002622C6",
+      "property": "Picture",
+      "source_offset": 2499298,
+      "private_file": "Graphic/Recovered/resource-2622EA.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMZishaKW:00262E2A",
+      "property": "Picture",
+      "source_offset": 2502212,
+      "private_file": "Graphic/Recovered/resource-262E4C.gif",
+      "file_sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "owner": "instance:fGMZishaKW:002631B6",
+      "property": "Picture",
+      "source_offset": 2503122,
+      "private_file": "Graphic/Recovered/resource-2631DA.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMZishaKW:00263B9A",
+      "property": "Picture",
+      "source_offset": 2505652,
+      "private_file": "Graphic/Recovered/resource-263BBC.gif",
+      "file_sha256": "3863e0bf3c6721690b118b96b432b29bc915258ba520c52e361523a327701fb2"
+    },
+    {
+      "owner": "instance:fGMSyukka:002650FC",
+      "property": "Picture",
+      "source_offset": 2511126,
+      "private_file": "Graphic/Recovered/resource-26511E.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMSyukka:0026565E",
+      "property": "Picture",
+      "source_offset": 2512504,
+      "private_file": "Graphic/Recovered/resource-265680.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMSyukka:00265C25",
+      "property": "Picture",
+      "source_offset": 2513983,
+      "private_file": "Graphic/Recovered/resource-265C47.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMSyukka:00266187",
+      "property": "Picture",
+      "source_offset": 2515361,
+      "private_file": "Graphic/Recovered/resource-2661A9.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMSyukka:002668D3",
+      "property": "Picture",
+      "source_offset": 2517229,
+      "private_file": "Graphic/Recovered/resource-2668F5.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fGMSyukka:00266E37",
+      "property": "Picture",
+      "source_offset": 2518609,
+      "private_file": "Graphic/Recovered/resource-266E59.bmp",
+      "file_sha256": "271f7bf1cb23f0a80bcffac34a0f531aa548b1df339bece222b108aaa635171c"
+    },
+    {
+      "owner": "instance:fGMSyukka:0026739B",
+      "property": "Picture",
+      "source_offset": 2519989,
+      "private_file": "Graphic/Recovered/resource-2673BD.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fGMSyukka:002678FF",
+      "property": "Picture",
+      "source_offset": 2521369,
+      "private_file": "Graphic/Recovered/resource-267921.bmp",
+      "file_sha256": "1dff85239783021c2c132f7fff04193d25a9e1b68675b0a46dbf345d02a6cf30"
+    },
+    {
+      "owner": "instance:fGMSyain:002685BC",
+      "property": "Picture",
+      "source_offset": 2524630,
+      "private_file": "Graphic/Recovered/resource-2685DE.bmp",
+      "file_sha256": "cde113251b5ef32521856e3cb2d8681a3e6c6e4bcfadcb86d2e9d2a5fab08a99"
+    },
+    {
+      "owner": "instance:fGMSyain:00268B8E",
+      "property": "Picture",
+      "source_offset": 2526121,
+      "private_file": "Graphic/Recovered/resource-268BB1.bmp",
+      "file_sha256": "543013fa9de2349f377c019efd091106d8b0dc094dd04c6a8ee6a444af578183"
+    },
+    {
+      "owner": "instance:fGMSyain:002691C5",
+      "property": "Picture",
+      "source_offset": 2527712,
+      "private_file": "Graphic/Recovered/resource-2691E8.bmp",
+      "file_sha256": "392ce36b2460811b321cef6ac13e90c494eac4fd3504425d812f0e226ed8878f"
+    },
+    {
+      "owner": "instance:fGMSyain:0026972A",
+      "property": "Picture",
+      "source_offset": 2529093,
+      "private_file": "Graphic/Recovered/resource-26974D.bmp",
+      "file_sha256": "969b08c7e81ca1be2202fcab006d4557c7a8490ba56fe69b5e5a45df5a92a71b"
+    },
+    {
+      "owner": "instance:fGMSyain:00269C9F",
+      "property": "Picture",
+      "source_offset": 2530490,
+      "private_file": "Graphic/Recovered/resource-269CC2.bmp",
+      "file_sha256": "18b6284adff148463d79fcaed502d8dba3e7eaafd74dd7839872afbdcb920345"
+    },
+    {
+      "owner": "instance:fGMSyain:0026A204",
+      "property": "Picture",
+      "source_offset": 2531871,
+      "private_file": "Graphic/Recovered/resource-26A227.bmp",
+      "file_sha256": "210120c825bd833b80b29eacb67cf52e50feee7a28f44847272c6f68167bd4bc"
+    },
+    {
+      "owner": "instance:fGMSyain:0026A769",
+      "property": "Picture",
+      "source_offset": 2533252,
+      "private_file": "Graphic/Recovered/resource-26A78C.bmp",
+      "file_sha256": "8ae21458d419e2a982dd958d1efac66a59d73760f36e95d603f640ce5f7b6b1a"
+    },
+    {
+      "owner": "instance:fGMSyain:0026B51A",
+      "property": "Picture",
+      "source_offset": 2536756,
+      "private_file": "Graphic/Recovered/resource-26B53C.bmp",
+      "file_sha256": "08a12d4398615fd47e82254e1c1e9520fc9b5211bb73d0a7181c61fc9593b5dc"
+    },
+    {
+      "owner": "instance:fGMSyain:0026B730",
+      "property": "Picture",
+      "source_offset": 2537290,
+      "private_file": "Graphic/Recovered/resource-26B752.bmp",
+      "file_sha256": "9999c880607ea86e03eaf90a14ab60537f70f06c8ef1c63a3a7552951ae1265d"
+    },
+    {
+      "owner": "instance:fGMSyain:0026B946",
+      "property": "Picture",
+      "source_offset": 2537824,
+      "private_file": "Graphic/Recovered/resource-26B968.bmp",
+      "file_sha256": "94a13112ebc25f34e3be9d3420c030ee419dfb2efc1028169f72955078226c3c"
+    },
+    {
+      "owner": "instance:fGMSyain:0026BB5C",
+      "property": "Picture",
+      "source_offset": 2538358,
+      "private_file": "Graphic/Recovered/resource-26BB7E.bmp",
+      "file_sha256": "4dc454112e5ad44ea864c9d994bc9ce03a341af972de319a35c4c6081376ab3b"
+    },
+    {
+      "owner": "instance:fGMHikinuki:0026D206",
+      "property": "Picture",
+      "source_offset": 2544160,
+      "private_file": "Graphic/Recovered/resource-26D228.bmp",
+      "file_sha256": "ad370b9dd89b9ef69e2458d17f28eb140100218ef98d945e389d3053569b02aa"
+    },
+    {
+      "owner": "instance:fGMHikinuki:0026E6C6",
+      "property": "Picture",
+      "source_offset": 2549472,
+      "private_file": "Graphic/Recovered/resource-26E6E8.bmp",
+      "file_sha256": "8777396813b86eec0e68d48cab5c44c2bc712e4d832adc2727245b734a5c7741"
+    },
+    {
+      "owner": "instance:fGMbeta:00270A4D",
+      "property": "Picture",
+      "source_offset": 2558569,
+      "private_file": "Graphic/Recovered/resource-270A71.bmp",
+      "file_sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "owner": "instance:fGMbeta:00271431",
+      "property": "Picture",
+      "source_offset": 2561101,
+      "private_file": "Graphic/Recovered/resource-271455.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMbeta:00271E15",
+      "property": "Picture",
+      "source_offset": 2563633,
+      "private_file": "Graphic/Recovered/resource-271E39.bmp",
+      "file_sha256": "be267a215a236ef12e50b2bf25c83ec0c2cb4e865d051c081411a49a7d78b523"
+    },
+    {
+      "owner": "instance:fGMbeta:002727F9",
+      "property": "Picture",
+      "source_offset": 2566165,
+      "private_file": "Graphic/Recovered/resource-27281D.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMbeta:002731DD",
+      "property": "Picture",
+      "source_offset": 2568697,
+      "private_file": "Graphic/Recovered/resource-273201.bmp",
+      "file_sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "owner": "instance:fGMbeta:00273BC1",
+      "property": "Picture",
+      "source_offset": 2571229,
+      "private_file": "Graphic/Recovered/resource-273BE5.bmp",
+      "file_sha256": "da6f1f1fd2a524e18c5d0bedf5ffe0e2abba9c9db76407b6d1f03dcc6a2c5666"
+    },
+    {
+      "owner": "instance:fGMComK:0027564A",
+      "property": "Picture",
+      "source_offset": 2578020,
+      "private_file": "Graphic/Recovered/resource-27566C.bmp",
+      "file_sha256": "6e55e6fbf862ebdd59550655b51b33aa0987a34b414dc56a35b1588aa6dc19b3"
+    },
+    {
+      "owner": "instance:fGMComK:002766E8",
+      "property": "Picture",
+      "source_offset": 2582274,
+      "private_file": "Graphic/Recovered/resource-27670A.bmp",
+      "file_sha256": "489cddb110fc6d6081d663cbb79b0194198192ca15e63873ccb5044780bf2693"
+    },
+    {
+      "owner": "instance:fGMComK:00277792",
+      "property": "Picture",
+      "source_offset": 2586540,
+      "private_file": "Graphic/Recovered/resource-2777B4.bmp",
+      "file_sha256": "237f89b772ee270216415b59f676528921c0260b4cb832bbf7740b3e60c4d523"
+    },
+    {
+      "owner": "instance:fGMComK:00278820",
+      "property": "Picture",
+      "source_offset": 2590778,
+      "private_file": "Graphic/Recovered/resource-278842.bmp",
+      "file_sha256": "a06d7b924825ed57bc0dfe06b5aeb14fb9a57c0d372982eb5eefb928ba527ed4"
+    },
+    {
+      "owner": "instance:fGMalpha:0027AA80",
+      "property": "Picture",
+      "source_offset": 2599580,
+      "private_file": "Graphic/Recovered/resource-27AAA4.bmp",
+      "file_sha256": "da6f1f1fd2a524e18c5d0bedf5ffe0e2abba9c9db76407b6d1f03dcc6a2c5666"
+    },
+    {
+      "owner": "instance:fGMalpha:0027B464",
+      "property": "Picture",
+      "source_offset": 2602112,
+      "private_file": "Graphic/Recovered/resource-27B488.bmp",
+      "file_sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "owner": "instance:fGMalpha:0027BE48",
+      "property": "Picture",
+      "source_offset": 2604644,
+      "private_file": "Graphic/Recovered/resource-27BE6C.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMalpha:0027C82C",
+      "property": "Picture",
+      "source_offset": 2607176,
+      "private_file": "Graphic/Recovered/resource-27C850.bmp",
+      "file_sha256": "be267a215a236ef12e50b2bf25c83ec0c2cb4e865d051c081411a49a7d78b523"
+    },
+    {
+      "owner": "instance:fGMalpha:0027D210",
+      "property": "Picture",
+      "source_offset": 2609708,
+      "private_file": "Graphic/Recovered/resource-27D234.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMalpha:0027DBF4",
+      "property": "Picture",
+      "source_offset": 2612240,
+      "private_file": "Graphic/Recovered/resource-27DC18.bmp",
+      "file_sha256": "d92b69e15c6d0b6685de50d26c99665f96ddcbcdade21533d08423f62d4cb81d"
+    },
+    {
+      "owner": "instance:fGMDevW2:0027F86E",
+      "property": "Picture",
+      "source_offset": 2619530,
+      "private_file": "Graphic/Recovered/resource-27F892.bmp",
+      "file_sha256": "a381f1ee0f279d425f97fadc6126799143c5e32a459045cca6c6a86c25d09ffe"
+    },
+    {
+      "owner": "instance:fGMDevW2:00280252",
+      "property": "Picture",
+      "source_offset": 2622062,
+      "private_file": "Graphic/Recovered/resource-280276.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMDevW2:00280C36",
+      "property": "Picture",
+      "source_offset": 2624594,
+      "private_file": "Graphic/Recovered/resource-280C5A.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMDevW2:0028161A",
+      "property": "Picture",
+      "source_offset": 2627126,
+      "private_file": "Graphic/Recovered/resource-28163E.bmp",
+      "file_sha256": "0457612af2710b3aa8f1bcbd630940e335966aa58295799792d5e6e5021b37b8"
+    },
+    {
+      "owner": "instance:fGMDevW2:00281FFE",
+      "property": "Picture",
+      "source_offset": 2629658,
+      "private_file": "Graphic/Recovered/resource-282022.bmp",
+      "file_sha256": "0457612af2710b3aa8f1bcbd630940e335966aa58295799792d5e6e5021b37b8"
+    },
+    {
+      "owner": "instance:fGMDevW2:002829E2",
+      "property": "Picture",
+      "source_offset": 2632190,
+      "private_file": "Graphic/Recovered/resource-282A06.bmp",
+      "file_sha256": "a184cf64707ccd8c54255ace69c2a8139da803942305b91ababdd9a53d4aae5a"
+    },
+    {
+      "owner": "instance:fGMDevW2:002833C6",
+      "property": "Picture",
+      "source_offset": 2634722,
+      "private_file": "Graphic/Recovered/resource-2833EA.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMDevW2:00283DAA",
+      "property": "Picture",
+      "source_offset": 2637254,
+      "private_file": "Graphic/Recovered/resource-283DCE.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMDevW2:0028478E",
+      "property": "Picture",
+      "source_offset": 2639786,
+      "private_file": "Graphic/Recovered/resource-2847B2.bmp",
+      "file_sha256": "be267a215a236ef12e50b2bf25c83ec0c2cb4e865d051c081411a49a7d78b523"
+    },
+    {
+      "owner": "instance:fGMDevW2:00285193",
+      "property": "Picture",
+      "source_offset": 2642351,
+      "private_file": "Graphic/Recovered/resource-2851B7.bmp",
+      "file_sha256": "f365597e4714eb9bef1fc7e18fb4b6064715856b1f3f9cfb2a894a7c80465b40"
+    },
+    {
+      "owner": "instance:fGMDevW1:0028635C",
+      "property": "Picture",
+      "source_offset": 2646904,
+      "private_file": "Graphic/Recovered/resource-286380.bmp",
+      "file_sha256": "f365597e4714eb9bef1fc7e18fb4b6064715856b1f3f9cfb2a894a7c80465b40"
+    },
+    {
+      "owner": "instance:fGMDevW1:00286D61",
+      "property": "Picture",
+      "source_offset": 2649469,
+      "private_file": "Graphic/Recovered/resource-286D85.bmp",
+      "file_sha256": "be267a215a236ef12e50b2bf25c83ec0c2cb4e865d051c081411a49a7d78b523"
+    },
+    {
+      "owner": "instance:fGMDevW1:00287745",
+      "property": "Picture",
+      "source_offset": 2652001,
+      "private_file": "Graphic/Recovered/resource-287769.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMDevW1:00288129",
+      "property": "Picture",
+      "source_offset": 2654533,
+      "private_file": "Graphic/Recovered/resource-28814D.bmp",
+      "file_sha256": "682701f1e473638c0e766fcab6693eff60515496e97170a2ab97c149fb88cc73"
+    },
+    {
+      "owner": "instance:fGMDevW1:00288B0D",
+      "property": "Picture",
+      "source_offset": 2657065,
+      "private_file": "Graphic/Recovered/resource-288B31.bmp",
+      "file_sha256": "a184cf64707ccd8c54255ace69c2a8139da803942305b91ababdd9a53d4aae5a"
+    },
+    {
+      "owner": "instance:fGMDevW1:002894F1",
+      "property": "Picture",
+      "source_offset": 2659597,
+      "private_file": "Graphic/Recovered/resource-289515.bmp",
+      "file_sha256": "0457612af2710b3aa8f1bcbd630940e335966aa58295799792d5e6e5021b37b8"
+    },
+    {
+      "owner": "instance:fGMDevW1:00289ED5",
+      "property": "Picture",
+      "source_offset": 2662129,
+      "private_file": "Graphic/Recovered/resource-289EF9.bmp",
+      "file_sha256": "0457612af2710b3aa8f1bcbd630940e335966aa58295799792d5e6e5021b37b8"
+    },
+    {
+      "owner": "instance:fGMDevW1:0028A8B9",
+      "property": "Picture",
+      "source_offset": 2664661,
+      "private_file": "Graphic/Recovered/resource-28A8DD.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMDevW1:0028B29D",
+      "property": "Picture",
+      "source_offset": 2667193,
+      "private_file": "Graphic/Recovered/resource-28B2C1.bmp",
+      "file_sha256": "422ece85419ca8caaa7241f186484024c9d985a6c98be919d4e5741d8d03f9e8"
+    },
+    {
+      "owner": "instance:fGMDevW1:0028BC81",
+      "property": "Picture",
+      "source_offset": 2669725,
+      "private_file": "Graphic/Recovered/resource-28BCA5.bmp",
+      "file_sha256": "a381f1ee0f279d425f97fadc6126799143c5e32a459045cca6c6a86c25d09ffe"
+    },
+    {
+      "owner": "instance:fGMSyukkaH:0028D64A",
+      "property": "Picture",
+      "source_offset": 2676326,
+      "private_file": "Graphic/Recovered/resource-28D66E.bmp",
+      "file_sha256": "c75c84f7564a14698e7ab50d090ee8dc3e211811ff10ffa8342cabed82ca5a9d"
+    },
+    {
+      "owner": "instance:fGMInfo:00298B26",
+      "property": "Picture",
+      "source_offset": 2722626,
+      "private_file": "Graphic/Recovered/resource-298B4A.bmp",
+      "file_sha256": "d2d6057f6ad008a8bd52d97a93a1150590f61b5490b983ef8a5a461f03563bc9"
+    },
+    {
+      "owner": "instance:fGMInfo:0029919A",
+      "property": "Picture",
+      "source_offset": 2724278,
+      "private_file": "Graphic/Recovered/resource-2991BE.bmp",
+      "file_sha256": "d2d6057f6ad008a8bd52d97a93a1150590f61b5490b983ef8a5a461f03563bc9"
+    },
+    {
+      "owner": "instance:fGMInfo:0029980E",
+      "property": "Picture",
+      "source_offset": 2725930,
+      "private_file": "Graphic/Recovered/resource-299832.bmp",
+      "file_sha256": "17772fe69fafd4c644703f8625e55df7640e71a316fa9ce3d34896233628da20"
+    },
+    {
+      "owner": "instance:fGMInfo:00299E82",
+      "property": "Picture",
+      "source_offset": 2727582,
+      "private_file": "Graphic/Recovered/resource-299EA6.bmp",
+      "file_sha256": "de23312d150aeb30fb64e5006733b66d6d2fdd3e62389529393cff9755fd6f4c"
+    },
+    {
+      "owner": "instance:fGMInfo:0029A4F6",
+      "property": "Picture",
+      "source_offset": 2729234,
+      "private_file": "Graphic/Recovered/resource-29A51A.bmp",
+      "file_sha256": "de23312d150aeb30fb64e5006733b66d6d2fdd3e62389529393cff9755fd6f4c"
+    },
+    {
+      "owner": "instance:fGMInfo:0029AB6A",
+      "property": "Picture",
+      "source_offset": 2730886,
+      "private_file": "Graphic/Recovered/resource-29AB8E.bmp",
+      "file_sha256": "b203ac84f69a1faaac1cacb761258444ea1ac4c4a73350e97ed187ab89659733"
+    },
+    {
+      "owner": "instance:fGMInfo:0029C240",
+      "property": "Picture",
+      "source_offset": 2736732,
+      "private_file": "Graphic/Recovered/resource-29C264.bmp",
+      "file_sha256": "bb4ee98b3d97306c18a89473c30061063475f5c3e1d9f7a086d1503b5d8fa897"
+    },
+    {
+      "owner": "instance:fGMInfo:0029C8B4",
+      "property": "Picture",
+      "source_offset": 2738384,
+      "private_file": "Graphic/Recovered/resource-29C8D8.bmp",
+      "file_sha256": "5437c7b961f07e5626039dee7e5e7d47b6a186fe3c75c3581a064b1312b06766"
+    },
+    {
+      "owner": "instance:fGMInfo:0029CF28",
+      "property": "Picture",
+      "source_offset": 2740036,
+      "private_file": "Graphic/Recovered/resource-29CF4C.bmp",
+      "file_sha256": "5437c7b961f07e5626039dee7e5e7d47b6a186fe3c75c3581a064b1312b06766"
+    },
+    {
+      "owner": "instance:fGMInfo:0029D59C",
+      "property": "Picture",
+      "source_offset": 2741688,
+      "private_file": "Graphic/Recovered/resource-29D5C0.bmp",
+      "file_sha256": "6e3a182e4117d884a32ae92200b5f37d1a5b99f9473143ab4d4f30248806c564"
+    },
+    {
+      "owner": "instance:fGMInfo:0029DC10",
+      "property": "Picture",
+      "source_offset": 2743340,
+      "private_file": "Graphic/Recovered/resource-29DC34.bmp",
+      "file_sha256": "8e7ce4168bdc08f35304a3855b97cb92b109c6f91585ca61c5a3d27be36b6744"
+    },
+    {
+      "owner": "instance:fGMInfo:0029E284",
+      "property": "Picture",
+      "source_offset": 2744992,
+      "private_file": "Graphic/Recovered/resource-29E2A8.bmp",
+      "file_sha256": "8e7ce4168bdc08f35304a3855b97cb92b109c6f91585ca61c5a3d27be36b6744"
+    },
+    {
+      "owner": "instance:fGMInfo:0029F66D",
+      "property": "Picture",
+      "source_offset": 2750089,
+      "private_file": "Graphic/Recovered/resource-29F691.bmp",
+      "file_sha256": "121ba10ab43c396bab2fcd39952f536bcfde9355b780922f38c5077fc33871d2"
+    },
+    {
+      "owner": "instance:fGMInfo:0029FE53",
+      "property": "Picture",
+      "source_offset": 2752111,
+      "private_file": "Graphic/Recovered/resource-29FE77.bmp",
+      "file_sha256": "a6039323c9c4623a94470374c9c3a24d5594f2d19ea76371d9baf3c9b8c56173"
+    },
+    {
+      "owner": "instance:fGMInfo:002A063B",
+      "property": "Picture",
+      "source_offset": 2754135,
+      "private_file": "Graphic/Recovered/resource-2A065F.bmp",
+      "file_sha256": "a6039323c9c4623a94470374c9c3a24d5594f2d19ea76371d9baf3c9b8c56173"
+    },
+    {
+      "owner": "instance:fGMInfo:002A0E21",
+      "property": "Picture",
+      "source_offset": 2756157,
+      "private_file": "Graphic/Recovered/resource-2A0E45.bmp",
+      "file_sha256": "407defc6d51c869ce7d19997d9b776f87cf30c7729e2f4b2b80815e480705f70"
+    },
+    {
+      "owner": "instance:fGMInfo:002A1607",
+      "property": "Picture",
+      "source_offset": 2758179,
+      "private_file": "Graphic/Recovered/resource-2A162B.bmp",
+      "file_sha256": "a3f319f47832c091fd9d18c196026cf63365de0f0aa53f9b8db8734a6980050c"
+    },
+    {
+      "owner": "instance:fGMInfo:002A1DEF",
+      "property": "Picture",
+      "source_offset": 2760203,
+      "private_file": "Graphic/Recovered/resource-2A1E13.bmp",
+      "file_sha256": "a3f319f47832c091fd9d18c196026cf63365de0f0aa53f9b8db8734a6980050c"
+    },
+    {
+      "owner": "instance:fGMHardHatubai:002A310C",
+      "property": "Picture",
+      "source_offset": 2765096,
+      "private_file": "Graphic/Recovered/resource-2A3130.bmp",
+      "file_sha256": "c75c84f7564a14698e7ab50d090ee8dc3e211811ff10ffa8342cabed82ca5a9d"
+    },
+    {
+      "owner": "instance:fGMKikakusyo:002AE05A",
+      "property": "Picture",
+      "source_offset": 2809969,
+      "private_file": "Graphic/Recovered/resource-2AE079.bmp",
+      "file_sha256": "68b9527b0fca162503e367eabe8f03b0114e92857c1926160ffa994de8073447"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002B9786",
+      "property": "Picture",
+      "source_offset": 2856864,
+      "private_file": "Graphic/Recovered/resource-2B97A8.bmp",
+      "file_sha256": "d4c6682bfd6bd29b4be9fb0baada895f7b80e158faa7abee3b7341b2199856a5"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002B9E38",
+      "property": "Picture",
+      "source_offset": 2858578,
+      "private_file": "Graphic/Recovered/resource-2B9E5A.bmp",
+      "file_sha256": "11f8eaa213b9fd34a5163bf2a49abb55f7ac5cc435c6ab7a25523785ef969b25"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BA4EA",
+      "property": "Picture",
+      "source_offset": 2860292,
+      "private_file": "Graphic/Recovered/resource-2BA50C.bmp",
+      "file_sha256": "3a862bd99c43722b8a06d9071c1f84056fc0088a57e05cee488b1682dfd83a40"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BAB9C",
+      "property": "Picture",
+      "source_offset": 2862006,
+      "private_file": "Graphic/Recovered/resource-2BABBE.bmp",
+      "file_sha256": "baa9cb8d6e680e9f0c4e94b54c52c283764f4e839d8e1aae7a63a0ca73de9a8a"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BCAFE",
+      "property": "Picture",
+      "source_offset": 2870040,
+      "private_file": "Graphic/Recovered/resource-2BCB20.bmp",
+      "file_sha256": "e7f97a43c8a8c77be9b8f6950b7a78b5f7cb4af36c6ac2f3fd3d2b30ca048e3e"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BD0F0",
+      "property": "Picture",
+      "source_offset": 2871562,
+      "private_file": "Graphic/Recovered/resource-2BD112.bmp",
+      "file_sha256": "74b43fdd2da7a1e2eb496bf92b33da289c283d71693b502b41200967e66f2c4c"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BD6E2",
+      "property": "Picture",
+      "source_offset": 2873084,
+      "private_file": "Graphic/Recovered/resource-2BD704.bmp",
+      "file_sha256": "cb666d3f196d9947d5ac964679f1b4df97cad6493a7654d114d2647bc16ff1d4"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BDCD4",
+      "property": "Picture",
+      "source_offset": 2874606,
+      "private_file": "Graphic/Recovered/resource-2BDCF6.bmp",
+      "file_sha256": "e53014f9168179ed850d66dab0ad4039296778121f36ad4767f6394210604f7f"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BE2C6",
+      "property": "Picture",
+      "source_offset": 2876128,
+      "private_file": "Graphic/Recovered/resource-2BE2E8.bmp",
+      "file_sha256": "6babf82fa722dedc6c7b827b1261b85a06c4a0863a628e47de0b0bd9e60c2747"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BE8B8",
+      "property": "Picture",
+      "source_offset": 2877650,
+      "private_file": "Graphic/Recovered/resource-2BE8DA.bmp",
+      "file_sha256": "236a29fda614488237e19e2c84d4fcbddc59e8d4875cc682e70f60a886f378f3"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BEEAA",
+      "property": "Picture",
+      "source_offset": 2879172,
+      "private_file": "Graphic/Recovered/resource-2BEECC.bmp",
+      "file_sha256": "547638d1b3bb033b958d5fac70d99efe96d4fbb8412abdd1908b37f6ee48d105"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BF49C",
+      "property": "Picture",
+      "source_offset": 2880694,
+      "private_file": "Graphic/Recovered/resource-2BF4BE.bmp",
+      "file_sha256": "ec1c4e7bd6b2e3bd25efb41e4c3e8309a0b17a3bce68e080470305e017f3dfb3"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002BFA8E",
+      "property": "Picture",
+      "source_offset": 2882216,
+      "private_file": "Graphic/Recovered/resource-2BFAB0.bmp",
+      "file_sha256": "4a5e60c7a400fc2e8772f9a231cb53de6c5027d3e5fa1dc89ad0188b4837139a"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C0080",
+      "property": "Picture",
+      "source_offset": 2883738,
+      "private_file": "Graphic/Recovered/resource-2C00A2.bmp",
+      "file_sha256": "f14798b02895417d30d1ad1ad8293884526901130cbd182e27c7536f20d4ae02"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C0672",
+      "property": "Picture",
+      "source_offset": 2885260,
+      "private_file": "Graphic/Recovered/resource-2C0694.bmp",
+      "file_sha256": "863103ac2d0628b70defdc119f1c9be7b95f2892d61d026687a5f946e3133e52"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C0C64",
+      "property": "Picture",
+      "source_offset": 2886782,
+      "private_file": "Graphic/Recovered/resource-2C0C86.bmp",
+      "file_sha256": "cf727f4406fcead65f34e79ac800a1fd3041dbf39bd362034bbddd5a4defe95f"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C1256",
+      "property": "Picture",
+      "source_offset": 2888304,
+      "private_file": "Graphic/Recovered/resource-2C1278.bmp",
+      "file_sha256": "3c720e14afbe4401e93904ad9e99e29d4d3c5ffa77cbc3beb8f0e8b491b89cce"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C1848",
+      "property": "Picture",
+      "source_offset": 2889826,
+      "private_file": "Graphic/Recovered/resource-2C186A.bmp",
+      "file_sha256": "cfda68760fa1b5d156175c77cabfbbcee9d4f15ad02714fcfefcf5654f2ee6a9"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C1E3A",
+      "property": "Picture",
+      "source_offset": 2891348,
+      "private_file": "Graphic/Recovered/resource-2C1E5C.bmp",
+      "file_sha256": "7d0435c1590f1c1f305d0099cc2827a418d833e31318ca9e809fc225aaeb6dac"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C242C",
+      "property": "Picture",
+      "source_offset": 2892870,
+      "private_file": "Graphic/Recovered/resource-2C244E.bmp",
+      "file_sha256": "b61c5227bb08e17cd06e7d81f5470bf13d2f07476683ef15615d3d617d3214b1"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C2A1E",
+      "property": "Picture",
+      "source_offset": 2894392,
+      "private_file": "Graphic/Recovered/resource-2C2A40.bmp",
+      "file_sha256": "80f7931e8c7275515331777f092703367564da05f9fbd9c52e8816cc8dff5158"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C3010",
+      "property": "Picture",
+      "source_offset": 2895914,
+      "private_file": "Graphic/Recovered/resource-2C3032.bmp",
+      "file_sha256": "3b4f5fe041c2bf1d3b48a2488a4cc4854b01a1a46c152d2acc5d9270b24c3794"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C3602",
+      "property": "Picture",
+      "source_offset": 2897436,
+      "private_file": "Graphic/Recovered/resource-2C3624.bmp",
+      "file_sha256": "901c3b279e4bf6f1b925bf40bc101905fe44d1fc2f965f5c578720e4aa9f41e2"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C3BF4",
+      "property": "Picture",
+      "source_offset": 2898958,
+      "private_file": "Graphic/Recovered/resource-2C3C16.bmp",
+      "file_sha256": "4d0e108ee1ed2386ff1d43c3110eb0acf4781def1f9f426a4c249e0cf8705573"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C41E6",
+      "property": "Picture",
+      "source_offset": 2900480,
+      "private_file": "Graphic/Recovered/resource-2C4208.bmp",
+      "file_sha256": "c78c2d5efd73b2b0e524535558cd2c9e94a6a8b8dd03922fdc01074a7cb26551"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C47D8",
+      "property": "Picture",
+      "source_offset": 2902002,
+      "private_file": "Graphic/Recovered/resource-2C47FA.bmp",
+      "file_sha256": "7d0535bda1e58fe231b5df879ed0955cd5321ad69efbbf8a030d2bfef6d6be3e"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C4DCA",
+      "property": "Picture",
+      "source_offset": 2903524,
+      "private_file": "Graphic/Recovered/resource-2C4DEC.bmp",
+      "file_sha256": "6eff5fbc731acf628e3cbc4b21fba29bb33af879d6dfaeb25042a9bd20439147"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C53BC",
+      "property": "Picture",
+      "source_offset": 2905046,
+      "private_file": "Graphic/Recovered/resource-2C53DE.bmp",
+      "file_sha256": "43314efafb09aaa644ac088bebe8f0628d4c66afc3d7f8caac6e320ecfa2edc0"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C59AE",
+      "property": "Picture",
+      "source_offset": 2906568,
+      "private_file": "Graphic/Recovered/resource-2C59D0.bmp",
+      "file_sha256": "23e88542bd08f1e5ff2369224c68c4f9ea0973716a488b5cb9040036ebfed6d0"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C5FA0",
+      "property": "Picture",
+      "source_offset": 2908090,
+      "private_file": "Graphic/Recovered/resource-2C5FC2.bmp",
+      "file_sha256": "4f48f9c9bb8ab4dadf541631642c45dabb78582c7ae66498845cd24d04570105"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C6592",
+      "property": "Picture",
+      "source_offset": 2909612,
+      "private_file": "Graphic/Recovered/resource-2C65B4.bmp",
+      "file_sha256": "c8c499f6f456922093c80034adad97d4d8c7c28aa99df812b23de770f17eef82"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C932B",
+      "property": "Picture",
+      "source_offset": 2921285,
+      "private_file": "Graphic/Recovered/resource-2C934D.bmp",
+      "file_sha256": "970a316d4a72b0e6895c96aa73a9d4641787d84b4aa17beec22ab1a33ced0b6b"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C991D",
+      "property": "Picture",
+      "source_offset": 2922807,
+      "private_file": "Graphic/Recovered/resource-2C993F.bmp",
+      "file_sha256": "f9513760f8a279add28c6119b0f07b125c56c73d6742b7d32db8fc2976cd0055"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C9F0F",
+      "property": "Picture",
+      "source_offset": 2924329,
+      "private_file": "Graphic/Recovered/resource-2C9F31.bmp",
+      "file_sha256": "80cb3abd55ea54436cd48f8ffe7d9d53bdac7451777a4be6869cdb36d720c034"
+    },
+    {
+      "owner": "instance:fCasinoPoker:002CA501",
+      "property": "Picture",
+      "source_offset": 2925851,
+      "private_file": "Graphic/Recovered/resource-2CA523.bmp",
+      "file_sha256": "eeeb08fd3f45546f6b716a5761c23b424321c81e292bd5a0933f72a498d8ddaa"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CBC1D",
+      "property": "Picture",
+      "source_offset": 2931767,
+      "private_file": "Graphic/Recovered/resource-2CBC3F.bmp",
+      "file_sha256": "c8c499f6f456922093c80034adad97d4d8c7c28aa99df812b23de770f17eef82"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CDB7F",
+      "property": "Picture",
+      "source_offset": 2939801,
+      "private_file": "Graphic/Recovered/resource-2CDBA1.bmp",
+      "file_sha256": "4f48f9c9bb8ab4dadf541631642c45dabb78582c7ae66498845cd24d04570105"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CE171",
+      "property": "Picture",
+      "source_offset": 2941323,
+      "private_file": "Graphic/Recovered/resource-2CE193.bmp",
+      "file_sha256": "23e88542bd08f1e5ff2369224c68c4f9ea0973716a488b5cb9040036ebfed6d0"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CE763",
+      "property": "Picture",
+      "source_offset": 2942845,
+      "private_file": "Graphic/Recovered/resource-2CE785.bmp",
+      "file_sha256": "43314efafb09aaa644ac088bebe8f0628d4c66afc3d7f8caac6e320ecfa2edc0"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CED55",
+      "property": "Picture",
+      "source_offset": 2944367,
+      "private_file": "Graphic/Recovered/resource-2CED77.bmp",
+      "file_sha256": "6eff5fbc731acf628e3cbc4b21fba29bb33af879d6dfaeb25042a9bd20439147"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CF347",
+      "property": "Picture",
+      "source_offset": 2945889,
+      "private_file": "Graphic/Recovered/resource-2CF369.bmp",
+      "file_sha256": "7d0535bda1e58fe231b5df879ed0955cd5321ad69efbbf8a030d2bfef6d6be3e"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CF939",
+      "property": "Picture",
+      "source_offset": 2947411,
+      "private_file": "Graphic/Recovered/resource-2CF95B.bmp",
+      "file_sha256": "c78c2d5efd73b2b0e524535558cd2c9e94a6a8b8dd03922fdc01074a7cb26551"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002CFF2B",
+      "property": "Picture",
+      "source_offset": 2948933,
+      "private_file": "Graphic/Recovered/resource-2CFF4D.bmp",
+      "file_sha256": "4d0e108ee1ed2386ff1d43c3110eb0acf4781def1f9f426a4c249e0cf8705573"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D051D",
+      "property": "Picture",
+      "source_offset": 2950455,
+      "private_file": "Graphic/Recovered/resource-2D053F.bmp",
+      "file_sha256": "901c3b279e4bf6f1b925bf40bc101905fe44d1fc2f965f5c578720e4aa9f41e2"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D0B0F",
+      "property": "Picture",
+      "source_offset": 2951977,
+      "private_file": "Graphic/Recovered/resource-2D0B31.bmp",
+      "file_sha256": "3b4f5fe041c2bf1d3b48a2488a4cc4854b01a1a46c152d2acc5d9270b24c3794"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D1101",
+      "property": "Picture",
+      "source_offset": 2953499,
+      "private_file": "Graphic/Recovered/resource-2D1123.bmp",
+      "file_sha256": "80f7931e8c7275515331777f092703367564da05f9fbd9c52e8816cc8dff5158"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D16F3",
+      "property": "Picture",
+      "source_offset": 2955021,
+      "private_file": "Graphic/Recovered/resource-2D1715.bmp",
+      "file_sha256": "b61c5227bb08e17cd06e7d81f5470bf13d2f07476683ef15615d3d617d3214b1"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D1CE5",
+      "property": "Picture",
+      "source_offset": 2956543,
+      "private_file": "Graphic/Recovered/resource-2D1D07.bmp",
+      "file_sha256": "7d0435c1590f1c1f305d0099cc2827a418d833e31318ca9e809fc225aaeb6dac"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D22D7",
+      "property": "Picture",
+      "source_offset": 2958065,
+      "private_file": "Graphic/Recovered/resource-2D22F9.bmp",
+      "file_sha256": "cfda68760fa1b5d156175c77cabfbbcee9d4f15ad02714fcfefcf5654f2ee6a9"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D28C9",
+      "property": "Picture",
+      "source_offset": 2959587,
+      "private_file": "Graphic/Recovered/resource-2D28EB.bmp",
+      "file_sha256": "3c720e14afbe4401e93904ad9e99e29d4d3c5ffa77cbc3beb8f0e8b491b89cce"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D2EBB",
+      "property": "Picture",
+      "source_offset": 2961109,
+      "private_file": "Graphic/Recovered/resource-2D2EDD.bmp",
+      "file_sha256": "cf727f4406fcead65f34e79ac800a1fd3041dbf39bd362034bbddd5a4defe95f"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D34AD",
+      "property": "Picture",
+      "source_offset": 2962631,
+      "private_file": "Graphic/Recovered/resource-2D34CF.bmp",
+      "file_sha256": "863103ac2d0628b70defdc119f1c9be7b95f2892d61d026687a5f946e3133e52"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D3A9F",
+      "property": "Picture",
+      "source_offset": 2964153,
+      "private_file": "Graphic/Recovered/resource-2D3AC1.bmp",
+      "file_sha256": "f14798b02895417d30d1ad1ad8293884526901130cbd182e27c7536f20d4ae02"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D4091",
+      "property": "Picture",
+      "source_offset": 2965675,
+      "private_file": "Graphic/Recovered/resource-2D40B3.bmp",
+      "file_sha256": "4a5e60c7a400fc2e8772f9a231cb53de6c5027d3e5fa1dc89ad0188b4837139a"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D4683",
+      "property": "Picture",
+      "source_offset": 2967197,
+      "private_file": "Graphic/Recovered/resource-2D46A5.bmp",
+      "file_sha256": "ec1c4e7bd6b2e3bd25efb41e4c3e8309a0b17a3bce68e080470305e017f3dfb3"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D4C75",
+      "property": "Picture",
+      "source_offset": 2968719,
+      "private_file": "Graphic/Recovered/resource-2D4C97.bmp",
+      "file_sha256": "547638d1b3bb033b958d5fac70d99efe96d4fbb8412abdd1908b37f6ee48d105"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D5267",
+      "property": "Picture",
+      "source_offset": 2970241,
+      "private_file": "Graphic/Recovered/resource-2D5289.bmp",
+      "file_sha256": "236a29fda614488237e19e2c84d4fcbddc59e8d4875cc682e70f60a886f378f3"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D5859",
+      "property": "Picture",
+      "source_offset": 2971763,
+      "private_file": "Graphic/Recovered/resource-2D587B.bmp",
+      "file_sha256": "6babf82fa722dedc6c7b827b1261b85a06c4a0863a628e47de0b0bd9e60c2747"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D5E4B",
+      "property": "Picture",
+      "source_offset": 2973285,
+      "private_file": "Graphic/Recovered/resource-2D5E6D.bmp",
+      "file_sha256": "e53014f9168179ed850d66dab0ad4039296778121f36ad4767f6394210604f7f"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D643D",
+      "property": "Picture",
+      "source_offset": 2974807,
+      "private_file": "Graphic/Recovered/resource-2D645F.bmp",
+      "file_sha256": "cb666d3f196d9947d5ac964679f1b4df97cad6493a7654d114d2647bc16ff1d4"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D6A2F",
+      "property": "Picture",
+      "source_offset": 2976329,
+      "private_file": "Graphic/Recovered/resource-2D6A51.bmp",
+      "file_sha256": "74b43fdd2da7a1e2eb496bf92b33da289c283d71693b502b41200967e66f2c4c"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D7021",
+      "property": "Picture",
+      "source_offset": 2977851,
+      "private_file": "Graphic/Recovered/resource-2D7043.bmp",
+      "file_sha256": "e7f97a43c8a8c77be9b8f6950b7a78b5f7cb4af36c6ac2f3fd3d2b30ca048e3e"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D861C",
+      "property": "Picture",
+      "source_offset": 2983478,
+      "private_file": "Graphic/Recovered/resource-2D863E.bmp",
+      "file_sha256": "eeeb08fd3f45546f6b716a5761c23b424321c81e292bd5a0933f72a498d8ddaa"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D8C0E",
+      "property": "Picture",
+      "source_offset": 2985000,
+      "private_file": "Graphic/Recovered/resource-2D8C30.bmp",
+      "file_sha256": "80cb3abd55ea54436cd48f8ffe7d9d53bdac7451777a4be6869cdb36d720c034"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D9200",
+      "property": "Picture",
+      "source_offset": 2986522,
+      "private_file": "Graphic/Recovered/resource-2D9222.bmp",
+      "file_sha256": "f9513760f8a279add28c6119b0f07b125c56c73d6742b7d32db8fc2976cd0055"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D97F2",
+      "property": "Picture",
+      "source_offset": 2988044,
+      "private_file": "Graphic/Recovered/resource-2D9814.bmp",
+      "file_sha256": "970a316d4a72b0e6895c96aa73a9d4641787d84b4aa17beec22ab1a33ced0b6b"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002DA438",
+      "property": "Picture",
+      "source_offset": 2991186,
+      "private_file": "Graphic/Recovered/resource-2DA45A.bmp",
+      "file_sha256": "baa9cb8d6e680e9f0c4e94b54c52c283764f4e839d8e1aae7a63a0ca73de9a8a"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002DC39A",
+      "property": "Picture",
+      "source_offset": 2999220,
+      "private_file": "Graphic/Recovered/resource-2DC3BC.bmp",
+      "file_sha256": "3a862bd99c43722b8a06d9071c1f84056fc0088a57e05cee488b1682dfd83a40"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002DCA4C",
+      "property": "Picture",
+      "source_offset": 3000934,
+      "private_file": "Graphic/Recovered/resource-2DCA6E.bmp",
+      "file_sha256": "11f8eaa213b9fd34a5163bf2a49abb55f7ac5cc435c6ab7a25523785ef969b25"
+    },
+    {
+      "owner": "instance:fCasinoBJ:002DD0FE",
+      "property": "Picture",
+      "source_offset": 3002648,
+      "private_file": "Graphic/Recovered/resource-2DD120.bmp",
+      "file_sha256": "d4c6682bfd6bd29b4be9fb0baada895f7b80e158faa7abee3b7341b2199856a5"
+    },
+    {
+      "owner": "instance:fCasinoCC:002DF0CE",
+      "property": "Picture",
+      "source_offset": 3010792,
+      "private_file": "Graphic/Recovered/resource-2DF0F0.bmp",
+      "file_sha256": "c8c499f6f456922093c80034adad97d4d8c7c28aa99df812b23de770f17eef82"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E15C0",
+      "property": "Picture",
+      "source_offset": 3020250,
+      "private_file": "Graphic/Recovered/resource-2E15E2.bmp",
+      "file_sha256": "388a779525878c9f6fa339847c4504b8788c609e41431d7f758a917e57f7b465"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E1DF9",
+      "property": "Picture",
+      "source_offset": 3022355,
+      "private_file": "Graphic/Recovered/resource-2E1E1B.bmp",
+      "file_sha256": "388a779525878c9f6fa339847c4504b8788c609e41431d7f758a917e57f7b465"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E34E6",
+      "property": "Picture",
+      "source_offset": 3028224,
+      "private_file": "Graphic/Recovered/resource-2E3508.bmp",
+      "file_sha256": "4f48f9c9bb8ab4dadf541631642c45dabb78582c7ae66498845cd24d04570105"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E3AD8",
+      "property": "Picture",
+      "source_offset": 3029746,
+      "private_file": "Graphic/Recovered/resource-2E3AFA.bmp",
+      "file_sha256": "23e88542bd08f1e5ff2369224c68c4f9ea0973716a488b5cb9040036ebfed6d0"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E40CA",
+      "property": "Picture",
+      "source_offset": 3031268,
+      "private_file": "Graphic/Recovered/resource-2E40EC.bmp",
+      "file_sha256": "43314efafb09aaa644ac088bebe8f0628d4c66afc3d7f8caac6e320ecfa2edc0"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E46BC",
+      "property": "Picture",
+      "source_offset": 3032790,
+      "private_file": "Graphic/Recovered/resource-2E46DE.bmp",
+      "file_sha256": "6eff5fbc731acf628e3cbc4b21fba29bb33af879d6dfaeb25042a9bd20439147"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E4CAE",
+      "property": "Picture",
+      "source_offset": 3034312,
+      "private_file": "Graphic/Recovered/resource-2E4CD0.bmp",
+      "file_sha256": "7d0535bda1e58fe231b5df879ed0955cd5321ad69efbbf8a030d2bfef6d6be3e"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E52A0",
+      "property": "Picture",
+      "source_offset": 3035834,
+      "private_file": "Graphic/Recovered/resource-2E52C2.bmp",
+      "file_sha256": "c78c2d5efd73b2b0e524535558cd2c9e94a6a8b8dd03922fdc01074a7cb26551"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E5892",
+      "property": "Picture",
+      "source_offset": 3037356,
+      "private_file": "Graphic/Recovered/resource-2E58B4.bmp",
+      "file_sha256": "4d0e108ee1ed2386ff1d43c3110eb0acf4781def1f9f426a4c249e0cf8705573"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E5E84",
+      "property": "Picture",
+      "source_offset": 3038878,
+      "private_file": "Graphic/Recovered/resource-2E5EA6.bmp",
+      "file_sha256": "901c3b279e4bf6f1b925bf40bc101905fe44d1fc2f965f5c578720e4aa9f41e2"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E6476",
+      "property": "Picture",
+      "source_offset": 3040400,
+      "private_file": "Graphic/Recovered/resource-2E6498.bmp",
+      "file_sha256": "3b4f5fe041c2bf1d3b48a2488a4cc4854b01a1a46c152d2acc5d9270b24c3794"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E6A68",
+      "property": "Picture",
+      "source_offset": 3041922,
+      "private_file": "Graphic/Recovered/resource-2E6A8A.bmp",
+      "file_sha256": "eeeb08fd3f45546f6b716a5761c23b424321c81e292bd5a0933f72a498d8ddaa"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E705A",
+      "property": "Picture",
+      "source_offset": 3043444,
+      "private_file": "Graphic/Recovered/resource-2E707C.bmp",
+      "file_sha256": "80cb3abd55ea54436cd48f8ffe7d9d53bdac7451777a4be6869cdb36d720c034"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E764C",
+      "property": "Picture",
+      "source_offset": 3044966,
+      "private_file": "Graphic/Recovered/resource-2E766E.bmp",
+      "file_sha256": "f9513760f8a279add28c6119b0f07b125c56c73d6742b7d32db8fc2976cd0055"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E7C3E",
+      "property": "Picture",
+      "source_offset": 3046488,
+      "private_file": "Graphic/Recovered/resource-2E7C60.bmp",
+      "file_sha256": "970a316d4a72b0e6895c96aa73a9d4641787d84b4aa17beec22ab1a33ced0b6b"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E83AC",
+      "property": "Picture",
+      "source_offset": 3048390,
+      "private_file": "Graphic/Recovered/resource-2E83CE.bmp",
+      "file_sha256": "80f7931e8c7275515331777f092703367564da05f9fbd9c52e8816cc8dff5158"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E899E",
+      "property": "Picture",
+      "source_offset": 3049912,
+      "private_file": "Graphic/Recovered/resource-2E89C0.bmp",
+      "file_sha256": "b61c5227bb08e17cd06e7d81f5470bf13d2f07476683ef15615d3d617d3214b1"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E8F90",
+      "property": "Picture",
+      "source_offset": 3051434,
+      "private_file": "Graphic/Recovered/resource-2E8FB2.bmp",
+      "file_sha256": "7d0435c1590f1c1f305d0099cc2827a418d833e31318ca9e809fc225aaeb6dac"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E9582",
+      "property": "Picture",
+      "source_offset": 3052956,
+      "private_file": "Graphic/Recovered/resource-2E95A4.bmp",
+      "file_sha256": "cfda68760fa1b5d156175c77cabfbbcee9d4f15ad02714fcfefcf5654f2ee6a9"
+    },
+    {
+      "owner": "instance:fCasinoCC:002E9B74",
+      "property": "Picture",
+      "source_offset": 3054478,
+      "private_file": "Graphic/Recovered/resource-2E9B96.bmp",
+      "file_sha256": "3c720e14afbe4401e93904ad9e99e29d4d3c5ffa77cbc3beb8f0e8b491b89cce"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EA166",
+      "property": "Picture",
+      "source_offset": 3056000,
+      "private_file": "Graphic/Recovered/resource-2EA188.bmp",
+      "file_sha256": "cf727f4406fcead65f34e79ac800a1fd3041dbf39bd362034bbddd5a4defe95f"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EA758",
+      "property": "Picture",
+      "source_offset": 3057522,
+      "private_file": "Graphic/Recovered/resource-2EA77A.bmp",
+      "file_sha256": "863103ac2d0628b70defdc119f1c9be7b95f2892d61d026687a5f946e3133e52"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EAD4A",
+      "property": "Picture",
+      "source_offset": 3059044,
+      "private_file": "Graphic/Recovered/resource-2EAD6C.bmp",
+      "file_sha256": "f14798b02895417d30d1ad1ad8293884526901130cbd182e27c7536f20d4ae02"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EB33C",
+      "property": "Picture",
+      "source_offset": 3060566,
+      "private_file": "Graphic/Recovered/resource-2EB35E.bmp",
+      "file_sha256": "4a5e60c7a400fc2e8772f9a231cb53de6c5027d3e5fa1dc89ad0188b4837139a"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EB92E",
+      "property": "Picture",
+      "source_offset": 3062088,
+      "private_file": "Graphic/Recovered/resource-2EB950.bmp",
+      "file_sha256": "ec1c4e7bd6b2e3bd25efb41e4c3e8309a0b17a3bce68e080470305e017f3dfb3"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EBF20",
+      "property": "Picture",
+      "source_offset": 3063610,
+      "private_file": "Graphic/Recovered/resource-2EBF42.bmp",
+      "file_sha256": "547638d1b3bb033b958d5fac70d99efe96d4fbb8412abdd1908b37f6ee48d105"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EC512",
+      "property": "Picture",
+      "source_offset": 3065132,
+      "private_file": "Graphic/Recovered/resource-2EC534.bmp",
+      "file_sha256": "236a29fda614488237e19e2c84d4fcbddc59e8d4875cc682e70f60a886f378f3"
+    },
+    {
+      "owner": "instance:fCasinoCC:002ECB04",
+      "property": "Picture",
+      "source_offset": 3066654,
+      "private_file": "Graphic/Recovered/resource-2ECB26.bmp",
+      "file_sha256": "6babf82fa722dedc6c7b827b1261b85a06c4a0863a628e47de0b0bd9e60c2747"
+    },
+    {
+      "owner": "instance:fCasinoCC:002ED0F6",
+      "property": "Picture",
+      "source_offset": 3068176,
+      "private_file": "Graphic/Recovered/resource-2ED118.bmp",
+      "file_sha256": "e53014f9168179ed850d66dab0ad4039296778121f36ad4767f6394210604f7f"
+    },
+    {
+      "owner": "instance:fCasinoCC:002ED6E8",
+      "property": "Picture",
+      "source_offset": 3069698,
+      "private_file": "Graphic/Recovered/resource-2ED70A.bmp",
+      "file_sha256": "cb666d3f196d9947d5ac964679f1b4df97cad6493a7654d114d2647bc16ff1d4"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EDCDA",
+      "property": "Picture",
+      "source_offset": 3071220,
+      "private_file": "Graphic/Recovered/resource-2EDCFC.bmp",
+      "file_sha256": "74b43fdd2da7a1e2eb496bf92b33da289c283d71693b502b41200967e66f2c4c"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EE2CC",
+      "property": "Picture",
+      "source_offset": 3072742,
+      "private_file": "Graphic/Recovered/resource-2EE2EE.bmp",
+      "file_sha256": "e7f97a43c8a8c77be9b8f6950b7a78b5f7cb4af36c6ac2f3fd3d2b30ca048e3e"
+    },
+    {
+      "owner": "instance:fCasinoCC:002EF05C",
+      "property": "Picture",
+      "source_offset": 3076214,
+      "private_file": "Graphic/Recovered/resource-2EF07E.bmp",
+      "file_sha256": "baa9cb8d6e680e9f0c4e94b54c52c283764f4e839d8e1aae7a63a0ca73de9a8a"
+    },
+    {
+      "owner": "instance:fCasinoCC:002F1205",
+      "property": "Picture",
+      "source_offset": 3084831,
+      "private_file": "Graphic/Recovered/resource-2F1227.bmp",
+      "file_sha256": "3a862bd99c43722b8a06d9071c1f84056fc0088a57e05cee488b1682dfd83a40"
+    },
+    {
+      "owner": "instance:fCasinoCC:002F18B7",
+      "property": "Picture",
+      "source_offset": 3086545,
+      "private_file": "Graphic/Recovered/resource-2F18D9.bmp",
+      "file_sha256": "11f8eaa213b9fd34a5163bf2a49abb55f7ac5cc435c6ab7a25523785ef969b25"
+    },
+    {
+      "owner": "instance:fCasinoCC:002F1F69",
+      "property": "Picture",
+      "source_offset": 3088259,
+      "private_file": "Graphic/Recovered/resource-2F1F8B.bmp",
+      "file_sha256": "d4c6682bfd6bd29b4be9fb0baada895f7b80e158faa7abee3b7341b2199856a5"
+    },
+    {
+      "owner": "instance:fGMCrossRDen:002F2E7F",
+      "property": "Picture",
+      "source_offset": 3092121,
+      "private_file": "Graphic/Recovered/resource-2F2EA1.bmp",
+      "file_sha256": "09de5d7139e414c766c774318c76680a7ea007670a3e0d65e53f2733b1d49bea"
+    },
+    {
+      "owner": "instance:fGMCrossRDen:002FD2E3",
+      "property": "Picture",
+      "source_offset": 3134205,
+      "private_file": "Graphic/Recovered/resource-2FD305.bmp",
+      "file_sha256": "0d925ce0d3eb02d82bf3837f89464fa21ab2115b6aee53c709657c882d00b23c"
+    },
+    {
+      "owner": "instance:fGMCrossR:00307E3F",
+      "property": "Picture",
+      "source_offset": 3178073,
+      "private_file": "Graphic/Recovered/resource-307E61.bmp",
+      "file_sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030930C",
+      "property": "Picture",
+      "source_offset": 3183398,
+      "private_file": "Graphic/Recovered/resource-30932E.bmp",
+      "file_sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030A7D9",
+      "property": "Picture",
+      "source_offset": 3188723,
+      "private_file": "Graphic/Recovered/resource-30A7FB.bmp",
+      "file_sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030BCA6",
+      "property": "Picture",
+      "source_offset": 3194048,
+      "private_file": "Graphic/Recovered/resource-30BCC8.bmp",
+      "file_sha256": "80cffed088a9ffbb74ff05485fc214b9464151729edbc697b12031d982883337"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030D1A8",
+      "property": "Picture",
+      "source_offset": 3199426,
+      "private_file": "Graphic/Recovered/resource-30D1CA.png",
+      "file_sha256": "c07fa7d601c70f24da1b58684bb63623606362de50501af27d95a10990b72c50"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030DE64",
+      "property": "Picture",
+      "source_offset": 3202686,
+      "private_file": "Graphic/Recovered/resource-30DE86.png",
+      "file_sha256": "9991e7c94a03f6d923578c4527fcfdaed89cad1e10b8984125ddbf1a1e3a11a6"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030E840",
+      "property": "Picture",
+      "source_offset": 3205210,
+      "private_file": "Graphic/Recovered/resource-30E862.png",
+      "file_sha256": "94a46b6ef8ce2941381e42efccdf2892e480cb776c0153ba3f73c2e7fa701e00"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030F1FC",
+      "property": "Picture",
+      "source_offset": 3207702,
+      "private_file": "Graphic/Recovered/resource-30F21E.png",
+      "file_sha256": "41879988579377cb2265b408c7cbf2c8eedb9d66932f1c28a042ca3c43f22796"
+    },
+    {
+      "owner": "instance:fGMCrossR:0030FA18",
+      "property": "Picture",
+      "source_offset": 3209778,
+      "private_file": "Graphic/Recovered/resource-30FA3A.png",
+      "file_sha256": "6377345394a69cda694e0c9a9ced5defae53bddca5e5846f191a76803c3a7136"
+    },
+    {
+      "owner": "instance:fGMCrossR:003103D4",
+      "property": "Picture",
+      "source_offset": 3212270,
+      "private_file": "Graphic/Recovered/resource-3103F6.png",
+      "file_sha256": "66d804950a01e56dd5397f56efb81a14c3201a06bcbd1ace7d6baf6346d76b04"
+    },
+    {
+      "owner": "instance:fGMCrossR:00310CD0",
+      "property": "Picture",
+      "source_offset": 3214570,
+      "private_file": "Graphic/Recovered/resource-310CF2.png",
+      "file_sha256": "009ade8ef3f8965b4b11080189b25a0fca7bf33c02e8ddf4a49a8f24748f6481"
+    },
+    {
+      "owner": "instance:fGMCrossR:003115AC",
+      "property": "Picture",
+      "source_offset": 3216838,
+      "private_file": "Graphic/Recovered/resource-3115CE.png",
+      "file_sha256": "3bb73c46f1b0525100980669f620beb0b9e72329b425df0d484295760fbdf099"
+    },
+    {
+      "owner": "instance:fGMCrossR:00311F28",
+      "property": "Picture",
+      "source_offset": 3219266,
+      "private_file": "Graphic/Recovered/resource-311F4A.png",
+      "file_sha256": "34a5c6f3cfeb67a7f3e0677bc452cebbb1ba186abfc8304639581fb018906337"
+    },
+    {
+      "owner": "instance:fGMCrossR:00312804",
+      "property": "Picture",
+      "source_offset": 3221534,
+      "private_file": "Graphic/Recovered/resource-312826.png",
+      "file_sha256": "ec9c1a6c514f129f129efd0e84974cbaaa0d97d4fba692c21cd0778052409cd2"
+    },
+    {
+      "owner": "instance:fGMCrossR:00313000",
+      "property": "Picture",
+      "source_offset": 3223578,
+      "private_file": "Graphic/Recovered/resource-313022.bmp",
+      "file_sha256": "2fd25bc701d2d299aad749fc515e7f4fea279a0503522fef9f990ca84a739919"
+    },
+    {
+      "owner": "instance:fGMCrossR:00313962",
+      "property": "Picture",
+      "source_offset": 3225980,
+      "private_file": "Graphic/Recovered/resource-313984.bmp",
+      "file_sha256": "ee97b040563ca787c812b516d8e0bcc5d1639dc9062e7531ba52de74fe922979"
+    },
+    {
+      "owner": "instance:fGMCrossR:003142C4",
+      "property": "Picture",
+      "source_offset": 3228382,
+      "private_file": "Graphic/Recovered/resource-3142E6.bmp",
+      "file_sha256": "1fa8a1604c5658d192fdd3683df97de927d17f9e9eb7c03d352dd1eea7ff02ac"
+    },
+    {
+      "owner": "instance:fGMCrossR:00314C26",
+      "property": "Picture",
+      "source_offset": 3230784,
+      "private_file": "Graphic/Recovered/resource-314C48.bmp",
+      "file_sha256": "9fefae69aed51dc43acc62d995b41b9e2c292d702f743c4d0ab573b9d645fe83"
+    },
+    {
+      "owner": "instance:fGMCrossR:00315588",
+      "property": "Picture",
+      "source_offset": 3233186,
+      "private_file": "Graphic/Recovered/resource-3155AA.bmp",
+      "file_sha256": "09f67adab75fbd775c28d107284961ece5c15930fd36a4dd9adad15ef04871fa"
+    },
+    {
+      "owner": "instance:fGMCrossR:00315EEA",
+      "property": "Picture",
+      "source_offset": 3235588,
+      "private_file": "Graphic/Recovered/resource-315F0C.bmp",
+      "file_sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "owner": "instance:fGMCrossR:0031684C",
+      "property": "Picture",
+      "source_offset": 3237990,
+      "private_file": "Graphic/Recovered/resource-31686E.bmp",
+      "file_sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "owner": "instance:fGMCrossR:003171B0",
+      "property": "Picture",
+      "source_offset": 3240394,
+      "private_file": "Graphic/Recovered/resource-3171D2.bmp",
+      "file_sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "owner": "instance:fGMCrossR:00317B14",
+      "property": "Picture",
+      "source_offset": 3242798,
+      "private_file": "Graphic/Recovered/resource-317B36.bmp",
+      "file_sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "owner": "instance:fGMCrossR:00318478",
+      "property": "Picture",
+      "source_offset": 3245202,
+      "private_file": "Graphic/Recovered/resource-31849A.bmp",
+      "file_sha256": "daf40da0a3457f7838dfb0938ec72fd12d8881148ce8bdea6dd5c0cd70041ad6"
+    },
+    {
+      "owner": "instance:fGMCrossR:00318DDC",
+      "property": "Picture",
+      "source_offset": 3247606,
+      "private_file": "Graphic/Recovered/resource-318DFE.bmp",
+      "file_sha256": "3d044b1b0a7489ef33b67fea21a2e61e9bc29362b338d812f1c4a691c6529610"
+    },
+    {
+      "owner": "instance:fGMCrossR:0031A23E",
+      "property": "Picture",
+      "source_offset": 3252824,
+      "private_file": "Graphic/Recovered/resource-31A260.bmp",
+      "file_sha256": "f5f0b0c9d7e98feef53d6fb77ea1f25782faef060bcbc613970ab60550e545d3"
+    },
+    {
+      "owner": "instance:fGMCrossR:0031B6A0",
+      "property": "Picture",
+      "source_offset": 3258042,
+      "private_file": "Graphic/Recovered/resource-31B6C2.bmp",
+      "file_sha256": "fe12ba14436439b9aa9e6c8e900341ce835e0eff422ba259fa2f00e05df7173f"
+    },
+    {
+      "owner": "instance:fGMCrossR:0031CB02",
+      "property": "Picture",
+      "source_offset": 3263260,
+      "private_file": "Graphic/Recovered/resource-31CB24.bmp",
+      "file_sha256": "7c8e5d66d3f7973c9f687d1df4a21a65d7a8b3112add5b6c672e26dbdf875959"
+    },
+    {
+      "owner": "instance:fMainAbout:0031E5D4",
+      "property": "Picture",
+      "source_offset": 3270121,
+      "private_file": "Graphic/Recovered/resource-31E5F1.gif",
+      "file_sha256": "8a0bc5af7e453328dafcff9c5145f5bb3f7ac47a5e11f951cc6417ae80bea609"
+    },
+    {
+      "owner": "instance:fMainAbout:0031EDCF",
+      "property": "Picture",
+      "source_offset": 3272164,
+      "private_file": "Graphic/Recovered/resource-31EDEC.bmp",
+      "file_sha256": "f8e0e9682b3ab95677fbe0ad6b63fad40181587b0238b11454f0bb4c4b0c80ef"
+    },
+    {
+      "owner": "instance:fGMHelp:0033F2E9",
+      "property": "Picture",
+      "source_offset": 3404542,
+      "private_file": "Graphic/Recovered/resource-33F306.bmp",
+      "file_sha256": "f8e0e9682b3ab95677fbe0ad6b63fad40181587b0238b11454f0bb4c4b0c80ef"
+    },
+    {
+      "owner": "instance:fGMOuri:00361EF8",
+      "property": "Picture",
+      "source_offset": 3546898,
+      "private_file": "Graphic/Recovered/resource-361F1A.bmp",
+      "file_sha256": "6e53a83f5d3a8fe2bd3b3e078a4025a59975efff349e4e55c121485b43168f0d"
+    },
+    {
+      "owner": "instance:fGMOuri:0036C35A",
+      "property": "Picture",
+      "source_offset": 3588980,
+      "private_file": "Graphic/Recovered/resource-36C37C.bmp",
+      "file_sha256": "8383986ab2d045b24d3044f0610d190c1ea23f74ea7fc995223a1dd9e7bd4df2"
+    },
+    {
+      "owner": "instance:fGMOuri:003767BC",
+      "property": "Picture",
+      "source_offset": 3631062,
+      "private_file": "Graphic/Recovered/resource-3767DE.bmp",
+      "file_sha256": "d1849ceec0108d9dd62c3602eccb22c4fbacff422c77ef7a3d568977ce841d89"
+    },
+    {
+      "owner": "instance:fGMOuri:00380C1E",
+      "property": "Picture",
+      "source_offset": 3673144,
+      "private_file": "Graphic/Recovered/resource-380C40.bmp",
+      "file_sha256": "ca11db0a50bb2d8ac8c7fea86d0fa7d562fb4dc17454c75f56c183a7dc0aa26c"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038B395",
+      "property": "Picture",
+      "source_offset": 3716015,
+      "private_file": "Graphic/Recovered/resource-38B3B7.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038B8F7",
+      "property": "Picture",
+      "source_offset": 3717393,
+      "private_file": "Graphic/Recovered/resource-38B919.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038BE59",
+      "property": "Picture",
+      "source_offset": 3718771,
+      "private_file": "Graphic/Recovered/resource-38BE7B.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038C3BB",
+      "property": "Picture",
+      "source_offset": 3720149,
+      "private_file": "Graphic/Recovered/resource-38C3DD.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038C91D",
+      "property": "Picture",
+      "source_offset": 3721527,
+      "private_file": "Graphic/Recovered/resource-38C93F.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038CE7F",
+      "property": "Picture",
+      "source_offset": 3722905,
+      "private_file": "Graphic/Recovered/resource-38CEA1.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038D3E1",
+      "property": "Picture",
+      "source_offset": 3724283,
+      "private_file": "Graphic/Recovered/resource-38D403.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038D943",
+      "property": "Picture",
+      "source_offset": 3725661,
+      "private_file": "Graphic/Recovered/resource-38D965.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038DEA5",
+      "property": "Picture",
+      "source_offset": 3727039,
+      "private_file": "Graphic/Recovered/resource-38DEC7.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038E407",
+      "property": "Picture",
+      "source_offset": 3728417,
+      "private_file": "Graphic/Recovered/resource-38E429.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038E969",
+      "property": "Picture",
+      "source_offset": 3729795,
+      "private_file": "Graphic/Recovered/resource-38E98B.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038EECB",
+      "property": "Picture",
+      "source_offset": 3731173,
+      "private_file": "Graphic/Recovered/resource-38EEED.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038F42D",
+      "property": "Picture",
+      "source_offset": 3732551,
+      "private_file": "Graphic/Recovered/resource-38F44F.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038F98F",
+      "property": "Picture",
+      "source_offset": 3733929,
+      "private_file": "Graphic/Recovered/resource-38F9B1.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0038FEF1",
+      "property": "Picture",
+      "source_offset": 3735307,
+      "private_file": "Graphic/Recovered/resource-38FF13.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00390453",
+      "property": "Picture",
+      "source_offset": 3736685,
+      "private_file": "Graphic/Recovered/resource-390475.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00391365",
+      "property": "Picture",
+      "source_offset": 3740543,
+      "private_file": "Graphic/Recovered/resource-391387.bmp",
+      "file_sha256": "c64f1565e96ea8991a67c0d89d53b67751c2394ddde0adaf4a22822aedde2f08"
+    },
+    {
+      "owner": "instance:fKeibaMain:003918C7",
+      "property": "Picture",
+      "source_offset": 3741921,
+      "private_file": "Graphic/Recovered/resource-3918E9.bmp",
+      "file_sha256": "70be2c40b2c45bbd4ee90a59ffdabc1a90defe1021d410842305e87692c3f052"
+    },
+    {
+      "owner": "instance:fKeibaMain:00391E29",
+      "property": "Picture",
+      "source_offset": 3743299,
+      "private_file": "Graphic/Recovered/resource-391E4B.bmp",
+      "file_sha256": "bbcd24be39270be733591964d7a8c8aad87b7ed891eda57abf17a8ac7c7303ec"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039238B",
+      "property": "Picture",
+      "source_offset": 3744677,
+      "private_file": "Graphic/Recovered/resource-3923AD.bmp",
+      "file_sha256": "42c9470236e2e0c3bd0d763c9bc2f842e20bc6d7da7ce686bc05f0ba0d9c3ae1"
+    },
+    {
+      "owner": "instance:fKeibaMain:003928ED",
+      "property": "Picture",
+      "source_offset": 3746055,
+      "private_file": "Graphic/Recovered/resource-39290F.bmp",
+      "file_sha256": "ccf1c196922b9622d7129564a726425310fab151a76fc9ef8eb33dbf9ab62e3b"
+    },
+    {
+      "owner": "instance:fKeibaMain:00392E4F",
+      "property": "Picture",
+      "source_offset": 3747433,
+      "private_file": "Graphic/Recovered/resource-392E71.bmp",
+      "file_sha256": "7cda10f3b98ce9f08c805f2a83cc73be70cdf1aae55d92e7cbbc79e473d00aa2"
+    },
+    {
+      "owner": "instance:fKeibaMain:003933B1",
+      "property": "Picture",
+      "source_offset": 3748811,
+      "private_file": "Graphic/Recovered/resource-3933D3.bmp",
+      "file_sha256": "8a45c8fc656314d6adeba6fe73ed3e2d1f69776bc3e8e38f16ff30acadbc95d5"
+    },
+    {
+      "owner": "instance:fKeibaMain:00393913",
+      "property": "Picture",
+      "source_offset": 3750189,
+      "private_file": "Graphic/Recovered/resource-393935.bmp",
+      "file_sha256": "a47f5f251f7c49b13ed59ccca3196ae14c5d480b9800a1e3fc97fa941bc5d0b6"
+    },
+    {
+      "owner": "instance:fKeibaMain:003943B2",
+      "property": "Picture",
+      "source_offset": 3752908,
+      "private_file": "Graphic/Recovered/resource-3943D4.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00394914",
+      "property": "Picture",
+      "source_offset": 3754286,
+      "private_file": "Graphic/Recovered/resource-394936.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:00394E76",
+      "property": "Picture",
+      "source_offset": 3755664,
+      "private_file": "Graphic/Recovered/resource-394E98.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:003953D8",
+      "property": "Picture",
+      "source_offset": 3757042,
+      "private_file": "Graphic/Recovered/resource-3953FA.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039593A",
+      "property": "Picture",
+      "source_offset": 3758420,
+      "private_file": "Graphic/Recovered/resource-39595C.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00395E9C",
+      "property": "Picture",
+      "source_offset": 3759798,
+      "private_file": "Graphic/Recovered/resource-395EBE.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:003963FE",
+      "property": "Picture",
+      "source_offset": 3761176,
+      "private_file": "Graphic/Recovered/resource-396420.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00396960",
+      "property": "Picture",
+      "source_offset": 3762554,
+      "private_file": "Graphic/Recovered/resource-396982.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:00396EC2",
+      "property": "Picture",
+      "source_offset": 3763932,
+      "private_file": "Graphic/Recovered/resource-396EE4.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:00397424",
+      "property": "Picture",
+      "source_offset": 3765310,
+      "private_file": "Graphic/Recovered/resource-397446.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:00397986",
+      "property": "Picture",
+      "source_offset": 3766688,
+      "private_file": "Graphic/Recovered/resource-3979A8.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:00397EE8",
+      "property": "Picture",
+      "source_offset": 3768066,
+      "private_file": "Graphic/Recovered/resource-397F0A.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039844A",
+      "property": "Picture",
+      "source_offset": 3769444,
+      "private_file": "Graphic/Recovered/resource-39846C.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:003989AC",
+      "property": "Picture",
+      "source_offset": 3770822,
+      "private_file": "Graphic/Recovered/resource-3989CE.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:00398FBD",
+      "property": "Picture",
+      "source_offset": 3772375,
+      "private_file": "Graphic/Recovered/resource-398FDF.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:00399427",
+      "property": "Picture",
+      "source_offset": 3773505,
+      "private_file": "Graphic/Recovered/resource-399449.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:00399891",
+      "property": "Picture",
+      "source_offset": 3774635,
+      "private_file": "Graphic/Recovered/resource-3998B3.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:00399CFB",
+      "property": "Picture",
+      "source_offset": 3775765,
+      "private_file": "Graphic/Recovered/resource-399D1D.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039A1BF",
+      "property": "Picture",
+      "source_offset": 3776985,
+      "private_file": "Graphic/Recovered/resource-39A1E1.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039A629",
+      "property": "Picture",
+      "source_offset": 3778115,
+      "private_file": "Graphic/Recovered/resource-39A64B.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039AAC0",
+      "property": "Picture",
+      "source_offset": 3779290,
+      "private_file": "Graphic/Recovered/resource-39AAE2.png",
+      "file_sha256": "7ac2abfce2be8b46dd9826d597d94edeefc1570b4a992622721b90a1850e3ee9"
+    },
+    {
+      "owner": "instance:fKeibaMain:0039AFDA",
+      "property": "Picture",
+      "source_offset": 3780596,
+      "private_file": "Graphic/Recovered/resource-39AFFC.bmp",
+      "file_sha256": "c67871972b5e8392a30420b947f3f59a04a5e95d5d78c7cad9f6b802c25588f5"
+    },
+    {
+      "owner": "instance:fKeibaMain:003AEA6C",
+      "property": "Picture",
+      "source_offset": 3861126,
+      "private_file": "Graphic/Recovered/resource-3AEA8E.bmp",
+      "file_sha256": "1dff85239783021c2c132f7fff04193d25a9e1b68675b0a46dbf345d02a6cf30"
+    },
+    {
+      "owner": "instance:fKeibaMain:003AEFD0",
+      "property": "Picture",
+      "source_offset": 3862506,
+      "private_file": "Graphic/Recovered/resource-3AEFF2.bmp",
+      "file_sha256": "2d3d7e4c0ce6c94fbc32da5fd59846c6a7bf80640975857b8bdded1f26a364b4"
+    },
+    {
+      "owner": "instance:fKeibaMain:003AF534",
+      "property": "Picture",
+      "source_offset": 3863886,
+      "private_file": "Graphic/Recovered/resource-3AF556.bmp",
+      "file_sha256": "271f7bf1cb23f0a80bcffac34a0f531aa548b1df339bece222b108aaa635171c"
+    },
+    {
+      "owner": "instance:fKeibaMain:003AFA98",
+      "property": "Picture",
+      "source_offset": 3865266,
+      "private_file": "Graphic/Recovered/resource-3AFABA.bmp",
+      "file_sha256": "3a3a5a0ba8f7153c9269e81f6c4cd7a8abb5108fcf3d2b99aa71cb1a90eb2602"
+    },
+    {
+      "owner": "instance:fKeibaMain:003AFFFC",
+      "property": "Picture",
+      "source_offset": 3866646,
+      "private_file": "Graphic/Recovered/resource-3B001E.bmp",
+      "file_sha256": "b475d718252131a894ac4c7d7d39385f3ae53f3a657eb7e105da7dd1920c56e4"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B055E",
+      "property": "Picture",
+      "source_offset": 3868024,
+      "private_file": "Graphic/Recovered/resource-3B0580.bmp",
+      "file_sha256": "873f3e1eedae1203d87c58d06e17bb750c28d1c84c3a3f1d107523943e88d18d"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B0AC0",
+      "property": "Picture",
+      "source_offset": 3869402,
+      "private_file": "Graphic/Recovered/resource-3B0AE2.bmp",
+      "file_sha256": "3b4360258dd001039aeffdaaacb8ae977fd186cbfe0da7cfbf11f3f63f2b2aba"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B1022",
+      "property": "Picture",
+      "source_offset": 3870780,
+      "private_file": "Graphic/Recovered/resource-3B1044.bmp",
+      "file_sha256": "a7d503b65db0ada0a3278beed0601c8a24e2298514d8350e56aba2dd5c425512"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B1584",
+      "property": "Picture",
+      "source_offset": 3872158,
+      "private_file": "Graphic/Recovered/resource-3B15A6.bmp",
+      "file_sha256": "060c62c1170696d9e79f15249f281913ba808c2359942959b2a904a83185b2e3"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B1AE6",
+      "property": "Picture",
+      "source_offset": 3873536,
+      "private_file": "Graphic/Recovered/resource-3B1B08.bmp",
+      "file_sha256": "c7ed3c4e076360be89086738d835565c18328a5076f84bf7187cea8065cf0959"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B2048",
+      "property": "Picture",
+      "source_offset": 3874914,
+      "private_file": "Graphic/Recovered/resource-3B206A.bmp",
+      "file_sha256": "eec22ef70791146cb37a15a204a6a067c0d5e5909365079605c1f11795073268"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B25AA",
+      "property": "Picture",
+      "source_offset": 3876292,
+      "private_file": "Graphic/Recovered/resource-3B25CC.bmp",
+      "file_sha256": "5a833942a32ecc03ea716b94f20c24f265fbc4de4b021b4beeef22c7597b046e"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B2B0C",
+      "property": "Picture",
+      "source_offset": 3877670,
+      "private_file": "Graphic/Recovered/resource-3B2B2E.bmp",
+      "file_sha256": "a47f5f251f7c49b13ed59ccca3196ae14c5d480b9800a1e3fc97fa941bc5d0b6"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B306E",
+      "property": "Picture",
+      "source_offset": 3879048,
+      "private_file": "Graphic/Recovered/resource-3B3090.bmp",
+      "file_sha256": "8a45c8fc656314d6adeba6fe73ed3e2d1f69776bc3e8e38f16ff30acadbc95d5"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B35D0",
+      "property": "Picture",
+      "source_offset": 3880426,
+      "private_file": "Graphic/Recovered/resource-3B35F2.bmp",
+      "file_sha256": "7cda10f3b98ce9f08c805f2a83cc73be70cdf1aae55d92e7cbbc79e473d00aa2"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B3B32",
+      "property": "Picture",
+      "source_offset": 3881804,
+      "private_file": "Graphic/Recovered/resource-3B3B54.bmp",
+      "file_sha256": "ccf1c196922b9622d7129564a726425310fab151a76fc9ef8eb33dbf9ab62e3b"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B4094",
+      "property": "Picture",
+      "source_offset": 3883182,
+      "private_file": "Graphic/Recovered/resource-3B40B6.bmp",
+      "file_sha256": "42c9470236e2e0c3bd0d763c9bc2f842e20bc6d7da7ce686bc05f0ba0d9c3ae1"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B45F6",
+      "property": "Picture",
+      "source_offset": 3884560,
+      "private_file": "Graphic/Recovered/resource-3B4618.bmp",
+      "file_sha256": "bbcd24be39270be733591964d7a8c8aad87b7ed891eda57abf17a8ac7c7303ec"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B4B58",
+      "property": "Picture",
+      "source_offset": 3885938,
+      "private_file": "Graphic/Recovered/resource-3B4B7A.bmp",
+      "file_sha256": "70be2c40b2c45bbd4ee90a59ffdabc1a90defe1021d410842305e87692c3f052"
+    },
+    {
+      "owner": "instance:fKeibaMain:003B50BA",
+      "property": "Picture",
+      "source_offset": 3887316,
+      "private_file": "Graphic/Recovered/resource-3B50DC.bmp",
+      "file_sha256": "c64f1565e96ea8991a67c0d89d53b67751c2394ddde0adaf4a22822aedde2f08"
+    },
+    {
+      "owner": "instance:fMainVisual:003B5DA4",
+      "property": "Picture",
+      "source_offset": 3890622,
+      "private_file": "Graphic/Recovered/resource-3B5DC6.bmp",
+      "file_sha256": "ca909aa021f8c95ff8b90e35f81f9f59c222d1d98bae198dd1b795ca6e3f507e"
+    },
+    {
+      "owner": "instance:fMainVisual:003D7445",
+      "property": "Picture",
+      "source_offset": 4027489,
+      "private_file": "Graphic/Recovered/resource-3D7469.bmp",
+      "file_sha256": "2817ea925508bb57aa33a2e711432bd640073508dfd5d65224dadb48690f3928"
+    },
+    {
+      "owner": "instance:fMainVisual:004A693C",
+      "property": "Picture",
+      "source_offset": 4876632,
+      "private_file": "Graphic/Recovered/resource-4A6960.bmp",
+      "file_sha256": "c7d9f1619ba7f9f6ba3c276d25ab81e7955188253134d077ae493cd40a01fbd4"
+    }
+  ],
+  "other_pictures": [
+    {
+      "owner": "instance:MDIForm1:001E14A4",
+      "property": "Picture",
+      "source_offset": 1971390,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E1A4E",
+      "property": "Picture",
+      "source_offset": 1972840,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E1FF8",
+      "property": "Picture",
+      "source_offset": 1974290,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E25A2",
+      "property": "Picture",
+      "source_offset": 1975740,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E2B4C",
+      "property": "Picture",
+      "source_offset": 1977190,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E30F6",
+      "property": "Picture",
+      "source_offset": 1978640,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E36A0",
+      "property": "Picture",
+      "source_offset": 1980090,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E3C4A",
+      "property": "Picture",
+      "source_offset": 1981540,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E41F4",
+      "property": "Picture",
+      "source_offset": 1982990,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E479E",
+      "property": "Picture",
+      "source_offset": 1984440,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E4D48",
+      "property": "Picture",
+      "source_offset": 1985890,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E52F2",
+      "property": "Picture",
+      "source_offset": 1987340,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E589C",
+      "property": "Picture",
+      "source_offset": 1988790,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E5E46",
+      "property": "Picture",
+      "source_offset": 1990240,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:MDIForm1:001E63F0",
+      "property": "Picture",
+      "source_offset": 1991690,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMRank100:0024F0D1",
+      "property": "Picture",
+      "source_offset": 2420968,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMRank100:0024F3FA",
+      "property": "Picture",
+      "source_offset": 2421777,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMZisha:00251EE4",
+      "property": "Picture",
+      "source_offset": 2432768,
+      "classification": "CUR",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMZisha:002527D2",
+      "property": "Picture",
+      "source_offset": 2435049,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMZisha:00252AFB",
+      "property": "Picture",
+      "source_offset": 2435858,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMSyain:0026AE66",
+      "property": "Picture",
+      "source_offset": 2535037,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMSyain:0026B18F",
+      "property": "Picture",
+      "source_offset": 2535846,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C89DD",
+      "property": "Picture",
+      "source_offset": 2918903,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoPoker:002C8D07",
+      "property": "Picture",
+      "source_offset": 2919713,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoBJ:002D9DE4",
+      "property": "Picture",
+      "source_offset": 2989566,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoBJ:002DA10E",
+      "property": "Picture",
+      "source_offset": 2990376,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoCC:002EEA08",
+      "property": "Picture",
+      "source_offset": 3074594,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fCasinoCC:002EED32",
+      "property": "Picture",
+      "source_offset": 3075404,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fMainAbout:0031E6E8",
+      "property": "Picture",
+      "source_offset": 3270402,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fMainAbout:0031EA14",
+      "property": "Picture",
+      "source_offset": 3271214,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMHelp:00361191",
+      "property": "Picture",
+      "source_offset": 3543464,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fGMHelp:003614BA",
+      "property": "Picture",
+      "source_offset": 3544273,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "instance:fMainVisual:00575A65",
+      "property": "Picture",
+      "source_offset": 5724799,
+      "classification": "ICO",
+      "named_icon": null
+    },
+    {
+      "owner": "layout:MainForm16",
+      "property": "Icon",
+      "source_offset": 2288193,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-MainForm16.png"
+    },
+    {
+      "owner": "layout:fKeibaModosi",
+      "property": "Icon",
+      "source_offset": 2289195,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fKeibaModosi.png"
+    },
+    {
+      "owner": "layout:fGMKikakuKaigi",
+      "property": "Icon",
+      "source_offset": 2290813,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKikakuKaigi.png"
+    },
+    {
+      "owner": "layout:fGMKontesutoHp",
+      "property": "Icon",
+      "source_offset": 2292485,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKontesutoHp.png"
+    },
+    {
+      "owner": "layout:fGMGameKaishi",
+      "property": "Icon",
+      "source_offset": 2294234,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameKaishi.png"
+    },
+    {
+      "owner": "layout:fGMHikinukiKnS",
+      "property": "Icon",
+      "source_offset": 2296053,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHikinukiKnS.png"
+    },
+    {
+      "owner": "layout:fGMHikinukiKeS",
+      "property": "Icon",
+      "source_offset": 2297999,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHikinukiKeS.png"
+    },
+    {
+      "owner": "layout:fGMTenantGameS",
+      "property": "Icon",
+      "source_offset": 2299955,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantGameS.png"
+    },
+    {
+      "owner": "layout:fGMSeisanZ",
+      "property": "Icon",
+      "source_offset": 2301939,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSeisanZ.png"
+    },
+    {
+      "owner": "layout:fGMMedia",
+      "property": "Icon",
+      "source_offset": 2303949,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMMedia.png"
+    },
+    {
+      "owner": "layout:fGMKoudou",
+      "property": "Icon",
+      "source_offset": 2305964,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKoudou.png"
+    },
+    {
+      "owner": "layout:fGMTenantCasino",
+      "property": "Icon",
+      "source_offset": 2308016,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantCasino.png"
+    },
+    {
+      "owner": "layout:fGMGameDexKs",
+      "property": "Icon",
+      "source_offset": 2310075,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameDexKs.png"
+    },
+    {
+      "owner": "layout:fGMTenantHard",
+      "property": "Icon",
+      "source_offset": 2312122,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantHard.png"
+    },
+    {
+      "owner": "layout:fGMTenantReS",
+      "property": "Icon",
+      "source_offset": 2314185,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantReS.png"
+    },
+    {
+      "owner": "layout:fGMGameNew",
+      "property": "Icon",
+      "source_offset": 2316237,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameNew.png"
+    },
+    {
+      "owner": "layout:fGMKaiwa2",
+      "property": "Icon",
+      "source_offset": 2318292,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKaiwa2.png"
+    },
+    {
+      "owner": "layout:fGMKaiwaC",
+      "property": "Icon",
+      "source_offset": 2320392,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKaiwaC.png"
+    },
+    {
+      "owner": "layout:fGMKaihatuS",
+      "property": "Icon",
+      "source_offset": 2322530,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKaihatuS.png"
+    },
+    {
+      "owner": "layout:fGMTenantCasinoSn",
+      "property": "Icon",
+      "source_offset": 2324682,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantCasinoSn.png"
+    },
+    {
+      "owner": "layout:fGMTenantNazoP",
+      "property": "Icon",
+      "source_offset": 2326831,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantNazoP.png"
+    },
+    {
+      "owner": "layout:fGMSendenBaitai",
+      "property": "Icon",
+      "source_offset": 2329022,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSendenBaitai.png"
+    },
+    {
+      "owner": "layout:fGMTenantTechS",
+      "property": "Icon",
+      "source_offset": 2331220,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantTechS.png"
+    },
+    {
+      "owner": "layout:fGMTenantSeisan",
+      "property": "Icon",
+      "source_offset": 2333416,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantSeisan.png"
+    },
+    {
+      "owner": "layout:fGMTenantTechSel",
+      "property": "Icon",
+      "source_offset": 2335624,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantTechSel.png"
+    },
+    {
+      "owner": "layout:fGMTenantBengo",
+      "property": "Icon",
+      "source_offset": 2337877,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantBengo.png"
+    },
+    {
+      "owner": "layout:fGMTenantOnsen",
+      "property": "Icon",
+      "source_offset": 2340153,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantOnsen.png"
+    },
+    {
+      "owner": "layout:fGMTechKau",
+      "property": "Icon",
+      "source_offset": 2342445,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTechKau.png"
+    },
+    {
+      "owner": "layout:fGMGameSave",
+      "property": "Icon",
+      "source_offset": 2344768,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameSave.png"
+    },
+    {
+      "owner": "layout:fGMGameLoad",
+      "property": "Icon",
+      "source_offset": 2347170,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameLoad.png"
+    },
+    {
+      "owner": "layout:fGMZishaH",
+      "property": "Icon",
+      "source_offset": 2349576,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZishaH.png"
+    },
+    {
+      "owner": "layout:fGMTenaSel",
+      "property": "Icon",
+      "source_offset": 2352025,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenaSel.png"
+    },
+    {
+      "owner": "layout:fGMGameHardInfo",
+      "property": "Icon",
+      "source_offset": 2354492,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameHardInfo.png"
+    },
+    {
+      "owner": "layout:fGMKoudo",
+      "property": "Icon",
+      "source_offset": 2357017,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKoudo.png"
+    },
+    {
+      "owner": "layout:fGMZishaNet",
+      "property": "Icon",
+      "source_offset": 2359670,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZishaNet.png"
+    },
+    {
+      "owner": "layout:fGMWSTech",
+      "property": "Icon",
+      "source_offset": 2362339,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMWSTech.png"
+    },
+    {
+      "owner": "layout:fGMLevelUP",
+      "property": "Icon",
+      "source_offset": 2365033,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMLevelUP.png"
+    },
+    {
+      "owner": "layout:fGMHisyoSet",
+      "property": "Icon",
+      "source_offset": 2367798,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHisyoSet.png"
+    },
+    {
+      "owner": "layout:fGMGameDexSn",
+      "property": "Icon",
+      "source_offset": 2370797,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMGameDexSn.png"
+    },
+    {
+      "owner": "layout:fGMHLicense",
+      "property": "Icon",
+      "source_offset": 2373870,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHLicense.png"
+    },
+    {
+      "owner": "layout:fGMBank",
+      "property": "Icon",
+      "source_offset": 2376950,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMBank.png"
+    },
+    {
+      "owner": "layout:fGMHisyoK",
+      "property": "Icon",
+      "source_offset": 2380126,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHisyoK.png"
+    },
+    {
+      "owner": "layout:fGMTenantHardS",
+      "property": "Icon",
+      "source_offset": 2383333,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMTenantHardS.png"
+    },
+    {
+      "owner": "layout:fGMKontesuto",
+      "property": "Icon",
+      "source_offset": 2386993,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKontesuto.png"
+    },
+    {
+      "owner": "layout:fGMKansei",
+      "property": "Icon",
+      "source_offset": 2390672,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKansei.png"
+    },
+    {
+      "owner": "layout:fGMKaiwa",
+      "property": "Icon",
+      "source_offset": 2394367,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKaiwa.png"
+    },
+    {
+      "owner": "layout:fGMManga",
+      "property": "Icon",
+      "source_offset": 2398133,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMManga.png"
+    },
+    {
+      "owner": "layout:fGMToutatuRank",
+      "property": "Icon",
+      "source_offset": 2401975,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMToutatuRank.png"
+    },
+    {
+      "owner": "layout:fGMDevH",
+      "property": "Icon",
+      "source_offset": 2405896,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMDevH.png"
+    },
+    {
+      "owner": "layout:fGMKeiyakuS",
+      "property": "Icon",
+      "source_offset": 2410014,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKeiyakuS.png"
+    },
+    {
+      "owner": "layout:fGMZokuhen",
+      "property": "Icon",
+      "source_offset": 2414163,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZokuhen.png"
+    },
+    {
+      "owner": "layout:fGMRank100",
+      "property": "Icon",
+      "source_offset": 2418390,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMRank100.png"
+    },
+    {
+      "owner": "layout:fGMKaihatu",
+      "property": "Icon",
+      "source_offset": 2422770,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKaihatu.png"
+    },
+    {
+      "owner": "layout:fGMZisha",
+      "property": "Icon",
+      "source_offset": 2429559,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZisha.png"
+    },
+    {
+      "owner": "layout:fGMZishaK",
+      "property": "Icon",
+      "source_offset": 2436958,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZishaK.png"
+    },
+    {
+      "owner": "layout:fGMHikinukiSel",
+      "property": "Icon",
+      "source_offset": 2444479,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHikinukiSel.png"
+    },
+    {
+      "owner": "layout:fGMSKoyou",
+      "property": "Icon",
+      "source_offset": 2456468,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSKoyou.png"
+    },
+    {
+      "owner": "layout:fGMSKoyouKz",
+      "property": "Icon",
+      "source_offset": 2468474,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSKoyouKz.png"
+    },
+    {
+      "owner": "layout:fGMSyukkaSai",
+      "property": "Icon",
+      "source_offset": 2480845,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSyukkaSai.png"
+    },
+    {
+      "owner": "layout:fGMZishaKW",
+      "property": "Icon",
+      "source_offset": 2493735,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMZishaKW.png"
+    },
+    {
+      "owner": "layout:fGMSyukka",
+      "property": "Icon",
+      "source_offset": 2507268,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSyukka.png"
+    },
+    {
+      "owner": "layout:fGMSyain",
+      "property": "Icon",
+      "source_offset": 2522913,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSyain.png"
+    },
+    {
+      "owner": "layout:fGMHikinuki",
+      "property": "Icon",
+      "source_offset": 2539062,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHikinuki.png"
+    },
+    {
+      "owner": "layout:fGMbeta",
+      "property": "Icon",
+      "source_offset": 2555486,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMbeta.png"
+    },
+    {
+      "owner": "layout:fGMComK",
+      "property": "Icon",
+      "source_offset": 2575434,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMComK.png"
+    },
+    {
+      "owner": "layout:fGMalpha",
+      "property": "Icon",
+      "source_offset": 2595411,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMalpha.png"
+    },
+    {
+      "owner": "layout:fGMDevW2",
+      "property": "Icon",
+      "source_offset": 2615510,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMDevW2.png"
+    },
+    {
+      "owner": "layout:fGMDevW1",
+      "property": "Icon",
+      "source_offset": 2645162,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMDevW1.png"
+    },
+    {
+      "owner": "layout:fGMSyukkaH",
+      "property": "Icon",
+      "source_offset": 2674853,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMSyukkaH.png"
+    },
+    {
+      "owner": "layout:fGMInfo",
+      "property": "Icon",
+      "source_offset": 2718890,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMInfo.png"
+    },
+    {
+      "owner": "layout:fGMHardHatubai",
+      "property": "Icon",
+      "source_offset": 2763623,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHardHatubai.png"
+    },
+    {
+      "owner": "layout:fGMKikakusyo",
+      "property": "Icon",
+      "source_offset": 2808501,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMKikakusyo.png"
+    },
+    {
+      "owner": "layout:fCasinoPoker",
+      "property": "Icon",
+      "source_offset": 2854211,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fCasinoPoker.png"
+    },
+    {
+      "owner": "layout:fCasinoBJ",
+      "property": "Icon",
+      "source_offset": 2928032,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fCasinoBJ.png"
+    },
+    {
+      "owner": "layout:fCasinoCC",
+      "property": "Icon",
+      "source_offset": 3004954,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fCasinoCC.png"
+    },
+    {
+      "owner": "layout:fGMCrossRDen",
+      "property": "Icon",
+      "source_offset": 3090553,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMCrossRDen.png"
+    },
+    {
+      "owner": "layout:fGMCrossR",
+      "property": "Icon",
+      "source_offset": 3176556,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMCrossR.png"
+    },
+    {
+      "owner": "layout:fMainAbout",
+      "property": "Icon",
+      "source_offset": 3268594,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fMainAbout.png"
+    },
+    {
+      "owner": "layout:fGMHelp",
+      "property": "Icon",
+      "source_offset": 3401044,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMHelp.png"
+    },
+    {
+      "owner": "layout:fGMOuri",
+      "property": "Icon",
+      "source_offset": 3545326,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fGMOuri.png"
+    },
+    {
+      "owner": "layout:fKeibaMain",
+      "property": "Icon",
+      "source_offset": 3715419,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fKeibaMain.png"
+    },
+    {
+      "owner": "layout:fMainVisual",
+      "property": "Icon",
+      "source_offset": 3888963,
+      "classification": "ICO",
+      "named_icon": "Graphic/Embedded/WindowIcon-fMainVisual.png"
+    }
+  ],
+  "audio": [
+    {
+      "file": "Sound/Bakuhatu.wav",
+      "bytes": 14622,
+      "sha256": "7d16e0eb2d879bbd4c9df3d7d091d962b814de3f9b01f416c9acc41b9ffec3a0"
+    },
+    {
+      "file": "Sound/FIRE.wav",
+      "bytes": 74122,
+      "sha256": "b31a7bec2cc7dae84aec8e111094fa63f261862d635c80b100704277b23aaae0"
+    },
+    {
+      "file": "Sound/GOLD.WAV",
+      "bytes": 16406,
+      "sha256": "96b813fd59e240b3418bbf9d68a40a4a31e7258fda278e04be1b3524f0a099c0"
+    },
+    {
+      "file": "Sound/Open.wav",
+      "bytes": 4074,
+      "sha256": "4d6de2d257be9026269e5bff8d1bf412b0270043422fe2a3d51d03e57037137a"
+    },
+    {
+      "file": "Sound/Up.wav",
+      "bytes": 31810,
+      "sha256": "75fda0a9c654bfbfb0e8fe568917c9595309e0eff2c092176802548c48011fdf"
+    }
+  ],
+  "pe_resources": {
+    "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+    "resource_directory_bytes": 2204,
+    "payloads": [
+      {
+        "path": [
+          {
+            "id": 3
+          },
+          {
+            "id": 30001
+          },
+          {
+            "id": 0
+          }
+        ],
+        "bytes": 1384,
+        "code_page": 1200,
+        "sha256": "64cd271258fa463555d81cfe3f85edd7e3b8b279a3a6d80d32e24347daf94a96"
+      },
+      {
+        "path": [
+          {
+            "id": 14
+          },
+          {
+            "id": 1
+          },
+          {
+            "id": 0
+          }
+        ],
+        "bytes": 20,
+        "code_page": 1200,
+        "sha256": "04b3b7bd15828b7304f4182661ccfa95a72be465392d0a0a6a1b0cbfc9edee72"
+      },
+      {
+        "path": [
+          {
+            "id": 16
+          },
+          {
+            "id": 1
+          },
+          {
+            "id": 1041
+          }
+        ],
+        "bytes": 560,
+        "code_page": 1200,
+        "sha256": "51b14453882ea9e9de1918fe3430907fbc12cb3b6fa0ab70354a70a163649722"
+      }
+    ],
+    "limit": "PE resources are accounted independently of VB picture properties; identity/use and runtime rendering are separate evidence."
+  },
+  "limits": [
+    "Imported pixels/files do not establish all dynamic image assignments or every visible use.",
+    "Unexported control ICO/CUR properties remain explicit; root-icon presence is not runtime pixel acceptance.",
+    "Open.wav has no established trigger; Bakuhatu.wav has a native dispatcher branch but no recovered caller."
+  ]
+}

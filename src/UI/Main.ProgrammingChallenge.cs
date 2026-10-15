@@ -11,8 +11,8 @@ public partial class Main
         var actor=state.Employees.Single(e=>e.SourceIndex==cursor.EmployeeSourceIndex);
         if(scene.IntroPage<2)
         {
-            string text=scene.IntroPage==0 ? string.Format(Tr("PROGRAMMING_INTRO"),EmployeeName(actor)) :
-                string.Format(Tr("PROGRAMMING_INSPIRATION"),actor.Inspiration);
+            string text=scene.IntroPage==0 ? string.Format(DisplayNumbers.Provider,Tr("PROGRAMMING_INTRO"),EmployeeName(actor)) :
+                string.Format(DisplayNumbers.Provider,Tr("PROGRAMMING_INSPIRATION"),actor.Inspiration);
             ShowConversation(SecretaryCaption(state.SecretarySourceIndex),[new(SecretaryCaption(state.SecretarySourceIndex),text)],()=>
             {if(ReferenceEquals(_session.Current,state)){ProgrammingChallengeService.AcknowledgeIntro(state);ShowPendingProgrammingChallenge(state);}});
             return true;
@@ -21,8 +21,8 @@ public partial class Main
         {
             string text=scene.ResultPage switch
             {
-                0=>string.Format(Tr($"PROGRAMMING_RESULT_{scene.Outcome}"),EmployeeName(actor)),
-                1=>scene.Outcome==0 ? Tr("PROGRAMMING_FAILURE_EFFECT") : string.Format(Tr("PROGRAMMING_QUALITY_EFFECT"),
+                0=>string.Format(DisplayNumbers.Provider,Tr($"PROGRAMMING_RESULT_{scene.Outcome}"),EmployeeName(actor)),
+                1=>scene.Outcome==0 ? Tr("PROGRAMMING_FAILURE_EFFECT") : string.Format(DisplayNumbers.Provider,Tr("PROGRAMMING_QUALITY_EFFECT"),
                     Tr(new[]{"STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"}[scene.QualityIndex!.Value]),scene.Outcome==1?40:100),
                 _=>Tr($"PROGRAMMING_COMMENT_{(scene.Outcome==0?"FAILURE":"SUCCESS")}_{scene.CommentVariant}")
             };

@@ -29,7 +29,7 @@ public partial class SalesHistoryChart : Control
         {
             float y=bottom-(bottom-top)*i/4;
             DrawLine(new(left,y),new(right,y),new Color(.75f,.75f,.75f));
-            DrawString(font,new(0,y+5),Compact?(i==0?"0":$"{ceiling*i/4000.0:0.#}k"):$"{ceiling*i/4:N0}",HorizontalAlignment.Right,left-8,fontSize,Colors.Black);
+            DrawString(font,new(0,y+5),Compact?(i==0?"0":$"{ceiling*i/4000.0:0.#}k"):$"{DisplayNumbers.Format(ceiling*i/4)}",HorizontalAlignment.Right,left-8,fontSize,Colors.Black);
         }
         if(!Compact)for (int i=0;i<SalesHistoryRules.CellCount;i++)
         {

@@ -22,7 +22,7 @@ public partial class Main
             });
         var details=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};row.AddChild(details);
         details.AddChild(new Label {Text=$"{EmployeeName(employee)}   {Tr("LEVEL")} {employee.Level}"});
-        details.AddChild(new Label {Text=$"{Tr("CONTRACT_FEE")}: ¥{employee.ContractFee:N0}"});
+        details.AddChild(new Label {Text=$"{Tr("CONTRACT_FEE")}: ¥{DisplayNumbers.Format(employee.ContractFee)}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_FUN")}: {employee.Fun}   {Tr("STAT_NOVELTY")}: {employee.Novelty}   {Tr("STAT_ACCURACY")}: {employee.Accuracy}"});
         details.AddChild(new Label {Text=$"{Tr("STAT_GRAPHICS")}: {employee.Graphics}   {Tr("STAT_MUSIC")}: {employee.Music}   {Tr("STAT_DEVELOPMENT_SPEED")}: {employee.DevelopmentSpeed}   {Tr("STAT_INSPIRATION")}: {employee.Inspiration}"});
         return card;
@@ -44,7 +44,7 @@ public partial class Main
         foreach (var product in candidates)
         {
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,product.ProductIndex);
-            string[] values=[product.Title,(product.OriginalSequelCounter+1).ToString(),product.ReviewScores?.Sum().ToString() ?? "?",product.UnitsSold.ToString("N0")];
+            string[] values=[product.Title,(product.OriginalSequelCounter+1).ToString(),product.ReviewScores?.Sum().ToString() ?? "?",product.UnitsSold.ToDisplayNumber()];
             for (int column=0;column<values.Length;column++)
             {
                 row.SetText(column,values[column]);row.SetTextAlignment(column,column==0 ? HorizontalAlignment.Left : HorizontalAlignment.Right);
@@ -71,7 +71,7 @@ public partial class Main
     {
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog."));
         ClearContent();CompactManagementWindow("PlanningQuoteWindow",new Vector2(430,360),410);
-        _dialog!.SetTitle($"{Tr("DEVELOPMENT_PLANNING")} · ¥{state.Money:N0}");
+        _dialog!.SetTitle($"{Tr("DEVELOPMENT_PLANNING")} · ¥{DisplayNumbers.Format(state.Money)}");
         var room=new OptionButton {Name="PlanningRoom"};
         for (int i=0;i<2;i++) room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
         if (selectedRoom is int chosen) {room.Select(chosen);room.Visible=false;}
@@ -100,8 +100,8 @@ public partial class Main
         {
             var row=hardware.CreateItem(hardware.GetRoot());row.SetMetadata(0,item.SourceIndex);
             double? market=state.Calendar?.Hardware.SingleOrDefault(x=>x.SourceIndex==item.SourceIndex)?.Market;
-            string[] values=[CatalogName(catalog,"HARDWARE",item.SourceIndex,item.Name),item.PlanningPoints.ToString("N0"),item.PlanningCost.ToString("N0"),
-                market is double m ? (Math.Floor(m)*10_000).ToString("N0") : "?"];
+            string[] values=[CatalogName(catalog,"HARDWARE",item.SourceIndex,item.Name),item.PlanningPoints.ToDisplayNumber(),item.PlanningCost.ToDisplayNumber(),
+                market is double m ? (Math.Floor(m)*10_000).ToDisplayNumber(): "?"];
             bool licensed=state.HardwareLicenses?.Contains(item.SourceIndex)==true;
             for (int column=0;column<values.Length;column++)
             {
@@ -114,7 +114,7 @@ public partial class Main
         foreach (var item in catalog.Audiences)
         {
             var row=audience.CreateItem(audience.GetRoot());row.SetMetadata(0,item.SourceIndex);
-            string[] values=[CatalogName(catalog,"AUDIENCE",item.SourceIndex,item.Name),item.RawMembers["1454"].ToString("N0"),item.RawMembers["148C"].ToString("N0")];
+            string[] values=[CatalogName(catalog,"AUDIENCE",item.SourceIndex,item.Name),item.RawMembers["1454"].ToDisplayNumber(),item.RawMembers["148C"].ToDisplayNumber()];
             for (int column=0;column<values.Length;column++) {row.SetText(column,values[column]);row.SetTextAlignment(column,column==0 ? HorizontalAlignment.Left : HorizontalAlignment.Right);}
             if (item.SourceIndex==audienceId) row.Select(0);
         }
@@ -122,7 +122,7 @@ public partial class Main
         {
             if (hardwareId<0 || audienceId<0) {quote.Text=Tr("PLANNING_NO_HARDWARE");meeting.Disabled=true;return;}
             var result=CheckPlanning(state,catalog,room.GetSelectedId(),hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
-            quote.Text=$"{Tr("DEVELOPMENT_POINTS")}\n{value.Points:N0}\n{Tr("PLANNING_COST")}\n¥{value.Cost:N0}";
+            quote.Text=$"{Tr("DEVELOPMENT_POINTS")}\n{DisplayNumbers.Format(value.Points)}\n{Tr("PLANNING_COST")}\n¥{DisplayNumbers.Format(value.Cost)}";
             bits.Text=$"{catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).BitWidth} {Tr("BIT_UNIT")}";
             int pictureIndex=hardwareId==11 ? OwnHardwareService.OwnPictureIndex(state.OwnHardware.LaunchedDesign!.Value,state.OwnHardware.LaunchedMedium!.Value) : hardwareId;
             picture.Texture=OriginalAssetStore.LoadTexture($"Graphic/Embedded/Hardware{pictureIndex}.bmp");
@@ -177,7 +177,7 @@ public partial class Main
         void RefreshQuote()
         {
             var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
-            quote.Text=$"{Tr("PLANNING_COST")}: ¥{value.Cost:N0}\n{Tr("DEVELOPMENT_POINTS")}: {value.Points}";
+            quote.Text=$"{Tr("PLANNING_COST")}: ¥{DisplayNumbers.Format(value.Cost)}\n{Tr("DEVELOPMENT_POINTS")}: {value.Points}";
             gate.Text=Tr($"PLANNING_RESULT_{result}");gate.Visible=result!=DevelopmentPlanningResult.Success;
             start.Disabled=result!=DevelopmentPlanningResult.Success;
         }

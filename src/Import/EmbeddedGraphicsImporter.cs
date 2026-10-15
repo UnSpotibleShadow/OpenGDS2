@@ -10,6 +10,8 @@ public static class EmbeddedGraphicsImporter
     public static void Extract(byte[] executable, string destination)
     {
         Directory.CreateDirectory(destination);NativePresentationAssetImporter.Extract(executable,destination);
+        SerializedImageBinding(executable,0x26D228,"Image1",1);WriteBitmap(executable,0x26D228,64,64,destination,"PoachingRival.bmp");
+        SerializedImageBinding(executable,0x26E6E8,"Image1",2);WriteBitmap(executable,0x26E6E8,64,64,destination,"PoachingPresident.bmp");
         WriteBitmap(executable,0x2C65B4,71,96,destination,"CardFrame.bmp");
         WriteBitmap(executable,0x2BABBE,71,96,destination,"CardBack.bmp");
         for(int i=0;i<26;i++){int offset=0x2C5FC2-i*0x5F2;SerializedImageBinding(executable,offset,"Image3",i);WriteBitmap(executable,offset,20,20,destination,$"CardRank{i}.bmp");}

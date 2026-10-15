@@ -4194,3 +4194,231 @@ msgstr "Buy facility"
 
 msgid "TOOLBAR_YEAR"
 msgstr "Year {0}"
+
+msgid "BUY_BACKUP_DEVICE"
+msgstr "Buy backup device"
+
+msgid "BACKUP_DEVICE_CONFIRM"
+msgstr "Buy a backup device for {0}?"
+
+msgid "BACKUP_DEVICE_EXPLANATION"
+msgstr "A backup device protects games in development from a computer virus. The purchase costs ¥100 million."
+
+msgid "BACKUP_DEVICE_RESULT_AlreadyOwned"
+msgstr "Your company already owns a backup device. No further purchase is needed."
+
+msgid "BACKUP_DEVICE_RESULT_InsufficientFunds"
+msgstr "There are not enough funds to buy the backup device."
+
+msgid "BACKUP_DEVICE_RESULT_Success"
+msgstr "The backup device has been purchased. Your development data now has protection against virus incidents."
+
+msgid "BACKUP_DEVICE_RESULT_StateUnknown"
+msgstr "Company funds are unknown. The purchase cannot be completed."
+
+msgid "VIRUS_EVENT"
+msgstr "Computer virus"
+
+msgid "VIRUS_INTRO"
+msgstr "A computer virus has attacked the game in development room {room}!"
+
+msgid "VIRUS_PROTECTED"
+msgstr "The backup device protected the project. Its development data is safe."
+
+msgid "VIRUS_STRESS"
+msgstr "The employees assigned to development room {room} are much more stressed after losing their work."
+
+msgid "VIRUS_BUY_BACKUP"
+msgstr "We should buy a backup device to prevent this from happening again."
+
+msgid "VIRUS_LOSS_REACTION_0"
+msgstr "All that work, gone!"
+
+msgid "VIRUS_PROTECTED_REACTION_0"
+msgstr "Good thing we had that backup."
+
+msgid "VIRUS_LOSS_REACTION_1"
+msgstr "We had come so far…"
+
+msgid "VIRUS_PROTECTED_REACTION_1"
+msgstr "Our work is still safe!"
+
+msgid "VIRUS_LOSS_REACTION_2"
+msgstr "That is terrible. I have lost my motivation."
+
+msgid "VIRUS_PROTECTED_REACTION_2"
+msgstr "That was a close call."
+
+msgid "VIRUS_LOSS_REACTION_3"
+msgstr "I cannot believe this happened."
+
+msgid "VIRUS_PROTECTED_REACTION_3"
+msgstr "Now we can carry on with development."
+
+msgid "VIRUS_LOSS_REACTION_4"
+msgstr "The whole project has vanished!"
+
+msgid "VIRUS_PROTECTED_REACTION_4"
+msgstr "We prepared for this, and it paid off."
+
+msgid "VIRUS_LOSS_REACTION_5"
+msgstr "What a disaster for the team."
+
+msgid "VIRUS_PROTECTED_REACTION_5"
+msgstr "The backup saved our project."
+
+msgid "VIRUS_LOSS_REACTION_6"
+msgstr "No! Our development data!"
+
+msgid "VIRUS_PROTECTED_REACTION_6"
+msgstr "What a relief!"
+
+msgid "POACH_EMPLOYEE"
+msgstr "Poach employee"
+
+msgid "NO_POACHING_TARGETS"
+msgstr "No rival employees are available for negotiation."
+
+msgid "POACHING_TARGET_INTRO"
+msgstr "We will approach {name} about joining our company."
+
+msgid "POACHING_CONFIRM"
+msgstr "Start the poaching negotiation?"
+
+msgid "POACHING_RIVAL_ALERT"
+msgstr "A rival company is trying to recruit {name}!"
+
+msgid "POACHING_DEFENCE_INTRO"
+msgstr "Let us negotiate and try to keep our employee."
+
+msgid "POACHING_DECISION_INTRO"
+msgstr "The negotiation is over. What will {name} decide?"
+
+msgid "POACHING_DECISION_SUSPENSE"
+msgstr "I have made my decision. The company I will work for is..."
+
+msgid "POACHING_CHOICE_RIVAL"
+msgstr "I have chosen the rival company."
+
+msgid "POACHING_CHOICE_PLAYER"
+msgstr "I have chosen {company}."
+
+msgid "POACHING_RESULT_LOST_OFFENSIVE"
+msgstr "They have decided to stay with the rival company."
+
+msgid "POACHING_RESULT_LOST_DEFENSIVE"
+msgstr "{name} is leaving to join the rival company."
+
+msgid "POACHING_RESULT_WON_OFFENSIVE"
+msgstr "{name} will join our company!"
+
+msgid "POACHING_RESULT_WON_DEFENSIVE"
+msgstr "{name} will stay with our company!"
+
+msgid "POACHING_RIVAL"
+msgstr "Rival company"
+
+msgid "POACHING_DONATE"
+msgstr "Donate"
+
+msgid "POACHING_RAISE_OFFER"
+msgstr "Raise contract fee"
+
+msgid "POACHING_DONATIONS"
+msgstr "Donations"
+
+msgid "POACHING_DONATION_SENT"
+msgstr "Donation received."
+
+msgid "POACHING_OFFER_RAISED"
+msgstr "Contract offer raised."
+
+msgid "POACHING_TIME_LEFT"
+msgstr "Negotiation: {0} remaining"
+
+msgid "POACHING_ACTION_InsufficientFunds"
+msgstr "There are not enough funds for that donation."
+
+msgid "POACHING_ACTION_MoneyUnknown"
+msgstr "Company funds are unknown in this save."
+
+msgid "POACHING_ACTION_NotNegotiating"
+msgstr "The negotiation is no longer active."
+
+msgid "POACHING_ACTION_InvalidAmount"
+msgstr "Choose one of the available amounts."
+
+msgid "POACHING_RIVAL_MESSAGE_0"
+msgstr "We offer a ¥1 million donation."
+
+msgid "POACHING_RIVAL_MESSAGE_1"
+msgstr "We offer a ¥5 million donation."
+
+msgid "POACHING_RIVAL_MESSAGE_2"
+msgstr "We offer a ¥10 million donation."
+
+msgid "POACHING_RIVAL_MESSAGE_3"
+msgstr "We will add ¥10 million to the contract."
+
+msgid "POACHING_RIVAL_MESSAGE_4"
+msgstr "We will add ¥20 million to the contract."
+
+msgid "POACHING_RIVAL_MESSAGE_5"
+msgstr "We will add ¥40 million to the contract."
+
+msgid "POACHING_RIVAL_MESSAGE_6"
+msgstr "Another ¥5 million donation!"
+
+msgid "POACHING_RIVAL_MESSAGE_7"
+msgstr "Another ¥10 million donation!"
+
+msgid "POACHING_RIVAL_MESSAGE_8"
+msgstr "Another ¥15 million donation!"
+
+msgid "POACHING_RIVAL_MESSAGE_9"
+msgstr "That is our final contract offer."
+
+msgid "POACHING_EMPLOYEE_MESSAGE_0"
+msgstr "Which company should I choose?"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_1"
+msgstr "I have decided!"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_2"
+msgstr "Thank you for the donation."
+
+msgid "POACHING_EMPLOYEE_MESSAGE_3"
+msgstr "A higher contract fee is welcome."
+
+msgid "ORIGINAL_SOUND"
+msgstr "Sound"
+
+msgid "SOUND_ON"
+msgstr "On"
+
+msgid "SOUND_OFF"
+msgstr "Off"
+
+msgid "ORIGINAL_GRAPHIC_SIZE"
+msgstr "Graphic enlargement"
+
+msgid "GRAPHICS_NORMAL"
+msgstr "Normal"
+
+msgid "GRAPHICS_ENLARGED"
+msgstr "Enlarged"
+
+msgid "ORIGINAL_NUMBER_DISPLAY"
+msgstr "Number display"
+
+msgid "NUMBER_JAPANESE"
+msgstr "Japanese grouping (万 / 億 / 兆)"
+
+msgid "NUMBER_THOUSANDS"
+msgstr "Thousands grouping"
+
+msgid "GO_OUT"
+msgstr "Go out"
+
+msgid "POACHING_DONATION_ACK"
+msgstr "We are sending a donation of ¥{amount} to {name}."

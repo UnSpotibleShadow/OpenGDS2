@@ -57,10 +57,10 @@ public partial class Main
         {
             var dot=NativeText(canvas,"CompleteDot"+i,"●",new(4,250+i*16,12,16));dot.AddThemeColorOverride("font_color",colors[i]);
             NativeText(canvas,"CompleteQualityCaption"+i,Tr(keys[i]),new(16,250+i*16,80,16));
-            NativeText(canvas,"ProjectQuality"+i,$"{q[i]:N0}",new(98,250+i*16,70,16),11,HorizontalAlignment.Right);
+            NativeText(canvas,"ProjectQuality"+i,$"{DisplayNumbers.Format(q[i])}",new(98,250+i*16,70,16),11,HorizontalAlignment.Right);
         }
-        NativeText(canvas,"CompletionSize",Tr("PROJECT_SIZE")+": "+$"{Math.Floor(project.DataSize):N0} KB",new(180,198,184,21));
-        NativeText(canvas,"ProjectRecognition",Tr("NATIVE_RECOGNITION")+": "+$"{project.Recognition:N0}%",new(180,226,184,18));
+        NativeText(canvas,"CompletionSize",Tr("PROJECT_SIZE")+": "+$"{DisplayNumbers.Format(Math.Floor(project.DataSize))} KB",new(180,198,184,21));
+        NativeText(canvas,"ProjectRecognition",Tr("NATIVE_RECOGNITION")+": "+$"{DisplayNumbers.Format(project.Recognition)}%",new(180,226,184,18));
         NativeText(canvas,"CompleteBugCaption",Tr("BUGS"),new(180,254,70,17));
         NativeFill(canvas,"CompleteBugBox",new(184,275,49,25),Colors.Red);
         NativeText(canvas,"ProjectBugCount",project.Bugs.ToString(),new(184,275,49,25),15,HorizontalAlignment.Center);

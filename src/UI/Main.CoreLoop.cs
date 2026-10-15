@@ -24,12 +24,12 @@ public partial class Main
     private void AddProjectMetrics(DevelopmentProjectState project)
     {
         var metrics=new GridContainer {Columns=2};_content.AddChild(metrics);
-        AddMetric(metrics,Tr("STAT_FUN"),$"{project.Quality.Fun:N0}");
-        AddMetric(metrics,Tr("STAT_NOVELTY"),$"{project.Quality.Novelty:N0}");
-        AddMetric(metrics,Tr("STAT_GRAPHICS"),$"{project.Quality.Graphics:N0}");
-        AddMetric(metrics,Tr("STAT_MUSIC"),$"{project.Quality.Music:N0}");
+        AddMetric(metrics,Tr("STAT_FUN"),$"{DisplayNumbers.Format(project.Quality.Fun)}");
+        AddMetric(metrics,Tr("STAT_NOVELTY"),$"{DisplayNumbers.Format(project.Quality.Novelty)}");
+        AddMetric(metrics,Tr("STAT_GRAPHICS"),$"{DisplayNumbers.Format(project.Quality.Graphics)}");
+        AddMetric(metrics,Tr("STAT_MUSIC"),$"{DisplayNumbers.Format(project.Quality.Music)}");
         AddMetric(metrics,Tr("BUGS"),project.Bugs.ToString());
-        AddMetric(metrics,Tr("GAME_RECOGNITION"),$"{project.Recognition:N0}%");
+        AddMetric(metrics,Tr("GAME_RECOGNITION"),$"{DisplayNumbers.Format(project.Recognition)}%");
     }
     private void ShowProject(GameState state,DevelopmentProjectState project)
     {
@@ -228,8 +228,8 @@ public partial class Main
         foreach(string mode in new[]{"normal","hover","pressed"})button.AddThemeStyleboxOverride(mode,new StyleBoxFlat {BgColor=mode=="pressed"?new(.7f,1,.7f):Colors.White,ContentMarginTop=0,ContentMarginBottom=0,ContentMarginLeft=2});
         string exampleText=examples is null?"":string.Join("\n",examples.Where(x=>!string.IsNullOrWhiteSpace(x)));
         button.TooltipText=caption+(exampleText.Length==0?"":"\n"+exampleText);row.AddChild(button);
-        var point=new Label {Name=nodeName+"Points",Text=$"+{points:N0}",CustomMinimumSize=new(56,19),HorizontalAlignment=HorizontalAlignment.Right};point.AddThemeFontSizeOverride("font_size",11);row.AddChild(point);
-        var price=new Label {Name=nodeName+"Fee",Text=$"¥{fee:N0}",CustomMinimumSize=new(94,19),HorizontalAlignment=HorizontalAlignment.Right};price.AddThemeFontSizeOverride("font_size",11);row.AddChild(price);
+        var point=new Label {Name=nodeName+"Points",Text=$"+{DisplayNumbers.Format(points)}",CustomMinimumSize=new(56,19),HorizontalAlignment=HorizontalAlignment.Right};point.AddThemeFontSizeOverride("font_size",11);row.AddChild(point);
+        var price=new Label {Name=nodeName+"Fee",Text=$"¥{DisplayNumbers.Format(fee)}",CustomMinimumSize=new(94,19),HorizontalAlignment=HorizontalAlignment.Right};price.AddThemeFontSizeOverride("font_size",11);row.AddChild(price);
         row.GuiInput+=e=>{if(e is InputEventMouseButton {Pressed:true,ButtonIndex:MouseButton.Left}){button.ButtonPressed=true;button.EmitSignal(Button.SignalName.Pressed);}};
         if(options.GetChildCount()==2)button.CallDeferred(Control.MethodName.GrabFocus);return button;
     }
@@ -254,7 +254,7 @@ public partial class Main
         var speaker=line.EmployeeSourceIndex is int speakerSource
             ? state.Employees.FirstOrDefault(x=>x.SourceIndex==speakerSource) ?? state.EmployeeSources.FirstOrDefault(x=>x.SourceIndex==speakerSource)?.Employee : null;
         string speakerName=secretary ? DialogueText("CORE_SECRETARY") : speaker is null ? DialogueText("CORE_EMPLOYEE") :
-            string.Format(Tr("CHECKPOINT_EMPLOYEE_NAMED"),EmployeeName(speaker));
+            string.Format(DisplayNumbers.Provider,Tr("CHECKPOINT_EMPLOYEE_NAMED"),EmployeeName(speaker));
         int? portrait=secretary ? SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex) : line.EmployeePortraitId;
         ShowConversation(DialogueText(meeting.Milestone==DevelopmentMilestone.SelectType ? "CHECKPOINT_ALPHA_MEETING" : "CHECKPOINT_BETA_MEETING"),[new(speakerName,body,portrait)],()=>
         {

@@ -1,3 +1,38 @@
+# Current handoff — original-map implementation, 15 October 2026
+
+Owner authorized the full map backlog and standing merges of verified PRs.
+Branch `codex/map-backlog-implementation`, base
+`a5abd1de0336ea67ba87aad200899d5dbf7472c0`, implements the gameplay backup
+purchase/virus branch, four-form employee poaching including automatic offers,
+and original sound/graphics/number options/direct access. Read
+`docs/map-backlog-implementation.md` and `docs/map-backlog-verification.md`.
+551 optional-original domain checks, clean app build, 19 map/property tests,
+eight affected Godot regressions and full official-LZH import pass.
+
+The official archive is recovered and inventoried privately. All 45 CRCs,
+422 raster properties, 82 root-icon exports and three PE resource payloads are
+checked. All 2605 control streams/all 84 roots are structurally bounded, including
+MDI's implicit ClientLeft header; 537 picture properties are accounted for.
+Opaque marker meanings and dynamic semantics remain open. Native save mapping
+pairs 130 templates/448 field slots/447 members; RNG maps 310 draws/one seed site.
+No native GD2 compatibility or full native draw-order/pixel/timing parity is claimed.
+Wine 11 crashes at host level before a usable original-game window; all 245
+original-versus-port scenarios remain pending. Do not turn static coverage into
+runtime acceptance. Reimport for 322 dialogue entries and negotiation portraits.
+Keep #95 open. No release/export/Actions/visibility changes are authorized.
+
+Recovery/check logs and guarded publication receipts:
+`/workspace/scratch/map-backlog-implementation/`. The full git checkout is
+`/workspace/scratch/m105-review-git`; the primary snapshot has no .git and needs
+only verified changed files synced after publication. Avoid repeating passed
+checks without a relevant change; use the repository watchdog for new checks.
+
+**Next owner request:** after this batch is published, investigate the latest
+issue #118, created while the owner compared the old and new games. Read its
+latest body/attachments then. Persist it in `/workspace/review-task-list.md`.
+The owner selects the active model through the UI; do not spawn agents merely
+to emulate the requested Sol Light model switch.
+
 # Development execution safeguards
 
 ## Original-game mapping — 15 October 2026

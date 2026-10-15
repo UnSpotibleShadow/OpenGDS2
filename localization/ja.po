@@ -4017,3 +4017,231 @@ msgstr "施設を購入"
 
 msgid "TOOLBAR_YEAR"
 msgstr "{0}年"
+
+msgid "BUY_BACKUP_DEVICE"
+msgstr "バックアップ機を購入"
+
+msgid "BACKUP_DEVICE_CONFIRM"
+msgstr "{0}でバックアップ機を購入しますか？"
+
+msgid "BACKUP_DEVICE_EXPLANATION"
+msgstr "バックアップ機で開発データを保護できます。購入費用は1億円です。"
+
+msgid "BACKUP_DEVICE_RESULT_AlreadyOwned"
+msgstr "バックアップ機は導入済みです。追加購入は不要です。"
+
+msgid "BACKUP_DEVICE_RESULT_InsufficientFunds"
+msgstr "バックアップ機の購入資金が不足しています。"
+
+msgid "BACKUP_DEVICE_RESULT_Success"
+msgstr "バックアップ機を導入しました。ウイルスによる開発データの損失に備えられます。"
+
+msgid "BACKUP_DEVICE_RESULT_StateUnknown"
+msgstr "所持金を確認できないため、購入できません。"
+
+msgid "VIRUS_EVENT"
+msgstr "コンピューターウイルス"
+
+msgid "VIRUS_INTRO"
+msgstr "第{room}開発室でウイルスが発生しました！"
+
+msgid "VIRUS_PROTECTED"
+msgstr "バックアップにより、開発中のデータは無事です。"
+
+msgid "VIRUS_STRESS"
+msgstr "開発室{room}の担当者はデータを失い、大きなストレスを受けています。"
+
+msgid "VIRUS_BUY_BACKUP"
+msgstr "次の被害を防ぐため、バックアップ機の導入を検討してください。"
+
+msgid "VIRUS_LOSS_REACTION_0"
+msgstr "今までの作業が失われてしまった……。"
+
+msgid "VIRUS_PROTECTED_REACTION_0"
+msgstr "バックアップがあって助かった。"
+
+msgid "VIRUS_LOSS_REACTION_1"
+msgstr "ここまで開発してきたのに……。"
+
+msgid "VIRUS_PROTECTED_REACTION_1"
+msgstr "作業内容は無事だ！"
+
+msgid "VIRUS_LOSS_REACTION_2"
+msgstr "これはつらい。気力が出ない。"
+
+msgid "VIRUS_PROTECTED_REACTION_2"
+msgstr "危ないところだった。"
+
+msgid "VIRUS_LOSS_REACTION_3"
+msgstr "信じられない出来事だ。"
+
+msgid "VIRUS_PROTECTED_REACTION_3"
+msgstr "開発を続けられそうだ。"
+
+msgid "VIRUS_LOSS_REACTION_4"
+msgstr "プロジェクトのデータが消えてしまった！"
+
+msgid "VIRUS_PROTECTED_REACTION_4"
+msgstr "備えておいてよかった。"
+
+msgid "VIRUS_LOSS_REACTION_5"
+msgstr "チーム全員が困っている。"
+
+msgid "VIRUS_PROTECTED_REACTION_5"
+msgstr "大切なデータが守られた。"
+
+msgid "VIRUS_LOSS_REACTION_6"
+msgstr "開発データを失うなんて！"
+
+msgid "VIRUS_PROTECTED_REACTION_6"
+msgstr "ひと安心できる。"
+
+msgid "POACH_EMPLOYEE"
+msgstr "社員引き抜き"
+
+msgid "NO_POACHING_TARGETS"
+msgstr "交渉できるライバル社員はいません。"
+
+msgid "POACHING_TARGET_INTRO"
+msgstr "{name}の入社交渉を始めます。"
+
+msgid "POACHING_CONFIRM"
+msgstr "引き抜き交渉を始めますか？"
+
+msgid "POACHING_RIVAL_ALERT"
+msgstr "ライバル会社が{name}を勧誘しています！"
+
+msgid "POACHING_DEFENCE_INTRO"
+msgstr "交渉して社員に残ってもらいましょう。"
+
+msgid "POACHING_DECISION_INTRO"
+msgstr "交渉は終了しました。{name}の決断は？"
+
+msgid "POACHING_DECISION_SUSPENSE"
+msgstr "決めました。これから働く会社は……"
+
+msgid "POACHING_CHOICE_RIVAL"
+msgstr "ライバル会社で働きます。"
+
+msgid "POACHING_CHOICE_PLAYER"
+msgstr "{company}で働きます。"
+
+msgid "POACHING_RESULT_LOST_OFFENSIVE"
+msgstr "ライバル会社に残ることになりました。"
+
+msgid "POACHING_RESULT_LOST_DEFENSIVE"
+msgstr "{name}はライバル会社に移ります。"
+
+msgid "POACHING_RESULT_WON_OFFENSIVE"
+msgstr "{name}が入社します！"
+
+msgid "POACHING_RESULT_WON_DEFENSIVE"
+msgstr "{name}が残ってくれます！"
+
+msgid "POACHING_RIVAL"
+msgstr "ライバル会社"
+
+msgid "POACHING_DONATE"
+msgstr "献金する"
+
+msgid "POACHING_RAISE_OFFER"
+msgstr "契約金を上げる"
+
+msgid "POACHING_DONATIONS"
+msgstr "献金"
+
+msgid "POACHING_DONATION_SENT"
+msgstr "献金を受け取りました。"
+
+msgid "POACHING_OFFER_RAISED"
+msgstr "契約金を上げました。"
+
+msgid "POACHING_TIME_LEFT"
+msgstr "交渉残り: {0}"
+
+msgid "POACHING_ACTION_InsufficientFunds"
+msgstr "献金の資金が足りません。"
+
+msgid "POACHING_ACTION_MoneyUnknown"
+msgstr "このセーブでは会社の資金が不明です。"
+
+msgid "POACHING_ACTION_NotNegotiating"
+msgstr "交渉は終了しています。"
+
+msgid "POACHING_ACTION_InvalidAmount"
+msgstr "表示された金額から選択してください。"
+
+msgid "POACHING_RIVAL_MESSAGE_0"
+msgstr "100万円を献金します。"
+
+msgid "POACHING_RIVAL_MESSAGE_1"
+msgstr "500万円を献金します。"
+
+msgid "POACHING_RIVAL_MESSAGE_2"
+msgstr "1000万円を献金します。"
+
+msgid "POACHING_RIVAL_MESSAGE_3"
+msgstr "契約金を1000万円増やします。"
+
+msgid "POACHING_RIVAL_MESSAGE_4"
+msgstr "契約金を2000万円増やします。"
+
+msgid "POACHING_RIVAL_MESSAGE_5"
+msgstr "契約金を4000万円増やします。"
+
+msgid "POACHING_RIVAL_MESSAGE_6"
+msgstr "さらに500万円を献金します！"
+
+msgid "POACHING_RIVAL_MESSAGE_7"
+msgstr "さらに1000万円を献金します！"
+
+msgid "POACHING_RIVAL_MESSAGE_8"
+msgstr "さらに1500万円を献金します！"
+
+msgid "POACHING_RIVAL_MESSAGE_9"
+msgstr "これが最後の契約金です。"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_0"
+msgstr "どちらの会社にしようかな。"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_1"
+msgstr "決めました！"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_2"
+msgstr "献金ありがとうございます。"
+
+msgid "POACHING_EMPLOYEE_MESSAGE_3"
+msgstr "契約金が増えるのはうれしいです。"
+
+msgid "ORIGINAL_SOUND"
+msgstr "サウンド"
+
+msgid "SOUND_ON"
+msgstr "オン"
+
+msgid "SOUND_OFF"
+msgstr "オフ"
+
+msgid "ORIGINAL_GRAPHIC_SIZE"
+msgstr "グラフィック拡大"
+
+msgid "GRAPHICS_NORMAL"
+msgstr "標準"
+
+msgid "GRAPHICS_ENLARGED"
+msgstr "拡大"
+
+msgid "ORIGINAL_NUMBER_DISPLAY"
+msgstr "数字表示"
+
+msgid "NUMBER_JAPANESE"
+msgstr "万・億・兆で表示"
+
+msgid "NUMBER_THOUSANDS"
+msgstr "3桁区切り"
+
+msgid "GO_OUT"
+msgstr "外出する"
+
+msgid "POACHING_DONATION_ACK"
+msgstr "{name}に{amount}円を献金します。"

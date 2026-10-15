@@ -3,6 +3,21 @@ namespace OpenGDS2.Domain;
 /// <summary>Engine-owned state. Keep this independent from Godot UI nodes so rules can be regression-tested.</summary>
 public sealed class GameState
 {
+    // Native members0140/01DC participate in save/load. Null preserves legacy uncertainty.
+    public NumberGrouping? NumberDisplayGrouping {get;set;}
+    public bool? OfficeGraphicsEnlarged {get;set;}
+    // Native member 02CC resets to Empty/zero and participates in GD2 save/load.
+    // Earlier modern versions had no purchase path, so their absent flag is false.
+    public bool BackupDeviceOwned {get;set;}
+    public long PoachingOpportunityTicks {get;set;}
+    public bool PoachingEmptyRosterObserved {get;set;}
+    public bool PoachingUnknownTargetObserved {get;set;}
+    public PoachingState? PendingPoaching {get;set;}
+    public int BackupDeviceAnimationTicks {get;set;}
+    public bool BackupDeviceAlternateFrame {get;set;}
+    public BackupDevicePurchaseState? PendingBackupDevice {get;set;}
+    public VirusEventState? PendingVirusEvent {get;set;}
+    public CompanyEventContinuation? CompanyEventContinuation {get;set;}
     public LevelUpPresentationState? PendingLevelUpResult {get;set;}
 
     // Unknown original values stay nullable. Do not turn missing reverse-engineering evidence into zeroes.

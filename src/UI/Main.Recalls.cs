@@ -17,8 +17,8 @@ public partial class Main
         else
         {
             AddHeading(Tr($"RECALL_OUTCOME_{recall.OutcomeRoll}"),18);
-            AddHeading($"{Tr("RECALL_REFUND")}: ¥{recall.RefundAmount:N0}",18);
-            AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
+            AddHeading($"{Tr("RECALL_REFUND")}: ¥{DisplayNumbers.Format(recall.RefundAmount)}",18);
+            AddHeading($"{Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}",18);
         }
         _status=new Label();_content.AddChild(_status);
         AddAction("SAVE_GAME",()=>

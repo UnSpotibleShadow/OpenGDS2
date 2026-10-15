@@ -14,7 +14,7 @@ public partial class Main
         {AddHeading(Tr($"PROMOTION_RESULT_{allowed}"),16);AddAction("CANCEL",()=>ShowProject(state,project));return;}
         int selected=-1;
         var table=new ItemList {Name="PromotionMedia",CustomMinimumSize=new(420,200)};
-        for(int i=0;i<PromotionService.Media.Count;i++)table.AddItem($"{Tr($"PROMOTION_MEDIA_{i}")} — {PromotionService.Media[i].Fee:N0}");
+        for(int i=0;i<PromotionService.Media.Count;i++)table.AddItem($"{Tr($"PROMOTION_MEDIA_{i}")} — {DisplayNumbers.Format(PromotionService.Media[i].Fee)}");
         _content.AddChild(table);
         var message=new Label {Name="PromotionStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(message);
         var confirm=new Button {Name="ConfirmPromotion",Text=Tr("CONFIRM"),Disabled=true};_content.AddChild(confirm);
@@ -44,7 +44,7 @@ public partial class Main
         void Refresh()
         {
             close.Disabled=meeting.Callbacks<27;
-            report.Text=meeting.Gain is double gain ? string.Format(Tr("PROMOTION_COMPLETED"),gain,PromotionService.Media[meeting.MediaIndex].Fee) : Tr("PROMOTION_IN_PROGRESS");
+            report.Text=meeting.Gain is double gain ? string.Format(DisplayNumbers.Provider,Tr("PROMOTION_COMPLETED"),gain,PromotionService.Media[meeting.MediaIndex].Fee) : Tr("PROMOTION_IN_PROGRESS");
         }
         Refresh();if(meeting.Callbacks<27)AdvancePromotionMeeting(state,meeting,_dialog!,Refresh);
         return true;

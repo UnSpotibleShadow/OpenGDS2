@@ -5,6 +5,7 @@ public static class NativeWindowArtwork
 {
     private static readonly Dictionary<string,string> Forms=new()
     {
+        ["PoachingSelectionWindow"]="fGMHikinukiSel",["PoachingWindow"]="fGMHikinuki",["PoachingDonationWindow"]="fGMHikinukiKnS",["PoachingContractWindow"]="fGMHikinukiKeS",
         ["CasinoSelector"]="fGMTenantCasinoSn",["CasinoCoinPurchase"]="fGMTenantCasinoSn",["BankWindow"]="fGMBank",["SaveSlotWindow"]="fGMGameSave",["LoadSlotWindow"]="fGMGameLoad",["ActivityConfirmationWindow"]="fGMSeisanZ",
         ["PlanningDiscussionScene"]="fGMKikakuKaigi",["HardwareLicenceWindow"]="fGMHLicense",["StaffRosterWindow"]="fGMSyain",
         ["TechnologyUseWindow"]="fGMInfo",["ReachTimeRecordsWindow"]="fGMToutatuRank",["SalesRankingWindow"]="fGMRank100",["AdditionalProductionWindow"]="fGMSyukkaSai",["SalesHistoryWindow"]="fGMZishaK",
@@ -17,7 +18,7 @@ public static class NativeWindowArtwork
         ["DevelopmentProjectWindow"]="fGMDevW1",["DevelopmentCompleteWindow"]="fGMKansei",["ShipmentWindow"]="fGMSyukka",["MediaInformationWindow"]="fGMMedia",
         ["CompactProductWindow"]="fGMZishaKW",["MagazineReviewsWindow"]="fGMCrossR",["HallCelebrationWindow"]="fGMCrossRDen",
         ["ExhibitionSelectionWindow"]="fGMGameDexSn",["ExhibitionAttendanceWindow"]="fGMGameDexKs",["AwardCeremonyWindow"]="fGMKontesuto",["AwardAnnouncementWindow"]="fGMKontesutoHp",
-        ["GraduateRecruitmentWindow"]="fGMSKoyouKz",["AnnualRenewalWindow"]="fGMKeiyakuS",["ConversationWindow"]="fGMKaiwa",["ComputerPurchaseWindow"]="fGMComK",["TechnologyPurchaseWindow"]="fGMTechKau",["LevelUpResultWindow"]="fGMLevelUP",
+        ["GraduateRecruitmentWindow"]="fGMKeiyakuS",["AnnualRenewalWindow"]="fGMSKoyouKz",["ConversationWindow"]="fGMKaiwa",["ComputerPurchaseWindow"]="fGMComK",["TechnologyPurchaseWindow"]="fGMTechKau",["LevelUpResultWindow"]="fGMLevelUP",
         ["HardwarePlanWindow"]="fGMTenantHardS",["NegotiationConfirmationWindow"]="fGMTenantBengo",["FacilityPickerWindow"]="fGMTenaSel",["FacilityStudyWindow"]="fGMTenantTechSel",
         ["FacilitySchoolWindow"]="fGMTenantGameS",["FacilityHotSpringWindow"]="fGMTenantOnsen",["FacilityRecyclingWindow"]="fGMTenantReS",["FacilityTechnologySchoolWindow"]="fGMTenantTechS",
         ["FacilityCasinoWindow"]="fGMTenantCasino",["FacilityLawyerWindow"]="fGMTenantBengo",["FacilityMysteryLabWindow"]="fGMTenantNazoP",["FacilityProductionLabWindow"]="fGMTenantSeisan",["FacilityHardwareLabWindow"]="fGMTenantHard"

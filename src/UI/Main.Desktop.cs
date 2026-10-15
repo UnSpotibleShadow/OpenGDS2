@@ -67,6 +67,10 @@ public partial class Main
     {
         _music.SetMonth(state.Month ?? 0);
         if (_desktop is not null && ReferenceEquals(state, _desktopState) && _desktopLocale == TranslationServer.GetLocale()) return;
+        if(state.NumberDisplayGrouping is { } grouping)DisplayNumbers.Grouping=grouping;
+        else state.NumberDisplayGrouping=DisplayNumbers.Grouping;
+        if(state.OfficeGraphicsEnlarged is { } enlarged)_officeGraphicScale=enlarged?2:1;
+        else state.OfficeGraphicsEnlarged=_officeGraphicScale==2;
         DestroyDesktop();
         foreach (Node child in _screenContent.GetChildren()) { _screenContent.RemoveChild(child); child.QueueFree(); }
         _screen.Hide(); _desktopState = state; _desktopLocale = TranslationServer.GetLocale();
@@ -77,20 +81,21 @@ public partial class Main
         var layout = new VBoxContainer(); layout.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         layout.AddThemeConstantOverride("separation", 0); _desktop.AddChild(layout);
         var menus = new HBoxContainer { CustomMinimumSize = new Vector2(0, 24) }; layout.AddChild(menus);
-        Menu(menus, "MENU_GAME", [("SAVE_GAME", ()=>ShowSaveSlots(state,false)), ("LOAD_GAME", ()=>ShowSaveSlots(state,true)),
-            ("BACK_TO_TITLE", ShowTitleScreen)]);
+        OriginalGameMenu(menus,state);
         Menu(menus, "MENU_COMPANY", [("PUBLIC_RELATIONS", () => BeginCompanyActivity(state,CompanyActivity.PublicRelations)),("BANK",()=>ShowBank(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
             ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
             ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state)),
-            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion))]);
-        Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
+            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion)),("BUY_BACKUP_DEVICE",()=>BeginBackupDevice(state))]);
+        Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment),("POACH_EMPLOYEE",()=>ShowPoachingSelection(state))]);
         Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state))]);
         Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state)),("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state))]);
         Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
             ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
+        OriginalGoOutMenu(menus,state);
+        OriginalSettingsMenu(menus);
         Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0,24) };
@@ -145,9 +150,10 @@ public partial class Main
             var officeImage = new TextureRect { Name = "OriginalOfficeBackground", Texture = texture,
                 TextureFilter = TextureFilterEnum.Nearest, ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
                 StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2(466, 290), TooltipText = Tr("OFFICE_EMPLOYEE_HELP") };
+                CustomMinimumSize = new Vector2(466*_officeGraphicScale,290*_officeGraphicScale), TooltipText = Tr("OFFICE_EMPLOYEE_HELP") };
             officeImage.GuiInput += input => OnOfficeInput(state,officeImage,input);
-            office.Body.AddChild(officeImage);
+            var viewport=new ScrollContainer {Name="OfficeViewport",SizeFlagsHorizontal=SizeFlags.ExpandFill,SizeFlagsVertical=SizeFlags.ExpandFill};
+            office.Body.AddChild(viewport);viewport.AddChild(officeImage);
         }
         else office.Body.AddChild(new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(186, 318));
@@ -269,7 +275,7 @@ public partial class Main
             for (int index = 0; index < actions.Length; index++)
                 menu.GetPopup().SetItemDisabled(index, !DesktopActionEnabled(actions[index].Key));
         };
-        menu.GetPopup().IdPressed += id => { if (DesktopActionEnabled(actions[(int)id].Key)) actions[(int)id].Action(); };
+        menu.GetPopup().IdPressed += id => { if (id>=0 && id<actions.Length && DesktopActionEnabled(actions[(int)id].Key)) actions[(int)id].Action(); };
     }
 
     private bool DesktopActionEnabled(string key)
@@ -279,7 +285,7 @@ public partial class Main
         if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;
         // Original weekly forms are modal. Modern save/load/settings remain
         // accessible, but another action cannot mutate a suspended transaction.
-        if (_desktopState is GameState current && (current.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(current) || current.ReleasedGames.Any(p=>p.HallCelebration is not null) || current.PendingPromotion is not null || current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || (current.PendingFacilityReceipt is not null || current.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(current) || current.PendingMysteryLabResult is not null)) &&
+        if (_desktopState is GameState current && (CompanyEventService.HasPending(current) || current.PendingCompanyActivity is not null || ProgrammingChallengeService.HasPending(current) || current.ReleasedGames.Any(p=>p.HallCelebration is not null) || current.PendingPromotion is not null || current.PendingBankLoanReceipt is not null || CalendarService.HasPending(current) || current.PendingHireGreeting is not null || current.PendingSecretaryAdvice is not null || current.PendingSecretaryReplacement is not null || current.PendingProjectCancellation is not null || (current.PendingFacilityReceipt is not null || current.PendingFeeNegotiation is not null || OwnHardwareService.HasPending(current) || current.PendingMysteryLabResult is not null)) &&
             key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE")) return false;
         return key switch
         {
@@ -346,12 +352,12 @@ public partial class Main
         if (_desktopLoad is not null) _desktopLoad.Disabled = !System.IO.File.Exists(SavePath);
         foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
             button.Disabled=!button.GetMeta("base_enabled").AsBool() || !DesktopActionEnabled(button.Name.ToString()[7..]);
-        _desktopFunds.Text = $"{string.Format(Tr("TOOLBAR_YEAR"),state.Year?.ToString()??"?")}   {Tr("FUNDS")}: ¥{state.Money:N0}";
+        _desktopFunds.Text = $"{string.Format(DisplayNumbers.Provider,Tr("TOOLBAR_YEAR"),state.Year?.ToString()??"?")}   {Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}";
         _companyMetrics["COMPANY_NAME"].Text = state.Company.Name;
-        _companyMetrics["FUNDS"].Text = state.Money?.ToString("N0") ?? "?";
-        _companyMetrics["WEEKLY_NET"].Text=state.Company.WeeklyNet?.ToString("N0") ?? "?";
-        _companyMetrics["MONTHLY_NET"].Text=state.Company.MonthlyNet?.ToString("N0") ?? "?";
-        _companyMetrics["YEARLY_NET"].Text=state.Company.YearlyNet?.ToString("N0") ?? "?";
+        _companyMetrics["FUNDS"].Text = state.Money?.ToDisplayNumber()?? "?";
+        _companyMetrics["WEEKLY_NET"].Text=state.Company.WeeklyNet?.ToDisplayNumber()?? "?";
+        _companyMetrics["MONTHLY_NET"].Text=state.Company.MonthlyNet?.ToDisplayNumber()?? "?";
+        _companyMetrics["YEARLY_NET"].Text=state.Company.YearlyNet?.ToDisplayNumber()?? "?";
         _companyMetrics["COMPANY_FAME"].Text = state.Company.Fame is int fame ? $"{fame}%" : "?";
         _companyMetrics["PRODUCTION_CAPACITY"].Text = state.Company.ProductionCapacity?.ToString() ?? "?";
         _companyMetrics["GENRE_RESEARCH"].Text = state.Company.OriginalMember90?.ToString() ?? "?";
@@ -383,14 +389,14 @@ public partial class Main
             string[] values = [EmployeeName(employee), employee.Level?.ToString() ?? "?", employee.Fun?.ToString() ?? "?",
                 employee.Novelty?.ToString() ?? "?", employee.Graphics?.ToString() ?? "?", employee.Music?.ToString() ?? "?",
                 employee.Accuracy?.ToString() ?? "?", employee.DevelopmentSpeed?.ToString() ?? "?", employee.Inspiration?.ToString() ?? "?",
-                employee.Experience?.ToString("N0") ?? "?"];
+                employee.Experience?.ToDisplayNumber()?? "?"];
             for (int col = 0; col < values.Length; col++) _staffRows[index].SetText(col, values[col]);
         }
         int? selectedProductId=_productTable.GetSelected()?.GetMetadata(0).AsInt32();
         SyncRows(_productTable, _productRows, state.ReleasedGames.Count);
         for (int index = 0; index < state.ReleasedGames.Count; index++)
         {
-            var game = state.ReleasedGames[state.ReleasedGames.Count-1-index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
+            var game = state.ReleasedGames[state.ReleasedGames.Count-1-index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToDisplayNumber(), game.UnitsSold.ToDisplayNumber(), game.Stock.ToDisplayNumber()];
             for (int col = 0; col < values.Length; col++) _productRows[index].SetText(col, values[col]);
             if(game.ProductIndex==selectedProductId)_productRows[index].Select(0);
         }

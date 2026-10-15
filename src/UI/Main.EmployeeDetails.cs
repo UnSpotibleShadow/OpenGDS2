@@ -147,7 +147,7 @@ public partial class Main
         var e=_selectedEmployee;if (e is null || _desktopState is null) return;
         if (!_desktopState.Employees.Contains(e)) {CloseEmployeeDetails();return;}
         _employeeDetailsLabels["Name"].Text=EmployeeName(e);_employeeDetailsLabels["Level"].Text=$"{Tr("LEVEL")} {e.Level?.ToString() ?? "?"}/10";
-        _employeeDetailsLabels["Salary"].Text=e.MonthlySalary?.ToString("N0") ?? "?";_employeeDetailsLabels["Fee"].Text=e.ContractFee?.ToString("N0") ?? "?";
+        _employeeDetailsLabels["Salary"].Text=e.MonthlySalary?.ToDisplayNumber()?? "?";_employeeDetailsLabels["Fee"].Text=e.ContractFee?.ToDisplayNumber()?? "?";
         _employeeDetailsLabels["Experience"].Text=$"{(e.Experience is double exp ? Math.Floor(exp).ToString() : "?")}/{(e.Level is >=1 and <=10 ? EmployeeLevelUpService.RequiredExperience(e.Level.Value).ToString() : "?")}";
         foreach (var (key,value) in new (string,double?)[] {("Speed",e.DevelopmentSpeed),("Inspiration",e.Inspiration),("Stress",e.Stress)})
         {_employeeDetailsLabels[key].Text=value is double v ? Math.Floor(v).ToString() : "?";_employeeDetailsBars[key].Visible=value is not null;_employeeDetailsBars[key].Value=value ?? 0;}

@@ -19,6 +19,7 @@ import sys
 from inspect_vb6 import PeImage, ParseError, inspect
 import trace_hiring_pcode as pcode
 from original_game_map_view import render_view
+from verify_serialized_properties import inventory as property_inventory
 
 ROOT = Path(__file__).resolve().parents[1]
 STRUCTURE = ROOT / "tools/original_game_structure.json"
@@ -241,6 +242,14 @@ def build(exe, structure):
                 if fmt != anchor["format"]:
                     raise ParseError("picture format disagrees with source: " + anchor["id"])
     menus = recover_menus(data, metadata["objects"])
+    property_report=property_inventory(Path(exe),structure)
+    property_records={row['id']:row for row in property_report['records']}
+    for row in structure['instances']:
+        if row['property_parse']!=property_records[row['id']]['status']:
+            raise ParseError('stale serialized property disposition: '+row['id'])
+    recovered_pictures={(row['offset'],row['size'],row['sha256']) for row in property_report['pictures']}
+    if recovered_pictures!={(row['offset'],row['size'],row['sha256']) for row in structure['pictures']}:
+        raise ParseError('serialized picture property inventory is incomplete')
     timers = [{"id": "timer:" + row["id"].removeprefix("instance:"), "instance": row["id"],
         "object": row["object"], "control": row["control"], "serialized": row["timer_properties"],
         "bound_procedures": [e["procedure"] for e in events if e["control"] == row["control"]],
@@ -262,6 +271,7 @@ def build(exe, structure):
         "numeric_facts": structure.get("numeric_facts", []),
         "references": references, "unresolved_dispatch": dispatch,
         "layouts": structure["layouts"], "instances": structure["instances"], "pictures": structure["pictures"],
+        "serialized_property_summary":dict(counts=property_report['counts'],opaque_marker_counts=property_report['opaque_marker_counts']),
         "limits": structure["limits"]}
 
 
@@ -365,7 +375,7 @@ def render(inventory, catalog):
         "Stable IDs, hashes and relationships are in [the inventory](original-game-inventory.json); authored workflows, runtime scenarios and gaps are in [the catalog](original-game-workflows.json). Open [the standalone searchable view](original-game-map.html) locally to browse workflows, menus, event bindings, procedures and graph edges without a server or external assets.",
         "", f"Original SHA-256: `{inventory['source_sha256']}`. Comparison baseline: `{inventory['baseline_main']}`.", "",
         "## Coverage means", "",
-        "Every discovered item has an inventory entry, and every compiled object has a workflow disposition. This is **100% accounting of the enumerated sets**, not 100% game understanding or adaptation parity. The complete archive, all VB property encodings, dynamically dispatched targets and native runtime behavior are open boundaries.", "",
+        "Every discovered item has an inventory entry, and every compiled object has a workflow disposition. This is **100% accounting of the enumerated sets**, not 100% game understanding or adaptation parity. The official archive is now inventoried and imported resources are checked separately. One MDI root encoding, opaque property meanings, dynamically dispatched targets and native runtime behavior remain open boundaries.", "",
         "| Set | Accounted | Meaning |", "| --- | ---: | --- |",
         f"| Compiled objects | {count('objects')} / {count('objects')} | {forms} forms/designers, two modules |",
         f"| Metadata control definitions | {count('controls')} / {count('controls')} | Includes form and menu definitions; arrays are definitions |",

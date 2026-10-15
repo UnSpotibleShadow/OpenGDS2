@@ -23,7 +23,7 @@ public partial class Main
         {
             if (!_pokerInterfaceVisible) return;
             var c=state.Casino;var b=c.Blackjack;
-            totals.Text=string.Format(Tr("POKER_TOTALS"),c.Coins,c.Bet,c.PendingPayout);
+            totals.Text=string.Format(DisplayNumbers.Provider,Tr("POKER_TOTALS"),c.Coins,c.Bet,c.PendingPayout);
             bool doubling=b.Phase is 5 or 6 or 7;
             message.Text=Tr(b.BoundaryReached ? "BLACKJACK_CARD_BOUNDARY" : doubling ? b.TieTick>0 ? "POKER_TIE" : b.Phase==5 ? "BLACKJACK_FIRST" : b.Phase==6 ? "BLACKJACK_SECOND" : "POKER_REVEAL" : b.Phase==4 ? "POKER_COLLECTING" : b.Win ? b.AwardReady ? "POKER_WIN" : "POKER_RESULT_WAIT" : b.Phase==0 ? "POKER_BET" : b.Phase==2 ? "BLACKJACK_DECISION" : "POKER_REVEAL");
             if (b.Win && b.AwardReady && (c.PendingPayout>long.MaxValue/2 || c.Coins>long.MaxValue-c.PendingPayout)) message.Text+="\n"+Tr("CASINO_RESULT_NumericLimit");

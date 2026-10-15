@@ -20,7 +20,7 @@ public partial class Main
         }
         var details=NativePlace(canvas,new Control {Name="RenewalEmployeeDetails"},new(4,203,492,131));
         var selectedTotal=NativeText(canvas,"RenewalSelectedTotal","",new(4,343,350,19),10);
-        var funds=NativeText(canvas,"RenewalFunds",$"{Tr("FUNDS")}: ¥{state.Money:N0}",new(4,324,350,19),10);
+        var funds=NativeText(canvas,"RenewalFunds",$"{Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}",new(4,324,350,19),10);
         _status=NativeText(canvas,"RenewalStatus","",new(278,304,218,19),10);
         var selection=new Dictionary<int,CheckBox>();
         void ShowPerson(EmployeeState employee)
@@ -46,7 +46,7 @@ public partial class Main
         void RefreshTotal()
         {
             var checkedPeople=state.Employees.Where(e=>selection[e.SourceIndex!.Value].ButtonPressed).ToList();
-            selectedTotal.Text=Tr("RENEWAL_SELECTED_TOTAL")+": "+(checkedPeople.Any(e=>e.ContractFee is null) ? "?" : $"¥{checkedPeople.Sum(e=>e.ContractFee!.Value):N0}");
+            selectedTotal.Text=Tr("RENEWAL_SELECTED_TOTAL")+": "+(checkedPeople.Any(e=>e.ContractFee is null) ? "?" : $"¥{DisplayNumbers.Format(checkedPeople.Sum(e=>e.ContractFee!.Value))}");
         }
         foreach(var employee in state.Employees.OrderBy(x=>x.SourceIndex))
         {
@@ -56,7 +56,7 @@ public partial class Main
             var name=new Button {Name=$"SelectRenewalEmployee{id}",Text=EmployeeName(employee),ClipText=true,CustomMinimumSize=new(122,20)};name.AddThemeFontSizeOverride("font_size",10);name.AddThemeStyleboxOverride("normal",new StyleBoxFlat {BgColor=Colors.White});name.Pressed+=()=>ShowPerson(employee);grid.AddChild(name);
             foreach(int? value in new[]{employee.Level,employee.Fun,employee.Graphics,employee.Music,employee.Novelty,employee.Accuracy})
                 {var valueLabel=new Label {Text=value?.ToString() ?? "?",HorizontalAlignment=HorizontalAlignment.Right};valueLabel.AddThemeFontSizeOverride("font_size",10);grid.AddChild(valueLabel);}
-            grid.AddChild(new Label {Text=employee.ContractFee is { } fee ? $"¥{fee:N0}" : "?",HorizontalAlignment=HorizontalAlignment.Right});
+            grid.AddChild(new Label {Text=employee.ContractFee is { } fee ? $"¥{DisplayNumbers.Format(fee)}" : "?",HorizontalAlignment=HorizontalAlignment.Right});
         }
         if(state.Employees.OrderBy(x=>x.SourceIndex).FirstOrDefault() is { } first)ShowPerson(first);
         RefreshTotal();

@@ -13,7 +13,7 @@ public partial class Main
         foreach(var entry in entries)
         {
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,entry.Slot);row.SetText(0,entry.Slot.ToString());row.SetText(1,entry.State?.Company.Name??Tr(entry.Error is null?"SAVE_SLOT_EMPTY":"SAVE_SLOT_DAMAGED"));
-            row.SetText(2,entry.State is { } snapshot?$"{snapshot.Year}/{snapshot.Month}/{snapshot.Week}":"—");row.SetText(3,entry.State?.Money?.ToString("N0")??"—");row.SetTextAlignment(3,HorizontalAlignment.Right);row.SetTooltipText(1,row.GetText(1));row.SetTooltipText(3,row.GetText(3));
+            row.SetText(2,entry.State is { } snapshot?$"{snapshot.Year}/{snapshot.Month}/{snapshot.Week}":"—");row.SetText(3,entry.State?.Money?.ToDisplayNumber()??"—");row.SetTextAlignment(3,HorizontalAlignment.Right);row.SetTooltipText(1,row.GetText(1));row.SetTooltipText(3,row.GetText(3));
         }
         var image=NativePlace(canvas,Picture("SaveSlotOfficePreview",null,new(233,145)),new(4,155,233,145));
         var detail=NativeText(canvas,"SaveSlotDetails","",new(245,155,185,145),10);detail.AutowrapMode=TextServer.AutowrapMode.WordSmart;
@@ -27,7 +27,7 @@ public partial class Main
             if(table.GetSelected() is not { } row)return;int slot=row.GetMetadata(0).AsInt32();selected=entries.ToList().FindIndex(x=>x.Slot==slot);if(selected<0)return;
             var entry=entries[selected];confirm.Disabled=load?entry.State is null:state is null;backup.Disabled=!entry.BackupAvailable;
             image.Texture=entry.State is { } snapshot?OriginalAssetStore.LoadOpeningOffice(snapshot):null;
-            detail.Text=entry.State is { } saved?$"{saved.Company.Name}\n{saved.Company.PresidentName}\n{saved.Year}/{saved.Month}/{saved.Week}\n{Tr("FUNDS")}: ¥{saved.Money:N0}\n{Tr("STAFF")}: {saved.Employees.Count}":Tr(entry.Error is null?"SAVE_SLOT_EMPTY":"SAVE_SLOT_DAMAGED");detail.TooltipText=detail.Text;
+            detail.Text=entry.State is { } saved?$"{saved.Company.Name}\n{saved.Company.PresidentName}\n{saved.Year}/{saved.Month}/{saved.Week}\n{Tr("FUNDS")}: ¥{DisplayNumbers.Format(saved.Money)}\n{Tr("STAFF")}: {saved.Employees.Count}":Tr(entry.Error is null?"SAVE_SLOT_EMPTY":"SAVE_SLOT_DAMAGED");detail.TooltipText=detail.Text;
             status.Text=entry.Error is null?"":Tr("SAVE_SLOT_DAMAGED");
         };
         void Load(bool previous)

@@ -52,7 +52,7 @@ public partial class Main
             if(enabled && !selected.Contains(id) && selected.Count==5)
             {item.Deselect((int)column);_status.Text=Tr("EXHIBITION_TooManyProducts");return;}
             if(enabled)selected.Add(id);else selected.Remove(id);
-            total.Text=$"{Tr("EXHIBITION_FEE")}: ¥{selected.Count*ExhibitionService.ProductFee:N0}";
+            total.Text=$"{Tr("EXHIBITION_FEE")}: ¥{DisplayNumbers.Format(selected.Count*ExhibitionService.ProductFee)}";
         }
         developing.MultiSelected+=Select;released.MultiSelected+=Select;
         NativeAction(canvas,"ParticipateExhibition","EXHIBITION_PARTICIPATE",new(186,283,78,27),()=>
@@ -76,7 +76,7 @@ public partial class Main
             return;
         }
         ClearContent();var canvas=NativeWindow("GraduateRecruitmentWindow",Tr("GRADUATE_RECRUITMENT"),new(382,239));
-        NativeText(canvas,"GraduatePosition",string.Format(Tr("GRADUATE_POSITION"),graduates.CandidateIndex+1,graduates.Candidates.Count),new(4,3,374,23),10);
+        NativeText(canvas,"GraduatePosition",string.Format(DisplayNumbers.Provider,Tr("GRADUATE_POSITION"),graduates.CandidateIndex+1,graduates.Candidates.Count),new(4,3,374,23),10);
         EmployeePreview(canvas,employee,"Graduate",new(4,31,374,163));
         _status=NativeText(canvas,"GraduateStatus","",new(4,197,374,14),10);
         NativeAction(canvas,"HireGraduate","HIRE_CONFIRM",new(156,211,106,25),()=>{var result=GraduateService.Hire(state,_session.Random);if(result==HireResult.Success)ShowOfficeReconstruction(state);else _status.Text=Tr("HIRE_RESULT_"+result);});

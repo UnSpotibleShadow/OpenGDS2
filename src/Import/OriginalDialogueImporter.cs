@@ -13,7 +13,24 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=13,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=16,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        const int poachPool=0x606824;
+        int[] rivalMessages=[0x40,0x41,0x42,0x44,0x45,0x46,0x47,0x48,0x49,0x4A];
+        for(int i=0;i<10;i++)result.Entries.Add("POACHING_RIVAL_MESSAGE_"+i,pe.String(poachPool,rivalMessages[i]));
+        for(int i=0;i<4;i++)result.Entries.Add("POACHING_EMPLOYEE_MESSAGE_"+i,pe.String(poachPool,0x4B+i));
+        result.Entries.Add("POACHING_TARGET_INTRO","{name}"+pe.String(0x60B404,3));
+        result.Entries.Add("POACHING_CONFIRM",pe.String(0x60B404,5));
+        result.Entries.Add("POACHING_DONATION_ACK","{name}"+pe.String(0x5EE018,8)+"{amount}"+pe.String(0x5EE018,9));
+        result.Entries.Add("POACHING_RIVAL_ALERT",pe.String(0x5F99AC,0x180)+"{name}"+pe.String(0x5F99AC,0x181));
+        result.Entries.Add("POACHING_DEFENCE_INTRO",pe.String(0x5F99AC,0x182));
+        result.Entries.Add("POACHING_DECISION_INTRO",pe.String(poachPool,0x50)+"{name}"+pe.String(poachPool,0x51));
+        result.Entries.Add("POACHING_DECISION_SUSPENSE",pe.String(poachPool,0x55));
+        result.Entries.Add("POACHING_CHOICE_RIVAL",pe.String(poachPool,0x56));
+        result.Entries.Add("POACHING_CHOICE_PLAYER","{company}"+pe.String(poachPool,0x5D));
+        result.Entries.Add("POACHING_RESULT_LOST_OFFENSIVE",pe.String(poachPool,0x58));
+        result.Entries.Add("POACHING_RESULT_LOST_DEFENSIVE",pe.String(poachPool,0x59)+"{name}"+pe.String(poachPool,0x5A));
+        result.Entries.Add("POACHING_RESULT_WON_OFFENSIVE","{name}"+pe.String(poachPool,0x5E));
+        result.Entries.Add("POACHING_RESULT_WON_DEFENSIVE","{name}"+pe.String(poachPool,0x60));
         // fGMCrossR comment branches: 49 reachable variants, local strings only.
         const int reviewPool=0x5F92C4;
         int[][][] reviewComments=[
@@ -80,6 +97,20 @@ public static class OriginalDialogueImporter
         result.Entries.Add("MANGA_BEGIN_DEVELOPMENT",pe.String(meetingPool,0x13A));
         result.Entries.Add("MANGA_RIGHTS_DECLINED",pe.String(meetingPool,0x8B));
         const int workPool=0x5F99AC,shipmentPool=0x60736C;
+        const int backupPool=0x614CC8;
+        result.Entries.Add("BACKUP_DEVICE_EXPLANATION",pe.String(backupPool,0x59));
+        result.Entries.Add("BACKUP_DEVICE_RESULT_AlreadyOwned",pe.String(backupPool,0x58));
+        result.Entries.Add("BACKUP_DEVICE_RESULT_InsufficientFunds",pe.String(backupPool,0x5D));
+        result.Entries.Add("BACKUP_DEVICE_RESULT_Success",pe.String(backupPool,0x5E));
+        result.Entries.Add("VIRUS_INTRO",pe.String(workPool,0x187)+"{room}"+pe.String(workPool,0x188));
+        result.Entries.Add("VIRUS_PROTECTED",pe.String(workPool,0x194));
+        result.Entries.Add("VIRUS_STRESS",pe.String(workPool,0x191)+"{room}"+pe.String(workPool,0x192));
+        result.Entries.Add("VIRUS_BUY_BACKUP",pe.String(workPool,0x193));
+        for(int i=0;i<7;i++)
+        {
+            result.Entries.Add($"VIRUS_LOSS_REACTION_{i}",pe.String(workPool,0x18A+i));
+            result.Entries.Add($"VIRUS_PROTECTED_REACTION_{i}",pe.String(workPool,0x195+i));
+        }
         result.Entries.Add("CORE_SECRETARY",pe.String(workPool,0x77));
         result.Entries.Add("FINANCIAL_FAILURE_INTRO_0",pe.String(workPool,0xEF));
         result.Entries.Add("FINANCIAL_FAILURE_INTRO_1",pe.String(workPool,0xF0));

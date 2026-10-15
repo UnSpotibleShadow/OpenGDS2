@@ -1,0 +1,2867 @@
+{
+  "schema": 1,
+  "scope": "Intrinsic property names/types recovered from the VB runtime; supported executable only. Types98/99 and zero object markers remain structurally bounded with unresolved semantics.",
+  "classes": {
+    "Form": [
+      {
+        "index": 0,
+        "name": "FormName",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "WindowState",
+        "type": 6
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "Hdc",
+        "type": 3
+      },
+      {
+        "index": 19,
+        "name": "CurrentX",
+        "type": 7
+      },
+      {
+        "index": 20,
+        "name": "CurrentY",
+        "type": 7
+      },
+      {
+        "index": 21,
+        "name": "ScaleLeft",
+        "type": 7
+      },
+      {
+        "index": 22,
+        "name": "ScaleTop",
+        "type": 7
+      },
+      {
+        "index": 23,
+        "name": "ScaleWidth",
+        "type": 7
+      },
+      {
+        "index": 24,
+        "name": "ScaleHeight",
+        "type": 7
+      },
+      {
+        "index": 25,
+        "name": "ScaleMode",
+        "type": 6
+      },
+      {
+        "index": 26,
+        "name": "FontTransparent",
+        "type": 4
+      },
+      {
+        "index": 27,
+        "name": "DrawStyle",
+        "type": 6
+      },
+      {
+        "index": 28,
+        "name": "DrawWidth",
+        "type": 2
+      },
+      {
+        "index": 29,
+        "name": "FillStyle",
+        "type": 6
+      },
+      {
+        "index": 30,
+        "name": "FillColor",
+        "type": 5
+      },
+      {
+        "index": 31,
+        "name": "DrawMode",
+        "type": 6
+      },
+      {
+        "index": 32,
+        "name": "AutoRedraw",
+        "type": 4
+      },
+      {
+        "index": 33,
+        "name": "Picture",
+        "type": 21
+      },
+      {
+        "index": 34,
+        "name": "BorderStyle",
+        "type": 6
+      },
+      {
+        "index": 35,
+        "name": "Icon",
+        "type": 21
+      },
+      {
+        "index": 36,
+        "name": "LinkTopic",
+        "type": 1
+      },
+      {
+        "index": 37,
+        "name": "LinkMode",
+        "type": 6
+      },
+      {
+        "index": 38,
+        "name": "MaxButton",
+        "type": 4
+      },
+      {
+        "index": 39,
+        "name": "MinButton",
+        "type": 4
+      },
+      {
+        "index": 40,
+        "name": "ControlBox",
+        "type": 4
+      },
+      {
+        "index": 41,
+        "name": "Image",
+        "type": 21
+      },
+      {
+        "index": 42,
+        "name": "OwnDC",
+        "type": 4
+      },
+      {
+        "index": 43,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 44,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 45,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 46,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 47,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 48,
+        "name": "MDIChild",
+        "type": 4
+      },
+      {
+        "index": 49,
+        "name": "KeyPreview",
+        "type": 4
+      },
+      {
+        "index": 50,
+        "name": "ClipControls",
+        "type": 4
+      },
+      {
+        "index": 51,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 52,
+        "name": "ActiveControl",
+        "type": 26
+      },
+      {
+        "index": 53,
+        "name": "ClientLeft",
+        "type": 8
+      },
+      {
+        "index": 54,
+        "name": "ClientTop",
+        "type": 10
+      },
+      {
+        "index": 55,
+        "name": "ClientWidth",
+        "type": 8
+      },
+      {
+        "index": 56,
+        "name": "ClientHeight",
+        "type": 10
+      },
+      {
+        "index": 57,
+        "name": "Count",
+        "type": 2
+      },
+      {
+        "index": 58,
+        "name": "Controls",
+        "type": 32
+      },
+      {
+        "index": 59,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 60,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 61,
+        "name": "ControlsLocked",
+        "type": 4
+      },
+      {
+        "index": 62,
+        "name": "MenuNegotiation",
+        "type": 4
+      },
+      {
+        "index": 63,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 64,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 65,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 66,
+        "name": "WhatsThisButton",
+        "type": 4
+      },
+      {
+        "index": 67,
+        "name": "WhatsThisHelp",
+        "type": 4
+      },
+      {
+        "index": 68,
+        "name": "ShowInTaskbar",
+        "type": 4
+      },
+      {
+        "index": 69,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 70,
+        "name": "ShowCentered",
+        "type": 6
+      },
+      {
+        "index": 71,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 72,
+        "name": "Palette",
+        "type": 21
+      },
+      {
+        "index": 73,
+        "name": "PaletteMode",
+        "type": 6
+      },
+      {
+        "index": 74,
+        "name": "Moveable",
+        "type": 4
+      }
+    ],
+    "Label": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "BorderStyle",
+        "type": 6
+      },
+      {
+        "index": 20,
+        "name": "Alignment",
+        "type": 6
+      },
+      {
+        "index": 21,
+        "name": "DdeTopic",
+        "type": 1
+      },
+      {
+        "index": 22,
+        "name": "DdeItem",
+        "type": 1
+      },
+      {
+        "index": 23,
+        "name": "DdeMode",
+        "type": 6
+      },
+      {
+        "index": 24,
+        "name": "AutoSize",
+        "type": 4
+      },
+      {
+        "index": 25,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 26,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 27,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 28,
+        "name": "DdeTimeout",
+        "type": 2
+      },
+      {
+        "index": 29,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 30,
+        "name": "WordWrap",
+        "type": 4
+      },
+      {
+        "index": 31,
+        "name": "BackStyle",
+        "type": 6
+      },
+      {
+        "index": 32,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 33,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 34,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 35,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 36,
+        "name": "UseMnemonic",
+        "type": 4
+      },
+      {
+        "index": 37,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 38,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 39,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 40,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 41,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 42,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 43,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 44,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 45,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 46,
+        "name": "DataSourceObject",
+        "type": 22
+      }
+    ],
+    "Opt": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "Value",
+        "type": 4
+      },
+      {
+        "index": 20,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 21,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 22,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 23,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 24,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 25,
+        "name": "Alignment",
+        "type": 6
+      },
+      {
+        "index": 26,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 27,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 28,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 29,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 30,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 31,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 32,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 33,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 34,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 35,
+        "name": "PbtnPicture",
+        "type": 21
+      },
+      {
+        "index": 36,
+        "name": "PbtnDisabledPicture",
+        "type": 21
+      },
+      {
+        "index": 37,
+        "name": "PbtnDownPicture",
+        "type": 21
+      },
+      {
+        "index": 38,
+        "name": "Style",
+        "type": 6
+      },
+      {
+        "index": 39,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 40,
+        "name": "PbtnMaskColor",
+        "type": 5
+      },
+      {
+        "index": 41,
+        "name": "PbtnUseMaskColor",
+        "type": 4
+      },
+      {
+        "index": 42,
+        "name": "CausesValidation",
+        "type": 4
+      }
+    ],
+    "Push": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 5,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 6,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 7,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 8,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 9,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 11,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 12,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 13,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 14,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 18,
+        "name": "Value",
+        "type": 4
+      },
+      {
+        "index": 19,
+        "name": "Default",
+        "type": 4
+      },
+      {
+        "index": 20,
+        "name": "Cancel",
+        "type": 4
+      },
+      {
+        "index": 21,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 22,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 23,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 24,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 25,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 26,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 27,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 28,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 29,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 30,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 31,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 32,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 33,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 34,
+        "name": "PbtnPicture",
+        "type": 21
+      },
+      {
+        "index": 35,
+        "name": "PbtnDisabledPicture",
+        "type": 21
+      },
+      {
+        "index": 36,
+        "name": "PbtnDownPicture",
+        "type": 21
+      },
+      {
+        "index": 37,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 38,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 39,
+        "name": "PbtnMaskColor",
+        "type": 5
+      },
+      {
+        "index": 40,
+        "name": "PbtnUseMaskColor",
+        "type": 4
+      },
+      {
+        "index": 41,
+        "name": "Style",
+        "type": 6
+      },
+      {
+        "index": 42,
+        "name": "CausesValidation",
+        "type": 4
+      }
+    ],
+    "Pix": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "Picture",
+        "type": 21
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "Hdc",
+        "type": 3
+      },
+      {
+        "index": 20,
+        "name": "CurrentX",
+        "type": 7
+      },
+      {
+        "index": 21,
+        "name": "CurrentY",
+        "type": 7
+      },
+      {
+        "index": 22,
+        "name": "ScaleLeft",
+        "type": 7
+      },
+      {
+        "index": 23,
+        "name": "ScaleTop",
+        "type": 7
+      },
+      {
+        "index": 24,
+        "name": "ScaleWidth",
+        "type": 7
+      },
+      {
+        "index": 25,
+        "name": "ScaleHeight",
+        "type": 7
+      },
+      {
+        "index": 26,
+        "name": "ScaleMode",
+        "type": 6
+      },
+      {
+        "index": 27,
+        "name": "FontTransparent",
+        "type": 4
+      },
+      {
+        "index": 28,
+        "name": "DrawStyle",
+        "type": 6
+      },
+      {
+        "index": 29,
+        "name": "DrawWidth",
+        "type": 2
+      },
+      {
+        "index": 30,
+        "name": "FillStyle",
+        "type": 6
+      },
+      {
+        "index": 31,
+        "name": "FillColor",
+        "type": 5
+      },
+      {
+        "index": 32,
+        "name": "DrawMode",
+        "type": 6
+      },
+      {
+        "index": 33,
+        "name": "AutoRedraw",
+        "type": 4
+      },
+      {
+        "index": 34,
+        "name": "CausesValidation",
+        "type": 4
+      },
+      {
+        "index": 35,
+        "name": "AutoSize",
+        "type": 4
+      },
+      {
+        "index": 36,
+        "name": "BorderStyle",
+        "type": 6
+      },
+      {
+        "index": 37,
+        "name": "DdeTopic",
+        "type": 1
+      },
+      {
+        "index": 38,
+        "name": "DdeItem",
+        "type": 1
+      },
+      {
+        "index": 39,
+        "name": "DdeMode",
+        "type": 6
+      },
+      {
+        "index": 40,
+        "name": "Image",
+        "type": 21
+      },
+      {
+        "index": 41,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 42,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 43,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 44,
+        "name": "DdeTimeout",
+        "type": 2
+      },
+      {
+        "index": 45,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 46,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 47,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 48,
+        "name": "ClipControls",
+        "type": 4
+      },
+      {
+        "index": 49,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 50,
+        "name": "Align",
+        "type": 6
+      },
+      {
+        "index": 51,
+        "name": "ImeMode",
+        "type": 6
+      },
+      {
+        "index": 52,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 53,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 54,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 55,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 56,
+        "name": "AlignPersist",
+        "type": 4
+      },
+      {
+        "index": 57,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 58,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 59,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 60,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 61,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 62,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 63,
+        "name": "OLEDragModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 64,
+        "name": "OLEDropModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 65,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 66,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 67,
+        "name": "DataSourceObject",
+        "type": 22
+      },
+      {
+        "index": 68,
+        "name": "OwnDC",
+        "type": 4
+      }
+    ],
+    "Frame": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 20,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 21,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 22,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 23,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 24,
+        "name": "ClipControls",
+        "type": 4
+      },
+      {
+        "index": 25,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 26,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 27,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 28,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 29,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 30,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 31,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 32,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 33,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 34,
+        "name": "BorderStyle",
+        "type": 6
+      }
+    ],
+    "Check": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Caption",
+        "type": 1
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor3D",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor3D",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 14,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "Value",
+        "type": 6
+      },
+      {
+        "index": 20,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 21,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 22,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 23,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 24,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 25,
+        "name": "Alignment",
+        "type": 6
+      },
+      {
+        "index": 26,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 27,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 28,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 29,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 30,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 31,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 32,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 33,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 34,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 35,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 36,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 37,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 38,
+        "name": "PbtnPicture",
+        "type": 21
+      },
+      {
+        "index": 39,
+        "name": "PbtnDisabledPicture",
+        "type": 21
+      },
+      {
+        "index": 40,
+        "name": "PbtnDownPicture",
+        "type": 21
+      },
+      {
+        "index": 41,
+        "name": "Style",
+        "type": 6
+      },
+      {
+        "index": 42,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 43,
+        "name": "PbtnMaskColor",
+        "type": 5
+      },
+      {
+        "index": 44,
+        "name": "PbtnUseMaskColor",
+        "type": 4
+      },
+      {
+        "index": 45,
+        "name": "CausesValidation",
+        "type": 4
+      },
+      {
+        "index": 46,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 47,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 48,
+        "name": "DataSourceObject",
+        "type": 22
+      }
+    ],
+    "Combo": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Style",
+        "type": 6
+      },
+      {
+        "index": 2,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 3,
+        "name": "BackColor",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "ForeColor",
+        "type": 5
+      },
+      {
+        "index": 5,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 6,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 7,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 8,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 9,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 12,
+        "name": "Text",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 19,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 20,
+        "name": "ListCount",
+        "type": 2
+      },
+      {
+        "index": 21,
+        "name": "ListIndex",
+        "type": 2
+      },
+      {
+        "index": 22,
+        "name": "List",
+        "type": 1
+      },
+      {
+        "index": 23,
+        "name": "Sorted",
+        "type": 4
+      },
+      {
+        "index": 24,
+        "name": "SelStart",
+        "type": 3
+      },
+      {
+        "index": 25,
+        "name": "SelLength",
+        "type": 3
+      },
+      {
+        "index": 26,
+        "name": "SelText",
+        "type": 1
+      },
+      {
+        "index": 27,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 28,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 29,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 30,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 31,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 32,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 33,
+        "name": "ItemData",
+        "type": 3
+      },
+      {
+        "index": 34,
+        "name": "NewIndex",
+        "type": 2
+      },
+      {
+        "index": 35,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 36,
+        "name": "ImeMode",
+        "type": 6
+      },
+      {
+        "index": 37,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 38,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 39,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 40,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 41,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 42,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 43,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 44,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 45,
+        "name": "IntegralHeight",
+        "type": 4
+      },
+      {
+        "index": 46,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 47,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 48,
+        "name": "OLEDragModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 49,
+        "name": "OLEDropMode",
+        "type": 6
+      },
+      {
+        "index": 50,
+        "name": "Locked",
+        "type": 4
+      },
+      {
+        "index": 51,
+        "name": "TopIndex",
+        "type": 2
+      },
+      {
+        "index": 52,
+        "name": "CausesValidation",
+        "type": 4
+      },
+      {
+        "index": 53,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 54,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 55,
+        "name": "DataSourceObject",
+        "type": 22
+      }
+    ],
+    "Edit": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 2,
+        "name": "BackColor",
+        "type": 5
+      },
+      {
+        "index": 3,
+        "name": "ForeColor",
+        "type": 5
+      },
+      {
+        "index": 4,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 5,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 6,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 7,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 8,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 9,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 10,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 11,
+        "name": "Text",
+        "type": 1
+      },
+      {
+        "index": 12,
+        "name": "FontName",
+        "type": 1
+      },
+      {
+        "index": 13,
+        "name": "FontSize",
+        "type": 7
+      },
+      {
+        "index": 14,
+        "name": "FontBold",
+        "type": 4
+      },
+      {
+        "index": 15,
+        "name": "FontItalic",
+        "type": 4
+      },
+      {
+        "index": 16,
+        "name": "FontStrikethru",
+        "type": 4
+      },
+      {
+        "index": 17,
+        "name": "FontUnderline",
+        "type": 4
+      },
+      {
+        "index": 18,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 19,
+        "name": "BorderStyle",
+        "type": 6
+      },
+      {
+        "index": 20,
+        "name": "DdeTopic",
+        "type": 1
+      },
+      {
+        "index": 21,
+        "name": "DdeItem",
+        "type": 1
+      },
+      {
+        "index": 22,
+        "name": "DdeMode",
+        "type": 6
+      },
+      {
+        "index": 23,
+        "name": "MultiLine",
+        "type": 4
+      },
+      {
+        "index": 24,
+        "name": "ScrollBars",
+        "type": 6
+      },
+      {
+        "index": 25,
+        "name": "SelStart",
+        "type": 3
+      },
+      {
+        "index": 26,
+        "name": "SelLength",
+        "type": 3
+      },
+      {
+        "index": 27,
+        "name": "SelText",
+        "type": 1
+      },
+      {
+        "index": 28,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 29,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 30,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 31,
+        "name": "DdeTimeout",
+        "type": 2
+      },
+      {
+        "index": 32,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 33,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 34,
+        "name": "PasswordChar",
+        "type": 1
+      },
+      {
+        "index": 35,
+        "name": "HideSelection",
+        "type": 4
+      },
+      {
+        "index": 36,
+        "name": "Alignment",
+        "type": 6
+      },
+      {
+        "index": 37,
+        "name": "MaxLength",
+        "type": 3
+      },
+      {
+        "index": 38,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 39,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 40,
+        "name": "ImeMode",
+        "type": 6
+      },
+      {
+        "index": 41,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 42,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 43,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 44,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 45,
+        "name": "Locked",
+        "type": 4
+      },
+      {
+        "index": 46,
+        "name": "Font",
+        "type": 20
+      },
+      {
+        "index": 47,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 48,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 49,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 50,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 51,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 52,
+        "name": "OLEDragModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 53,
+        "name": "OLEDropModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 54,
+        "name": "CausesValidation",
+        "type": 4
+      },
+      {
+        "index": 55,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 56,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 57,
+        "name": "DataSourceObject",
+        "type": 22
+      }
+    ],
+    "Img": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 2,
+        "name": "Picture",
+        "type": 21
+      },
+      {
+        "index": 3,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 4,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 5,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 6,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 7,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 8,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 9,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 10,
+        "name": "Stretch",
+        "type": 4
+      },
+      {
+        "index": 11,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 12,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 13,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 14,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 15,
+        "name": "BorderStyle",
+        "type": 6
+      },
+      {
+        "index": 16,
+        "name": "DataSource",
+        "type": 1
+      },
+      {
+        "index": 17,
+        "name": "DataField",
+        "type": 1
+      },
+      {
+        "index": 18,
+        "name": "DataChanged",
+        "type": 4
+      },
+      {
+        "index": 19,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 20,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 21,
+        "name": "Auto3D",
+        "type": 6
+      },
+      {
+        "index": 22,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 23,
+        "name": "ToolTipText",
+        "type": 1
+      },
+      {
+        "index": 24,
+        "name": "OLEDragModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 25,
+        "name": "OLEDropModeIntrinsic",
+        "type": 6
+      },
+      {
+        "index": 26,
+        "name": "DataMember",
+        "type": 33
+      },
+      {
+        "index": 27,
+        "name": "DataFormat",
+        "type": 22
+      },
+      {
+        "index": 28,
+        "name": "DataSourceObject",
+        "type": 22
+      }
+    ],
+    "Scroll": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 2,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 3,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 4,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 5,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 6,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 7,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 8,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 9,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 10,
+        "name": "Min",
+        "type": 2
+      },
+      {
+        "index": 11,
+        "name": "Max",
+        "type": 2
+      },
+      {
+        "index": 12,
+        "name": "SmallChange",
+        "type": 2
+      },
+      {
+        "index": 13,
+        "name": "LargeChange",
+        "type": 2
+      },
+      {
+        "index": 14,
+        "name": "Value",
+        "type": 2
+      },
+      {
+        "index": 15,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 16,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 17,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 18,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 19,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 20,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 21,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 22,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 23,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 24,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 25,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 26,
+        "name": "CausesValidation",
+        "type": 4
+      }
+    ],
+    "Timer": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 2,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 3,
+        "name": "Interval",
+        "type": 3
+      },
+      {
+        "index": 4,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 5,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 6,
+        "name": "NONE",
+        "type": 4
+      },
+      {
+        "index": 7,
+        "name": "LeftNoRun",
+        "type": 8
+      },
+      {
+        "index": 8,
+        "name": "TopNoRun",
+        "type": 10
+      }
+    ],
+    "HScroll": [
+      {
+        "index": 0,
+        "name": "Name",
+        "type": 18
+      },
+      {
+        "index": 1,
+        "name": "Index",
+        "type": 17
+      },
+      {
+        "index": 2,
+        "name": "Left",
+        "type": 8
+      },
+      {
+        "index": 3,
+        "name": "Top",
+        "type": 10
+      },
+      {
+        "index": 4,
+        "name": "Width",
+        "type": 9
+      },
+      {
+        "index": 5,
+        "name": "Height",
+        "type": 11
+      },
+      {
+        "index": 6,
+        "name": "Enabled",
+        "type": 4
+      },
+      {
+        "index": 7,
+        "name": "Visible",
+        "type": 4
+      },
+      {
+        "index": 8,
+        "name": "MousePointer",
+        "type": 6
+      },
+      {
+        "index": 9,
+        "name": "TabIndex",
+        "type": 2
+      },
+      {
+        "index": 10,
+        "name": "Min",
+        "type": 2
+      },
+      {
+        "index": 11,
+        "name": "Max",
+        "type": 2
+      },
+      {
+        "index": 12,
+        "name": "SmallChange",
+        "type": 2
+      },
+      {
+        "index": 13,
+        "name": "LargeChange",
+        "type": 2
+      },
+      {
+        "index": 14,
+        "name": "Value",
+        "type": 2
+      },
+      {
+        "index": 15,
+        "name": "Parent",
+        "type": 25
+      },
+      {
+        "index": 16,
+        "name": "DragMode",
+        "type": 6
+      },
+      {
+        "index": 17,
+        "name": "DragIcon",
+        "type": 21
+      },
+      {
+        "index": 18,
+        "name": "TabStop",
+        "type": 4
+      },
+      {
+        "index": 19,
+        "name": "Tag",
+        "type": 13
+      },
+      {
+        "index": 20,
+        "name": "Hwnd",
+        "type": 3
+      },
+      {
+        "index": 21,
+        "name": "HelpContext",
+        "type": 3
+      },
+      {
+        "index": 22,
+        "name": "MouseIcon",
+        "type": 21
+      },
+      {
+        "index": 23,
+        "name": "HelpWhatsThis",
+        "type": 3
+      },
+      {
+        "index": 24,
+        "name": "Container",
+        "type": 32
+      },
+      {
+        "index": 25,
+        "name": "RightToLeft",
+        "type": 4
+      },
+      {
+        "index": 26,
+        "name": "CausesValidation",
+        "type": 4
+      }
+    ]
+  }
+}

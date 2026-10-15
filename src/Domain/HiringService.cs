@@ -23,14 +23,28 @@ public static class HiringService
         if (state.Money.Value < candidate.ContractFee.Value)
             return HireResult.InsufficientFunds;
 
+        CompleteHire(state,candidate,random ?? Random.Shared);
+        return HireResult.Success;
+    }
+
+    // The negotiation's native winning branch calls the shared hire helper
+    // directly, without the ordinary hiring screen's balance guard.
+    internal static void HirePoached(GameState state,EmployeeState candidate,Random random)
+    {
+        if(candidate.ContractFee is null or <0 || state.Employees.Any(e=>e.SourceIndex==candidate.SourceIndex))
+            throw new InvalidOperationException("Invalid poaching hire target.");
+        CompleteHire(state,candidate,random);
+    }
+    private static void CompleteHire(GameState state,EmployeeState candidate,Random random)
+    {
+        var change=FinancialRules.Prepare(state,-candidate.ContractFee!.Value);
         var employee = CloneEmployee(candidate);
         if (candidate.PortraitId is >= 1 and <= 10)
-            employee.Office = OfficeStaffRules.CreateHire(state, random ?? Random.Shared);
-        FinancialRules.Apply(state,-candidate.ContractFee.Value);
+            employee.Office = OfficeStaffRules.CreateHire(state, random);
+        change.Commit(state);
         state.Employees.Add(employee);
         var source = state.EmployeeSources.FirstOrDefault(x => x.SourceIndex == candidate.SourceIndex);
         if (source is not null) source.GateValue = 1;
-        return HireResult.Success;
     }
 
     private static EmployeeState CloneEmployee(EmployeeState source) => new()

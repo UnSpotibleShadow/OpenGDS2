@@ -34,6 +34,7 @@ public partial class Main : Control
     {
         TickConversation(delta);
         TickPokerInterface(delta);
+        TickPoachingInterface(delta);
         if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
         RefreshEmployeeSelectionArrow();
         if (GetTree().GetNodesInGroup("GameplayWindows").OfType<DesktopWindow>().Any(w=>w.IsDragging&&w.IsVisibleInTree())){_officeElapsed=0;return;}
@@ -45,6 +46,7 @@ public partial class Main : Control
             _music.SetMonth(state.Month ?? 0);
             PersistPendingRankings(state);
             if(ShowPendingLevelUp(state))return;
+        if(ShowPendingCompanyEvent(state))return;
         if(ShowPendingCompanyActivity(state))return;
             if(ShowPendingProgrammingChallenge(state))return;
             if (ShowPendingFinancialFailure(state)) return;
@@ -213,13 +215,14 @@ public partial class Main : Control
     /// Company Name, President Name, Confirm, Cancel.
     /// Original default personal names must come from a local import.
     /// </summary>
-    private void ShowCompanySetup()
+    private void ShowCompanySetup()=>ShowCompanySetup(null);
+    private void ShowCompanySetup(GameState? previous,string companyDraft="",string presidentDraft="")
     {
         ClearContent();
         AddHeading(Tr("NEW_GAME"), 34);
 
-        _companyName = AddField(Tr("COMPANY_NAME"), string.Empty, 32);
-        _presidentName = AddField(Tr("PRESIDENT_NAME"), string.Empty, 32);
+        _companyName = AddField(Tr("COMPANY_NAME"), companyDraft, 32);
+        _presidentName = AddField(Tr("PRESIDENT_NAME"), presidentDraft, 32);
 
         var validation = new Label
         {
@@ -238,12 +241,12 @@ public partial class Main : Control
                 validation.Text = Tr("NAME_REQUIRED");
                 return;
             }
-            ShowModeSelection(company, president);
+            ShowModeSelection(company, president,previous);
         };
         _content.AddChild(confirm);
 
         var cancel = new Button { Text = Tr("CANCEL"), CustomMinimumSize = new Vector2(0, 46) };
-        cancel.Pressed += ShowTitleScreen;
+        cancel.Pressed += ()=>{if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);};
         _content.AddChild(cancel);
     }
 
@@ -251,7 +254,7 @@ public partial class Main : Control
     /// Mirrors the original fGMGameKaishi form: Beginner Mode, Normal Mode, Cancel.
     /// Mode funds are statically verified; remaining mode-specific simulation differences stay unresolved.
     /// </summary>
-    private void ShowModeSelection(string companyName, string presidentName)
+    private void ShowModeSelection(string companyName, string presidentName,GameState? previous=null)
     {
         ClearContent();
         AddHeading(Tr("GAME_START"), 34);
@@ -276,7 +279,7 @@ public partial class Main : Control
         _content.AddChild(normal);
 
         var cancel = new Button { Text = Tr("CANCEL"), CustomMinimumSize = new Vector2(0, 46) };
-        cancel.Pressed += ShowCompanySetup;
+        cancel.Pressed += ()=>ShowCompanySetup(previous,companyName,presidentName);
         _content.AddChild(cancel);
     }
 
@@ -307,6 +310,7 @@ public partial class Main : Control
         PersistPendingRankings(state);
         EnsureDesktop(state);
         if(ShowPendingLevelUp(state))return;
+        if(ShowPendingCompanyEvent(state))return;
         if(ShowPendingCompanyActivity(state))return;
             if(ShowPendingProgrammingChallenge(state))return;
             if (ShowPendingFinancialFailure(state)) return;
@@ -383,7 +387,7 @@ public partial class Main : Control
         try { payrollDebit=OriginalPayrollRules.MonthlyDebit(state); }
         catch (OverflowException) { }
         _content.AddChild(new Label {Name="OriginalPayrollPreview",
-            Text=$"{Tr("ORIGINAL_PAYROLL_PREVIEW")}: {payrollDebit?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
+            Text=$"{Tr("ORIGINAL_PAYROLL_PREVIEW")}: {payrollDebit?.ToDisplayNumber()?? Tr("NOT_YET_DECODED")}"});
         AddHeading(Tr("PAYROLL_PREVIEW_NOTE"),14);
         AddAction("NEXT_WEEK", () => { date = CalendarRules.AdvanceWeek(date); label.Text = $"{date.Year} / {date.Month} / {date.Week}"; });
         AddAction("CANCEL", () => ShowOfficeReconstruction(state));
@@ -424,8 +428,8 @@ public partial class Main : Control
         }
         AddHeading(Tr("ORIGINAL_EFFECTS_SETTINGS"),18);
         var effectsEnabled=new CheckButton {Name="EffectsEnabled",Text=Tr("ORIGINAL_EFFECTS_ENABLED"),ButtonPressed=_effects.Enabled};effectsEnabled.Toggled+=_effects.SetEnabled;_content.AddChild(effectsEnabled);
-        var effectsLabel=new Label {Text=$"{Tr("EFFECTS_VOLUME")}: {_effects.VolumePercent:N0}%"};_content.AddChild(effectsLabel);
-        var effectsVolume=new HSlider {Name="EffectsVolume",MinValue=0,MaxValue=100,Step=1,Value=_effects.VolumePercent};effectsVolume.ValueChanged+=value=>{_effects.SetVolume((float)value);effectsLabel.Text=$"{Tr("EFFECTS_VOLUME")}: {value:N0}%";};_content.AddChild(effectsVolume);
+        var effectsLabel=new Label {Text=$"{Tr("EFFECTS_VOLUME")}: {DisplayNumbers.Format(_effects.VolumePercent)}%"};_content.AddChild(effectsLabel);
+        var effectsVolume=new HSlider {Name="EffectsVolume",MinValue=0,MaxValue=100,Step=1,Value=_effects.VolumePercent};effectsVolume.ValueChanged+=value=>{_effects.SetVolume((float)value);effectsLabel.Text=$"{Tr("EFFECTS_VOLUME")}: {DisplayNumbers.Format(value)}%";};_content.AddChild(effectsVolume);
         AddHeading(Tr("MUSIC_SETTINGS"), 18);
         _content.AddChild(new Label { Text = $"{Tr("MUSIC_DIRECTORY")}: {ProjectSettings.GlobalizePath(BackgroundMusic.DirectoryPath)}", AutowrapMode = TextServer.AutowrapMode.WordSmart });
         _content.AddChild(new Label { Text = Tr("MUSIC_LOCAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
@@ -434,9 +438,9 @@ public partial class Main : Control
         var seasonal = new CheckButton { Name = "SeasonalMusicEnabled", Text = Tr("MUSIC_SEASONAL_ENABLED"), ButtonPressed = _music.SeasonalEnabled };
         seasonal.Toggled += value => _music.SetSeasonalEnabled(value); _content.AddChild(seasonal);
         _content.AddChild(new Label { Text = Tr("MUSIC_SEASONAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
-        var volumeLabel = new Label { Text = $"{Tr("MUSIC_VOLUME")}: {_music.VolumePercent:N0}%" }; _content.AddChild(volumeLabel);
+        var volumeLabel = new Label { Text = $"{Tr("MUSIC_VOLUME")}: {DisplayNumbers.Format(_music.VolumePercent)}%" }; _content.AddChild(volumeLabel);
         var volume = new HSlider { Name = "MusicVolume", MinValue = 0, MaxValue = 100, Step = 1, Value = _music.VolumePercent };
-        volume.ValueChanged += value => { _music.SetVolume((float)value); volumeLabel.Text = $"{Tr("MUSIC_VOLUME")}: {value:N0}%"; }; _content.AddChild(volume);
+        volume.ValueChanged += value => { _music.SetVolume((float)value); volumeLabel.Text = $"{Tr("MUSIC_VOLUME")}: {DisplayNumbers.Format(value)}%"; }; _content.AddChild(volume);
         AddAction("NEXT_MUSIC_TRACK", _music.NextTrack, _music.TrackCount > 0);
         if (_desktopState is GameState adviceState)
         {

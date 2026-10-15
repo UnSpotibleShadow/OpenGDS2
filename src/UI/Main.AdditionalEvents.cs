@@ -7,7 +7,7 @@ public partial class Main
     private void ShowReviewSummary(GameState state,ReleasedGameState product)
     {
         int page=product.ReviewSummaryPage!.Value;int sum=product.ReviewScores!.Sum();
-        string text=page==1?Tr("REVIEW_SEQUEL_MESSAGE"):string.Format(Tr(sum>=32?"REVIEW_HALL_MESSAGE":"REVIEW_SUMMARY_MESSAGE"),product.Title,sum);
+        string text=page==1?Tr("REVIEW_SEQUEL_MESSAGE"):string.Format(DisplayNumbers.Provider,Tr(sum>=32?"REVIEW_HALL_MESSAGE":"REVIEW_SUMMARY_MESSAGE"),product.Title,sum);
         ShowConversation(Tr("MAGAZINE_REVIEWS"),[new(SecretaryCaption(state.SecretarySourceIndex),text)],()=>
         {
             if(!ReferenceEquals(_session.Current,state)||product.ReviewSummaryPage!=page)return;
@@ -22,7 +22,7 @@ public partial class Main
         if(product.SalesMilestonePage==1)
         {
             ShowConversation(Tr("SALES_MILESTONE"),[new(SecretaryCaption(state.SecretarySourceIndex),
-                string.Format(Tr("SALES_ACHIEVEMENT_MESSAGE"),product.Title,SalesMilestoneService.Threshold(stage)))],()=>
+                string.Format(DisplayNumbers.Provider,Tr("SALES_ACHIEVEMENT_MESSAGE"),product.Title,SalesMilestoneService.Threshold(stage)))],()=>
             {
                 if(!ReferenceEquals(_session.Current,state))return;
                 SalesMilestoneService.Acknowledge(state,product);PersistPendingRankings(state);

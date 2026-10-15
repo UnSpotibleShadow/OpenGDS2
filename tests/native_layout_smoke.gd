@@ -139,7 +139,7 @@ func run() -> void:
             fixture_value.State.DevelopmentProjects=[p]
             await load_fixture(fixture_value)
             if phase==-1:
-                await press("DEVELOPMENT_PLANNING")
+                await press("START_GAME_DEVELOPMENT")
                 # The room report is opened by the actual office room button.
                 await press_node("OpenProject0")
             var target=["DevelopmentProjectWindow","TypeMeetingWindow","GenreMeetingWindow","CompletionWindow"][phase+1]

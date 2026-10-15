@@ -1,7 +1,7 @@
 # Original-game map verification
 
 Baseline: main `2eb7c0bf7de32b33b76e0bb1dc80840f406188e1`, 15 October 2026.
-This is a research/tooling change. No simulation, game UI, importer behavior,
+The initial PR116/117 mapping was a research/tooling change. No simulation, game UI, importer behavior,
 release package or Actions configuration was changed.
 
 Validation completed:
@@ -47,9 +47,11 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Then visit `http://127.0.0.1:8000/docs/original-game-map.html`.
 
-No original-game runtime execution, archive completeness, pixel parity, complete
-semantic decompilation, GD2 interoperability or whole-session RNG acceptance is
-claimed. Two form-property streams, 228 control-property streams and dynamic
-dispatch remain partial. The original archive is unavailable here; a private
-Wine binary alone does not establish a working original installation. The map's
-gap queue and scenarios preserve the work needed for full coverage. #95 stays open.
+The initial mapping did not claim original runtime acceptance, archive
+completeness, pixel parity, semantic completeness, GD2 interoperability or
+whole-session RNG equivalence. The subsequent
+[implementation and evidence batch](map-backlog-implementation.md) recovers the
+official archive, bounds all known control properties and all 84 roots, adds the
+missing gameplay/options, and advances save/RNG/resource evidence. It preserves
+opaque property meanings, dynamic-dispatch semantics
+and all 245 native runtime scenarios as open work. #95 stays open.
