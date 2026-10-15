@@ -4,6 +4,11 @@ using OpenGDS2.Core;
 namespace OpenGDS2.UI;
 public partial class Main
 {
+    private void BeginCompanyActivity(GameState state,CompanyActivity activity)
+    {
+        if(!ReferenceEquals(_session.Current,state) || state.CompanyActivityPerformed!=false || state.Company.ActivityCost is null || state.PendingCompanyActivity is not null)return;
+        state.PendingCompanyActivity=new(){Activity=activity};ShowPendingCompanyActivity(state);
+    }
     private bool ShowPendingCompanyActivity(GameState state)
     {
         if(state.PendingCompanyActivity is not { } scene)return false;
@@ -18,7 +23,7 @@ public partial class Main
             {
                 if(!ReferenceEquals(_session.Current,state))return;
                 if(scene.Page==0 && scene.UnlockedGenres.Count>0)scene.Page=1;else state.PendingCompanyActivity=null;
-                if(!ShowPendingCompanyActivity(state))ShowCompanyActivities(state);
+                if(!ShowPendingCompanyActivity(state))ShowOfficeReconstruction(state);
             });return true;
         }
         var canvas=ManagementCanvas("ActivityConfirmationWindow",Tr(key),new(290,285));
@@ -35,6 +40,6 @@ public partial class Main
             var result=CompanyActivityPresentation.Confirm(state,_importer.LoadCatalog(),_session.Random);
             if(result==CompanyActivityResult.Success)ShowPendingCompanyActivity(state);else status.Text=Tr($"COMPANY_ACTIVITY_RESULT_{result}");
         };
-        NativeAction(canvas,"CancelCompanyActivity","CANCEL",new(190,253,92,25),()=>{state.PendingCompanyActivity=null;ShowCompanyActivities(state);});return true;
+        NativeAction(canvas,"CancelCompanyActivity","CANCEL",new(190,253,92,25),()=>{state.PendingCompanyActivity=null;ShowOfficeReconstruction(state);});return true;
     }
 }

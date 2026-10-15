@@ -60,7 +60,7 @@ func run() -> void:
         await create_timer(0.2).timeout
         await press_node("ToolbarSAVE_GAME")
         check(saved().CompanyActivityTicks==ticks,"Blackjack pauses office")
-        check(main.find_child("ToolbarSETTINGS",true,false).disabled,"Blackjack blocks settings")
+        check(main.find_child("ToolbarSETTINGS",true,false)==null,"No port settings shortcut in blackjack")
         await press_node("ToolbarLOAD_GAME")
         await press_node("ToolbarSAVE_GAME")
         check(saved().Casino.Blackjack.Cards==hand,"Saved hand resumes without redraw")

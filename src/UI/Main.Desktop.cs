@@ -31,7 +31,6 @@ public partial class Main
     private readonly Dictionary<string, DesktopWindow> _windows = new();
     private readonly List<TreeItem> _staffRows = new();
     private readonly List<TreeItem> _productRows = new();
-    private Button? _desktopPause;
     private Button? _desktopLoad;
     private HBoxContainer? _projectButtons;
     private string _projectSignature = string.Empty;
@@ -49,7 +48,7 @@ public partial class Main
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
         _retainedProjectReports.Clear();_projectReportRoom=null;_projectReportRefresh=null;_dialogPositionKey=null;
-        _desktopFunds = null; _desktopStatus = null; _desktopPause = null; _desktopLoad = null;
+        _desktopFunds = null; _desktopStatus = null; _desktopLoad = null;
         _staffTable = null; _productTable = null; _staffRows.Clear(); _productRows.Clear();
         _windows.Clear(); _companyMetrics.Clear(); _projectButtons = null; _projectSignature = string.Empty;
         _toolbarHelp = string.Empty; _toolbarArtworkMissing = false;
@@ -79,49 +78,48 @@ public partial class Main
         layout.AddThemeConstantOverride("separation", 0); _desktop.AddChild(layout);
         var menus = new HBoxContainer { CustomMinimumSize = new Vector2(0, 24) }; layout.AddChild(menus);
         Menu(menus, "MENU_GAME", [("SAVE_GAME", ()=>ShowSaveSlots(state,false)), ("LOAD_GAME", ()=>ShowSaveSlots(state,true)),
-            ("SETTINGS", ShowSettings), ("IMPORT_BUTTON", ShowImporter), ("BACK_TO_TITLE", ShowTitleScreen)]);
-        Menu(menus, "MENU_COMPANY", [("COMPANY_ACTIVITIES", () => ShowCompanyActivities(state)),("BANK",()=>ShowBank(state)),
+            ("BACK_TO_TITLE", ShowTitleScreen)]);
+        Menu(menus, "MENU_COMPANY", [("PUBLIC_RELATIONS", () => BeginCompanyActivity(state,CompanyActivity.PublicRelations)),("BANK",()=>ShowBank(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
             ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
-            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state))]);
+            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state)),
+            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion))]);
         Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
-        Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state)),
-            ("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state))]);
+        Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state))]);
         Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state)),("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state))]);
         Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
             ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
-        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("CALENDAR_INSPECTOR", () => ShowCalendar(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
+        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
 
-        var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0, 28) };
-        toolbar.AddThemeConstantOverride("separation", 1); layout.AddChild(toolbar);
-        ToolbarAction(toolbar, "BACK_TO_TITLE", ShowTitleScreen, null);
-        ToolbarAction(toolbar, "SAVE_GAME", SaveDesktop, 15);
-        _desktopLoad = ToolbarAction(toolbar, "LOAD_GAME", LoadSession, 14, System.IO.File.Exists(SavePath));
-        ToolbarAction(toolbar, "DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state), null, _activeCatalog is not null);
-        ToolbarAction(toolbar, "COMPANY_ACTIVITIES", () => ShowCompanyActivities(state), 8, state.Company.ActivityCost is not null);
-        ToolbarAction(toolbar, "HIRE_EMPLOYEES", ShowRecruitment, 13, state.Recruitment.CandidateDatabaseDecoded);
-        ToolbarAction(toolbar, "TECHNOLOGIES", () => ShowTechnologies(state), 12, _activeCatalog?.Technologies.Count > 0);
-        ToolbarAction(toolbar, "DEVELOPMENT_COMPUTERS", () => ShowComputers(state), 10, _activeCatalog?.DevelopmentComputers.Count == 4);
-        ToolbarAction(toolbar, "START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state), null, _activeCatalog is not null);
-        ToolbarAction(toolbar, "SALES", () => ShowProductList(state), 6, _activeCatalog is not null);
-        ToolbarAction(toolbar, "STAFF", () => ShowStaff(state), 7);
-        ToolbarAction(toolbar, "HARDWARE_LICENSES", () => ShowLicenses(state), 9, state.AvailableHardware is not null && state.HardwareLicenses is not null);
-        ToolbarAction(toolbar, "IMPORT_BUTTON", ShowImporter, null);
-        ToolbarAction(toolbar, "SETTINGS", ShowSettings, null);
-        ToolbarAction(toolbar, "CALENDAR_INSPECTOR", () => ShowCalendar(state), null);
-        _desktopPause = ToolbarAction(toolbar, _paused ? "RESUME" : "PAUSE", () =>
-        {
-            _paused = !_paused; _desktopPause!.Text = Tr(_paused ? "RESUME" : "PAUSE");
-            _desktopPause.Icon = ToolbarArtwork.CreateFallback(_paused ? "RESUME" : "PAUSE");
-            if (!string.IsNullOrEmpty(_toolbarHelp)) _toolbarHelp = _desktopPause.Text;
-            _desktopPause.TooltipText = _desktopPause.Text; RefreshDesktop(); _refreshCoreStatus?.Invoke();
-        }, null);
-        _desktopPause.Name = "TogglePause";
+        var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0,24) };
+        toolbar.AddThemeConstantOverride("separation",1);layout.AddChild(toolbar);
+        void Gap()=>toolbar.AddChild(new Control {CustomMinimumSize=new(7,0)});
+        ToolbarAction(toolbar,"SAVE_GAME",SaveDesktop,15);
+        _desktopLoad=ToolbarAction(toolbar,"LOAD_GAME",LoadSession,14,System.IO.File.Exists(SavePath));
+        Gap();
+        ToolbarAction(toolbar,"PUBLIC_RELATIONS",()=>BeginCompanyActivity(state,CompanyActivity.PublicRelations),2);
+        ToolbarAction(toolbar,"GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch),1);
+        ToolbarAction(toolbar,"EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion),0);
+        Gap();
+        ToolbarAction(toolbar,"HIRE_EMPLOYEES",ShowRecruitment,13,state.Recruitment.CandidateDatabaseDecoded);
+        ToolbarAction(toolbar,"TECHNOLOGIES",()=>ShowTechnologies(state),12,_activeCatalog?.Technologies.Count>0);
+        ToolbarAction(toolbar,"BANK",()=>ShowBank(state),11);
+        ToolbarAction(toolbar,"DEVELOPMENT_COMPUTERS",()=>ShowComputers(state),10,_activeCatalog?.DevelopmentComputers.Count==4);
+        ToolbarAction(toolbar,"HARDWARE_LICENSES",()=>ShowLicenses(state),9,state.AvailableHardware is not null && state.HardwareLicenses is not null);
+        ToolbarAction(toolbar,"HIRE_SECRETARY",()=>ShowSecretaryHiring(state),8);
+        Gap();
+        ToolbarAction(toolbar,"STAFF",()=>ShowStaff(state),7);
+        ToolbarAction(toolbar,"SALES",()=>ShowProductList(state),6,_activeCatalog is not null);
+        ToolbarAction(toolbar,"SALES_CHART",()=>ShowSalesChart(state),5);
+        Gap();
+        ToolbarAction(toolbar,"GAME_HELP",()=>ShowHelp(state),3);
         toolbar.AddChild(new Control { SizeFlagsHorizontal = SizeFlags.ExpandFill });
         _desktopFunds = new Label { Name = "DesktopFunds", CustomMinimumSize = new Vector2(225, 0),
-            HorizontalAlignment = HorizontalAlignment.Right }; toolbar.AddChild(_desktopFunds);
+            HorizontalAlignment = HorizontalAlignment.Right,SizeFlagsVertical=SizeFlags.ShrinkCenter };
+        var fundsBox=new StyleBoxFlat {BgColor=Colors.White,BorderColor=new(.5f,.5f,.5f),ContentMarginLeft=4,ContentMarginRight=4,ContentMarginTop=1,ContentMarginBottom=1};fundsBox.SetBorderWidthAll(1);
+        _desktopFunds.AddThemeStyleboxOverride("normal",fundsBox);_desktopFunds.AddThemeFontSizeOverride("font_size",12);toolbar.AddChild(_desktopFunds);
         _projectButtons = new HBoxContainer { Name = "DesktopProjects" }; layout.AddChild(_projectButtons);
         _workspace = new Control { Name = "DesktopWorkspace", SizeFlagsVertical = SizeFlags.ExpandFill,
             MouseFilter = MouseFilterEnum.Ignore, ClipContents = true }; layout.AddChild(_workspace);
@@ -295,28 +293,34 @@ public partial class Main
         "HARDWARE_LICENSES" => _desktopState?.AvailableHardware is not null && _desktopState.HardwareLicenses is not null,
         "BANK" => _desktopState is { } bankState && BankLoanService.CheckBorrow(bankState) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied,
         "COMPANY_ACTIVITIES" => _desktopState?.Company.ActivityCost is not null,
+        "PUBLIC_RELATIONS" or "GENRE_RESEARCH" or "EXPAND_PRODUCTION" => _desktopState is {Company.ActivityCost:not null,CompanyActivityPerformed:false},
         _ => true
         };
     }
 
+    public bool GetSimulationPaused()=>_paused;
+    public bool SetSimulationPaused(bool paused)
+    {
+        if(!DesktopActionEnabled("PAUSE"))return false;
+        _paused=paused;RefreshDesktop();_refreshCoreStatus?.Invoke();return true;
+    }
+
     private Button ToolbarAction(HBoxContainer parent, string key, Action action, int? icon, bool enabled = true)
     {
-        var button = new Button { Name = $"Toolbar{key}", Text = Tr(key), TooltipText = Tr(key), Disabled = !enabled, ClipText = true,
-            CustomMinimumSize = new Vector2(29, 26), FocusMode = FocusModeEnum.All };
+        var button = new Button { Name = $"Toolbar{key}", Text = "", TooltipText = Tr(key), IconAlignment=HorizontalAlignment.Center, Disabled = !enabled, ClipText = true,
+            CustomMinimumSize = new Vector2(23,22), SizeFlagsVertical=SizeFlags.ShrinkCenter, FocusMode = FocusModeEnum.All };
         button.TextureFilter = TextureFilterEnum.Nearest;
-        button.AddThemeStyleboxOverride("normal", ClassicTheme.CompactButton());
-        button.AddThemeStyleboxOverride("pressed", ClassicTheme.CompactButton(true));
-        foreach(string mode in new[]{"hover","disabled"})button.AddThemeStyleboxOverride(mode,ClassicTheme.CompactButton());
-        var focus=new StyleBoxFlat {BgColor=Colors.Transparent,BorderColor=new(.15f,.24f,.45f),ContentMarginLeft=3,ContentMarginRight=3,ContentMarginTop=1,ContentMarginBottom=1};focus.SetBorderWidthAll(1);button.AddThemeStyleboxOverride("focus",focus);
+        foreach(string mode in new[]{"normal","pressed","hover","disabled"})button.AddThemeStyleboxOverride(mode,new StyleBoxEmpty());
+        var focus=new StyleBoxFlat {BgColor=Colors.Transparent,BorderColor=new(.15f,.24f,.45f),ContentMarginLeft=0,ContentMarginRight=0,ContentMarginTop=0,ContentMarginBottom=0};focus.SetBorderWidthAll(1);button.AddThemeStyleboxOverride("focus",focus);
         button.AddThemeFontSizeOverride("font_size", 1);
         foreach (string color in new[] { "font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_disabled_color" })
             button.AddThemeColorOverride(color, Colors.Transparent);
         if (icon is int id) button.Icon = OriginalAssetStore.LoadTexture($"Graphic/Embedded/Toolbar{id}.bmp");
         if (icon is not null && button.Icon is null) _toolbarArtworkMissing = true;
         button.Icon ??= ToolbarArtwork.CreateFallback(key);
-        button.MouseEntered += () => { _toolbarHelp = button.Text; RefreshDesktop(); };
+        button.MouseEntered += () => { _toolbarHelp = button.TooltipText; RefreshDesktop(); };
         button.MouseExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
-        button.FocusEntered += () => { _toolbarHelp = button.Text; RefreshDesktop(); };
+        button.FocusEntered += () => { _toolbarHelp = button.TooltipText; RefreshDesktop(); };
         button.FocusExited += () => { _toolbarHelp = string.Empty; RefreshDesktop(); };
         button.SetMeta("base_enabled",key=="LOAD_GAME" || enabled);
         button.Pressed += () => {if (DesktopActionEnabled(key)) action();}; parent.AddChild(button); return button;
@@ -340,7 +344,6 @@ public partial class Main
         if (_desktopState is not GameState state || _desktopFunds is null || _desktopStatus is null) return;
         RefreshRetainedProjectReports(state);
         if (_desktopLoad is not null) _desktopLoad.Disabled = !System.IO.File.Exists(SavePath);
-        if (_desktopPause is not null) _desktopPause.Disabled=!DesktopActionEnabled("PAUSE");
         foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
             button.Disabled=!button.GetMeta("base_enabled").AsBool() || !DesktopActionEnabled(button.Name.ToString()[7..]);
         _desktopFunds.Text = $"{Tr("FUNDS")}: ¥{state.Money:N0}";

@@ -129,7 +129,7 @@ func run() -> void:
         await press_node("ToolbarSAVE_GAME")
         check(saved().Money==paid.Money and saved().Company.Fame==paid.Company.Fame,"Result reload cannot repeat fee or fame")
         await advance_page()
-        await press("BACK_TO_OFFICE")
+        check(main.find_child("CompanyActivitiesWindow",true,false)==null,"Activity result returns directly to office")
         main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(0)
         await process_frame
         var help=main.find_child("HelpTopicBody",true,false)
@@ -176,7 +176,7 @@ func run() -> void:
             {"Title":"Synthetic leader","Owner":0,"Hardware":0,"UnitsSold":100,"Demand":0,"SalesPower":0},
             {"Title":"Synthetic rising game","Owner":1,"Hardware":0,"UnitsSold":0,"Demand":99,"SalesPower":100}]}
         await load_fixture(chart)
-        main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(3)
+        main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
         await process_frame
         var table=main.find_child("SalesRankingTable",true,false)
         check(table.get_root().get_child_count()==2,"Live chart has no phantom container row")
