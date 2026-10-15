@@ -82,7 +82,7 @@ public partial class Main
             if(outcome?.ProductIndex is int product)
                 winner=state.ReleasedGames.Single(p=>p.ProductIndex==product).Title+"\n"+state.Company.Name;
             else if(outcome?.RivalIndex is int rival && state.Competition is { } competition)
-            {var rivalProduct=competition.Products[rival];winner=rivalProduct.Title+"\n"+(_activeCatalog?.RivalCompanies.ElementAtOrDefault(rivalProduct.Owner) ?? "?");}
+            {var rivalProduct=competition.Products[rival];winner=RivalTitle(rivalProduct)+"\n"+RivalCompany(rivalProduct.Owner);}
             else if(outcome is not null)winner=Tr("AWARD_OTHER_COMPANY");
             text.AddThemeFontSizeOverride("font_size",10);text.Text=Tr($"AWARD_{category}")+"\n"+winner;text.TooltipText=text.Text;
         }

@@ -15,6 +15,13 @@ public partial class Main
         _activeEmployeeDatabase, TranslationServer.GetLocale().StartsWith("en", StringComparison.OrdinalIgnoreCase),
         key => Tr(key),_employeeNameReadings);
 
+    private string RivalTitle(RivalProduct product)=>GameNameLocalization.RivalTitle(product,_activeCatalog,
+        TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase),key=>Tr(key));
+    private string RivalCompany(int owner)=>GameNameLocalization.RivalCompany(owner,_activeCatalog,
+        TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase),key=>Tr(key),Tr("UNKNOWN"));
+    private System.Collections.Generic.IReadOnlyList<string> TypeExamples(OriginalCatalog catalog,GameTypeDefinition type)
+        =>GameNameLocalization.Examples(type,catalog,TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase),key=>Tr(key));
+
     private void LoadInterfaceLanguage()
     {
         var settings = new ConfigFile();

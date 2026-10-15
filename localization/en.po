@@ -4618,3 +4618,689 @@ msgstr "{facility} is already installed."
 
 msgid "FACILITY_SERVICE_FEE"
 msgstr "Service fee: ¥{fee}"
+
+# Authored English names; Japanese uses the locally imported catalog.
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_0"
+msgstr "Labyrinth Crew Music"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_1"
+msgstr "Takahashi's Super Adventure"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_2"
+msgstr "Dorazaemon"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_3"
+msgstr "Fi Fantasy"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_4"
+msgstr "Gatten Wrestling"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_5"
+msgstr "Go, Jiraiya!"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_6"
+msgstr "Sanma's Great Detective"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_7"
+msgstr "All Aboard the B Train"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_8"
+msgstr "Hanetic Gone"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_9"
+msgstr "Act Razor"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_10"
+msgstr "HRR"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_11"
+msgstr "Legend of Kintaro"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_12"
+msgstr "Kintaro Railway"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_13"
+msgstr "Dragon Siesta"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_14"
+msgstr "Go, Raskolnikov!"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_15"
+msgstr "Familion Jump"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_16"
+msgstr "Space Harry"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_17"
+msgstr "The Used Bookshop"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_18"
+msgstr "The Used Bookshop II"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_19"
+msgstr "FireWin"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_20"
+msgstr "Bookshop Story"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_21"
+msgstr "Comic Journey to the Deep North"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_22"
+msgstr "Battlefield Underdog"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_23"
+msgstr "Mao Zeshan's Secret"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_24"
+msgstr "Pomperman"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_25"
+msgstr "Seaweed Farming Story"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_26"
+msgstr "Diversification Helicopter"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_27"
+msgstr "Board-Hugging Street"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_28"
+msgstr "Street Fighyer"
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_29"
+msgstr "Thoroughbred Ranch"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_0"
+msgstr "Final Fire"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_1"
+msgstr "Space Battleship Musashi"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_2"
+msgstr "Galaxy Canal 999"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_3"
+msgstr "Road Walker"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_4"
+msgstr "Sim Tsutei"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_5"
+msgstr "Hyper Hippy"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_6"
+msgstr "Modeka Knight"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_7"
+msgstr "Sour vs. Spy"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_8"
+msgstr "Beg Your Pardon, Your Lordship"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_9"
+msgstr "Time to Pants Out"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_10"
+msgstr "Vampire Hunter"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_11"
+msgstr "Kunita's Volleyball"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_12"
+msgstr "The Great Action King"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_13"
+msgstr "Kiyoshi's Challenge"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_14"
+msgstr "Kurome River Hiking"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_15"
+msgstr "The Tale of 100 Yen Lost"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_16"
+msgstr "Bean Sprout Man"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_17"
+msgstr "Manly Udon"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_18"
+msgstr "Fly, Beauty!"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_19"
+msgstr "Higashikurume Dance"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_20"
+msgstr "Dragon Siesta 2"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_21"
+msgstr "Fi Fantasy 2"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_22"
+msgstr "Kunita's Dodgeball"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_23"
+msgstr "Dragon Siesta 3"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_24"
+msgstr "Dawn! Men's Lodge"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_25"
+msgstr "Kentaro of the North Star"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_26"
+msgstr "Dragon Siesta 4"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_27"
+msgstr "Fi Fantasy 3"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_28"
+msgstr "Mamezon Two Moments"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_29"
+msgstr "Dragon Siesta 5"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_30"
+msgstr "Fi Fantasy 4"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_31"
+msgstr "Burn! Pro Hockey!"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_32"
+msgstr "Woman"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_33"
+msgstr "Sumari"
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_34"
+msgstr "Red Arima"
+
+msgid "CATALOG_RIVAL_COMPANY_0"
+msgstr "Eftsu"
+
+msgid "CATALOG_RIVAL_COMPANY_1"
+msgstr "Ninnindo"
+
+msgid "CATALOG_RIVAL_COMPANY_2"
+msgstr "NEU"
+
+msgid "CATALOG_RIVAL_COMPANY_3"
+msgstr "Sedaga"
+
+msgid "CATALOG_RIVAL_COMPANY_4"
+msgstr "Somy"
+
+msgid "CATALOG_RIVAL_COMPANY_5"
+msgstr "Soquare"
+
+msgid "CATALOG_RIVAL_COMPANY_6"
+msgstr "Konam"
+
+msgid "CATALOG_RIVAL_COMPANY_7"
+msgstr "Nammo"
+
+msgid "CATALOG_RIVAL_COMPANY_8"
+msgstr "Heartdenk"
+
+msgid "CATALOG_RIVAL_COMPANY_9"
+msgstr "Henikuso"
+
+msgid "CATALOG_TYPE_EXAMPLE_0_0"
+msgstr "Tale of the Japanese Sword"
+
+msgid "CATALOG_TYPE_EXAMPLE_0_1"
+msgstr "Go, Lord Komon!"
+
+msgid "CATALOG_TYPE_EXAMPLE_0_2"
+msgstr "Modern Broadsheet"
+
+msgid "CATALOG_TYPE_EXAMPLE_1_0"
+msgstr "Sim Game"
+
+msgid "CATALOG_TYPE_EXAMPLE_1_1"
+msgstr "Game Developing Country"
+
+msgid "CATALOG_TYPE_EXAMPLE_1_2"
+msgstr "Game Guys Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_2_0"
+msgstr "Peeko's Toys"
+
+msgid "CATALOG_TYPE_EXAMPLE_2_1"
+msgstr "The Mysterious Toy Guy"
+
+msgid "CATALOG_TYPE_EXAMPLE_2_2"
+msgstr "Hobby Toy Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_3_0"
+msgstr "Gal Getten"
+
+msgid "CATALOG_TYPE_EXAMPLE_3_1"
+msgstr "Heartbeats Aplenty"
+
+msgid "CATALOG_TYPE_EXAMPLE_3_2"
+msgstr "Tekko Giant"
+
+msgid "CATALOG_TYPE_EXAMPLE_4_0"
+msgstr "Lead the Way, Heihachi!"
+
+msgid "CATALOG_TYPE_EXAMPLE_4_1"
+msgstr "City of Narcissists"
+
+msgid "CATALOG_TYPE_EXAMPLE_4_2"
+msgstr "White Rose Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_5_0"
+msgstr "Youth Story"
+
+msgid "CATALOG_TYPE_EXAMPLE_5_1"
+msgstr "Run, Youth!"
+
+msgid "CATALOG_TYPE_EXAMPLE_5_2"
+msgstr "Serious Study Club"
+
+msgid "CATALOG_TYPE_EXAMPLE_6_0"
+msgstr "Fire Wrestling"
+
+msgid "CATALOG_TYPE_EXAMPLE_6_1"
+msgstr "Wrestling Story"
+
+msgid "CATALOG_TYPE_EXAMPLE_6_2"
+msgstr "Kong Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_7_0"
+msgstr "Space Fight"
+
+msgid "CATALOG_TYPE_EXAMPLE_7_1"
+msgstr "Galaxy Legend"
+
+msgid "CATALOG_TYPE_EXAMPLE_7_2"
+msgstr "SF Magazon"
+
+msgid "CATALOG_TYPE_EXAMPLE_8_0"
+msgstr "Must-Read Bar Exam Guide"
+
+msgid "CATALOG_TYPE_EXAMPLE_8_1"
+msgstr "Go, Life Sentence!"
+
+msgid "CATALOG_TYPE_EXAMPLE_8_2"
+msgstr "Court Review"
+
+msgid "CATALOG_TYPE_EXAMPLE_9_0"
+msgstr "Tower Story"
+
+msgid "CATALOG_TYPE_EXAMPLE_9_1"
+msgstr "Skyscraper Guys"
+
+msgid "CATALOG_TYPE_EXAMPLE_9_2"
+msgstr "Building Construction Daily"
+
+msgid "CATALOG_TYPE_EXAMPLE_10_0"
+msgstr "Ham Fantasy"
+
+msgid "CATALOG_TYPE_EXAMPLE_10_1"
+msgstr "Dororon the Wizard"
+
+msgid "CATALOG_TYPE_EXAMPLE_10_2"
+msgstr "Magic Comic"
+
+msgid "CATALOG_TYPE_EXAMPLE_11_0"
+msgstr "Street Family"
+
+msgid "CATALOG_TYPE_EXAMPLE_11_1"
+msgstr "Virtua Fire"
+
+msgid "CATALOG_TYPE_EXAMPLE_11_2"
+msgstr "The Battle"
+
+msgid "CATALOG_TYPE_EXAMPLE_12_0"
+msgstr "Takahashi's Great Adventure"
+
+msgid "CATALOG_TYPE_EXAMPLE_12_1"
+msgstr "Mysterious Desert Island"
+
+msgid "CATALOG_TYPE_EXAMPLE_12_2"
+msgstr "Game Guys Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_13_0"
+msgstr "Sim Town"
+
+msgid "CATALOG_TYPE_EXAMPLE_13_1"
+msgstr "Leap Aboard the C Train"
+
+msgid "CATALOG_TYPE_EXAMPLE_13_2"
+msgstr "Town Construction Daily"
+
+msgid "CATALOG_TYPE_EXAMPLE_14_0"
+msgstr "Mysteries of the Nile"
+
+msgid "CATALOG_TYPE_EXAMPLE_14_1"
+msgstr "Pyramid Experience"
+
+msgid "CATALOG_TYPE_EXAMPLE_14_2"
+msgstr "Momu"
+
+msgid "CATALOG_TYPE_EXAMPLE_15_0"
+msgstr "Robot Battle Special"
+
+msgid "CATALOG_TYPE_EXAMPLE_15_1"
+msgstr "Mandam Guys"
+
+msgid "CATALOG_TYPE_EXAMPLE_15_2"
+msgstr "Magic Comic"
+
+msgid "CATALOG_TYPE_EXAMPLE_16_0"
+msgstr "The Convenience Store"
+
+msgid "CATALOG_TYPE_EXAMPLE_16_1"
+msgstr "Silly Convenience Store"
+
+msgid "CATALOG_TYPE_EXAMPLE_16_2"
+msgstr "Convenience Store News"
+
+msgid "CATALOG_TYPE_EXAMPLE_17_0"
+msgstr "Motochika Chosokabe's Ambition"
+
+msgid "CATALOG_TYPE_EXAMPLE_17_1"
+msgstr "Hideyoshi's Ambition"
+
+msgid "CATALOG_TYPE_EXAMPLE_17_2"
+msgstr "Historical Romance Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_18_0"
+msgstr "Derby Station"
+
+msgid "CATALOG_TYPE_EXAMPLE_18_1"
+msgstr "Winning Horse Furlong"
+
+msgid "CATALOG_TYPE_EXAMPLE_18_2"
+msgstr "The Horse"
+
+msgid "CATALOG_TYPE_EXAMPLE_19_0"
+msgstr "Defeat the Great King!"
+
+msgid "CATALOG_TYPE_EXAMPLE_19_1"
+msgstr "Makenpo the Demon King"
+
+msgid "CATALOG_TYPE_EXAMPLE_19_2"
+msgstr "SF Magazon"
+
+msgid "CATALOG_TYPE_EXAMPLE_20_0"
+msgstr "Hazardry"
+
+msgid "CATALOG_TYPE_EXAMPLE_20_1"
+msgstr "Otoro's Mysterious Hole"
+
+msgid "CATALOG_TYPE_EXAMPLE_20_2"
+msgstr "Adventure Magazine"
+
+msgid "CATALOG_TYPE_EXAMPLE_21_0"
+msgstr "Hanako of the Washlet"
+
+msgid "CATALOG_TYPE_EXAMPLE_21_1"
+msgstr "Merry Mummies"
+
+msgid "CATALOG_TYPE_EXAMPLE_21_2"
+msgstr "Junji Inagawa Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_22_0"
+msgstr "Train de GOO!!"
+
+msgid "CATALOG_TYPE_EXAMPLE_22_1"
+msgstr "Hokubu Railway Fare Dodgers"
+
+msgid "CATALOG_TYPE_EXAMPLE_22_2"
+msgstr "Train Mania"
+
+msgid "CATALOG_TYPE_EXAMPLE_23_0"
+msgstr "Agedamen"
+
+msgid "CATALOG_TYPE_EXAMPLE_23_1"
+msgstr "Unlucky Man"
+
+msgid "CATALOG_TYPE_EXAMPLE_23_2"
+msgstr "Animarge"
+
+msgid "CATALOG_TYPE_EXAMPLE_24_0"
+msgstr "The Football"
+
+msgid "CATALOG_TYPE_EXAMPLE_24_1"
+msgstr "Football Championship"
+
+msgid "CATALOG_TYPE_EXAMPLE_24_2"
+msgstr "Footballer Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_25_0"
+msgstr "The Soccer"
+
+msgid "CATALOG_TYPE_EXAMPLE_25_1"
+msgstr "Association Football Conquest!"
+
+msgid "CATALOG_TYPE_EXAMPLE_25_2"
+msgstr "Soccer Pro Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_26_0"
+msgstr "The Fishing"
+
+msgid "CATALOG_TYPE_EXAMPLE_26_1"
+msgstr "Fishing Fan Saburo"
+
+msgid "CATALOG_TYPE_EXAMPLE_26_2"
+msgstr "A Fish's Feelings Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_27_0"
+msgstr "The Basketball"
+
+msgid "CATALOG_TYPE_EXAMPLE_27_1"
+msgstr "Basketball Championship"
+
+msgid "CATALOG_TYPE_EXAMPLE_27_2"
+msgstr "Basketballer Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_28_0"
+msgstr "The Skiing"
+
+msgid "CATALOG_TYPE_EXAMPLE_28_1"
+msgstr "Slippery Skiing"
+
+msgid "CATALOG_TYPE_EXAMPLE_28_2"
+msgstr "Ski Lovers Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_29_0"
+msgstr "The Snowboarding"
+
+msgid "CATALOG_TYPE_EXAMPLE_29_1"
+msgstr "Boarder Action"
+
+msgid "CATALOG_TYPE_EXAMPLE_29_2"
+msgstr "Snowboarder Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_30_0"
+msgstr "Swim Along Swimmer"
+
+msgid "CATALOG_TYPE_EXAMPLE_30_1"
+msgstr "Crazy Swimming"
+
+msgid "CATALOG_TYPE_EXAMPLE_30_2"
+msgstr "Sports Guys"
+
+msgid "CATALOG_TYPE_EXAMPLE_31_0"
+msgstr "Burn! Pro Baseball!"
+
+msgid "CATALOG_TYPE_EXAMPLE_31_1"
+msgstr "Wonderful Baseball"
+
+msgid "CATALOG_TYPE_EXAMPLE_31_2"
+msgstr "Baseballer Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_32_0"
+msgstr "The Golf"
+
+msgid "CATALOG_TYPE_EXAMPLE_32_1"
+msgstr "Tigger Wood"
+
+msgid "CATALOG_TYPE_EXAMPLE_32_2"
+msgstr "Golf Life"
+
+msgid "CATALOG_TYPE_EXAMPLE_33_0"
+msgstr "The Grand Sumo"
+
+msgid "CATALOG_TYPE_EXAMPLE_33_1"
+msgstr "Sumo to the World!"
+
+msgid "CATALOG_TYPE_EXAMPLE_33_2"
+msgstr "The World of Sumo"
+
+msgid "CATALOG_TYPE_EXAMPLE_34_0"
+msgstr "The Skateboarding"
+
+msgid "CATALOG_TYPE_EXAMPLE_34_1"
+msgstr "Skebo's World Conquest!"
+
+msgid "CATALOG_TYPE_EXAMPLE_34_2"
+msgstr "Sports Guys"
+
+msgid "CATALOG_TYPE_EXAMPLE_35_0"
+msgstr "Flight Tokyo"
+
+msgid "CATALOG_TYPE_EXAMPLE_35_1"
+msgstr "Chiki-Chiki Airplanes"
+
+msgid "CATALOG_TYPE_EXAMPLE_35_2"
+msgstr "The Joy of Flying"
+
+msgid "CATALOG_TYPE_EXAMPLE_36_0"
+msgstr "The English"
+
+msgid "CATALOG_TYPE_EXAMPLE_36_1"
+msgstr "Sunny Arithmetic"
+
+msgid "CATALOG_TYPE_EXAMPLE_36_2"
+msgstr "Mother of Education"
+
+msgid "CATALOG_TYPE_EXAMPLE_37_0"
+msgstr "Jump-Rope Hop-Hop"
+
+msgid "CATALOG_TYPE_EXAMPLE_37_1"
+msgstr "Aim for a Triple Jump!"
+
+msgid "CATALOG_TYPE_EXAMPLE_37_2"
+msgstr "Sports Guys"
+
+msgid "CATALOG_TYPE_EXAMPLE_38_0"
+msgstr "Dr. Kope's Feng Shui Heaven"
+
+msgid "CATALOG_TYPE_EXAMPLE_38_1"
+msgstr "Grand Tour Feng Shui"
+
+msgid "CATALOG_TYPE_EXAMPLE_38_2"
+msgstr "Fortune-Telling Times"
+
+msgid "CATALOG_TYPE_EXAMPLE_39_0"
+msgstr "Super F1"
+
+msgid "CATALOG_TYPE_EXAMPLE_39_1"
+msgstr "Idling Senna!"
+
+msgid "CATALOG_TYPE_EXAMPLE_39_2"
+msgstr "F1 Truth Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_40_0"
+msgstr "Take Flight! Radio Control"
+
+msgid "CATALOG_TYPE_EXAMPLE_40_1"
+msgstr "RC Car GP"
+
+msgid "CATALOG_TYPE_EXAMPLE_40_2"
+msgstr "Radio Control Monthly"
+
+msgid "CATALOG_TYPE_EXAMPLE_41_0"
+msgstr "Dance Dance Troupe"
+
+msgid "CATALOG_TYPE_EXAMPLE_41_1"
+msgstr "Dancer India"
+
+msgid "CATALOG_TYPE_EXAMPLE_41_2"
+msgstr "Dancer Magazine"
+
+msgid "CATALOG_TYPE_EXAMPLE_42_0"
+msgstr "Drum Geek"
+
+msgid "CATALOG_TYPE_EXAMPLE_42_1"
+msgstr "Drummer Masa's Great Adventure"
+
+msgid "CATALOG_TYPE_EXAMPLE_42_2"
+msgstr "Music Fun Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_43_0"
+msgstr "The Shogi"
+
+msgid "CATALOG_TYPE_EXAMPLE_43_1"
+msgstr "You Can Be a Shogi Master!"
+
+msgid "CATALOG_TYPE_EXAMPLE_43_2"
+msgstr "Shogi Life"
+
+msgid "CATALOG_TYPE_EXAMPLE_44_0"
+msgstr "The Go"
+
+msgid "CATALOG_TYPE_EXAMPLE_44_1"
+msgstr "You Can Be a Go Master!"
+
+msgid "CATALOG_TYPE_EXAMPLE_44_2"
+msgstr "Go Life"
+
+msgid "CATALOG_TYPE_EXAMPLE_45_0"
+msgstr "The Mahjong"
+
+msgid "CATALOG_TYPE_EXAMPLE_45_1"
+msgstr "Mahjong National Conquest!"
+
+msgid "CATALOG_TYPE_EXAMPLE_45_2"
+msgstr "Mahjong Life"
+
+msgid "CATALOG_TYPE_EXAMPLE_46_0"
+msgstr "The Reversi"
+
+msgid "CATALOG_TYPE_EXAMPLE_46_1"
+msgstr "Reversing"
+
+msgid "CATALOG_TYPE_EXAMPLE_46_2"
+msgstr "Reversi Life"
+
+msgid "CATALOG_TYPE_EXAMPLE_47_0"
+msgstr "Mr. Drillro"
+
+msgid "CATALOG_TYPE_EXAMPLE_47_1"
+msgstr "Drill Killer"
+
+msgid "CATALOG_TYPE_EXAMPLE_47_2"
+msgstr "Drill Weekly"
+
+msgid "CATALOG_TYPE_EXAMPLE_48_0"
+msgstr "Playing Card Collection"
+
+msgid "CATALOG_TYPE_EXAMPLE_48_1"
+msgstr "Mr. Playing Cards"
+
+msgid "CATALOG_TYPE_EXAMPLE_48_2"
+msgstr "Children's Toys"
+
+msgid "CATALOG_TYPE_EXAMPLE_49_0"
+msgstr "Every Popular Slot Machine"
+
+msgid "CATALOG_TYPE_EXAMPLE_49_1"
+msgstr "Slot Paradise"
+
+msgid "CATALOG_TYPE_EXAMPLE_49_2"
+msgstr "Go, Pachislot!"
+
+msgid "CATALOG_TYPE_EXAMPLE_50_0"
+msgstr "Pachinko Paradise"
+
+msgid "CATALOG_TYPE_EXAMPLE_50_1"
+msgstr "The Wandering Pachinko Guy"
+
+msgid "CATALOG_TYPE_EXAMPLE_50_2"
+msgstr "Go, Pachinko!"

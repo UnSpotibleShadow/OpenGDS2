@@ -1,3 +1,16 @@
+# Current task — English game-title display names
+
+Owner requests translation of original game names, especially Award Ceremony
+rivals. Branch `codex/english-game-titles`, base
+`2610e61d1d5ccf282eac4d46dc8c7cb8d05de216`, covers all 65 rival titles, ten
+publishers and 153 development example/magazine names. Change presentation only:
+preserve imported/saved titles, own titles, Japanese and unknown-name fallbacks.
+Check the award board, host dialogue, reel, sales rankings and example tooltips.
+Verification complete: 565 domain checks, clean app build, translation import,
+bilingual rendered title/chart/example checks, award continuation and core loop.
+Recovery: `/workspace/scratch/english-game-titles/`. Standing verified-PR merge
+authorization continues; no export/release/issue closure or unchanged Wine retry.
+
 # Current task — Television screen patch correction
 
 Owner requests a second pass on the TV artwork after the prior patch painted
