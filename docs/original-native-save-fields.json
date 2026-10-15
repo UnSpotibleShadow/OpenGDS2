@@ -1,0 +1,3679 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "record_templates": 130,
+  "field_slots": 448,
+  "distinct_members": 447,
+  "loops": [
+    {
+      "start": 326,
+      "end": 362,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 524,
+      "end": 560,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 573,
+      "end": 645,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 672,
+      "end": 768,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 800,
+      "end": 848,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 861,
+      "end": 921,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1011,
+      "end": 1047,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1074,
+      "end": 1110,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1205,
+      "end": 1241,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1480,
+      "end": 1576,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1613,
+      "end": 1709,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 1770,
+      "end": 2160,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2106,
+      "end": 2151,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2187,
+      "end": 2235,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2262,
+      "end": 2310,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2337,
+      "end": 2373,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2449,
+      "end": 2849,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2753,
+      "end": 2840,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2862,
+      "end": 2956,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2881,
+      "end": 2926,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 2983,
+      "end": 3100,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3127,
+      "end": 3163,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3190,
+      "end": 3401,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3347,
+      "end": 3392,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3428,
+      "end": 3545,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3572,
+      "end": 3765,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3648,
+      "end": 3756,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3792,
+      "end": 3852,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 3879,
+      "end": 4575,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 4640,
+      "end": 5262,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5208,
+      "end": 5253,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5289,
+      "end": 5418,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5431,
+      "end": 5581,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5594,
+      "end": 5642,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5655,
+      "end": 5691,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5718,
+      "end": 5754,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 5825,
+      "end": 6001,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 6028,
+      "end": 6064,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 6096,
+      "end": 6726,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    },
+    {
+      "start": 6739,
+      "end": 6823,
+      "opcode": "ForVar",
+      "cardinality": "requires verified bound-expression/state evaluation"
+    }
+  ],
+  "records": [
+    {
+      "template": 0,
+      "fields": [
+        {
+          "member": "header-local",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 143,
+      "read_at": 32,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 1,
+      "fields": [
+        {
+          "member": "0000",
+          "array_rank": 0
+        },
+        {
+          "member": "0010",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 162,
+      "read_at": 51,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 2,
+      "fields": [
+        {
+          "member": "0020",
+          "array_rank": 0
+        },
+        {
+          "member": "0030",
+          "array_rank": 0
+        },
+        {
+          "member": "0040",
+          "array_rank": 0
+        },
+        {
+          "member": "0050",
+          "array_rank": 0
+        },
+        {
+          "member": "0060",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 196,
+      "read_at": 85,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 3,
+      "fields": [
+        {
+          "member": "0070",
+          "array_rank": 0
+        },
+        {
+          "member": "0080",
+          "array_rank": 0
+        },
+        {
+          "member": "0090",
+          "array_rank": 0
+        },
+        {
+          "member": "00A0",
+          "array_rank": 0
+        },
+        {
+          "member": "00B0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 230,
+      "read_at": 119,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 4,
+      "fields": [
+        {
+          "member": "00D0",
+          "array_rank": 0
+        },
+        {
+          "member": "00E0",
+          "array_rank": 0
+        },
+        {
+          "member": "00F0",
+          "array_rank": 0
+        },
+        {
+          "member": "0100",
+          "array_rank": 0
+        },
+        {
+          "member": "0110",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 264,
+      "read_at": 153,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 5,
+      "fields": [
+        {
+          "member": "0120",
+          "array_rank": 0
+        },
+        {
+          "member": "0130",
+          "array_rank": 0
+        },
+        {
+          "member": "0140",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 288,
+      "read_at": 177,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 6,
+      "fields": [
+        {
+          "member": "0150",
+          "array_rank": 0
+        },
+        {
+          "member": "0160",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 307,
+      "read_at": 196,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 7,
+      "fields": [
+        {
+          "member": "0174",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 347,
+      "read_at": 235,
+      "write_loops": [
+        326
+      ],
+      "read_loops": [
+        215
+      ]
+    },
+    {
+      "template": 8,
+      "fields": [
+        {
+          "member": "018C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 370,
+      "read_at": 258,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 9,
+      "fields": [
+        {
+          "member": "01BC",
+          "array_rank": 0
+        },
+        {
+          "member": "01CC",
+          "array_rank": 0
+        },
+        {
+          "member": "01DC",
+          "array_rank": 0
+        },
+        {
+          "member": "01EC",
+          "array_rank": 0
+        },
+        {
+          "member": "01FC",
+          "array_rank": 0
+        },
+        {
+          "member": "020C",
+          "array_rank": 0
+        },
+        {
+          "member": "021C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 7,
+      "write_at": 414,
+      "read_at": 302,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 10,
+      "fields": [
+        {
+          "member": "022C",
+          "array_rank": 0
+        },
+        {
+          "member": "023C",
+          "array_rank": 0
+        },
+        {
+          "member": "024C",
+          "array_rank": 0
+        },
+        {
+          "member": "025C",
+          "array_rank": 0
+        },
+        {
+          "member": "026C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 448,
+      "read_at": 336,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 11,
+      "fields": [
+        {
+          "member": "027C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 462,
+      "read_at": 350,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 12,
+      "fields": [
+        {
+          "member": "028C",
+          "array_rank": 0
+        },
+        {
+          "member": "029C",
+          "array_rank": 0
+        },
+        {
+          "member": "02AC",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 486,
+      "read_at": 374,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 13,
+      "fields": [
+        {
+          "member": "02BC",
+          "array_rank": 0
+        },
+        {
+          "member": "02CC",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 505,
+      "read_at": 393,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 14,
+      "fields": [
+        {
+          "member": "02E0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 545,
+      "read_at": 432,
+      "write_loops": [
+        524
+      ],
+      "read_loops": [
+        412
+      ]
+    },
+    {
+      "template": 15,
+      "fields": [
+        {
+          "member": "02FC",
+          "array_rank": 1
+        },
+        {
+          "member": "0318",
+          "array_rank": 1
+        },
+        {
+          "member": "0334",
+          "array_rank": 1
+        },
+        {
+          "member": "0350",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 630,
+      "read_at": 513,
+      "write_loops": [
+        573
+      ],
+      "read_loops": [
+        460
+      ]
+    },
+    {
+      "template": 16,
+      "fields": [
+        {
+          "member": "0368",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 653,
+      "read_at": 536,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 17,
+      "fields": [
+        {
+          "member": "037C",
+          "array_rank": 1
+        },
+        {
+          "member": "0398",
+          "array_rank": 1
+        },
+        {
+          "member": "03B4",
+          "array_rank": 1
+        },
+        {
+          "member": "03D0",
+          "array_rank": 1
+        },
+        {
+          "member": "03EC",
+          "array_rank": 1
+        },
+        {
+          "member": "0408",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 753,
+      "read_at": 630,
+      "write_loops": [
+        672
+      ],
+      "read_loops": [
+        555
+      ]
+    },
+    {
+      "template": 18,
+      "fields": [
+        {
+          "member": "0420",
+          "array_rank": 0
+        },
+        {
+          "member": "0430",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 781,
+      "read_at": 658,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 19,
+      "fields": [
+        {
+          "member": "0444",
+          "array_rank": 1
+        },
+        {
+          "member": "0460",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 833,
+      "read_at": 708,
+      "write_loops": [
+        800
+      ],
+      "read_loops": [
+        677
+      ]
+    },
+    {
+      "template": 20,
+      "fields": [
+        {
+          "member": "047C",
+          "array_rank": 1
+        },
+        {
+          "member": "0498",
+          "array_rank": 1
+        },
+        {
+          "member": "04B4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 906,
+      "read_at": 778,
+      "write_loops": [
+        861
+      ],
+      "read_loops": [
+        736
+      ]
+    },
+    {
+      "template": 21,
+      "fields": [
+        {
+          "member": "04CC",
+          "array_rank": 0
+        },
+        {
+          "member": "04DC",
+          "array_rank": 0
+        },
+        {
+          "member": "04EC",
+          "array_rank": 0
+        },
+        {
+          "member": "04FC",
+          "array_rank": 0
+        },
+        {
+          "member": "050C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 949,
+      "read_at": 821,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 22,
+      "fields": [
+        {
+          "member": "051C",
+          "array_rank": 0
+        },
+        {
+          "member": "052C",
+          "array_rank": 0
+        },
+        {
+          "member": "053C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 973,
+      "read_at": 845,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 23,
+      "fields": [
+        {
+          "member": "054C",
+          "array_rank": 0
+        },
+        {
+          "member": "055C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 992,
+      "read_at": 864,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 24,
+      "fields": [
+        {
+          "member": "0570",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 1032,
+      "read_at": 903,
+      "write_loops": [
+        1011
+      ],
+      "read_loops": [
+        883
+      ]
+    },
+    {
+      "template": 25,
+      "fields": [
+        {
+          "member": "0588",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 1055,
+      "read_at": 926,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 26,
+      "fields": [
+        {
+          "member": "059C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 1095,
+      "read_at": 965,
+      "write_loops": [
+        1074
+      ],
+      "read_loops": [
+        945
+      ]
+    },
+    {
+      "template": 27,
+      "fields": [
+        {
+          "member": "05B4",
+          "array_rank": 0
+        },
+        {
+          "member": "05C4",
+          "array_rank": 0
+        },
+        {
+          "member": "05D4",
+          "array_rank": 0
+        },
+        {
+          "member": "05E4",
+          "array_rank": 0
+        },
+        {
+          "member": "05F4",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 1138,
+      "read_at": 1008,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 28,
+      "fields": [
+        {
+          "member": "0604",
+          "array_rank": 0
+        },
+        {
+          "member": "0614",
+          "array_rank": 0
+        },
+        {
+          "member": "0624",
+          "array_rank": 0
+        },
+        {
+          "member": "0634",
+          "array_rank": 0
+        },
+        {
+          "member": "0644",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 1172,
+      "read_at": 1042,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 29,
+      "fields": [
+        {
+          "member": "0654",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 1186,
+      "read_at": 1056,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 30,
+      "fields": [
+        {
+          "member": "0668",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 1226,
+      "read_at": 1095,
+      "write_loops": [
+        1205
+      ],
+      "read_loops": [
+        1075
+      ]
+    },
+    {
+      "template": 31,
+      "fields": [
+        {
+          "member": "0680",
+          "array_rank": 0
+        },
+        {
+          "member": "0690",
+          "array_rank": 0
+        },
+        {
+          "member": "06A0",
+          "array_rank": 0
+        },
+        {
+          "member": "06B0",
+          "array_rank": 0
+        },
+        {
+          "member": "06C0",
+          "array_rank": 0
+        },
+        {
+          "member": "06D0",
+          "array_rank": 0
+        },
+        {
+          "member": "06E0",
+          "array_rank": 0
+        },
+        {
+          "member": "06F0",
+          "array_rank": 0
+        },
+        {
+          "member": "0700",
+          "array_rank": 0
+        },
+        {
+          "member": "0710",
+          "array_rank": 0
+        },
+        {
+          "member": "0720",
+          "array_rank": 0
+        },
+        {
+          "member": "0730",
+          "array_rank": 0
+        },
+        {
+          "member": "0740",
+          "array_rank": 0
+        },
+        {
+          "member": "0750",
+          "array_rank": 0
+        },
+        {
+          "member": "0760",
+          "array_rank": 0
+        },
+        {
+          "member": "0770",
+          "array_rank": 0
+        },
+        {
+          "member": "0780",
+          "array_rank": 0
+        },
+        {
+          "member": "0790",
+          "array_rank": 0
+        },
+        {
+          "member": "07A0",
+          "array_rank": 0
+        },
+        {
+          "member": "07B0",
+          "array_rank": 0
+        },
+        {
+          "member": "07C0",
+          "array_rank": 0
+        },
+        {
+          "member": "07D0",
+          "array_rank": 0
+        },
+        {
+          "member": "07E0",
+          "array_rank": 0
+        },
+        {
+          "member": "07F0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 24,
+      "write_at": 1364,
+      "read_at": 1233,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 32,
+      "fields": [
+        {
+          "member": "0800",
+          "array_rank": 0
+        },
+        {
+          "member": "0810",
+          "array_rank": 0
+        },
+        {
+          "member": "0820",
+          "array_rank": 0
+        },
+        {
+          "member": "0830",
+          "array_rank": 0
+        },
+        {
+          "member": "0840",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 1398,
+      "read_at": 1267,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 33,
+      "fields": [
+        {
+          "member": "0850",
+          "array_rank": 0
+        },
+        {
+          "member": "0860",
+          "array_rank": 0
+        },
+        {
+          "member": "0870",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 1422,
+      "read_at": 1291,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 34,
+      "fields": [
+        {
+          "member": "0880",
+          "array_rank": 0
+        },
+        {
+          "member": "0890",
+          "array_rank": 0
+        },
+        {
+          "member": "08A0",
+          "array_rank": 0
+        },
+        {
+          "member": "08B0",
+          "array_rank": 0
+        },
+        {
+          "member": "08C0",
+          "array_rank": 0
+        },
+        {
+          "member": "08D0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 6,
+      "write_at": 1461,
+      "read_at": 1330,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 35,
+      "fields": [
+        {
+          "member": "08E4",
+          "array_rank": 1
+        },
+        {
+          "member": "0900",
+          "array_rank": 1
+        },
+        {
+          "member": "091C",
+          "array_rank": 1
+        },
+        {
+          "member": "0938",
+          "array_rank": 1
+        },
+        {
+          "member": "0954",
+          "array_rank": 1
+        },
+        {
+          "member": "0970",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 1561,
+      "read_at": 1424,
+      "write_loops": [
+        1480
+      ],
+      "read_loops": [
+        1349
+      ]
+    },
+    {
+      "template": 36,
+      "fields": [
+        {
+          "member": "0988",
+          "array_rank": 0
+        },
+        {
+          "member": "0998",
+          "array_rank": 0
+        },
+        {
+          "member": "09A8",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 1594,
+      "read_at": 1457,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 37,
+      "fields": [
+        {
+          "member": "09BC",
+          "array_rank": 1
+        },
+        {
+          "member": "09D8",
+          "array_rank": 1
+        },
+        {
+          "member": "09F4",
+          "array_rank": 1
+        },
+        {
+          "member": "0A10",
+          "array_rank": 1
+        },
+        {
+          "member": "0A2C",
+          "array_rank": 1
+        },
+        {
+          "member": "0A48",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 1694,
+      "read_at": 1551,
+      "write_loops": [
+        1613
+      ],
+      "read_loops": [
+        1476
+      ]
+    },
+    {
+      "template": 38,
+      "fields": [
+        {
+          "member": "0A60",
+          "array_rank": 0
+        },
+        {
+          "member": "0A70",
+          "array_rank": 0
+        },
+        {
+          "member": "0A80",
+          "array_rank": 0
+        },
+        {
+          "member": "0A90",
+          "array_rank": 0
+        }
+      ],
+      "arity": 4,
+      "write_at": 1732,
+      "read_at": 1589,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 39,
+      "fields": [
+        {
+          "member": "0AA0",
+          "array_rank": 0
+        },
+        {
+          "member": "0AB0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 1751,
+      "read_at": 1608,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 40,
+      "fields": [
+        {
+          "member": "0AC4",
+          "array_rank": 1
+        },
+        {
+          "member": "0AE0",
+          "array_rank": 1
+        },
+        {
+          "member": "0AFC",
+          "array_rank": 1
+        },
+        {
+          "member": "0B18",
+          "array_rank": 1
+        },
+        {
+          "member": "0B34",
+          "array_rank": 1
+        },
+        {
+          "member": "0B50",
+          "array_rank": 1
+        },
+        {
+          "member": "0B6C",
+          "array_rank": 1
+        },
+        {
+          "member": "0B88",
+          "array_rank": 1
+        },
+        {
+          "member": "0BA4",
+          "array_rank": 1
+        },
+        {
+          "member": "0BC0",
+          "array_rank": 1
+        },
+        {
+          "member": "0BDC",
+          "array_rank": 1
+        },
+        {
+          "member": "0BF8",
+          "array_rank": 1
+        },
+        {
+          "member": "0C14",
+          "array_rank": 1
+        }
+      ],
+      "arity": 13,
+      "write_at": 1935,
+      "read_at": 1779,
+      "write_loops": [
+        1770
+      ],
+      "read_loops": [
+        1627
+      ]
+    },
+    {
+      "template": 41,
+      "fields": [
+        {
+          "member": "0C30",
+          "array_rank": 1
+        },
+        {
+          "member": "0C4C",
+          "array_rank": 1
+        },
+        {
+          "member": "0C68",
+          "array_rank": 1
+        },
+        {
+          "member": "0C84",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 1992,
+      "read_at": 1832,
+      "write_loops": [
+        1770
+      ],
+      "read_loops": [
+        1627
+      ]
+    },
+    {
+      "template": 42,
+      "fields": [
+        {
+          "member": "0C9C",
+          "array_rank": 0
+        },
+        {
+          "member": "0CB0",
+          "array_rank": 1
+        },
+        {
+          "member": "0CCC",
+          "array_rank": 1
+        },
+        {
+          "member": "0CE8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 2042,
+      "read_at": 1879,
+      "write_loops": [
+        1770
+      ],
+      "read_loops": [
+        1627
+      ]
+    },
+    {
+      "template": 43,
+      "fields": [
+        {
+          "member": "0D04",
+          "array_rank": 1
+        },
+        {
+          "member": "0D20",
+          "array_rank": 1
+        },
+        {
+          "member": "0D3C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 2087,
+      "read_at": 1921,
+      "write_loops": [
+        1770
+      ],
+      "read_loops": [
+        1627
+      ]
+    },
+    {
+      "template": 44,
+      "fields": [
+        {
+          "member": "0D58",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2136,
+      "read_at": 1967,
+      "write_loops": [
+        1770,
+        2106
+      ],
+      "read_loops": [
+        1627,
+        1940
+      ]
+    },
+    {
+      "template": 45,
+      "fields": [
+        {
+          "member": "0D78",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2168,
+      "read_at": 1999,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 46,
+      "fields": [
+        {
+          "member": "0D8C",
+          "array_rank": 1
+        },
+        {
+          "member": "0DA8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 2220,
+      "read_at": 2049,
+      "write_loops": [
+        2187
+      ],
+      "read_loops": [
+        2018
+      ]
+    },
+    {
+      "template": 47,
+      "fields": [
+        {
+          "member": "0DC0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2243,
+      "read_at": 2072,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 48,
+      "fields": [
+        {
+          "member": "0DD4",
+          "array_rank": 1
+        },
+        {
+          "member": "0DF0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 2295,
+      "read_at": 2122,
+      "write_loops": [
+        2262
+      ],
+      "read_loops": [
+        2091
+      ]
+    },
+    {
+      "template": 49,
+      "fields": [
+        {
+          "member": "0E08",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2318,
+      "read_at": 2145,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 50,
+      "fields": [
+        {
+          "member": "0E1C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 2358,
+      "read_at": 2184,
+      "write_loops": [
+        2337
+      ],
+      "read_loops": [
+        2164
+      ]
+    },
+    {
+      "template": 51,
+      "fields": [
+        {
+          "member": "0E34",
+          "array_rank": 0
+        },
+        {
+          "member": "0E44",
+          "array_rank": 0
+        },
+        {
+          "member": "0E54",
+          "array_rank": 0
+        },
+        {
+          "member": "0E64",
+          "array_rank": 0
+        },
+        {
+          "member": "0E74",
+          "array_rank": 0
+        },
+        {
+          "member": "0E84",
+          "array_rank": 0
+        }
+      ],
+      "arity": 6,
+      "write_at": 2406,
+      "read_at": 2232,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 52,
+      "fields": [
+        {
+          "member": "0E94",
+          "array_rank": 0
+        },
+        {
+          "member": "0EA4",
+          "array_rank": 0
+        },
+        {
+          "member": "0EB4",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 2430,
+      "read_at": 2256,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 53,
+      "fields": [
+        {
+          "member": "0EC8",
+          "array_rank": 1
+        },
+        {
+          "member": "0EE4",
+          "array_rank": 1
+        },
+        {
+          "member": "0F00",
+          "array_rank": 1
+        },
+        {
+          "member": "0F1C",
+          "array_rank": 1
+        },
+        {
+          "member": "0F38",
+          "array_rank": 1
+        },
+        {
+          "member": "0F54",
+          "array_rank": 1
+        },
+        {
+          "member": "0F70",
+          "array_rank": 1
+        },
+        {
+          "member": "0F8C",
+          "array_rank": 1
+        },
+        {
+          "member": "0FA8",
+          "array_rank": 1
+        },
+        {
+          "member": "0FC4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 10,
+      "write_at": 2578,
+      "read_at": 2394,
+      "write_loops": [
+        2449
+      ],
+      "read_loops": [
+        2275
+      ]
+    },
+    {
+      "template": 54,
+      "fields": [
+        {
+          "member": "0FE0",
+          "array_rank": 1
+        },
+        {
+          "member": "0FFC",
+          "array_rank": 1
+        },
+        {
+          "member": "1018",
+          "array_rank": 1
+        },
+        {
+          "member": "1034",
+          "array_rank": 1
+        },
+        {
+          "member": "1050",
+          "array_rank": 1
+        }
+      ],
+      "arity": 5,
+      "write_at": 2647,
+      "read_at": 2458,
+      "write_loops": [
+        2449
+      ],
+      "read_loops": [
+        2275
+      ]
+    },
+    {
+      "template": 55,
+      "fields": [
+        {
+          "member": "106C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 2668,
+      "read_at": 2478,
+      "write_loops": [
+        2449
+      ],
+      "read_loops": [
+        2275
+      ]
+    },
+    {
+      "template": 56,
+      "fields": [
+        {
+          "member": "1088",
+          "array_rank": 1
+        },
+        {
+          "member": "10A4",
+          "array_rank": 1
+        },
+        {
+          "member": "10C0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 2713,
+      "read_at": 2520,
+      "write_loops": [
+        2449
+      ],
+      "read_loops": [
+        2275
+      ]
+    },
+    {
+      "template": 57,
+      "fields": [
+        {
+          "member": "10DC",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 2734,
+      "read_at": 2540,
+      "write_loops": [
+        2449
+      ],
+      "read_loops": [
+        2275
+      ]
+    },
+    {
+      "template": 58,
+      "fields": [
+        {
+          "member": "10F8",
+          "array_rank": 0
+        },
+        {
+          "member": "111C",
+          "array_rank": 0
+        },
+        {
+          "member": "1140",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 2825,
+      "read_at": 2622,
+      "write_loops": [
+        2449,
+        2753
+      ],
+      "read_loops": [
+        2275,
+        2559
+      ]
+    },
+    {
+      "template": 59,
+      "fields": [
+        {
+          "member": "1164",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2911,
+      "read_at": 2705,
+      "write_loops": [
+        2862,
+        2881
+      ],
+      "read_loops": [
+        2659,
+        2678
+      ]
+    },
+    {
+      "template": 60,
+      "fields": [
+        {
+          "member": "1188",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 2941,
+      "read_at": 2734,
+      "write_loops": [
+        2862
+      ],
+      "read_loops": [
+        2659
+      ]
+    },
+    {
+      "template": 61,
+      "fields": [
+        {
+          "member": "11A0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 2964,
+      "read_at": 2757,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 62,
+      "fields": [
+        {
+          "member": "11B4",
+          "array_rank": 1
+        },
+        {
+          "member": "11D0",
+          "array_rank": 1
+        },
+        {
+          "member": "11EC",
+          "array_rank": 1
+        },
+        {
+          "member": "1208",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 3040,
+      "read_at": 2829,
+      "write_loops": [
+        2983
+      ],
+      "read_loops": [
+        2776
+      ]
+    },
+    {
+      "template": 63,
+      "fields": [
+        {
+          "member": "1224",
+          "array_rank": 1
+        },
+        {
+          "member": "1240",
+          "array_rank": 1
+        },
+        {
+          "member": "125C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 3085,
+      "read_at": 2871,
+      "write_loops": [
+        2983
+      ],
+      "read_loops": [
+        2776
+      ]
+    },
+    {
+      "template": 64,
+      "fields": [
+        {
+          "member": "1274",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3108,
+      "read_at": 2894,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 65,
+      "fields": [
+        {
+          "member": "1288",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 3148,
+      "read_at": 2933,
+      "write_loops": [
+        3127
+      ],
+      "read_loops": [
+        2913
+      ]
+    },
+    {
+      "template": 66,
+      "fields": [
+        {
+          "member": "12A0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3171,
+      "read_at": 2956,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 67,
+      "fields": [
+        {
+          "member": "12B4",
+          "array_rank": 1
+        },
+        {
+          "member": "12D0",
+          "array_rank": 1
+        },
+        {
+          "member": "12EC",
+          "array_rank": 1
+        },
+        {
+          "member": "1308",
+          "array_rank": 1
+        },
+        {
+          "member": "1324",
+          "array_rank": 1
+        },
+        {
+          "member": "1340",
+          "array_rank": 1
+        },
+        {
+          "member": "135C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 7,
+      "write_at": 3283,
+      "read_at": 3061,
+      "write_loops": [
+        3190
+      ],
+      "read_loops": [
+        2975
+      ]
+    },
+    {
+      "template": 68,
+      "fields": [
+        {
+          "member": "1378",
+          "array_rank": 1
+        },
+        {
+          "member": "1394",
+          "array_rank": 1
+        },
+        {
+          "member": "13B0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 3328,
+      "read_at": 3103,
+      "write_loops": [
+        3190
+      ],
+      "read_loops": [
+        2975
+      ]
+    },
+    {
+      "template": 69,
+      "fields": [
+        {
+          "member": "13CC",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3377,
+      "read_at": 3149,
+      "write_loops": [
+        3190,
+        3347
+      ],
+      "read_loops": [
+        2975,
+        3122
+      ]
+    },
+    {
+      "template": 70,
+      "fields": [
+        {
+          "member": "13EC",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3409,
+      "read_at": 3181,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 71,
+      "fields": [
+        {
+          "member": "1400",
+          "array_rank": 1
+        },
+        {
+          "member": "141C",
+          "array_rank": 1
+        },
+        {
+          "member": "1438",
+          "array_rank": 1
+        },
+        {
+          "member": "1454",
+          "array_rank": 1
+        },
+        {
+          "member": "1470",
+          "array_rank": 1
+        }
+      ],
+      "arity": 5,
+      "write_at": 3497,
+      "read_at": 3264,
+      "write_loops": [
+        3428
+      ],
+      "read_loops": [
+        3200
+      ]
+    },
+    {
+      "template": 72,
+      "fields": [
+        {
+          "member": "148C",
+          "array_rank": 1
+        },
+        {
+          "member": "14A8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 3530,
+      "read_at": 3295,
+      "write_loops": [
+        3428
+      ],
+      "read_loops": [
+        3200
+      ]
+    },
+    {
+      "template": 73,
+      "fields": [
+        {
+          "member": "14C0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3553,
+      "read_at": 3318,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 74,
+      "fields": [
+        {
+          "member": "14D4",
+          "array_rank": 1
+        },
+        {
+          "member": "14F0",
+          "array_rank": 1
+        },
+        {
+          "member": "150C",
+          "array_rank": 1
+        },
+        {
+          "member": "1528",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 3629,
+      "read_at": 3390,
+      "write_loops": [
+        3572
+      ],
+      "read_loops": [
+        3337
+      ]
+    },
+    {
+      "template": 75,
+      "fields": [
+        {
+          "member": "1544",
+          "array_rank": 0
+        },
+        {
+          "member": "1568",
+          "array_rank": 0
+        },
+        {
+          "member": "158C",
+          "array_rank": 0
+        },
+        {
+          "member": "15B0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 4,
+      "write_at": 3741,
+      "read_at": 3490,
+      "write_loops": [
+        3572,
+        3648
+      ],
+      "read_loops": [
+        3337,
+        3409
+      ]
+    },
+    {
+      "template": 76,
+      "fields": [
+        {
+          "member": "15D0",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3773,
+      "read_at": 3522,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 77,
+      "fields": [
+        {
+          "member": "15E4",
+          "array_rank": 1
+        },
+        {
+          "member": "1600",
+          "array_rank": 1
+        },
+        {
+          "member": "161C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 3837,
+      "read_at": 3583,
+      "write_loops": [
+        3792
+      ],
+      "read_loops": [
+        3541
+      ]
+    },
+    {
+      "template": 78,
+      "fields": [
+        {
+          "member": "1634",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 3860,
+      "read_at": 3606,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 79,
+      "fields": [
+        {
+          "member": "1648",
+          "array_rank": 1
+        },
+        {
+          "member": "1664",
+          "array_rank": 1
+        },
+        {
+          "member": "1680",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 3924,
+      "read_at": 3667,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 80,
+      "fields": [
+        {
+          "member": "169C",
+          "array_rank": 1
+        },
+        {
+          "member": "16B8",
+          "array_rank": 1
+        },
+        {
+          "member": "16D4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 3969,
+      "read_at": 3709,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 81,
+      "fields": [
+        {
+          "member": "16F0",
+          "array_rank": 1
+        },
+        {
+          "member": "170C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 4002,
+      "read_at": 3740,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 82,
+      "fields": [
+        {
+          "member": "1728",
+          "array_rank": 1
+        },
+        {
+          "member": "1744",
+          "array_rank": 1
+        },
+        {
+          "member": "1760",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 4047,
+      "read_at": 3782,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 83,
+      "fields": [
+        {
+          "member": "177C",
+          "array_rank": 1
+        },
+        {
+          "member": "1798",
+          "array_rank": 1
+        },
+        {
+          "member": "17B4",
+          "array_rank": 1
+        },
+        {
+          "member": "17D0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 4104,
+      "read_at": 3835,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 84,
+      "fields": [
+        {
+          "member": "17EC",
+          "array_rank": 1
+        },
+        {
+          "member": "1808",
+          "array_rank": 1
+        },
+        {
+          "member": "1824",
+          "array_rank": 1
+        },
+        {
+          "member": "1840",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 4161,
+      "read_at": 3888,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 85,
+      "fields": [
+        {
+          "member": "185C",
+          "array_rank": 1
+        },
+        {
+          "member": "1878",
+          "array_rank": 1
+        },
+        {
+          "member": "1894",
+          "array_rank": 1
+        },
+        {
+          "member": "18B0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 4218,
+      "read_at": 3941,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 86,
+      "fields": [
+        {
+          "member": "18CC",
+          "array_rank": 1
+        },
+        {
+          "member": "18E8",
+          "array_rank": 1
+        },
+        {
+          "member": "1904",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 4263,
+      "read_at": 3983,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 87,
+      "fields": [
+        {
+          "member": "1920",
+          "array_rank": 1
+        },
+        {
+          "member": "193C",
+          "array_rank": 1
+        },
+        {
+          "member": "1958",
+          "array_rank": 1
+        },
+        {
+          "member": "1974",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 4320,
+      "read_at": 4036,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 88,
+      "fields": [
+        {
+          "member": "1990",
+          "array_rank": 1
+        },
+        {
+          "member": "19AC",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 4353,
+      "read_at": 4067,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 89,
+      "fields": [
+        {
+          "member": "19C8",
+          "array_rank": 1
+        },
+        {
+          "member": "19E4",
+          "array_rank": 1
+        },
+        {
+          "member": "1A00",
+          "array_rank": 1
+        },
+        {
+          "member": "1A1C",
+          "array_rank": 1
+        },
+        {
+          "member": "1A38",
+          "array_rank": 1
+        },
+        {
+          "member": "1A54",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 4434,
+      "read_at": 4142,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 90,
+      "fields": [
+        {
+          "member": "1A70",
+          "array_rank": 1
+        },
+        {
+          "member": "1A8C",
+          "array_rank": 1
+        },
+        {
+          "member": "1AA8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 4479,
+      "read_at": 4184,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 91,
+      "fields": [
+        {
+          "member": "1AC4",
+          "array_rank": 1
+        },
+        {
+          "member": "1AE0",
+          "array_rank": 1
+        },
+        {
+          "member": "1AFC",
+          "array_rank": 1
+        },
+        {
+          "member": "1B18",
+          "array_rank": 1
+        },
+        {
+          "member": "1B34",
+          "array_rank": 1
+        },
+        {
+          "member": "1B50",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 4560,
+      "read_at": 4259,
+      "write_loops": [
+        3879
+      ],
+      "read_loops": [
+        3625
+      ]
+    },
+    {
+      "template": 92,
+      "fields": [
+        {
+          "member": "1B68",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 4583,
+      "read_at": 4282,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 93,
+      "fields": [
+        {
+          "member": "1B78",
+          "array_rank": 0
+        },
+        {
+          "member": "1B88",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 4602,
+      "read_at": 4301,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 94,
+      "fields": [
+        {
+          "member": "1B98",
+          "array_rank": 0
+        },
+        {
+          "member": "1BA8",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 4621,
+      "read_at": 4320,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 95,
+      "fields": [
+        {
+          "member": "1BBC",
+          "array_rank": 1
+        },
+        {
+          "member": "1BD8",
+          "array_rank": 1
+        },
+        {
+          "member": "1BF4",
+          "array_rank": 1
+        },
+        {
+          "member": "1C10",
+          "array_rank": 1
+        },
+        {
+          "member": "1C2C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 5,
+      "write_at": 4709,
+      "read_at": 4403,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 96,
+      "fields": [
+        {
+          "member": "1C48",
+          "array_rank": 1
+        },
+        {
+          "member": "1C64",
+          "array_rank": 1
+        },
+        {
+          "member": "1C80",
+          "array_rank": 1
+        },
+        {
+          "member": "1C9C",
+          "array_rank": 1
+        },
+        {
+          "member": "1CB8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 5,
+      "write_at": 4778,
+      "read_at": 4467,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 97,
+      "fields": [
+        {
+          "member": "1CD4",
+          "array_rank": 1
+        },
+        {
+          "member": "1CF0",
+          "array_rank": 1
+        },
+        {
+          "member": "1D0C",
+          "array_rank": 1
+        },
+        {
+          "member": "1D28",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 4835,
+      "read_at": 4520,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 98,
+      "fields": [
+        {
+          "member": "1D44",
+          "array_rank": 1
+        },
+        {
+          "member": "1D60",
+          "array_rank": 1
+        },
+        {
+          "member": "1D7C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 4880,
+      "read_at": 4562,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 99,
+      "fields": [
+        {
+          "member": "1D98",
+          "array_rank": 1
+        },
+        {
+          "member": "1DB4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 4913,
+      "read_at": 4593,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 100,
+      "fields": [
+        {
+          "member": "1DD0",
+          "array_rank": 1
+        },
+        {
+          "member": "1DEC",
+          "array_rank": 1
+        },
+        {
+          "member": "1E08",
+          "array_rank": 1
+        },
+        {
+          "member": "1E24",
+          "array_rank": 1
+        },
+        {
+          "member": "1E40",
+          "array_rank": 1
+        },
+        {
+          "member": "1E5C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 4994,
+      "read_at": 4668,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 101,
+      "fields": [
+        {
+          "member": "1E78",
+          "array_rank": 1
+        },
+        {
+          "member": "1E94",
+          "array_rank": 1
+        },
+        {
+          "member": "1EB0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 5039,
+      "read_at": 4710,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 102,
+      "fields": [
+        {
+          "member": "1ECC",
+          "array_rank": 1
+        },
+        {
+          "member": "1EE8",
+          "array_rank": 1
+        },
+        {
+          "member": "1F04",
+          "array_rank": 1
+        },
+        {
+          "member": "1F20",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 5096,
+      "read_at": 4763,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 103,
+      "fields": [
+        {
+          "member": "1F3C",
+          "array_rank": 1
+        },
+        {
+          "member": "1F58",
+          "array_rank": 1
+        },
+        {
+          "member": "1F74",
+          "array_rank": 1
+        },
+        {
+          "member": "1F90",
+          "array_rank": 1
+        },
+        {
+          "member": "1FAC",
+          "array_rank": 1
+        },
+        {
+          "member": "1FC8",
+          "array_rank": 1
+        },
+        {
+          "member": "1FE4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 7,
+      "write_at": 5189,
+      "read_at": 4849,
+      "write_loops": [
+        4640
+      ],
+      "read_loops": [
+        4339
+      ]
+    },
+    {
+      "template": 104,
+      "fields": [
+        {
+          "member": "2000",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 5238,
+      "read_at": 4895,
+      "write_loops": [
+        4640,
+        5208
+      ],
+      "read_loops": [
+        4339,
+        4868
+      ]
+    },
+    {
+      "template": 105,
+      "fields": [
+        {
+          "member": "2020",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 5270,
+      "read_at": 4927,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 106,
+      "fields": [
+        {
+          "member": "2034",
+          "array_rank": 1
+        },
+        {
+          "member": "2050",
+          "array_rank": 1
+        },
+        {
+          "member": "206C",
+          "array_rank": 1
+        },
+        {
+          "member": "2088",
+          "array_rank": 1
+        },
+        {
+          "member": "20A4",
+          "array_rank": 1
+        },
+        {
+          "member": "20C0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 5370,
+      "read_at": 5021,
+      "write_loops": [
+        5289
+      ],
+      "read_loops": [
+        4946
+      ]
+    },
+    {
+      "template": 107,
+      "fields": [
+        {
+          "member": "20DC",
+          "array_rank": 1
+        },
+        {
+          "member": "20F8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 5403,
+      "read_at": 5052,
+      "write_loops": [
+        5289
+      ],
+      "read_loops": [
+        4946
+      ]
+    },
+    {
+      "template": 108,
+      "fields": [
+        {
+          "member": "21E0",
+          "array_rank": 1
+        },
+        {
+          "member": "21FC",
+          "array_rank": 1
+        },
+        {
+          "member": "2218",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 5476,
+      "read_at": 5122,
+      "write_loops": [
+        5431
+      ],
+      "read_loops": [
+        5080
+      ]
+    },
+    {
+      "template": 109,
+      "fields": [
+        {
+          "member": "2234",
+          "array_rank": 1
+        },
+        {
+          "member": "2250",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 5509,
+      "read_at": 5153,
+      "write_loops": [
+        5431
+      ],
+      "read_loops": [
+        5080
+      ]
+    },
+    {
+      "template": 110,
+      "fields": [
+        {
+          "member": "226C",
+          "array_rank": 1
+        },
+        {
+          "member": "2288",
+          "array_rank": 1
+        },
+        {
+          "member": "22A4",
+          "array_rank": 1
+        },
+        {
+          "member": "22C0",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 5566,
+      "read_at": 5206,
+      "write_loops": [
+        5431
+      ],
+      "read_loops": [
+        5080
+      ]
+    },
+    {
+      "template": 111,
+      "fields": [
+        {
+          "member": "22DC",
+          "array_rank": 1
+        },
+        {
+          "member": "22F8",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 5627,
+      "read_at": 5265,
+      "write_loops": [
+        5594
+      ],
+      "read_loops": [
+        5234
+      ]
+    },
+    {
+      "template": 112,
+      "fields": [
+        {
+          "member": "2314",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 5676,
+      "read_at": 5313,
+      "write_loops": [
+        5655
+      ],
+      "read_loops": [
+        5293
+      ]
+    },
+    {
+      "template": 113,
+      "fields": [
+        {
+          "member": "232C",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 5699,
+      "read_at": 5336,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 114,
+      "fields": [
+        {
+          "member": "2340",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 5739,
+      "read_at": 5375,
+      "write_loops": [
+        5718
+      ],
+      "read_loops": [
+        5355
+      ]
+    },
+    {
+      "template": 115,
+      "fields": [
+        {
+          "member": "2358",
+          "array_rank": 0
+        },
+        {
+          "member": "2368",
+          "array_rank": 0
+        },
+        {
+          "member": "2378",
+          "array_rank": 0
+        }
+      ],
+      "arity": 3,
+      "write_at": 5772,
+      "read_at": 5408,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 116,
+      "fields": [
+        {
+          "member": "2388",
+          "array_rank": 0
+        },
+        {
+          "member": "2398",
+          "array_rank": 0
+        },
+        {
+          "member": "23A8",
+          "array_rank": 0
+        },
+        {
+          "member": "23B8",
+          "array_rank": 0
+        },
+        {
+          "member": "23C8",
+          "array_rank": 0
+        }
+      ],
+      "arity": 5,
+      "write_at": 5806,
+      "read_at": 5442,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 117,
+      "fields": [
+        {
+          "member": "23DC",
+          "array_rank": 1
+        },
+        {
+          "member": "23F8",
+          "array_rank": 1
+        },
+        {
+          "member": "2414",
+          "array_rank": 1
+        },
+        {
+          "member": "2430",
+          "array_rank": 1
+        },
+        {
+          "member": "244C",
+          "array_rank": 1
+        },
+        {
+          "member": "2468",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 5900,
+      "read_at": 5536,
+      "write_loops": [
+        5825
+      ],
+      "read_loops": [
+        5461
+      ]
+    },
+    {
+      "template": 118,
+      "fields": [
+        {
+          "member": "2484",
+          "array_rank": 1
+        },
+        {
+          "member": "24A0",
+          "array_rank": 1
+        },
+        {
+          "member": "24BC",
+          "array_rank": 1
+        },
+        {
+          "member": "24D8",
+          "array_rank": 1
+        },
+        {
+          "member": "24F4",
+          "array_rank": 1
+        },
+        {
+          "member": "2510",
+          "array_rank": 1
+        },
+        {
+          "member": "252C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 7,
+      "write_at": 5986,
+      "read_at": 5622,
+      "write_loops": [
+        5825
+      ],
+      "read_loops": [
+        5461
+      ]
+    },
+    {
+      "template": 119,
+      "fields": [
+        {
+          "member": "2544",
+          "array_rank": 0
+        }
+      ],
+      "arity": 1,
+      "write_at": 6009,
+      "read_at": 5645,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 120,
+      "fields": [
+        {
+          "member": "2558",
+          "array_rank": 1
+        }
+      ],
+      "arity": 1,
+      "write_at": 6049,
+      "read_at": 5684,
+      "write_loops": [
+        6028
+      ],
+      "read_loops": [
+        5664
+      ]
+    },
+    {
+      "template": 121,
+      "fields": [
+        {
+          "member": "2570",
+          "array_rank": 0
+        },
+        {
+          "member": "2580",
+          "array_rank": 0
+        }
+      ],
+      "arity": 2,
+      "write_at": 6077,
+      "read_at": 5712,
+      "write_loops": [],
+      "read_loops": []
+    },
+    {
+      "template": 122,
+      "fields": [
+        {
+          "member": "2594",
+          "array_rank": 1
+        },
+        {
+          "member": "25B0",
+          "array_rank": 1
+        },
+        {
+          "member": "25CC",
+          "array_rank": 1
+        },
+        {
+          "member": "25E8",
+          "array_rank": 1
+        },
+        {
+          "member": "2604",
+          "array_rank": 1
+        },
+        {
+          "member": "2620",
+          "array_rank": 1
+        },
+        {
+          "member": "263C",
+          "array_rank": 1
+        },
+        {
+          "member": "2658",
+          "array_rank": 1
+        },
+        {
+          "member": "2674",
+          "array_rank": 1
+        },
+        {
+          "member": "2690",
+          "array_rank": 1
+        },
+        {
+          "member": "26AC",
+          "array_rank": 1
+        }
+      ],
+      "arity": 11,
+      "write_at": 6237,
+      "read_at": 5861,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 123,
+      "fields": [
+        {
+          "member": "26C8",
+          "array_rank": 1
+        },
+        {
+          "member": "26E4",
+          "array_rank": 1
+        },
+        {
+          "member": "2700",
+          "array_rank": 1
+        },
+        {
+          "member": "271C",
+          "array_rank": 1
+        },
+        {
+          "member": "2738",
+          "array_rank": 1
+        },
+        {
+          "member": "2754",
+          "array_rank": 1
+        },
+        {
+          "member": "2770",
+          "array_rank": 1
+        },
+        {
+          "member": "278C",
+          "array_rank": 1
+        },
+        {
+          "member": "27A8",
+          "array_rank": 1
+        },
+        {
+          "member": "27C4",
+          "array_rank": 1
+        },
+        {
+          "member": "27E0",
+          "array_rank": 1
+        },
+        {
+          "member": "27FC",
+          "array_rank": 1
+        }
+      ],
+      "arity": 12,
+      "write_at": 6390,
+      "read_at": 6002,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 124,
+      "fields": [
+        {
+          "member": "2818",
+          "array_rank": 1
+        },
+        {
+          "member": "2834",
+          "array_rank": 1
+        },
+        {
+          "member": "2850",
+          "array_rank": 1
+        },
+        {
+          "member": "286C",
+          "array_rank": 1
+        },
+        {
+          "member": "2888",
+          "array_rank": 1
+        },
+        {
+          "member": "28A4",
+          "array_rank": 1
+        },
+        {
+          "member": "28C0",
+          "array_rank": 1
+        },
+        {
+          "member": "28DC",
+          "array_rank": 1
+        }
+      ],
+      "arity": 8,
+      "write_at": 6495,
+      "read_at": 6099,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 125,
+      "fields": [
+        {
+          "member": "28F8",
+          "array_rank": 1
+        },
+        {
+          "member": "2914",
+          "array_rank": 1
+        },
+        {
+          "member": "2930",
+          "array_rank": 1
+        },
+        {
+          "member": "294C",
+          "array_rank": 1
+        },
+        {
+          "member": "2968",
+          "array_rank": 1
+        },
+        {
+          "member": "2984",
+          "array_rank": 1
+        }
+      ],
+      "arity": 6,
+      "write_at": 6576,
+      "read_at": 6174,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 126,
+      "fields": [
+        {
+          "member": "29A0",
+          "array_rank": 1
+        },
+        {
+          "member": "29BC",
+          "array_rank": 1
+        },
+        {
+          "member": "29D8",
+          "array_rank": 1
+        },
+        {
+          "member": "29F4",
+          "array_rank": 1
+        }
+      ],
+      "arity": 4,
+      "write_at": 6633,
+      "read_at": 6227,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 127,
+      "fields": [
+        {
+          "member": "2A10",
+          "array_rank": 1
+        },
+        {
+          "member": "2A2C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 2,
+      "write_at": 6666,
+      "read_at": 6258,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 128,
+      "fields": [
+        {
+          "member": "2A48",
+          "array_rank": 1
+        },
+        {
+          "member": "2A64",
+          "array_rank": 1
+        },
+        {
+          "member": "2A80",
+          "array_rank": 1
+        }
+      ],
+      "arity": 3,
+      "write_at": 6711,
+      "read_at": 6300,
+      "write_loops": [
+        6096
+      ],
+      "read_loops": [
+        5731
+      ]
+    },
+    {
+      "template": 129,
+      "fields": [
+        {
+          "member": "2A9C",
+          "array_rank": 1
+        },
+        {
+          "member": "2AB8",
+          "array_rank": 1
+        },
+        {
+          "member": "2AD4",
+          "array_rank": 1
+        },
+        {
+          "member": "2AF0",
+          "array_rank": 1
+        },
+        {
+          "member": "2B0C",
+          "array_rank": 1
+        }
+      ],
+      "arity": 5,
+      "write_at": 6808,
+      "read_at": 6392,
+      "write_loops": [
+        6739
+      ],
+      "read_loops": [
+        6328
+      ]
+    }
+  ],
+  "limits": [
+    "Source-order member references and array ranks are paired, not native record values or modern state meanings.",
+    "Loop bounds/cardinalities, Variant subtypes, native encoding and a genuine GD2 fixture still require validation.",
+    "This tool does not load, export or certify interoperability with GD2 saves."
+  ]
+}

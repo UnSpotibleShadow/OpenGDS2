@@ -23,7 +23,7 @@ public partial class Main
         void Refresh()
         {
             preview.Texture=HardwareDesignPicture(design.GetSelectedId(),medium.GetSelectedId());preview.SetMeta("hardware_picture_index",11+design.GetSelectedId()*2+medium.GetSelectedId());
-            cost.Text=$"{Tr("PLANNING_COST")}: ¥{OwnHardwareService.Quote(design.GetSelectedId(),medium.GetSelectedId()):N0}";
+            cost.Text=$"{Tr("PLANNING_COST")}: ¥{DisplayNumbers.Format(OwnHardwareService.Quote(design.GetSelectedId(),medium.GetSelectedId()))}";
             var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId());gate.Text=result==OwnHardwareResult.Success?"":Tr("OWN_HARDWARE_RESULT_"+result);accept.Disabled=result!=OwnHardwareResult.Success;
         }
         design.ItemSelected+=_=>{state.OwnHardware.SelectedDesign=design.GetSelectedId();Refresh();};medium.ItemSelected+=_=>{state.OwnHardware.SelectedMedium=medium.GetSelectedId();Refresh();};room.ItemSelected+=_=>Refresh();Refresh();
@@ -45,7 +45,7 @@ public partial class Main
         if (technologyProject?.HardwareDesign?.PendingTechnology is int id)
         {
             ShowConversation(Tr("OWN_HARDWARE_PROJECT"),[new(SecretaryCaption(state.SecretarySourceIndex),
-                string.Format(Tr("OWN_HARDWARE_TECH_COMPLETED"),HardwareTechnologyName(id),technologyProject.RoomIndex+1))],()=>
+                string.Format(DisplayNumbers.Provider,Tr("OWN_HARDWARE_TECH_COMPLETED"),HardwareTechnologyName(id),technologyProject.RoomIndex+1))],()=>
             {
                 if (!ReferenceEquals(_session.Current,state) || technologyProject.HardwareDesign.PendingTechnology!=id) return;
                 OwnHardwareService.AcknowledgeTechnology(state,technologyProject);ShowOfficeReconstruction(state);

@@ -14,14 +14,14 @@ public partial class Main
         NativeText(canvas,"ExhibitionVisitorsCaption",Tr("EXHIBITION_VISITORS")+":",new(4,167,236,19),10);
         var visitors=NativeText(canvas,"ExhibitionVisitors","",new(241,167,55,19),10,HorizontalAlignment.Right);
         NativeText(canvas,"ExhibitionRecordCaption",Tr("EXHIBITION_PREVIOUS_RECORD")+":",new(4,186,236,18),10);
-        NativeText(canvas,"ExhibitionPreviousRecord",exhibition.PreviousVisitorRecord?.ToString("N0")??"?",new(241,186,55,18),10,HorizontalAlignment.Right);
+        NativeText(canvas,"ExhibitionPreviousRecord",exhibition.PreviousVisitorRecord?.ToDisplayNumber()??"?",new(241,186,55,18),10,HorizontalAlignment.Right);
         var close=NativeAction(canvas,"CloseExhibition","CONTINUE",new(100,209,100,25),()=>{});
         close.Pressed+=()=>{if(!close.Disabled){ExhibitionService.Close(state);ShowOfficeReconstruction(state);}};
         void Refresh()
         {
-            visitors.Text=$"{ExhibitionService.DisplayVisitors(exhibition):N0}";
+            visitors.Text=$"{DisplayNumbers.Format(ExhibitionService.DisplayVisitors(exhibition))}";
             bool done=exhibition.DisplayCallbacks is null or >=90;
-            visitors.TooltipText=done?string.Format(Tr("EXHIBITION_RESULT"),exhibition.Visitors,exhibition.ReportedAwarenessGain):visitors.Text;
+            visitors.TooltipText=done?string.Format(DisplayNumbers.Provider,Tr("EXHIBITION_RESULT"),exhibition.Visitors,exhibition.ReportedAwarenessGain):visitors.Text;
             close.Disabled=!done;
         }
         Refresh();if(exhibition.DisplayCallbacks is <90)AdvanceExhibitionScene(state,exhibition,_dialog!,Refresh);

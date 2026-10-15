@@ -28,6 +28,192 @@ GameState ProgrammingFixture(int index=5)
         OfficeActorContinuation=new() {ActorSlot=0,EmployeeSourceIndex=0,RoomIndex=0},
         PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2,Mode=4,Index=index,Outcome=index==1?0:1,QualityIndex=index==1?null:0,CommentVariant=0}};
 }
+GameState VirusFixture(bool owned=false)
+{
+    return new() {Company=new() {Name="Fixture",PresidentName="Test",WeeklyNet=0,MonthlyNet=0,YearlyNet=0},Money=200_000_000,BackupDeviceOwned=owned,
+        Employees=[new() {Name="Developer",SourceIndex=0,PortraitId=1,Level=1,Experience=0,Stress=90,
+            Office=new() {SlotIndex=0,Action=6,SeatedAction=6,WorkEngaged=true,MovementState=0}}],
+        DevelopmentProjects=[new() {Title="Project",RoomIndex=0,RequiredPoints=100,Progress=30,Focus=new(25,25,25,25)}]};
+}
+Test("original number display retains fixed lower Japanese groups and comma thousands",()=>
+{
+    Check(OriginalNumberFormatter.Format(9999,NumberGrouping.Japanese)=="9999");
+    Check(OriginalNumberFormatter.Format(10000,NumberGrouping.Japanese)=="1万0000");
+    Check(OriginalNumberFormatter.Format(100000001,NumberGrouping.Japanese)=="1億0000万0001");
+    Check(OriginalNumberFormatter.Format(-1234567890123,NumberGrouping.Japanese)=="-1兆2345億6789万0123");
+    Check(OriginalNumberFormatter.Format(123456789,NumberGrouping.Thousands)=="123,456,789");
+    Check(OriginalNumberFormatter.Format(long.MinValue,NumberGrouping.Thousands)=="-9,223,372,036,854,775,808");
+    Throws<ArgumentException>(()=>OriginalNumberFormatter.FormatDigits("1.5",NumberGrouping.Japanese));
+});
+GameState PoachingFixture(bool defensive=false)
+{
+    var s=VirusFixture();s.DevelopmentProjects.Clear();s.Employees.Clear();
+    var employee=new EmployeeState {SourceIndex=49,Name="Rival developer",PortraitId=1,ContractFee=10_000_000,
+        Level=1,Experience=0,Stress=10,SpecialFlag=1,TechnologyLevels=new(),OriginalAttributes=[50,50,50,50,50,50,50],
+        Fun=50,Novelty=50,Graphics=50,Music=50,Accuracy=50,DevelopmentSpeed=50,Inspiration=50};
+    s.EmployeeSources=[new() {SourceIndex=49,GateValue=defensive?1:0,Employee=employee}];
+    if(defensive){employee.Office=new() {SlotIndex=0,Action=0,MovementState=0};s.Employees.Add(employee);}
+    return s;
+}
+void StartPoaching(GameState s)
+{
+    Check(PoachingService.Begin(s,49));Check(PoachingService.Acknowledge(s,new FailureRandom()));
+    Check(PoachingService.Confirm(s));
+}
+Test("poaching candidate filter and confirmation never hire or charge on cancel",()=>
+{
+    var s=PoachingFixture();Check(PoachingService.Candidates(s).Single().SourceIndex==49);
+    Check(PoachingService.Begin(s,49));Check(!BackupDeviceService.Begin(s));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(PoachingService.Cancel(s) && s.Employees.Count==0 && s.Money==200_000_000);
+    s.EmployeeSources[0].GateValue=1;Check(!PoachingService.Begin(s,49));
+});
+Test("poaching donations debit every accumulator while contract raises are free until outcome",()=>
+{
+    var s=PoachingFixture();StartPoaching(s);
+    Check(PoachingService.Donate(s,5_000_000)==PoachingActionResult.Success && s.Money==195_000_000 && s.Company.WeeklyNet==-5_000_000);
+    Check(PoachingService.RaiseOffer(s,100_000_000)==PoachingActionResult.Success && s.Money==195_000_000 && s.PendingPoaching!.PlayerOffer==110_000_000);
+    Check(PoachingService.Donate(s,1)==PoachingActionResult.InvalidAmount);
+    s.Money=1;Check(PoachingService.Donate(s,5_000_000)==PoachingActionResult.InsufficientFunds && s.PendingPoaching.PlayerDonations==5_000_000);
+    s.Money=195_000_000;Check(PoachingService.Cancel(s) && s.Money==195_000_000 && s.Employees.Count==0);
+});
+Test("poaching donation acknowledgment survives reload before its one-time debit",()=>
+{
+    var s=PoachingFixture();StartPoaching(s);Check(PoachingService.QueueDonation(s,5_000_000)==PoachingActionResult.Success);
+    Check(s.Money==200_000_000 && s.PendingPoaching!.PlayerDonations==0 && !PoachingService.Tick(s,new FailureRandom()));
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(PoachingService.Acknowledge(s,new FailureRandom()));
+    Check(s.Money==195_000_000 && s.PendingPoaching!.PlayerDonations==5_000_000 && s.PendingPoaching.PendingDonation is null);
+    Check(!PoachingService.Acknowledge(s,new FailureRandom()) && s.Money==195_000_000);
+});
+Test("poaching timed offers retain all four draws across save load and conditional final response",()=>
+{
+    var s=PoachingFixture();StartPoaching(s);PoachingService.RaiseOffer(s,100_000_000);
+    var first=new FailureRandom(0,.34f);for(int i=0;i<=80;i++)PoachingService.Tick(s,first);
+    Check(first.Calls==2 && s.PendingPoaching!.RivalDonations==1_000_000 && s.PendingPoaching.RivalOffer==30_000_000);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));var last=new FailureRandom(.99f,.34f);
+    for(int i=81;i<=200;i++)PoachingService.Tick(s,last);
+    Check(last.Calls==2 && s.PendingPoaching!.RivalDonations==16_000_000 && s.PendingPoaching.RivalOffer==125_000_000 && s.PendingPoaching.TimerCallbacks==201);
+    Check(s.PendingPoaching.Phase==PoachingPhase.DecisionIntroduction && !PoachingService.Tick(s,new FailureRandom()));
+    var noResponse=PoachingFixture();StartPoaching(noResponse);var three=new FailureRandom(0,0,0);
+    for(int i=0;i<=200;i++)PoachingService.Tick(noResponse,three);
+    Check(three.Calls==3 && noResponse.PendingPoaching!.RivalOffer==20_000_000);
+});
+Test("winning poach charges the previous contract fee once after the final secretary result",()=>
+{
+    var s=PoachingFixture();StartPoaching(s);PoachingService.Donate(s,50_000_000);PoachingService.RaiseOffer(s,100_000_000);
+    var roll=new FailureRandom(0,.34f,.99f,.34f);for(int i=0;i<=200;i++)PoachingService.Tick(s,roll);
+    Check(PoachingService.Acknowledge(s,new FailureRandom()) && s.PendingPoaching!.PlayerWins==true);
+    Check(PoachingService.Acknowledge(s,new FailureRandom()) && PoachingService.Acknowledge(s,new FailureRandom()));
+    Check(s.Employees.Count==0 && s.Money==150_000_000);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(PoachingService.Acknowledge(s,new Random(1)));
+    Check(s.Employees.Single().ContractFee==110_000_000 && s.Money==140_000_000 && s.EmployeeSources[0].GateValue==1 && s.PendingPoaching is null);
+    Check(!PoachingService.Acknowledge(s,new FailureRandom()) && s.Money==140_000_000);
+});
+Test("negotiation ties favour the player and defensive retention raises only future renewal fee",()=>
+{
+    var s=PoachingFixture(true);s.PoachingOpportunityTicks=30000;
+    Check(!PoachingService.Periodic(s,new FailureRandom(.00015f,0)) && s.OriginalPayrollScratchIndex==1);
+    PoachingService.Acknowledge(s,new FailureRandom());PoachingService.Acknowledge(s,new FailureRandom());
+    PoachingService.RaiseOffer(s,10_000_000);var scene=s.PendingPoaching!;scene.RivalOffer=scene.PlayerOffer;scene.TimerCallbacks=200;
+    PoachingService.Tick(s,new FailureRandom());PoachingService.Acknowledge(s,new FailureRandom());Check(scene.PlayerWins==true);
+    while(PoachingService.Acknowledge(s,new Random(2))){}
+    Check(s.Money==200_000_000 && s.Employees.Single().ContractFee==20_000_000 && s.EmployeeSources[0].Employee.ContractFee==20_000_000);
+});
+Test("losing defensive negotiation dismisses after its result and keeps paid donations spent",()=>
+{
+    var s=PoachingFixture(true);s.PoachingOpportunityTicks=30000;PoachingService.Periodic(s,new FailureRandom(.00015f,0));
+    PoachingService.Acknowledge(s,new FailureRandom());PoachingService.Acknowledge(s,new FailureRandom());PoachingService.Donate(s,5_000_000);
+    s.PendingPoaching!.RivalOffer=100_000_000;s.PendingPoaching.TimerCallbacks=200;PoachingService.Tick(s,new FailureRandom());
+    for(int i=0;i<3;i++)PoachingService.Acknowledge(s,new FailureRandom());
+    Check(s.Employees.Count==1 && s.EmployeeSources[0].GateValue==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));PoachingService.Acknowledge(s,new FailureRandom());
+    Check(s.Employees.Count==0 && s.EmployeeSources[0].GateValue==0 && s.EmployeeSources[0].Employee.Stress==0 && s.Money==195_000_000);
+});
+Test("periodic poaching uses eager opportunity draw and resumes before virus without rerolling",()=>
+{
+    var s=PoachingFixture(true);s.PoachingOpportunityTicks=29999;var below=new FailureRandom(.00015f);
+    Check(CompanyEventService.Resume(s,below) && below.Calls==1 && s.PoachingOpportunityTicks==30000);
+    var eligible=new FailureRandom(.00015f,0);Check(!CompanyEventService.Resume(s,eligible) && eligible.Calls==2 && s.CompanyEventContinuation!.PoachingProcessed);
+    PoachingService.Acknowledge(s,new FailureRandom());PoachingService.Acknowledge(s,new FailureRandom());Check(PoachingService.Cancel(s));
+    Check(CompanyEventService.Resume(s,new FailureRandom()) && s.PoachingOpportunityTicks==0 && s.CompanyEventContinuation is null);
+    s.Employees.Clear();s.EmployeeSources.Clear();s.PoachingOpportunityTicks=30000;
+    Check(CompanyEventService.Resume(s,new FailureRandom(.00015f,.9f)) && s.PoachingEmptyRosterObserved && s.PendingPoaching is null);
+});
+Test("poaching overflow and malformed saved outcomes cannot partially mutate a transaction",()=>
+{
+    var s=PoachingFixture();StartPoaching(s);s.Company.MonthlyNet=long.MinValue;
+    Throws<OverflowException>(()=>PoachingService.Donate(s,5_000_000));Check(s.Money==200_000_000 && s.PendingPoaching!.PlayerDonations==0);
+    s.Company.MonthlyNet=0;s.PendingPoaching!.PlayerWins=true;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    s.PendingPoaching.PlayerWins=null;s.PendingPoaching.RivalOffer=0;Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+
+Test("backup purchase charges once, updates every financial period and resumes its saved receipt",()=>
+{
+    var s=VirusFixture();Check(BackupDeviceService.Begin(s));Check(BackupDeviceService.Acknowledge(s));
+    Check(BackupDeviceService.Confirm(s)==BackupPurchaseResult.Success && s.BackupDeviceOwned && s.Money==100_000_000);
+    Check(s.Company.WeeklyNet==-100_000_000 && s.Company.MonthlyNet==-100_000_000 && s.Company.YearlyNet==-100_000_000);
+    var restored=SaveStore.Deserialize(SaveStore.Serialize(s));Check(restored.BackupDeviceOwned && restored.PendingBackupDevice?.Result==BackupPurchaseResult.Success);
+    Check(BackupDeviceService.Confirm(restored) is null && restored.Money==100_000_000);
+    Check(BackupDeviceService.Acknowledge(restored) && BackupDeviceService.Begin(restored));
+    Check(restored.PendingBackupDevice?.Result==BackupPurchaseResult.AlreadyOwned && restored.Money==100_000_000);
+});
+Test("backup cancellation and insufficient funds do not charge or grant ownership",()=>
+{
+    var s=VirusFixture();Check(BackupDeviceService.Begin(s) && BackupDeviceService.Acknowledge(s) && BackupDeviceService.Cancel(s));
+    Check(!s.BackupDeviceOwned && s.Money==200_000_000 && s.PendingBackupDevice is null);
+    s.Money=BackupDeviceService.Price-1;Check(BackupDeviceService.Begin(s) && BackupDeviceService.Acknowledge(s));
+    Check(BackupDeviceService.Confirm(s)==BackupPurchaseResult.InsufficientFunds && !s.BackupDeviceOwned && s.Money==BackupDeviceService.Price-1);
+});
+Test("backup purchase prepares overflow and modal guards before mutation",()=>
+{
+    var s=VirusFixture();s.Company.WeeklyNet=long.MinValue;
+    Check(BackupDeviceService.Begin(s) && FacilityService.HasPendingDecision(s));Check(!BackupDeviceService.Begin(s));BackupDeviceService.Acknowledge(s);
+    Throws<OverflowException>(()=>BackupDeviceService.Confirm(s));Check(!s.BackupDeviceOwned && s.Money==200_000_000 && s.PendingBackupDevice?.Page==1);
+});
+Test("unprotected virus applies stress only after each reaction and discards only after final acknowledgment",()=>
+{
+    var s=VirusFixture();var random=new FailureRandom(.2f);CompanyEventService.BeginVirus(s,s.DevelopmentProjects[0]);
+    Check(s.Employees[0].Stress==90 && s.DevelopmentProjects.Count==1 && random.Calls==0);
+    Check(CompanyEventService.AcknowledgeVirus(s,random) && s.PendingVirusEvent?.Page==2 && random.Calls==1 && s.Employees[0].Stress==90);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CompanyEventService.AcknowledgeVirus(s,random) && s.Employees[0].Stress==99 && s.PendingVirusEvent?.Page==3);
+    Check(s.DevelopmentProjects.Count==1);CompanyEventService.AcknowledgeVirus(s,random);Check(s.PendingVirusEvent?.Page==4 && s.DevelopmentProjects.Count==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CompanyEventService.AcknowledgeVirus(s,random) && s.DevelopmentProjects.Count==0 && s.PendingVirusEvent is null);
+    Check(!CompanyEventService.AcknowledgeVirus(s,random) && s.Employees[0].Stress==99 && random.Calls==1);
+});
+Test("owned backup preserves project and stress throughout virus dialogue and save reload",()=>
+{
+    var s=VirusFixture(true);s.Employees[0].Stress=100;var random=new FailureRandom(.9f);CompanyEventService.BeginVirus(s,s.DevelopmentProjects[0]);
+    Check(CompanyEventService.AcknowledgeVirus(s,random) && s.PendingVirusEvent?.Page==1 && random.Calls==0);
+    Check(CompanyEventService.AcknowledgeVirus(s,random) && s.PendingVirusEvent?.Page==2 && random.Calls==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));CompanyEventService.AcknowledgeVirus(s,random);
+    Check(s.PendingVirusEvent is null && s.Employees[0].Stress==100 && s.DevelopmentProjects.Count==1 && s.BackupDeviceOwned);
+});
+Test("virus eligibility consumes eager room draws after five releases and resumes at the next room",()=>
+{
+    var s=VirusFixture();var firstRoll=new FailureRandom(.5f);Check(CompanyEventService.Resume(s,firstRoll) && firstRoll.Calls==1);
+    s.ReleasedGames=Enumerable.Range(0,5).Select(i=>new ReleasedGameState {ProductIndex=i,Title="Game"+i}).ToList();
+    var trigger=new FailureRandom(.5f,.000067f);Check(!CompanyEventService.Resume(s,trigger) && trigger.Calls==2 && s.CompanyEventContinuation?.NextVirusRoom==1);
+    var reaction=new FailureRandom(.1f);while(CompanyEventService.AcknowledgeVirus(s,reaction)){}
+    var remaining=new FailureRandom(.5f);Check(CompanyEventService.Resume(s,remaining) && remaining.Calls==1 && s.CompanyEventContinuation is null);
+    var emptyRooms=new FailureRandom(.5f,.2f,.3f);Check(CompanyEventService.Resume(s,emptyRooms) && emptyRooms.Calls==3);
+});
+Test("backup equipment uses the original hidden tile and retained two-frame animation",()=>
+{
+    var s=VirusFixture();var tile=new OfficeSpriteDefinition(142,-100,79,379,357,24,32,26);
+    Check(CompanyEventService.ProjectBackup(tile,s)==tile);s.BackupDeviceOwned=true;
+    var rolls=new FailureRandom(Enumerable.Repeat(.5f,29).ToArray());for(int i=0;i<19;i++)CompanyEventService.Resume(s,rolls);
+    var visible=CompanyEventService.ProjectBackup(tile,s);Check(visible.X==18 && visible.Y==109 && visible.SourceX==403 && s.BackupDeviceAnimationTicks==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));for(int i=0;i<10;i++)CompanyEventService.Resume(s,rolls);
+    Check(CompanyEventService.ProjectBackup(tile,s).SourceX==379 && rolls.Calls==29);
+});
+Test("malformed virus and backup continuation states are rejected before loading",()=>
+{
+    var s=VirusFixture();CompanyEventService.BeginVirus(s,s.DevelopmentProjects[0]);s.PendingVirusEvent!.Protected=true;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.PendingVirusEvent.Protected=false;s.PendingVirusEvent.Page=2;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.PendingVirusEvent=null;s.BackupDeviceAnimationTicks=19;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));s.BackupDeviceAnimationTicks=0;s.PendingBackupDevice=new() {Page=2};
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+});
+
 Test("English office date units preserve the blue frame and every pixel outside their labels",()=>
 {
     byte[] source=Enumerable.Range(0,466*290*3).Select(i=>(byte)(i%251)).ToArray();var original=(byte[])source.Clone();
@@ -1076,7 +1262,7 @@ Test("failure waits for earlier modal receipts and resumes at the late office-lo
 {
     var s=FailureFixture();s.PendingBankLoanReceipt=new() {Slot=0,OriginalType=1,BorrowedOn=new(3,5,1)};
     Check(!FinancialFailureService.Begin(s));s.PendingBankLoanReceipt=null;
-    var session=new GameSession(new FailureRandom());session.Restore(s);session.TickOffice();Check(s.FinancialFailure?.Phase==0);
+    var session=new GameSession(new FailureRandom(.5f));session.Restore(s);session.TickOffice();Check(s.FinancialFailure?.Phase==0);
 });
 Test("invalid failure cursors reactions snapshots and overlaps are rejected",()=>
 {
@@ -5979,7 +6165,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==273 && dialogue.SchemaVersion==13 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==322 && dialogue.SchemaVersion==16 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
@@ -6056,6 +6242,7 @@ if (args.Length == 2)
         var scene = OfficeSceneImporter.Extract(File.ReadAllBytes(args[0]));
         Check(scene.Sprites.Count == 128 && scene.Sprites[0] == new OfficeSpriteDefinition(23,148,64,47,226,11,21,20));
         Check(scene.Sprites[121].Id == 144 && scene.Sprites[122].Id == 145);
+        Check(scene.Sprites.Single(x=>x.Id==142)==new OfficeSpriteDefinition(142,-100,79,379,357,24,32,26));
         // The final initializer selects secretary record 1 (portrait 2),
         // overriding the earlier portrait-1 tile allocation.
         Check(scene.Sprites.Single(x => x.Id == 141) == new OfficeSpriteDefinition(141,101,79,200,32,16,32,26));

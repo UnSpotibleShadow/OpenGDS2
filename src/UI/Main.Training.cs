@@ -34,7 +34,7 @@ public partial class Main
         void Select()
         {
             if(table.GetSelected() is not { } row)return;selected=courses.Single(t=>t.SourceIndex==row.GetMetadata(0).AsInt32());int level=employee.TechnologyLevels![selected.SourceIndex];
-            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(Tr("TRAINING_DESCRIPTION"),TechnologyName(selected)):selected.Description;
+            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(DisplayNumbers.Provider,Tr("TRAINING_DESCRIPTION"),TechnologyName(selected)):selected.Description;
             if(employee.Office?.Training?.TechnologySourceIndex==selected.SourceIndex)description.Text+=$"\n{Tr("TRAINING_PROGRESS")}: {employee.Office.Training.Progress} / {selected.RequiredTrainingWork.ElementAtOrDefault(level)}\n{Tr("TRAINING_RESUME_NOTE")}";
             train.Name="TrainTechnology"+selected.SourceIndex;train.Disabled=TrainingEligibility(state,employee,selected)!=TrainingResult.Success;
             train.TooltipText=Tr("TRAINING_RESULT_"+TrainingEligibility(state,employee,selected));
@@ -72,14 +72,14 @@ public partial class Main
             string note=TranslationServer.GetLocale().StartsWith("en")?Tr("TECHNOLOGY_EFFECT_"+technology.Identifier)+"\n"+Tr("TECHNOLOGY_EFFECT_TIMING"):technology.Description;
             if(technology.Identifier==4){Boundary("SpeedTechnologyNote",Tr("SPEED_TECHNOLOGY_NOTE"));if(employee.Office is {WorkTier:4,WorkTicks:>0})Boundary("SpeedTechnologyInterruptedWork",Tr("SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"));}
             if(technology.Identifier==4)note+="\n"+Tr("SPEED_TECHNOLOGY_NOTE")+(employee.Office is {WorkTier:4,WorkTicks:>0}?"\n"+Tr("SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"):"");
-            if(technology.Identifier==5&&level==3){var target=TechnologyApplicationService.LevelThreeStressTarget(state);Boundary("StressReliefSourceTarget",target is null?Tr("STRESS_RELIEF_MAPPING_UNKNOWN"):string.Format(Tr("STRESS_RELIEF_SLOT_ZERO"),EmployeeName(target)));}
+            if(technology.Identifier==5&&level==3){var target=TechnologyApplicationService.LevelThreeStressTarget(state);Boundary("StressReliefSourceTarget",target is null?Tr("STRESS_RELIEF_MAPPING_UNKNOWN"):string.Format(DisplayNumbers.Provider,Tr("STRESS_RELIEF_SLOT_ZERO"),EmployeeName(target)));}
             if(result!=TechnologyApplicationResult.Success)note+="\n"+Tr("TECHNOLOGY_USE_"+result);
             select.TooltipText=note;select.Pressed+=()=>description.Text=note;if(description.Text.Length==0)description.Text=note;
             if(technology.RawTable1568.Count!=3)continue;
             var use=new Button {Name="UseTechnology"+technology.SourceIndex,Text=$"{Tr("USE_TECHNOLOGY")} · {technology.RawTable1568[level-1]}",Disabled=result!=TechnologyApplicationResult.Success,TooltipText=note,CustomMinimumSize=new(126,23)};use.AddThemeFontSizeOverride("font_size",10);row.AddChild(use);
             use.Pressed+=()=>{var outcome=TechnologyApplicationService.TryUse(state,employee,technology);if(outcome==TechnologyApplicationResult.Success)ShowOfficeReconstruction(state);else _status.Text=Tr("TECHNOLOGY_USE_"+outcome);};
         }
-        string activeText=employee.Office?.TechnologyApplication is TechnologyApplicationState active ? active.IsSpeedBoost?string.Format(Tr("SPEED_TECHNOLOGY_REMAINING"),employee.Office.SpeedBoostTicks*OfficeStaffRules.TickSeconds):$"{Tr("TECHNOLOGY_REMAINING_WORK")}: {active.RemainingUnits}":Tr("TECHNOLOGY_USE_NOTE");
+        string activeText=employee.Office?.TechnologyApplication is TechnologyApplicationState active ? active.IsSpeedBoost?string.Format(DisplayNumbers.Provider,Tr("SPEED_TECHNOLOGY_REMAINING"),employee.Office.SpeedBoostTicks*OfficeStaffRules.TickSeconds):$"{Tr("TECHNOLOGY_REMAINING_WORK")}: {active.RemainingUnits}":Tr("TECHNOLOGY_USE_NOTE");
         _status=NativeText(canvas,employee.Office?.TechnologyApplication?.IsSpeedBoost==true?"SpeedTechnologyRemaining":"TechnologyUseStatus",activeText,new(4,274,402,26),10);_status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         ManagementSaveActions(canvas,state,357,402);
         NativeAction(canvas,"TechnologyUseDesk","ASSIGN_DESK",new(4,303,205,25),()=>ShowDeskAssignment(state,employee));

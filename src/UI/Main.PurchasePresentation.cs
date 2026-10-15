@@ -29,7 +29,7 @@ public partial class Main
         table.ItemSelected+=Select;
         foreach(var computer in computers)
         {
-            var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,computer.SourceIndex);row.SetText(0,CatalogName(catalog,"COMPUTER",computer.SourceIndex,computer.Name));row.SetText(1,computer.BitWidth+" bit");row.SetText(2,$"¥{computer.PurchasePrice:N0}");row.SetTextAlignment(2,HorizontalAlignment.Right);
+            var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,computer.SourceIndex);row.SetText(0,CatalogName(catalog,"COMPUTER",computer.SourceIndex,computer.Name));row.SetText(1,computer.BitWidth+" bit");row.SetText(2,$"¥{DisplayNumbers.Format(computer.PurchasePrice)}");row.SetTextAlignment(2,HorizontalAlignment.Right);
             if(computer.SourceIndex==(selectedSource??state.DevelopmentComputerIndex??computers[0].SourceIndex))row.Select(0);
         }
         Select();buy.Disabled|=computers.Count==0;buy.Pressed+=()=>{if(buy.Disabled||selected is not int source)return;var result=DevelopmentComputerService.TryPurchase(state,catalog,source);ShowComputerPurchase(state,source);_status.Text=Tr("COMPUTER_RESULT_"+result);};
@@ -50,13 +50,13 @@ public partial class Main
             buy.Disabled=state.TechnologyOwnershipLevels is null||state.TechnologyOwnershipLevels.GetValueOrDefault(technology.SourceIndex)>=1;
         }
         table.ItemSelected+=Select;
-        foreach(var technology in technologies){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,technology.SourceIndex);row.SetText(0,TechnologyName(technology));row.SetText(1,$"¥{technology.PurchaseFee:N0}");row.SetTextAlignment(1,HorizontalAlignment.Right);if(technology.SourceIndex==(selectedSource??technologies[0].SourceIndex))row.Select(0);}
+        foreach(var technology in technologies){var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,technology.SourceIndex);row.SetText(0,TechnologyName(technology));row.SetText(1,$"¥{DisplayNumbers.Format(technology.PurchaseFee)}");row.SetTextAlignment(1,HorizontalAlignment.Right);if(technology.SourceIndex==(selectedSource??technologies[0].SourceIndex))row.Select(0);}
         Select();buy.Disabled|=technologies.Count==0;buy.Pressed+=()=>{if(buy.Disabled||selected is not int source)return;var result=TechnologyService.TryPurchase(state,technologies.Single(t=>t.SourceIndex==source));ShowTechnologyPurchase(state,source);_status.Text=Tr("TECHNOLOGY_PURCHASE_"+result);};
     }
     private string CatalogDescription(OriginalCatalog catalog,string kind,int source,string original)
     {
         if(!TranslationServer.GetLocale().StartsWith("en"))return original;
-        return kind=="COMPUTER"?string.Format(Tr("COMPUTER_DESCRIPTION"),catalog.DevelopmentComputers.Single(c=>c.SourceIndex==source).BitWidth):string.Format(Tr("TECHNOLOGY_DESCRIPTION"),CatalogName(catalog,kind,source,catalog.Technologies.Single(t=>t.SourceIndex==source).Name));
+        return kind=="COMPUTER"?string.Format(DisplayNumbers.Provider,Tr("COMPUTER_DESCRIPTION"),catalog.DevelopmentComputers.Single(c=>c.SourceIndex==source).BitWidth):string.Format(DisplayNumbers.Provider,Tr("TECHNOLOGY_DESCRIPTION"),CatalogName(catalog,kind,source,catalog.Technologies.Single(t=>t.SourceIndex==source).Name));
     }
     private LevelUpResult LevelUpWithPresentation(GameState state,int source,IReadOnlyList<float> draws)
     {

@@ -1,6 +1,8 @@
 # Planning catalogs and original saves
 
-Classification: verified static structures, not original runtime comparison.
+Classification: historical initial static-structure investigation, not original runtime comparison.
+Current catalogs/technologies are implemented; see the [map follow-up](map-backlog-implementation.md)
+for current feature status and the paired native save field map.
 
 ## Genres
 
@@ -40,8 +42,9 @@ raw in-memory struct dump or the modern JSON format.
 The initial records include a header variable, members 0000/0010, then members
 0020/0030/0040/0050/0060. Known latter roles are funds, company name, year, month,
 week. Further loops serialize catalogs, employees and workspace state. Stack
-push order is reversed relative to source argument order, so a future format
-map must correlate save and load before assigning record positions.
+push order is reversed relative to source argument order, and all 130 templates now have paired source-order member references and array ranks
+in [the native field map](original-native-save-fields.json). This still does not
+assign every field a modern meaning or validate native file encoding.
 
 No original .GD2 fixture was supplied or generated. Header meaning, exact text
 encoding, delimiters, array-loop cardinalities and error behavior remain unverified.

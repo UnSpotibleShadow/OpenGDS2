@@ -25,7 +25,7 @@ public partial class Main
             {
                 var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,h.SourceIndex);row.SetText(0,CatalogName(catalog,"HARDWARE",h.SourceIndex,h.Name));
                 row.SetText(1,state.HardwareLicenses is null?"?":state.HardwareLicenses.Contains(h.SourceIndex)?Tr("LICENSE_OWNED_SHORT"):"—");
-                var market=state.Calendar?.Hardware.SingleOrDefault(m=>m.SourceIndex==h.SourceIndex);row.SetText(2,market is null?"?":(Math.Floor(market.Market)*10_000).ToString("N0"));row.SetTextAlignment(2,HorizontalAlignment.Right);
+                var market=state.Calendar?.Hardware.SingleOrDefault(m=>m.SourceIndex==h.SourceIndex);row.SetText(2,market is null?"?":(Math.Floor(market.Market)*10_000).ToDisplayNumber());row.SetTextAlignment(2,HorizontalAlignment.Right);
                 row.SetText(3,h.SourceIndex==11?state.Company.Name:h.RawMembers.TryGetValue("0FA8",out long maker)&&maker is >=0 and <=9?DialogueText("CALENDAR_MAKER_"+maker):"?");
                 if(h.SourceIndex==selected)row.Select(0);
             }
@@ -47,7 +47,7 @@ public partial class Main
         {
             design.Text=state.OwnHardware.LaunchedDesign is int d?Tr("HARDWARE_FORM_"+d):"?";
             medium.Text=state.OwnHardware.LaunchedMedium is int m?Tr("HARDWARE_MEDIA_"+m):"?";
-            var market=state.Calendar?.Hardware.SingleOrDefault(h=>h.SourceIndex==11);units.Text=market is null?"?":(Math.Floor(market.Market)*10_000).ToString("N0");
+            var market=state.Calendar?.Hardware.SingleOrDefault(h=>h.SourceIndex==11);units.Text=market is null?"?":(Math.Floor(market.Market)*10_000).ToDisplayNumber();
         }
         _clockRunning=true;_activeCatalog=_importer.LoadCatalog();_refreshCoreStatus=Refresh;Refresh();
     }
@@ -76,8 +76,8 @@ public partial class Main
         void Refresh()
         {
             double[] values=[project.Quality.Fun,project.Quality.Novelty,project.Quality.Graphics,project.Quality.Music];
-            for(int i=0;i<4;i++){quality[i].Text=$"{values[i]:N0}/800";flags[i].Text=design.TechnologyFlags[OwnHardwareService.RequiredTechnologies[i]]==1?"on":"off";}
-            report.Text=$"{Tr("DEVELOPMENT_POINTS")}: {project.Progress:N0}/2,500";progress.Value=project.Progress;
+            for(int i=0;i<4;i++){quality[i].Text=$"{DisplayNumbers.Format(values[i])}/800";flags[i].Text=design.TechnologyFlags[OwnHardwareService.RequiredTechnologies[i]]==1?"on":"off";}
+            report.Text=$"{Tr("DEVELOPMENT_POINTS")}: {DisplayNumbers.Format(project.Progress)}/2,500";progress.Value=project.Progress;
             
         }
         _projectReportRoom=project.RoomIndex;_projectReportRefresh=Refresh;_dialog!.CloseRequested=()=>{_closingProjectReport=true;try{ShowOfficeReconstruction(state);}finally{_closingProjectReport=false;}};
@@ -114,10 +114,10 @@ public partial class Main
         NativeText(canvas,"HardwareAnnouncementName",CatalogName(catalog,"HARDWARE",hardware.SourceIndex,hardware.Name),new(77,174,241,21),11);
         string maker=hardware.RawMembers.TryGetValue("0FA8",out long id)&&id is >=0 and <=9?DialogueText("CALENDAR_MAKER_"+id):"?";
         NativeText(canvas,"HardwareAnnouncementMaker",maker,new(77,197,241,18),10);
-        NativeText(canvas,"HardwareAnnouncementFee",Tr("LICENCE_FEE")+": "+(hardware.RawMembers.TryGetValue("0FC4",out long fee)?$"¥{fee:N0}":"?"),new(77,218,241,18),10);
+        NativeText(canvas,"HardwareAnnouncementFee",Tr("LICENCE_FEE")+": "+(hardware.RawMembers.TryGetValue("0FC4",out long fee)?$"¥{DisplayNumbers.Format(fee)}":"?"),new(77,218,241,18),10);
         NativeFill(canvas,"HardwareAnnouncementDescriptionBox",new(77,241,241,47),Colors.White,true);
         var description=new RichTextLabel {Name="HardwareAnnouncementDescription",ScrollActive=true};description.AddThemeFontSizeOverride("normal_font_size",10);NativePlace(canvas,description,new(80,244,235,41));
-        description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(Tr("HARDWARE_ANNOUNCEMENT_DESCRIPTION"),CatalogName(catalog,"HARDWARE",hardware.SourceIndex,hardware.Name),hardware.RawMembers.GetValueOrDefault("0F00")):hardware.Description;
+        description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(DisplayNumbers.Provider,Tr("HARDWARE_ANNOUNCEMENT_DESCRIPTION"),CatalogName(catalog,"HARDWARE",hardware.SourceIndex,hardware.Name),hardware.RawMembers.GetValueOrDefault("0F00")):hardware.Description;
         NativeAction(canvas,"AcknowledgeCalendar","CONTINUE",new(107,295,108,25),()=>{if(!ReferenceEquals(state.Calendar?.Pending,pending))return;pending.HardwareLaunchPage=1;ShowHardwareLaunchCard(state,pending);});
     }
 }

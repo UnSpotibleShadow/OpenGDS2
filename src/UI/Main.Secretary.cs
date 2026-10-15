@@ -38,7 +38,7 @@ public partial class Main
         {
             var item=table.CreateItem(root);item.SetMetadata(0,candidate.SourceIndex);
             item.SetText(0,SecretaryName(candidate.SourceIndex));
-            item.SetText(1,candidate.ContractFee.ToString("N0"));item.SetText(2,candidate.AdvertisedSalary.ToString("N0"));
+            item.SetText(1,candidate.ContractFee.ToDisplayNumber());item.SetText(2,candidate.AdvertisedSalary.ToDisplayNumber());
             item.SetTextAlignment(1,HorizontalAlignment.Right);item.SetTextAlignment(2,HorizontalAlignment.Right);
         }
         table.ItemSelected+=()=>

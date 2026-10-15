@@ -22,7 +22,7 @@ public partial class Main
         {
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,manga.SourceIndex);
             row.SetText(0,MangaText(catalog,manga.SourceIndex,"TITLE"));row.SetText(1,MangaText(catalog,manga.SourceIndex,"POPULARITY"));
-            row.SetText(2,manga.RightsFee.ToString("N0"));row.SetTextAlignment(2,HorizontalAlignment.Right);
+            row.SetText(2,manga.RightsFee.ToDisplayNumber());row.SetTextAlignment(2,HorizontalAlignment.Right);
         }
         int selected=catalog.Manga[0].SourceIndex;
         NativeFill(canvas,"MangaDetailBox",new(4,157,418,80),Colors.White,true);var details=NativeText(canvas,"MangaDetails","",new(8,160,410,73),11);details.AutowrapMode=TextServer.AutowrapMode.WordSmart;
@@ -44,7 +44,7 @@ public partial class Main
         {
             ClearContent();CompactManagementWindow("MangaRightsWindow",new Vector2(330,180),310);
             _dialog!.SetTitle(Tr("MANGA_RIGHTS_MEETING"));
-            _content.AddChild(new Label {Name="MangaRightsQuestion",Text=Text("MANGA_RIGHTS_QUESTION").Replace("{fee}",catalog.Manga.Single(x=>x.SourceIndex==source).RightsFee.ToString("N0")),AutowrapMode=TextServer.AutowrapMode.WordSmart});
+            _content.AddChild(new Label {Name="MangaRightsQuestion",Text=Text("MANGA_RIGHTS_QUESTION").Replace("{fee}",catalog.Manga.Single(x=>x.SourceIndex==source).RightsFee.ToDisplayNumber()),AutowrapMode=TextServer.AutowrapMode.WordSmart});
             var status=new Label {Name="MangaRightsStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(status);
             var agree=new Button {Name="AgreeMangaRights",Text=Tr("ACCEPT")};_content.AddChild(agree);
             agree.Pressed+=()=>

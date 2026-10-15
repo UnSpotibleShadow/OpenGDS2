@@ -3,11 +3,11 @@
 This map starts from the supported original executable; OpenGDS2 is a separate comparison layer.
 Stable IDs, hashes and relationships are in [the inventory](original-game-inventory.json); authored workflows, runtime scenarios and gaps are in [the catalog](original-game-workflows.json). Open [the standalone searchable view](original-game-map.html) locally to browse workflows, menus, event bindings, procedures and graph edges without a server or external assets.
 
-Original SHA-256: `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`. Comparison baseline: `2eb7c0bf7de32b33b76e0bb1dc80840f406188e1`.
+Original SHA-256: `4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6`. Comparison baseline: `a5abd1de0336ea67ba87aad200899d5dbf7472c0`.
 
 ## Coverage means
 
-Every discovered item has an inventory entry, and every compiled object has a workflow disposition. This is **100% accounting of the enumerated sets**, not 100% game understanding or adaptation parity. The complete archive, all VB property encodings, dynamically dispatched targets and native runtime behavior are open boundaries.
+Every discovered item has an inventory entry, and every compiled object has a workflow disposition. This is **100% accounting of the enumerated sets**, not 100% game understanding or adaptation parity. The official archive is now inventoried and imported resources are checked separately. One MDI root encoding, opaque property meanings, dynamically dispatched targets and native runtime behavior remain open boundaries.
 
 | Set | Accounted | Meaning |
 | --- | ---: | --- |
@@ -17,7 +17,7 @@ Every discovered item has an inventory entry, and every compiled object has a wo
 | Valid procedure descriptors | 669 / 669 | 167,189 decoded instructions; semantics remain partial |
 | Known serialized control instances | 2605 / 2605 | Array instances and decorative controls; excludes menus and form roots |
 | Serialized menus | 55 / 55 | Parents recovered from persisted child markers and closing delimiters |
-| Known picture properties | 536 / 536 | Includes repeated images and icons; not the full archive |
+| Known picture properties | 537 / 537 | Includes repeated images and icons; not the full archive |
 | Known serialized timers | 36 / 36 | Stored intervals/enabled values and event bindings; dynamic writers remain partial |
 | Original runtime workflow acceptance | 0 / 35 | Original was not executed in this environment |
 
@@ -40,33 +40,33 @@ Each entry states what is available in OpenGDS2 and where the player can find it
 - **Menu organization / Separator:** describes a container or divider, not a gameplay feature.
 
 - Menu — `menu:mMenu`: Menu organization: OpenGDS2 uses Game for saving/loading and Back to Title; New Game and Quit are on the title screen. See the individual actions below.
-  - New game — `menu:mMenuNewG`: Available elsewhere: title screen > New Game. During play, use Game > Back to Title first; the original direct New Game menu item is missing. Equivalent reset/confirmation behavior remains unverified.
+  - New game — `menu:mMenuNewG`: Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Exact native setup presentation is pending.
   - Separator — `menu:mMenuHaihun1`: Separator: decorative menu divider; no action or gameplay is expected.
   - Save game — `menu:mMenuSave`: Available: Game > Save Game opens the numbered save picker. OpenGDS2 saves JSON; native GD2 compatibility is missing.
   - Load game — `menu:mMenuLoad`: Available: Game > Load Game opens the numbered load picker. OpenGDS2 loads JSON; native GD2 compatibility is missing.
   - Separator — `menu:mMenuHaihun2`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Exit game — `menu:mMenuEnd`: Available elsewhere: title screen > Quit closes the application; Game > Back to Title returns there during play. The original direct Exit Game menu item and its confirmation flow are not reproduced.
-- Actions — `menu:mKoudou`: Menu organization: actions are distributed across Company and Employees, the three UP toolbar buttons and casino-facility controls. This does not mean every original action exists; poaching and backup-device purchase are missing below.
+  - Exit game — `menu:mMenuEnd`: Available: Game > Quit closes the application. Native unload/confirmation equivalence remains pending.
+- Actions — `menu:mKoudou`: Menu organization: actions remain grouped under Company and Employees; three UP actions are also on the toolbar. Backup purchase and employee poaching are implemented below.
   - Company development — `menu:mKoudouKaisha`: Menu organization: Public relations, Genre research and Expand production exist under Company and as three UP toolbar buttons. The original nested Company development submenu is not reproduced.
     - Public relations — `menu:mKoudouTimeido`: Available: Company > Public relations, or the Public relations UP toolbar button, opens the activity confirmation.
     - Genre development — `menu:mKoudouLibary`: Available: Company > Genre research, or the Genre research UP toolbar button, opens the activity confirmation.
     - Production expansion — `menu:mKoudouZoukyou`: Available: Company > Expand production, or the Expand production UP toolbar button, opens the activity confirmation.
   - Separator — `menu:mKoudouMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
   - Recruit employees — `menu:mKoudouSShinki`: Available: Employees > Hire Employees, or the recruitment toolbar button, opens recruitment.
-  - Poach employees — `menu:mKoudouSHikinuku`: Missing functionality: employee-poaching offers, negotiation/contract transactions and the menu action are not implemented. There is no alternate player path.
+  - Poach employees — `menu:mKoudouSHikinuku`: Available: Employees > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending.
   - Separator — `menu:mKoudouMinasu3`: Separator: decorative menu divider; no action or gameplay is expected.
   - Secretary settings — `menu:mKoudouHisyoS`: Available: Company > Secretary policies opens the secretary settings window.
   - Change secretary — `menu:mKoudouHisyoK`: Available: Company > Hire secretary, or the secretary toolbar button, opens secretary hiring/change.
   - Separator — `menu:mKoudouMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
   - Visit bank — `menu:mKoudouBank`: Available: Company > Bank, or the bank toolbar button, opens the bank window.
   - Buy development computer — `menu:mKoudouPCK`: Available: Company > Development Computers, or the computer toolbar button, opens computer purchasing.
-  - Buy backup device — `menu:mKoudouBackupK`: Missing functionality: the purchasable gameplay backup device and its virus-protection ownership/transaction are not implemented. There is no alternate player path; modern save-file backups are a separate feature.
+  - Buy backup device — `menu:mKoudouBackupK`: Available: Company > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature.
   - Acquire hardware license — `menu:mKoudouLicense`: Available: Company > Hardware Licenses, or the license toolbar button, opens license purchasing.
   - Buy technology — `menu:mKoudouTechK`: Available: Company > Technologies, or the technology toolbar button, opens technology purchasing.
-  - Go out — `menu:mKoudouGo`: Available elsewhere: open an existing casino through Company facilities or its office tenant, then choose a game. The original Actions > Go out submenu is missing; its original visibility/eligibility rules remain unverified.
-    - Go horse racing — `menu:mKoudouGoKeiba`: Available elsewhere: casino facility > Casino > Horse racing opens the implemented horse-racing game. The original direct Go horse racing menu item is missing. Catalog, funds and pending-decision guards can disable entry.
-    - Play poker — `menu:mKoudouGoPoka`: Available elsewhere: casino facility > Casino > Poker opens the implemented poker game. The original direct Play poker menu item is missing. Coins and pending-decision guards can disable entry.
-    - Play blackjack — `menu:mKoudouGoBlack`: Available elsewhere: casino facility > Casino > Blackjack opens the implemented blackjack game. The original direct Play blackjack menu item is missing. Coins and pending-decision guards can disable entry.
+  - Go out — `menu:mKoudouGo`: Available: Company > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending.
+    - Go horse racing — `menu:mKoudouGoKeiba`: Available: Company > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply.
+    - Play poker — `menu:mKoudouGoPoka`: Available: Company > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply.
+    - Play blackjack — `menu:mKoudouGoBlack`: Available: Company > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply.
 - Information — `menu:mInfo`: Menu organization: the corresponding reports are under Employees, Products, Company and Help. The original Information menu grouping is not reproduced.
   - All staff information — `menu:mInfoGMsStaffAll`: Available: Employees > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified.
   - Own released games — `menu:mInfoGMsZishaGame`: Available: Products > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
@@ -80,16 +80,16 @@ Each entry states what is available in OpenGDS2 and where the player can find it
   - Visual window — `menu:mWindowVisual`: Available: Windows > Office reopens the office window. Exact original show/hide behavior remains unverified.
   - Tool window — `menu:mWindowTool`: Available: Windows > Company reopens the company window, the comparison for original fGMInfo. Exact original page/tool-window behavior remains unverified.
   - Other windows — `menu:mWindowOther`: Unresolved: the original entry has no bound handler; dynamic window-list behavior has not been established. OpenGDS2 has explicit Windows entries, but they are not a confirmed equivalent.
-- Settings — `menu:mSetup`: Missing menu access: there is no in-game Settings menu. Title screen > Settings contains language, sound-effect and music controls. The original graphic-size and number-grouping choices are missing options below.
-  - Sound — `menu:mSetupSound`: Missing menu access: there is no in-game Settings > Sound submenu. Title screen > Settings provides separate sound-effect and music toggles/volumes; equivalence to the original single sound setting remains unverified.
-    - Sound on — `menu:mSetupSoundOn`: Missing menu access: enable sound effects and/or music through title screen > Settings. The original in-game Sound > On command is missing; whether it controlled the same sounds remains unverified.
-    - Sound off — `menu:mSetupSoundOff`: Missing menu access: disable sound effects and/or music through title screen > Settings. The original in-game Sound > Off command is missing; whether it muted the same sounds remains unverified.
-  - Graphic enlargement — `menu:mSetupGraphic`: Missing option: no Normal/Enlarged office-graphics selector was found in OpenGDS2. The office is rendered, but the original selectable enlargement behavior has no confirmed equivalent.
-    - Normal size — `menu:mSetupGraphicD`: Missing option: there is no player-selectable Normal office-graphics command. Existing default office rendering is not proof of equivalent original sizing; the source references fMainVisual.
-    - Enlarged size — `menu:mSetupGraphicK`: Missing option: there is no player-selectable Enlarged office-graphics command or confirmed alternate enlargement control. The source references fMainVisual; exact original scaling remains unverified.
-  - Number display — `menu:mSetupNumber`: Missing option: there is no player-selectable number-grouping mode. OpenGDS2 already renders numbers with N0 formatting, but does not expose the original two-format choice.
-    - Japanese large-number grouping — `menu:mSetupNumber1`: Missing option: no selector for Japanese large-number grouping was found. Existing number rendering and interface-language selection do not implement this original format choice.
-    - Thousands grouping — `menu:mSetupNumber2`: Missing option: no selector for thousands grouping was found. Current N0-formatted numbers may already use thousands separators, but the player cannot choose this original display mode independently.
+- Settings — `menu:mSetup`: Available: in-game Settings exposes the original Sound, Graphic enlargement and Number display submenus. Title-screen Settings retains community music and language preferences.
+  - Sound — `menu:mSetupSound`: Available: Settings > Sound controls native effects independently of community music, matching the recovered native dispatcher guard.
+    - Sound on — `menu:mSetupSoundOn`: Available: Settings > Sound > On enables original sound effects; community music keeps its separate setting.
+    - Sound off — `menu:mSetupSoundOff`: Available: Settings > Sound > Off disables original sound effects; community music keeps its separate setting.
+  - Graphic enlargement — `menu:mSetupGraphic`: Available: Settings > Graphic enlargement selects Normal/Enlarged office graphics. The saved choice uses native-size pixels or 2x pixels with a bounded scroll viewport.
+    - Normal size — `menu:mSetupGraphicD`: Available: Settings > Graphic enlargement > Normal restores native office resolution and clears the visible scroll position.
+    - Enlarged size — `menu:mSetupGraphicK`: Available: Settings > Graphic enlargement > Enlarged doubles office pixels and preserves office input-coordinate mapping. Native panning/focus acceptance remains pending.
+  - Number display — `menu:mSetupNumber`: Available: Settings > Number display selects Japanese or comma-separated thousands grouping across the UI; the choice is stored in company saves.
+    - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京.
+    - Thousands grouping — `menu:mSetupNumber2`: Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language.
 - Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below.
   - Help topics — `menu:mHelpHelp`: Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer.
   - Separator — `menu:mHelpMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
@@ -102,7 +102,7 @@ All rows retain partial understanding and pending original runtime acceptance. C
 | Stable ID | Original objects | Adaptation disposition | Evidence |
 | --- | --- | --- | --- |
 | W01: Start, numbered save/load and start gate | `fGMGameNew`, `fGMGameSave`, `fGMGameLoad`, `fGMGameKaishi` | intentional-difference | [catalogs-and-original-saves](catalogs-and-original-saves.md) · [source-save-integrity](source-save-integrity.md) · [remaining-presentation-m105-step6](remaining-presentation-m105-step6.md) |
-| W02: Desktop, toolbar and office input | `MDIForm1`, `fMainVisual` | partial | [native-toolbar-20261015](native-toolbar-20261015.md) · [office-clicks-m39](office-clicks-m39.md) · [office-presentation-m94](office-presentation-m94.md) |
+| W02: Desktop, toolbar and office input | `MDIForm1`, `fMainVisual` | partial | [native-toolbar-20261015](native-toolbar-20261015.md) · [office-clicks-m39](office-clicks-m39.md) · [office-presentation-m94](office-presentation-m94.md) · [map-backlog-implementation](map-backlog-implementation.md) |
 | W03: Company information and employee detail pages | `fGMInfo` | comparison-present | [management-presentation-m105-step3](management-presentation-m105-step3.md) · [window-census-m98](window-census-m98.md) |
 | W04: Portrait conversations and callback return | `fGMKaiwa`, `fGMKaiwa2`, `fGMKaiwaC` | partial | [checkpoint-speakers-m92](checkpoint-speakers-m92.md) · [secretary-advice](secretary-advice.md) · [workflow-verification-m76](workflow-verification-m76.md) |
 | W05: Staff roster, recruitment and annual contracts | `fGMSyain`, `fGMSKoyou`, `fGMSKoyouKz`, `fGMKeiyakuS` | comparison-present | [management-presentation-m105-step3](management-presentation-m105-step3.md) · [presentation-handler-audit-m93](presentation-handler-audit-m93.md) |
@@ -130,12 +130,12 @@ All rows retain partial understanding and pending original runtime acceptance. C
 | W27: Bank loan and repayment | `fGMBank` | comparison-present | [bank-loans-m58](bank-loans-m58.md) · [financial-failure-m84](financial-failure-m84.md) |
 | W28: Original Help viewer | `fGMHelp` | comparison-present | [review112-help-technology-audit](review112-help-technology-audit.md) · [remaining-presentation-m105-step6](remaining-presentation-m105-step6.md) |
 | W29: Live sales rankings and reach-time records | `fGMRank100`, `fGMToutatuRank` | comparison-present | [school-rivals-and-rankings](school-rivals-and-rankings.md) · [remaining-presentation-m105-step6](remaining-presentation-m105-step6.md) |
-| W30: Poaching and employment offers | `fGMHikinuki`, `fGMHikinukiSel`, `fGMHikinukiKeS`, `fGMHikinukiKnS` | missing | [window-census-m98](window-census-m98.md) · [remaining-presentation-m105-step6](remaining-presentation-m105-step6.md) |
+| W30: Poaching and employment offers | `fGMHikinuki`, `fGMHikinukiSel`, `fGMHikinukiKeS`, `fGMHikinukiKnS` | comparison-present | [map-backlog-implementation](map-backlog-implementation.md) · [window-census-m98](window-census-m98.md) · [remaining-presentation-m105-step6](remaining-presentation-m105-step6.md) |
 | W31: Reachable opponent-software pane with dormant data | `fGMZishaNet` | unresolved | [window-census-m98](window-census-m98.md) |
 | W32: Utility, about and unclassified helper forms | `MainForm16`, `MainForm3`, `fMainAbout` | unresolved | [window-census-m98](window-census-m98.md) · [presentation-evidence-m105](presentation-evidence-m105.md) |
 | W33: Initialization, simulation, calendars and failure | `Module1`, `Module2` | partial | [static-recovery-2026-10-10](static-recovery-2026-10-10.md) · [weekly-economics-investigation](weekly-economics-investigation.md) · [calendar-transactions](calendar-transactions.md) · [financial-failure-m84](financial-failure-m84.md) · [workflow-verification-m76](workflow-verification-m76.md) |
 | W34: Paid room promotion and media selection | `fGMSendenBaitai` | comparison-present | [room-promotion-m97](room-promotion-m97.md) · [presentation-handler-audit-m93](presentation-handler-audit-m93.md) |
-| W35: Backup device purchase and virus-event protection | `MDIForm1`, `Module2` | missing | [original-backup-device-map](original-backup-device-map.md) |
+| W35: Backup device purchase and virus-event protection | `MDIForm1`, `Module2` | comparison-present | [map-backlog-implementation](map-backlog-implementation.md) · [original-backup-device-map](original-backup-device-map.md) |
 
 ## Original timer inventory
 
@@ -190,9 +190,9 @@ Next: Trace each bound event, array-index switch and keyboard branch; record the
 
 ### X02: Screens, layouts, buttons and window lifetime
 
-All 84 forms have known layout-region anchors. Known non-menu instances and picture-property hashes are bound to owners; two root and 228 instance property streams are partial.
+All 2605 known control property streams and all 84 roots are structurally bounded. The MDI root omits the normal Form-class byte and begins directly with ClientLeft. Opaque object/reserved marker meanings remain unresolved; there are 537 picture properties.
 
-Next: Resolve stopped property streams; distinguish dynamic controls/default properties; verify dimensions, fonts, tooltip/focus, dialog owner/modality and drag/reopen/selection position on Windows.
+Next: Resolve opaque marker meanings and unsupported encodings outside the known inventory; runtime values/assignments and keyboard/focus still require comparison.
 
 ### X03: Timelines, automatic triggers and ordering
 
@@ -202,27 +202,27 @@ Next: Label callback slots, resolve timer enable/interval writers and caller con
 
 ### X04: Globals, members, arrays and native RNG
 
-Operand reference sites are mechanically indexed. Pool addresses retain unclassified roles; member offsets retain unknown receiver identity. Existing local RNG evidence does not establish whole-session draw ordering.
+Operand references remain indexed with unqualified member receivers kept explicit. The new RNG map resolves 310 native random draw sites and one startup seed site. This is a callsite inventory, not whole-session draw order.
 
-Next: Classify pool cells and receiver-qualified members; map readers/writers, aliases and seeds/draw ordering using startup and saved checkpoints.
+Next: Classify remaining receiver aliases and executed RNG paths; compare native seeds and paired saved sessions.
 
 ### X05: Persistence and migration
 
-Native save/load spans 009D9824/009D60E0 are fingerprinted and 669 procedures are indexed. Modern numbered JSON slots and migrations are implemented; native GD2 interoperability remains unsupported.
+All 130 native read/write record templates now pair their 448 field slots and array ranks, covering 447 distinct members and 40 loops. Modern numbered JSON slots work; native GD2 interoperability remains unsupported.
 
-Next: Complete ordered native field/type/array map and transient/nonpersistent cells; obtain genuine GD2 fixtures and cross-load/save comparisons before claiming compatibility.
+Next: Validate Variant subtypes, loop cardinalities, modern meanings and native encoding against genuine GD2 fixtures before enabling compatibility.
 
 ### X06: Artwork, icons, patches and external files
 
-Known property payloads bind 400 BMP, 22 GIF, 113 ICO and one CUR occurrence. Repetition counts are not distinct artwork counts. Source-handler use and dynamic picture assignment remain partial; no fresh LZH denominator exists.
+The official LZH has 45 files and three directories, with lengths and CRC16s verified. All 422 BMP/GIF property imports match bytes or decoded pixels. There are 114 ICO properties and one CUR; 82 root-icon exports are checked separately. Exhaustive dynamic image use remains unverified. The separate PE resource tree is also inventoried: one icon, one icon group and one version payload.
 
-Next: Supply original archive; inventory every entry/hash/type; map all picture writers and use-sites, sprite subdivisions/masks, English patch regions and per-window icon/button identity.
+Next: Resolve the remaining control ICO/CUR and dynamic assignment uses; pair rendered screens with the original runtime.
 
 ### X07: Original audio and music
 
-The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison. Current sound-effect and music controls are available through title screen > Settings; the original in-game Sound On/Off menu entries are missing access points, not evidence that audio toggling is unimplemented.
+Five original WAVs are recovered. Existing native effect callsites remain wired; in-game Sound On/Off now controls the source effect dispatcher independently of community music. Open.wav has no established trigger; Bakuhatu.wav has a dispatcher branch but no recovered caller.
 
-Next: Inventory archive audio and every direct/indirect playback site; establish selector/context, interruption/overlap/mute/loop/stop and resume on the original. Do not create a trigger for an unused selector.
+Next: Keep unused/unproven triggers explicit; validate audio timing and replacement on the original runtime rather than assigning invented cues.
 
 ### X08: Tables, formulas and importer coverage
 
@@ -232,9 +232,9 @@ Next: Reconcile every initialization assignment/table/helper with a schema or ex
 
 ### X09: Archive and original runtime acceptance
 
-Original PE is available and freshly hash-verified. A private Wine 11 binary exists, but no complete original distribution or established runnable game installation is available. Native Windows acceptance and all 245 paired workflow scenarios remain pending.
+The official archive and exact supported PE are recovered. A disposable original installation with VB6 runtime is prepared, but Wine11 exits with host SIGSEGV before a usable game window; a bounded strace confirms the failure. All 245 paired workflow scenarios remain pending.
 
-Next: Use a disposable Windows install with the matching original distribution. Record original archive/runtime versions and execute catalog scenarios with captures/state checkpoints, then compare the adaptation.
+Next: Use a working original Windows runtime for the 245 comparisons, native focus/timing acceptance and genuine GD2 fixtures. The failed Wine run is not an acceptance pass.
 
 ## Catalog and audio source anchors
 
@@ -260,15 +260,15 @@ These are evidence tasks or known adaptation differences, not authorization to i
 
 | Priority | ID | Work remaining |
 | --- | --- | --- |
-| P0 | G01 | Obtain original archive and runtime evidence; complete external-file denominator and pair 245 scenario recordings. This blocks a claim of complete game coverage. |
-| P1 | G02 | Recover the four-form poaching transaction and its periodic/menu callbacks; adaptation workflow is missing. |
-| P1 | G03 | Reconcile original menu/toolbar/hotspot/keyboard access with the concrete paths listed above. Casino games and title-screen audio controls exist elsewhere; direct casino and in-game Sound entries are missing. Graphic-size/number-grouping selectors are missing options. Backup purchase and poaching are missing gameplay; unresolved behavior must remain separate. |
+| P0 | G01 | Official archive inventory/import verification is complete. Original runtime acceptance remains blocked on this host by Wine SIGSEGV; execute all 245 paired scenarios on working Windows before claiming complete coverage. |
+| P1 | G02 | Poaching is implemented and regression-tested. Compare the four native forms, timer delivery/retained controls, automatic offers and the unresolved empty-roster scratch boundary on the original runtime. |
+| P1 | G03 | Missing backup/poaching/direct-game access and sound/graphics/number options are restored. Remaining original menu grouping, exact enable/visibility rules, About and utility access still need reconciliation. |
 | P1 | G04 | Classify dynamic dispatch targets, timer interval/enable writers, scheduler order and actor/callback persistence; direct-call graph alone is incomplete. |
-| P1 | G05 | Complete native GD2 field/type/array mapping and whole-session RNG seed/draw-order comparisons as separate compatibility projects. |
-| P1 | G11 | Implement the source-backed backup-device purchase/ownership and corresponding virus protection only after tracing event mutations/persistence; this is absent from the adaptation and distinct from JSON backup files. |
-| P2 | G06 | Decode two stopped root and 228 stopped control-property streams; determine whether unsupported classes/streams contain additional controls or resources. |
-| P2 | G07 | Reconcile every original artwork/audio/table use, including archive-only race sheets and dynamic assignments. 536 known picture properties do not prove complete resource coverage. |
-| P2 | G08 | Reconcile NativeWindowArtwork graduate/renewal aliases with the source forms; icon association does not establish workflow identity. |
+| P1 | G05 | All 130 native record templates have paired member/rank references (448 field slots); 310 RNG draw sites and one seed site are mapped. Finish field meanings/types/cardinalities and genuine GD2 cross-load tests; compare whole-session native seed/draw ordering. |
+| P1 | G11 | Backup purchase, source ownership/reset/persistence, virus outcomes, office animation and saved continuations are implemented and tested. Paired original runtime acceptance remains pending. |
+| P2 | G06 | All 2605 control streams and all 84 roots are structurally bounded. Resolve meanings of opaque zero-object/reserved 98/99 markers and investigate unsupported encodings outside the known inventory; consumed bytes are not understood behaviour. |
+| P2 | G07 | All 45 archive files and 422 imported raster properties are verified, with 82 root icons. Resolve remaining control ICO/CUR usage, dynamic assignments and unproven audio triggers; imported files are not exhaustive handler coverage. |
+| P2 | G08 | Graduate/renewal artwork aliases are corrected to fGMKeiyakuS/fGMSKoyouKz. Native runtime presentation comparison remains pending. |
 | P2 | G09 | Resolve utility forms and fGMZishaNet data initialization/writers before exposing guessed behavior. |
 | P2 | G10 | Verify all presented screens, selections, button glyphs, graph blocks, bilingual patches, window retention, focus and drag-time suspension on the original Windows runtime. |
 
@@ -286,13 +286,14 @@ python3 tools/map_original_game.py --query fGMDevW1
 
 The structural anchors are build-specific recovered boundaries. Hash verification does not improve a partial property parse. Current known limits:
 
-- The original LZH is absent from this workspace. External graphics, audio and other archive entries have no complete fresh archive denominator; cache contents are not a substitute.
-- Known serialized anchors comprise 84 layout regions, 2,605 non-menu control instances and 536 picture properties. Two root property parses and 228 control property parses stop early. Unknown property encodings may contain further data.
+- The official LZH is now fingerprinted: 45 files and 3 directories with all file CRC16s verified. See docs/original-archive-inventory.json; no archive contents are bundled.
+- All 2605 known control property streams and all 84 form roots are structurally bounded. The MDI root has an implicit header beginning with ClientLeft. Zero object markers and reserved 98/99 properties retain unresolved meanings. There are 537 known picture properties, including the additionally recovered office icon.
 - Menus are independently recovered as class-19 records. Other unsupported serialized control classes/encodings are not proven absent.
 - Procedure decoding covers descriptor bodies with alignment tails reported. An instruction decode is not a decompilation, proof of reachability, or complete recovery of computed calls.
 - Dynamic dispatch, event semantic names, receiver identity for member offsets and aliasing require further analysis. Pool reference sites are not all globals.
 - Window modality, focus, z-order, timer delivery, drag suspension, native fonts and retained-frame lifetime need Windows runtime evidence.
 - No whole-session native RNG equivalence, native GD2 compatibility, exhaustive image-to-handler binding, or complete audio-trigger parity is claimed.
+- The original distribution/runtime copy was recovered, but Wine 11 exits with a host SIGSEGV before a usable game window. All 245 original-versus-port acceptance scenarios remain pending; no successful native runtime pass is claimed.
 
 ## Runtime acceptance protocol
 

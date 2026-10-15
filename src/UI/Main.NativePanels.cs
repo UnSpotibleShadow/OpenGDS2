@@ -51,12 +51,12 @@ public partial class Main
             string audience=CatalogName(catalog,"AUDIENCE",project.AudienceSourceIndex,catalog.Audiences.Single(x=>x.SourceIndex==project.AudienceSourceIndex).Name);
             string genre=project.GenreSourceIndex is int g ? CatalogName(catalog,"GENRE",g,catalog.Genres.Single(x=>x.SourceIndex==g).Name) : "—";
             string type=project.GameTypeSourceIndex is int t ? CatalogName(catalog,"TYPE",t,catalog.GameTypes.Single(x=>x.SourceIndex==t).Name) : "—";
-            summary.Text=$"{Tr("PROJECT_AUDIENCE")}: {audience}\n{Tr("PROJECT_GENRE")}: {genre}\n{Tr("PROJECT_CONTENT")}: {type}\n{Tr("PROJECT_SIZE")}: {Math.Floor(project.DataSize):N0} KB";summary.TooltipText=summary.Text;
+            summary.Text=$"{Tr("PROJECT_AUDIENCE")}: {audience}\n{Tr("PROJECT_GENRE")}: {genre}\n{Tr("PROJECT_CONTENT")}: {type}\n{Tr("PROJECT_SIZE")}: {DisplayNumbers.Format(Math.Floor(project.DataSize))} KB";summary.TooltipText=summary.Text;
             double[] q=[project.Quality.Fun,project.Quality.Novelty,project.Quality.Graphics,project.Quality.Music];
             int?[] f=[project.Focus?.Fun,project.Focus?.Novelty,project.Focus?.Graphics,project.Focus?.Music];
-            for(int i=0;i<4;i++){values[i].Text=$"{q[i]:N0}";weights[i].Text=$"{f[i]?.ToString() ?? "?"}%";}
-            bugs.Text=project.Bugs.ToString();recognition.Text=$"{Tr("NATIVE_RECOGNITION")}: {project.Recognition:N0}%";
-            progress.Text=$"{Tr("DEVELOPMENT_POINTS")}: {Math.Floor(project.Progress):N0}/{project.RequiredPoints:N0}";
+            for(int i=0;i<4;i++){values[i].Text=$"{DisplayNumbers.Format(q[i])}";weights[i].Text=$"{f[i]?.ToString() ?? "?"}%";}
+            bugs.Text=project.Bugs.ToString();recognition.Text=$"{Tr("NATIVE_RECOGNITION")}: {DisplayNumbers.Format(project.Recognition)}%";
+            progress.Text=$"{Tr("DEVELOPMENT_POINTS")}: {DisplayNumbers.Format(Math.Floor(project.Progress))}/{DisplayNumbers.Format(project.RequiredPoints)}";
             int value=OfficeRoomPresentationRules.Percentage(project);bar.Value=value;percent.Text=value+"%";
         }
         Refresh();return Refresh;
@@ -93,9 +93,9 @@ public partial class Main
         void Refresh()
         {
             long count=(long)copies.Value,p=(long)price.Value,per=p-state.SalesFee1!.Value-state.SalesFee2!.Value;
-            media.Text=$"¥{unit-200:N0}";package.Text="¥200";each.Text=$"¥{unit:N0}";total.Text=$"¥{checked(unit*count):N0}";
-            retail.Text=$"¥{p:N0}";retailer.Text=$"−¥{state.SalesFee1:N0}";transport.Text=$"−¥{state.SalesFee2:N0}";
-            receipt.Text=$"¥{per:N0}";all.Text=$"¥{(System.Numerics.BigInteger)per*count:N0}";
+            media.Text=$"¥{DisplayNumbers.Format(unit-200)}";package.Text="¥200";each.Text=$"¥{DisplayNumbers.Format(unit)}";total.Text=$"¥{DisplayNumbers.Format(checked(unit*count))}";
+            retail.Text=$"¥{DisplayNumbers.Format(p)}";retailer.Text=$"−¥{DisplayNumbers.Format(state.SalesFee1)}";transport.Text=$"−¥{DisplayNumbers.Format(state.SalesFee2)}";
+            receipt.Text=$"¥{DisplayNumbers.Format(per)}";all.Text=$"¥{DisplayNumbers.Format((System.Numerics.BigInteger)per*count)}";
         }
         price.ValueChanged+=_=>Refresh();copies.ValueChanged+=_=>Refresh();Refresh();
     }

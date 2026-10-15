@@ -29,7 +29,7 @@ public partial class Main
         _refreshCoreStatus=()=>
         {
             if(chart is not null)chart.SetHistory(product.WeeklySalesHistory!);
-            sales.Text=$"{Tr("UNITS_SOLD")}: {product.UnitsSold:N0}\n{Tr("STOCK")}: {product.Stock:N0}";
+            sales.Text=$"{Tr("UNITS_SOLD")}: {DisplayNumbers.Format(product.UnitsSold)}\n{Tr("STOCK")}: {DisplayNumbers.Format(product.Stock)}";
             string award=product.OriginalAwardCode is null ? "?" : "—";
             foreach(var category in AwardService.Order)
                 if(product.OriginalAwardCode==AwardService.OriginalCode(category))award=Tr($"AWARD_{category}");

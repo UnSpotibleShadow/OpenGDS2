@@ -21,6 +21,8 @@ public partial class Main
         string locale = settings.Load(InterfaceSettingsPath) == Error.Ok
             ? settings.GetValue("language", "locale", "en").AsString() : "en";
         TranslationServer.SetLocale(locale is "en" or "ja" ? locale : "en");
+        _officeGraphicScale=settings.GetValue("display","office_scale",1).AsInt32()==2?2:1;
+        DisplayNumbers.Grouping=settings.GetValue("display","number_grouping",1).AsInt32()==0?NumberGrouping.Japanese:NumberGrouping.Thousands;
         string readings=ProjectSettings.GlobalizePath("user://employee-name-readings.json");
         if (File.Exists(readings))
         {
@@ -32,7 +34,7 @@ public partial class Main
     private void SaveInterfaceLanguage(string locale)
     {
         TranslationServer.SetLocale(locale);
-        var settings = new ConfigFile(); settings.SetValue("language", "locale", locale);
+        var settings = new ConfigFile();settings.Load(InterfaceSettingsPath);settings.SetValue("language", "locale", locale);
         var result = settings.Save(InterfaceSettingsPath);
         if (result != Error.Ok) GD.PushWarning($"Language preference could not be saved: {result}");
     }

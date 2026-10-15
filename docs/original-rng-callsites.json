@@ -1,0 +1,1883 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "import_ordinals": {
+    "MSVBVM60.dll:593": "rtcRandomNext",
+    "MSVBVM60.dll:594": "rtcRandomize"
+  },
+  "counts": {
+    "draw": 310,
+    "seed": 1
+  },
+  "sites": [
+    {
+      "procedure": "procedure:0x009CD8C4",
+      "at": 17,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099CA4C",
+      "at": 196,
+      "import_name": "rtcRandomize",
+      "role": "seed"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 27,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 90,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 153,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 216,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 279,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099791C",
+      "at": 342,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 258,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 487,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 634,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 781,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 1308,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 1660,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 1815,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 1970,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B15F0",
+      "at": 2183,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00991920",
+      "at": 40,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00991920",
+      "at": 81,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009DB4F4",
+      "at": 6864,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009933DC",
+      "at": 179,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009930BC",
+      "at": 179,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009A3E34",
+      "at": 865,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00988368",
+      "at": 157,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00995CDC",
+      "at": 319,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009AAA8C",
+      "at": 817,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 1662,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 2175,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 2410,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 2684,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 2814,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 2962,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 3113,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C9CB8",
+      "at": 3257,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B4344",
+      "at": 809,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009ACF14",
+      "at": 532,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D2F68",
+      "at": 1094,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D2F68",
+      "at": 1280,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D2F68",
+      "at": 1578,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D2F68",
+      "at": 1621,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B00D8",
+      "at": 538,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1209,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1314,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1419,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1524,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1822,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1879,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1936,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 1993,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2050,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2107,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2164,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2234,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2291,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2361,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2404,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2474,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2658,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 2999,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 3282,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 3677,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 4073,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009CAFCC",
+      "at": 4302,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 190,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 3234,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4113,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4159,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4205,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4251,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4297,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4343,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4410,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4456,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4502,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4548,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4594,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4640,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4707,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4749,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4791,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4833,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4875,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 4917,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 7691,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 8340,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 8369,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 9206,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 10610,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 12000,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 13302,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 13927,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 14931,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 17466,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 18046,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 18626,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 19206,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 20724,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 21304,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 21884,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 22464,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 25837,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EFA40",
+      "at": 26462,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 3,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 31,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 818,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 1092,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 1270,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 1876,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 1904,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D46D0",
+      "at": 1993,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099061C",
+      "at": 3,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099061C",
+      "at": 384,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099061C",
+      "at": 443,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099061C",
+      "at": 521,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009896AC",
+      "at": 3,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009EB860",
+      "at": 15714,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 17,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 160,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 256,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 352,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 448,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 544,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 640,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 736,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 836,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 1134,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 1432,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 1730,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 2028,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 2326,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B375C",
+      "at": 2624,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099AB50",
+      "at": 152,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00999858",
+      "at": 159,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00999858",
+      "at": 639,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00992A98",
+      "at": 169,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099E164",
+      "at": 701,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099E164",
+      "at": 748,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B7570",
+      "at": 661,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B7570",
+      "at": 944,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B7570",
+      "at": 1227,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B7570",
+      "at": 1521,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00996CB8",
+      "at": 742,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 17,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 166,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 245,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 370,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 835,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 914,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 1039,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 1544,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 1609,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 1674,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 1745,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 2250,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 2369,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 2454,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 3007,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 3072,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 3137,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BD6F8",
+      "at": 3262,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009AA1B8",
+      "at": 785,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009AF6BC",
+      "at": 179,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 125,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 539,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 564,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 681,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 12956,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 13002,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 15370,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 16380,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 16488,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 16534,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 17020,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 17704,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 18923,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 19107,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 19206,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 20795,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 21728,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 21883,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 22405,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 23014,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 23722,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 23828,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24248,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24312,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24548,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24612,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24848,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 24912,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 25148,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 25212,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 25421,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 25630,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 25852,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 27902,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 27979,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28056,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28157,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28234,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28311,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28391,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28458,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28525,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 28988,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29065,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29142,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29243,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29320,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29397,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29477,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29544,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 29611,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30207,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30284,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30361,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30462,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30539,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30616,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30696,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30763,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 30830,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31254,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31331,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31408,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31509,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31586,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31663,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31743,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31810,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 31877,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32490,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32567,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32644,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32745,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32822,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32899,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 32979,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33046,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33113,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33709,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33786,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33863,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 33964,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 34041,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 34118,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 34198,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 34265,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 34332,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 35290,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 35398,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 35601,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 35709,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 38979,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 39090,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 39201,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 39312,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 39423,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 39534,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 41328,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 41714,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 42100,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 45113,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 53074,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00A0283C",
+      "at": 53113,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 1250,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 2525,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 3008,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 4676,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 4704,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 4899,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 4969,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 5044,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 6191,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 6763,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 6918,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 7215,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 7574,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E3830",
+      "at": 9100,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099ED68",
+      "at": 385,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099ED68",
+      "at": 611,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099ED68",
+      "at": 1036,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099ED68",
+      "at": 1061,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099ED68",
+      "at": 1219,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00988DAC",
+      "at": 150,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00987B40",
+      "at": 255,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B9DE4",
+      "at": 3,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B9DE4",
+      "at": 1293,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B9DE4",
+      "at": 1318,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B9DE4",
+      "at": 2274,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009B9DE4",
+      "at": 2299,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D0374",
+      "at": 2076,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D0374",
+      "at": 2101,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D1968",
+      "at": 338,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D1968",
+      "at": 363,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D1968",
+      "at": 2313,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D1968",
+      "at": 2338,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D7BB8",
+      "at": 5335,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009D7BB8",
+      "at": 5360,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C8A8C",
+      "at": 3,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C8A8C",
+      "at": 2239,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C8A8C",
+      "at": 2264,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C8A8C",
+      "at": 3407,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009C8A8C",
+      "at": 3432,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E13B8",
+      "at": 606,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E13B8",
+      "at": 631,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E13B8",
+      "at": 6056,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009E13B8",
+      "at": 6081,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x0099FFC8",
+      "at": 231,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x009BABFC",
+      "at": 671,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    },
+    {
+      "procedure": "procedure:0x00980EB8",
+      "at": 93,
+      "import_name": "rtcRandomNext",
+      "role": "draw"
+    }
+  ],
+  "limits": [
+    "Static sites do not establish reachability, executed branch counts, dynamic calls or whole-session draw order.",
+    "OpenGDS2 saves its shared 24-bit state. Native seed initialization and paired Windows-session equivalence remain unverified."
+  ]
+}

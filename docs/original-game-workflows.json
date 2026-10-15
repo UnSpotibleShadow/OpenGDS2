@@ -10,7 +10,7 @@
     "menus": 55,
     "layouts": 84,
     "instances": 2605,
-    "pictures": 536,
+    "pictures": 537,
     "timers": 36,
     "edges": 2829,
     "references": 18591,
@@ -184,16 +184,19 @@
       "evidence": [
         "docs/native-toolbar-20261015.md",
         "docs/office-clicks-m39.md",
-        "docs/office-presentation-m94.md"
+        "docs/office-presentation-m94.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Desktop.cs",
-        "src/UI/Main.Office.cs"
+        "src/UI/Main.Office.cs",
+        "src/UI/Main.OriginalSettings.cs"
       ],
       "tests": [
         "tests/native_toolbar_smoke.gd",
         "tests/office_presentation_smoke.gd",
-        "tests/window_artwork_smoke.gd"
+        "tests/window_artwork_smoke.gd",
+        "tests/original_settings_smoke.gd"
       ],
       "open_questions": [
         "Six original menu roots and 55 items are recovered; current menu organization is a comparison, not exact parity.",
@@ -669,8 +672,8 @@
         "tests/review_round_smoke.gd"
       ],
       "open_questions": [
-        "Annual renewal is fGMSKoyouKz; fGMKeiyakuS is the graduate/individual selector. Artwork aliases in NativeWindowArtwork need reconciliation.",
-        "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending."
+        "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending.",
+        "Graduate/renewal artwork aliases are corrected against fGMKeiyakuS/fGMSKoyouKz; native runtime acceptance remains pending."
       ],
       "scenarios": [
         {
@@ -4536,19 +4539,24 @@
       "entry": "Periodic Module2 branch and poaching action/menu",
       "sequence": "Offer/employee selector; negotiation/contract branches; callback return",
       "understanding": "partial",
-      "adaptation": "missing",
+      "adaptation": "comparison-present",
       "runtime": "pending-original-runtime",
       "evidence": [
+        "docs/map-backlog-implementation.md",
         "docs/window-census-m98.md",
         "docs/remaining-presentation-m105-step6.md"
       ],
       "adaptation_files": [
-        "src/UI/Main.Calendar.cs"
+        "src/Domain/PoachingService.cs",
+        "src/UI/Main.Poaching.cs"
       ],
-      "tests": [],
+      "tests": [
+        "tests/DomainTests/Program.cs",
+        "tests/poaching_smoke.gd"
+      ],
       "open_questions": [
-        "No real modern poaching event/state/transaction is implemented. Trace price, target, accept/reject and queue ordering before adding it.",
-        "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending."
+        "Source-backed implementation and modern save continuations are tested; paired native runtime acceptance remains pending.",
+        "Empty native rosters read retained scratch data; the adaptation records that unresolved boundary without inventing an employee. Native control retention, exact timer delivery and menu gating still require comparison."
       ],
       "scenarios": [
         {
@@ -4564,7 +4572,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-C",
@@ -4579,7 +4590,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-F",
@@ -4594,7 +4608,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-R",
@@ -4609,7 +4626,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-I",
@@ -4624,7 +4644,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-S",
@@ -4639,7 +4662,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         },
         {
           "id": "W30-T",
@@ -4654,7 +4680,10 @@
             "caller return",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/poaching_smoke.gd"
+          ]
         }
       ]
     },
@@ -5248,19 +5277,22 @@
       "entry": "Actions menu mKoudouBackupK; handler 0098B1F4",
       "sequence": "Already-owned guard; secretary explanation; confirm; funds gate; set A112E8=1 and debit 100000000; periodic virus branch reads the flag",
       "understanding": "partial",
-      "adaptation": "missing",
+      "adaptation": "comparison-present",
       "runtime": "pending-original-runtime",
       "evidence": [
+        "docs/map-backlog-implementation.md",
         "docs/original-backup-device-map.md"
       ],
       "adaptation_files": [
-        "src/UI/Main.Desktop.cs",
-        "src/Persistence/SaveStore.cs"
+        "src/Domain/BackupDeviceService.cs",
+        "src/UI/Main.CompanyEvents.cs"
       ],
-      "tests": [],
+      "tests": [
+        "tests/DomainTests/Program.cs",
+        "tests/company_events_smoke.gd"
+      ],
       "open_questions": [
-        "The adaptation has modern save-file backup recovery, not the original purchasable gameplay device. Trace exact virus mutations and startup/save persistence of A112E8 before implementation.",
-        "Native confirmation result, interrupted dialogue continuation and protected/unprotected event outcomes need runtime evidence."
+        "Source-backed implementation and modern save continuations are tested; paired native runtime acceptance remains pending."
       ],
       "source_procedures": [
         "procedure:0x0098B1F4",
@@ -5280,7 +5312,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-C",
@@ -5295,7 +5330,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-F",
@@ -5310,7 +5348,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-R",
@@ -5325,7 +5366,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-I",
@@ -5340,7 +5384,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-S",
@@ -5355,7 +5402,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         },
         {
           "id": "W35-T",
@@ -5370,7 +5420,10 @@
             "project mutations",
             "capture references"
           ],
-          "adaptation_tests": []
+          "adaptation_tests": [
+            "tests/DomainTests/Program.cs",
+            "tests/company_events_smoke.gd"
+          ]
         }
       ]
     }
@@ -5395,12 +5448,13 @@
       "id": "X02",
       "title": "Screens, layouts, buttons and window lifetime",
       "status": "partial",
-      "finding": "All 84 forms have known layout-region anchors. Known non-menu instances and picture-property hashes are bound to owners; two root and 228 instance property streams are partial.",
-      "next_evidence": "Resolve stopped property streams; distinguish dynamic controls/default properties; verify dimensions, fonts, tooltip/focus, dialog owner/modality and drag/reopen/selection position on Windows.",
+      "finding": "All 2605 known control property streams and all 84 roots are structurally bounded. The MDI root omits the normal Form-class byte and begins directly with ClientLeft. Opaque object/reserved marker meanings remain unresolved; there are 537 picture properties.",
+      "next_evidence": "Resolve opaque marker meanings and unsupported encodings outside the known inventory; runtime values/assignments and keyboard/focus still require comparison.",
       "evidence": [
         "docs/presentation-evidence-m105.md",
         "docs/shared-presentation-m105-step2.md",
-        "docs/playthrough-presentation-m103.md"
+        "docs/playthrough-presentation-m103.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/DesktopWindow.cs",
@@ -5429,11 +5483,12 @@
       "id": "X04",
       "title": "Globals, members, arrays and native RNG",
       "status": "partial",
-      "finding": "Operand reference sites are mechanically indexed. Pool addresses retain unclassified roles; member offsets retain unknown receiver identity. Existing local RNG evidence does not establish whole-session draw ordering.",
-      "next_evidence": "Classify pool cells and receiver-qualified members; map readers/writers, aliases and seeds/draw ordering using startup and saved checkpoints.",
+      "finding": "Operand references remain indexed with unqualified member receivers kept explicit. The new RNG map resolves 310 native random draw sites and one startup seed site. This is a callsite inventory, not whole-session draw order.",
+      "next_evidence": "Classify remaining receiver aliases and executed RNG paths; compare native seeds and paired saved sessions.",
       "evidence": [
         "docs/workflow-verification-m76.md",
-        "docs/casino-runtime-boundaries-m79.md"
+        "docs/casino-runtime-boundaries-m79.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.CoreLoop.cs",
@@ -5445,11 +5500,12 @@
       "id": "X05",
       "title": "Persistence and migration",
       "status": "intentional-difference",
-      "finding": "Native save/load spans 009D9824/009D60E0 are fingerprinted and 669 procedures are indexed. Modern numbered JSON slots and migrations are implemented; native GD2 interoperability remains unsupported.",
-      "next_evidence": "Complete ordered native field/type/array map and transient/nonpersistent cells; obtain genuine GD2 fixtures and cross-load/save comparisons before claiming compatibility.",
+      "finding": "All 130 native read/write record templates now pair their 448 field slots and array ranks, covering 447 distinct members and 40 loops. Modern numbered JSON slots work; native GD2 interoperability remains unsupported.",
+      "next_evidence": "Validate Variant subtypes, loop cardinalities, modern meanings and native encoding against genuine GD2 fixtures before enabling compatibility.",
       "evidence": [
         "docs/catalogs-and-original-saves.md",
-        "docs/source-save-integrity.md"
+        "docs/source-save-integrity.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.SaveSlots.cs",
@@ -5461,12 +5517,13 @@
       "id": "X06",
       "title": "Artwork, icons, patches and external files",
       "status": "partial",
-      "finding": "Known property payloads bind 400 BMP, 22 GIF, 113 ICO and one CUR occurrence. Repetition counts are not distinct artwork counts. Source-handler use and dynamic picture assignment remain partial; no fresh LZH denominator exists.",
-      "next_evidence": "Supply original archive; inventory every entry/hash/type; map all picture writers and use-sites, sprite subdivisions/masks, English patch regions and per-window icon/button identity.",
+      "finding": "The official LZH has 45 files and three directories, with lengths and CRC16s verified. All 422 BMP/GIF property imports match bytes or decoded pixels. There are 114 ICO properties and one CUR; 82 root-icon exports are checked separately. Exhaustive dynamic image use remains unverified. The separate PE resource tree is also inventoried: one icon, one icon group and one version payload.",
+      "next_evidence": "Resolve the remaining control ICO/CUR and dynamic assignment uses; pair rendered screens with the original runtime.",
       "evidence": [
         "docs/artwork-reference-index.md",
         "docs/facility-artwork-m61.md",
-        "docs/presentation-evidence-m105.md"
+        "docs/presentation-evidence-m105.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/NativeWindowArtwork.cs",
@@ -5481,13 +5538,14 @@
       "id": "X07",
       "title": "Original audio and music",
       "status": "partial",
-      "finding": "The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison. Current sound-effect and music controls are available through title screen > Settings; the original in-game Sound On/Off menu entries are missing access points, not evidence that audio toggling is unimplemented.",
-      "next_evidence": "Inventory archive audio and every direct/indirect playback site; establish selector/context, interruption/overlap/mute/loop/stop and resume on the original. Do not create a trigger for an unused selector.",
+      "finding": "Five original WAVs are recovered. Existing native effect callsites remain wired; in-game Sound On/Off now controls the source effect dispatcher independently of community music. Open.wav has no established trigger; Bakuhatu.wav has a dispatcher branch but no recovered caller.",
+      "next_evidence": "Keep unused/unproven triggers explicit; validate audio timing and replacement on the original runtime rather than assigning invented cues.",
       "evidence": [
         "docs/original-audio-m105-step7.md",
         "docs/desktop-ui-and-music.md",
         "docs/meeting-audio-continuity-m65.md",
-        "docs/seasonal-music.md"
+        "docs/seasonal-music.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.CoreLoop.cs",
@@ -5520,11 +5578,12 @@
       "id": "X09",
       "title": "Archive and original runtime acceptance",
       "status": "unresolved",
-      "finding": "Original PE is available and freshly hash-verified. A private Wine 11 binary exists, but no complete original distribution or established runnable game installation is available. Native Windows acceptance and all 245 paired workflow scenarios remain pending.",
-      "next_evidence": "Use a disposable Windows install with the matching original distribution. Record original archive/runtime versions and execute catalog scenarios with captures/state checkpoints, then compare the adaptation.",
+      "finding": "The official archive and exact supported PE are recovered. A disposable original installation with VB6 runtime is prepared, but Wine11 exits with host SIGSEGV before a usable game window; a bounded strace confirms the failure. All 245 paired workflow scenarios remain pending.",
+      "next_evidence": "Use a working original Windows runtime for the 245 comparisons, native focus/timing acceptance and genuine GD2 fixtures. The failed Wine run is not an acceptance pass.",
       "evidence": [
         "docs/windows-acceptance-record.md",
-        "docs/casino-runtime-boundaries-m79.md"
+        "docs/casino-runtime-boundaries-m79.md",
+        "docs/map-backlog-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.cs"
@@ -5535,17 +5594,17 @@
     {
       "priority": "P0",
       "id": "G01",
-      "task": "Obtain original archive and runtime evidence; complete external-file denominator and pair 245 scenario recordings. This blocks a claim of complete game coverage."
+      "task": "Official archive inventory/import verification is complete. Original runtime acceptance remains blocked on this host by Wine SIGSEGV; execute all 245 paired scenarios on working Windows before claiming complete coverage."
     },
     {
       "priority": "P1",
       "id": "G02",
-      "task": "Recover the four-form poaching transaction and its periodic/menu callbacks; adaptation workflow is missing."
+      "task": "Poaching is implemented and regression-tested. Compare the four native forms, timer delivery/retained controls, automatic offers and the unresolved empty-roster scratch boundary on the original runtime."
     },
     {
       "priority": "P1",
       "id": "G03",
-      "task": "Reconcile original menu/toolbar/hotspot/keyboard access with the concrete paths listed above. Casino games and title-screen audio controls exist elsewhere; direct casino and in-game Sound entries are missing. Graphic-size/number-grouping selectors are missing options. Backup purchase and poaching are missing gameplay; unresolved behavior must remain separate."
+      "task": "Missing backup/poaching/direct-game access and sound/graphics/number options are restored. Remaining original menu grouping, exact enable/visibility rules, About and utility access still need reconciliation."
     },
     {
       "priority": "P1",
@@ -5555,27 +5614,27 @@
     {
       "priority": "P1",
       "id": "G05",
-      "task": "Complete native GD2 field/type/array mapping and whole-session RNG seed/draw-order comparisons as separate compatibility projects."
+      "task": "All 130 native record templates have paired member/rank references (448 field slots); 310 RNG draw sites and one seed site are mapped. Finish field meanings/types/cardinalities and genuine GD2 cross-load tests; compare whole-session native seed/draw ordering."
     },
     {
       "priority": "P1",
       "id": "G11",
-      "task": "Implement the source-backed backup-device purchase/ownership and corresponding virus protection only after tracing event mutations/persistence; this is absent from the adaptation and distinct from JSON backup files."
+      "task": "Backup purchase, source ownership/reset/persistence, virus outcomes, office animation and saved continuations are implemented and tested. Paired original runtime acceptance remains pending."
     },
     {
       "priority": "P2",
       "id": "G06",
-      "task": "Decode two stopped root and 228 stopped control-property streams; determine whether unsupported classes/streams contain additional controls or resources."
+      "task": "All 2605 control streams and all 84 roots are structurally bounded. Resolve meanings of opaque zero-object/reserved 98/99 markers and investigate unsupported encodings outside the known inventory; consumed bytes are not understood behaviour."
     },
     {
       "priority": "P2",
       "id": "G07",
-      "task": "Reconcile every original artwork/audio/table use, including archive-only race sheets and dynamic assignments. 536 known picture properties do not prove complete resource coverage."
+      "task": "All 45 archive files and 422 imported raster properties are verified, with 82 root icons. Resolve remaining control ICO/CUR usage, dynamic assignments and unproven audio triggers; imported files are not exhaustive handler coverage."
     },
     {
       "priority": "P2",
       "id": "G08",
-      "task": "Reconcile NativeWindowArtwork graduate/renewal aliases with the source forms; icon association does not establish workflow identity."
+      "task": "Graduate/renewal artwork aliases are corrected to fGMKeiyakuS/fGMSKoyouKz. Native runtime presentation comparison remains pending."
     },
     {
       "priority": "P2",
@@ -5603,7 +5662,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "Available elsewhere: title screen > New Game. During play, use Game > Back to Title first; the original direct New Game menu item is missing. Equivalent reset/confirmation behavior remains unverified."
+      "disposition": "Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Exact native setup presentation is pending."
     },
     {
       "id": "menu:mMenuHaihun1",
@@ -5643,7 +5702,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "Available elsewhere: title screen > Quit closes the application; Game > Back to Title returns there during play. The original direct Exit Game menu item and its confirmation flow are not reproduced."
+      "disposition": "Available: Game > Quit closes the application. Native unload/confirmation equivalence remains pending."
     },
     {
       "id": "menu:mKoudou",
@@ -5651,7 +5710,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Menu organization: actions are distributed across Company and Employees, the three UP toolbar buttons and casino-facility controls. This does not mean every original action exists; poaching and backup-device purchase are missing below."
+      "disposition": "Menu organization: actions remain grouped under Company and Employees; three UP actions are also on the toolbar. Backup purchase and employee poaching are implemented below."
     },
     {
       "id": "menu:mKoudouKaisha",
@@ -5707,7 +5766,7 @@
       "workflows": [
         "W30"
       ],
-      "disposition": "Missing functionality: employee-poaching offers, negotiation/contract transactions and the menu action are not implemented. There is no alternate player path."
+      "disposition": "Available: Employees > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending."
     },
     {
       "id": "menu:mKoudouMinasu3",
@@ -5763,7 +5822,7 @@
       "workflows": [
         "W35"
       ],
-      "disposition": "Missing functionality: the purchasable gameplay backup device and its virus-protection ownership/transaction are not implemented. There is no alternate player path; modern save-file backups are a separate feature."
+      "disposition": "Available: Company > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature."
     },
     {
       "id": "menu:mKoudouLicense",
@@ -5788,7 +5847,7 @@
         "W22",
         "W26"
       ],
-      "disposition": "Available elsewhere: open an existing casino through Company facilities or its office tenant, then choose a game. The original Actions > Go out submenu is missing; its original visibility/eligibility rules remain unverified."
+      "disposition": "Available: Company > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending."
     },
     {
       "id": "menu:mKoudouGoKeiba",
@@ -5796,7 +5855,7 @@
       "workflows": [
         "W26"
       ],
-      "disposition": "Available elsewhere: casino facility > Casino > Horse racing opens the implemented horse-racing game. The original direct Go horse racing menu item is missing. Catalog, funds and pending-decision guards can disable entry."
+      "disposition": "Available: Company > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply."
     },
     {
       "id": "menu:mKoudouGoPoka",
@@ -5804,7 +5863,7 @@
       "workflows": [
         "W23"
       ],
-      "disposition": "Available elsewhere: casino facility > Casino > Poker opens the implemented poker game. The original direct Play poker menu item is missing. Coins and pending-decision guards can disable entry."
+      "disposition": "Available: Company > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply."
     },
     {
       "id": "menu:mKoudouGoBlack",
@@ -5812,7 +5871,7 @@
       "workflows": [
         "W24"
       ],
-      "disposition": "Available elsewhere: casino facility > Casino > Blackjack opens the implemented blackjack game. The original direct Play blackjack menu item is missing. Coins and pending-decision guards can disable entry."
+      "disposition": "Available: Company > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply."
     },
     {
       "id": "menu:mInfo",
@@ -5924,7 +5983,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing menu access: there is no in-game Settings menu. Title screen > Settings contains language, sound-effect and music controls. The original graphic-size and number-grouping choices are missing options below."
+      "disposition": "Available: in-game Settings exposes the original Sound, Graphic enlargement and Number display submenus. Title-screen Settings retains community music and language preferences."
     },
     {
       "id": "menu:mSetupSound",
@@ -5932,7 +5991,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing menu access: there is no in-game Settings > Sound submenu. Title screen > Settings provides separate sound-effect and music toggles/volumes; equivalence to the original single sound setting remains unverified."
+      "disposition": "Available: Settings > Sound controls native effects independently of community music, matching the recovered native dispatcher guard."
     },
     {
       "id": "menu:mSetupSoundOn",
@@ -5940,7 +5999,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing menu access: enable sound effects and/or music through title screen > Settings. The original in-game Sound > On command is missing; whether it controlled the same sounds remains unverified."
+      "disposition": "Available: Settings > Sound > On enables original sound effects; community music keeps its separate setting."
     },
     {
       "id": "menu:mSetupSoundOff",
@@ -5948,7 +6007,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing menu access: disable sound effects and/or music through title screen > Settings. The original in-game Sound > Off command is missing; whether it muted the same sounds remains unverified."
+      "disposition": "Available: Settings > Sound > Off disables original sound effects; community music keeps its separate setting."
     },
     {
       "id": "menu:mSetupGraphic",
@@ -5956,7 +6015,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: no Normal/Enlarged office-graphics selector was found in OpenGDS2. The office is rendered, but the original selectable enlargement behavior has no confirmed equivalent."
+      "disposition": "Available: Settings > Graphic enlargement selects Normal/Enlarged office graphics. The saved choice uses native-size pixels or 2x pixels with a bounded scroll viewport."
     },
     {
       "id": "menu:mSetupGraphicD",
@@ -5964,7 +6023,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: there is no player-selectable Normal office-graphics command. Existing default office rendering is not proof of equivalent original sizing; the source references fMainVisual."
+      "disposition": "Available: Settings > Graphic enlargement > Normal restores native office resolution and clears the visible scroll position."
     },
     {
       "id": "menu:mSetupGraphicK",
@@ -5972,7 +6031,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: there is no player-selectable Enlarged office-graphics command or confirmed alternate enlargement control. The source references fMainVisual; exact original scaling remains unverified."
+      "disposition": "Available: Settings > Graphic enlargement > Enlarged doubles office pixels and preserves office input-coordinate mapping. Native panning/focus acceptance remains pending."
     },
     {
       "id": "menu:mSetupNumber",
@@ -5980,7 +6039,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: there is no player-selectable number-grouping mode. OpenGDS2 already renders numbers with N0 formatting, but does not expose the original two-format choice."
+      "disposition": "Available: Settings > Number display selects Japanese or comma-separated thousands grouping across the UI; the choice is stored in company saves."
     },
     {
       "id": "menu:mSetupNumber1",
@@ -5988,7 +6047,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: no selector for Japanese large-number grouping was found. Existing number rendering and interface-language selection do not implement this original format choice."
+      "disposition": "Available: Settings > Number display > Japanese grouping uses four-digit groups with \u4e07/\u5104/\u5146 and zero-filled lower groups. Modern Int64 values can additionally use \u4eac."
     },
     {
       "id": "menu:mSetupNumber2",
@@ -5996,7 +6055,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Missing option: no selector for thousands grouping was found. Current N0-formatted numbers may already use thousands separators, but the player cannot choose this original display mode independently."
+      "disposition": "Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language."
     },
     {
       "id": "menu:mHelp",

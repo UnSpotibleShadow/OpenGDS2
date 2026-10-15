@@ -17,7 +17,7 @@ public partial class Main
         if(_awardBoard is null||!GodotObject.IsInstanceValid(_awardBoard)||!ReferenceEquals(_awardBoardState,awards))
         {
             CloseAwardBoard();AwardScene(state,awards,42);_awardBoard=_dialog;_awardBoardState=awards;
-            var canvas=(Control)_content.GetChild(0);NativeText(canvas,"AwardEntries",string.Format(Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,36),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+            var canvas=(Control)_content.GetChild(0);NativeText(canvas,"AwardEntries",string.Format(DisplayNumbers.Provider,Tr("AWARD_ENTRIES"),awards.Entries.Count),new(8,174,246,36),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
             NativeText(canvas,"AwardResult",Tr("AWARD_"+AwardService.Order[awards.CategoryIndex]),new(8,211,246,23),10);
             _awardBoard!.CloseRequested=()=>{};_dialog=null;_dialogPositionKey=null;
         }

@@ -27,19 +27,19 @@ public partial class Main
         if (_officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture,state);
         ClearContent();IdentifyManagementWindow("FacilitiesOverviewWindow");AddHeading(Tr("COMPANY_FACILITIES"),26);
         if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(410,440),390);
-        AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
+        AddHeading($"{Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}",18);
         if (state.Calendar is null) AnnualMessage("FacilitiesUnknown",Tr("CALENDAR_LEGACY_SAVE"));
         else for (int slot=0;slot<3;slot++)
         {
             if (selectedSlot is int chosen && slot!=chosen) continue;
             int index=slot,value=state.Calendar.OriginalSlots0444[slot];
-            AddHeading(string.Format(Tr("FACILITY_SLOT"),slot+1)+": "+FacilityName(value),18);
+            AddHeading(string.Format(DisplayNumbers.Provider,Tr("FACILITY_SLOT"),slot+1)+": "+FacilityName(value),18);
             if (value==-1)
             {
                 foreach (FacilityKind kind in Enum.GetValues<FacilityKind>())
                 {
                     var chosenKind=kind;bool available=FacilityService.ServiceAvailable(kind);
-                    var buy=new Button {Name=kind==FacilityKind.School ? $"OpenSchool{slot}" : $"OpenFacility{slot}_{(int)kind}",Text=$"{FacilityName((int)kind)} — ¥{FacilityService.PurchasePrice(kind):N0}"+
+                    var buy=new Button {Name=kind==FacilityKind.School ? $"OpenSchool{slot}" : $"OpenFacility{slot}_{(int)kind}",Text=$"{FacilityName((int)kind)} — ¥{DisplayNumbers.Format(FacilityService.PurchasePrice(kind))}"+
                         (available ? "" : " · "+Tr("FACILITY_COMING_SOON")),
                         Disabled=!available || state.Calendar.OriginalSlots0444.Contains((int)kind) || FacilityService.HasPendingDecision(state)};
                     _content.AddChild(buy);buy.Pressed+=()=>
@@ -66,7 +66,7 @@ public partial class Main
                         foreach (var target in Enum.GetValues<FeeNegotiationTarget>())
                         {
                             var chosenTarget=target;
-                            AnnualMessage($"NegotiationFee{target}",string.Format(Tr("NEGOTIATION_CURRENT_FEE"),Tr($"NEGOTIATION_TARGET_{target}"),FeeNegotiationService.CurrentFee(state,target)));
+                            AnnualMessage($"NegotiationFee{target}",string.Format(DisplayNumbers.Provider,Tr("NEGOTIATION_CURRENT_FEE"),Tr($"NEGOTIATION_TARGET_{target}"),FeeNegotiationService.CurrentFee(state,target)));
                             AnnualButton($"Negotiate{target}{slot}",$"NEGOTIATION_TARGET_{target}",()=>ShowFeeNegotiationConfirmation(state,index,chosenTarget));
                         }
                         break;
@@ -79,10 +79,10 @@ public partial class Main
                         _content.AddChild(hard);hard.Pressed+=()=>ShowHardwarePlan(state,index);break;
                     case FacilityKind.MysteryLab:
                         if (state.MysteryLab.Progress>0)
-                            AnnualMessage("MysteryLabProgress",string.Format(Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)));
+                            AnnualMessage("MysteryLabProgress",string.Format(DisplayNumbers.Provider,Tr("MYSTERY_LAB_PROGRESS"),Math.Min(100,state.MysteryLab.Progress)));
                         AnnualMessage("MysteryLabLifecycle",Tr("MYSTERY_LAB_LIFECYCLE"));
                         var experiment=new Button {Name=$"StartMysteryExperiment{slot}",
-                            Text=$"{Tr("MYSTERY_LAB_START")} — ¥{MysteryLabService.ExperimentCost:N0}",
+                            Text=$"{Tr("MYSTERY_LAB_START")} — ¥{DisplayNumbers.Format(MysteryLabService.ExperimentCost)}",
                             Disabled=state.MysteryLab.Progress>0 || FacilityService.HasPendingDecision(state)};
                         _content.AddChild(experiment);experiment.Pressed+=()=>ConfirmFacilityService(state,index,kind,
                             MysteryLabService.ExperimentCost,()=>_session.StartMysteryExperiment(index));break;
@@ -94,13 +94,13 @@ public partial class Main
     }
     private void FacilityAction(string name,string key,long amount,Action action)
     {
-        var button=new Button {Name=name,Text=$"{Tr(key)} — ¥{amount:N0}"};_content.AddChild(button);button.Pressed+=action;
+        var button=new Button {Name=name,Text=$"{Tr(key)} — ¥{DisplayNumbers.Format(amount)}"};_content.AddChild(button);button.Pressed+=action;
     }
-    private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(Tr("FACILITY_OTHER"),value);
+    private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(DisplayNumbers.Provider,Tr("FACILITY_OTHER"),value);
     private void ShowFacilityClosure(GameState state,int slot,FacilityKind kind)
     {
         ClearContent();IdentifyManagementWindow("FacilityClosureWindow");AddHeading(Tr("FACILITY_CLOSE"),26);
-        AnnualMessage("FacilityCloseConfirmation",string.Format(Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind)));
+        AnnualMessage("FacilityCloseConfirmation",string.Format(DisplayNumbers.Provider,Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind)));
         AnnualButton(kind==FacilityKind.School ? "ConfirmSchoolClosure" : "ConfirmFacilityClosure","CONFIRM",()=>
         {var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");});
         AddAction("CANCEL",()=>ShowFacilities(state,slot));
@@ -109,7 +109,7 @@ public partial class Main
     {
         ClearContent();CompactManagementWindow("FacilityConfirmationWindow",new Vector2(410,280),390);
         AddHeading(FacilityName((int)kind),22);
-        AnnualMessage("FacilityConfirmation",string.Format(Tr($"FACILITY_CONFIRM_{kind}"),amount));
+        AnnualMessage("FacilityConfirmation",string.Format(DisplayNumbers.Provider,Tr($"FACILITY_CONFIRM_{kind}"),amount));
         AnnualButton("ConfirmFacilityService","CONFIRM",()=>
         {
             if (!ReferenceEquals(_session.Current,state)) return;
@@ -125,7 +125,7 @@ public partial class Main
         if (state.PendingFacilityReceipt is not { } receipt) return false;
         ClearContent();CompactManagementWindow("FacilityResultWindow",new Vector2(410,280),390);
         AddHeading(FacilityName((int)receipt.Kind),22);
-        AnnualMessage("FacilityServiceResult",string.Format(Tr($"FACILITY_RECEIPT_{receipt.Kind}"),receipt.Amount,receipt.Gain,receipt.EmployeeName));
+        AnnualMessage("FacilityServiceResult",string.Format(DisplayNumbers.Provider,Tr($"FACILITY_RECEIPT_{receipt.Kind}"),receipt.Amount,receipt.Gain,receipt.EmployeeName));
         AnnualButton("AcknowledgeFacilityReceipt","CONTINUE",()=>
         {
             if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingFacilityReceipt,receipt)) return;
@@ -149,7 +149,7 @@ public partial class Main
     private void ShowFeeNegotiationConfirmation(GameState state,int slot,FeeNegotiationTarget target)
     {
         ClearContent();var canvas=NativeWindow("NegotiationConfirmationWindow",Tr("NEGOTIATION_TARGET_"+target),new(310,152));
-        NativeFill(canvas,"NegotiationConfirmationBox",new(4,4,302,91),Colors.White,true);NativeText(canvas,"NegotiationConfirmation",string.Format(Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds),new(8,7,294,85),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeFill(canvas,"NegotiationConfirmationBox",new(4,4,302,91),Colors.White,true);NativeText(canvas,"NegotiationConfirmation",string.Format(DisplayNumbers.Provider,Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds),new(8,7,294,85),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         NativeAction(canvas,"ConfirmFeeNegotiation","CONFIRM",new(112,120,94,26),()=>
         {if(!ReferenceEquals(_session.Current,state))return;var result=_session.BeginFeeNegotiation(slot,target);if(result==FacilityResult.Success)ShowOfficeReconstruction(state);else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}});
         NativeAction(canvas,"CancelFeeNegotiation","CANCEL",new(212,120,94,26),()=>ShowFacilities(state,slot));
@@ -175,7 +175,7 @@ public partial class Main
         AddHeading(Tr("FACILITY_CHOOSE_PLOT"),22);
         foreach (int slot in slots)
         {
-            int chosen=slot;var button=new Button {Name=$"ChooseTenantPlot{slot}",Text=string.Format(Tr("FACILITY_SLOT"),slot+1)};
+            int chosen=slot;var button=new Button {Name=$"ChooseTenantPlot{slot}",Text=string.Format(DisplayNumbers.Provider,Tr("FACILITY_SLOT"),slot+1)};
             _content.AddChild(button);button.Pressed+=()=>ShowFacilities(state,chosen);
         }
         AddAction("CANCEL",()=>ShowOfficeReconstruction(state));
@@ -246,7 +246,7 @@ public partial class Main
                 foreach(int id in ids)
                 {
                     var p=state.Competition.Products[id];var row=rows[id];row.SetText(0,(rank++).ToString());row.SetText(1,p.Title);
-                    row.SetText(2,p.UnitsSold.ToString("N0"));row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
+                    row.SetText(2,p.UnitsSold.ToDisplayNumber());row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
                     row.SetText(3,p.Owner==-1?state.Company.Name:_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED"));
                     if(selected==id)row.Select(0);
                 }

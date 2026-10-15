@@ -20,8 +20,8 @@ public partial class Main
             bool occupied=loan is {OriginalType:>0};
             string date=occupied && loan!.BorrowedOn is GameDate borrowed ? $"{BankLoanService.DueOn(borrowed).Year}/{BankLoanService.DueOn(borrowed).Month}/{BankLoanService.DueOn(borrowed).Week}" : loan is null||occupied?"?":"—";
             NativeText(canvas,"BankLoanDate"+i,date,new(xs[0],28+i*19,widths[0],19),11);
-            NativeText(canvas,"BankLoanPrincipal"+i,loan is null?"?":occupied?$"¥{CalendarDialogueRules.LoanPrincipal(loan!.OriginalType):N0}":"—",new(xs[1],28+i*19,widths[1],19),11,HorizontalAlignment.Right);
-            NativeText(canvas,"BankLoanRepayment"+i,loan is null?"?":occupied?$"¥{CalendarService.LoanRepayment(loan!.OriginalType):N0}":"—",new(xs[2],28+i*19,widths[2],19),11,HorizontalAlignment.Right);
+            NativeText(canvas,"BankLoanPrincipal"+i,loan is null?"?":occupied?$"¥{DisplayNumbers.Format(CalendarDialogueRules.LoanPrincipal(loan!.OriginalType))}":"—",new(xs[1],28+i*19,widths[1],19),11,HorizontalAlignment.Right);
+            NativeText(canvas,"BankLoanRepayment"+i,loan is null?"?":occupied?$"¥{DisplayNumbers.Format(CalendarService.LoanRepayment(loan!.OriginalType))}":"—",new(xs[2],28+i*19,widths[2],19),11,HorizontalAlignment.Right);
         }
         var eligibility=BankLoanService.CheckBorrow(state);
         _status=NativeText(canvas,"BankStatus",eligibility==BankLoanResult.Success?"":Tr($"BANK_RESULT_{eligibility}"),new(4,164,406,46),10);
@@ -31,8 +31,8 @@ public partial class Main
         for(int type=1;type<=4;type++)
         {
             int sourceType=type;
-            var choice=new CheckBox {Name=$"BankLoanType{type}",Text=$"¥{CalendarDialogueRules.LoanPrincipal(type):N0}",ButtonGroup=group,
-                Disabled=eligibility!=BankLoanResult.Success,TooltipText=Tr("BANK_REPAYMENT").Replace("{amount}",$"¥{CalendarService.LoanRepayment(type):N0}")};
+            var choice=new CheckBox {Name=$"BankLoanType{type}",Text=$"¥{DisplayNumbers.Format(CalendarDialogueRules.LoanPrincipal(type))}",ButtonGroup=group,
+                Disabled=eligibility!=BankLoanResult.Success,TooltipText=Tr("BANK_REPAYMENT").Replace("{amount}",$"¥{DisplayNumbers.Format(CalendarService.LoanRepayment(type))}")};
             foreach(string mode in new[]{"normal","pressed","hover","disabled","focus","hover_pressed"})choice.AddThemeStyleboxOverride(mode,new StyleBoxEmpty());
             choice.AddThemeFontSizeOverride("font_size",11);
             NativePlace(canvas,choice,new(4+((type-1)/2)*150,96+((type-1)%2)*23,148,23));
@@ -53,8 +53,8 @@ public partial class Main
     {
         if (state.PendingBankLoanReceipt is not { } receipt) return false;
         RefreshDesktop();
-        string body=Tr("BANK_RECEIPT").Replace("{principal}",$"¥{CalendarDialogueRules.LoanPrincipal(receipt.OriginalType):N0}")
-            .Replace("{repayment}",$"¥{CalendarService.LoanRepayment(receipt.OriginalType):N0}").Replace("{date}",BankDate(BankLoanService.DueOn(receipt.BorrowedOn)));
+        string body=Tr("BANK_RECEIPT").Replace("{principal}",$"¥{DisplayNumbers.Format(CalendarDialogueRules.LoanPrincipal(receipt.OriginalType))}")
+            .Replace("{repayment}",$"¥{DisplayNumbers.Format(CalendarService.LoanRepayment(receipt.OriginalType))}").Replace("{date}",BankDate(BankLoanService.DueOn(receipt.BorrowedOn)));
         ShowConversation(Tr("BANK"),[new(Tr("BANK_CLERK"),body)],()=>
         {
             if (!ReferenceEquals(state.PendingBankLoanReceipt,receipt)) return;

@@ -27,9 +27,9 @@ public partial class Main
         _refreshCoreStatus=()=>
         {
             chart.SetHistory(product.WeeklySalesHistory);
-            current.Text=$"{Tr("SALES_HISTORY_CURRENT")}: {product.WeeklySalesHistory[0]:N0}";
-            prior.Text=$"{Tr("SALES_HISTORY_PREVIOUS")}: {product.WeeklySalesHistory[1]:N0}";
-            total.Text=$"{Tr("UNITS_SOLD")}: {product.UnitsSold:N0}";
+            current.Text=$"{Tr("SALES_HISTORY_CURRENT")}: {DisplayNumbers.Format(product.WeeklySalesHistory[0])}";
+            prior.Text=$"{Tr("SALES_HISTORY_PREVIOUS")}: {DisplayNumbers.Format(product.WeeklySalesHistory[1])}";
+            total.Text=$"{Tr("UNITS_SOLD")}: {DisplayNumbers.Format(product.UnitsSold)}";
         };
         _refreshCoreStatus();
     }

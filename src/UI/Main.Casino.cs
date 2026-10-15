@@ -26,7 +26,7 @@ public partial class Main
         if (state.Casino.CardChainOpen) {ShowCardChain(state);return;}
         if (state.Casino.HorseOpen) {ShowHorseRacing(state);return;}
         var canvas=ManagementCanvas("CasinoSelector",Tr("CASINO_ENTER"),new(214,276));
-        NativeText(canvas,"CasinoCoins",string.Format(Tr("CASINO_COINS"),state.Casino.Coins),new(8,4,198,22));
+        NativeText(canvas,"CasinoCoins",string.Format(DisplayNumbers.Provider,Tr("CASINO_COINS"),state.Casino.Coins),new(8,4,198,22));
         bool cards=state.Casino.Coins>0 && !FacilityService.HasPendingDecision(state);
         void OpenCard(Func<CasinoResult> open,Action show)
         {
@@ -77,7 +77,7 @@ public partial class Main
         {
             if (!_pokerInterfaceVisible) return;
             var c=state.Casino;var p=c.Poker;
-            totals.Text=string.Format(Tr("POKER_TOTALS"),c.Coins,c.Bet,c.PendingPayout);
+            totals.Text=string.Format(DisplayNumbers.Provider,Tr("POKER_TOTALS"),c.Coins,c.Bet,c.PendingPayout);
             string key=p.Phase switch {0=>c.Bet==50 ? "POKER_RETAINED_BET" : "POKER_BET",1=>p.Tick<45 ? "POKER_REVEAL" : "POKER_HOLD",2=>"POKER_REVEAL",
                 3=>p.AwardReady ? "POKER_WIN" : "POKER_RESULT_WAIT",4=>"POKER_COLLECTING",5=>p.Tick<18 ? "POKER_REVEAL" : "POKER_CHOOSE_DOUBLE",_=>p.TieRedeal ? "POKER_TIE" : "POKER_REVEAL"};
             message.Text=Tr(key);

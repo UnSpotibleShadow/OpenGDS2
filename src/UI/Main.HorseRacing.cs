@@ -64,16 +64,16 @@ public partial class Main
         {
             if(!_pokerInterfaceVisible) return;
             var r=state.Casino.Horse;
-            totals.Text=string.Format(Tr("HORSE_TOTALS"),state.Money,r.DraftCash,r.RaceCounter+1);
+            totals.Text=string.Format(DisplayNumbers.Provider,Tr("HORSE_TOTALS"),state.Money,r.DraftCash,r.RaceCounter+1);
             message.Text=Tr(r.NumericBoundary ? "CASINO_RESULT_NumericLimit" : r.CatalogBoundary ? "CASINO_RESULT_CatalogMissing" : r.Stage switch {0=>"HORSE_BETTING",1=>"HORSE_RUNNING",2=>"HORSE_RESULTS_WAIT",_=>"HORSE_PAYOUT"});
-            if(r.Stage>=2) message.Text+="\n"+string.Format(Tr("HORSE_FINISH"),string.Join(" → ",r.Arrival.Select(i=>(i+1).ToString())));
-            if(r.Stage==3) message.Text+="\n"+string.Format(Tr("HORSE_AWARD"),r.DisplayedAward);
+            if(r.Stage>=2) message.Text+="\n"+string.Format(DisplayNumbers.Provider,Tr("HORSE_FINISH"),string.Join(" → ",r.Arrival.Select(i=>(i+1).ToString())));
+            if(r.Stage==3) message.Text+="\n"+string.Format(DisplayNumbers.Provider,Tr("HORSE_AWARD"),r.DisplayedAward);
             for(int i=0;i<8;i++)
             {
                 var h=r.Runners[i];string forecasts=string.Join("/",r.ForecastRanks.Select(row=>(row[i]+1).ToString()));
                 var entry=rosterRows[i];entry.SetText(0,(i+1).ToString());entry.SetText(1,h.Name);entry.SetText(2,h.JockeyName);entry.SetText(3,forecasts);entry.SetText(4,r.WinOdds[i].ToString("0.0"));entry.SetTextAlignment(4,HorizontalAlignment.Right);
                 if(r.PairSelected&&i==r.SelectedFirst){matrixButtons[i].Text="—";matrixButtons[i].Disabled=true;}
-                else{double cellOdds=r.PairSelected?r.PairOdds[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,i)]:r.WinOdds[i];long cellStake=r.PairSelected?r.PairStakes[r.SelectedFirst][i]:r.SingleStakes[i];matrixButtons[i].Text=$"{(r.PairSelected?(r.SelectedFirst+1)+"–":"")}{i+1}: {cellOdds:0.0} · ¥{cellStake:N0}";matrixButtons[i].Disabled=r.Stage!=0;}
+                else{double cellOdds=r.PairSelected?r.PairOdds[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,i)]:r.WinOdds[i];long cellStake=r.PairSelected?r.PairStakes[r.SelectedFirst][i]:r.SingleStakes[i];matrixButtons[i].Text=$"{(r.PairSelected?(r.SelectedFirst+1)+"–":"")}{i+1}: {cellOdds:0.0} · ¥{DisplayNumbers.Format(cellStake)}";matrixButtons[i].Disabled=r.Stage!=0;}
             }
             table.Visible=r.Stage!=1;track.Visible=r.Stage==1;track.Race=r;track.QueueRedraw();
             kind.Select(r.PairSelected ? 1 : 0);
@@ -85,7 +85,7 @@ public partial class Main
             first.Select(r.SelectedFirst);second.Select(CasinoHorseService.CompressedColumn(r.SelectedFirst,r.SelectedSecond));second.Visible=r.PairSelected;
             long stake=r.PairSelected ? r.PairStakes[r.SelectedFirst][r.SelectedSecond] : r.SingleStakes[r.SelectedFirst];
             double odds=r.PairSelected ? r.PairOdds[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,r.SelectedSecond)] : r.WinOdds[r.SelectedFirst];
-            wager.Text=string.Format(Tr("HORSE_SELECTED_WAGER"),stake,odds);
+            wager.Text=string.Format(DisplayNumbers.Provider,Tr("HORSE_SELECTED_WAGER"),stake,odds);
             bool draft=r.Stage==0 && !r.NumericBoundary && !r.CatalogBoundary;
             kind.Disabled=first.Disabled=second.Disabled=!draft;add.Disabled=!draft || r.DraftCash<=0;
             remove.Disabled=!draft || (r.PairSelected ? r.PairStakes[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,r.SelectedSecond)] : r.SingleStakes[r.SelectedFirst])<=0;

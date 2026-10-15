@@ -38,8 +38,8 @@ public partial class Main
             selected=hardware.Single(h=>h.SourceIndex==row.GetMetadata(0).AsInt32());
             picture.Texture=HardwarePicture(state,selected.SourceIndex);bits.Text=selected.BitWidth+" "+Tr("BIT_UNIT");
             name.Text=CatalogName(catalog,"HARDWARE",selected.SourceIndex,selected.Name);
-            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(Tr("LICENCE_DESCRIPTION"),name.Text,selected.BitWidth):selected.Description;
-            fee.Text=$"{Tr("CONTRACT_FEE")}: ¥{selected.LicenseFee:N0}";
+            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(DisplayNumbers.Provider,Tr("LICENCE_DESCRIPTION"),name.Text,selected.BitWidth):selected.Description;
+            fee.Text=$"{Tr("CONTRACT_FEE")}: ¥{DisplayNumbers.Format(selected.LicenseFee)}";
             buy.Disabled=state.HardwareLicenses is null||state.HardwareLicenses.Contains(selected.SourceIndex)||state.Money is null||state.Money<selected.LicenseFee;
             buy.TooltipText=Tr(state.HardwareLicenses is null?"LICENSE_RESULT_LicensesUnknown":state.HardwareLicenses.Contains(selected.SourceIndex)?"LICENSE_RESULT_AlreadyOwned":state.Money is null?"LICENSE_RESULT_MoneyUnknown":state.Money<selected.LicenseFee?"LICENSE_RESULT_InsufficientFunds":"LICENSE_BUY");
         }
@@ -49,7 +49,7 @@ public partial class Main
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,h.SourceIndex);row.SetText(0,CatalogName(catalog,"HARDWARE",h.SourceIndex,h.Name));
             row.SetText(1,state.HardwareLicenses is null?"?":state.HardwareLicenses.Contains(h.SourceIndex)?Tr("LICENSE_OWNED_SHORT"):"—");
             var market=state.Calendar?.Hardware.SingleOrDefault(x=>x.SourceIndex==h.SourceIndex);
-            row.SetText(2,market is null?"?":(Math.Floor(market.Market)*10_000).ToString("N0"));row.SetTextAlignment(2,HorizontalAlignment.Right);
+            row.SetText(2,market is null?"?":(Math.Floor(market.Market)*10_000).ToDisplayNumber());row.SetTextAlignment(2,HorizontalAlignment.Right);
             row.SetText(3,h.RawMembers.TryGetValue("0FA8",out long maker)&&maker is >=0 and <=9?DialogueText("CALENDAR_MAKER_"+maker):"?");
             if(h.SourceIndex==(selectedSource??hardware.FirstOrDefault()?.SourceIndex))row.Select(0);
         }
@@ -70,12 +70,12 @@ public partial class Main
         NativeText(canvas,"ProductionQuantityCaption",Tr("PRODUCTION_COPIES"),new(76,216,129,24),10);
         var copies=ProductionQuantity(state,"ProductionCopies");_content.RemoveChild(copies);if(draftCopies.HasValue)copies.Value=draftCopies.Value;
         var field=new HBoxContainer {Name="ProductionQuantityField"};NativePlace(canvas,field,new(208,214,194,26));field.AddChild(copies);field.AddChild(HeldShipmentButtons(copies,true));
-        NativeText(canvas,"ProductionReadonlyPrice",$"{Tr("RETAIL_PRICE")}: ¥{product.Price:N0}",new(76,245,326,22));
+        NativeText(canvas,"ProductionReadonlyPrice",$"{Tr("RETAIL_PRICE")}: ¥{DisplayNumbers.Format(product.Price)}",new(76,245,326,22));
         void Refresh()
         {
             long? net=state.SalesFee1 is long fee1&&state.SalesFee2 is long fee2?product.Price-fee1-fee2:null;
             long?[] amounts=[unit-200,200,unit,checked(unit*(long)copies.Value),product.Price,-state.SalesFee1,-state.SalesFee2,net,net is long known?checked(known*(long)copies.Value):null];
-            for(int i=0;i<9;i++)values[i].Text=amounts[i] is long amount?$"¥{amount:N0}":"?";
+            for(int i=0;i<9;i++)values[i].Text=amounts[i] is long amount?$"¥{DisplayNumbers.Format(amount)}":"?";
         }
         copies.ValueChanged+=_=>Refresh();Refresh();
         _status=NativeText(canvas,"ProductionStatus","",new(4,278,398,18),10);
@@ -88,7 +88,7 @@ public partial class Main
         ClearContent();var canvas=NativeWindow("StaffRosterWindow",Tr("STAFF"),new(442,362));
         bool complete=OriginalPayrollRules.CaptureStaffList(state);long? salary=null;
         try{if(complete)salary=OriginalPayrollRules.StaffSalaryTotal(state.EmployeeSources);}catch(OverflowException){}
-        NativeText(canvas,"StaffSalaryTotal",$"{Tr("MONTHLY_SALARY_TOTAL")}: {salary?.ToString("N0")??Tr("NOT_YET_DECODED")}",new(4,2,434,21));
+        NativeText(canvas,"StaffSalaryTotal",$"{Tr("MONTHLY_SALARY_TOTAL")}: {salary?.ToDisplayNumber()??Tr("NOT_YET_DECODED")}",new(4,2,434,21));
         NativeFill(canvas,"StaffListBox",new(4,26,434,108),Colors.White,true);
         var scroll=NativePlace(canvas,new ScrollContainer {Name="StaffSelectionList",HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled},new(6,28,430,104));
         var list=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};list.AddThemeConstantOverride("separation",0);scroll.AddChild(list);
@@ -97,7 +97,7 @@ public partial class Main
         {
             var row=new HBoxContainer();list.AddChild(row);
             var select=new Button {Name="SelectStaff"+employee.SourceIndex,Text=EmployeeName(employee),ToggleMode=true,ButtonPressed=employee==selected,SizeFlagsHorizontal=SizeFlags.ExpandFill,ClipText=true};select.AddThemeFontSizeOverride("font_size",11);row.AddChild(select);
-            var amount=new Label {Name="MonthlySalary"+employee.SourceIndex,Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToString("N0")??Tr("NOT_YET_DECODED")}",HorizontalAlignment=HorizontalAlignment.Right,CustomMinimumSize=new(176,0)};amount.AddThemeFontSizeOverride("font_size",10);row.AddChild(amount);
+            var amount=new Label {Name="MonthlySalary"+employee.SourceIndex,Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToDisplayNumber()??Tr("NOT_YET_DECODED")}",HorizontalAlignment=HorizontalAlignment.Right,CustomMinimumSize=new(176,0)};amount.AddThemeFontSizeOverride("font_size",10);row.AddChild(amount);
             select.Pressed+=()=>ShowStaffSelection(state,employee);
         }
         NativeAction(canvas,"CancelStaff","CANCEL",new(332,333,106,25),()=>ShowOfficeReconstruction(state));
@@ -122,20 +122,20 @@ public partial class Main
         NativeFill(canvas,"CompanyInformationFields",new(4,4,332,203),Colors.White,true);
         string secretary=state.SecretarySourceIndex is null?"?":SecretaryName(state.SecretarySourceIndex);
         var computer=_activeCatalog?.DevelopmentComputers.SingleOrDefault(c=>c.SourceIndex==state.DevelopmentComputerIndex);
-        (string Key,string Value)[] fields=[("COMPANY_NAME",state.Company.Name),("SECRETARY",secretary),("SHIPMENT_RETAILER_SHARE",state.SalesFee1?.ToString("N0")??"?"),("SHIPMENT_TRANSPORT_SHARE",state.SalesFee2?.ToString("N0")??"?"),("COMPUTER_PROCESSING",computer is null?"?":computer.BitWidth+" bit")];
+        (string Key,string Value)[] fields=[("COMPANY_NAME",state.Company.Name),("SECRETARY",secretary),("SHIPMENT_RETAILER_SHARE",state.SalesFee1?.ToDisplayNumber()??"?"),("SHIPMENT_TRANSPORT_SHARE",state.SalesFee2?.ToDisplayNumber()??"?"),("COMPUTER_PROCESSING",computer is null?"?":computer.BitWidth+" bit")];
         for(int i=0;i<fields.Length;i++){NativeText(canvas,"CompanyInfoCaption"+i,Tr(fields[i].Key),new(10,8+i*23,185,21),10);NativeText(canvas,"CompanyInfoValue"+i,fields[i].Value,new(197,8+i*23,131,21),11,HorizontalAlignment.Right);}
         for(int i=0;i<3;i++)
         {
             int? type=state.Calendar?.OriginalSlots0444.ElementAtOrDefault(i);
             string tenant=state.Calendar?.OriginalSlots0444.Count>i?type==-1?Tr("FACILITY_EMPTY"):type is >=0 and <=8?FacilityName(type.Value):"?":"?";
-            NativeText(canvas,"CompanyTenantCaption"+i,string.Format(Tr("FACILITY_SLOT"),i+1),new(10,125+i*23,104,21),10);
+            NativeText(canvas,"CompanyTenantCaption"+i,string.Format(DisplayNumbers.Provider,Tr("FACILITY_SLOT"),i+1),new(10,125+i*23,104,21),10);
             NativeText(canvas,"CompanyTenant"+i,tenant,new(118,125+i*23,210,21),10,HorizontalAlignment.Right);
         }
         var record=state.ReleasedGames.OrderByDescending(p=>p.UnitsSold).FirstOrDefault();
         NativeFill(canvas,"CompanySalesRecordBox",new(4,214,332,65),new(.7f,.97f,1),true);
         NativeText(canvas,"CompanySalesRecordHeading",Tr("BEST_SELLING_GAME"),new(9,216,322,20));
         NativeText(canvas,"CompanySalesRecordTitle",record?.Title??"—",new(9,238,214,20));
-        NativeText(canvas,"CompanySalesRecordUnits",record?.UnitsSold.ToString("N0")??"—",new(223,238,108,20),11,HorizontalAlignment.Right);
+        NativeText(canvas,"CompanySalesRecordUnits",record?.UnitsSold.ToDisplayNumber()??"—",new(223,238,108,20),11,HorizontalAlignment.Right);
         NativeAction(canvas,"CloseCompanyInformation","CANCEL",new(226,291,110,25),()=>ShowOfficeReconstruction(state));
     }
 

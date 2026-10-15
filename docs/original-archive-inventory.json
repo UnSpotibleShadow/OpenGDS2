@@ -1,0 +1,330 @@
+{
+  "source_url": "https://kairosoft.net/File/GameDev2DX.lzh",
+  "archive_sha256": "118fc868e3b888ec86b9dcd958f52109d0074717e8e78d9fbc44bd03ecdfc0b4",
+  "archive_bytes": 2059311,
+  "directories": [
+    "Graphic/",
+    "Graphic/Human/",
+    "Sound/"
+  ],
+  "files": [
+    {
+      "path": "GameDev2DX.exe",
+      "method": "-lh5-",
+      "bytes": 6365184,
+      "crc16": 34567,
+      "sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6"
+    },
+    {
+      "path": "GameRank.GDS",
+      "method": "-lh5-",
+      "bytes": 61,
+      "crc16": 29442,
+      "sha256": "29b32366492fce214301931d0aa020c2737fe2218bccb110039c7de0a5175c5b"
+    },
+    {
+      "path": "Graphic/Beibazyo.bmp",
+      "method": "-lh5-",
+      "bytes": 74430,
+      "crc16": 44250,
+      "sha256": "c67871972b5e8392a30420b947f3f59a04a5e95d5d78c7cad9f6b802c25588f5"
+    },
+    {
+      "path": "Graphic/Beibazyo2.bmp",
+      "method": "-lh5-",
+      "bytes": 93086,
+      "crc16": 53623,
+      "sha256": "23a0818b9339c421ef1969112dfd34bca5e512b749b4d0282b90c1d7b20c9a90"
+    },
+    {
+      "path": "Graphic/Beibazyo3.bmp",
+      "method": "-lh5-",
+      "bytes": 74430,
+      "crc16": 43123,
+      "sha256": "df9372a0e824e3e2b2687c828a8fd11f82ecc2c75a6b7ac1574a4d8967437f13"
+    },
+    {
+      "path": "Graphic/BokuzyoBack.bmp",
+      "method": "-lh5-",
+      "bytes": 31534,
+      "crc16": 52745,
+      "sha256": "e7679e654a41231e75d50c7ff12fb351a42eff401d419cc883dafc46a8ca8722"
+    },
+    {
+      "path": "Graphic/Human/Human1.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 16706,
+      "sha256": "40c202dc444c783ef43a9c7142834f2a9583212bea5de9519638757add783afb"
+    },
+    {
+      "path": "Graphic/Human/Human1.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 33897,
+      "sha256": "1b944a4b83d6ad08d0ed40ccfa593a2367101a7b2c17631950909e6f05441253"
+    },
+    {
+      "path": "Graphic/Human/Human1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 29125,
+      "sha256": "0d607bd0be15ffc7471b625067b56c3e518f68118b38417e1b168b7bfd9717b5"
+    },
+    {
+      "path": "Graphic/Human/Human10.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 42279,
+      "sha256": "6d061cd63f210e61891f42707207d1dfd1d2411c6cf6aa5149cece885a0bb9e0"
+    },
+    {
+      "path": "Graphic/Human/Human10.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 16020,
+      "sha256": "91de7146a820f5a4b85ab15892a91204bc8bda2f0dea9001f57fd25e71d5a594"
+    },
+    {
+      "path": "Graphic/Human/Human10.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 33079,
+      "sha256": "2a998d6b3177a70b85c87955fe701048f57921c116ef9cd684eb779fa6071d30"
+    },
+    {
+      "path": "Graphic/Human/Human2.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 2869,
+      "sha256": "52a9a63f41887f36a064d73eff3dc6eb8714ad26d04790db284aa110a919d5d8"
+    },
+    {
+      "path": "Graphic/Human/Human2.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 65081,
+      "sha256": "19fd9e96357dabfe0063caf951a83f58d1ac01ef1b7e8b1b0c18f4ea75a7bb48"
+    },
+    {
+      "path": "Graphic/Human/Human2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 39465,
+      "sha256": "baa222bd055ccc2d687088e6aad92cbae5b53a93184d0108fd1b03c470087a53"
+    },
+    {
+      "path": "Graphic/Human/Human3.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 12987,
+      "sha256": "48eacf8e897e22858aa27b995a3e5b1fbcda24591621e82d82cb625f03f2d2f4"
+    },
+    {
+      "path": "Graphic/Human/Human3.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 16054,
+      "sha256": "6031a4ff6b23d6114535bdab01509bf935dc68fd12ba9afc207b27f6cedcd921"
+    },
+    {
+      "path": "Graphic/Human/Human3.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 5412,
+      "sha256": "0ad51ed9b535ddc3c0e17566be563f47bd2f4790f7b6496fcc7adc5c55a2b323"
+    },
+    {
+      "path": "Graphic/Human/Human4.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 25585,
+      "sha256": "13375e0fb470f9b824d0afa3e07d096dd7eb17dfeb876fe99ba15bf52ed1b6aa"
+    },
+    {
+      "path": "Graphic/Human/Human4.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 18016,
+      "sha256": "b9dd3ee4c1943aed0f60a3638c6a583e42aaa964a45029aaf1d28dba9bdcc91f"
+    },
+    {
+      "path": "Graphic/Human/Human4.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 12117,
+      "sha256": "1bd052cd6e426cf6970292940a8cb6bf72ae7c1e19e6731e7251dae48d8f2a8d"
+    },
+    {
+      "path": "Graphic/Human/Human5.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 15107,
+      "sha256": "e9e3e38fde0913bee154e29fa732d555c8793b57ba938b9ac3432ceeb2e003b0"
+    },
+    {
+      "path": "Graphic/Human/Human5.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 17112,
+      "sha256": "0ec04374f41c02608baf1e8a55d914897659778da071e8d9d740ac282d226879"
+    },
+    {
+      "path": "Graphic/Human/Human5.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 10776,
+      "sha256": "835b83c2abc31a95cb4b1124269c162ef2fca58c20f031c6ce73008d78f359a2"
+    },
+    {
+      "path": "Graphic/Human/Human6.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 5174,
+      "sha256": "55f32cfcc871ab9c95d550db146ea157a9d0c7a904ac2671d2f2f735bd343849"
+    },
+    {
+      "path": "Graphic/Human/Human6.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 47970,
+      "sha256": "c52a495cf61b51f24b358fc0d541e3180ba0bbc13510b86bef5304fae1a535b7"
+    },
+    {
+      "path": "Graphic/Human/Human6.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 8718,
+      "sha256": "411880340606f359533c12f68d9147124f17087e0df6abd4ef754d253ff9706e"
+    },
+    {
+      "path": "Graphic/Human/Human7.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 44191,
+      "sha256": "917b9dd81375ee1af80dddd198ce3da335b1efeb85ef991b2f1cdaf8a3eb4c71"
+    },
+    {
+      "path": "Graphic/Human/Human7.2.bmp",
+      "method": "-lh5-",
+      "bytes": 12344,
+      "crc16": 18830,
+      "sha256": "d90d7b08e63f27b464a509da7bb198b6485504fd52df62cd2678ac4842ab9c07"
+    },
+    {
+      "path": "Graphic/Human/Human7.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 43882,
+      "sha256": "0f022b3c9b2a19f1435cf38ad4104c8ad4317e3043604cba28de8d2eeb9c7a38"
+    },
+    {
+      "path": "Graphic/Human/Human8.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 60301,
+      "sha256": "ec5c3153393093bd88de192fc6cd0f8c2d424c70675736227e8d63efffb5cee9"
+    },
+    {
+      "path": "Graphic/Human/Human8.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 28348,
+      "sha256": "58587d2fbf8510242e81d5b84340aae498a32acdedf169384081ae19500946ea"
+    },
+    {
+      "path": "Graphic/Human/Human8.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 65207,
+      "sha256": "e50fbfac7e2248f0228a1094cc2ddd33ecc51d65cdd8d684581c4419e890308c"
+    },
+    {
+      "path": "Graphic/Human/Human9.1.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 38412,
+      "sha256": "49baf609fcd5580f31469b53d9977eb89cddca3f8ed782c7648eccc774ab5ae7"
+    },
+    {
+      "path": "Graphic/Human/Human9.2.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 26435,
+      "sha256": "7539b0f7db4b74554d6dd833c84fac07cb835e3c714e35f55c878ea69eb01b3d"
+    },
+    {
+      "path": "Graphic/Human/Human9.bmp",
+      "method": "-lh5-",
+      "bytes": 5172,
+      "crc16": 64064,
+      "sha256": "8f393d08c29681447219dbff40492e69704f623267edf359abba88caf238d72a"
+    },
+    {
+      "path": "Graphic/Kabe.bmp",
+      "method": "-lh5-",
+      "bytes": 2457728,
+      "crc16": 50729,
+      "sha256": "4e54d310b44c4fc2502be2f26bf23bbd9bbc27590252a5a8b729c2a5bac106e2"
+    },
+    {
+      "path": "Graphic/KeibaC.bmp",
+      "method": "-lh5-",
+      "bytes": 75654,
+      "crc16": 60761,
+      "sha256": "17b6d527922020c5f40d4168eb06728a1c342e4740b4b9e98ac1ea002dce8703"
+    },
+    {
+      "path": "Graphic/KeibaM.bmp",
+      "method": "-lh5-",
+      "bytes": 75654,
+      "crc16": 37914,
+      "sha256": "5860f105b8de619ee08014c7491b933accaa93ac08d5df4b1f3c6a52431fd762"
+    },
+    {
+      "path": "Graphic/Title.bmp",
+      "method": "-lh5-",
+      "bytes": 645316,
+      "crc16": 58957,
+      "sha256": "21cc12e89d63ae6a57fbaa074780d6214ab8a306e446f87449b74f3994bd0b26"
+    },
+    {
+      "path": "Sound/Bakuhatu.wav",
+      "method": "-lh5-",
+      "bytes": 14622,
+      "crc16": 45985,
+      "sha256": "7d16e0eb2d879bbd4c9df3d7d091d962b814de3f9b01f416c9acc41b9ffec3a0"
+    },
+    {
+      "path": "Sound/FIRE.wav",
+      "method": "-lh5-",
+      "bytes": 74122,
+      "crc16": 17522,
+      "sha256": "b31a7bec2cc7dae84aec8e111094fa63f261862d635c80b100704277b23aaae0"
+    },
+    {
+      "path": "Sound/GOLD.WAV",
+      "method": "-lh5-",
+      "bytes": 16406,
+      "crc16": 45052,
+      "sha256": "96b813fd59e240b3418bbf9d68a40a4a31e7258fda278e04be1b3524f0a099c0"
+    },
+    {
+      "path": "Sound/Open.wav",
+      "method": "-lh5-",
+      "bytes": 4074,
+      "crc16": 28964,
+      "sha256": "4d6de2d257be9026269e5bff8d1bf412b0270043422fe2a3d51d03e57037137a"
+    },
+    {
+      "path": "Sound/Up.wav",
+      "method": "-lh5-",
+      "bytes": 31810,
+      "crc16": 37392,
+      "sha256": "75fda0a9c654bfbfb0e8fe568917c9595309e0eff2c092176802548c48011fdf"
+    }
+  ],
+  "crc_verified": 45,
+  "payload_end": 2059310,
+  "trailing_zero_bytes": 1
+}

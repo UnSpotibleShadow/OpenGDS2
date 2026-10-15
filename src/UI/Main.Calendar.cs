@@ -23,8 +23,8 @@ public partial class Main
                 text=text.Replace("{maker}",maker).Replace("{hardware}",hardware is null ? Tr("UNKNOWN") : CatalogName(_activeCatalog,"HARDWARE",source,hardware.Name));
             }
             if (pending.PendingEvent==CalendarEvent.LoanRepayment)
-                text=text.Replace("{principal}",CalendarDialogueRules.LoanPrincipal(calendar!.Loans[pending.Index].OriginalType).ToString("N0"))
-                    .Replace("{repayment}",pending.Amount!.Value.ToString("N0"));
+                text=text.Replace("{principal}",CalendarDialogueRules.LoanPrincipal(calendar!.Loans[pending.Index].OriginalType).ToDisplayNumber())
+                    .Replace("{repayment}",pending.Amount!.Value.ToDisplayNumber());
             if (pending.Graduates is { } graduates) text=text.Replace("{count}",graduates.Candidates.Count.ToString());
             // These callers explicitly pass generic secretary/-2, unlike the
             // named portrait used by manual secretary advice.
@@ -39,7 +39,7 @@ public partial class Main
         {ShowGraduate(state,greeting);return true;}
         if(pending.PendingEvent==CalendarEvent.Awards && pending.Awards is { } awards){ShowAwards(state,awards);return true;}
         ClearContent();IdentifyManagementWindow("CalendarEventWindow");AddHeading(Tr("CALENDAR_TRANSACTIONS"),28);
-        AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
+        AddHeading($"{Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}",20);
         if (pending.Block is CalendarBlock block)
         {
             var message=new Label {Name="CalendarBlock",Text=Tr($"CALENDAR_BLOCK_{block}"),
@@ -61,7 +61,7 @@ public partial class Main
         else if (pending.PendingEvent is CalendarEvent kind)
         {
             AddHeading(Tr($"CALENDAR_EVENT_{kind}"),22);
-            if (kind==CalendarEvent.LoanRepayment) AddHeading($"¥{pending.Amount:N0}",22);
+            if (kind==CalendarEvent.LoanRepayment) AddHeading($"¥{DisplayNumbers.Format(pending.Amount)}",22);
             else
             {
                 int index=kind is CalendarEvent.HardwareDevelopment or CalendarEvent.HardwareRetiring or CalendarEvent.HardwareRetired ?
