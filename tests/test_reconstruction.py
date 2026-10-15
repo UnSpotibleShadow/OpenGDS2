@@ -110,6 +110,19 @@ class PublicTests(unittest.TestCase):
         with self.assertRaises(ParseError):verify_office(b'MZ'+bytes(200))
         with self.assertRaises(ParseError):verify_development(b'MZ'+bytes(200))
         with self.assertRaises(ParseError):verify_core_loop(b'MZ'+bytes(200))
+    def test_english_game_name_coverage(self):
+        import re
+        entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',(ROOT/'localization'/'en.po').read_text(),re.M))
+        keys=[f'CATALOG_RIVAL_{kind}_{i}' for kind,count in [('INITIAL_TITLE',30),('STAGED_TITLE',35),('COMPANY',10)] for i in range(count)]
+        keys += [f'CATALOG_TYPE_EXAMPLE_{i}_{j}' for i in range(51) for j in range(3)]
+        self.assertEqual(len(keys),228)
+        for key in keys:
+            self.assertTrue(entries.get(key),key)
+            self.assertTrue(entries[key].isascii(),key)
+        self.assertEqual(entries['CATALOG_RIVAL_INITIAL_TITLE_21'],entries['CATALOG_MANGA_TITLE_1'])
+        for stage,number in [(20,2),(23,3),(26,4),(29,5)]:
+            self.assertEqual(entries[f'CATALOG_RIVAL_STAGED_TITLE_{stage}'],entries['CATALOG_RIVAL_INITIAL_TITLE_13']+f' {number}')
+
     def test_localization_key_parity(self):
         import re
         keys=[]
@@ -118,7 +131,7 @@ class PublicTests(unittest.TestCase):
             ids=re.findall(r'^msgid "(.*)"$',text,re.M)
             self.assertEqual(len(ids),len(set(ids)),language+' duplicate msgid')
             keys.append(set(ids))
-        # Cancellation's original Japanese is imported locally, never bundled.
+        # Cancellation/review Japanese is imported locally, never bundled.
         # Keep the exception exact: a new untranslated authored key must fail.
         imported_cancellation={
             'CANCELLATION_EMPLOYEE_NAMED',
@@ -126,7 +139,8 @@ class PublicTests(unittest.TestCase):
             'CANCELLATION_DISCARD_SUMMARY',
             *(f'CANCELLATION_REACTION_{variant}' for variant in range(7)),
         }
-        self.assertEqual(keys[0]-keys[1],imported_cancellation)
+        imported_reviews={f'REVIEW_COMMENT_{band}_{variant}' for band,count in enumerate([9,8,11,9,8,4]) for variant in range(count)}
+        self.assertEqual(keys[0]-keys[1],imported_cancellation|imported_reviews)
         self.assertEqual(keys[1]-keys[0],set())
     def test_english_catalog_translation_coverage(self):
         import re

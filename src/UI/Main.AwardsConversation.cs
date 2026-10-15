@@ -29,7 +29,7 @@ public partial class Main
             if(text is null)continue;string winner="—";
             if(outcome?.ProductIndex is int own)winner=state.ReleasedGames.Single(p=>p.ProductIndex==own).Title+"\n"+state.Company.Name;
             else if(outcome?.RivalIndex is int id&&state.Competition is { } competition)
-            {var product=competition.Products[id];winner=product.Title+"\n"+(_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner)??"?");}
+            {var product=competition.Products[id];winner=RivalTitle(product)+"\n"+RivalCompany(product.Owner);}
             else if(outcome is not null)winner=Tr("AWARD_OTHER_COMPANY");
             text.Text=Tr("AWARD_"+category)+"\n"+winner;text.TooltipText=text.Text;
         }
@@ -72,7 +72,7 @@ public partial class Main
         {
             string title=Tr("UNKNOWN"),company=Tr("AWARD_OTHER_COMPANY");
             if(awards.WinningProduct is int own){title=state.ReleasedGames.Single(p=>p.ProductIndex==own).Title;company=state.Company.Name;}
-            else if(awards.WinningRival is int id&&state.Competition is { } competition){var product=competition.Products[id];title=product.Title;company=_activeCatalog?.RivalCompanies.ElementAtOrDefault(product.Owner)??Tr("UNKNOWN");}
+            else if(awards.WinningRival is int id&&state.Competition is { } competition){var product=competition.Products[id];title=RivalTitle(product);company=RivalCompany(product.Owner);}
             text=text.Replace("{title}",title).Replace("{company}",company);
         }
         int phase=awards.PresentationPhase,pageIndex=awards.PresentationPage;
@@ -111,7 +111,7 @@ public partial class Main
         int count=awards.AnimationProducts?.Count??1;
         while(awards.ReelIndex<count)
         {
-            if(awards.AnimationProducts is { } reel&&state.Competition is { } competition)text.Text=competition.Products[reel[awards.ReelIndex]].Title;
+            if(awards.AnimationProducts is { } reel&&state.Competition is { } competition)text.Text=RivalTitle(competition.Products[reel[awards.ReelIndex]]);
             else text.Text=Tr("AWARD_"+AwardService.Order[awards.CategoryIndex]);
             await ToSignal(GetTree().CreateTimer(.08),SceneTreeTimer.SignalName.Timeout);
             if(!ReferenceEquals(_session.Current,state)||!ReferenceEquals(_dialog,window)||!GodotObject.IsInstanceValid(window)||!ReferenceEquals(state.Calendar?.Pending?.Awards,awards))return;

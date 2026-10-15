@@ -4441,3 +4441,689 @@ msgstr "{facility}は既に設置されています。"
 
 msgid "FACILITY_SERVICE_FEE"
 msgstr "利用料：{fee}円"
+
+# Authored English names; Japanese uses the locally imported catalog.
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_0"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_1"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_2"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_3"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_4"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_5"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_6"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_7"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_8"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_9"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_10"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_11"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_12"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_13"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_14"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_15"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_16"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_17"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_18"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_19"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_20"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_21"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_22"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_23"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_24"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_25"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_26"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_27"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_28"
+msgstr ""
+
+msgid "CATALOG_RIVAL_INITIAL_TITLE_29"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_0"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_1"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_2"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_3"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_4"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_5"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_6"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_7"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_8"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_9"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_10"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_11"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_12"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_13"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_14"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_15"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_16"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_17"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_18"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_19"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_20"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_21"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_22"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_23"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_24"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_25"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_26"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_27"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_28"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_29"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_30"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_31"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_32"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_33"
+msgstr ""
+
+msgid "CATALOG_RIVAL_STAGED_TITLE_34"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_0"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_1"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_2"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_3"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_4"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_5"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_6"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_7"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_8"
+msgstr ""
+
+msgid "CATALOG_RIVAL_COMPANY_9"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_0_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_0_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_0_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_1_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_1_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_1_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_2_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_2_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_2_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_3_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_3_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_3_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_4_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_4_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_4_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_5_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_5_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_5_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_6_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_6_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_6_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_7_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_7_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_7_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_8_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_8_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_8_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_9_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_9_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_9_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_10_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_10_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_10_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_11_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_11_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_11_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_12_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_12_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_12_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_13_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_13_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_13_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_14_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_14_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_14_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_15_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_15_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_15_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_16_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_16_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_16_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_17_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_17_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_17_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_18_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_18_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_18_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_19_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_19_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_19_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_20_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_20_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_20_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_21_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_21_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_21_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_22_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_22_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_22_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_23_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_23_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_23_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_24_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_24_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_24_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_25_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_25_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_25_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_26_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_26_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_26_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_27_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_27_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_27_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_28_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_28_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_28_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_29_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_29_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_29_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_30_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_30_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_30_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_31_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_31_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_31_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_32_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_32_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_32_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_33_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_33_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_33_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_34_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_34_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_34_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_35_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_35_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_35_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_36_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_36_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_36_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_37_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_37_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_37_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_38_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_38_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_38_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_39_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_39_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_39_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_40_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_40_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_40_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_41_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_41_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_41_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_42_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_42_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_42_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_43_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_43_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_43_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_44_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_44_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_44_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_45_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_45_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_45_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_46_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_46_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_46_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_47_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_47_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_47_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_48_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_48_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_48_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_49_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_49_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_49_2"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_50_0"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_50_1"
+msgstr ""
+
+msgid "CATALOG_TYPE_EXAMPLE_50_2"
+msgstr ""

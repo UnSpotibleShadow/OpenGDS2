@@ -278,13 +278,13 @@ public partial class Main
                 int rank=1;
                 foreach(int id in ids)
                 {
-                    var p=state.Competition.Products[id];var row=rows[id];row.SetText(0,(rank++).ToString());row.SetText(1,p.Title);
+                    var p=state.Competition.Products[id];var row=rows[id];row.SetText(0,(rank++).ToString());row.SetText(1,RivalTitle(p));row.SetTooltipText(1,RivalTitle(p));
                     row.SetText(2,p.UnitsSold.ToDisplayNumber());row.SetTextAlignment(0,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
-                    row.SetText(3,p.Owner==-1?state.Company.Name:_activeCatalog?.RivalCompanies.ElementAtOrDefault(p.Owner)??Tr("NOT_YET_DECODED"));
+                    row.SetText(3,p.Owner==-1?state.Company.Name:RivalCompany(p.Owner));row.SetTooltipText(3,row.GetText(3));
                     if(selected==id)row.Select(0);
                 }
             }
-            Refresh();_clockRunning=true;_activeCatalog=_importer.LoadCatalog();_refreshCoreStatus=Refresh;
+            _activeCatalog=_importer.LoadCatalog();Refresh();_clockRunning=true;_refreshCoreStatus=Refresh;
         }
         NativeAction(canvas,"SalesChartRecords","GLOBAL_RANKINGS",new(210,258,143,25),()=>ShowRankings(state));NativeAction(canvas,"CloseSalesChart","BACK_TO_OFFICE",new(359,258,145,25),()=>ShowOfficeReconstruction(state));
     }

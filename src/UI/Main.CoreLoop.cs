@@ -145,7 +145,7 @@ public partial class Main
                     var type=catalog.GameTypes.Single(x=>x.SourceIndex==source);
                     int rowIndex=listIndex++;
                     var button=AddCheckpointOption(options,$"SelectType{rowIndex}",CatalogName(catalog,"TYPE",type.SourceIndex,type.Name),
-                        type.SelectionFee,type.SelectionPoints,group,type.ExampleTitles,$"TypeExamples{rowIndex}");
+                        type.SelectionFee,type.SelectionPoints,group,TypeExamples(catalog,type),$"TypeExamples{rowIndex}");
                     button.Pressed+=()=>
                     {
                         selected=source;chosen.Text=CatalogName(catalog,"TYPE",type.SourceIndex,type.Name);

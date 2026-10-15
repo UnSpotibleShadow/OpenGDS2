@@ -120,6 +120,43 @@ Test("interview rejects malformed saved phases, overlapping decisions and altere
     Check(ReleaseService.TryRelease(s,s.DevelopmentProjects[0],new OriginalCatalog(),"Blocked",5800,100,new FailureRandom())==ReleaseResult.NotReady);
     s.PendingProjectCancellation=new() {RoomIndex=0};Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(s)));
 });
+Test("game-title aliases preserve player names and require a matching imported rival",()=>
+{
+    var rival=new RivalProduct {Title="Authored rival",Owner=2};
+    var catalog=new OriginalCatalog {SourceHash=EmployeeDatabaseImporter.ExpectedHash,InitialRivalProducts=[rival.Copy()],
+        StagedRivalProducts=[new() {Product=new() {Title="Authored sequel",Owner=2}}],RivalCompanies=Enumerable.Range(0,10).Select(i=>$"Authored publisher {i}").ToList()};
+    string Translate(string key)=>key switch
+    {"CATALOG_RIVAL_INITIAL_TITLE_0"=>"English rival","CATALOG_RIVAL_STAGED_TITLE_0"=>"English sequel","CATALOG_RIVAL_COMPANY_2"=>"English publisher",_=>key};
+    Check(GameNameLocalization.RivalTitle(rival,catalog,true,Translate)=="English rival");
+    var saved=rival.Copy();saved.Demand=0;saved.UnitsSold=987654;
+    Check(GameNameLocalization.RivalTitle(saved,catalog,true,Translate)=="English rival");
+    Check(GameNameLocalization.RivalTitle(catalog.StagedRivalProducts[0].Product,catalog,true,Translate)=="English sequel");
+    Check(GameNameLocalization.RivalTitle(rival,catalog,false,Translate)==rival.Title);
+    Check(GameNameLocalization.RivalTitle(rival,catalog,true,key=>key)==rival.Title);
+    Check(GameNameLocalization.RivalTitle(rival,catalog,true,_=>" ")==rival.Title);
+    var own=rival.Copy();own.Owner=-1;own.OwnProduct=0;
+    Check(GameNameLocalization.RivalTitle(own,catalog,true,Translate)==rival.Title);
+    saved.Owner=3;Check(GameNameLocalization.RivalTitle(saved,catalog,true,Translate)==rival.Title);
+    saved.Owner=2;saved.Title="Custom title";Check(GameNameLocalization.RivalTitle(saved,catalog,true,Translate)==saved.Title);
+    Check(GameNameLocalization.RivalCompany(2,catalog,true,Translate,"Unknown")=="English publisher");
+    Check(GameNameLocalization.RivalCompany(2,catalog,false,Translate,"Unknown")==catalog.RivalCompanies[2]);
+    Check(GameNameLocalization.RivalCompany(99,catalog,true,Translate,"Unknown")=="Unknown");
+    catalog.SourceHash="other";
+    Check(GameNameLocalization.RivalTitle(rival,catalog,true,Translate)==rival.Title);
+    Check(GameNameLocalization.RivalCompany(2,catalog,true,Translate,"Unknown")==catalog.RivalCompanies[2]);
+    Check(GameNameLocalization.RivalTitle(rival,null,true,Translate)==rival.Title);
+    Check(rival.Title=="Authored rival"&&catalog.InitialRivalProducts[0].Title==rival.Title);
+});
+Test("example-title aliases keep unknown, Japanese and custom catalog text",()=>
+{
+    var type=new GameTypeDefinition {SourceIndex=7,ExampleTitles=["Authored game","Authored game two","Authored magazine"]};
+    var catalog=new OriginalCatalog {SourceHash=EmployeeDatabaseImporter.ExpectedHash,GameTypes=Enumerable.Range(0,51).Select(i=>new GameTypeDefinition {SourceIndex=i}).ToList()};
+    string Translate(string key)=>key=="CATALOG_TYPE_EXAMPLE_7_0"?"English game":key;
+    Check(GameNameLocalization.Examples(type,catalog,true,Translate).SequenceEqual(new[]{"English game","Authored game two","Authored magazine"}));
+    Check(GameNameLocalization.Examples(type,catalog,false,Translate).SequenceEqual(type.ExampleTitles));
+    catalog.GameTypes.Clear();Check(GameNameLocalization.Examples(type,catalog,true,Translate).SequenceEqual(type.ExampleTitles));
+    Check(type.ExampleTitles[0]=="Authored game");
+});
 Test("secretary badge English patch preserves the face and all mouth frames",()=>
 {
     byte[] source=Enumerable.Range(0,64*64*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])source.Clone();
@@ -6238,6 +6275,32 @@ if (args.Length == 2)
         Check(DevelopmentProjectService.TryAcceptNewPlan(s,c,0,11,0,"Original-backed software",new(25,25,25,25))==DevelopmentPlanningResult.Success);
         Check(s.DevelopmentProjects.Single().HardwareSourceIndex==11 && OwnHardwareService.Catalog(s,c).Hardware.Count==12 && c.Hardware.Count==11);
         SaveStore.Deserialize(SaveStore.Serialize(s));
+    });
+    Test("optional original game names have complete display-only English coverage",()=>
+    {
+        var catalog=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        var entries=System.Text.RegularExpressions.Regex.Matches(File.ReadAllText("localization/en.po"),"(?m)^msgid \"([^\"\\r\\n]+)\"\\r?\\nmsgstr \"([^\"\\r\\n]*)\"$")
+            .ToDictionary(m=>m.Groups[1].Value,m=>m.Groups[2].Value);
+        string Translate(string key)=>entries.GetValueOrDefault(key)??key;
+        string before=System.Text.Json.JsonSerializer.Serialize(catalog);
+        var rivals=catalog.InitialRivalProducts.Concat(catalog.StagedRivalProducts.Select(p=>p.Product)).ToArray();
+        Check(rivals.Length==65&&catalog.GameTypes.Count==51);
+        foreach(var rival in rivals)
+        {
+            string title=GameNameLocalization.RivalTitle(rival.Copy(),catalog,true,Translate);
+            Check(!string.IsNullOrWhiteSpace(title)&&title.All(c=>c<128)&&!title.StartsWith("CATALOG_"));
+            Check(GameNameLocalization.RivalTitle(rival,catalog,false,Translate)==rival.Title);
+            var own=rival.Copy();own.Owner=-1;own.OwnProduct=0;
+            Check(GameNameLocalization.RivalTitle(own,catalog,true,Translate)==rival.Title);
+        }
+        for(int owner=0;owner<10;owner++)Check(GameNameLocalization.RivalCompany(owner,catalog,true,Translate,"Unknown").All(c=>c<128));
+        foreach(var type in catalog.GameTypes)
+        {
+            var examples=GameNameLocalization.Examples(type,catalog,true,Translate);
+            Check(examples.Count==3&&examples.All(t=>!string.IsNullOrWhiteSpace(t)&&t.All(c=>c<128)&&!t.StartsWith("CATALOG_")));
+            Check(GameNameLocalization.Examples(type,catalog,false,Translate).SequenceEqual(type.ExampleTitles));
+        }
+        Check(before==System.Text.Json.JsonSerializer.Serialize(catalog));
     });
     Test("optional original import supports development release and real-catalog sales",()=>
     {
