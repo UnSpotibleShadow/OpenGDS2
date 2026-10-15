@@ -1,0 +1,605 @@
+{
+  "schema": 1,
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "facilities": [
+    {
+      "kind": "School",
+      "form": "fGMTenantGameS",
+      "load": "0x0098BE64",
+      "image_form_g_index": 13,
+      "asset": "Graphic/Embedded/Facility-School.png",
+      "resource": {
+        "file_offset": 576305,
+        "size": 12653,
+        "sha256": "eaacb87569ca7303da31e9693c7ece7e0f5f7ef919c068f3973bcf92f094da5c",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00984480"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B9B0"
+        }
+      ]
+    },
+    {
+      "kind": "HotSpring",
+      "form": "fGMTenantOnsen",
+      "load": "0x0099165C",
+      "image_form_g_index": 14,
+      "asset": "Graphic/Embedded/Facility-HotSpring.png",
+      "resource": {
+        "file_offset": 560660,
+        "size": 15595,
+        "sha256": "cceca1da302d3e2784d4a06565efa8ca567564a32df6fb84821d9f8456ba484d",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B960"
+        },
+        {
+          "name": "Command2",
+          "click": "0x0099E164"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00983D78"
+        }
+      ]
+    },
+    {
+      "kind": "Recycling",
+      "form": "fGMTenantReS",
+      "load": "0x0098C08C",
+      "image_form_g_index": 19,
+      "asset": "Graphic/Embedded/Facility-Recycling.png",
+      "resource": {
+        "file_offset": 285050,
+        "size": 6553,
+        "sha256": "47bf8f5c9b233e2de63f8b61bd8ffee5b0c33878bd4b3c0a526bac36481e869d",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00983FD0"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B820"
+        },
+        {
+          "name": "Command2",
+          "click": "0x0098DDC4"
+        }
+      ]
+    },
+    {
+      "kind": "TechnologySchool",
+      "form": "fGMTenantTechS",
+      "load": "0x0098E51C",
+      "image_form_g_index": 24,
+      "asset": "Graphic/Embedded/Facility-TechnologySchool.png",
+      "resource": {
+        "file_offset": 214511,
+        "size": 12436,
+        "sha256": "07be0e26edd5fcd77c8b06606ddba6f9c3c5d69d3dd0e4c4df4c47fb6d9cd88f",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097BA50"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00983B20"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00983C4C"
+        }
+      ]
+    },
+    {
+      "kind": "Casino",
+      "form": "fGMTenantCasino",
+      "load": "0x0098C2B4",
+      "image_form_g_index": 21,
+      "asset": "Graphic/Embedded/Facility-Casino.png",
+      "resource": {
+        "file_offset": 264950,
+        "size": 6768,
+        "sha256": "6a928c1043686d48feebf31977a43db60386cf3c874d759dda01ff928c5f57bd",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x0097A494"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B870"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00983EA4"
+        }
+      ]
+    },
+    {
+      "kind": "Lawyer",
+      "form": "fGMTenantBengo",
+      "load": "0x0098E034",
+      "image_form_g_index": 20,
+      "asset": "Graphic/Embedded/Facility-Lawyer.png",
+      "resource": {
+        "file_offset": 271768,
+        "size": 13232,
+        "sha256": "8e8c1a469ffad519b9620c6d5ea0bc9efd91bf2f5ba0c9f3c9b44bc5ab5a83bb",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B8C0"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00987810"
+        },
+        {
+          "name": "Command4",
+          "click": "0x00987678"
+        },
+        {
+          "name": "Command3",
+          "click": "0x009839F4"
+        }
+      ]
+    },
+    {
+      "kind": "MysteryLab",
+      "form": "fGMTenantNazoP",
+      "load": "0x0098E790",
+      "image_form_g_index": 17,
+      "asset": "Graphic/Embedded/Facility-MysteryLab.bmp",
+      "resource": {
+        "file_offset": 414639,
+        "size": 122936,
+        "sha256": "d52be360e966c72a2d5d4492788662ab2148ed562b8b3956057dff3cd49a0de6",
+        "format": "bmp",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B6E0"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00987B40"
+        },
+        {
+          "name": "Command3",
+          "click": "0x00984354"
+        }
+      ]
+    },
+    {
+      "kind": "ProductionLab",
+      "form": "fGMTenantSeisan",
+      "load": "0x0098E2A8",
+      "image_form_g_index": 22,
+      "asset": "Graphic/Embedded/Facility-ProductionLab.png",
+      "resource": {
+        "file_offset": 241444,
+        "size": 23456,
+        "sha256": "317f9a7818585cca0df10c1ac6ec4722a5ef1bf14fe4c685e0dd219f83fa8bb2",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command1",
+          "click": "0x0097B550"
+        },
+        {
+          "name": "Command2",
+          "click": "0x00988DAC"
+        },
+        {
+          "name": "Command3",
+          "click": "0x009840FC"
+        }
+      ]
+    },
+    {
+      "kind": "HardwareLab",
+      "form": "fGMTenantHard",
+      "load": "0x0098C4DC",
+      "image_form_g_index": 23,
+      "asset": "Graphic/Embedded/Facility-HardwareLab.png",
+      "resource": {
+        "file_offset": 226997,
+        "size": 14397,
+        "sha256": "784c5b2c116d285cce5e52465426ab8e8c138a6d18ab3cf75ceeb989db38b5c8",
+        "format": "gif",
+        "width": 256,
+        "height": 160
+      },
+      "buttons": [
+        {
+          "name": "Command3",
+          "click": "0x00984228"
+        },
+        {
+          "name": "Command1",
+          "click": "0x0097B690"
+        },
+        {
+          "name": "Command2",
+          "click": "0x009864AC"
+        }
+      ]
+    }
+  ],
+  "procedures": [
+    {
+      "object": "Module1",
+      "start": "0x009933DC",
+      "size": 708,
+      "sha256": "a9fd513a653091c9156bdb8e043792932a0c8dc76dca65ae783221ca222fada8"
+    },
+    {
+      "object": "fGMKikakuKaigi",
+      "start": "0x009A6DDC",
+      "size": 2080,
+      "sha256": "681dcb64611fa0368c2526e2da8eae03cd9c541023644a5e5ba51321d80e7352"
+    },
+    {
+      "object": "fGMKikakuKaigi",
+      "start": "0x009EFA40",
+      "size": 27016,
+      "sha256": "873bf218fd41a10dfbac8ff7e394f68ceb018df513a432033c8cfc5d088f936b"
+    },
+    {
+      "object": "fGMTenantOnsen",
+      "start": "0x0097B960",
+      "size": 28,
+      "sha256": "229d074337dda14c492c1592e52ea48fc24337bec1c18885604a0387d7d9a6c3"
+    },
+    {
+      "object": "fGMTenantOnsen",
+      "start": "0x0099E164",
+      "size": 1388,
+      "sha256": "8aaa1c8ebbb094220624bdaed7e4d9d92d9a7a2f675cbe08219a460103b6ddf1"
+    },
+    {
+      "object": "fGMTenantOnsen",
+      "start": "0x00983D78",
+      "size": 208,
+      "sha256": "c2b9c1bd67be96ab9762c83d78eb9d7317e4a84f049f8afabd2dd6590f4705c3"
+    },
+    {
+      "object": "fGMTenantOnsen",
+      "start": "0x0099165C",
+      "size": 632,
+      "sha256": "deed603e07be13f3d3faebd71808b6384a4cb7d45b135b628616ed7c62c72211"
+    },
+    {
+      "object": "fGMTenantGameS",
+      "start": "0x0097B9B0",
+      "size": 28,
+      "sha256": "17d7b3f20433ff300bb53d0a525c6f973c1b3a903f8f804a2f6123e4e4b2bdb5"
+    },
+    {
+      "object": "fGMTenantGameS",
+      "start": "0x00984480",
+      "size": 208,
+      "sha256": "d3ec2cae15a00510e510d6f5717338d8f685d09542756e496a90e89a48ee4dc4"
+    },
+    {
+      "object": "fGMTenantGameS",
+      "start": "0x0098BE64",
+      "size": 476,
+      "sha256": "f135fc821ee6cfc7a4bdc91d465adb5893bec1047d13126968ecaf639d850017"
+    },
+    {
+      "object": "fGMTenantReS",
+      "start": "0x0097B820",
+      "size": 28,
+      "sha256": "17d7b3f20433ff300bb53d0a525c6f973c1b3a903f8f804a2f6123e4e4b2bdb5"
+    },
+    {
+      "object": "fGMTenantReS",
+      "start": "0x0098DDC4",
+      "size": 496,
+      "sha256": "16a8089c259870eacb2dc4b7b02a67f53074681bb9c4cda1020f67334ced5fdf"
+    },
+    {
+      "object": "fGMTenantReS",
+      "start": "0x00983FD0",
+      "size": 208,
+      "sha256": "ca9925d110b3ec624a34a57c0897eba6a4bee854f6f00a74d5fca2f40373f971"
+    },
+    {
+      "object": "fGMTenantReS",
+      "start": "0x0098C08C",
+      "size": 476,
+      "sha256": "0b9d4935218b4df3df56f55ab664ff7c80c3b40aeaf954b4cb2010a1978b0a36"
+    },
+    {
+      "object": "fGMTenantTechS",
+      "start": "0x0097BA50",
+      "size": 28,
+      "sha256": "96edaa0727ebbc5cd066f8a97faed1685bde01051a0b7a026773067c937733f4"
+    },
+    {
+      "object": "fGMTenantTechS",
+      "start": "0x00983B20",
+      "size": 200,
+      "sha256": "8b46bdc771e5f12c9f8ab80978daf60b91904e38fbc59eed4fc9b07978455cc6"
+    },
+    {
+      "object": "fGMTenantTechS",
+      "start": "0x00983C4C",
+      "size": 208,
+      "sha256": "1ec35163c2168dd587b9fd679bb8880cb205b5c588d4dd6a557bf2b1ac5f4cf0"
+    },
+    {
+      "object": "fGMTenantTechS",
+      "start": "0x0098E51C",
+      "size": 552,
+      "sha256": "e4e193b2cd3147abfc374ee89367e3808663ebf74bdcb3cd951fbac8200aa807"
+    },
+    {
+      "object": "fGMTenantTechS",
+      "start": "0x00977BE4",
+      "size": 8,
+      "sha256": "b8b3eeca3f5e2798dbefb28e67190748890753d0f9141f7f7df05d9d7ad46206"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x009881C0",
+      "size": 328,
+      "sha256": "0d655bde2e56208df0574cd335c081b7aa6adf5ff24c791ccdb560f0fe89c94b"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x0097AE58",
+      "size": 24,
+      "sha256": "b56a023689beb509d70ce489d62549229ce627af3ded55f74b706d6a7a5c5421"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x0099F9A4",
+      "size": 1460,
+      "sha256": "de0db7228144911af2e6ae682a56f8cddcb493d2a5e723d028616ddb8eab3452"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x00980F7C",
+      "size": 132,
+      "sha256": "4a3f1aaf6b8391a2b7f2aa2d57eca4b622eff3c2fa952e0cc64518da03e6a1c6"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x0097E4E4",
+      "size": 80,
+      "sha256": "a76c27dc26b6034e6b5bd6b8205100b3c689d5c38c4e914580de77624d92f748"
+    },
+    {
+      "object": "fGMTenantTechSel",
+      "start": "0x0097E7B4",
+      "size": 80,
+      "sha256": "2a945b1ee1f3e010520a1cfd36ee5d27fa76d32f1d476b00fa3464205d7fe2c8"
+    },
+    {
+      "object": "fGMTenantCasino",
+      "start": "0x0097B870",
+      "size": 28,
+      "sha256": "17d7b3f20433ff300bb53d0a525c6f973c1b3a903f8f804a2f6123e4e4b2bdb5"
+    },
+    {
+      "object": "fGMTenantCasino",
+      "start": "0x00983EA4",
+      "size": 208,
+      "sha256": "d3ec2cae15a00510e510d6f5717338d8f685d09542756e496a90e89a48ee4dc4"
+    },
+    {
+      "object": "fGMTenantCasino",
+      "start": "0x0097A494",
+      "size": 24,
+      "sha256": "bd45d178a3fbcccd245353f85174f16fbe1a7398e3ad4a535f4c13827bb43147"
+    },
+    {
+      "object": "fGMTenantCasino",
+      "start": "0x0098C2B4",
+      "size": 476,
+      "sha256": "90a73d3a91bbb73d583eedc7a9f83ef235b3da2728013b35e416bb228bdd7a01"
+    },
+    {
+      "object": "fGMTenantCasino",
+      "start": "0x00977C8C",
+      "size": 8,
+      "sha256": "b8b3eeca3f5e2798dbefb28e67190748890753d0f9141f7f7df05d9d7ad46206"
+    },
+    {
+      "object": "fGMTenantBengo",
+      "start": "0x0097B8C0",
+      "size": 28,
+      "sha256": "17d7b3f20433ff300bb53d0a525c6f973c1b3a903f8f804a2f6123e4e4b2bdb5"
+    },
+    {
+      "object": "fGMTenantBengo",
+      "start": "0x00987810",
+      "size": 312,
+      "sha256": "21c53be0bfc977b0f1bfc4d58523bfe41364cf1fc1a4e33430ab103f00f0fe8c"
+    },
+    {
+      "object": "fGMTenantBengo",
+      "start": "0x009839F4",
+      "size": 208,
+      "sha256": "b6f447e136452d3606e45a1818ecfcc0167fe47f0b76309a7128123d5ebbd006"
+    },
+    {
+      "object": "fGMTenantBengo",
+      "start": "0x00987678",
+      "size": 312,
+      "sha256": "86249504a3360278ae339bcb10be59e118428708f18d7a3abeb7b4e17e41448a"
+    },
+    {
+      "object": "fGMTenantBengo",
+      "start": "0x0098E034",
+      "size": 552,
+      "sha256": "4a38f9585c9fad0b027ac14f1419fa88a42a84182142a55938214c0675551cfa"
+    },
+    {
+      "object": "Module2",
+      "start": "0x009E3830",
+      "size": 10216,
+      "sha256": "8ed78499bf69505d290087f05309d948c2bf63b1259a144df437f23201760243"
+    },
+    {
+      "object": "fGMTenantSeisan",
+      "start": "0x0097B550",
+      "size": 28,
+      "sha256": "7aa226ac88f68565b1e6a883e77b3e063c266a8c6c61a4e2334e06959f07f6a3"
+    },
+    {
+      "object": "fGMTenantSeisan",
+      "start": "0x00988DAC",
+      "size": 352,
+      "sha256": "cae0b49d0263db792a1b7345a92d08c8ecef4213fc3b31e6f0de50c94f3330e0"
+    },
+    {
+      "object": "fGMTenantSeisan",
+      "start": "0x009840FC",
+      "size": 208,
+      "sha256": "b9ce9a60135c5b72df23e137b4440afcf79d48ea9687383e94c8ebb4c4d05ea0"
+    },
+    {
+      "object": "fGMTenantSeisan",
+      "start": "0x0098E2A8",
+      "size": 552,
+      "sha256": "2363dab5fe9673165ae65a3173c3f7a9c4fe124c38e23454fcf67df15eaa4b02"
+    },
+    {
+      "object": "fGMTenantNazoP",
+      "start": "0x0097B6E0",
+      "size": 28,
+      "sha256": "17d7b3f20433ff300bb53d0a525c6f973c1b3a903f8f804a2f6123e4e4b2bdb5"
+    },
+    {
+      "object": "fGMTenantNazoP",
+      "start": "0x00987B40",
+      "size": 316,
+      "sha256": "dcc2458017474d2b7ed2ae66f92cac7316bbbaf6fd620336d7a39472536ca35f"
+    },
+    {
+      "object": "fGMTenantNazoP",
+      "start": "0x00984354",
+      "size": 208,
+      "sha256": "332ea03ea7234bd8cbc39647ef172416b6254e7e51a70127ae199709f425d7ea"
+    },
+    {
+      "object": "fGMTenantNazoP",
+      "start": "0x0098E790",
+      "size": 552,
+      "sha256": "fe463bec0daf3be75df4b9bb473bfe6016c5bee6c9594be27d1b3a5f94b47e5b"
+    },
+    {
+      "object": "fGMTenantNazoP",
+      "start": "0x00977B3C",
+      "size": 8,
+      "sha256": "b8b3eeca3f5e2798dbefb28e67190748890753d0f9141f7f7df05d9d7ad46206"
+    },
+    {
+      "object": "fGMTenantHard",
+      "start": "0x0097B690",
+      "size": 28,
+      "sha256": "bc17dd358fd4368e84e802a3848ca0aab5713c04f3241b0fcc60b8133a0ea2de"
+    },
+    {
+      "object": "fGMTenantHard",
+      "start": "0x009864AC",
+      "size": 272,
+      "sha256": "8b483875eaf4db4e2198d449419da4a836ff13339a29b898739d07a2cb84b1da"
+    },
+    {
+      "object": "fGMTenantHard",
+      "start": "0x00984228",
+      "size": 208,
+      "sha256": "f85b9e5d6b3575ac32c76442a8da8e949446fea8d6f2cf065fda9286c360dac6"
+    },
+    {
+      "object": "fGMTenantHard",
+      "start": "0x0098C4DC",
+      "size": 476,
+      "sha256": "518a9a458d47f51a30d130f2267ce1842ddfc1c945ec39fc4517c92451d88f62"
+    },
+    {
+      "object": "fGMTenantHardS",
+      "start": "0x00990B70",
+      "size": 600,
+      "sha256": "8204b3fb4af8a0761dc7cc800bffb484b8cb32640e76621f07f5eddc354c5e9e"
+    },
+    {
+      "object": "fGMTenantHardS",
+      "start": "0x0097ABF8",
+      "size": 24,
+      "sha256": "2bc31c38f2cea284e74b1d3205dae64d5ceaec2a08cc3f46066249e1d66a4b6e"
+    },
+    {
+      "object": "fGMTenantHardS",
+      "start": "0x00989144",
+      "size": 392,
+      "sha256": "41cd14339cc0a89715040cde0d63ef7e059c733da3773777a37ac337d65d51e6"
+    },
+    {
+      "object": "fGMTenantHardS",
+      "start": "0x00977FD4",
+      "size": 8,
+      "sha256": "4fb981683e1a55925d884db847aaf71eb941598b4e069f4bc961a1fbb5b765ed"
+    },
+    {
+      "object": "fGMTenantHardS",
+      "start": "0x00991BE8",
+      "size": 652,
+      "sha256": "a42ccd18cfba1a527665ac48c2a4c236fc3af1df0503b2e42b73964fcac3edd0"
+    },
+    {
+      "object": "fGMTenantCasinoSn",
+      "start": "0x00994780",
+      "size": 804,
+      "sha256": "c0eae9a4f0e00e06539283b40f87e88de175fe8227fa11f3cd480c9823d9843c"
+    },
+    {
+      "object": "fGMTenantCasinoSn",
+      "start": "0x00985B10",
+      "size": 296,
+      "sha256": "8d2f9069d7f3f50625e3ac16686058202c99c5dd6851e8e2a342d18f890b2281"
+    }
+  ]
+}
