@@ -1,5 +1,9 @@
 # Original facility conversation chains — #118 follow-up
 
+The corrections identified here are implemented in the subsequent
+[facility and promotion follow-up](facility-promotion-dialogue.md). This report
+records the investigation findings against PR #121.
+
 15 October 2026. Investigation requested after PR #121: the Lawyer is acceptable,
 but the other facilities need the same depth of original-first recovery.
 
@@ -11,8 +15,9 @@ facility window behind direct dialogue, rather than the Lawyer's separate
 business-meeting sequence. Extending the Lawyer's five pages to every facility
 would invent behavior.
 
-This follow-up changes research and verification only. The gameplay and UI gaps
-below remain to be implemented. Keep #118 and #95 open.
+This investigation changed research and verification only. The gaps below
+describe that baseline; use the linked implementation report for current status.
+Keep #118 and #95 open.
 
 ## Evidence and artwork
 

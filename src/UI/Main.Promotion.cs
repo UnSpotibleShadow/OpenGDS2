@@ -47,22 +47,24 @@ public partial class Main
         var picture=OriginalSceneArtwork.Promotion(meeting.MediaIndex);
         if(meeting.Callbacks>=27)
         {
-            string text=string.Format(DisplayNumbers.Provider,Tr("PROMOTION_FINISHED_DIALOGUE"),Tr($"PROMOTION_MEDIA_{meeting.MediaIndex}"),meeting.Gain);
+            var project=state.DevelopmentProjects.Single(p=>p.RoomIndex==meeting.RoomIndex);
+            string text=FacilityText("PROMOTION_NATIVE_RESULT_"+meeting.MediaIndex).Replace("{title}",project.Title).Replace("{gain}",meeting.Gain?.ToDisplayNumber()??"?");
             ShowConversation(Tr("PAID_PROMOTION"),[new(SecretaryCaption(state.SecretarySourceIndex),text,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
             {
                 if(!ReferenceEquals(state.PendingPromotion,meeting)||!PromotionService.Acknowledge(state))return;
                 ClosePromotionSelector();ShowProject(state,state.DevelopmentProjects.Single(p=>p.RoomIndex==meeting.RoomIndex));
             },scene:picture);return true;
         }
-        ClearContent();var canvas=NativeWindow("PromotionMeetingWindow",Tr($"PROMOTION_MEDIA_{meeting.MediaIndex}"),new(256,160));
+        ClearContent();var canvas=NativeWindow("PromotionMeetingWindow",FacilityText("PROMOTION_ACTIVITY_"+meeting.MediaIndex),new(256,184));
         NativePlace(canvas,Picture("PromotionMeetingPicture",picture,new(256,160)),new(0,0,256,160));
+        NativeText(canvas,"PromotionActivity",FacilityText("PROMOTION_ACTIVITY_"+meeting.MediaIndex),new(4,161,248,22),10).ClipText=true;
         _dialog!.CloseRequested=()=>{};AdvancePromotionMeeting(state,meeting,_dialog);return true;
     }
     private async void AdvancePromotionMeeting(GameState state,PromotionMeetingState meeting,DesktopWindow window)
     {
         while(meeting.Callbacks<27)
         {
-            await ToSignal(GetTree().CreateTimer(.025),SceneTreeTimer.SignalName.Timeout);
+            await ToSignal(GetTree().CreateTimer(.1),SceneTreeTimer.SignalName.Timeout);
             if(!ReferenceEquals(_session.Current,state)||!ReferenceEquals(state.PendingPromotion,meeting)||
                 !ReferenceEquals(_dialog,window)||!GodotObject.IsInstanceValid(window)||!window.IsInsideTree())return;
             PromotionService.Advance(state,_session.Random);

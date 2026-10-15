@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=17,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=18,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int poachPool=0x606824;
         int[] rivalMessages=[0x40,0x41,0x42,0x44,0x45,0x46,0x47,0x48,0x49,0x4A];
         for(int i=0;i<10;i++)result.Entries.Add("POACHING_RIVAL_MESSAGE_"+i,pe.String(poachPool,rivalMessages[i]));
@@ -68,6 +68,38 @@ public static class OriginalDialogueImporter
         result.Entries.Add("NEW_EMPLOYEE",pe.String(pool,0x10));
         const int meetingPool=0x5FAFCC;
         const int periodicPool=0x5F99AC;
+        const int springPool=0x5F6354,recyclePool=0x5F1A68,productionPool=0x5F4400,mysteryPool=0x5F5D08;
+        result.Entries.Add("FACILITY_INTRO_HotSpring",pe.String(springPool,8)+"{fee}"+pe.String(springPool,9));
+        result.Entries.Add("FACILITY_QUESTION_HotSpring",pe.String(springPool,0xB));
+        result.Entries.Add("FACILITY_DONE_HotSpring",pe.String(springPool,0x14));
+        for(int i=0;i<5;i++)result.Entries.Add("HOT_SPRING_REACTION_"+i,pe.String(springPool,0x1C+i));
+        result.Entries.Add("FACILITY_INTRO_Recycling",pe.String(recyclePool,0xA)+"{stock}"+pe.String(recyclePool,0xB));
+        result.Entries.Add("FACILITY_QUESTION_Recycling",pe.String(recyclePool,0xD));
+        result.Entries.Add("FACILITY_DONE_Recycling",pe.String(recyclePool,0x10)+"{amount}"+pe.String(recyclePool,0x11));
+        result.Entries.Add("FACILITY_INTRO_ProductionLab",pe.String(productionPool,8)+"{fee}"+pe.String(productionPool,9));
+        result.Entries.Add("FACILITY_QUESTION_ProductionLab",pe.String(productionPool,0xB));
+        result.Entries.Add("FACILITY_DONE_ProductionLab",pe.String(productionPool,0xF)+"{before}"+pe.String(productionPool,0x11)+"{after}"+pe.String(productionPool,0x12));
+        result.Entries.Add("FACILITY_INTRO_MysteryLab",pe.String(mysteryPool,0xB)+"{fee}"+pe.String(mysteryPool,0xC));
+        result.Entries.Add("FACILITY_QUESTION_MysteryLab",pe.String(mysteryPool,0xD));
+        result.Entries.Add("FACILITY_MYSTERY_BUSY",pe.String(mysteryPool,6));
+        result.Entries.Add("FACILITY_DONE_TechnologySchool","{name}"+pe.String(0x5F319C,9)+"{capacity}"+pe.String(0x5F319C,0xA));
+        result.Entries.Add("FACILITY_NO_EMPLOYEES",pe.String(springPool,0x10));
+        result.Entries.Add("FACILITY_NO_FUNDS",pe.String(springPool,0x12));
+        result.Entries.Add("FACILITY_ALREADY_OWNED",pe.String(0x5F4A34,7)+"{facility}"+pe.String(0x5F4A34,9));
+        result.Entries.Add("FACILITY_HARDWARE_LIMIT",pe.String(0x5F14C4,6));
+        result.Entries.Add("FACILITY_HARDWARE_BUSY",pe.String(0x5F14C4,9));
+        result.Entries.Add("FACILITY_HARDWARE_ROOM_BUSY",pe.String(0x5F8BB0,8)+"{room}"+pe.String(0x5F8BB0,9));
+        result.Entries.Add("FACILITY_CASINO_NO_COINS",pe.String(0x5EA164,0xC));
+        result.Entries.Add("FACILITY_CASINO_COINS_QUESTION",pe.String(0x5EA164,0x17));
+        result.Entries.Add("FACILITY_CLOSE_INTRO",pe.String(springPool,0x21)+"{facility}"+pe.String(springPool,0x25));
+        result.Entries.Add("FACILITY_CLOSE_QUESTION","{facility}"+pe.String(springPool,0x26));
+        int[] promotionResults=[0x66,0x69,0x6A,0x6B,0x6C,0x6D];
+        for(int i=0;i<6;i++)
+        {
+            result.Entries.Add("PROMOTION_NATIVE_RESULT_"+i,pe.String(meetingPool,promotionResults[i])+"{title}"+pe.String(meetingPool,0x67)+"{gain}"+pe.String(meetingPool,0x68));
+            result.Entries.Add("PROMOTION_ACTIVITY_"+i,pe.String(meetingPool,0x50+i));
+        }
+
         for(int i=0;i<5;i++)result.Entries.Add("INTERVIEW_REPORTER_"+i,pe.String(meetingPool,0xA2+i));
         result.Entries.Add("INTERVIEW_SPEAKER",pe.String(meetingPool,0xA7));
         result.Entries.Add("INTERVIEW_INTRO",pe.String(periodicPool,0xA1)+"{room}"+pe.String(periodicPool,0x177)+"{magazine}"+pe.String(periodicPool,0x179));

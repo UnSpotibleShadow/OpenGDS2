@@ -41,24 +41,34 @@ func all_facility_closures() -> void:
         await dispose()
 
 func service_cases() -> void:
-    for kind in [1,2,3,6]:
+    for kind in [1,2,3,6,7]:
         var v=complete_value();v.State.DevelopmentProjects=[];v.State.Calendar.OriginalSlots0444=[kind,-1,-1];v.State.SecretarySourceIndex=0
         if kind==2:
             var stock=product();stock.ReviewPending=false;stock.ReviewDisplayCallbacks=90;stock.Recall={"OriginalState":1,"WeeksRemaining":0};v.State.ReleasedGames=[stock]
         await pause_load(v);await facility_input()
-        var action={1:"UseHotSpring0",2:"RecycleStock0",3:"TechnologyRoster0",6:"StartMysteryExperiment0"}[kind]
+        var action={1:"UseHotSpring0",2:"RecycleStock0",3:"TechnologyRoster0",6:"StartMysteryExperiment0",7:"ExpandProduction0"}[kind]
         await press_node(action)
         if kind==3:
             var roster=main.find_child("FacilityStudyTable",true,false);roster.get_root().get_first_child().select(0);roster.item_selected.emit();await process_frame
             await press_node("StudyCapacity0")
-        check(main.find_child("ConversationWindow",true,false)!=null,"Facility service begins with secretary: "+str(kind))
-        await award_page();await press_node("ConfirmFacilityService");await press_node("ToolbarSAVE_GAME")
+        check(main.find_child("ConversationWindow",true,false)!=null,"Facility-specific service conversation: "+str(kind))
+        if kind!=3:
+            await capture_desktop("facility-intro-"+str(kind))
+            await award_page();await press_node("ConfirmFacilityService")
+        else:check(main.find_child("FacilityConfirmationWindow",true,false)==null,"Study applies directly from its employee selector")
+        await press_node("ToolbarSAVE_GAME")
         var result=saved()
-        var cost={1:8000000,2:-500000,3:40000000,6:25000000}[kind]
+        var cost={1:8000000,2:-500000,3:40000000,6:25000000,7:10000000}[kind]
         check(result.Money==v.State.Money-cost,"Facility source service amount: "+str(kind))
         if kind!=6:
-            await press_node("ToolbarLOAD_GAME");await award_page();await press_node("ToolbarSAVE_GAME")
-            check(saved().Money==result.Money and saved().PendingFacilityReceipt==null,"Service receipt cannot repeat payment: "+str(kind))
+            await capture_desktop("facility-result-"+str(kind))
+            if kind==7:check(result.PendingFacilityReceipt.CapacityBefore==v.State.Company.ProductionCapacity,"Production keeps its old capacity for the result")
+            await press_node("ToolbarLOAD_GAME")
+            for page in range(12):
+                await award_page();await press_node("ToolbarSAVE_GAME")
+                check(saved().Money==result.Money,"Facility page never repeats payment")
+                if saved().PendingFacilityReceipt==null:break
+            check(saved().PendingFacilityReceipt==null,"Facility chain completes: "+str(kind))
         else:check(result.MysteryLab.Progress>0,"Mystery experiment remains active after its confirmation")
         await dispose()
     var v=complete_value();v.State.DevelopmentProjects=[];v.State.Calendar.OriginalSlots0444=[5,-1,-1];v.State.SecretarySourceIndex=0;v.State.SalesFee1=1500;v.State.SalesFee2=1500

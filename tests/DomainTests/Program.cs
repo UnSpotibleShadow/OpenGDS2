@@ -2468,6 +2468,54 @@ Test("hot spring ownership receipt and reload prevent repeated spending and clea
     var session=new GameSession();session.Restore(s);session.TickOffice();Check(SaveStore.Serialize(s)==before);
     s.PendingFacilityReceipt=null;Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
 });
+Test("hot spring chain consumes eager source draws and saves each named reaction without repeat payments",()=>
+{
+    var (state,_)=CalendarFixture(money:100_000_000);state.Calendar!.OriginalSlots0444[0]=1;
+    state.SourceUpperBound=6;state.EmployeeSources=[];state.Employees=[];
+    for(int i=0;i<6;i++)
+    {
+        var source=Worker(source:i);source.Stress=80;
+        state.EmployeeSources.Add(new(){SourceIndex=i,GateValue=i%3==0?1:0,Employee=source});
+        if(i%3==0){var worker=Worker(source:i);worker.Stress=80;worker.Office=null;state.Employees.Add(worker);}
+    }
+    var random=new GreetingRandom(.2f);
+    Check(FacilityService.HotSpring(state,0,random)==FacilityResult.Success && random.GreetingCalls==8);
+    Check(state.PendingFacilityReceipt!.Reactions!.Select(r=>r.SourceIndex).SequenceEqual(new[]{0,3}) && state.PendingFacilityReceipt.Reactions!.All(r=>r.Variant==1));
+    Check(state.Money==92_000_000 && state.Employees.All(e=>e.Stress==0));
+    for(int page=0;page<3;page++)
+    {
+        state=SaveStore.Deserialize(SaveStore.Serialize(state));Check(state.PendingFacilityReceipt!.PageIndex==page && state.Money==92_000_000);
+        Check(FacilityService.HotSpring(state,0,random)==FacilityResult.EventPending && random.GreetingCalls==8);
+        Check(FacilityService.AcknowledgeReceipt(state));
+    }
+    Check(state.PendingFacilityReceipt is null && !FacilityService.AcknowledgeReceipt(state) && state.Money==92_000_000);
+});
+Test("hot spring large staff has no four-speaker cap and incomplete source history does not invent draws",()=>
+{
+    foreach(float draw in new[]{0f,.9f})
+    {
+        var (state,_)=CalendarFixture(money:100_000_000);state.Calendar!.OriginalSlots0444[0]=1;state.SourceUpperBound=6;state.EmployeeSources=[];state.Employees=[];
+        for(int i=0;i<6;i++){state.EmployeeSources.Add(new(){SourceIndex=i,GateValue=1,Employee=Worker(source:i)});state.Employees.Add(Worker(source:i));}
+        var random=new GreetingRandom(draw);Check(FacilityService.HotSpring(state,0,random)==FacilityResult.Success);
+        Check(state.PendingFacilityReceipt!.Reactions!.Count==(draw==0?6:0) && random.GreetingCalls==(draw==0?12:6));
+        state.PendingFacilityReceipt=null;state.SourceUpperBound=7;long money=state.Money!.Value;int calls=random.GreetingCalls;
+        Check(FacilityService.HotSpring(state,0,random)==FacilityResult.StateUnknown && random.GreetingCalls==calls && state.Money==money);
+    }
+});
+Test("facility chain snapshots reject invalid pages speakers owner slots and changed capacity",()=>
+{
+    var (state,_)=CalendarFixture();state.Calendar!.OriginalSlots0444[0]=1;
+    state.PendingFacilityReceipt=new(){Kind=FacilityKind.HotSpring,Amount=8_000_000,SourceSlot=0,Reactions=[new(0,"Authored staff",1,2)],PageIndex=2};
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));state.PendingFacilityReceipt.PageIndex=1;
+    Check(SaveStore.Deserialize(SaveStore.Serialize(state)).PendingFacilityReceipt!.PageIndex==1);
+    state.PendingFacilityReceipt.Reactions.Add(new(0,"Duplicate",1,0));Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.PendingFacilityReceipt.Reactions=[];state.PendingFacilityReceipt.PageIndex=0;state.PendingFacilityReceipt.SourceSlot=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.Calendar.OriginalSlots0444[0]=7;state.Company.ProductionCapacity=100;
+    state.PendingFacilityReceipt=new(){Kind=FacilityKind.ProductionLab,Amount=10_000_000,Gain=15,CapacityBefore=84,SourceSlot=0};Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.PendingFacilityReceipt.CapacityBefore=85;Check(SaveStore.Deserialize(SaveStore.Serialize(state)).PendingFacilityReceipt!.CapacityBefore==85);
+    state.PendingFacilityReceipt=new(){Kind=FacilityKind.HotSpring,Amount=8_000_000};
+    state=SaveStore.Deserialize(SaveStore.Serialize(state));Check(state.PendingFacilityReceipt!.Reactions is null);FacilityService.AcknowledgeReceipt(state);Check(state.PendingFacilityReceipt is null);
+});
 Test("recycling zeroes stock and pays exactly once without changing sales or production history",()=>
 {
     var (s,_)=CalendarFixture();s.Calendar!.OriginalSlots0444[0]=2;
@@ -6255,7 +6303,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==334 && dialogue.SchemaVersion==17 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==374 && dialogue.SchemaVersion==18 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));

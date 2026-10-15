@@ -61,7 +61,9 @@ The shared facility presentation above did not complete original conversation
 parity. The owner requested deeper recovery after reviewing PR #121.
 [The facility chain audit](facility-conversation-chains.md) identifies missing
 hot-spring reactions, early owner closure and facility-specific child/refusal/return
-routes. Those gaps remain unimplemented; the Lawyer is accepted by the owner.
+routes. The subsequent [facility/promotion correction](facility-promotion-dialogue.md)
+implements those gaps and all six promotion message variants. The Lawyer remains
+accepted by the owner; native runtime acceptance still needs review.
 
 ## Magazine interview gameplay and persistence
 

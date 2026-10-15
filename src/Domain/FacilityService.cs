@@ -4,6 +4,8 @@ public enum FacilityKind { School, HotSpring, Recycling, TechnologySchool, Casin
 public enum FacilityResult { Success, CalendarUnknown, EventPending, InvalidSlot, SlotOccupied, AlreadyOwned, MoneyUnknown, InsufficientFunds, NotOwned, StateUnknown, NoEmployees, NotEmployed, ExperimentRunning }
 
 /// <summary>Authored result snapshot; applying a service and acknowledging it are separate operations.</summary>
+public sealed record FacilityStaffReaction(int SourceIndex,string Name,int? PortraitId,int Variant);
+
 public sealed class FacilityReceipt
 {
     [System.Text.Json.Serialization.JsonRequired]
@@ -12,6 +14,11 @@ public sealed class FacilityReceipt
     public long Amount {get;set;}
     public int? Gain {get;set;}
     public string? EmployeeName {get;set;}
+    public int? SourceSlot {get;set;}
+    public int? CapacityBefore {get;set;}
+    public int PageIndex {get;set;}
+    // Null means a pre-chain receipt. Never roll historical reactions on load.
+    public List<FacilityStaffReaction>? Reactions {get;set;}
 }
 
 /// <summary>fGMTenaSel, fGMTenantReS, fGMTenantTechSel and fGMTenantSeisan verified transactions.</summary>
@@ -66,8 +73,41 @@ public static class FacilityService
         var care=EmployeeCareService.TryHotSpring(state);
         if (care!=EmployeeCareResult.Success) return care switch
         {EmployeeCareResult.NoEmployees=>FacilityResult.NoEmployees,EmployeeCareResult.MoneyUnknown=>FacilityResult.MoneyUnknown,_=>FacilityResult.InsufficientFunds};
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot};
         return FacilityResult.Success;
+    }
+    public static FacilityResult HotSpring(GameState state,int slot,Random random)
+    {
+        ArgumentNullException.ThrowIfNull(random);
+        var result=CheckService(state,slot,FacilityKind.HotSpring);if(result!=FacilityResult.Success)return result;
+        if(state.Employees.Count==0)return FacilityResult.NoEmployees;
+        if(state.Money is not long money)return FacilityResult.MoneyUnknown;
+        if(money<EmployeeCareService.HotSpringCost)return FacilityResult.InsufficientFunds;
+        if(state.SourceUpperBound is not int upper || upper<=0 || state.EmployeeSources.Count!=upper ||
+            !state.EmployeeSources.Select(x=>x.SourceIndex).Order().SequenceEqual(Enumerable.Range(0,upper)))return FacilityResult.StateUnknown;
+        var employed=state.EmployeeSources.Where(x=>x.GateValue==1).ToArray();
+        if(employed.Length!=state.Employees.Count || !employed.Select(x=>x.SourceIndex).Order().SequenceEqual(state.Employees.Select(x=>x.SourceIndex??-1).Order()))return FacilityResult.StateUnknown;
+        var finance=FinancialRules.Prepare(state,-EmployeeCareService.HotSpringCost);
+        var reactions=new List<FacilityStaffReaction>();
+        foreach(var row in state.EmployeeSources.OrderBy(x=>x.SourceIndex))
+        {
+            // 0099E164 +028C..02F7: eager draw even for non-employees and <=4 staff.
+            int gate=CompanyEventService.Draw(random,2);
+            if(row.GateValue==1 && (employed.Length<=4 || gate==0))
+                reactions.Add(new(row.SourceIndex,row.Employee.Name,row.Employee.PortraitId,CompanyEventService.Draw(random,5)));
+        }
+        finance.Commit(state);
+        foreach(var employee in state.Employees)employee.Stress=0;
+        foreach(var row in employed)row.Employee.Stress=0;
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot,Reactions=reactions};
+        return FacilityResult.Success;
+    }
+    public static bool AcknowledgeReceipt(GameState state)
+    {
+        if(state.PendingFacilityReceipt is not { } receipt)return false;
+        if(receipt.PageIndex<(receipt.Reactions?.Count??0))receipt.PageIndex++;
+        else state.PendingFacilityReceipt=null;
+        return true;
     }
     public static FacilityResult Recycle(GameState state,int slot)
     {
@@ -76,7 +116,7 @@ public static class FacilityService
         long stock=StockForRecycling(state),amount=checked(stock*RecyclingPrice);
         var finance=FinancialRules.Prepare(state,amount);
         foreach (var product in state.ReleasedGames) product.Stock=0;
-        finance.Commit(state);state.PendingFacilityReceipt=new() {Kind=FacilityKind.Recycling,Amount=amount};
+        finance.Commit(state);state.PendingFacilityReceipt=new() {Kind=FacilityKind.Recycling,Amount=amount,SourceSlot=slot};
         return FacilityResult.Success;
     }
     public static long StockForRecycling(GameState state)
@@ -115,7 +155,7 @@ public static class FacilityService
         if (money<TechnologyStudyCost) return FacilityResult.InsufficientFunds;
         int next=checked(capacity+1);var finance=FinancialRules.Prepare(state,-TechnologyStudyCost);
         employee.RawParameter34=next;sources[0].Employee.RawParameter34=next;finance.Commit(state);
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.TechnologySchool,Amount=TechnologyStudyCost,Gain=next,EmployeeName=employee.Name};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.TechnologySchool,Amount=TechnologyStudyCost,Gain=next,EmployeeName=employee.Name,SourceSlot=slot};
         return FacilityResult.Success;
     }
     public static FacilityResult ExpandProduction(GameState state,int slot,Random random)
@@ -129,7 +169,7 @@ public static class FacilityService
         long cash=checked(money-ProductionExpansionCost);
         // This branch neither checks affordability nor calls the accumulator.
         state.Company.ProductionCapacity=next;state.Money=cash;
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.ProductionLab,Amount=ProductionExpansionCost,Gain=gain};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.ProductionLab,Amount=ProductionExpansionCost,Gain=gain,CapacityBefore=capacity,SourceSlot=slot};
         return FacilityResult.Success;
     }
     public static void ValidateReceipt(FacilityReceipt receipt)
@@ -142,6 +182,13 @@ public static class FacilityService
             FacilityKind.ProductionLab=>receipt.Amount==ProductionExpansionCost && receipt.Gain is >=15 and <=19 && receipt.EmployeeName is null,
             _=>false
         };
+        if(receipt.SourceSlot is <0 or >2 || receipt.CapacityBefore is <0 ||
+            receipt.Kind!=FacilityKind.ProductionLab && receipt.CapacityBefore is not null ||
+            receipt.CapacityBefore is int before && (long)before+receipt.Gain>int.MaxValue ||
+            receipt.PageIndex<0 || receipt.PageIndex>(receipt.Reactions?.Count??0) ||
+            receipt.Kind!=FacilityKind.HotSpring && receipt.Reactions is not null ||
+            receipt.Reactions is { } reactions && (reactions.Any(r=>r is null || r.SourceIndex<0 || string.IsNullOrWhiteSpace(r.Name) || r.PortraitId is not (null or >=1 and <=10) || r.Variant is <0 or >4) ||
+                !reactions.Select(r=>r.SourceIndex).SequenceEqual(reactions.Select(r=>r.SourceIndex).Distinct().Order())))valid=false;
         if (!valid) throw new InvalidDataException("Invalid facility result.");
     }
 }
