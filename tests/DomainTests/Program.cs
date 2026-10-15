@@ -127,13 +127,26 @@ Test("secretary badge English patch preserves the face and all mouth frames",()=
     for(int y=0;y<64;y++)for(int x=0;x<64;x++)if(y<52||y>=62||x<18||x>=48)
         for(int c=0;c<3;c++)Check(patch[(y*64+x)*3+c]==copy[(y*64+x)*3+c]);
 });
-Test("television English patch changes only its monitor panel",()=>
+Test("television English patch stays inside the original CRT glass",()=>
 {
     byte[] pixels=Enumerable.Range(0,256*152*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])pixels.Clone();
     var patch=LocalSceneCaptionRules.PatchTelevision(pixels);Check(pixels.SequenceEqual(copy)&&!patch.SequenceEqual(copy));
+    // Independent half-plane bounds from the original glass corners, one pixel
+    // outside the authored inset. This catches the old paint below the CRT.
+    (int X,int Y)[] glass=[(84,31),(178,38),(174,94),(87,85)];
     for(int y=0;y<152;y++)for(int x=0;x<256;x++)
-        if(y<34||y>108||x<85-(y-34)/37||x>179-(y-34)/7)
-            for(int c=0;c<3;c++)Check(patch[(y*256+x)*3+c]==copy[(y*256+x)*3+c]);
+    {
+        bool inside=true;
+        for(int edge=0;edge<4;edge++)
+        {
+            var a=glass[edge];var b=glass[(edge+1)%4];
+            if((b.X-a.X)*(y-a.Y)-(b.Y-a.Y)*(x-a.X)<0)inside=false;
+        }
+        if(!inside)for(int c=0;c<3;c++)Check(patch[(y*256+x)*3+c]==copy[(y*256+x)*3+c]);
+    }
+    foreach(var (x,y) in new[]{(85,100),(120,105),(170,102),(84,50),(177,75),(130,95)})
+        for(int c=0;c<3;c++)Check(patch[(y*256+x)*3+c]==copy[(y*256+x)*3+c]);
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchTelevision(new byte[256*160*3]));
 });
 GameState PoachingFixture(bool defensive=false)
 {

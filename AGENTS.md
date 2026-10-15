@@ -1,3 +1,13 @@
+# Current task — Television screen patch correction
+
+Owner requests a second pass on the TV artwork after the prior patch painted
+outside the CRT. Branch `codex/television-patch-bounds` starts at
+`cd4a8f89abc6c32af1336e9ae3251f54eac8d2c1`. Recovery records:
+`/workspace/scratch/television-patch-v2/`. Implementation and verification complete: 562 domain checks, clean app build,
+and real English/Japanese/override renders pass. Native pixel comparison confirms
+zero changes outside the CRT glass; only the TV cache is invalidated. Standing verified-PR merge authorization
+continues; keep #118/#95 open. No export/release or unchanged Wine retry.
+
 # Current task — facility and six-media promotion fixes
 
 Owner explicitly authorizes fixing the recovered facility chains and all six
