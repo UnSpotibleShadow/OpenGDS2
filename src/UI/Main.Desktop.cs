@@ -41,6 +41,9 @@ public partial class Main
     private void DestroyDesktop()
     {
         CloseAwardBoard();
+        ClosePromotionSelector();
+        CloseExhibitionBoard();
+        CloseFacilityOwner();
         _music?.SetMeetingPhase(-1);
         RememberConversationPosition();
         CloseConversationScene();
@@ -141,7 +144,7 @@ public partial class Main
             var wallpaper = new ColorRect { Color = new Color(0.85f, 0.8f, 0.8f), MouseFilter = MouseFilterEnum.Ignore };
             wallpaper.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect); _workspace.AddChild(wallpaper);
         }
-        var office = ChildWindow("OfficeWindow", state.Company.Name, new Vector2(4, 4), new Vector2(472, 318), false);
+        var office = ChildWindow("OfficeWindow", state.Company.Name, new Vector2(4, 4), new Vector2(472, 320), false);
         _officeRenderer = OriginalAssetStore.LoadOfficeRenderer();
         _officeTexture = _officeRenderer?.CreateTexture(state);
         var texture = (Texture2D?)_officeTexture ?? OriginalAssetStore.LoadTexture("Graphic/Embedded/OfficeBase.bmp");
@@ -244,7 +247,7 @@ public partial class Main
         var tenants=OfficeInteractionRules.TenantSlotsAt(pixel.X,pixel.Y);
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
         bool deskTarget=_selectedEmployee is not null && OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is not null;
-        image.TooltipText=Tr("OFFICE_ASSIGN_HINT");
+        image.TooltipText=OfficeHoverText(state,pixel,employee,room,tenants);
         image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
         if(employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
@@ -280,6 +283,7 @@ public partial class Main
 
     private bool DesktopActionEnabled(string key)
     {
+        if(_facilityOwner is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE"))return false;
         if (_desktopState?.Casino.ActivityOpen==true && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState?.FinancialFailure is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;

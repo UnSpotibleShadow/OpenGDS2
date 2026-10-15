@@ -32,6 +32,8 @@ public sealed class DevelopmentProjectState
     public int Bugs {get;set;}
     // A12AC4: shared across media; absent legacy history stays unknown.
     public int? PromotionUseCount {get;set;}
+    // A129C8/member19AC: reset for new projects; absent legacy history is unknown.
+    public bool? InterviewCompleted {get;set;}
     public double Recognition {get;set;}
     public double DataSize {get;set;}
     public DevelopmentFocus? Focus {get;set;}

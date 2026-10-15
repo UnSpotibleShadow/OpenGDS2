@@ -1,0 +1,77 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "procedures": [
+    {
+      "start": "0x009C0588",
+      "size": 3932,
+      "sha256": "c3f557326219c8df5a7b342e1347292339e73fd96a2218ecb0e59e03b0e88a33"
+    },
+    {
+      "start": "0x0099BA80",
+      "size": 1228,
+      "sha256": "71d2bfc58f55a55b01a8213c93329ef8bb2c080dc1751796ca820fab73923a54"
+    },
+    {
+      "start": "0x009C9CB8",
+      "size": 4776,
+      "sha256": "b0a2123bfaefda036cf372a41f2e9db98105687b5b56c7a9533ab3f3a5f7af1b"
+    },
+    {
+      "start": "0x009A6DDC",
+      "size": 2080,
+      "sha256": "681dcb64611fa0368c2526e2da8eae03cd9c541023644a5e5ba51321d80e7352"
+    },
+    {
+      "start": "0x009EFA40",
+      "size": 27016,
+      "sha256": "873bf218fd41a10dfbac8ff7e394f68ceb018df513a432033c8cfc5d088f936b"
+    },
+    {
+      "start": "0x009E3830",
+      "size": 10216,
+      "sha256": "8ed78499bf69505d290087f05309d948c2bf63b1259a144df437f23201760243"
+    }
+  ],
+  "resources": [
+    {
+      "file_offset": 984836,
+      "size": 122936,
+      "sha256": "d295d00d8aa9c042af2fb50c77136ff1d21875486ea17a52eda385dddaf84d67"
+    },
+    {
+      "file_offset": 1578270,
+      "size": 39992,
+      "sha256": "82426682f60d7e41ea72b9c5ad45edd8e6b0cb5f06c1d6afaf8e2fbcc2b6ec65"
+    },
+    {
+      "file_offset": 780848,
+      "size": 39992,
+      "sha256": "02e8ce8f6ec99cf2585a176315dd826e701e109461836c0120b599c8dcda72f4"
+    },
+    {
+      "file_offset": 1107822,
+      "size": 163896,
+      "sha256": "a42748f1e430bbb3993ca16dbb06636d1c1189179fa0d1f8a36cff2a0c3fbb4a"
+    },
+    {
+      "file_offset": 616902,
+      "size": 163896,
+      "sha256": "fce427b8465a57c173fe7b2a6b034a2d072485d283342df78a421484d92fbd35"
+    },
+    {
+      "file_offset": 820890,
+      "size": 163896,
+      "sha256": "458ef3a4211fd5e2dc21668b1c57b8cae83dce7850841dffba1eb53f0a06a224"
+    },
+    {
+      "file_offset": 1455284,
+      "size": 122936,
+      "sha256": "7512024e4267a284aee8196a9730acf7d8015e11bc2a1b6281b36659003eef9e"
+    },
+    {
+      "file_offset": 589008,
+      "size": 10877,
+      "sha256": "2d5229dd16a26dea098f31d4f04e673a1ea651e2745bc8d9ff25c65eed670d47"
+    }
+  ]
+}

@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=16,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=17,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int poachPool=0x606824;
         int[] rivalMessages=[0x40,0x41,0x42,0x44,0x45,0x46,0x47,0x48,0x49,0x4A];
         for(int i=0;i<10;i++)result.Entries.Add("POACHING_RIVAL_MESSAGE_"+i,pe.String(poachPool,rivalMessages[i]));
@@ -67,6 +67,15 @@ public static class OriginalDialogueImporter
         result.Entries.Add("HIRE_GREETING_9",pe.String(pool,0x1A)+"{company}"+pe.String(pool,0x1C));
         result.Entries.Add("NEW_EMPLOYEE",pe.String(pool,0x10));
         const int meetingPool=0x5FAFCC;
+        const int periodicPool=0x5F99AC;
+        for(int i=0;i<5;i++)result.Entries.Add("INTERVIEW_REPORTER_"+i,pe.String(meetingPool,0xA2+i));
+        result.Entries.Add("INTERVIEW_SPEAKER",pe.String(meetingPool,0xA7));
+        result.Entries.Add("INTERVIEW_INTRO",pe.String(periodicPool,0xA1)+"{room}"+pe.String(periodicPool,0x177)+"{magazine}"+pe.String(periodicPool,0x179));
+        result.Entries.Add("INTERVIEW_RESULT",pe.String(periodicPool,0xA1)+"{room}"+pe.String(periodicPool,0x17A)+"{gain}"+pe.String(periodicPool,0x17B));
+        result.Entries.Add("INTERVIEW_PAGE_0",pe.String(meetingPool,0xA9)+"{magazine}"+pe.String(meetingPool,0xAC)+"{name}"+pe.String(meetingPool,0xAD));
+        result.Entries.Add("INTERVIEW_PAGE_1",pe.String(meetingPool,0xAE)+"{subject}"+pe.String(meetingPool,0xB0));
+        result.Entries.Add("INTERVIEW_PAGE_2",pe.String(meetingPool,0xB1));
+        result.Entries.Add("INTERVIEW_PAGE_3",pe.String(meetingPool,0xB2));
         result.Entries.Add("MYSTERY_LAB_INTRO",pe.String(meetingPool,0x11C));
         int[] labCells=[0x11E,0x11F,0x120,0x122,0x124,0x128,0x129];
         for (int i=0;i<labCells.Length;i++) result.Entries.Add($"MYSTERY_LAB_RESULT_{i}",pe.String(meetingPool,labCells[i]));

@@ -27,6 +27,7 @@ public sealed class CompanyEventContinuation
 {
     public bool PoachingProcessed {get;set;}
     public int NextVirusRoom {get;set;}
+    public int NextInterviewRoom {get;set;}
 }
 
 /// <summary>MDIForm1 0098B1F4, native member 02CC and its guarded financial debit.</summary>
@@ -70,7 +71,7 @@ public static class CompanyEventService
         "BACKUP_DEVICE_RESULT_InsufficientFunds","BACKUP_DEVICE_RESULT_Success","VIRUS_INTRO","VIRUS_PROTECTED","VIRUS_STRESS","VIRUS_BUY_BACKUP"}
         .Concat(Enumerable.Range(0,7).Select(i=>$"VIRUS_LOSS_REACTION_{i}"))
         .Concat(Enumerable.Range(0,7).Select(i=>$"VIRUS_PROTECTED_REACTION_{i}")).ToArray();
-    public static bool HasPending(GameState state)=>state.PendingBackupDevice is not null || state.PendingVirusEvent is not null || state.PendingPoaching is not null;
+    public static bool HasPending(GameState state)=>state.PendingBackupDevice is not null || state.PendingVirusEvent is not null || state.PendingPoaching is not null || state.PendingMagazineInterview is not null;
     public static bool Resume(GameState state,Random random)
     {
         if(HasPending(state))return false;
@@ -79,6 +80,12 @@ public static class CompanyEventService
         {
             cursor.PoachingProcessed=true;
             if(!PoachingService.Periodic(state,random))return false;
+        }
+        while(cursor.NextInterviewRoom<2)
+        {
+            int room=cursor.NextInterviewRoom++;
+            var project=state.DevelopmentProjects.SingleOrDefault(p=>p.RoomIndex==room&&p.OriginalRoomState==1);
+            if(project is not null&&!MagazineInterviewService.Periodic(state,project,random))return false;
         }
         if(state.ReleasedGames.Count>=5)
         {
@@ -156,8 +163,11 @@ public static class CompanyEventService
         if(HasPending(state) && (state.PendingCompanyActivity is not null || CalendarService.HasPending(state) ||
             state.PendingProgrammingChallenge is not null || state.PendingPromotion is not null || state.Casino.ActivityOpen ||
             state.PendingFacilityReceipt is not null || state.PendingFeeNegotiation is not null || state.PendingBankLoanReceipt is not null ||
-            state.FinancialFailure is not null || state.PendingHireGreeting is not null || OwnHardwareService.HasPending(state)))
+            state.FinancialFailure is not null || state.PendingHireGreeting is not null || state.PendingProjectCancellation is not null ||
+            state.PendingSecretaryAdvice is not null || state.PendingSecretaryReplacement is not null || OwnHardwareService.HasPending(state)))
             throw new InvalidDataException("Overlapping company-event decisions.");
+        if(new object?[]{state.PendingBackupDevice,state.PendingPoaching,state.PendingVirusEvent,state.PendingMagazineInterview}.Count(x=>x is not null)>1||
+            state.CompanyEventContinuation?.NextInterviewRoom is <0 or >2)throw new InvalidDataException("Overlapping company events or invalid interview cursor.");
         if(state.BackupDeviceAnimationTicks is <0 or >18 || state.CompanyEventContinuation?.NextVirusRoom is <0 or >2)
             throw new InvalidDataException("Invalid periodic company-event cursor.");
         if(state.PendingBackupDevice is { } purchase && (purchase.Page is <0 or >2 || (purchase.Page==2)!=(purchase.Result is not null) ||

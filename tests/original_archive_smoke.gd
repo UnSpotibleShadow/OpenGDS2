@@ -16,11 +16,11 @@ func run() -> void:
     main.find_children("*","FileDialog",false,false)[0].file_selected.emit(archive)
     await process_frame
     check(FileAccess.file_exists("user://original/.imported"),"Supported original archive imported atomically")
-    for filename in ["Graphic/KeibaC.bmp","Graphic/KeibaM.bmp","Sound/Bakuhatu.wav","Sound/FIRE.wav","Sound/GOLD.WAV","Sound/Open.wav","Sound/Up.wav","Graphic/Embedded/PoachingRival.bmp","Graphic/Embedded/PoachingPresident.bmp"]:
+    for filename in ["Graphic/KeibaC.bmp","Graphic/KeibaM.bmp","Sound/Bakuhatu.wav","Sound/FIRE.wav","Sound/GOLD.WAV","Sound/Open.wav","Sound/Up.wav","Graphic/Embedded/PoachingRival.bmp","Graphic/Embedded/PoachingPresident.bmp","Graphic/Embedded/Promotion1.bmp","Graphic/Embedded/Promotion2.bmp","Graphic/Embedded/PublisherMeeting.bmp","Graphic/Embedded/BusinessMeeting.png"]:
         check(FileAccess.file_exists("user://original/"+filename),"Imported original resource: "+filename)
     var dialogue=JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
-    check(dialogue.SchemaVersion==16 and dialogue.Entries.size()==322,"All current native dialogue entries imported")
-    for key in ["BACKUP_DEVICE_EXPLANATION","VIRUS_INTRO","POACHING_RIVAL_MESSAGE_3","POACHING_RESULT_WON_OFFENSIVE"]:
+    check(dialogue.SchemaVersion==17 and dialogue.Entries.size()==334,"All current native dialogue entries imported")
+    for key in ["BACKUP_DEVICE_EXPLANATION","VIRUS_INTRO","POACHING_RIVAL_MESSAGE_3","POACHING_RESULT_WON_OFFENSIVE","INTERVIEW_INTRO","INTERVIEW_PAGE_3"]:
         check(dialogue.Entries.has(key) and not dialogue.Entries[key].is_empty(),"Source-bound dialogue key: "+key)
     main.queue_free();await process_frame
     print("Original archive smoke failures: ",failures);quit(0 if failures==0 else 1)

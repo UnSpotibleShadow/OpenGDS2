@@ -4245,3 +4245,75 @@ msgstr "外出する"
 
 msgid "POACHING_DONATION_ACK"
 msgstr "{name}に{amount}円を献金します。"
+
+msgid "PROMOTION_METHOD"
+msgstr "宣伝方法"
+
+msgid "PROMOTION_FINISHED_DIALOGUE"
+msgstr "{0}を実施しました。開発中のゲームの知名度が{1:N0}ポイント上がりました。"
+
+msgid "EXHIBITION_SECRETARY_RESULT"
+msgstr "出展したゲームの知名度が{0:N0}ポイント上がりました。"
+
+msgid "OFFICE_EMPTY_ROOM_HINT"
+msgstr "クリックしてゲームの開発を計画します。"
+
+msgid "OFFICE_VENDING_HINT"
+msgstr "自動販売機\n社員の休憩場所です。"
+
+msgid "OFFICE_TRAINING_HINT"
+msgstr "研修スペース\n社員を選んで研修を指示します。"
+
+msgid "SEQUEL_WHICH_GAME"
+msgstr "どのゲームの続編を開発しますか？"
+
+msgid "MANGA_WHICH_TITLE"
+msgstr "どの漫画をゲームにしますか？"
+
+msgid "SHIPMENT_PROFIT_TABLE"
+msgstr "== ゲームソフトの利益表 =="
+
+msgid "MAGAZINE_INTERVIEW"
+msgstr "専門誌の取材"
+
+msgid "INTERVIEW_MAGAZINE"
+msgstr "{0}専門誌"
+
+msgid "INTERVIEW_SPEAKER"
+msgstr "記者"
+
+msgid "INTERVIEW_INTRO"
+msgstr "第{room}開発室のゲームに専門誌「{magazine}」から取材が来ました。"
+
+msgid "INTERVIEW_RESULT"
+msgstr "第{room}開発室のゲームの知名度が{gain}ポイント上がりました。"
+
+msgid "INTERVIEW_PAGE_0"
+msgstr "こんにちは。{magazine}の{name}です。"
+
+msgid "INTERVIEW_PAGE_1"
+msgstr "開発中のゲームが{subject}を題材にしていると伺い、取材に来ました。"
+
+msgid "INTERVIEW_PAGE_2"
+msgstr "なるほど、これは面白そうですね。"
+
+msgid "INTERVIEW_PAGE_3"
+msgstr "本誌でしっかり紹介させていただきます。今後もよろしくお願いします。"
+
+msgid "INTERVIEW_REPORTER_0"
+msgstr "田中"
+
+msgid "INTERVIEW_REPORTER_1"
+msgstr "先島"
+
+msgid "INTERVIEW_REPORTER_2"
+msgstr "木村"
+
+msgid "INTERVIEW_REPORTER_3"
+msgstr "小林"
+
+msgid "INTERVIEW_REPORTER_4"
+msgstr "小島"
+
+msgid "SHIPMENT_COPIES"
+msgstr "本数"

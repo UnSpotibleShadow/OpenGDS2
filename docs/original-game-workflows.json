@@ -185,7 +185,8 @@
         "docs/native-toolbar-20261015.md",
         "docs/office-clicks-m39.md",
         "docs/office-presentation-m94.md",
-        "docs/map-backlog-implementation.md"
+        "docs/map-backlog-implementation.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Desktop.cs",
@@ -502,7 +503,8 @@
       "evidence": [
         "docs/checkpoint-speakers-m92.md",
         "docs/secretary-advice.md",
-        "docs/workflow-verification-m76.md"
+        "docs/workflow-verification-m76.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Conversations.cs",
@@ -1273,7 +1275,7 @@
     },
     {
       "id": "W09",
-      "title": "Planning, proposal, alpha/beta and completion",
+      "title": "Planning, checkpoints, completion and magazine interviews",
       "objects": [
         "object:fGMKaihatu",
         "object:fGMKaihatuS",
@@ -1284,22 +1286,26 @@
         "object:fGMKansei"
       ],
       "entry": "Development room/planning commands and work thresholds",
-      "sequence": "Plan choices; proposal accept/redo/cancel; alpha content and beta genre; complete/ship or postpone",
+      "sequence": "Plan choices; proposal accept/redo/cancel; alpha content and beta genre; complete/ship or postpone; eligible specialist-magazine interview with once-per-project awareness gain",
       "understanding": "partial",
       "adaptation": "comparison-present",
       "runtime": "pending-original-runtime",
       "evidence": [
         "docs/development-planning.md",
         "docs/checkpoint-choices-m57.md",
-        "docs/development-panels-m95.md"
+        "docs/development-panels-m95.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Development.cs",
-        "src/UI/Main.CoreLoop.cs"
+        "src/UI/Main.CoreLoop.cs",
+        "src/Domain/MagazineInterviewService.cs",
+        "src/UI/Main.MagazineInterview.cs"
       ],
       "tests": [
         "tests/core_loop_smoke.gd",
-        "tests/project_cancellation_smoke.gd"
+        "tests/project_cancellation_smoke.gd",
+        "tests/issue118_smoke.gd"
       ],
       "open_questions": [
         "Charge and selection happen at their source-backed phase; retries and cancel must preserve only retained selections.",
@@ -1311,7 +1317,7 @@
           "path": "normal path",
           "status": "pending-original-runtime",
           "setup": "Record supported original hash, starting save hash, relevant selection/state and available resources.",
-          "observe": "Plan choices; proposal accept/redo/cancel; alpha content and beta genre; complete/ship or postpone",
+          "observe": "Plan choices; proposal accept/redo/cancel; alpha content and beta genre; complete/ship or postpone; eligible specialist-magazine interview with once-per-project awareness gain",
           "record": [
             "actions",
             "visible ordering",
@@ -1321,7 +1327,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1339,7 +1346,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1357,7 +1365,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1375,7 +1384,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1383,7 +1393,7 @@
           "path": "automatic interruption and caller resume",
           "status": "pending-original-runtime",
           "setup": "Record supported original hash, starting save hash, relevant selection/state and available resources.",
-          "observe": "Charge and selection happen at their source-backed phase; retries and cancel must preserve only retained selections.",
+          "observe": "Charge and selection happen at their source-backed phase; retries and cancel must preserve only retained selections. Interview resumes its saved target/reporter/pages and applies the capped gain once.",
           "record": [
             "actions",
             "visible ordering",
@@ -1393,7 +1403,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1411,7 +1422,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         },
         {
@@ -1429,7 +1441,8 @@
           ],
           "adaptation_tests": [
             "tests/core_loop_smoke.gd",
-            "tests/project_cancellation_smoke.gd"
+            "tests/project_cancellation_smoke.gd",
+            "tests/issue118_smoke.gd"
           ]
         }
       ]
@@ -1447,7 +1460,8 @@
       "runtime": "pending-original-runtime",
       "evidence": [
         "docs/development-planning.md",
-        "docs/management-presentation-m105-step3.md"
+        "docs/management-presentation-m105-step3.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Manga.cs",
@@ -1595,7 +1609,8 @@
       "runtime": "pending-original-runtime",
       "evidence": [
         "docs/sequel-development.md",
-        "docs/review-event-presentation-m96.md"
+        "docs/review-event-presentation-m96.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Development.cs"
@@ -1903,7 +1918,8 @@
       "evidence": [
         "docs/presentation-handler-audit-m93.md",
         "docs/playthrough-presentation-m103.md",
-        "docs/development-panels-m95.md"
+        "docs/development-panels-m95.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.CoreLoop.cs",
@@ -2382,7 +2398,8 @@
       "evidence": [
         "docs/annual-calendar-events.md",
         "docs/review-event-presentation-m96.md",
-        "docs/playthrough-presentation-m103.md"
+        "docs/playthrough-presentation-m103.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.AnnualEvents.cs",
@@ -3014,7 +3031,8 @@
       "evidence": [
         "docs/facility-artwork-m61.md",
         "docs/lawyer-facility-m71.md",
-        "docs/management-presentation-m105-step3.md"
+        "docs/management-presentation-m105-step3.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.FacilityPresentation.cs",
@@ -4967,12 +4985,14 @@
         "docs/weekly-economics-investigation.md",
         "docs/calendar-transactions.md",
         "docs/financial-failure-m84.md",
-        "docs/workflow-verification-m76.md"
+        "docs/workflow-verification-m76.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.CoreLoop.cs",
         "src/UI/Main.Calendar.cs",
-        "src/UI/Main.FinancialFailure.cs"
+        "src/UI/Main.FinancialFailure.cs",
+        "src/Domain/MagazineInterviewService.cs"
       ],
       "tests": [
         "tests/core_loop_smoke.gd",
@@ -5132,7 +5152,8 @@
       "runtime": "pending-original-runtime",
       "evidence": [
         "docs/room-promotion-m97.md",
-        "docs/presentation-handler-audit-m93.md"
+        "docs/presentation-handler-audit-m93.md",
+        "docs/issue118-implementation.md"
       ],
       "adaptation_files": [
         "src/UI/Main.Promotion.cs",

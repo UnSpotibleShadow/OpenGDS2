@@ -8,6 +8,30 @@ public static class LocalSceneCaptionRules
     public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);
     public static readonly (int X,int Y,int Width,int Height) HardwareRegion=(49,0,164,23);
     public static readonly (int X,int Y,int Width,int Height)[] ActivityRegions=[(8,134,64,25),(86,91,88,25),(178,134,78,25)];
+    public static byte[] PatchSecretary(byte[] source)
+    {
+        if(source.Length!=64*64*3)throw new InvalidDataException("Unexpected secretary portrait.");
+        var output=(byte[])source.Clone();
+        for(int y=52;y<62;y++)for(int x=18;x<48;x++)
+        {int i=(y*64+x)*3;output[i]=output[i+1]=output[i+2]=255;}
+        LocalBitmapLetteringRules.DrawLettering(output,64,64,"SEC",24,54,1,1,(0,0,0));
+        return output;
+    }
+    public static byte[] PatchTelevision(byte[] source)
+    {
+        if(source.Length!=256*152*3)throw new InvalidDataException("Unexpected television scene.");
+        var output=(byte[])source.Clone();
+        // The monitor's inner panel is a trapezoid. Keep its frame, stand and room.
+        for(int y=34;y<=108;y++)
+        {
+            int left=85-(y-34)/37,right=179-(y-34)/7;
+            for(int x=left;x<=right;x++){int i=(y*256+x)*3;output[i]=250;output[i+1]=238;output[i+2]=238;}
+        }
+        LocalBitmapLetteringRules.DrawLettering(output,256,152,"GAME",106,48,2,2,(180,20,20));
+        LocalBitmapLetteringRules.DrawLettering(output,256,152,"DEV",111,68,2,2,(180,20,20));
+        LocalBitmapLetteringRules.DrawLettering(output,256,152,"STORY II",94,90,1,1,(180,20,20));
+        return output;
+    }
     public static byte[] PatchActivity(byte[] source)
     {
         const int width=256,height=160;

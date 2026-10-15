@@ -18,6 +18,8 @@ public sealed class ReleasedGameState
     public int GenreSourceIndex {get;set;}
     public DevelopmentQuality Quality {get;set;}=new();
     public int Bugs {get;set;}
+    // Native shipment copies the room interview flag into the product record.
+    public bool? OriginalInterviewCompleted {get;set;}
     public double Recognition {get;set;}
     public double DataSize {get;set;}
     public double MarketFactor {get;set;}

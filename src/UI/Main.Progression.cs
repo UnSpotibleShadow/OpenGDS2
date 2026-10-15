@@ -1,4 +1,5 @@
 using Godot;
+using OpenGDS2.Core;
 using OpenGDS2.Domain;
 using OpenGDS2.Persistence;
 
@@ -97,41 +98,52 @@ public partial class Main
         var button=new Button {Name=name,Text=$"{Tr(key)} — ¥{DisplayNumbers.Format(amount)}"};_content.AddChild(button);button.Pressed+=action;
     }
     private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(DisplayNumbers.Provider,Tr("FACILITY_OTHER"),value);
+    private Texture2D? FacilityScene(FacilityKind kind)=>OriginalAssetStore.LoadTexture("Graphic/Embedded/Facility-"+kind+(kind==FacilityKind.MysteryLab?".bmp":".png"));
+    private void FacilityQuestion(GameState state,FacilityKind kind,string question,string name,Action confirm,Action cancel,string confirmName="ConfirmFacilityService")
+    {
+        RetainFacilityOwner();
+        void Cancel(){CloseFacilityOwner();cancel();}
+        void Confirm(){CloseFacilityOwner();confirm();}
+        ShowConversation(FacilityName((int)kind),[new(SecretaryCaption(state.SecretarySourceIndex),question,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
+        {
+            ClearContent();var canvas=NativeWindow(name,FacilityName((int)kind),new(330,126));
+            NativeText(canvas,"FacilityConfirmation",question,new(8,5,314,76),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+            NativeAction(canvas,confirmName,"CONFIRM",new(126,92,94,26),Confirm);
+            NativeAction(canvas,"CancelFacilityService","CANCEL",new(226,92,94,26),Cancel);
+            _dialog!.CloseRequested=Cancel;
+        },Cancel);
+    }
     private void ShowFacilityClosure(GameState state,int slot,FacilityKind kind)
     {
-        ClearContent();IdentifyManagementWindow("FacilityClosureWindow");AddHeading(Tr("FACILITY_CLOSE"),26);
-        AnnualMessage("FacilityCloseConfirmation",string.Format(DisplayNumbers.Provider,Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind)));
-        AnnualButton(kind==FacilityKind.School ? "ConfirmSchoolClosure" : "ConfirmFacilityClosure","CONFIRM",()=>
-        {var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");});
-        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+        string question=string.Format(DisplayNumbers.Provider,Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind));
+        FacilityQuestion(state,kind,question,"FacilityClosureWindow",()=>
+        {
+            if(!ReferenceEquals(_session.Current,state))return;
+            var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);
+            if(result!=FacilityResult.Success)_status.Text=Tr("FACILITY_RESULT_"+result);
+        },()=>ShowFacilities(state,slot),kind==FacilityKind.School?"ConfirmSchoolClosure":"ConfirmFacilityClosure");
     }
     private void ConfirmFacilityService(GameState state,int slot,FacilityKind kind,long amount,Func<FacilityResult> action)
     {
-        ClearContent();CompactManagementWindow("FacilityConfirmationWindow",new Vector2(410,280),390);
-        AddHeading(FacilityName((int)kind),22);
-        AnnualMessage("FacilityConfirmation",string.Format(DisplayNumbers.Provider,Tr($"FACILITY_CONFIRM_{kind}"),amount));
-        AnnualButton("ConfirmFacilityService","CONFIRM",()=>
+        string question=string.Format(DisplayNumbers.Provider,Tr("FACILITY_CONFIRM_"+kind),amount);
+        FacilityQuestion(state,kind,question,"FacilityConfirmationWindow",()=>
         {
-            if (!ReferenceEquals(_session.Current,state)) return;
+            if(!ReferenceEquals(_session.Current,state))return;
             var result=action();
-            if (result==FacilityResult.Success) ShowOfficeReconstruction(state);
-            else {ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");}
-        });
-        AddAction("CANCEL",()=>ShowFacilities(state,slot));
+            if(result==FacilityResult.Success)ShowOfficeReconstruction(state);
+            else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}
+        },()=>ShowFacilities(state,slot));
     }
     private void ShowFacilityTechnologyRoster(GameState state,int slot)=>ShowNativeStudyRoster(state,slot);
     private bool ShowPendingFacilityReceipt(GameState state)
     {
-        if (state.PendingFacilityReceipt is not { } receipt) return false;
-        ClearContent();CompactManagementWindow("FacilityResultWindow",new Vector2(410,280),390);
-        AddHeading(FacilityName((int)receipt.Kind),22);
-        AnnualMessage("FacilityServiceResult",string.Format(DisplayNumbers.Provider,Tr($"FACILITY_RECEIPT_{receipt.Kind}"),receipt.Amount,receipt.Gain,receipt.EmployeeName));
-        AnnualButton("AcknowledgeFacilityReceipt","CONTINUE",()=>
+        if(state.PendingFacilityReceipt is not { } receipt)return false;
+        ShowConversation(FacilityName((int)receipt.Kind),[new(SecretaryCaption(state.SecretarySourceIndex),
+            string.Format(DisplayNumbers.Provider,Tr("FACILITY_RECEIPT_"+receipt.Kind),receipt.Amount,receipt.Gain,receipt.EmployeeName),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
         {
-            if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingFacilityReceipt,receipt)) return;
+            if(!ReferenceEquals(_session.Current,state)||!ReferenceEquals(state.PendingFacilityReceipt,receipt))return;
             state.PendingFacilityReceipt=null;ShowOfficeReconstruction(state);
-        });
-        AddSaveActions(state);return true;
+        },scene:FacilityScene(receipt.Kind));return true;
     }
     private bool ShowPendingMysteryLabResult(GameState state)
     {
@@ -139,20 +151,21 @@ public partial class Main
         int cursor=pending.MessageIndex;string key=MysteryLabService.MessageKey(pending);
         string body=TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase)
             ? Tr(key) : _importer.LoadDialogue()?.Entries.GetValueOrDefault(key) ?? Tr(key);
-        ShowConversation(FacilityName((int)FacilityKind.MysteryLab),[new(SecretaryCaption(state.SecretarySourceIndex),body,null)],()=>
+        ShowConversation(FacilityName((int)FacilityKind.MysteryLab),[new(SecretaryCaption(state.SecretarySourceIndex),body,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
         {
             if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingMysteryLabResult,pending) || pending.MessageIndex!=cursor) return;
             MysteryLabService.Acknowledge(state);ShowOfficeReconstruction(state);
-        });
+        },scene:FacilityScene(FacilityKind.MysteryLab));
         return true;
     }
     private void ShowFeeNegotiationConfirmation(GameState state,int slot,FeeNegotiationTarget target)
     {
-        ClearContent();var canvas=NativeWindow("NegotiationConfirmationWindow",Tr("NEGOTIATION_TARGET_"+target),new(310,152));
+        RetainFacilityOwner();ClearContent();var canvas=NativeWindow("NegotiationConfirmationWindow",Tr("NEGOTIATION_TARGET_"+target),new(310,152));
         NativeFill(canvas,"NegotiationConfirmationBox",new(4,4,302,91),Colors.White,true);NativeText(canvas,"NegotiationConfirmation",string.Format(DisplayNumbers.Provider,Tr("NEGOTIATION_CONFIRM"),FeeNegotiationService.RequiredFunds),new(8,7,294,85),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         NativeAction(canvas,"ConfirmFeeNegotiation","CONFIRM",new(112,120,94,26),()=>
-        {if(!ReferenceEquals(_session.Current,state))return;var result=_session.BeginFeeNegotiation(slot,target);if(result==FacilityResult.Success)ShowOfficeReconstruction(state);else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}});
-        NativeAction(canvas,"CancelFeeNegotiation","CANCEL",new(212,120,94,26),()=>ShowFacilities(state,slot));
+        {if(!ReferenceEquals(_session.Current,state))return;CloseFacilityOwner();var result=_session.BeginFeeNegotiation(slot,target);if(result==FacilityResult.Success)ShowOfficeReconstruction(state);else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}});
+        NativeAction(canvas,"CancelFeeNegotiation","CANCEL",new(212,120,94,26),()=>{CloseFacilityOwner();ShowFacilities(state,slot);});
+        _dialog!.CloseRequested=()=>{CloseFacilityOwner();ShowFacilities(state,slot);};
     }
     private bool ShowPendingFeeNegotiation(GameState state)
     {
@@ -162,11 +175,11 @@ public partial class Main
             ? Tr(key) : _importer.LoadDialogue()?.Entries.GetValueOrDefault(key) ?? Tr(key);
         string speaker=cursor is >=1 and <=3 ? Text(FeeNegotiationService.Key(pending.Target,"SPEAKER")) : SecretaryCaption(state.SecretarySourceIndex);
         string body=Text(FeeNegotiationService.MessageKey(pending)).Replace("{fee}",pending.After.ToString());
-        ShowConversation(Tr($"NEGOTIATION_TARGET_{pending.Target}"),[new(speaker,body,cursor is >=1 and <=3 ? 4 : null)],()=>
+        ShowConversation(Tr($"NEGOTIATION_TARGET_{pending.Target}"),[new(speaker,body,cursor is >=1 and <=3 ? 4 : SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
         {
             if (!ReferenceEquals(_session.Current,state) || !ReferenceEquals(state.PendingFeeNegotiation,pending) || pending.MessageIndex!=cursor) return;
             FeeNegotiationService.Acknowledge(state);ShowOfficeReconstruction(state);
-        });
+        },scene:OriginalSceneArtwork.BusinessMeeting());
         return true;
     }
     private void ShowTenantPlotChoice(GameState state,IReadOnlyList<int> slots)

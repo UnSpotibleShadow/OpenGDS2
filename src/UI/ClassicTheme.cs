@@ -50,6 +50,12 @@ public static class ClassicTheme
         theme.SetStylebox("title_button_normal", "Tree", CompactButton());
         theme.SetStylebox("title_button_hover", "Tree", CompactButton());
         theme.SetStylebox("title_button_pressed", "Tree", CompactButton(true));
+        theme.SetStylebox("panel","TooltipPanel",new StyleBoxFlat {BgColor=new Color(1,1,.88f),BorderColor=Colors.Black,
+            BorderWidthLeft=1,BorderWidthRight=1,BorderWidthTop=1,BorderWidthBottom=1,
+            ContentMarginLeft=6,ContentMarginRight=6,ContentMarginTop=4,ContentMarginBottom=4});
+        theme.SetColor("font_color","TooltipLabel",Colors.Black);
+        theme.SetColor("font_shadow_color","TooltipLabel",Colors.Transparent);
+        theme.SetFontSize("font_size","TooltipLabel",13);
         return theme;
     }
 

@@ -41,6 +41,8 @@ func check(condition: bool, message: String) -> void:
         push_error("FAIL CORE UI: " + message)
 
 func press(key: String) -> void:
+    if key=="CANCEL" and main.find_child("ConversationWindow",true,false)!=null:
+        main.find_child("ConversationWindow",true,false).find_child("CloseWindow",true,false).pressed.emit();await process_frame;return
     var found := false
     for button in main.find_children("*", "Button", true, false):
         if (button.text == tr(key) or button.name=="Toolbar"+key) and button.is_visible_in_tree() and not button.disabled:
@@ -78,7 +80,17 @@ func press(key: String) -> void:
     if key=="LEVEL_UP" and main.find_child("LevelUpResultWindow",true,false)!=null:
         main.find_child("LevelUpResultWindow",true,false).find_child("CloseWindow",true,false).pressed.emit();await process_frame
 
+func read_conversation_page() -> void:
+    var message=main.find_child("ConversationMessage",true,false)
+    if message==null:return
+    var enter=InputEventKey.new();enter.keycode=KEY_ENTER;enter.pressed=true
+    message.gui_input.emit(enter);await process_frame
+    if is_instance_valid(message) and message.is_inside_tree():
+        await create_timer(.03).timeout;message.gui_input.emit(enter);await process_frame
+
 func press_node(name: String) -> void:
+    if name in ["ConfirmSchoolClosure","ConfirmFacilityClosure","ConfirmFacilityService"] and main.find_child("ConversationWindow",true,false)!=null:
+        await read_conversation_page()
     if name=="TogglePause":
         check(main.call("SetSimulationPaused",not main.call("GetSimulationPaused")),"Harness simulation pause")
         await process_frame
@@ -100,6 +112,8 @@ func press_node(name: String) -> void:
         return
     if name in ["AcknowledgeReviews","CloseExhibition"]:
         for frame in range(600):
+            if name=="CloseExhibition" and main.find_child("ConversationWindow",true,false)!=null:
+                await read_conversation_page()
             var pending = main.find_child(name,true,false)
             if pending != null and not pending.disabled:
                 break

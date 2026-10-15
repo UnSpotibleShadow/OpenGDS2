@@ -13,6 +13,7 @@ public sealed class ExhibitionState
     public List<int>? VisitorSteps {get;set;}
     public int? DisplayCallbacks {get;set;}
     public int? PreviousVisitorRecord {get;set;}
+    public bool ResultAcknowledged {get;set;}
 }
 public enum GameAward { Music, Graphics, Design, Worst, GrandPrize }
 public sealed record AwardOutcome(GameAward Category,int? ProductIndex,int? RivalIndex);
@@ -254,6 +255,7 @@ internal static class AnnualCalendarValidation
             if (e.EligibleProducts is null || e.SelectedProducts is null ||
                 !e.EligibleProducts.SequenceEqual(ExhibitionService.Eligible(state)) ||
                 e.SelectedProducts.Count>5 || !e.SelectedProducts.SequenceEqual(e.EligibleProducts.Where(e.SelectedProducts.Contains)) ||
+                e.ResultAcknowledged && e.Visitors is null ||
                 e.Visitors is null && (e.SelectedProducts.Count!=0 || e.ReportedAwarenessGain is not null) ||
                 e.Visitors is not null && (e.Visitors is <9900 or >17578 || e.SelectedProducts.Count==0 ||
                     e.ReportedAwarenessGain is not double gain || !double.IsFinite(gain) || gain>e.Visitors/500))

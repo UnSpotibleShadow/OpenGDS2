@@ -31,6 +31,11 @@ public static class EmbeddedGraphicsImporter
             BinaryPrimitives.ReadUInt16LittleEndian(executable.AsSpan(meetingOffset-15,2))!=0)
             throw new InvalidDataException("Unsupported embedded planning illustration.");
         WriteBitmap(executable,meetingOffset,256,160,destination,"PlanningMeeting.bmp");
+        // 009A6DDC binds these distinct MDI ImageFormG pictures by meeting mode.
+        int[] promotionScenes=[0x0F0704,0x18151E,0x0BEA30,0x10E76E,0x0969C6,0x0C869A];
+        for(int medium=0;medium<6;medium++)WriteBitmap(executable,promotionScenes[medium],256,medium is 1 or 2?152:160,destination,$"Promotion{medium}.bmp");
+        WriteBitmap(executable,0x1634B4,256,160,destination,"PublisherMeeting.bmp");
+        WriteGif(executable,0x08FCD0,10877,destination,"BusinessMeeting.png");
         // fGMKikakusyo.Picture1: proposal document, not ImageFormG[0].
         WriteBitmap(executable,0x2AE079,256,160,destination,"PlanningProposal.bmp");
         // fGMSyukkaH.Picture1 and fGMHardHatubai.Picture1 share the same scene.

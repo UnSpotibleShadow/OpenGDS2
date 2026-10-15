@@ -199,7 +199,8 @@ public partial class Main
         else
         {
             var canvas=NativeWindow("CompletionWindow",Tr("DEVELOPMENT_COMPLETE"),new(368,316));
-            NativeText(canvas,"CompletionCaption",Tr("DEVELOPMENT_COMPLETE"),new(4,3,360,18),12,HorizontalAlignment.Center);
+            NativeFill(canvas,"CompletionHeaderStrip",new(4,3,360,19),Colors.White,true);
+            NativeText(canvas,"CompletionCaption","== "+Tr("DEVELOPMENT_COMPLETE")+" ==",new(6,3,356,19),11,HorizontalAlignment.Center);
             NativePlace(canvas,Picture("CompletionIllustration",OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),new(256,160)),new(56,26,256,160));
             NativeCompletionSummary(canvas,state,project,catalog);
             NativeAction(canvas,"CompletionRelease","RELEASE_GAME",new(254,245,110,27),()=>ShowRelease(state,project));
@@ -265,47 +266,41 @@ public partial class Main
     }
     private void ShowRelease(GameState state,DevelopmentProjectState project,string? draftTitle=null,long? draftPrice=null,long? draftCopies=null)
     {
-        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
-        // Release controls can follow the final meeting. Keep its recording
-        // through this form; opening release from ordinary work has no phase.
-        ClearContent(keepMeetingMusic:true);CompactManagementWindow("ShipmentWindow",new Vector2(460,490),440);
-        _dialog?.SetTitle(Tr("RELEASE_GAME"));
-        if (state.Company.ProductionCapacity is null || state.SalesFee1 is null || state.SalesFee2 is null)
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog()??throw new InvalidOperationException("No imported catalog."));
+        ClearContent(keepMeetingMusic:true);var canvas=NativeWindow("ShipmentWindow",Tr("RELEASE_GAME")+" · ¥"+DisplayNumbers.Format(state.Money),new(424,340));
+        if(state.Company.ProductionCapacity is null||state.SalesFee1 is null||state.SalesFee2 is null)
+        {NativeText(canvas,"ShipmentUnavailable",Tr("LEGACY_ROSTER_UNKNOWN"),new(4,4,416,200));NativeAction(canvas,"CancelRelease","CANCEL",new(320,286,100,25),()=>ShowOfficeReconstruction(state));return;}
+        NativeFill(canvas,"ShipmentHeaderStrip",new(4,3,416,19),Colors.White,true);
+        NativeText(canvas,"ShipmentHeading",Tr("SHIPMENT_PROFIT_TABLE"),new(6,3,412,19),10,HorizontalAlignment.Center);
+        var defaultTitle=project.OriginalMode==1&&project.PredecessorProductIndex is int predecessor?
+            SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)):project.Title;
+        var title=NativePlace(canvas,new LineEdit {Name="ReleaseTitle",Text=draftTitle??defaultTitle,MaxLength=128},new(142,220,172,24));
+        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,CustomMinimumSize=new(112,24),Value=draftPrice??ReleaseService.DefaultPrice};
+        var copies=ProductionQuantity(state,"ReleaseCopies");_content.RemoveChild(copies);if(draftCopies.HasValue)copies.Value=draftCopies.Value;
+        foreach(var (name,caption,number,y) in new[]{("ReleaseQuantityField","SHIPMENT_COPIES",copies,250),("ReleasePriceField","RETAIL_PRICE",price,282)})
         {
-            AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;
+            NativeText(canvas,name+"Caption",Tr(caption),new(76,y,64,28),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+            var field=NativePlace(canvas,new HBoxContainer {Name=name},new(142,y,172,26));field.AddThemeConstantOverride("separation",0);field.AddChild(number);field.AddChild(HeldShipmentButtons(number,ReferenceEquals(number,copies)));
         }
-        var defaultTitle=project.OriginalMode==1 && project.PredecessorProductIndex is int predecessor
-            ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==predecessor)) : project.Title;
-        var title=new LineEdit {Name="ReleaseTitle",Text=draftTitle ?? defaultTitle,MaxLength=128};
-        var price=new SpinBox {Name="ReleasePrice",MinValue=0,MaxValue=20000,AllowGreater=true,Step=10,CustomMinimumSize=new(112,24),Value=draftPrice ?? ReleaseService.DefaultPrice};
-
-        var copies=ProductionQuantity(state,"ReleaseCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;_content.RemoveChild(copies);
+        NativeText(canvas,"ShipmentTitleCaption",Tr("GAME_TITLE"),new(76,218,64,26),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex),project.DataSize);
-        ShipmentBreakdown(state,unit,price,copies);
-        var controls=new HBoxContainer();_content.AddChild(controls);
-        controls.AddChild(Picture("ShipmentHardwarePicture",HardwarePicture(state,project.HardwareSourceIndex),new(64,64)));
-        var fields=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};controls.AddChild(fields);
-        fields.AddChild(new Label {Text=Tr("GAME_TITLE")});fields.AddChild(title);
-        var numbers=new GridContainer {Columns=2};fields.AddChild(numbers);
-        numbers.AddChild(new Label {Text=Tr("PRODUCTION_COPIES")});
-        var quantityField=new HBoxContainer {Name="ReleaseQuantityField"};quantityField.AddChild(copies);quantityField.AddChild(HeldShipmentButtons(copies,true));numbers.AddChild(quantityField);
-        numbers.AddChild(new Label {Text=Tr("RETAIL_PRICE")});
-        var priceField=new HBoxContainer {Name="ReleasePriceField"};priceField.AddChild(price);priceField.AddChild(HeldShipmentButtons(price,false));numbers.AddChild(priceField);
-        _status=new Label();_content.AddChild(_status);
-        var confirm=new Button {Name="ConfirmRelease",Text=Tr("RELEASE_GAME")};_content.AddChild(confirm);
-        title.TextChanged+=value=>confirm.Disabled=string.IsNullOrWhiteSpace(value);
-        confirm.Pressed+=()=>
-        {
-            var result=ReleaseService.TryRelease(state,project,catalog,title.Text,(long)price.Value,(long)copies.Value,_session.Random);
-            if (result==ReleaseResult.Success) ShowReviews(state,state.ReleasedGames[^1]);
-            else _status.Text=Tr($"RELEASE_RESULT_{result}");
-        };
-        AddAction("MEDIA_INFORMATION",()=>
+        NativeShipmentBreakdown(canvas,state,unit,price,copies);
+        void Media()
         {
             string savedTitle=title.Text;long savedPrice=(long)price.Value,savedCopies=(long)copies.Value;
             ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowRelease(state,project,savedTitle,savedPrice,savedCopies));
+        }
+        // The device is the compact entry to capacity information; drafts survive it.
+        var hardware=NativePlace(canvas,new Button {Name="ShipmentMediaInformation",TooltipText=Tr("MEDIA_INFORMATION")},new(4,234,66,66));
+        hardware.AddChild(Picture("ShipmentHardwarePicture",HardwarePicture(state,project.HardwareSourceIndex),new(64,64)));hardware.Pressed+=Media;
+        _status=NativeText(canvas,"ShipmentStatus","",new(4,314,416,22),10);
+        var confirm=NativeAction(canvas,"ConfirmRelease","CONFIRM",new(320,250,100,25),()=>
+        {
+            var result=ReleaseService.TryRelease(state,project,catalog,title.Text,(long)price.Value,(long)copies.Value,_session.Random);
+            if(result==ReleaseResult.Success)ShowReviews(state,state.ReleasedGames[^1]);else _status.Text=Tr($"RELEASE_RESULT_{result}");
         });
-        AddAction("CANCEL",()=>ShowProject(state,project));
+        title.TextChanged+=value=>confirm.Disabled=string.IsNullOrWhiteSpace(value);
+        NativeAction(canvas,"CancelRelease","CANCEL",new(320,282,100,25),()=>ShowProject(state,project));
     }
     private SpinBox ProductionQuantity(GameState state,string name)
     {
