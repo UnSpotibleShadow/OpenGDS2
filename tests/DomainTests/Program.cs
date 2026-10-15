@@ -28,6 +28,16 @@ GameState ProgrammingFixture(int index=5)
         OfficeActorContinuation=new() {ActorSlot=0,EmployeeSourceIndex=0,RoomIndex=0},
         PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2,Mode=4,Index=index,Outcome=index==1?0:1,QualityIndex=index==1?null:0,CommentVariant=0}};
 }
+Test("English office date units preserve the blue frame and every pixel outside their labels",()=>
+{
+    byte[] source=Enumerable.Range(0,466*290*3).Select(i=>(byte)(i%251)).ToArray();var original=(byte[])source.Clone();
+    var patched=LocalBitmapLetteringRules.PatchOfficeDateLabels(source,466,290);
+    Check(source.SequenceEqual(original) && !source.SequenceEqual(patched));
+    for(int y=0;y<290;y++)for(int x=0;x<466;x++)
+        if(!LocalBitmapLetteringRules.OfficeDateLabelRegions.Any(r=>x>=r.X && x<r.X+r.Width && y>=r.Y && y<r.Y+r.Height))
+            Check(source.AsSpan((y*466+x)*3,3).SequenceEqual(patched.AsSpan((y*466+x)*3,3)));
+    Throws<InvalidDataException>(()=>LocalBitmapLetteringRules.PatchOfficeDateLabels(source,465,290));
+});
 Test("English Help covers all five original pages and 91 caption blocks",()=>
 {
     int[] counts=[16,34,20,2,19];Check(counts.Sum()==OriginalHelpEnglish.BlockCount);

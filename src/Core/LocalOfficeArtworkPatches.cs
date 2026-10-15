@@ -26,7 +26,7 @@ public static class LocalOfficeArtworkPatches
             Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(background))).ToLowerInvariant()!=BackgroundHash) return null;
         var captions=CaptionIds.ToDictionary(id=>id,id=>TranslationServer.Translate($"BITMAP_BUBBLE_{id}").ToString());
         string facilityCaption=TranslationServer.Translate("BITMAP_FACILITY_AVAILABLE").ToString();
-        string revision=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes("m94-room-lettering-v1\n"+facilityCaption+"\n"+string.Join("\n",captions.Select(x=>$"{x.Key}:{x.Value}"))))).ToLowerInvariant();
+        string revision=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes("m115-office-date-labels-v1\n"+facilityCaption+"\n"+string.Join("\n",captions.Select(x=>$"{x.Key}:{x.Value}"))))).ToLowerInvariant();
         string root=ProjectSettings.GlobalizePath(Root+"/"+revision);
         string output=System.IO.Path.Combine(root,"Graphic","Embedded","OfficeSprites.png");
         string backgroundOutput=System.IO.Path.Combine(root,"Graphic","Embedded","OfficeBase.png");
@@ -43,6 +43,7 @@ public static class LocalOfficeArtworkPatches
         if (baseImage.Load(background)!=Error.Ok) return null;
         baseImage.Convert(Image.Format.Rgb8);
         var translatedBase=LocalBitmapLetteringRules.PatchFacilitySigns(baseImage.GetData(),baseImage.GetWidth(),baseImage.GetHeight(),facilityCaption);
+        translatedBase=LocalBitmapLetteringRules.PatchOfficeDateLabels(translatedBase,baseImage.GetWidth(),baseImage.GetHeight());
         using var basePatch=Image.CreateFromData(baseImage.GetWidth(),baseImage.GetHeight(),false,Image.Format.Rgb8,translatedBase);
         if (basePatch.SavePng(backgroundOutput)!=Error.Ok) throw new IOException("Could not write local facility sign patch.");
         return root;

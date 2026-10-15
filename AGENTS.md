@@ -1,5 +1,17 @@
 # Development execution safeguards
 
+## Toolbar year / office date — 15 October 2026
+
+PR114 merged at65a655a8138174ea2d38940323da44376368c08e. Owner requests the
+missing year before toolbar Funds and an English patch for the office date.
+Implemented on codex/toolbar-year-office-date: year comes from state.Year;
+English MO/WK replaces only the two background labels, retaining original number
+sprites, frame, Japanese and override paths. English patch cache revision changes.
+Clean build,533 optional-original domain checks and two bilingual rendered
+regressions pass. See docs/toolbar-year-office-date.md; private checkpoint and
+captures: scratch/toolbar-date-20261015. Standing open-PR merge authorization
+continues; no exports, Actions or visibility changes are authorized.
+
 ## Native toolbar correction — 15 October 2026
 
 Owner authorizes merging open PRs. PR110/111/113 are merged; latest main was
