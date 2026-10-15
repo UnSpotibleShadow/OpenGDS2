@@ -5381,7 +5381,7 @@
       "title": "Menu, toolbar, hotspots and keyboard",
       "status": "partial",
       "finding": "Original menu hierarchy is freshly recovered from serialized records and metadata bindings. Toolbar/office events are inventoried, but numeric event slots do not by themselves identify Click/KeyDown meanings.",
-      "next_evidence": "Trace each bound event, array-index switch and keyboard branch; pair all 55 menu dispositions with a current route or explicit absent/dormant state.",
+      "next_evidence": "Trace each bound event, array-index switch and keyboard branch; record the current player path separately from missing menu access, missing options, missing functionality and unresolved original behavior.",
       "evidence": [
         "docs/native-toolbar-20261015.md",
         "docs/office-clicks-m39.md"
@@ -5481,7 +5481,7 @@
       "id": "X07",
       "title": "Original audio and music",
       "status": "partial",
-      "finding": "The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison.",
+      "finding": "The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison. Current sound-effect and music controls are available through title screen > Settings; the original in-game Sound On/Off menu entries are missing access points, not evidence that audio toggling is unimplemented.",
       "next_evidence": "Inventory archive audio and every direct/indirect playback site; establish selector/context, interruption/overlap/mute/loop/stop and resume on the original. Do not create a trigger for an unused selector.",
       "evidence": [
         "docs/original-audio-m105-step7.md",
@@ -5545,7 +5545,7 @@
     {
       "priority": "P1",
       "id": "G03",
-      "task": "Resolve all original menu/toolbar/hotspot/keyboard routes, including backup purchase, poaching, casino submenu and information/settings options; distinguish missing, dormant and replaced routes."
+      "task": "Reconcile original menu/toolbar/hotspot/keyboard access with the concrete paths listed above. Casino games and title-screen audio controls exist elsewhere; direct casino and in-game Sound entries are missing. Graphic-size/number-grouping selectors are missing options. Backup purchase and poaching are missing gameplay; unresolved behavior must remain separate."
     },
     {
       "priority": "P1",
@@ -5595,7 +5595,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "regrouped in current Game menu"
+      "disposition": "Menu organization: OpenGDS2 uses Game for saving/loading and Back to Title; New Game and Quit are on the title screen. See the individual actions below."
     },
     {
       "id": "menu:mMenuNewG",
@@ -5603,7 +5603,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "comparison: title/new-company flow; exact in-session reset confirmation unverified"
+      "disposition": "Available elsewhere: title screen > New Game. During play, use Game > Back to Title first; the original direct New Game menu item is missing. Equivalent reset/confirmation behavior remains unverified."
     },
     {
       "id": "menu:mMenuHaihun1",
@@ -5611,7 +5611,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mMenuSave",
@@ -5619,7 +5619,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "comparison: numbered JSON slots; native GD2 format differs"
+      "disposition": "Available: Game > Save Game opens the numbered save picker. OpenGDS2 saves JSON; native GD2 compatibility is missing."
     },
     {
       "id": "menu:mMenuLoad",
@@ -5627,7 +5627,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "comparison: numbered JSON slots; native GD2 format differs"
+      "disposition": "Available: Game > Load Game opens the numbered load picker. OpenGDS2 loads JSON; native GD2 compatibility is missing."
     },
     {
       "id": "menu:mMenuHaihun2",
@@ -5635,7 +5635,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mMenuEnd",
@@ -5643,7 +5643,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "comparison: application/title exit paths; original confirmation/termination semantics pending"
+      "disposition": "Available elsewhere: title screen > Quit closes the application; Game > Back to Title returns there during play. The original direct Exit Game menu item and its confirmation flow are not reproduced."
     },
     {
       "id": "menu:mKoudou",
@@ -5651,7 +5651,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "regrouped across current menus"
+      "disposition": "Menu organization: actions are distributed across Company and Employees, the three UP toolbar buttons and casino-facility controls. This does not mean every original action exists; poaching and backup-device purchase are missing below."
     },
     {
       "id": "menu:mKoudouKaisha",
@@ -5659,7 +5659,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "comparison: three UP actions; original nested menu differs"
+      "disposition": "Menu organization: Public relations, Genre research and Expand production exist under Company and as three UP toolbar buttons. The original nested Company development submenu is not reproduced."
     },
     {
       "id": "menu:mKoudouTimeido",
@@ -5667,7 +5667,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "comparison: BeginCompanyActivity, PublicRelations"
+      "disposition": "Available: Company > Public relations, or the Public relations UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouLibary",
@@ -5675,7 +5675,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "comparison: BeginCompanyActivity, GenreResearch"
+      "disposition": "Available: Company > Genre research, or the Genre research UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouZoukyou",
@@ -5683,7 +5683,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "comparison: BeginCompanyActivity, ProductionExpansion"
+      "disposition": "Available: Company > Expand production, or the Expand production UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouMinasu1",
@@ -5691,7 +5691,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mKoudouSShinki",
@@ -5699,7 +5699,7 @@
       "workflows": [
         "W05"
       ],
-      "disposition": "comparison: ShowRecruitment"
+      "disposition": "Available: Employees > Hire Employees, or the recruitment toolbar button, opens recruitment."
     },
     {
       "id": "menu:mKoudouSHikinuku",
@@ -5707,7 +5707,7 @@
       "workflows": [
         "W30"
       ],
-      "disposition": "missing gameplay workflow and menu route"
+      "disposition": "Missing functionality: employee-poaching offers, negotiation/contract transactions and the menu action are not implemented. There is no alternate player path."
     },
     {
       "id": "menu:mKoudouMinasu3",
@@ -5715,7 +5715,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mKoudouHisyoS",
@@ -5723,7 +5723,7 @@
       "workflows": [
         "W06"
       ],
-      "disposition": "comparison: ShowSecretaryPolicies"
+      "disposition": "Available: Company > Secretary policies opens the secretary settings window."
     },
     {
       "id": "menu:mKoudouHisyoK",
@@ -5731,7 +5731,7 @@
       "workflows": [
         "W06"
       ],
-      "disposition": "comparison: ShowSecretaryHiring"
+      "disposition": "Available: Company > Hire secretary, or the secretary toolbar button, opens secretary hiring/change."
     },
     {
       "id": "menu:mKoudouMinasu2",
@@ -5739,7 +5739,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mKoudouBank",
@@ -5747,7 +5747,7 @@
       "workflows": [
         "W27"
       ],
-      "disposition": "comparison: ShowBank"
+      "disposition": "Available: Company > Bank, or the bank toolbar button, opens the bank window."
     },
     {
       "id": "menu:mKoudouPCK",
@@ -5755,7 +5755,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "comparison: ShowComputers"
+      "disposition": "Available: Company > Development Computers, or the computer toolbar button, opens computer purchasing."
     },
     {
       "id": "menu:mKoudouBackupK",
@@ -5763,7 +5763,7 @@
       "workflows": [
         "W35"
       ],
-      "disposition": "missing gameplay purchase; modern save backups differ"
+      "disposition": "Missing functionality: the purchasable gameplay backup device and its virus-protection ownership/transaction are not implemented. There is no alternate player path; modern save-file backups are a separate feature."
     },
     {
       "id": "menu:mKoudouLicense",
@@ -5771,7 +5771,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "comparison: ShowLicenses"
+      "disposition": "Available: Company > Hardware Licenses, or the license toolbar button, opens license purchasing."
     },
     {
       "id": "menu:mKoudouTechK",
@@ -5779,7 +5779,7 @@
       "workflows": [
         "W07"
       ],
-      "disposition": "comparison: ShowTechnologies"
+      "disposition": "Available: Company > Technologies, or the technology toolbar button, opens technology purchasing."
     },
     {
       "id": "menu:mKoudouGo",
@@ -5788,7 +5788,7 @@
         "W22",
         "W26"
       ],
-      "disposition": "original submenu; current casino tenant route differs; original visibility/gating pending"
+      "disposition": "Available elsewhere: open an existing casino through Company facilities or its office tenant, then choose a game. The original Actions > Go out submenu is missing; its original visibility/eligibility rules remain unverified."
     },
     {
       "id": "menu:mKoudouGoKeiba",
@@ -5796,7 +5796,7 @@
       "workflows": [
         "W26"
       ],
-      "disposition": "comparison: horse selection via casino; direct menu route differs"
+      "disposition": "Available elsewhere: casino facility > Casino > Horse racing opens the implemented horse-racing game. The original direct Go horse racing menu item is missing. Catalog, funds and pending-decision guards can disable entry."
     },
     {
       "id": "menu:mKoudouGoPoka",
@@ -5804,7 +5804,7 @@
       "workflows": [
         "W23"
       ],
-      "disposition": "comparison: poker selection via casino; direct menu route differs"
+      "disposition": "Available elsewhere: casino facility > Casino > Poker opens the implemented poker game. The original direct Play poker menu item is missing. Coins and pending-decision guards can disable entry."
     },
     {
       "id": "menu:mKoudouGoBlack",
@@ -5812,7 +5812,7 @@
       "workflows": [
         "W24"
       ],
-      "disposition": "comparison: blackjack selection via casino; direct menu route differs"
+      "disposition": "Available elsewhere: casino facility > Casino > Blackjack opens the implemented blackjack game. The original direct Play blackjack menu item is missing. Coins and pending-decision guards can disable entry."
     },
     {
       "id": "menu:mInfo",
@@ -5820,7 +5820,7 @@
       "workflows": [
         "W03"
       ],
-      "disposition": "regrouped across current menus"
+      "disposition": "Menu organization: the corresponding reports are under Employees, Products, Company and Help. The original Information menu grouping is not reproduced."
     },
     {
       "id": "menu:mInfoGMsStaffAll",
@@ -5828,7 +5828,7 @@
       "workflows": [
         "W05"
       ],
-      "disposition": "comparison: ShowStaff; original handler uses local dispatch, target unresolved in direct graph"
+      "disposition": "Available: Employees > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified."
     },
     {
       "id": "menu:mInfoGMsZishaGame",
@@ -5836,7 +5836,7 @@
       "workflows": [
         "W15"
       ],
-      "disposition": "comparison: ShowProductList; original handler uses local dispatch"
+      "disposition": "Available: Products > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMsTusan100",
@@ -5844,7 +5844,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "comparison: ShowSalesChart; original handler uses local dispatch"
+      "disposition": "Available: Help > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMHatubaiHard",
@@ -5852,7 +5852,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "comparison: ShowHardwareMarket"
+      "disposition": "Available: Company > Hardware market opens the released-hardware report."
     },
     {
       "id": "menu:mInfoGMMinasu",
@@ -5860,7 +5860,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mInfoGMHatubaiZHard",
@@ -5868,7 +5868,7 @@
       "workflows": [
         "W21"
       ],
-      "disposition": "comparison: ShowOwnHardwareReport"
+      "disposition": "Available: Products > Own hardware opens the own-hardware report when its state is available."
     },
     {
       "id": "menu:mInfoGMMinasu2",
@@ -5876,7 +5876,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mInfoGMToutatu",
@@ -5884,7 +5884,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "comparison: ShowRankings"
+      "disposition": "Available: Help > Global rankings opens the reach-time records view."
     },
     {
       "id": "menu:mWindow",
@@ -5892,7 +5892,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "comparison: office/company/staff/product windows; grouping differs"
+      "disposition": "Menu organization: Windows exposes Office, Company, Employees and Products. That grouping differs from the original Visual, Tool and Other windows entries."
     },
     {
       "id": "menu:mWindowVisual",
@@ -5900,7 +5900,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "comparison: office window; exact show/hide state pending"
+      "disposition": "Available: Windows > Office reopens the office window. Exact original show/hide behavior remains unverified."
     },
     {
       "id": "menu:mWindowTool",
@@ -5908,7 +5908,7 @@
       "workflows": [
         "W03"
       ],
-      "disposition": "source references fGMInfo; comparison company window"
+      "disposition": "Available: Windows > Company reopens the company window, the comparison for original fGMInfo. Exact original page/tool-window behavior remains unverified."
     },
     {
       "id": "menu:mWindowOther",
@@ -5916,7 +5916,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "no bound handler; dynamic window-list behavior unresolved"
+      "disposition": "Unresolved: the original entry has no bound handler; dynamic window-list behavior has not been established. OpenGDS2 has explicit Windows entries, but they are not a confirmed equivalent."
     },
     {
       "id": "menu:mSetup",
@@ -5924,7 +5924,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original settings hierarchy absent from current in-game menu"
+      "disposition": "Missing menu access: there is no in-game Settings menu. Title screen > Settings contains language, sound-effect and music controls. The original graphic-size and number-grouping choices are missing options below."
     },
     {
       "id": "menu:mSetupSound",
@@ -5932,7 +5932,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original submenu absent; existing audio settings are a separate comparison"
+      "disposition": "Missing menu access: there is no in-game Settings > Sound submenu. Title screen > Settings provides separate sound-effect and music toggles/volumes; equivalence to the original single sound setting remains unverified."
     },
     {
       "id": "menu:mSetupSoundOn",
@@ -5940,7 +5940,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; match mute scope and effect/music separation before restoration"
+      "disposition": "Missing menu access: enable sound effects and/or music through title screen > Settings. The original in-game Sound > On command is missing; whether it controlled the same sounds remains unverified."
     },
     {
       "id": "menu:mSetupSoundOff",
@@ -5948,7 +5948,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; match mute scope and effect/music separation before restoration"
+      "disposition": "Missing menu access: disable sound effects and/or music through title screen > Settings. The original in-game Sound > Off command is missing; whether it muted the same sounds remains unverified."
     },
     {
       "id": "menu:mSetupGraphic",
@@ -5956,7 +5956,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original submenu absent; office graphic size behavior pending"
+      "disposition": "Missing option: no Normal/Enlarged office-graphics selector was found in OpenGDS2. The office is rendered, but the original selectable enlargement behavior has no confirmed equivalent."
     },
     {
       "id": "menu:mSetupGraphicD",
@@ -5964,7 +5964,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; source references fMainVisual"
+      "disposition": "Missing option: there is no player-selectable Normal office-graphics command. Existing default office rendering is not proof of equivalent original sizing; the source references fMainVisual."
     },
     {
       "id": "menu:mSetupGraphicK",
@@ -5972,7 +5972,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; source references fMainVisual"
+      "disposition": "Missing option: there is no player-selectable Enlarged office-graphics command or confirmed alternate enlargement control. The source references fMainVisual; exact original scaling remains unverified."
     },
     {
       "id": "menu:mSetupNumber",
@@ -5980,7 +5980,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original submenu absent; current localization formatting differs"
+      "disposition": "Missing option: there is no player-selectable number-grouping mode. OpenGDS2 already renders numbers with N0 formatting, but does not expose the original two-format choice."
     },
     {
       "id": "menu:mSetupNumber1",
@@ -5988,7 +5988,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; no equivalent in-game choice identified"
+      "disposition": "Missing option: no selector for Japanese large-number grouping was found. Existing number rendering and interface-language selection do not implement this original format choice."
     },
     {
       "id": "menu:mSetupNumber2",
@@ -5996,7 +5996,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "original route absent; current localized formatting is not this setting"
+      "disposition": "Missing option: no selector for thousands grouping was found. Current N0-formatted numbers may already use thousands separators, but the player cannot choose this original display mode independently."
     },
     {
       "id": "menu:mHelp",
@@ -6004,7 +6004,7 @@
       "workflows": [
         "W28"
       ],
-      "disposition": "comparison: Help menu; original About entry differs"
+      "disposition": "Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below."
     },
     {
       "id": "menu:mHelpHelp",
@@ -6012,7 +6012,7 @@
       "workflows": [
         "W28"
       ],
-      "disposition": "comparison: ShowHelp"
+      "disposition": "Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer."
     },
     {
       "id": "menu:mHelpMinasu1",
@@ -6020,7 +6020,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "non-action separator"
+      "disposition": "Separator: decorative menu divider; no action or gameplay is expected."
     },
     {
       "id": "menu:mHelpVersion",
@@ -6028,7 +6028,7 @@
       "workflows": [
         "W32"
       ],
-      "disposition": "source references fMainAbout; exact original about/link workflow unresolved"
+      "disposition": "Unresolved: the original opens fMainAbout. An equivalent interactive About/version/link dialog has not been established in OpenGDS2; there is no confirmed alternate player path for that dialog."
     }
   ],
   "catalog_families": [

@@ -378,7 +378,15 @@ def render(inventory, catalog):
         f"| Original runtime workflow acceptance | 0 / {len(catalog['workflows'])} | Original was not executed in this environment |", "",
         "Decoded instruction coverage does not prove call-graph completeness. Pool addresses may denote imports, globals, objects or constants. Member offsets retain unknown receiver identity. Object references do not prove a window opens or is modal.", "",
         f"Recorded graph: **{count('edges'):,}** direct-call/object-reference edges; **{count('references'):,}** operand-reference sites; **{count('unresolved_dispatch'):,}** dynamic-dispatch candidate sites remain unresolved.", "",
-        "## Original menus", "", "Names below are original technical identifiers. Indentation comes from serialization, not English translation or the current port menu. Shortcut/enabled/visible semantics need a further property pass.", ""]
+        "## Original menus", "", "Names below are original technical identifiers. Indentation comes from serialization, not English translation or the current port menu. Shortcut/enabled/visible semantics need a further property pass.", "",
+        "Each entry states what is available in OpenGDS2 and where the player can find it. These labels describe access and implementation found in the code; original-game behavior and runtime parity remain unverified.", "",
+        "- **Available:** the action exists at the stated menu or button.",
+        "- **Available elsewhere:** the feature exists through the stated alternative path; the original direct menu item is missing.",
+        "- **Missing menu access:** related controls exist at the stated location, but the original in-game menu entry is missing. Any uncertainty about equivalent behavior is stated separately.",
+        "- **Missing option:** no equivalent player-selectable choice was found. Existing graphics or number rendering may still work without that choice.",
+        "- **Missing functionality:** the gameplay action/transaction is not implemented; there is no alternate player path.",
+        "- **Unresolved:** the evidence does not yet establish an equivalent action or its behavior; this is not counted as confirmed missing functionality.",
+        "- **Menu organization / Separator:** describes a container or divider, not a gameplay feature.", ""]
     dispositions = {row["id"]: row for row in catalog["menu_dispositions"]}
     for menu in inventory["menus"]:
         row = dispositions[menu["id"]]
