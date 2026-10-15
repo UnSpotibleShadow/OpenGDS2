@@ -55,6 +55,14 @@ input still maps through normal/enlarged office coordinates. A two-pixel office
 client-height correction removes unnecessary normal-scale scrollbars introduced
 with the earlier enlarged-view scroll container.
 
+## Facility follow-up boundary
+
+The shared facility presentation above did not complete original conversation
+parity. The owner requested deeper recovery after reviewing PR #121.
+[The facility chain audit](facility-conversation-chains.md) identifies missing
+hot-spring reactions, early owner closure and facility-specific child/refusal/return
+routes. Those gaps remain unimplemented; the Lawyer is accepted by the owner.
+
 ## Magazine interview gameplay and persistence
 
 The new company-pass branch runs before virus checks in the recovered order,

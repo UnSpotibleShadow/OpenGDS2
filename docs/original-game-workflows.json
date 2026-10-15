@@ -3032,7 +3032,8 @@
         "docs/facility-artwork-m61.md",
         "docs/lawyer-facility-m71.md",
         "docs/management-presentation-m105-step3.md",
-        "docs/issue118-implementation.md"
+        "docs/issue118-implementation.md",
+        "docs/facility-conversation-chains.md"
       ],
       "adaptation_files": [
         "src/UI/Main.FacilityPresentation.cs",
@@ -3041,11 +3042,13 @@
       "tests": [
         "tests/facility_management_smoke.gd",
         "tests/fee_negotiation_smoke.gd",
-        "tests/mystery_lab_smoke.gd"
+        "tests/mystery_lab_smoke.gd",
+        "tools/verify_facility_chain_evidence.py"
       ],
       "open_questions": [
         "Facility art/button identity must match tenant type. Laboratory and lawyer transactions retain their documented gates, not guessed generic services.",
-        "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending."
+        "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending.",
+        "Confirmed #118 follow-up: direct facility owner lifetimes, hot-spring reactions and source-specific selector/refusal/return routes remain incomplete; see docs/facility-conversation-chains.md."
       ],
       "scenarios": [
         {
@@ -6068,7 +6071,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Number display > Japanese grouping uses four-digit groups with \u4e07/\u5104/\u5146 and zero-filled lower groups. Modern Int64 values can additionally use \u4eac."
+      "disposition": "Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京."
     },
     {
       "id": "menu:mSetupNumber2",

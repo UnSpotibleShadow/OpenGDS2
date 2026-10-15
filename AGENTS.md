@@ -1,3 +1,14 @@
+# Current follow-up — facility chains after #121
+
+Owner accepts the Lawyer and requests deeper recovery of the other facilities.
+Read `docs/facility-conversation-chains.md`: all nine illustration bindings and
+56 procedure fingerprints verified. Hot-spring employee reactions, owner window
+lifetimes and facility-specific selector/refusal/return routes remain incomplete.
+This follow-up is investigation-only; do not claim those corrections implemented.
+Private traces/artwork previews: `/workspace/scratch/facility-chains/`. Keep #118
+and #95 open; no unchanged Wine retry. Standing verified-PR merge authorization
+continues. Next implementation order and acceptance branches are in the report.
+
 # Current status — issue #118 implementation
 
 Owner authorized implementing #118. Branch `codex/issue118-fixes`, base
