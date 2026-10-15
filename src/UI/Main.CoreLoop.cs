@@ -8,7 +8,7 @@ public partial class Main
 {
     private void ShowDismissEmployee(GameState state,EmployeeState employee)
     {
-        ClearContent();AddHeading(Tr("DISMISS_EMPLOYEE"),28);AddHeading(EmployeeName(employee),22);
+        ClearContent();IdentifyManagementWindow("EmployeeDismissalWindow");AddHeading(Tr("DISMISS_EMPLOYEE"),28);AddHeading(EmployeeName(employee),22);
         AddHeading(Tr("DISMISS_EMPLOYEE_CONFIRM"),18);
         var confirm=new Button {Name="ConfirmDismissal",Text=Tr("CONFIRM")};_content.AddChild(confirm);
         confirm.Pressed+=()=>
@@ -118,7 +118,7 @@ public partial class Main
         if (project.PendingDecision is DevelopmentMilestone.SelectType or DevelopmentMilestone.SelectGenre)
         {
             try {CheckpointMeetingRules.Prepare(state,project,catalog,_session.Random);}
-            catch (InvalidOperationException) {ClearContent();AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;}
+            catch (InvalidOperationException) {ClearContent();IdentifyManagementWindow("LegacyRosterNoticeWindow");AddHeading(Tr("LEGACY_ROSTER_UNKNOWN"),16);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));return;}
         }
         if (CheckpointMeetingRules.HasPending(project)) {ShowCheckpointMeeting(state,project,catalog);return;}
         ClearContent(keepMeetingMusic:true);
@@ -359,24 +359,11 @@ public partial class Main
         var availability=ReleaseService.CheckProduction(state,product);
         if (availability!=ReleaseResult.Success)
         {
-            ClearContent();AddHeading(Tr($"RELEASE_RESULT_{availability}"),20);
+            ClearContent();IdentifyManagementWindow("AdditionalProductionWindow");AddHeading(Tr($"RELEASE_RESULT_{availability}"),20);
             AddAction("CANCEL",()=>ShowSales(state));return;
         }
         var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog() ?? throw new InvalidOperationException("No imported catalog."));
-        ClearContent();AddHeading(product.Title,28);AddHeading(Tr("PRODUCE_MORE"),22);
-        var copies=ProductionQuantity(state,"ProductionCopies");if(draftCopies.HasValue)copies.Value=draftCopies.Value;
-        _content.RemoveChild(copies);var productionField=new HBoxContainer {Name="ProductionQuantityField"};_content.AddChild(productionField);productionField.AddChild(copies);productionField.AddChild(HeldShipmentButtons(copies,true));
-        long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(x=>x.SourceIndex==product.HardwareSourceIndex),product.DataSize);
-        ReproductionBreakdown(state,product,unit,copies);
-        var quote=new Label();_content.AddChild(quote);quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}";
-        copies.ValueChanged+=_=>quote.Text=$"{Tr("PRODUCTION_COST")}: ¥{unit*(long)copies.Value:N0}";
-        _status=new Label();_content.AddChild(_status);
-        var confirm=new Button {Name="ConfirmProduction",Text=Tr("CONFIRM")};_content.AddChild(confirm);
-        confirm.Pressed+=()=>
-        {
-            var result=ReleaseService.TryProduce(state,product,catalog,(long)copies.Value);
-            if (result==ReleaseResult.Success) ShowSales(state);else _status.Text=Tr($"RELEASE_RESULT_{result}");
-        };
-        AddAction("CANCEL",()=>ShowSales(state));
+        ShowAdditionalProduction(state,product,catalog,draftCopies);
+
     }
 }

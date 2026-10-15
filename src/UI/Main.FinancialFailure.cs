@@ -10,7 +10,7 @@ public partial class Main
         if (pending.Phase==4) {ShowTitleScreen();return true;}
         if (pending.Phase==2 && pending.Slots is null)
         {
-            ClearContent();AddHeading(Tr("FINANCIAL_FAILURE"),24);
+            ClearContent();IdentifyManagementWindow("FinancialFailureNoticeWindow");AddHeading(Tr("FINANCIAL_FAILURE"),24);
             AddHeading(Tr("FINANCIAL_FAILURE_ROSTER_UNKNOWN"),16);
             AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
             AddAction("BACK_TO_TITLE",ShowTitleScreen);

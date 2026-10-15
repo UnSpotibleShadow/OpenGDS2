@@ -8,7 +8,7 @@ public partial class Main
     private void ShowRecall(GameState state,ReleasedGameState product)
     {
         var recall=product.Recall ?? throw new InvalidOperationException("Unknown recall.");
-        ClearContent();AddHeading(Tr("CONSUMER_INVESTIGATION"),28);AddHeading(product.Title,22);
+        ClearContent();IdentifyManagementWindow("RecallNoticeWindow");AddHeading(Tr("CONSUMER_INVESTIGATION"),28);AddHeading(product.Title,22);
         if (recall.PendingEvent==RecallEvent.Investigation)
         {
             AddHeading(Tr("RECALL_INVESTIGATION_STARTED"),18);

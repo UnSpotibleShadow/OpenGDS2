@@ -7,7 +7,7 @@ public partial class Main
 {
     private void ShowSalesHistory(GameState state,ReleasedGameState product)
     {
-        ClearContent();AddHeading(Tr("SALES_HISTORY"),28);AddHeading(product.Title,22);
+        ClearContent();IdentifyManagementWindow("SalesHistoryWindow");AddHeading(Tr("SALES_HISTORY"),28);AddHeading(product.Title,22);
         if (product.WeeklySalesHistory is null)
         {
             AddHeading(Tr("SALES_HISTORY_UNKNOWN"),18);AddAction("CANCEL",()=>ShowSales(state));return;

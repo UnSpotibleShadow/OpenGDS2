@@ -34,22 +34,20 @@ public partial class Main
                 if(!ShowPendingProgrammingChallenge(state))ShowOfficeReconstruction(state);
             });return true;
         }
-        ClearContent();CompactManagementWindow("ProgrammingChallengeWindow",new(490,350),470);AddHeading(Tr("PROGRAMMING_CHALLENGE"),22);
-        _content.AddChild(Picture("ProgrammingActorPortrait",OriginalAssetStore.LoadEmployeePortrait(actor.PortraitId),new(64,64)));
-        AddHeading(EmployeeName(actor),16);
-        var row=new HBoxContainer {Name="ProgrammingReel"};_content.AddChild(row);
+        ClearContent();var canvas=NativeWindow("ProgrammingChallengeWindow",Tr("PROGRAMMING_CHALLENGE"),new(294,207));
+        NativePlace(canvas,Picture("ProgrammingActorPortrait",OriginalAssetStore.LoadEmployeePortrait(actor.PortraitId),new(64,64)),new(216,5,64,64));
+        NativeText(canvas,"ProgrammingActorName",EmployeeName(actor),new(124,74,166,28),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         var slots=new Label[10];
-        for(int i=0;i<10;i++)
-        {slots[i]=new Label {Name=$"ProgrammingSlot{i}",CustomMinimumSize=new(40,35),HorizontalAlignment=HorizontalAlignment.Center};row.AddChild(slots[i]);}
-        var command=new Button {Name="ProgrammingCommand"};_content.AddChild(command);
+        for(int i=0;i<10;i++)slots[i]=NativeText(canvas,$"ProgrammingSlot{i}","",new(5,5+i*18,113,18),11);
+        var command=NativeAction(canvas,"ProgrammingCommand","PROGRAMMING_START",new(124,174,166,27),()=>{});
         command.Pressed+=()=>{ProgrammingChallengeService.Command(state,_session.Random);Refresh();};
         void Refresh()
         {
             for(int i=0;i<10;i++)
             {
                 var probe=new ProgrammingChallengeState {Inspiration=scene.Inspiration,Index=i};int result=ProgrammingChallengeService.Display(probe);
-                slots[i].Text=(i==scene.Index?"▼\n":"\n")+Tr($"PROGRAMMING_REEL_{result}");
-                slots[i].AddThemeColorOverride("font_color",result==0?new(1,.3f,.3f):result==1?new(.3f,1,.3f):new(.3f,.8f,1));
+                slots[i].Text=(i==scene.Index?"▶ ":"   ")+Tr($"PROGRAMMING_REEL_{result}");
+                slots[i].AddThemeColorOverride("font_color",result==0?new(.7f,0,0):result==1?new(0,.45f,0):new(0,.2f,.6f));
             }
             command.Text=Tr(scene.Mode==0?"PROGRAMMING_START":"PROGRAMMING_STOP");command.Disabled=scene.Mode>=2;
         }

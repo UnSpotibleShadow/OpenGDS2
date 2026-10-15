@@ -10,6 +10,13 @@ public static class EmbeddedGraphicsImporter
     public static void Extract(byte[] executable, string destination)
     {
         Directory.CreateDirectory(destination);NativePresentationAssetImporter.Extract(executable,destination);
+        WriteBitmap(executable,0x2C65B4,71,96,destination,"CardFrame.bmp");
+        WriteBitmap(executable,0x2BABBE,71,96,destination,"CardBack.bmp");
+        for(int i=0;i<26;i++){int offset=0x2C5FC2-i*0x5F2;SerializedImageBinding(executable,offset,"Image3",i);WriteBitmap(executable,offset,20,20,destination,$"CardRank{i}.bmp");}
+        for(int i=0;i<4;i++){int offset=0x2CA523-i*0x5F2;SerializedImageBinding(executable,offset,"Image4",i);WriteBitmap(executable,offset,20,20,destination,$"CardSuit{i}.bmp");}
+        for(int i=0;i<3;i++)WriteBitmap(executable,0x2BA50C-i*0x6B2,28,21,destination,$"CardFace{i}.bmp");
+        WriteBitmap(executable,0x39AFFC,421,173,destination,"HorseTrack.bmp");
+        for(int i=0;i<24;i++){int offset=i<8?0x391387+i*0x562:0x3B50DC-(i-8)*0x562;WriteBitmap(executable,offset,16,16,destination,$"HorseMarker{i}.bmp");}
         int[] computers=[0x278842,0x2777B4,0x27670A,0x27566C];
         for(int i=0;i<4;i++)WriteBitmap(executable,computers[i],64,64,destination,$"Computer{i}.bmp");
         WriteBitmap(executable, 0x3B5DC6, 466, 290, destination, "OfficeBase.bmp");
@@ -24,6 +31,13 @@ public static class EmbeddedGraphicsImporter
         WriteBitmap(executable,meetingOffset,256,160,destination,"PlanningMeeting.bmp");
         // fGMKikakusyo.Picture1: proposal document, not ImageFormG[0].
         WriteBitmap(executable,0x2AE079,256,160,destination,"PlanningProposal.bmp");
+        // fGMSyukkaH.Picture1 and fGMHardHatubai.Picture1 share the same scene.
+        const int launchScene=0x28D66E,announcementScene=0x2A3130;
+        int launchSize=BinaryPrimitives.ReadInt32LittleEndian(executable.AsSpan(launchScene+2));
+        if(launchSize!=42038 || announcementScene>executable.Length-launchSize ||
+            !executable.AsSpan(launchScene,launchSize).SequenceEqual(executable.AsSpan(announcementScene,launchSize)))
+            throw new InvalidDataException("Unsupported hardware launch illustration.");
+        WriteBitmap(executable,launchScene,256,160,destination,"HardwareLaunchScene.bmp");
         SerializedImageBinding(executable,0x2F2EA1,"Image1",2);WriteBitmap(executable,0x2F2EA1,256,160,destination,"HallCelebration2.bmp");
         SerializedImageBinding(executable,0x2FD305,"Image1",1);WriteBitmap(executable,0x2FD305,256,160,destination,"HallCelebration1.bmp");
         int[] achievements=[0x380C40,0x3767DE,0x36C37C,0x361F1A];

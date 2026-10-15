@@ -21,3 +21,9 @@ Local checks: clean application build; 522 optional-original domain checks; bili
 Reimport the original archive after updating the source to populate the new icons, facility images, computer previews and native Japanese awards dialogue (dialogue schema 13, 273 entries). English dialogue is authored translation. Older caches still have fallbacks. No original archive, extracted artwork, screenshots or saves are distributed in this change.
 
 Original Windows fonts, DPI, OS stacking and exact timer pacing are not certified. This is source publication for another owner review, not a new exported release. GitHub Actions and repository visibility remain unchanged.
+
+
+M105 evidence correction: `MainForm3` serializes no icon. Its former binding
+borrowed the next form's ICO, so the corrected importer/evidence has82 valid
+child-form bindings. See `presentation-evidence-m105.md`; other M104 artwork
+and functionality are unaffected.

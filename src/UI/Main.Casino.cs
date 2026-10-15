@@ -77,29 +77,20 @@ public partial class Main
     }
     private void ShowPoker(GameState state)
     {
-        ClearContent();CompactManagementWindow("CasinoPokerWindow",new Vector2(430,365),410);
+        var canvas=CasinoCanvas("CasinoPokerWindow","CASINO_POKER",422,318);PokerPayTable(canvas);
         _dialog!.SetTitle(Tr("CASINO_POKER"));
         _dialog.CloseRequested=()=>{CasinoPokerService.Close(state);ShowOfficeReconstruction(state);};
-        var totals=new Label {Name="PokerTotals",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(totals);
-        var message=new Label {Name="PokerPhase",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(message);
-        var row=new HBoxContainer {Name="PokerHand"};_content.AddChild(row);
-        var cards=new List<Button>();
+        var totals=NativeText(canvas,"PokerTotals","",new(4,251,414,20),10);
+        var message=NativeText(canvas,"PokerPhase","",new(4,274,188,40),10);message.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var cards=new List<NativeCasinoCard>();
         for (int index=0;index<5;index++)
         {
             int chosen=index;
-            var card=new Button {Name=$"PokerCard{index}",CustomMinimumSize=new Vector2(72,95),SizeFlagsHorizontal=SizeFlags.ExpandFill};
-            row.AddChild(card);cards.Add(card);
-            card.Pressed+=()=>{if (CasinoPokerService.SelectCard(state,chosen)) _refreshPoker?.Invoke();};
+            var card=PlaceCasinoCard(canvas,$"PokerCard{index}",12+80*index,132,()=>{if(CasinoPokerService.SelectCard(state,chosen))_refreshPoker?.Invoke();});cards.Add(card);
         }
-        var actions=new HBoxContainer();_content.AddChild(actions);
-        var bet=new Button {Name="PokerBetCollect",SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(bet);
-        var deal=new Button {Name="PokerDealDouble",SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(deal);
-        bet.Pressed+=()=>{_session.PokerCommand(0);_refreshPoker?.Invoke();};
-        deal.Pressed+=()=>{_session.PokerCommand(1);_refreshPoker?.Invoke();};
-        AddHeading(Tr("POKER_PAY_TABLE"),12);
-        AddHeading(Tr("CASINO_CLOSE_NOTE"),12);
-        var close=new Button {Name="ClosePoker",Text=Tr("BACK_TO_OFFICE")};_content.AddChild(close);
-        close.Pressed+=()=>{CasinoPokerService.Close(state);ShowOfficeReconstruction(state);};
+        var bet=NativeAction(canvas,"PokerBetCollect","POKER_ADD_BET",new(195,286,70,25),()=>{_session.PokerCommand(0);_refreshPoker?.Invoke();});
+        var deal=NativeAction(canvas,"PokerDealDouble","POKER_DEAL",new(271,286,65,25),()=>{_session.PokerCommand(1);_refreshPoker?.Invoke();});
+        NativeAction(canvas,"ClosePoker","BACK_TO_OFFICE",new(342,286,76,25),()=>{CasinoPokerService.Close(state);ShowOfficeReconstruction(state);}).TooltipText=Tr("CASINO_CLOSE_NOTE");
         _refreshPoker=()=>
         {
             if (!_pokerInterfaceVisible) return;
@@ -118,7 +109,7 @@ public partial class Main
                 bool known=p.Cards.Count==5 && p.Revealed[i];
                 var card=known ? p.Cards[i] : default;
                 string face=known ? CardFace(card) : "?";
-                cards[i].Text=face+(p.Phase==1 && p.Holds[i]==1 ? "\n"+Tr("POKER_HELD") : "");
+                cards[i].Present(card,known,p.Cards.Count==5,p.Phase==1&&p.Holds[i]==1);
                 cards[i].Disabled=!(p.Phase==1 || p.Phase==5 && p.Tick>=18 && i>=1);
                 cards[i].AddThemeColorOverride("font_color",known && card.Suit is 0 or 2 ? Colors.Red : Colors.Black);
                 cards[i].SetMeta("revealed",known);cards[i].SetMeta("held",p.Holds[i]==1);

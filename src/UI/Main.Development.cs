@@ -35,11 +35,10 @@ public partial class Main
 
     private void ShowSequelSelection(GameState state,int room)
     {
-        ClearContent();CompactManagementWindow("SequelSelectionWindow",new Vector2(440,310),420);
+        ClearContent();var canvas=NativeWindow("SequelSelectionWindow",Tr("SEQUEL_DEVELOPMENT"),new(424,286));
         _dialog!.SetTitle(Tr("SEQUEL_DEVELOPMENT"));
-        _content.AddChild(new Label {Text=Tr("SEQUEL_ELIGIBILITY_NOTE"),AutowrapMode=TextServer.AutowrapMode.WordSmart});
-        var table=CreateTable("SequelPredecessors",["GAME_TITLE","SERIES_INSTALLMENT","REVIEW_TOTAL","UNITS_SOLD"],[180,55,60,90]);
-        table.CustomMinimumSize=new Vector2(410,150);_content.AddChild(table);
+        NativeText(canvas,"SequelEligibility",Tr("SEQUEL_ELIGIBILITY_NOTE"),new(4,4,416,32),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var table=ManagementTable(canvas,"SequelPredecessors",["GAME_TITLE","SERIES_INSTALLMENT","REVIEW_TOTAL","UNITS_SOLD"],[181,54,60,90],new(4,40,416,139));
         var candidates=SequelDevelopmentRules.Candidates(state).ToList();
         int? selected=null;
         foreach (var product in candidates)
@@ -51,11 +50,13 @@ public partial class Main
                 row.SetText(column,values[column]);row.SetTextAlignment(column,column==0 ? HorizontalAlignment.Left : HorizontalAlignment.Right);
             }
         }
-        var status=new Label {Name="SequelSelectionStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(status);
-        var confirm=new Button {Name="ConfirmSequelPredecessor",Text=Tr("PLANNING_MEETING"),Disabled=true};_content.AddChild(confirm);
+        var picture=NativePlace(canvas,Picture("SequelHardwarePicture",null,new(64,64)),new(4,185,64,64));
+        var status=NativeText(canvas,"SequelSelectionStatus","",new(76,188,344,55),10);status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var confirm=NativeAction(canvas,"ConfirmSequelPredecessor","PLANNING_MEETING",new(152,256,162,25),()=>{},false);
         void Refresh()
         {
             var result=selected is int parent ? SequelDevelopmentRules.CheckPredecessor(state,parent) : DevelopmentPlanningResult.PredecessorUnavailable;
+            if(selected is int source&&state.ReleasedGames.FirstOrDefault(p=>p.ProductIndex==source) is { } product)picture.Texture=HardwarePicture(state,product.HardwareSourceIndex);
             confirm.Disabled=result!=DevelopmentPlanningResult.Success;
             status.Text=candidates.Count==0 ? Tr("SEQUEL_NO_CANDIDATES") : result==DevelopmentPlanningResult.Success ? Tr("SEQUEL_INHERITANCE_NOTE") : Tr($"PLANNING_RESULT_{result}");
         }
@@ -63,7 +64,7 @@ public partial class Main
         if (candidates.Count>0) {selected=candidates[0].ProductIndex;table.GetRoot().GetFirstChild().Select(0);}
         Refresh();
         confirm.Pressed+=()=>{if (!confirm.Disabled) ShowPlanningPreview(state,room,selected);};
-        AddAction("CANCEL",()=>ShowDevelopmentRoomActions(state,room));
+        NativeAction(canvas,"CancelSequelSelection","CANCEL",new(320,256,100,25),()=>ShowDevelopmentRoomActions(state,room));
     }
 
     private void ShowPlanningPreview(GameState state,int? selectedRoom=null,int? predecessorProductIndex=null,int? mangaSourceIndex=null)

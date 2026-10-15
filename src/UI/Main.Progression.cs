@@ -25,7 +25,7 @@ public partial class Main
         if(selectedSlot is int nativeSlot && state.Calendar is not null){ShowNativeFacility(state,nativeSlot);return;}
         RefreshDesktop();
         if (_officeRenderer is not null && _officeTexture is not null) _officeRenderer.UpdateTexture(_officeTexture,state);
-        ClearContent();AddHeading(Tr("COMPANY_FACILITIES"),26);
+        ClearContent();IdentifyManagementWindow("FacilitiesOverviewWindow");AddHeading(Tr("COMPANY_FACILITIES"),26);
         if (selectedSlot is not null) CompactManagementWindow("TenantFacilityWindow",new Vector2(410,440),390);
         AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
         if (state.Calendar is null) AnnualMessage("FacilitiesUnknown",Tr("CALENDAR_LEGACY_SAVE"));
@@ -99,7 +99,7 @@ public partial class Main
     private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(Tr("FACILITY_OTHER"),value);
     private void ShowFacilityClosure(GameState state,int slot,FacilityKind kind)
     {
-        ClearContent();AddHeading(Tr("FACILITY_CLOSE"),26);
+        ClearContent();IdentifyManagementWindow("FacilityClosureWindow");AddHeading(Tr("FACILITY_CLOSE"),26);
         AnnualMessage("FacilityCloseConfirmation",string.Format(Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind)));
         AnnualButton(kind==FacilityKind.School ? "ConfirmSchoolClosure" : "ConfirmFacilityClosure","CONFIRM",()=>
         {var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);_status.Text=Tr($"FACILITY_RESULT_{result}");});
@@ -183,20 +183,21 @@ public partial class Main
     private void ShowRankings(GameState? state=null)
     {
         if (state is not null) PersistPendingRankings(state);
-        ClearContent();AddHeading(Tr("GLOBAL_RANKINGS"),26);AnnualMessage("RankingScope",Tr("RANKINGS_SCOPE"));
+        var canvas=ManagementCanvas("ReachTimeRecordsWindow",Tr("GLOBAL_RANKINGS"),new(562,242));NativeText(canvas,"RankingScope",Tr("RANKINGS_SCOPE"),new(4,4,554,25),10);
+        _status=NativeText(canvas,"RankingStatus","",new(4,185,554,22),10);
         try
         {
             var book=RankingStore.Load(RankingsPath);
-            var table=CreateTable("ReachTimeRecords",["RANKING_CATEGORY","COMPANY_NAME","RANKING_REACHED_ON","RANKING_RECORDED_ON"],[180,130,130,140]);_content.AddChild(table);
+            var table=ManagementTable(canvas,"ReachTimeRecords",["RANKING_CATEGORY","COMPANY_NAME","RANKING_REACHED_ON","RANKING_RECORDED_ON"],[184,130,113,106],new(4,33,554,147));
             var root=table.GetRoot();
             for(int i=0;i<6;i++)
             {
                 var record=book.Records[i];var row=table.CreateItem(root);row.SetText(0,Tr($"RANKING_{(RankingKind)i}"));row.SetText(1,record.Company);
-                row.SetText(2,record.AchievedOn is { } d?$"{d.Year}/{d.Month}/{d.Week}":Tr("RANKING_NOT_REACHED"));row.SetText(3,record.RecordedOn);
+                row.SetText(2,record.AchievedOn is { } d?$"{d.Year}/{d.Month}/{d.Week}":Tr("RANKING_NOT_REACHED"));row.SetText(3,record.RecordedOn.Length>10?record.RecordedOn[..10]:record.RecordedOn);row.SetTooltipText(3,record.RecordedOn);
             }
         }
-        catch (Exception ex) {AnnualMessage("RankingError",$"{Tr("RANKINGS_LOAD_FAILED")}: {ex.Message}");}
-        AddAction("IMPORT_ORIGINAL_RANKINGS",()=>
+        catch(Exception ex){_status.Text=Tr("RANKINGS_LOAD_FAILED")+": "+ex.Message;}
+        NativeAction(canvas,"ImportOriginalRankings","IMPORT_ORIGINAL_RANKINGS",new(4,211,254,25),()=>
         {
             var dialog=new FileDialog {FileMode=FileDialog.FileModeEnum.OpenFile,Access=FileDialog.AccessEnum.Filesystem,Filters=["*.GDS, *.gds ; GameRank.GDS"],UseNativeDialog=false};
             AddChild(dialog);dialog.FileSelected+=path=>
@@ -213,16 +214,16 @@ public partial class Main
             };
             dialog.Canceled+=()=>dialog.QueueFree();dialog.PopupCenteredRatio(.8f);
         });
-        if (state is not null) AddAction("SALES_CHART",()=>ShowSalesChart(state));
-        AddAction(state is null ? "BACK_TO_TITLE" : "BACK_TO_OFFICE",()=> {if (state is null) ShowTitleScreen();else ShowOfficeReconstruction(state);});
+        if(state is not null)NativeAction(canvas,"RankingsSalesChart","SALES_CHART",new(264,211,141,25),()=>ShowSalesChart(state));
+        NativeAction(canvas,"CloseRankings",state is null?"BACK_TO_TITLE":"BACK_TO_OFFICE",new(411,211,147,25),()=>{if(state is null)ShowTitleScreen();else ShowOfficeReconstruction(state);});
     }
     private void ShowSalesChart(GameState state)
     {
-        ClearContent();AddHeading(Tr("SALES_CHART"),26);
-        if (state.Competition is null) AnnualMessage("CompetitionUnknown",Tr("COMPETITION_UNKNOWN"));
+        ClearContent();var canvas=NativeWindow("SalesRankingWindow",Tr("SALES_CHART"),new(508,287));
+        if(state.Competition is null)NativeText(canvas,"CompetitionUnknown",Tr("COMPETITION_UNKNOWN"),new(4,4,500,70),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         else
         {
-            var table=CreateTable("SalesRankingTable",["COMPANY_RANK","GAME_TITLE","UNITS_SOLD","COMPANY_NAME"],[40,220,100,150]);_content.AddChild(table);
+            var table=ManagementTable(canvas,"SalesRankingTable",["COMPANY_RANK","GAME_TITLE","UNITS_SOLD","COMPANY_NAME"],[35,185,109,140],new(4,4,500,244));
             int? selected=null;
             table.ItemSelected+=()=>{var row=table.GetSelected();if(row is not null)selected=(int)row.GetMetadata(0);};
             var rows=new Dictionary<int,TreeItem>();int[] previous=[];
@@ -252,6 +253,6 @@ public partial class Main
             }
             Refresh();_clockRunning=true;_activeCatalog=_importer.LoadCatalog();_refreshCoreStatus=Refresh;
         }
-        AddAction("GLOBAL_RANKINGS",()=>ShowRankings(state));AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        NativeAction(canvas,"SalesChartRecords","GLOBAL_RANKINGS",new(210,258,143,25),()=>ShowRankings(state));NativeAction(canvas,"CloseSalesChart","BACK_TO_OFFICE",new(359,258,145,25),()=>ShowOfficeReconstruction(state));
     }
 }

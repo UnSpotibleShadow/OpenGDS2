@@ -4,7 +4,6 @@ namespace OpenGDS2.Import;
 public static class NativePresentationAssetImporter
 {
     private static readonly (string Form,int Offset)[] Icons=[
-        ("MainForm3",0x22EA49),
         ("MainForm16",0x22EA49),
         ("fKeibaModosi",0x22EE33),
         ("fGMKikakuKaigi",0x22F485),

@@ -9,43 +9,30 @@ public partial class Main
     private void ShowHardwarePlan(GameState state,int slot)
     {
         var catalog=_activeCatalog;if (catalog is null) {ShowFacilities(state,slot);return;}
-        ClearContent();var canvas=NativeWindow("HardwarePlanWindow",Tr("OWN_HARDWARE_START"),new(310,218));
+        ClearContent();var canvas=NativeWindow("HardwarePlanWindow",Tr("OWN_HARDWARE_START"),new(370,248));
         var room=new OptionButton {Name="HardwareRoom"};for(int i=0;i<2;i++)room.AddItem($"{Tr("DEVELOPMENT_ROOM")} {i+1}",i);
         var design=new OptionButton {Name="HardwareDesign"};design.AddItem(Tr("OWN_HARDWARE_DESIGN_0"),0);design.AddItem(Tr("OWN_HARDWARE_DESIGN_1"),1);design.Select(state.OwnHardware.SelectedDesign);
         var medium=new OptionButton {Name="HardwareMedium"};medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_0"),0);medium.AddItem(Tr("OWN_HARDWARE_MEDIUM_1"),1);medium.Select(state.OwnHardware.SelectedMedium);
         int y=6;foreach(var (key,field) in new[]{("DEVELOPMENT_ROOM",room),("OWN_HARDWARE_DESIGN",design),("OWN_HARDWARE_MEDIUM",medium)})
-        {NativeText(canvas,key,Tr(key),new(4,y,108,26),10);field.AddThemeFontSizeOverride("font_size",10);NativePlace(canvas,field,new(114,y,192,26));y+=33;}
-        var cost=NativeText(canvas,"HardwarePlanCost","",new(4,109,302,24),11);
-        var gate=NativeText(canvas,"HardwarePlanStatus","",new(4,139,302,40),10);gate.AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        var accept=NativeAction(canvas,"StartHardwareDevelopment","CONFIRM",new(111,188,94,26),()=>{});
-        NativeAction(canvas,"CancelHardwarePlan","CANCEL",new(211,188,95,26),()=>ShowFacilities(state,slot));
+        {NativeText(canvas,key,Tr(key),new(4,y,108,26),10);field.AddThemeFontSizeOverride("font_size",10);NativePlace(canvas,field,new(114,y,252,26));y+=33;}
+        var preview=NativePlace(canvas,Picture("HardwareDesignPicture",null,new(64,64)),new(4,112,64,64));
+        var cost=NativeText(canvas,"HardwarePlanCost","",new(78,109,288,24),11);
+        var gate=NativeText(canvas,"HardwarePlanStatus","",new(78,139,288,48),10);gate.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var accept=NativeAction(canvas,"StartHardwareDevelopment","CONFIRM",new(168,216,94,26),()=>{});
+        NativeAction(canvas,"CancelHardwarePlan","CANCEL",new(270,216,96,26),()=>ShowFacilities(state,slot));
         void Refresh()
         {
+            preview.Texture=HardwareDesignPicture(design.GetSelectedId(),medium.GetSelectedId());preview.SetMeta("hardware_picture_index",11+design.GetSelectedId()*2+medium.GetSelectedId());
             cost.Text=$"{Tr("PLANNING_COST")}: ¥{OwnHardwareService.Quote(design.GetSelectedId(),medium.GetSelectedId()):N0}";
             var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId());gate.Text=result==OwnHardwareResult.Success?"":Tr("OWN_HARDWARE_RESULT_"+result);accept.Disabled=result!=OwnHardwareResult.Success;
         }
-        design.ItemSelected+=_=>Refresh();medium.ItemSelected+=_=>Refresh();room.ItemSelected+=_=>Refresh();Refresh();
+        design.ItemSelected+=_=>{state.OwnHardware.SelectedDesign=design.GetSelectedId();Refresh();};medium.ItemSelected+=_=>{state.OwnHardware.SelectedMedium=medium.GetSelectedId();Refresh();};room.ItemSelected+=_=>Refresh();Refresh();
         accept.Pressed+=()=>{if(accept.Disabled)return;var result=OwnHardwareService.Start(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId(),Tr("OWN_HARDWARE_PROJECT"));if(result==OwnHardwareResult.Success)ShowOfficeReconstruction(state);else{Refresh();gate.Text=Tr("OWN_HARDWARE_RESULT_"+result);}};
     }
     private void ShowHardwareProject(GameState state,DevelopmentProjectState project)
     {
         if (ShowPendingOwnHardware(state)) return;
-        ClearContent();CompactManagementWindow("HardwareProjectWindow",new Vector2(450,380),430);
-        AddHeading(Tr("OWN_HARDWARE_PROJECT"),20);
-        AnnualMessage("HardwareLifecycle",Tr("OWN_HARDWARE_LIFECYCLE"));
-        var progress=new ProgressBar {Name="HardwareProgress",MinValue=0,MaxValue=2500};_content.AddChild(progress);
-        var report=new Label {Name="HardwareReport",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(report);
-        _refreshCoreStatus=()=>
-        {
-            progress.Value=project.Progress;var q=project.Quality;
-            report.Text=$"{Tr("DEVELOPMENT_POINTS")}: {project.Progress:N1} / 2,500\n"+
-                $"{Tr("STAT_FUN")}: {q.Fun:N0} / 800 · {Tr("STAT_NOVELTY")}: {q.Novelty:N0} / 800\n"+
-                $"{Tr("STAT_GRAPHICS")}: {q.Graphics:N0} / 800 · {Tr("STAT_MUSIC")}: {q.Music:N0} / 800\n"+
-                string.Join("\n",OwnHardwareService.RequiredTechnologies.Select(id=>$"{HardwareTechnologyName(id)}: "+
-                    Tr(project.HardwareDesign!.TechnologyFlags[id]==1 ? "OWN_HARDWARE_TECH_APPLIED" : "OWN_HARDWARE_TECH_REQUIRED")));
-        };
-        _activeCatalog=_importer.LoadCatalog();_clockRunning=true;
-        _refreshCoreStatus();AddAction("STAFF",()=>ShowStaff(state));AddSaveActions(state);AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        ShowNativeHardwareProject(state,project);
     }
     private string HardwareTechnologyName(int identifier)
     {
@@ -65,19 +52,7 @@ public partial class Main
             });return true;
         }
         var project=state.DevelopmentProjects.FirstOrDefault(OwnHardwareService.Ready);if (project is null) return false;
-        ClearContent();CompactManagementWindow("HardwareLaunchWindow",new Vector2(430,300),410);
-        AddHeading(Tr("OWN_HARDWARE_LAUNCH"),20);AnnualMessage("HardwareLaunchRules",Tr("OWN_HARDWARE_LAUNCH_RULES"));
-        var name=AddField(Tr("OWN_HARDWARE_NAME"),project.HardwareDesign!.LaunchName ?? Tr("OWN_HARDWARE_DEFAULT_NAME"),128);name.Name="HardwareLaunchName";
-        name.TextChanged+=value=>project.HardwareDesign.LaunchName=value;
-        var gate=new Label {Name="HardwareLaunchGate",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(gate);
-        var launch=new Button {Name="LaunchOwnHardware",Text=Tr("OWN_HARDWARE_LAUNCH")};_content.AddChild(launch);
-        launch.Pressed+=()=>
-        {
-            if (!ReferenceEquals(_session.Current,state)) return;
-            var result=OwnHardwareService.Launch(state,project,name.Text);
-            if (result==OwnHardwareResult.Success) {PersistPendingRankings(state);ShowOfficeReconstruction(state);}
-            else gate.Text=Tr($"OWN_HARDWARE_RESULT_{result}");
-        };
-        AddSaveActions(state);return true;
+        ShowNativeHardwareLaunch(state,project);return true;
+
     }
 }

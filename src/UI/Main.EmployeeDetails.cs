@@ -6,6 +6,7 @@ namespace OpenGDS2.UI;
 
 public partial class Main
 {
+    private bool _employeeTechnologyPage;
     private DesktopWindow? _employeeDetails;
     private EmployeeState? _selectedEmployee;
     private EmployeeSelectionArrow? _selectionArrow;
@@ -18,7 +19,7 @@ public partial class Main
     private void CloseEmployeeDetails()
     {
         if (_employeeDetails is not null && GodotObject.IsInstanceValid(_employeeDetails))
-        {_workspace?.RemoveChild(_employeeDetails);_employeeDetails.QueueFree();}
+        {_dialogPositions["EmployeeDetailsWindow"]=_employeeDetails.Position;_workspace?.RemoveChild(_employeeDetails);_employeeDetails.QueueFree();}
         if (_selectionArrow is not null && GodotObject.IsInstanceValid(_selectionArrow))
         {_selectionArrow.GetParent()?.RemoveChild(_selectionArrow);_selectionArrow.QueueFree();}
         _employeeDetails=null;_selectedEmployee=null;_selectionArrow=null;_employeeChart=null;_employeeLevelUp=null;
@@ -34,6 +35,7 @@ public partial class Main
         _employeeDetails=new DesktopWindow {Name="EmployeeDetailsWindow"};_workspace!.AddChild(_employeeDetails);
         var position=_windows["CompanyWindow"].Position;
         _employeeDetails.Initialize(EmployeeName(employee),position,new Vector2(224,376),false);
+        if(_dialogPositions.TryGetValue("EmployeeDetailsWindow",out var savedPosition))_employeeDetails.SetPositionInsideWorkspace(savedPosition);
         _employeeDetails.CloseRequested=CloseEmployeeDetails;
         _windows["CompanyWindow"].Hide();
         _employeeDetails.Theme=ClassicTheme.Create();_employeeDetails.Theme.DefaultFontSize=11;
@@ -59,28 +61,30 @@ public partial class Main
         financials.AddChild(new Label {Text=Tr("MONTHLY_SALARY")});AddEmployeeDetailLabel(financials,"Salary","",false,$"MonthlySalary{employee.SourceIndex}");
         financials.AddChild(new Label {Text=Tr("CONTRACT_FEE")});AddEmployeeDetailLabel(financials,"Fee","",false);
         var tabs=new HBoxContainer();tabs.AddThemeConstantOverride("separation",2);selected.AddChild(tabs);
-        EmployeeDetailButton(tabs,"EmployeeAbilities","ABILITIES",()=> { _employeeAbilities!.Show();_employeeTechnologies!.Hide(); });
-        EmployeeDetailButton(tabs,"EmployeeTechnologies","TECHNOLOGIES",()=> { _employeeAbilities!.Hide();_employeeTechnologies!.Show(); });
+        var tabGroup=new ButtonGroup();
+        var abilityTab=EmployeeDetailButton(tabs,"EmployeeAbilities","ABILITIES",()=> { _employeeTechnologyPage=false;_employeeAbilities!.Show();_employeeTechnologies!.Hide(); });
+        var technologyTab=EmployeeDetailButton(tabs,"EmployeeTechnologies","TECHNOLOGIES",()=> { _employeeTechnologyPage=true;_employeeAbilities!.Hide();_employeeTechnologies!.Show(); });
+        abilityTab.ToggleMode=technologyTab.ToggleMode=true;abilityTab.ButtonGroup=technologyTab.ButtonGroup=tabGroup;
+        abilityTab.ButtonPressed=!_employeeTechnologyPage;technologyTab.ButtonPressed=_employeeTechnologyPage;
+        abilityTab.Pressed+=()=>abilityTab.ButtonPressed=true;technologyTab.Pressed+=()=>technologyTab.ButtonPressed=true;
         _employeeAbilities=new VBoxContainer {Name="EmployeeAbilitiesPage"};selected.AddChild(_employeeAbilities);
-        _employeeChart=new EmployeeAbilityChart {Name="EmployeeAbilityChart",Employee=employee,CustomMinimumSize=new Vector2(210,144),ClipContents=true,
+        _employeeChart=new EmployeeAbilityChart {Name="EmployeeAbilityChart",Employee=employee,Compact=true,CustomMinimumSize=new Vector2(210,124),ClipContents=true,
             MouseFilter=MouseFilterEnum.Ignore};_employeeAbilities.AddChild(_employeeChart);
         EmployeeDetailBar((VBoxContainer)_employeeAbilities,"Speed","STAT_DEVELOPMENT_SPEED",99);
         EmployeeDetailBar((VBoxContainer)_employeeAbilities,"Inspiration","STAT_INSPIRATION",99);
         EmployeeDetailBar((VBoxContainer)_employeeAbilities,"Stress","STRESS",99);
         _employeeTechnologies=new ScrollContainer {Name="EmployeeTechnologiesPage",CustomMinimumSize=new Vector2(210,210),Visible=false};selected.AddChild(_employeeTechnologies);
-        var technologies=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};_employeeTechnologies.AddChild(technologies);
-        if (employee.TechnologyLevels is null) technologies.AddChild(new Label {Text=Tr("NOT_YET_DECODED")});
+        var technologyContents=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};_employeeTechnologies.AddChild(technologyContents);
+        technologyContents.AddChild(new Label {Name="EmployeeTechnologyCapacity",Text=$"{Tr("MAXIMUM_TECHNOLOGIES")}: {employee.MaximumTechnologies?.ToString()??"?"}"});
+        var technologies=CreateTable("EmployeeTechnologyTable",["TECHNOLOGY_NAME","EMPLOYEE_LEVEL"],[154,35]);technologies.CustomMinimumSize=new(210,184);technologies.ScrollHorizontalEnabled=false;technologies.AddThemeFontSizeOverride("title_button_font_size",10);technologyContents.AddChild(technologies);
+        if(employee.TechnologyLevels is null){var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,Tr("NOT_YET_DECODED"));}
         else
         {
             var learned=employee.TechnologyLevels.Where(p=>p.Value>0).OrderBy(p=>p.Key).ToList();
-            if (learned.Count==0) technologies.AddChild(new Label {Text=Tr("EMPLOYEE_NO_TECHNOLOGIES")});
-            foreach (var skill in learned)
-            {
-                var original=_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==skill.Key);
-                string name=original is null || _activeCatalog is null ? "?" : CatalogName(_activeCatalog,"TECHNOLOGY",skill.Key,original.Name);
-                technologies.AddChild(new Label {Text=$"{name} · {Tr("LEVEL")} {skill.Value}",AutowrapMode=TextServer.AutowrapMode.WordSmart});
-            }
+            if(learned.Count==0){var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,Tr("EMPLOYEE_NO_TECHNOLOGIES"));}
+            foreach(var skill in learned){var original=_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==skill.Key);var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,original is null?"?":TechnologyName(original));row.SetText(1,skill.Value.ToString());row.SetTextAlignment(1,HorizontalAlignment.Right);}
         }
+        _employeeAbilities.Visible=!_employeeTechnologyPage;_employeeTechnologies.Visible=_employeeTechnologyPage;
         var footer=new HBoxContainer();footer.AddThemeConstantOverride("separation",2);_employeeDetails.Body.AddChild(footer);
         AddEmployeeDetailLabel(footer,"Experience","",false);
         _employeeLevelUp=EmployeeDetailButton(footer,"EmployeeLevelUp","LEVEL_UP",()=>
@@ -119,6 +123,11 @@ public partial class Main
     {
         var button=new Button {Name=name,Text=Tr(key),TooltipText=Tr(key),SizeFlagsHorizontal=SizeFlags.ExpandFill};
         button.AddThemeStyleboxOverride("normal",ClassicTheme.CompactButton());button.AddThemeStyleboxOverride("pressed",ClassicTheme.CompactButton(true));
+        foreach(string mode in new[]{"hover","disabled","focus"})button.AddThemeStyleboxOverride(mode,ClassicTheme.CompactButton());
+        if(name=="EmployeeLevelUp")NativeButtonArtwork.Apply(button,0x29DC34);
+        else if(name.StartsWith("DismissEmployee",StringComparison.Ordinal))NativeButtonArtwork.Apply(button,0x29C8D8);
+        else if(name=="EmployeeAbilities")NativeButtonArtwork.ApplyTab(button,0x29FE77,0x29F691);
+        else if(name=="EmployeeTechnologies")NativeButtonArtwork.ApplyTab(button,0x2A162B,0x2A0E45);
         parent.AddChild(button);button.Pressed+=()=> {if (_dialog is null && _desktopState is GameState state && !CalendarService.HasPending(state)) action();};return button;
     }
     private void EmployeeDetailBar(VBoxContainer parent,string key,string caption,double maximum)

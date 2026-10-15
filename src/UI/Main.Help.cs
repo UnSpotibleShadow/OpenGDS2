@@ -8,10 +8,13 @@ public partial class Main
 {
     private void ShowHelp(GameState? state=null,int topic=0)
     {
-        ClearContent();CompactManagementWindow("HelpTopicWindow",new(700,580),680);AddHeading(Tr("GAME_HELP"),24);
+        var canvas=ManagementCanvas("HelpTopicWindow",Tr("GAME_HELP"),new(408,369));
         var selector=new OptionButton {Name="HelpTopicSelector"};for(int i=0;i<5;i++)selector.AddItem(Tr($"HELP_TOPIC_{i}"),i);
-        selector.Select(topic);_content.AddChild(selector);selector.ItemSelected+=i=>ShowHelp(state,(int)i);
-        if(topic==3)_content.AddChild(Picture("HelpTitlePicture",OriginalAssetStore.LoadTexture("Graphic/Embedded/HelpTitle.bmp"),new(250,171)));
+        selector.Select(topic);selector.AddThemeFontSizeOverride("font_size",11);NativePlace(canvas,selector,new(4,4,400,27));selector.ItemSelected+=i=>ShowHelp(state,(int)i);
+        NativeFill(canvas,"HelpBodyBox",new(4,39,400,286),Colors.White,true);
+        var scroll=NativePlace(canvas,new ScrollContainer {Name="HelpScroll",HorizontalScrollMode=ScrollContainer.ScrollMode.Disabled},new(7,42,394,280));
+        var contents=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};scroll.AddChild(contents);
+        if(topic==3)contents.AddChild(Picture("HelpTitlePicture",OriginalAssetStore.LoadTexture("Graphic/Embedded/HelpTitle.bmp"),new(250,171)));
         string text=Tr($"HELP_BODY_{topic}");
         if(!TranslationServer.GetLocale().StartsWith("en",StringComparison.OrdinalIgnoreCase))
         {
@@ -23,7 +26,7 @@ public partial class Main
             }
             catch(System.IO.IOException){}catch(JsonException){}
         }
-        var body=new RichTextLabel {Name="HelpTopicBody",Text=text,BbcodeEnabled=false,FitContent=false,ScrollActive=true,CustomMinimumSize=new(640,330)};_content.AddChild(body);
-        AddAction(state is null?"BACK_TO_TITLE":"BACK_TO_OFFICE",()=>{if(state is null)ShowTitleScreen();else ShowOfficeReconstruction(state);});
+        var body=new RichTextLabel {Name="HelpTopicBody",Text=text,BbcodeEnabled=false,FitContent=true,ScrollActive=false,CustomMinimumSize=new(370,0),SizeFlagsHorizontal=SizeFlags.ExpandFill};body.AddThemeFontSizeOverride("normal_font_size",11);contents.AddChild(body);
+        NativeAction(canvas,"CloseHelp",state is null?"BACK_TO_TITLE":"BACK_TO_OFFICE",new(246,337,158,27),()=>{if(state is null)ShowTitleScreen();else ShowOfficeReconstruction(state);});
     }
 }

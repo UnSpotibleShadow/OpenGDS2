@@ -6,6 +6,51 @@ public static class LocalSceneCaptionRules
     public static readonly (int X,int Y,int Width,int Height) HallRegion=(20,68,222,66);
     public static readonly (int X,int Y,int Width,int Height) ExhibitionRegion=(60,0,137,22);
     public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);
+    public static readonly (int X,int Y,int Width,int Height) HardwareRegion=(49,0,164,23);
+    public static byte[] PatchHardware(byte[] source)
+    {
+        const int width=256,height=160;
+        if(source.Length!=width*height*3)throw new InvalidDataException("Unexpected hardware scene dimensions.");
+        var output=(byte[])source.Clone();var r=HardwareRegion;
+        // Authored title plate; preserve the stage, audience and devices below it.
+        for(int y=r.Y;y<r.Y+r.Height;y++)for(int x=r.X;x<r.X+r.Width;x++)
+        {int i=(y*width+x)*3;output[i]=107;output[i+1]=99;output[i+2]=91;}
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"NEW HARDWARE",59,4,2,2,(0,0,0),1);
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"NEW HARDWARE",59,4,2,2,(255,107,95));
+        return output;
+    }
+    public static readonly (int X,int Y,int Width,int Height)[] SalesRegions=[(80,40,91,45),(38,18,181,25),(64,25,109,23),(64,7,127,23)];
+    public static readonly (int X,int Y,int Width,int Height) HelpRegion=(6,30,238,119);
+    public static byte[] PatchSales(byte[] source,int stage)
+    {
+        if(source.Length!=256*160*3||stage is <1 or >4)throw new InvalidDataException("Unexpected sales picture.");
+        var output=(byte[])source.Clone();var area=SalesRegions[stage-1];
+        for(int y=area.Y;y<area.Y+area.Height;y++)for(int x=area.X;x<area.X+area.Width;x++){int i=(y*256+x)*3;output[i]=output[i+1]=output[i+2]=255;}
+        if(stage==1)
+        {
+            LocalBitmapLetteringRules.DrawLettering(output,256,160,"100K",90,44,3,3,(0,0,0),1);LocalBitmapLetteringRules.DrawLettering(output,256,160,"100K",90,44,3,3,(255,0,160));
+            LocalBitmapLetteringRules.DrawLettering(output,256,160,"SOLD!",96,68,2,2,(0,0,0));
+        }
+        else
+        {
+            string caption=new[]{"","250K SOLD!","500K SOLD!","1M SOLD!"}[stage-1];int scale=stage==3?1:2;
+            int x=area.X+(area.Width-(caption.Length*6-1)*scale)/2,y=area.Y+5;
+            LocalBitmapLetteringRules.DrawLettering(output,256,160,caption,x,y,scale,2,(0,0,0),1);
+            LocalBitmapLetteringRules.DrawLettering(output,256,160,caption,x,y,scale,2,stage==2?((byte)255,(byte)107,(byte)95):((byte)255,(byte)255,(byte)0));
+        }
+        return output;
+    }
+    public static byte[] PatchHelp(byte[] source)
+    {
+        const int width=250,height=171;
+        if(source.Length!=width*height*3)throw new InvalidDataException("Unexpected Help title.");
+        var output=(byte[])source.Clone();var area=HelpRegion;
+        for(int y=area.Y;y<area.Y+area.Height;y++)for(int x=area.X;x<area.X+area.Width;x++)for(int channel=0;channel<3;channel++)
+        {int left=source[y*width*3+channel],right=source[(y*width+width-1)*3+channel];output[(y*width+x)*3+channel]=(byte)Math.Round(left+(right-left)*x/(width-1.0));}
+        foreach(var (text,y) in new[]{("GAME DEV",52),("STORY II",94)})
+        {LocalBitmapLetteringRules.DrawLettering(output,width,height,text,56,y+2,3,3,(0,0,0),1);LocalBitmapLetteringRules.DrawLettering(output,width,height,text,54,y,3,3,(220,220,220));}
+        return output;
+    }
     public static byte[] PatchReviewer(byte[] source,int index)
     {
         if(source.Length!=64*64*3 || index is <0 or >3)throw new InvalidDataException("Unexpected reviewer picture.");

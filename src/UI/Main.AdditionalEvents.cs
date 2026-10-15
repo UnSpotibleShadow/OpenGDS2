@@ -29,15 +29,13 @@ public partial class Main
                 if(!ShowPendingProductEvent(state))ShowSales(state);
             });return;
         }
-        ClearContent();CompactManagementWindow("SalesAchievementWindow",new(410,330),390);
-        AddHeading(Tr("SALES_MILESTONE"),22);AddHeading(product.Title,16);
-        var art=OriginalAssetStore.LoadTexture($"Graphic/Embedded/SalesAchievement{stage}.bmp");
-        _content.AddChild(Picture("SalesAchievementPicture",art,new(256,160)));
-        if(art is null)AddHeading(Tr("EVENT_ARTWORK_REIMPORT"),14);
-        AddHeading($"{Tr("UNITS_SOLD")}: {SalesMilestoneService.Threshold(stage):N0}",18);
-        var close=new Button {Name="AcknowledgeSalesMilestone",Text=Tr("CONTINUE")};_content.AddChild(close);
-        close.Pressed+=()=>{product.SalesMilestonePage=1;ShowSalesAchievement(state,product);};
+        ClearContent();var canvas=NativeWindow("SalesAchievementWindow",Tr("SALES_MILESTONE"),new(274,225));
+        NativeText(canvas,"SalesAchievementTitle",product.Title,new(4,2,266,20),10,HorizontalAlignment.Center);
+        var art=OriginalAssetStore.LoadTexture($"Graphic/Embedded/SalesAchievement{stage}.bmp");NativePlace(canvas,Picture("SalesAchievementPicture",art,new(256,160)),new(9,27,256,160));
+        if(art is null)NativeText(canvas,"SalesArtworkMissing",Tr("EVENT_ARTWORK_REIMPORT"),new(12,75,250,45),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeAction(canvas,"AcknowledgeSalesMilestone","CONTINUE",new(90,196,94,25),()=>{product.SalesMilestonePage=1;ShowSalesAchievement(state,product);});
     }
+
     private void ShowHardwareLaunchCard(GameState state,CalendarTransaction pending)
     {
         int source=state.Calendar!.Hardware[pending.Index].SourceIndex;
@@ -47,13 +45,7 @@ public partial class Main
             ShowConversation(Tr("CALENDAR_EVENT_HardwareLaunch"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("HARDWARE_LAUNCH_LICENSE_MESSAGE"))],()=>
             {if(ReferenceEquals(state.Calendar?.Pending,pending)){CalendarService.Acknowledge(state);ShowOfficeReconstruction(state);}});return;
         }
-        ClearContent();CompactManagementWindow("HardwareAnnouncementWindow",new(400,330),380);
-        AddHeading(Tr("CALENDAR_EVENT_HardwareLaunch"),22);
-        _content.AddChild(Picture("HardwareAnnouncementPicture",HardwarePicture(state,source),new(64,64)));
-        AddHeading(CatalogName(catalog,"HARDWARE",source,hardware.Name),20);AddHeading((hardware.RawMembers.TryGetValue("0F00",out long bits)?bits.ToString():"?")+" bit",16);
-        AddHeading($"{Tr("HARDWARE_LICENSES")}: "+(hardware.RawMembers.TryGetValue("0FC4",out long fee)?$"¥{fee:N0}":Tr("UNKNOWN")),16);
-        AnnualMessage("HardwareAnnouncementDescription",hardware.Description);
-        var confirm=new Button {Name="AcknowledgeCalendar",Text=Tr("CONTINUE")};_content.AddChild(confirm);
-        confirm.Pressed+=()=>{pending.HardwareLaunchPage=1;ShowHardwareLaunchCard(state,pending);};
+        ShowNativeHardwareAnnouncement(state,pending,hardware,catalog);
+
     }
 }

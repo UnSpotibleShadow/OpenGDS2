@@ -72,7 +72,7 @@ func run() -> void:
             await press_node("CompanyFacilities")
             # Clicking the corresponding office plot uses the selected-slot path.
             var office=main.find_child("OriginalOfficeBackground",true,false)
-            main.find_child("ManagementWindow",true,false).find_child("CloseWindow",true,false).pressed.emit()
+            main.find_child("FacilitiesOverviewWindow",true,false).find_child("CloseWindow",true,false).pressed.emit()
             await process_frame
             var native_pos=Vector2(90,215) # first occupied facility slot hit region
             var click=InputEventMouseButton.new();click.button_index=MOUSE_BUTTON_LEFT;click.pressed=true;click.position=native_pos

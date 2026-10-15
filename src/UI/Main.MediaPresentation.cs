@@ -19,22 +19,4 @@ public partial class Main
         NativeText(canvas,"MediaUnitCost",$"{Tr("SHIPMENT_UNIT_COST")}: ¥{cost:N0}",new(4,220,182,18));
         NativeAction(canvas,"CloseMediaInformation","CANCEL",new(188,221,94,25),back);
     }
-    private void ReproductionBreakdown(GameState state,ReleasedGameState product,long unit,SpinBox copies)
-    {
-        _content.AddChild(Picture("ProductionHardwarePicture",HardwarePicture(state,product.HardwareSourceIndex),new(64,64)));
-        var box=new PanelContainer {Name="ReproductionCostTable"};box.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=new(1,1,.65f),ContentMarginLeft=6,ContentMarginRight=6});_content.AddChild(box);
-        var grid=new GridContainer {Columns=2};box.AddChild(grid);
-        MoneyCell(grid,"ProductionMediaCost",Tr("SHIPMENT_MEDIA_COST")).Text=$"¥{unit-200:N0}";
-        MoneyCell(grid,"ProductionPackageCost",Tr("SHIPMENT_PACKAGE_COST")).Text="¥200";
-        MoneyCell(grid,"ProductionUnitCost",Tr("SHIPMENT_UNIT_COST")).Text=$"¥{unit:N0}";
-        var total=MoneyCell(grid,"ProductionTotalCost",Tr("PRODUCTION_COST"));
-        MoneyCell(grid,"ProductionFunds",Tr("FUNDS")).Text=$"¥{state.Money:N0}";
-        void Refresh()=>total.Text=$"¥{checked(unit*(long)copies.Value):N0}";
-        copies.ValueChanged+=_=>Refresh();Refresh();
-        AddAction("MEDIA_INFORMATION",()=>
-        {
-            long selected=(long)copies.Value;
-            ShowMediaInformation(state,product.HardwareSourceIndex,product.DataSize,()=>ShowProduction(state,product,selected));
-        });
-    }
 }

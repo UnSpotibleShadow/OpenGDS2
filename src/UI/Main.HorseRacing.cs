@@ -1,5 +1,6 @@
 using Godot;
 using OpenGDS2.Domain;
+using OpenGDS2.Core;
 namespace OpenGDS2.UI;
 public partial class Main
 {
@@ -17,17 +18,23 @@ public partial class Main
     }
     private void ShowHorseRacing(GameState state)
     {
-        ClearContent();CompactManagementWindow("CasinoHorseWindow",new Vector2(665,560),645);
+        ClearContent();var canvas=NativeWindow("CasinoHorseWindow",Tr("CASINO_HORSE"),new(586,428));
         _dialog!.SetTitle(Tr("CASINO_HORSE"));
         _dialog.CloseRequested=()=>{CasinoHorseService.Close(state);ShowOfficeReconstruction(state);};
-        var totals=new Label {Name="HorseTotals",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(totals);
-        var message=new Label {Name="HorsePhase",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(message);
-        var runners=new List<Label>();
-        for(int i=0;i<8;i++) {var line=new Label {Name=$"HorseRunner{i}",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(line);runners.Add(line);}
-        var selectors=new HBoxContainer();_content.AddChild(selectors);
+        var totals=NativeText(canvas,"HorseTotals","",new(4,4,578,22),10);
+        var message=NativeText(canvas,"HorsePhase","",new(4,382,390,42),10);message.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var table=ManagementTable(canvas,"HorseRoster",["HORSE_NUMBER","EMPLOYEE_NAME","HORSE_JOCKEY","HORSE_FORECAST","HORSE_ODDS"],[34,208,114,112,77],new(4,31,578,177));
+        var rosterRows=new TreeItem[8];for(int i=0;i<8;i++){rosterRows[i]=table.CreateItem(table.GetRoot());rosterRows[i].SetMetadata(0,i);}
+        table.ItemSelected+=()=>{if(state.Casino.Horse.Stage==0&&table.GetSelected() is { } selected){state.Casino.Horse.SelectedFirst=selected.GetMetadata(0).AsInt32();if(state.Casino.Horse.SelectedSecond==state.Casino.Horse.SelectedFirst)state.Casino.Horse.SelectedSecond=(state.Casino.Horse.SelectedFirst+1)%8;state.Casino.Horse.HeldAdjustment=0;_refreshPoker?.Invoke();}};
+        var track=NativePlace(canvas,new NativeHorseTrack {Name="HorseRaceTrack",Race=state.Casino.Horse,TextureFilter=TextureFilterEnum.Nearest,Visible=false,ClipContents=true},new(82,33,421,173));
+        var selectors=NativePlace(canvas,new HBoxContainer(),new(4,213,578,26));
         var kind=new OptionButton {Name="HorseWagerKind"};kind.AddItem(Tr("HORSE_SINGLE"),0);kind.AddItem(Tr("HORSE_PAIR"),1);selectors.AddChild(kind);
-        var first=new OptionButton {Name="HorseFirst",SizeFlagsHorizontal=SizeFlags.ExpandFill};selectors.AddChild(first);
-        var second=new OptionButton {Name="HorseSecond",SizeFlagsHorizontal=SizeFlags.ExpandFill};selectors.AddChild(second);
+        var first=new OptionButton {Name="HorseFirst",SizeFlagsHorizontal=SizeFlags.ExpandFill,ClipText=true};selectors.AddChild(first);
+        var second=new OptionButton {Name="HorseSecond",SizeFlagsHorizontal=SizeFlags.ExpandFill,ClipText=true};selectors.AddChild(second);
+        foreach(var field in new[]{kind,first,second})field.AddThemeFontSizeOverride("font_size",10);
+        var matrix=NativePlace(canvas,new GridContainer {Name="HorseBettingMatrix",Columns=4},new(4,244,578,65));matrix.AddThemeConstantOverride("h_separation",3);matrix.AddThemeConstantOverride("v_separation",2);
+        var matrixButtons=new Button[8];
+        for(int i=0;i<8;i++){int pick=i;var button=new Button {Name="HorseMatrix"+i,Icon=OriginalAssetStore.LoadTexture($"Graphic/Embedded/HorseMarker{i}.bmp"),CustomMinimumSize=new(141,29),ClipText=true};button.AddThemeFontSizeOverride("font_size",10);matrix.AddChild(button);matrixButtons[i]=button;button.Pressed+=()=>{var race=state.Casino.Horse;if(race.Stage!=0)return;if(race.PairSelected){race.SelectedSecond=pick==race.SelectedFirst?(pick+1)%8:pick;}else{race.SelectedFirst=pick;if(race.SelectedSecond==pick)race.SelectedSecond=(pick+1)%8;}race.HeldAdjustment=0;_refreshPoker?.Invoke();};}
         kind.ItemSelected+=i=>{state.Casino.Horse.PairSelected=i==1;_refreshPoker?.Invoke();};
         first.ItemSelected+=i=>
         {
@@ -36,22 +43,21 @@ public partial class Main
             r.HeldAdjustment=0;_refreshPoker?.Invoke();
         };
         second.ItemSelected+=i=>{state.Casino.Horse.SelectedSecond=second.GetItemId((int)i);state.Casino.Horse.HeldAdjustment=0;_refreshPoker?.Invoke();};
-        var wager=new Label {Name="HorseSelectedWager"};_content.AddChild(wager);
-        var actions=new HBoxContainer();_content.AddChild(actions);
+        var wager=NativeText(canvas,"HorseSelectedWager","",new(4,315,578,22),10);
+        var actions=NativePlace(canvas,new HBoxContainer(),new(4,341,578,28));
         var add=new Button {Name="HorseAddWager",Text=Tr("HORSE_ADD"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(add);
         var remove=new Button {Name="HorseRemoveWager",Text=Tr("HORSE_REMOVE"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(remove);
         add.ButtonDown+=()=>state.Casino.Horse.HeldAdjustment=1;remove.ButtonDown+=()=>state.Casino.Horse.HeldAdjustment=-1;
         add.ButtonUp+=()=>state.Casino.Horse.HeldAdjustment=0;remove.ButtonUp+=()=>state.Casino.Horse.HeldAdjustment=0;
         var start=new Button {Name="HorseStart",Text=Tr("HORSE_START"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(start);
         start.Pressed+=()=>{_session.StartHorse();_horseElapsed=0;_refreshPoker?.Invoke();};
-        var accept=new Button {Name="HorseAcceptResult",Text=Tr("HORSE_ACCEPT_RESULT")};_content.AddChild(accept);
+        var accept=NativeAction(canvas,"HorseAcceptResult","HORSE_ACCEPT_RESULT",new(402,378,180,25),()=>{});
         accept.Pressed+=()=>
         {
             if(state.Casino.Horse.Stage==3) _session.AcceptHorsePayout(_activeCatalog);else _session.ResumeHorseCatalog(_activeCatalog);
             _horseElapsed=0;_refreshPoker?.Invoke();
         };
-        AddHeading(Tr("HORSE_ORIGINAL_DEFECTS"),12);AddHeading(Tr("HORSE_CLOSE_NOTE"),12);
-        var close=new Button {Name="CloseHorse",Text=Tr("BACK_TO_OFFICE")};_content.AddChild(close);
+        var close=NativeAction(canvas,"CloseHorse","BACK_TO_OFFICE",new(402,402,180,23),()=>{});close.TooltipText=Tr("HORSE_ORIGINAL_DEFECTS")+"\n"+Tr("HORSE_CLOSE_NOTE");
         close.Pressed+=()=>{CasinoHorseService.Close(state);ShowOfficeReconstruction(state);};
         List<RaceRunner>? roster=null;int lastFirst=-1;
         _refreshPoker=()=>
@@ -65,9 +71,11 @@ public partial class Main
             for(int i=0;i<8;i++)
             {
                 var h=r.Runners[i];string forecasts=string.Join("/",r.ForecastRanks.Select(row=>(row[i]+1).ToString()));
-                runners[i].Text=string.Format(Tr("HORSE_RUNNER"),i+1,h.Name,h.JockeyName,forecasts,r.WinOdds[i],r.SingleStakes[i]);
-                if(r.Stage>0) runners[i].Text+="  "+(r.RacePhase<2 ? r.Positions[i] : r.FinishCoordinates[i]).ToString("0.0");
+                var entry=rosterRows[i];entry.SetText(0,(i+1).ToString());entry.SetText(1,h.Name);entry.SetText(2,h.JockeyName);entry.SetText(3,forecasts);entry.SetText(4,r.WinOdds[i].ToString("0.0"));entry.SetTextAlignment(4,HorizontalAlignment.Right);
+                if(r.PairSelected&&i==r.SelectedFirst){matrixButtons[i].Text="—";matrixButtons[i].Disabled=true;}
+                else{double cellOdds=r.PairSelected?r.PairOdds[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,i)]:r.WinOdds[i];long cellStake=r.PairSelected?r.PairStakes[r.SelectedFirst][i]:r.SingleStakes[i];matrixButtons[i].Text=$"{(r.PairSelected?(r.SelectedFirst+1)+"–":"")}{i+1}: {cellOdds:0.0} · ¥{cellStake:N0}";matrixButtons[i].Disabled=r.Stage!=0;}
             }
+            table.Visible=r.Stage!=1;track.Visible=r.Stage==1;track.Race=r;track.QueueRedraw();
             kind.Select(r.PairSelected ? 1 : 0);
             bool changed=!ReferenceEquals(roster,r.Runners);
             if(changed) {first.Clear();for(int i=0;i<8;i++) first.AddItem($"{i+1}: {r.Runners[i].Name}",i);}

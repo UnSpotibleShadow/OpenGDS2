@@ -2,12 +2,6 @@
   "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
   "icons": [
     {
-      "form": "MainForm3",
-      "offset": 2288201,
-      "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
-      "size": 318
-    },
-    {
       "form": "MainForm16",
       "offset": 2288201,
       "sha256": "e5ae9a28c3e5d80897843278b4676c6278a45d82d3885d4f66a8a85950b4327f",
