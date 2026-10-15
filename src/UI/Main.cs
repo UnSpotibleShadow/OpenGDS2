@@ -482,8 +482,9 @@ public partial class Main : Control
 
     private void AddHeading(string text, int size)
     {
-        var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center };
-        label.AddThemeFontSizeOverride("font_size", _desktop is null ? size : Math.Min(size, 18));
+        var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center,
+            AutowrapMode=TextServer.AutowrapMode.WordSmart,SizeFlagsHorizontal=SizeFlags.ExpandFill };
+        label.AddThemeFontSizeOverride("font_size", _desktop is null ? size : Math.Min(size, _content.GetChildCount()==0 ? 14 : 11));
         if (_dialog is not null && _content.GetChildCount() == 0) _dialog.SetTitle(text);
         _content.AddChild(label);
     }

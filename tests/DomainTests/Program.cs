@@ -28,6 +28,15 @@ GameState ProgrammingFixture(int index=5)
         OfficeActorContinuation=new() {ActorSlot=0,EmployeeSourceIndex=0,RoomIndex=0},
         PendingProgrammingChallenge=new() {Inspiration=80,IntroPage=2,Mode=4,Index=index,Outcome=index==1?0:1,QualityIndex=index==1?null:0,CommentVariant=0}};
 }
+Test("English Help covers all five original pages and 91 caption blocks",()=>
+{
+    int[] counts=[16,34,20,2,19];Check(counts.Sum()==OriginalHelpEnglish.BlockCount);
+    for(int topic=0;topic<5;topic++){var blocks=OriginalHelpEnglish.Page(topic);Check(blocks.Count==counts[topic] && blocks.All(x=>!string.IsNullOrWhiteSpace(x)));}
+    Check(OriginalHelpEnglish.Page(0).Any(x=>x.Contains("experience points")));
+    Check(OriginalHelpEnglish.Page(1).Any(x=>x.Contains("poach")));
+    Check(OriginalHelpEnglish.Page(4).Any(x=>x.Contains("Hall of Fame")));
+    Check(OriginalHelpEnglish.OriginalWebsite=="http://www.bj.wakwak.com/~gamedev2/");
+});
 Test("local scene captions change only their declared area and preserve source pixels",()=>
 {
     byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray();byte[] original=(byte[])source.Clone();
@@ -3326,6 +3335,29 @@ TechnologyDefinition UseTechnology(int id=0,int units=2)=>new() {SourceIndex=id,
         TechnologyApplicationCounts=TechnologyApplicationService.NewProjectCounters()};
     state.DevelopmentProjects.Add(project);return (state,employee,catalog,project);
 }
+Test("all six work technologies apply after actor ticks and survive halfway reload at every learned level",()=>
+{
+    foreach(int id in TechnologyApplicationService.ProjectTechnologyIdentifiers)
+    foreach(int level in new[]{1,2,3})
+    {
+        var (s,e,c,p)=UseFixture();e.TechnologyLevels![id]=level;
+        Check(TechnologyApplicationService.TryUse(s,e,c.Technologies[id])==TechnologyApplicationResult.Success);
+        Check(e.Experience==100-5*level && s.Money==100);
+        for(int tick=0;tick<11;tick++)DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+        Check(p.Quality==new DevelopmentQuality(100,100,100,100) && p.DataSize==101.9 && p.Bugs==101);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));e=s.Employees[0];p=s.DevelopmentProjects[0];
+        for(int tick=0;tick<100 && e.Office!.TechnologyApplication is not null;tick++)DevelopmentSimulation.TickEmployee(s,e,c,new WorkRandom());
+        double factor=(10+10*level)/100.0;
+        Check(e.Office!.TechnologyApplication is null && p.TechnologyApplicationCounts![id]==1);
+        Check(p.DataSize==(id==0?Math.Floor(101.9*(1-factor)):101.9));
+        Check(p.Bugs==(id==2?(int)Math.Floor(101*(1-factor)):101));
+        Check(p.Quality.Fun==(id==6?Math.Floor(100*(1+factor)):100));
+        Check(p.Quality.Novelty==(id==7?Math.Floor(100*(1+factor)):100));
+        Check(p.Quality.Graphics==(id==1?Math.Floor(100*(1+factor)):100));
+        Check(p.Quality.Music==(id==3?Math.Floor(100*(1+factor)):100));
+        Check(e.Experience==100-5*level);
+    }
+});
 Test("technology diminishing returns and original random-width differences",()=>
 {
     foreach (int id in TechnologyApplicationService.ProjectTechnologyIdentifiers)
@@ -5740,6 +5772,7 @@ if (args.Length == 2)
             EmbeddedGraphicsImporter.Extract(exe,root);Check(Directory.GetFiles(root,"Button-*.bmp").Length>=40);
             Check(Directory.GetFiles(root,"CardRank*.bmp").Length==26&&Directory.GetFiles(root,"HorseMarker*.bmp").Length==24);
             Check(File.ReadAllBytes(Path.Combine(root,"CardBack.bmp")).SequenceEqual(exe.AsSpan(0x2BABBE,BitConverter.ToInt32(exe,0x2BABBE+2)).ToArray()));
+            Check(File.ReadAllBytes(Path.Combine(root,"CompanyActivity.bmp")).SequenceEqual(exe.AsSpan(0x16585,BitConverter.ToInt32(exe,0x16585+2)).ToArray()));
             Check(File.ReadAllBytes(Path.Combine(root,"HardwareLaunchScene.bmp")).SequenceEqual(exe.AsSpan(0x28D66E,42038).ToArray()));
             var bitmap=exe.AsSpan(0x28D66E,42038).ToArray();int pixelStart=BitConverter.ToInt32(bitmap,10);byte[] rgb=new byte[256*160*3];
             for(int y=0;y<160;y++)for(int x=0;x<256;x++){int color=bitmap[pixelStart+(159-y)*256+x],pal=54+color*4,i=(y*256+x)*3;rgb[i]=bitmap[pal+2];rgb[i+1]=bitmap[pal+1];rgb[i+2]=bitmap[pal];}
@@ -5751,10 +5784,34 @@ if (args.Length == 2)
         }
         finally{if(Directory.Exists(root))Directory.Delete(root,true);}
     });
+    Test("optional original all eight technology definitions charge and produce their real effect",()=>
+    {
+        var native=OriginalCatalogImporter.Extract(File.ReadAllBytes(args[0]));
+        foreach(var technology in native.Technologies)
+        {
+            var (state,employee,catalog,project)=UseFixture();catalog.Technologies=native.Technologies;
+            employee.Experience=10000;employee.Stress=77;state.RetainedDevelopmentEligibility=0;
+            int id=technology.Identifier;
+            Check(TechnologyApplicationService.TryUse(state,employee,technology)==TechnologyApplicationResult.Success);
+            Check(employee.Experience==10000-technology.RawTable1568[0]);
+            if(id==5){Check(employee.Stress==38 && employee.Office!.TechnologyApplication is null);continue;}
+            if(id==4)
+            {
+                Check(employee.Office!.SpeedBoostTicks==50);
+                for(int i=0;i<50;i++)TechnologyApplicationService.TickSpeed(employee);
+                Check(employee.Office.TechnologyApplication is null && employee.Office.SpeedBoostTicks==0);continue;
+            }
+            Check(employee.Office!.TechnologyApplication!.RemainingUnits==technology.RawTable158C[0]);
+            for(int tick=0;tick<2000 && employee.Office.TechnologyApplication is not null;tick++)DevelopmentSimulation.TickEmployee(state,employee,catalog,new WorkRandom());
+            Check(employee.Office.TechnologyApplication is null && project.TechnologyApplicationCounts![id]==1);
+            Check(id switch {0=>project.DataSize<101.9,1=>project.Quality.Graphics>100,2=>project.Bugs<101,3=>project.Quality.Music>100,6=>project.Quality.Fun>100,7=>project.Quality.Novelty>100,_=>false});
+        }
+    });
     Test("optional original help and every bounded serialized artwork resource are recovered locally",()=>
     {
         byte[] original=File.ReadAllBytes(args[0]);var help=OriginalHelpImporter.Extract(original);
         Check(help.Paragraphs.Count==91 && help.Paragraphs.Select(p=>p.Topic).Distinct().Count()==5);
+        for(int topic=0;topic<5;topic++)Check(help.Paragraphs.Count(p=>p.Topic==topic)==OriginalHelpEnglish.Page(topic).Count);
         string root=Path.Combine(Path.GetTempPath(),"opengds-art-"+Guid.NewGuid().ToString("N"));
         try{var art=SerializedArtworkImporter.Extract(original,root);Check(art.Count==422 && art.Count(a=>a.Format=="GIF")==22);}
         finally{if(Directory.Exists(root))Directory.Delete(root,true);}

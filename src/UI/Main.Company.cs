@@ -8,38 +8,22 @@ public partial class Main
     private void ShowCompanyActivities(GameState state)
     {
         if(ShowPendingCompanyActivity(state))return;
-        ClearContent();IdentifyManagementWindow("CompanyActivitiesWindow");AddHeading(Tr("COMPANY_ACTIVITIES"),28);
-        AddAction("BANK",()=>ShowBank(state),BankLoanService.CheckBorrow(state) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied);
-        AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",20);
-        AddHeading($"{Tr("COMPANY_ACTIVITY_COST")}: ¥{state.Company.ActivityCost:N0}",18);
-        var grid=new GridContainer {Columns=2};_content.AddChild(grid);
-        AddMetric(grid,Tr("COMPANY_FAME"),$"{state.Company.Fame}%");
-        AddMetric(grid,Tr("GENRE_RESEARCH"),$"{state.Company.OriginalMember90}");
-        AddMetric(grid,Tr("PRODUCTION_CAPACITY"),$"{state.Company.ProductionCapacity}");
-        if (state.CompanyActivityPerformed==true) AddHeading(Tr("COMPANY_ACTIVITY_ALREADY_USED"),18);
-        foreach (var (kind,key) in new[] {(CompanyActivity.PublicRelations,"PUBLIC_RELATIONS"),
-            (CompanyActivity.GenreResearch,"GENRE_RESEARCH"),(CompanyActivity.ProductionExpansion,"EXPAND_PRODUCTION")})
+        var canvas=ManagementCanvas("CompanyActivitiesWindow",Tr("COMPANY_ACTIVITIES"),new(390,325));
+        NativeFill(canvas,"CompanyActivityMetricsBox",new(4,4,382,95),new(.77f,1,1),true);
+        string[] labels=["FUNDS","COMPANY_ACTIVITY_COST","COMPANY_FAME","GENRE_RESEARCH","PRODUCTION_CAPACITY"];
+        string[] values=[$"¥{state.Money:N0}",$"¥{state.Company.ActivityCost:N0}",$"{state.Company.Fame}%",$"{state.Company.OriginalMember90}",$"{state.Company.ProductionCapacity}"];
+        for(int i=0;i<labels.Length;i++){NativeText(canvas,"ActivityMetricLabel"+i,Tr(labels[i]),new(8,6+18*i,265,18));NativeText(canvas,"ActivityMetricValue"+i,values[i],new(275,6+18*i,107,18),11,HorizontalAlignment.Right);}
+        int y=105;
+        foreach(var (kind,key) in new[] {(CompanyActivity.PublicRelations,"PUBLIC_RELATIONS"),(CompanyActivity.GenreResearch,"GENRE_RESEARCH"),(CompanyActivity.ProductionExpansion,"EXPAND_PRODUCTION")})
         {
-            var button=new Button {Name=$"CompanyActivity{(int)kind}",Text=Tr(key),Disabled=state.CompanyActivityPerformed!=false};_content.AddChild(button);
-            button.Pressed+=()=>
-            {
-                state.PendingCompanyActivity=new() {Activity=kind};ShowPendingCompanyActivity(state);
-            };
+            NativeAction(canvas,$"CompanyActivity{(int)kind}",key,new(4,y,382,25),()=>{state.PendingCompanyActivity=new(){Activity=kind};ShowPendingCompanyActivity(state);},state.CompanyActivityPerformed==false);y+=29;
         }
         var catalog=_importer.LoadCatalog();
-        if (catalog is not null && state.Company.OriginalMember90 is int research)
-        {
-            AddHeading(Tr("AVAILABLE_GENRES"),20);
-            foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,research)))
-                AddHeading(CatalogName(catalog,"GENRE",genre.SourceIndex,genre.Name),16);
-        }
-        _status=new Label();_content.AddChild(_status);
-        AddAction("SAVE_GAME",()=>
-        {
-            try {Persistence.SaveStore.Save(SavePath,state);_status.Text=Tr("SAVE_OK");}
-            catch (Exception ex) {_status.Text=$"{Tr("SAVE_FAILED")}: {ex.Message}";}
-        });
-        AddAction("LOAD_GAME",LoadSession,System.IO.File.Exists(SavePath));
-        AddAction("BACK_TO_OFFICE",()=>ShowOfficeReconstruction(state));
+        string genres=catalog is not null && state.Company.OriginalMember90 is int research ? string.Join(", ",catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,research)).Select(g=>CatalogName(catalog,"GENRE",g.SourceIndex,g.Name))) : "—";
+        NativeText(canvas,"AvailableGenresLabel",Tr("AVAILABLE_GENRES"),new(4,194,382,19),10);
+        var list=new RichTextLabel {Name="AvailableGenres",Text=genres,ScrollActive=true};list.AddThemeFontSizeOverride("normal_font_size",11);NativePlace(canvas,list,new(4,215,382,42));
+        _status=NativeText(canvas,"CompanyActivityStatus",state.CompanyActivityPerformed==true?Tr("COMPANY_ACTIVITY_ALREADY_USED"):"",new(4,260,382,25),10);
+        NativeAction(canvas,"CompanyActivitiesBank","BANK",new(4,290,185,25),()=>ShowBank(state),BankLoanService.CheckBorrow(state) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied);
+        NativeAction(canvas,"CompanyActivitiesClose","BACK_TO_OFFICE",new(197,290,189,25),()=>ShowOfficeReconstruction(state));
     }
 }

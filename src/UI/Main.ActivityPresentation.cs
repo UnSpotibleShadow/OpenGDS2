@@ -1,5 +1,6 @@
 using Godot;
 using OpenGDS2.Domain;
+using OpenGDS2.Core;
 namespace OpenGDS2.UI;
 public partial class Main
 {
@@ -20,17 +21,20 @@ public partial class Main
                 if(!ShowPendingCompanyActivity(state))ShowCompanyActivities(state);
             });return true;
         }
-        ClearContent();CompactManagementWindow("ActivityConfirmationWindow",new(440,320),420);AddHeading(Tr(key),22);
-        AnnualMessage("ActivityExplanation",Tr("ACTIVITY_DESCRIPTION_"+(int)scene.Activity));
-        AddHeading($"{Tr("COMPANY_ACTIVITY_COST")}: ¥{state.Company.ActivityCost:N0}",18);
-        AddHeading($"{Tr("FUNDS")}: ¥{state.Money:N0}",18);
-        var status=new Label {Name="ActivityConfirmationStatus"};_content.AddChild(status);
-        var confirm=new Button {Name="ConfirmCompanyActivity",Text=Tr("CONFIRM")};_content.AddChild(confirm);
+        var canvas=ManagementCanvas("ActivityConfirmationWindow",Tr(key),new(290,285));
+        var artwork=OriginalAssetStore.LoadTexture("Graphic/Embedded/CompanyActivity.bmp");
+        NativePlace(canvas,Picture("CompanyActivityArtwork",artwork,new(256,160)),new(17,8,256,160));
+        if(artwork is null)NativeText(canvas,"ActivityArtworkMissing",Tr("EVENT_ARTWORK_REIMPORT"),new(17,60,256,50),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeFill(canvas,"ActivityMessageBox",new(8,176,274,53),Colors.White,true);
+        NativeText(canvas,"ActivityExplanation",Tr("ACTIVITY_DESCRIPTION_"+(int)scene.Activity),new(12,179,266,47),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeText(canvas,"ActivityCost",$"{Tr("COMPANY_ACTIVITY_COST")}: ¥{state.Company.ActivityCost:N0}",new(8,231,274,18),10,HorizontalAlignment.Right);
+        var status=NativeText(canvas,"ActivityConfirmationStatus","",new(8,251,86,29),10);status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var confirm=NativeAction(canvas,"ConfirmCompanyActivity","CONFIRM",new(98,253,84,25),()=>{});
         confirm.Pressed+=()=>
         {
             var result=CompanyActivityPresentation.Confirm(state,_importer.LoadCatalog(),_session.Random);
             if(result==CompanyActivityResult.Success)ShowPendingCompanyActivity(state);else status.Text=Tr($"COMPANY_ACTIVITY_RESULT_{result}");
         };
-        AddAction("CANCEL",()=>{state.PendingCompanyActivity=null;ShowCompanyActivities(state);});return true;
+        NativeAction(canvas,"CancelCompanyActivity","CANCEL",new(190,253,92,25),()=>{state.PendingCompanyActivity=null;ShowCompanyActivities(state);});return true;
     }
 }
