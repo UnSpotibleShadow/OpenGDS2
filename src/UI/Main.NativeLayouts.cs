@@ -48,8 +48,13 @@ public partial class Main
         string hardware=CatalogName(catalog,"HARDWARE",project.HardwareSourceIndex,catalog.Hardware.Single(x=>x.SourceIndex==project.HardwareSourceIndex).Name);
         string genre=project.GenreSourceIndex is int g?CatalogName(catalog,"GENRE",g,catalog.Genres.Single(x=>x.SourceIndex==g).Name):"—";
         string type=project.GameTypeSourceIndex is int t?CatalogName(catalog,"TYPE",t,catalog.GameTypes.Single(x=>x.SourceIndex==t).Name):"—";
-        NativeFill(canvas,"CompletionCatalogFields",new(4,198,170,49),new(.77f,1,.77f));
-        NativeText(canvas,"ProjectCatalogSummary",$"{Tr("TARGET_HARDWARE")}: {hardware}\n{Tr("PROJECT_GENRE")}: {genre}\n{Tr("PROJECT_CONTENT")}: {type}",new(6,198,166,49),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        string[] captions=["TARGET_HARDWARE","PROJECT_GENRE","PROJECT_CONTENT"],metadata=[hardware,genre,type];
+        for(int i=0;i<3;i++)
+        {
+            NativeText(canvas,"CompletionMetadataCaption"+i,Tr(captions[i]),new(4,198+i*16,98,16),10);
+            NativeFill(canvas,"CompletionMetadataCell"+i,new(104,198+i*16,70,16),new(.77f,1,.77f));
+            NativeText(canvas,"CompletionMetadata"+i,metadata[i],new(106,198+i*16,66,16),10);
+        }
         double[] q=[project.Quality.Fun,project.Quality.Novelty,project.Quality.Graphics,project.Quality.Music];
         string[] keys=["STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"];
         Color[] colors=[Colors.Blue,Colors.Yellow,new(.7f,0,.8f),Colors.Cyan];

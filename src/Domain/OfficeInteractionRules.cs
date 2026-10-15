@@ -58,6 +58,21 @@ public static class OfficeInteractionRules
         return hits;
     }
 
+    /// <summary>fMainVisual MouseMove 009C0588 +0BCD..0C23.</summary>
+    public static bool TrainingAreaAt(double x,double y)
+    {
+        if(!double.IsFinite(x)||!double.IsFinite(y))return false;
+        float sum=(float)(y+x/2),difference=(float)(y-x/2);
+        return x>=160&&x<=309&&sum>118&&sum<244&&difference> -74&&difference< -28;
+    }
+    /// <summary>fMainVisual MouseMove 009C0588 +0DDF..0E36.</summary>
+    public static bool VendingAt(double x,double y)
+    {
+        if(!double.IsFinite(x)||!double.IsFinite(y))return false;
+        float sum=(float)(y+x/2),difference=(float)(y-x/2);
+        return x>=306&&x<=415&&sum>292&&sum<383&&difference> -60&&difference<0;
+    }
+
     public static EmployeeState? EmployeeAt(GameState state, double x, double y)
     {
         ArgumentNullException.ThrowIfNull(state);

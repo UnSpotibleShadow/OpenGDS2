@@ -75,27 +75,26 @@ public partial class Main
         grid.AddChild(new Label {Text=caption,SizeFlagsHorizontal=SizeFlags.ExpandFill});
         var label=new Label {Name=name,HorizontalAlignment=HorizontalAlignment.Right};grid.AddChild(label);return label;
     }
-    private void ShipmentBreakdown(GameState state,long unit,SpinBox price,SpinBox copies)
+    private void NativeShipmentBreakdown(Control canvas,GameState state,long unit,SpinBox price,SpinBox copies)
     {
-        var costBox=new PanelContainer {Name="ShipmentCostTable"};costBox.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=new(1,1,.65f),ContentMarginLeft=6,ContentMarginRight=6});_content.AddChild(costBox);
-        var costs=new GridContainer {Columns=2};costBox.AddChild(costs);
-        var media=MoneyCell(costs,"ShipmentMediaCost",Tr("SHIPMENT_MEDIA_COST"));
-        var package=MoneyCell(costs,"ShipmentPackageCost",Tr("SHIPMENT_PACKAGE_COST"));
-        var each=MoneyCell(costs,"ShipmentUnitCost",Tr("SHIPMENT_UNIT_COST"));
-        var total=MoneyCell(costs,"ShipmentTotalCost",Tr("PRODUCTION_COST"));
-        var netBox=new PanelContainer {Name="ShipmentDistributionTable"};netBox.AddThemeStyleboxOverride("panel",new StyleBoxFlat {BgColor=new(.65f,1,1),ContentMarginLeft=6,ContentMarginRight=6});_content.AddChild(netBox);
-        var net=new GridContainer {Columns=2};netBox.AddChild(net);
-        var retail=MoneyCell(net,"ShipmentRetail",Tr("RETAIL_PRICE"));
-        var retailer=MoneyCell(net,"ShipmentRetailer",Tr("SHIPMENT_RETAILER_SHARE"));
-        var transport=MoneyCell(net,"ShipmentTransport",Tr("SHIPMENT_TRANSPORT_SHARE"));
-        var receipt=MoneyCell(net,"ShipmentNetCopy",Tr("NET_PER_COPY"));
-        var all=MoneyCell(net,"ShipmentAllSold",Tr("SHIPMENT_ALL_SOLD"));
+        NativeFill(canvas,"ShipmentTableFrame",new(4,28,416,185),Colors.White,true);
+        string[] keys=["SHIPMENT_MEDIA_COST","SHIPMENT_PACKAGE_COST","SHIPMENT_UNIT_COST","PRODUCTION_COST","RETAIL_PRICE","SHIPMENT_RETAILER_SHARE","SHIPMENT_TRANSPORT_SHARE","NET_PER_COPY","SHIPMENT_ALL_SOLD"];
+        string[] names=["ShipmentMediaCost","ShipmentPackageCost","ShipmentUnitCost","ShipmentTotalCost","ShipmentRetail","ShipmentRetailer","ShipmentTransport","ShipmentNetCopy","ShipmentAllSold"];
+        var values=new Label[9];
+        for(int i=0;i<9;i++)
+        {
+            int y=34+i*18+(i>=4?8:0);Color color=i<4?new(1,1,.72f):new(.65f,1,1);
+            NativeFill(canvas,"ShipmentRow"+i,new(12,y,400,18),color,true);
+            NativeFill(canvas,"ShipmentDivider"+i,new(254,y,1,18),Colors.Black);
+            NativeFill(canvas,"ShipmentAmountDivider"+i,new(300,y,1,18),Colors.Black);
+            NativeText(canvas,"ShipmentCaption"+i,Tr(keys[i]),new(15,y,237,18),10);
+            values[i]=NativeText(canvas,names[i],"",new(i is 5 or 6?257:303,y,i is 5 or 6?42:106,18),10,HorizontalAlignment.Right);
+        }
         void Refresh()
         {
             long count=(long)copies.Value,p=(long)price.Value,per=p-state.SalesFee1!.Value-state.SalesFee2!.Value;
-            media.Text=$"¥{DisplayNumbers.Format(unit-200)}";package.Text="¥200";each.Text=$"¥{DisplayNumbers.Format(unit)}";total.Text=$"¥{DisplayNumbers.Format(checked(unit*count))}";
-            retail.Text=$"¥{DisplayNumbers.Format(p)}";retailer.Text=$"−¥{DisplayNumbers.Format(state.SalesFee1)}";transport.Text=$"−¥{DisplayNumbers.Format(state.SalesFee2)}";
-            receipt.Text=$"¥{DisplayNumbers.Format(per)}";all.Text=$"¥{DisplayNumbers.Format((System.Numerics.BigInteger)per*count)}";
+            System.Numerics.BigInteger[] amounts=[unit-200,200,unit,(System.Numerics.BigInteger)unit*count,p,-state.SalesFee1.Value,-state.SalesFee2.Value,per,(System.Numerics.BigInteger)per*count];
+            for(int i=0;i<9;i++){values[i].Text="¥"+DisplayNumbers.Format(amounts[i]);values[i].TooltipText=values[i].Text;}
         }
         price.ValueChanged+=_=>Refresh();copies.ValueChanged+=_=>Refresh();Refresh();
     }

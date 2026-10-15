@@ -28,7 +28,7 @@ Wine failure described in [batch verification](map-backlog-verification.md).
 
 ## Recovered scene bindings
 
-All these 256×160 originals already exist in the local generic resource import.
+Radio and television are 256×152; the other scenes are 256×160. These originals already exist in the local generic resource import.
 They need semantic scene use, rather than replacement artwork. Resource offsets
 below point to file headers, not the surrounding serialized property header.
 

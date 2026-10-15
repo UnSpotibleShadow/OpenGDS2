@@ -8,6 +8,7 @@ public partial class Main
     {if(ReferenceEquals(_session.Current,state) && BackupDeviceService.Begin(state))ShowPendingCompanyEvent(state);}
     private bool ShowPendingCompanyEvent(GameState state)
     {
+        if(ShowPendingMagazineInterview(state))return true;
         if(ShowPendingPoaching(state))return true;
         if(state.PendingBackupDevice is { } purchase)
         {

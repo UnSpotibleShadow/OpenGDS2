@@ -45,6 +45,96 @@ Test("original number display retains fixed lower Japanese groups and comma thou
     Check(OriginalNumberFormatter.Format(long.MinValue,NumberGrouping.Thousands)=="-9,223,372,036,854,775,808");
     Throws<ArgumentException>(()=>OriginalNumberFormatter.FormatDigits("1.5",NumberGrouping.Japanese));
 });
+Test("native office hover areas use strict transformed bounds",()=>
+{
+    Check(OfficeInteractionRules.TrainingAreaAt(220,60)&&!OfficeInteractionRules.TrainingAreaAt(220,82));
+    Check(OfficeInteractionRules.VendingAt(362,130)&&!OfficeInteractionRules.VendingAt(362,121));
+    Check(!OfficeInteractionRules.TrainingAreaAt(double.NaN,0)&&!OfficeInteractionRules.VendingAt(0,double.PositiveInfinity));
+});
+GameState InterviewFixture(double recognition=50)
+{
+    var state=VirusFixture();var project=state.DevelopmentProjects[0];
+    project.OriginalStage=2;project.GameTypeSourceIndex=0;project.GenreSourceIndex=0;
+    project.Recognition=recognition;project.InterviewCompleted=false;
+    return state;
+}
+Test("interview trigger consumes eager draws on known ineligible and already interviewed rooms",()=>
+{
+    foreach(int stage in new[]{0,1,2})
+    {
+        var s=InterviewFixture(10);var p=s.DevelopmentProjects[0];p.OriginalStage=stage;
+        var r=new FailureRandom(.002f);Check(MagazineInterviewService.Periodic(s,p,r)&&r.Calls==1&&s.PendingMagazineInterview is null);
+    }
+    var state=InterviewFixture();state.DevelopmentProjects[0].InterviewCompleted=true;
+    var random=new FailureRandom(.0016f);Check(MagazineInterviewService.Periodic(state,state.DevelopmentProjects[0],random)&&random.Calls==1);
+    state.DevelopmentProjects[0].InterviewCompleted=null;
+    Check(MagazineInterviewService.Periodic(state,state.DevelopmentProjects[0],new FailureRandom()));
+});
+Test("interview source portrait precedence and reporter name draws are saved after introduction",()=>
+{
+    var s=InterviewFixture();var random=new FailureRandom(.0016f,.99f,.85f);
+    Check(!MagazineInterviewService.Periodic(s,s.DevelopmentProjects[0],random));
+    Check(s.PendingMagazineInterview!.Page==0&&s.DevelopmentProjects[0].InterviewCompleted==true&&random.Calls==1);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.PendingMagazineInterview!.PortraitId is null);
+    Check(MagazineInterviewService.Acknowledge(s,random));
+    Check(s.PendingMagazineInterview!.PortraitId==1&&s.PendingMagazineInterview.ReporterNameIndex==4&&random.Calls==3);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.PendingMagazineInterview!.ReporterNameIndex==4);
+});
+Test("interview applies the capped awareness gain once after all four reporter pages",()=>
+{
+    foreach(double before in new[]{50d,90d})
+    {
+        var s=InterviewFixture(before);float trigger=before==50?.0016f:.008f;
+        Check(!MagazineInterviewService.Periodic(s,s.DevelopmentProjects[0],new FailureRandom(trigger)));
+        MagazineInterviewService.Acknowledge(s,new FailureRandom(.4f,.2f));
+        for(int page=1;page<=4;page++)
+        {
+            Check(s.PendingMagazineInterview!.Page==page&&s.DevelopmentProjects[0].Recognition==before);
+            s=SaveStore.Deserialize(SaveStore.Serialize(s));MagazineInterviewService.Acknowledge(s,new FailureRandom());
+        }
+        double after=Math.Min(before+20,100);Check(s.DevelopmentProjects[0].Recognition==after&&s.PendingMagazineInterview!.Page==5);
+        s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.DevelopmentProjects[0].Recognition==after);
+        MagazineInterviewService.Acknowledge(s,new FailureRandom());Check(s.PendingMagazineInterview is null&&s.DevelopmentProjects[0].Recognition==after);
+        Check(!MagazineInterviewService.Acknowledge(s,new FailureRandom()));
+    }
+});
+Test("company pass resumes at the next interview room without repeating its trigger",()=>
+{
+    var s=InterviewFixture();s.CompanyEventContinuation=new() {PoachingProcessed=true};
+    var other=InterviewFixture().DevelopmentProjects[0];other.RoomIndex=1;s.DevelopmentProjects.Add(other);
+    var r=new FailureRandom(.0016f,.6f,.2f,.99f);Check(!CompanyEventService.Resume(s,r));
+    Check(s.CompanyEventContinuation!.NextInterviewRoom==1&&r.Calls==1);
+    while(s.PendingMagazineInterview is not null)MagazineInterviewService.Acknowledge(s,r);
+    s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(CompanyEventService.Resume(s,r)&&r.Calls==4&&s.CompanyEventContinuation is null);
+    Check(s.DevelopmentProjects[0].Recognition==70&&s.DevelopmentProjects[1].Recognition==50);
+});
+Test("interview rejects malformed saved phases, overlapping decisions and altered gains",()=>
+{
+    var s=InterviewFixture();MagazineInterviewService.Periodic(s,s.DevelopmentProjects[0],new FailureRandom(.0016f));
+    s.PendingMagazineInterview!.Page=5;s.PendingMagazineInterview.Gain=999;
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(s)));
+    s=InterviewFixture();MagazineInterviewService.Periodic(s,s.DevelopmentProjects[0],new FailureRandom(.0016f));
+    s.PendingBackupDevice=new() {Page=0};Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(s)));
+    s.PendingBackupDevice=null;s.DevelopmentProjects[0].OriginalStage=3;s.DevelopmentProjects[0].Progress=100;
+    Check(ProjectCancellationService.Check(s,s.DevelopmentProjects[0])==ProjectCancellationResult.DecisionPending);
+    Check(ReleaseService.TryRelease(s,s.DevelopmentProjects[0],new OriginalCatalog(),"Blocked",5800,100,new FailureRandom())==ReleaseResult.NotReady);
+    s.PendingProjectCancellation=new() {RoomIndex=0};Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(s)));
+});
+Test("secretary badge English patch preserves the face and all mouth frames",()=>
+{
+    byte[] source=Enumerable.Range(0,64*64*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])source.Clone();
+    var patch=LocalSceneCaptionRules.PatchSecretary(source);Check(source.SequenceEqual(copy)&&!patch.SequenceEqual(copy));
+    for(int y=0;y<64;y++)for(int x=0;x<64;x++)if(y<52||y>=62||x<18||x>=48)
+        for(int c=0;c<3;c++)Check(patch[(y*64+x)*3+c]==copy[(y*64+x)*3+c]);
+});
+Test("television English patch changes only its monitor panel",()=>
+{
+    byte[] pixels=Enumerable.Range(0,256*152*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])pixels.Clone();
+    var patch=LocalSceneCaptionRules.PatchTelevision(pixels);Check(pixels.SequenceEqual(copy)&&!patch.SequenceEqual(copy));
+    for(int y=0;y<152;y++)for(int x=0;x<256;x++)
+        if(y<34||y>108||x<85-(y-34)/37||x>179-(y-34)/7)
+            for(int c=0;c<3;c++)Check(patch[(y*256+x)*3+c]==copy[(y*256+x)*3+c]);
+});
 GameState PoachingFixture(bool defensive=false)
 {
     var s=VirusFixture();s.DevelopmentProjects.Clear();s.Employees.Clear();
@@ -6165,7 +6255,7 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==322 && dialogue.SchemaVersion==16 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==334 && dialogue.SchemaVersion==17 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));

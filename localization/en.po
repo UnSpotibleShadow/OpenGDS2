@@ -4422,3 +4422,75 @@ msgstr "Go out"
 
 msgid "POACHING_DONATION_ACK"
 msgstr "We are sending a donation of ¥{amount} to {name}."
+
+msgid "PROMOTION_METHOD"
+msgstr "Advertising method"
+
+msgid "PROMOTION_FINISHED_DIALOGUE"
+msgstr "{0} is complete. Awareness of the game in development increased by {1:N0} points."
+
+msgid "EXHIBITION_SECRETARY_RESULT"
+msgstr "Awareness of the exhibited games increased by {0:N0} points."
+
+msgid "OFFICE_EMPTY_ROOM_HINT"
+msgstr "Click to plan a game."
+
+msgid "OFFICE_VENDING_HINT"
+msgstr "Vending machine\nStaff break area."
+
+msgid "OFFICE_TRAINING_HINT"
+msgstr "Training area\nChoose an employee to arrange training."
+
+msgid "SEQUEL_WHICH_GAME"
+msgstr "Which game would you like to continue?"
+
+msgid "MANGA_WHICH_TITLE"
+msgstr "Which comic would you like to adapt?"
+
+msgid "SHIPMENT_PROFIT_TABLE"
+msgstr "== Game profit table =="
+
+msgid "MAGAZINE_INTERVIEW"
+msgstr "Magazine interview"
+
+msgid "INTERVIEW_MAGAZINE"
+msgstr "{0} specialist magazine"
+
+msgid "INTERVIEW_SPEAKER"
+msgstr "Reporter"
+
+msgid "INTERVIEW_INTRO"
+msgstr "A reporter from {magazine} has come to interview the team in Development Room {room}."
+
+msgid "INTERVIEW_RESULT"
+msgstr "Awareness of the game in Development Room {room} increased by {gain} points."
+
+msgid "INTERVIEW_PAGE_0"
+msgstr "Hello. I am {name} from {magazine}."
+
+msgid "INTERVIEW_PAGE_1"
+msgstr "We heard your game in development features {subject}, and came to interview you."
+
+msgid "INTERVIEW_PAGE_2"
+msgstr "I see… this looks very interesting!"
+
+msgid "INTERVIEW_PAGE_3"
+msgstr "We will feature it in our magazine. We look forward to seeing how it turns out."
+
+msgid "INTERVIEW_REPORTER_0"
+msgstr "Tanaka"
+
+msgid "INTERVIEW_REPORTER_1"
+msgstr "Sakishima"
+
+msgid "INTERVIEW_REPORTER_2"
+msgstr "Kimura"
+
+msgid "INTERVIEW_REPORTER_3"
+msgstr "Kobayashi"
+
+msgid "INTERVIEW_REPORTER_4"
+msgstr "Kojima"
+
+msgid "SHIPMENT_COPIES"
+msgstr "Copies"

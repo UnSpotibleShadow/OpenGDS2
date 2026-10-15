@@ -6,6 +6,23 @@ namespace OpenGDS2.UI;
 
 public partial class Main
 {
+    private DesktopWindow? _exhibitionBoard;
+    private void CloseExhibitionBoard()
+    {
+        if(_exhibitionBoard is { } window&&GodotObject.IsInstanceValid(window))
+        {_dialogPositions["ExhibitionAttendanceWindow"]=window.Position;window.GetParent()?.RemoveChild(window);window.QueueFree();}
+        _exhibitionBoard=null;
+    }
+    private void ExhibitionSecretary(GameState state,ExhibitionState exhibition)
+    {
+        _exhibitionBoard=_dialog;_exhibitionBoard!.CloseRequested=()=>{};_dialog=null;_dialogPositionKey=null;
+        ShowConversation(Tr("GAME_EXHIBITION"),[new(SecretaryCaption(state.SecretarySourceIndex),
+            string.Format(DisplayNumbers.Provider,Tr("EXHIBITION_SECRETARY_RESULT"),exhibition.ReportedAwarenessGain),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
+        {
+            if(!ReferenceEquals(state.Calendar?.Pending?.Exhibition,exhibition))return;
+            exhibition.ResultAcknowledged=true;CloseExhibitionBoard();ShowOfficeReconstruction(state);
+        });
+    }
     private void ExhibitionScene(GameState state,ExhibitionState exhibition)
     {
         ClearContent();var canvas=NativeWindow("ExhibitionAttendanceWindow",Tr("GAME_EXHIBITION"),new(300,238));
@@ -22,9 +39,11 @@ public partial class Main
             visitors.Text=$"{DisplayNumbers.Format(ExhibitionService.DisplayVisitors(exhibition))}";
             bool done=exhibition.DisplayCallbacks is null or >=90;
             visitors.TooltipText=done?string.Format(DisplayNumbers.Provider,Tr("EXHIBITION_RESULT"),exhibition.Visitors,exhibition.ReportedAwarenessGain):visitors.Text;
-            close.Disabled=!done;
+            close.Disabled=!done||!exhibition.ResultAcknowledged;
         }
-        Refresh();if(exhibition.DisplayCallbacks is <90)AdvanceExhibitionScene(state,exhibition,_dialog!,Refresh);
+        Refresh();
+        if(exhibition.DisplayCallbacks is <90)AdvanceExhibitionScene(state,exhibition,_dialog!,Refresh);
+        else if(!exhibition.ResultAcknowledged)ExhibitionSecretary(state,exhibition);
     }
     private async void AdvanceExhibitionScene(GameState state,ExhibitionState exhibition,DesktopWindow window,Action refresh)
     {
@@ -35,6 +54,7 @@ public partial class Main
                 !ReferenceEquals(state.Calendar?.Pending?.Exhibition,exhibition) || !window.IsInsideTree())return;
             ExhibitionService.AdvanceDisplay(exhibition);refresh();
         }
+        if(!exhibition.ResultAcknowledged)ExhibitionSecretary(state,exhibition);
     }
     private void AwardScene(GameState state,AwardCeremonyState awards,float resultHeight)
     {

@@ -35,36 +35,60 @@ public partial class Main
 
     private void ShowSequelSelection(GameState state,int room)
     {
-        ClearContent();var canvas=NativeWindow("SequelSelectionWindow",Tr("SEQUEL_DEVELOPMENT"),new(424,286));
-        _dialog!.SetTitle(Tr("SEQUEL_DEVELOPMENT"));
-        NativeText(canvas,"SequelEligibility",Tr("SEQUEL_ELIGIBILITY_NOTE"),new(4,4,416,32),10).AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        var table=ManagementTable(canvas,"SequelPredecessors",["GAME_TITLE","SERIES_INSTALLMENT","REVIEW_TOTAL","UNITS_SOLD"],[181,54,60,90],new(4,40,416,139));
-        var candidates=SequelDevelopmentRules.Candidates(state).ToList();
-        int? selected=null;
-        foreach (var product in candidates)
+        var catalog=OwnHardwareService.Catalog(state,_importer.LoadCatalog()!);
+        ClearContent();var canvas=NativeWindow("SequelSelectionWindow",Tr("SEQUEL_DEVELOPMENT"),new(408,306));
+        NativeFill(canvas,"SequelQuestionStrip",new(4,3,400,19),Colors.White,true);
+        NativeText(canvas,"SequelQuestion",Tr("SEQUEL_WHICH_GAME"),new(6,3,396,19),10,HorizontalAlignment.Center);
+        var table=ManagementTable(canvas,"SequelPredecessors",["GAME_TITLE","SERIES_INSTALLMENT","UNITS_SOLD"],[220,70,90],new(4,27,400,140));
+        StyleSelection(table,new(1,.7f,1));
+        var candidates=SequelDevelopmentRules.Candidates(state).ToList();int? selected=null;
+        foreach(var product in candidates)
         {
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,product.ProductIndex);
-            string[] values=[product.Title,(product.OriginalSequelCounter+1).ToString(),product.ReviewScores?.Sum().ToString() ?? "?",product.UnitsSold.ToDisplayNumber()];
-            for (int column=0;column<values.Length;column++)
-            {
-                row.SetText(column,values[column]);row.SetTextAlignment(column,column==0 ? HorizontalAlignment.Left : HorizontalAlignment.Right);
-            }
+            row.SetText(0,product.Title);row.SetText(1,(product.OriginalSequelCounter+1).ToString());row.SetText(2,product.UnitsSold.ToDisplayNumber());
+            row.SetTextAlignment(1,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);
         }
-        var picture=NativePlace(canvas,Picture("SequelHardwarePicture",null,new(64,64)),new(4,185,64,64));
-        var status=NativeText(canvas,"SequelSelectionStatus","",new(76,188,344,55),10);status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        var confirm=NativeAction(canvas,"ConfirmSequelPredecessor","PLANNING_MEETING",new(152,256,162,25),()=>{},false);
+        var picture=NativePlace(canvas,Picture("SequelHardwarePicture",null,new(64,64)),new(4,177,64,64));
+        var hardware=NativeText(canvas,"SequelHardwareName","",new(4,243,68,20),10,HorizontalAlignment.Center);
+        string[] captions=["PROJECT_AUDIENCE","PROJECT_GENRE","PROJECT_CONTENT"];
+        var detail=new Label[3];
+        for(int i=0;i<3;i++)
+        {
+            NativeText(canvas,"SequelDetailCaption"+i,Tr(captions[i]),new(80,176+i*15,91,15),10);
+            NativeFill(canvas,"SequelDetailCell"+i,new(174,176+i*15,124,15),new(1,.72f,1));
+            detail[i]=NativeText(canvas,"SequelDetail"+i,"—",new(176,176+i*15,120,15),10);
+        }
+        string[] qualityKeys=["STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"];
+        Color[] colors=[Colors.Blue,Colors.Yellow,new(.7f,0,.8f),Colors.Cyan];var quality=new Label[4];
+        for(int i=0;i<4;i++)
+        {
+            int x=80+i%2*116,y=225+i/2*31;
+            NativeText(canvas,"SequelDot"+i,"●",new(x,y,11,15),10).AddThemeColorOverride("font_color",colors[i]);
+            NativeText(canvas,"SequelQualityCaption"+i,Tr(qualityKeys[i]),new(x+12,y,101,15),10);
+            quality[i]=NativeText(canvas,"SequelQuality"+i,"0",new(x+12,y+14,101,17),13);
+        }
+        var status=NativeText(canvas,"SequelSelectionStatus",Tr("SEQUEL_ELIGIBILITY_NOTE"),new(4,285,297,18),9);
+        var confirm=NativeAction(canvas,"ConfirmSequelPredecessor","CONFIRM",new(306,232,98,25),()=>{},false);
+        NativeAction(canvas,"CancelSequelSelection","CANCEL",new(306,263,98,25),()=>ShowDevelopmentRoomActions(state,room));
         void Refresh()
         {
-            var result=selected is int parent ? SequelDevelopmentRules.CheckPredecessor(state,parent) : DevelopmentPlanningResult.PredecessorUnavailable;
-            if(selected is int source&&state.ReleasedGames.FirstOrDefault(p=>p.ProductIndex==source) is { } product)picture.Texture=HardwarePicture(state,product.HardwareSourceIndex);
+            var result=selected is int parent?SequelDevelopmentRules.CheckPredecessor(state,parent):DevelopmentPlanningResult.PredecessorUnavailable;
             confirm.Disabled=result!=DevelopmentPlanningResult.Success;
-            status.Text=candidates.Count==0 ? Tr("SEQUEL_NO_CANDIDATES") : result==DevelopmentPlanningResult.Success ? Tr("SEQUEL_INHERITANCE_NOTE") : Tr($"PLANNING_RESULT_{result}");
+            if(selected is int source&&state.ReleasedGames.FirstOrDefault(p=>p.ProductIndex==source) is { } product)
+            {
+                picture.Texture=HardwarePicture(state,product.HardwareSourceIndex);
+                hardware.Text=CatalogName(catalog,"HARDWARE",product.HardwareSourceIndex,catalog.Hardware.Single(h=>h.SourceIndex==product.HardwareSourceIndex).Name);
+                detail[0].Text=CatalogName(catalog,"AUDIENCE",product.AudienceSourceIndex,catalog.Audiences.Single(x=>x.SourceIndex==product.AudienceSourceIndex).Name);
+                detail[1].Text=CatalogName(catalog,"GENRE",product.GenreSourceIndex,catalog.Genres.Single(x=>x.SourceIndex==product.GenreSourceIndex).Name);
+                detail[2].Text=CatalogName(catalog,"TYPE",product.GameTypeSourceIndex,catalog.GameTypes.Single(x=>x.SourceIndex==product.GameTypeSourceIndex).Name);
+                double[] values=[product.Quality.Fun,product.Quality.Novelty,product.Quality.Graphics,product.Quality.Music];
+                for(int i=0;i<4;i++)quality[i].Text=DisplayNumbers.Format(values[i]);
+            }
+            status.Text=candidates.Count==0?Tr("SEQUEL_NO_CANDIDATES"):Tr("SEQUEL_ELIGIBILITY_NOTE");
         }
         table.ItemSelected+=()=>{selected=table.GetSelected().GetMetadata(0).AsInt32();Refresh();};
-        if (candidates.Count>0) {selected=candidates[0].ProductIndex;table.GetRoot().GetFirstChild().Select(0);}
-        Refresh();
-        confirm.Pressed+=()=>{if (!confirm.Disabled) ShowPlanningPreview(state,room,selected);};
-        NativeAction(canvas,"CancelSequelSelection","CANCEL",new(320,256,100,25),()=>ShowDevelopmentRoomActions(state,room));
+        if(candidates.Count>0){selected=candidates[0].ProductIndex;table.GetRoot().GetFirstChild().Select(0);}Refresh();
+        confirm.Pressed+=()=>{if(!confirm.Disabled)ShowPlanningPreview(state,room,selected);};
     }
 
     private void ShowPlanningPreview(GameState state,int? selectedRoom=null,int? predecessorProductIndex=null,int? mangaSourceIndex=null)

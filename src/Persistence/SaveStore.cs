@@ -97,6 +97,7 @@ public static class SaveStore
         ProgrammingChallengeService.Validate(state);
         CompanyActivityPresentation.Validate(state);
         CompanyEventService.Validate(state);
+        MagazineInterviewService.Validate(state);
         PoachingService.Validate(state);
         OwnHardwareService.Validate(state);
         if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);

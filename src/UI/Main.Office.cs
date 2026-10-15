@@ -5,6 +5,19 @@ namespace OpenGDS2.UI;
 
 public partial class Main
 {
+    private string OfficeHoverText(GameState state,Vector2 pixel,EmployeeState? employee,int? room,IReadOnlyList<int> tenants)
+    {
+        if(employee is not null)return EmployeeName(employee)+"\n"+Tr("OFFICE_EMPLOYEE_HELP");
+        if(room is int r)
+        {
+            var project=state.DevelopmentProjects.SingleOrDefault(p=>p.RoomIndex==r);
+            return Tr("DEVELOPMENT_ROOM")+" "+(r+1)+"\n"+(project is null?Tr("OFFICE_EMPTY_ROOM_HINT"):ProjectSummary(project));
+        }
+        if(tenants.Count>0)return string.Join("\n",tenants.Select(t=>FacilityName(state.Calendar?.OriginalSlots0444[t]??-1)));
+        if(OfficeInteractionRules.VendingAt(pixel.X,pixel.Y))return Tr("OFFICE_VENDING_HINT");
+        if(OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y))return Tr("OFFICE_TRAINING_HINT");
+        return Tr("OFFICE_ASSIGN_HINT");
+    }
     private void ShowDevelopmentRoomActions(GameState state,int room)
     {
         var project=state.DevelopmentProjects.SingleOrDefault(p=>p.RoomIndex==room);

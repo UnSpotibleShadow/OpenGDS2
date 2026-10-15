@@ -20,7 +20,7 @@ public static class ReleaseService
     {
         ValidateInput(title,price,copies);
         catalog=OwnHardwareService.Catalog(state,catalog);
-        if (!state.DevelopmentProjects.Contains(project) || project.OriginalRoomState!=1 || project.OriginalStage!=3 ||
+        if (CompanyEventService.HasPending(state) || !state.DevelopmentProjects.Contains(project) || project.OriginalRoomState!=1 || project.OriginalStage!=3 ||
             project.Progress<project.RequiredPoints || project.GameTypeSourceIndex is null || project.GenreSourceIndex is null)
             return ReleaseResult.NotReady;
         title=title.Trim();
@@ -52,7 +52,7 @@ public static class ReleaseService
         var product=new ReleasedGameState
         {
             ProductIndex=state.ReleasedGames.Count,Title=title,Price=price,Stock=copies,ProductionSpending=cost,SalesMilestoneStage=0,
-            OriginalMode=project.OriginalMode,PredecessorProductIndex=project.PredecessorProductIndex,MangaSourceIndex=project.MangaSourceIndex,
+            OriginalInterviewCompleted=project.InterviewCompleted,OriginalMode=project.OriginalMode,PredecessorProductIndex=project.PredecessorProductIndex,MangaSourceIndex=project.MangaSourceIndex,
             // The original increments the fresh product's counter, not its parent's.
             OriginalSequelCounter=predecessor is null ? 0 : 1,
             SeriesBaseTitle=predecessor is null ? title : predecessor.SeriesBaseTitle ?? predecessor.Title,

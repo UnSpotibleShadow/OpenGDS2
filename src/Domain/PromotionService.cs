@@ -23,7 +23,7 @@ public static class PromotionService
     {
         if(media<0 || media>=Media.Count || !state.DevelopmentProjects.Contains(project) || project.OriginalRoomState!=1)
             return PromotionResult.InvalidTarget;
-        if(state.PendingPromotion is not null || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) ||
+        if(CompanyEventService.HasPending(state) || state.PendingPromotion is not null || project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project) ||
             CalendarService.HasPending(state) || state.FinancialFailure is not null || state.Casino.ActivityOpen ||
             OwnHardwareService.HasPending(state) || state.PendingHireGreeting is not null || state.PendingSecretaryAdvice is not null ||
             state.PendingSecretaryReplacement is not null || state.PendingBankLoanReceipt is not null ||
