@@ -1,3 +1,16 @@
+# Current status — PR #119 merged; issue #118 investigated
+
+PR #119 merged at `21c192b93a703b0ee83657d5bc9b89b5cbf66f21` and its 91
+verified changed files were synced to the primary snapshot. The current follow-up
+is investigation-only on `codex/issue118-investigation`. Read
+`docs/issue118-investigation.md`: all 14 ticket images were inspected, matching
+scene resources and nine facility prices verified, and the missing magazine
+interview identified with source trigger/flag/gain/caller evidence. Other areas
+mostly need layout, scene and conversation restoration. No #118 fixes have been
+implemented; keep #118 and #95 open. Do not present this report as ticket closure
+or native-runtime acceptance. Private work: `scratch/issue118-investigation`.
+The owned research Xorg :60 was stopped; do not retry the unchanged Wine runner.
+
 # Current handoff — original-map implementation, 15 October 2026
 
 Owner authorized the full map backlog and standing merges of verified PRs.
