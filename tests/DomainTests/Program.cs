@@ -783,6 +783,42 @@ PokerRoundState ReadyPoker(GameState s,params CasinoCard[] cards)
     p.Revealed=[true,true,true,true,true];p.Phase=1;p.Tick=45;s.Casino.Bet=1;
     return p;
 }
+Test("work sound cues occur once at medium or burst start and never on restore",()=>
+{
+    foreach(var (draw,cue) in new[]{(.2,(OriginalSoundCue?)OriginalSoundCue.Up),(0d,(OriginalSoundCue?)OriginalSoundCue.Fire),(.99,(OriginalSoundCue?)null)})
+    {
+        var s=PlanningState(200000000);var e=Worker();e.Office!.WorkIdleTicks=100;s.Employees=[e];s.DevelopmentProjects=[CancellationProject()];
+        var session=new GameSession(new AudioWorkRandom(draw));var cues=new List<OriginalSoundCue>();int resets=0;session.SoundRequested+=cues.Add;session.SoundResetRequested+=()=>resets++;
+        session.Restore(s);Check(resets==1 && cues.Count==0);session.TickOffice(CoreCatalog());Check(e.Office.WorkTicks==2);
+        Check(cue is null ? cues.Count==0 : cues.SequenceEqual(new[]{cue.Value}));session.TickOffice(CoreCatalog());Check(cues.Count==(cue is null?0:1));
+    }
+});
+Test("original audio notifications follow casino transactions and silent native branches",()=>
+{
+    var s=PokerFixture();var session=new GameSession(new GreetingRandom(0));session.Restore(s);var cues=new List<OriginalSoundCue>();session.SoundRequested+=cues.Add;
+    Check(session.PokerCommand(0)==CasinoResult.Success && cues.SequenceEqual(new[]{OriginalSoundCue.Gold}));
+    var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));p.Tick=0;p.Revealed=[false,false,false,false,false];cues.Clear();
+    for(int i=0;i<45;i++)session.TickPoker();Check(cues.Count==5 && cues.All(x=>x==OriginalSoundCue.Up));
+    p.Phase=2;p.Tick=0;p.RevealOrder=[0];p.Revealed[0]=false;cues.Clear();for(int i=0;i<9;i++)session.TickPoker();Check(cues.Count==0);
+    p.Phase=4;p.Tick=0;s.Casino.PendingPayout=2;session.TickPoker();Check(cues.Count==0);session.TickPoker();Check(cues.SequenceEqual(new[]{OriginalSoundCue.Gold}));
+    cues.Clear();session.Restore(s);Check(cues.Count==0); // Loading/rendering is not a cue.
+});
+Test("original poker double comparison cues exclude its dealer-only reveal",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,4),new(1,5),new(2,6),new(3,7),new(0,8));p.Phase=5;p.Tick=18;p.Revealed=[true,false,false,false,false];s.Casino.PendingPayout=2;
+    var session=new GameSession(new FailureRandom());session.Restore(s);var cues=new List<OriginalSoundCue>();session.SoundRequested+=cues.Add;
+    session.TickPoker();Check(cues.Count==0);Check(CasinoPokerService.SelectCard(s,1));
+    for(int i=0;i<28;i++)session.TickPoker();Check(cues.Count==4 && cues.All(x=>x==OriginalSoundCue.Up));
+});
+Test("card-chain selection and blackjack collection use their own native audio calls",()=>
+{
+    var s=CardChainFixture();var p=s.Casino.CardChain.Round;p.Phase=1;p.Cards=[new(0,0),new(1,1),new(2,2),new(3,3),new(0,4)];p.UsedCards=p.Cards.Select(x=>x.Identifier).ToHashSet();p.Revealed=[true,true,true,true,true];
+    var session=new GameSession(new FailureRandom());session.Restore(s);var cues=new List<OriginalSoundCue>();session.SoundRequested+=cues.Add;
+    Check(session.SelectChainCard(0));Check(cues.SequenceEqual(new[]{OriginalSoundCue.Up}));session.TickCardChain();Check(cues.Count==1);
+    s=BlackjackFixture();session.Restore(s);cues.Clear();Check(session.BlackjackCommand(2)==CasinoResult.Success && cues.Single()==OriginalSoundCue.Gold);
+    var b=s.Casino.Blackjack;b.Phase=1;b.Tick=17;b.Win=false;cues.Clear();session.TickBlackjack();Check(cues.Count==0);
+    b.Phase=4;b.CollectTick=0;s.Casino.PendingPayout=3;session.TickBlackjack();session.TickBlackjack();Check(cues.SequenceEqual(new[]{OriginalSoundCue.Gold}));
+});
 Test("poker uses the recovered nine categories, total-return multipliers and high-pair threshold",()=>
 {
     var hands=new (int Outcome,CasinoCard[] Cards)[] {
@@ -3146,6 +3182,12 @@ Test("local artwork overlays require original assets and cannot replace rule dat
         Check(LocalAssetOverlay.Resolve(original, overlay, "Graphic/Test.bmp") == replacement);
         File.WriteAllText(Path.Combine(overlay, "catalog.json"), "synthetic");
         Check(LocalAssetOverlay.Resolve(original, overlay, "catalog.json") == Path.Combine(original, "catalog.json"));
+        string sourcePng=Path.Combine(original,"Graphic","Native.png");File.WriteAllBytes(sourcePng,[1]);
+        string replacementPng=Path.Combine(overlay,"Graphic","Native.png");File.WriteAllBytes(replacementPng,[2]);
+        Check(LocalAssetOverlay.Resolve(original,overlay,"Graphic/Native.png")==replacementPng);
+        File.Delete(sourcePng);Check(LocalAssetOverlay.Resolve(original,overlay,"Graphic/Native.png")==sourcePng);
+        File.WriteAllBytes(Path.Combine(overlay,"Graphic","Hidden.png"),[3]);
+        Check(LocalAssetOverlay.Resolve(original,overlay,"Graphic/Hidden.png")==Path.Combine(original,"Graphic","Hidden.png"));
         foreach (string unsafePath in new[] { "../Graphic/Test.bmp", "/Graphic/Test.bmp", "C:/Test.bmp", "Graphic/./Test.bmp", "Graphic//Test.bmp", "Graphic/../Test.bmp" })
             Throws<ArgumentException>(() => LocalAssetOverlay.Resolve(original, overlay, unsafePath));
     }
@@ -5624,6 +5666,16 @@ Test("LHA validates data CRC and stored size", () =>
     }
     finally { File.Delete(file); }
 });
+Test("native horse raster keeps masks clipping and even rounding",()=>
+{
+    byte[] background=Enumerable.Repeat((byte)100,421*173*3).ToArray(),colors=new byte[233*316*3],masks=Enumerable.Repeat((byte)255,233*316*3).ToArray();
+    void Pixel(int x,int y,byte r,byte g,byte b){int at=(y*233+x)*3;colors[at]=r;colors[at+1]=g;colors[at+2]=b;masks[at]=masks[at+1]=masks[at+2]=0;}
+    Pixel(29,0,20,30,40);var race=new HorseRaceState {Tick=1,Positions=[2.5,-999,-999,-999,-999,-999,-999,-999]};var image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image.AsSpan((38*421+2)*3,3).SequenceEqual(new byte[]{20,30,40}));Check(image[(38*421+3)*3]==100);
+    Pixel(31,0,10,20,30);int maskAt=31*3;masks[maskAt]=15;masks[maskAt+1]=240;masks[maskAt+2]=255;race.Positions[0]=-1.5;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan(38*421*3,3).SequenceEqual(new byte[]{14,116,122}));
+    Pixel(116,0,7,8,9);race.Tick=0;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
+    Pixel(58,0,18,19,20);race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
+});
 if (args.Length == 2)
 {
     Test("optional original native window icons match independent decoded pixels",()=>
@@ -5638,7 +5690,7 @@ if (args.Length == 2)
             Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(pixels)).ToLowerInvariant()==hash);
         }
         string root=Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString());Directory.CreateDirectory(root);
-        try{NativePresentationAssetImporter.Extract(exe,root);Check(Directory.GetFiles(root,"WindowIcon-*.png").Length==83);Check(Directory.GetFiles(root,"Facility-*").Length==9);}
+        try{NativePresentationAssetImporter.Extract(exe,root);Check(Directory.GetFiles(root,"WindowIcon-*.png").Length==82);Check(Directory.GetFiles(root,"Facility-*").Length==9);Check(!File.Exists(Path.Combine(root,"WindowIcon-MainForm3.png")));}
         finally{Directory.Delete(root,true);}
     });
     Test("optional original scene patches preserve animation and scenery outside captions",()=>
@@ -5660,6 +5712,17 @@ if (args.Length == 2)
         Check(!translated.SequenceEqual(original));
         for(int y=22;y<160;y++)Check(original.AsSpan(y*256*3,256*3).SequenceEqual(translated.AsSpan(y*256*3,256*3)));
     });
+    Test("optional original sales and Help captions preserve surrounding pixels",()=>
+    {
+        byte[] exe=File.ReadAllBytes(args[0]);(int Offset,int W,int H,int Stage)[] cases=[(0x380C40,256,160,1),(0x3767DE,256,160,2),(0x36C37C,256,160,3),(0x361F1A,256,160,4),(0x33F306,250,171,0)];
+        foreach(var (offset,w,h,stage) in cases)
+        {
+            int bits=BitConverter.ToUInt16(exe,offset+28),start=BitConverter.ToInt32(exe,offset+10),stride=((w*bits+31)/32)*4;byte[] rgb=new byte[w*h*3];Check(bits is 8 or 24);
+            for(int y=0;y<h;y++)for(int x=0;x<w;x++){int data=offset+start+(h-1-y)*stride+(bits==8?x:x*3),color=bits==8?offset+54+exe[data]*4:data,i=(y*w+x)*3;rgb[i]=exe[color+2];rgb[i+1]=exe[color+1];rgb[i+2]=exe[color];}
+            byte[] patch=stage==0?LocalSceneCaptionRules.PatchHelp(rgb):LocalSceneCaptionRules.PatchSales(rgb,stage);Check(!patch.SequenceEqual(rgb));var area=stage==0?LocalSceneCaptionRules.HelpRegion:LocalSceneCaptionRules.SalesRegions[stage-1];
+            for(int y=0;y<h;y++)for(int x=0;x<w;x++)if(x<area.X||x>=area.X+area.Width||y<area.Y||y>=area.Y+area.Height)Check(rgb.AsSpan((y*w+x)*3,3).SequenceEqual(patch.AsSpan((y*w+x)*3,3)));
+        }
+    });
     Test("optional original awards caption fingerprint and scenery match",()=>
     {
         byte[] exe=File.ReadAllBytes(args[0]);var scene=LocalRasterDecoder.Gif(exe.AsSpan(0x1367D8,19520).ToArray(),256,160);
@@ -5675,6 +5738,14 @@ if (args.Length == 2)
         try
         {
             EmbeddedGraphicsImporter.Extract(exe,root);Check(Directory.GetFiles(root,"Button-*.bmp").Length>=40);
+            Check(Directory.GetFiles(root,"CardRank*.bmp").Length==26&&Directory.GetFiles(root,"HorseMarker*.bmp").Length==24);
+            Check(File.ReadAllBytes(Path.Combine(root,"CardBack.bmp")).SequenceEqual(exe.AsSpan(0x2BABBE,BitConverter.ToInt32(exe,0x2BABBE+2)).ToArray()));
+            Check(File.ReadAllBytes(Path.Combine(root,"HardwareLaunchScene.bmp")).SequenceEqual(exe.AsSpan(0x28D66E,42038).ToArray()));
+            var bitmap=exe.AsSpan(0x28D66E,42038).ToArray();int pixelStart=BitConverter.ToInt32(bitmap,10);byte[] rgb=new byte[256*160*3];
+            for(int y=0;y<160;y++)for(int x=0;x<256;x++){int color=bitmap[pixelStart+(159-y)*256+x],pal=54+color*4,i=(y*256+x)*3;rgb[i]=bitmap[pal+2];rgb[i+1]=bitmap[pal+1];rgb[i+2]=bitmap[pal];}
+            Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(rgb)).ToLowerInvariant()=="c8ac9409990d3b897fc7ef49204b99df3e47d0a3d9c20d5dae8cc478497c57c0");
+            var patched=LocalSceneCaptionRules.PatchHardware(rgb);Check(!patched.SequenceEqual(rgb));var area=LocalSceneCaptionRules.HardwareRegion;
+            for(int y=0;y<160;y++)for(int x=0;x<256;x++)if(x<area.X||x>=area.X+area.Width||y<area.Y||y>=area.Y+area.Height)Check(rgb.AsSpan((y*256+x)*3,3).SequenceEqual(patched.AsSpan((y*256+x)*3,3)));
             foreach(int offset in new[]{0x28814D,0x289EF9,0x28A8DD,0x27DC18,0x270A71,0x2631DA,0x265C47,0x2661A9})
             {int size=BitConverter.ToInt32(exe,offset+2);Check(File.ReadAllBytes(Path.Combine(root,$"Button-{offset:X6}.bmp")).SequenceEqual(exe.AsSpan(offset,size).ToArray()));}
         }
@@ -6095,4 +6166,11 @@ sealed class FailureRandom(params float[] values) : Random
 {
     public int Calls {get;private set;}
     public override float NextSingle()=>Calls<values.Length ? values[Calls++] : throw new Exception("Unexpected failure draw");
+}
+
+sealed class AudioWorkRandom(double draw) : Random
+{
+    public override int Next(int maxValue)=>maxValue==130?1:0;
+    public override double NextDouble()=>draw;
+    public override float NextSingle()=>.5f;
 }

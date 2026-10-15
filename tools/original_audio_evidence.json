@@ -1,0 +1,203 @@
+{
+  "source_sha256": "4820bc85529709a128a4812f1d1ff06b2ea16899f08a67f04d0431c8b04fdfe6",
+  "dispatcher": {
+    "start": "0x0098ABF8",
+    "size": 428,
+    "selectors": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "paths": [
+      "Sound/Gold.wav",
+      "Sound/Up.wav",
+      "Sound/Bakuhatu.wav",
+      "Sound/Fire.wav"
+    ],
+    "flag_offsets": [
+      82,
+      178,
+      274,
+      370
+    ],
+    "flags": 1,
+    "meaning": "SND_ASYNC; single replaceable voice, no loop"
+  },
+  "fingerprints": [
+    {
+      "start": "0x98abf8",
+      "size": 428,
+      "sha256": "2072230e89517b04d2d11f24f6530616018d396ac7ad371a307595763673299c"
+    },
+    {
+      "start": "0x98eef4",
+      "size": 540,
+      "sha256": "36f63d8878c9d04e33417bf90978cc803922908ecdb8737285a7e33ea1e470de"
+    },
+    {
+      "start": "0x9b9de4",
+      "size": 3412,
+      "sha256": "cc0d43d39ce02af858a4ce1fb69bf274c1b27bcf8e9b052b9314b36b496740f8"
+    },
+    {
+      "start": "0x9c8a8c",
+      "size": 4432,
+      "sha256": "1ae47c1b3c7c2bf9c18b06be8278b975259d2b1cd8a0259b63e924875a213b07"
+    },
+    {
+      "start": "0x9d0374",
+      "size": 5396,
+      "sha256": "1a1effe9d861ec7ab4ab7ab6aedad7b9c2f7853bf8b0199800ca92d70dbbb17b"
+    },
+    {
+      "start": "0x9d1968",
+      "size": 5388,
+      "sha256": "0420bc640b527b2f0aedee3e935e48fbf0d9a6c3764dc1ec841deb47599a777c"
+    },
+    {
+      "start": "0x9d7bb8",
+      "size": 7108,
+      "sha256": "b05068e1f1c58cf97ffc07bf9debe1b24f88874816dd58281bf63d757d782959"
+    },
+    {
+      "start": "0x9e13b8",
+      "size": 9116,
+      "sha256": "855df973548084817ba62fb50e12e71054b28e83cd3a12aa94f489d6558a12bb"
+    },
+    {
+      "start": "0xa0283c",
+      "size": 56604,
+      "sha256": "2a02c38bb853e37b5e616f4251350a25d12e0d27d19406098f5037b29a678ff4"
+    }
+  ],
+  "calls": [
+    {
+      "procedure": "0xa0283c",
+      "relative": 26072,
+      "pool": "0x5f99ac",
+      "anchor_hex": "282cff0200040cff0a9a000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0xa0283c",
+      "relative": 26118,
+      "pool": "0x5f99ac",
+      "anchor_hex": "282cff0400040cff0a9a000800",
+      "cue": 4
+    },
+    {
+      "procedure": "0x9b9de4",
+      "relative": 259,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff01000438ff0a12000800",
+      "cue": 1
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 103,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 174,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 245,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 316,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 387,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 1332,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff01000444ff0a12000800",
+      "cue": 1
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 4976,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 5030,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 5084,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d0374",
+      "relative": 5138,
+      "pool": "0x6097d4",
+      "anchor_hex": "285cff02000444ff0a12000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9d1968",
+      "relative": 4029,
+      "pool": "0x60a5dc",
+      "anchor_hex": "2858ff01000444fe0a22000800",
+      "cue": 1
+    },
+    {
+      "procedure": "0x9d7bb8",
+      "relative": 1981,
+      "pool": "0x60a5dc",
+      "anchor_hex": "285cff0100043cff0a22000800",
+      "cue": 1
+    },
+    {
+      "procedure": "0x9c8a8c",
+      "relative": 358,
+      "pool": "0x60efd8",
+      "anchor_hex": "285cff01000438ff0a1a000800",
+      "cue": 1
+    },
+    {
+      "procedure": "0x98eef4",
+      "relative": 193,
+      "pool": "0x60efd8",
+      "anchor_hex": "284cff0200042cff0a1a000800",
+      "cue": 2
+    },
+    {
+      "procedure": "0x9e13b8",
+      "relative": 5316,
+      "pool": "0x60efd8",
+      "anchor_hex": "285cff0100042cff0a1a000800",
+      "cue": 1
+    }
+  ],
+  "explosion_caller": "No direct caller in the 669 indexed procedures; do not invent a trigger."
+}

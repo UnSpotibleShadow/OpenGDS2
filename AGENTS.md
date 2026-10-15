@@ -1,5 +1,69 @@
 # Development execution safeguards
 
+## Active M105 — presentation plan, one step at a time
+
+The owner authorized all remaining steps on 2026-10-14 while going to bed,
+reporting 57% usage remaining. Earlier per-step permission pauses are superseded.
+Continue Steps 5–8 without further approval stops; persist checkpoints after each
+step. Usage is not exposed, so do not invent a remaining percentage.
+Steps 1–4 are complete locally. See docs/presentation-evidence-m105.md,
+docs/shared-presentation-m105-step2.md, docs/management-presentation-m105-step3.md
+and docs/hardware-presentation-m105-step4.md. Steps 1–7 are complete; consolidated verification passes. Step 8 publication is
+tracked in scratch/m105-evidence/publication-manifest.json and guarded receipts.
+Step 7 adds verified native asynchronous effects with independent settings;528
+domain checks and authored PCM/affected casino/core/music regressions pass.
+See docs/original-audio-m105-step7.md; union step-7-completed.json. Publication is Step 8.
+Branch codex/m105-presentation-evidence was created/read-back at main
+87aab7f7e834cbc66b44fb40367be2a9920fc22b. Publish only the verified explicit union as a review PR; no merge is authorized.
+Find the PR by feature branch and reconcile guarded remote receipts before retries.
+Keep #95 open; no export/release/Actions/visibility change.
+
+Step 1: corrected unused MainForm3 icon import (82 bindings); added form-boundary
+verification and35 forms/1633 rectangle anchors/240 handler fingerprints.
+Step 2: named older dialogs restore positions; employee details retain moved
+coordinates across selection/modal return; native icon bindings and small23x22
+button/39x16 localized-tab skins; PNG override support with ownership/dimension
+guards. Step 3: compact licence, production, training/use, staff/employee,
+secretary and Bank layouts; supplemental Company info; active employee tabs.
+Step 4: six compact hardware screens, missing market/report routes, retained
+monitor, shared launch illustration and fingerprint-guarded English title patch.
+Planning selection retains shared choices on cancel and restores device preview.
+Step 5 complete: native card components/three tables, horse roster/wager matrix
+and recovered mask/XOR/coordinate compositor. See docs/casino-presentation-m105-step5.md.
+Clean build,523 domain tests, bilingual four-table containment and four casino
+workflow checks pass. Receipts scratch/m105-step5-*; union step-5-completed.json.
+Race sheets remain ordinary original LZH assets; missing sheets request reimport.
+Step 6 is complete: compact remaining reachable screens and Help/milestone caption patches.
+Clean build,524 domain checks, bilingual layouts/core/continuation/window checks pass.
+Union: scratch/m105-evidence/step-6-completed.json. Earlier audit overstated poaching counterparts: no modern
+poaching event/state exists. Record that workflow gap explicitly; no fabricated
+negotiation transaction is authorized by a presentation-only rewrite.
+
+Step 4 checks: clean build;522 optional-original domain checks; bilingual hardware
+layouts; own-hardware workflow; presentation continuation; headless core-loop all
+pass. Receipts: scratch/m105-step4-*; union handoff step-4-completed.json. Owner
+welcomed community preview images: six English PNGs/overview/ZIP in private
+scratch/m105-step4-community (not committed/uploaded). :48 display stopped after
+checks. No M105 publication; Step 7 audio is still pending.
+
+Step 3 checks: clean build; bilingual management containment/transactions;
+headless core-loop; bilingual speed/stress use; bilingual window/artwork/position
+checks all pass. Source services unchanged. Media detour retains a value snapshot
+rather than reading the disposed spinner. Test worker selection follows the new
+bounded roster; preserve fixed-fps60 on headless core-loop checks. The initial
+missing-frame-rate attempt was stopped, not left running. Receipts/captures:
+scratch/m105-step3-*; union handoff scratch/m105-evidence/step-3-completed.json.
+Owned :47 display stopped after verification. Publication remains Step 8.
+
+Checks: clean app build;522 optional-original domain tests; focused bilingual
+rendered window/artwork checks; headless core-loop regression; rendered native
+layout sweep all pass. Rendered full core-loop attempt reached its180s deadline
+without an assertion failure; changed to the previously successful headless
+workflow route rather than extending the deadline. Failed focused fixtures lacked
+audience/recall fields and were corrected. See scratch/m105-step2-*.json/log.
+No passed check needs rerunning absent relevant changes. Owned :46 display was
+stopped after verification. Keep original artwork/audio/captions/traces private.
+
 ## Current M104 — third review implementation
 
 Owner approved the complete plan in docs/review-round-plan-m104.md. See

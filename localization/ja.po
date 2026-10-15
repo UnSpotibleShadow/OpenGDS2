@@ -3872,3 +3872,108 @@ msgstr "媒体"
 
 msgid "PURCHASE_PRICE"
 msgstr "価格"
+
+msgid "BANK_DUE_DATE"
+msgstr "返済日"
+
+msgid "BANK_PRINCIPAL"
+msgstr "借入額"
+
+msgid "BANK_REPAYMENT_COLUMN"
+msgstr "返済額"
+
+msgid "LICENSE_COLUMN"
+msgstr "ライセンス"
+
+msgid "HARDWARE_SHIPPED"
+msgstr "出荷台数"
+
+msgid "HARDWARE_MAKER"
+msgstr "メーカー"
+
+msgid "LICENSE_OWNED_SHORT"
+msgstr "取得済"
+
+msgid "LICENCE_DESCRIPTION"
+msgstr "{0}・{1}ビット機種。"
+
+msgid "TRAINING_WORK"
+msgstr "必要訓練量"
+
+msgid "BEST_SELLING_GAME"
+msgstr "最高販売ゲーム"
+
+msgid "SECRETARY"
+msgstr "秘書"
+
+msgid "TRAINING_DESCRIPTION"
+msgstr "{0}の次のレベルを習得します。訓練内容と学習席を選択してください。"
+
+msgid "TECHNOLOGY_USE_DESCRIPTION"
+msgstr "習得したレベルの{0}を使用します。"
+
+msgid "HARDWARE_MARKET"
+msgstr "ゲーム機情報"
+
+msgid "HARDWARE_MARKET_NOTE"
+msgstr "現在発売されているゲーム機"
+
+msgid "OWN_HARDWARE_REPORT"
+msgstr "自社ゲーム機"
+
+msgid "HARDWARE_REQUIREMENTS_NOTE"
+msgstr "完成にはすべてのテクノロジーをonにする必要があります。"
+
+msgid "LICENCE_FEE"
+msgstr "ライセンス料"
+
+msgid "HARDWARE_ANNOUNCEMENT_DESCRIPTION"
+msgstr "{0}が発売されました。処理能力：{1}ビット。"
+
+msgid "HARDWARE_FORM_0"
+msgstr "家庭用ゲーム機"
+
+msgid "HARDWARE_FORM_1"
+msgstr "携帯ゲーム機"
+
+msgid "HARDWARE_MEDIA_0"
+msgstr "カセット"
+
+msgid "HARDWARE_MEDIA_1"
+msgstr "CD-ROM"
+
+msgid "CARD_CHAIN_REFERENCE"
+msgstr "前のカード："
+
+msgid "BLACKJACK_DEALER_SCORE"
+msgstr "ディーラー"
+
+msgid "BLACKJACK_PLAYER_SCORE"
+msgstr "プレイヤー"
+
+msgid "HORSE_NUMBER"
+msgstr "番号"
+
+msgid "HORSE_JOCKEY"
+msgstr "騎手"
+
+msgid "HORSE_FORECAST"
+msgstr "予想"
+
+msgid "HORSE_ODDS"
+msgstr "倍率"
+
+msgid "CARD_CHAIN_REMAINING"
+msgstr "残りのカード"
+
+msgid "SAVE_SLOT_NUMBER"
+msgstr "番号"
+
+msgid "ORIGINAL_EFFECTS_SETTINGS"
+msgstr "オリジナル効果音"
+
+msgid "ORIGINAL_EFFECTS_ENABLED"
+msgstr "オリジナル効果音を有効にする"
+
+msgid "EFFECTS_VOLUME"
+msgstr "効果音の音量"

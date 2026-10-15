@@ -14,6 +14,7 @@ public partial class Main : Control
     private VBoxContainer _content = null!;
     private VBoxContainer _screenContent = null!;
     private BackgroundMusic _music = null!;
+    private OriginalSoundEffects _effects = null!;
     private Label _status = null!;
     private Button _importButton = null!;
     private FileDialog _fileDialog = null!;
@@ -68,6 +69,9 @@ public partial class Main : Control
         BuildShell();
         _music = new BackgroundMusic { Name = "BackgroundMusic" };
         AddChild(_music);
+        _effects=new OriginalSoundEffects {Name="OriginalSoundEffects"};AddChild(_effects);
+        _session.SoundRequested+=_effects.Play;
+        _session.SoundResetRequested+=_effects.Stop;
         ShowTitleScreen();
     }
 
@@ -149,6 +153,7 @@ public partial class Main : Control
 
     private void ShowTitleScreen()
     {
+        _effects?.Stop();
         if (_session.Current is { } old) {CasinoPokerService.Close(old);CasinoBlackjackService.Close(old);CasinoCardChainService.Close(old);CasinoHorseService.Close(old);}
         DestroyDesktop();
         _music?.SetTitleActive();
@@ -343,63 +348,7 @@ public partial class Main : Control
     {
         var state = _session.Current ?? throw new InvalidOperationException("No session.");
         var roster = _session.OpenRecruitment();
-        ClearContent();
-        AddHeading(Tr("HIRE_EMPLOYEES"), 18);
-        CompactManagementWindow("RecruitmentWindow", new Vector2(500,440), 480);
-        _content.AddChild(new Label { Name="RecruitmentFunds",Text=$"{Tr("FUNDS")}: ¥{state.Money:N0}" });
-        var table=CreateTable("RecruitmentTable",
-            ["EMPLOYEE_NAME","EMPLOYEE_LEVEL","SHORT_FUN","SHORT_GRAPHICS","SHORT_NOVELTY","SHORT_MUSIC","SHORT_ACCURACY","SHORT_CONTRACT_FEE"],
-            [105,35,28,28,28,28,28,110]);
-        table.CustomMinimumSize=new Vector2(0,140);_content.AddChild(table);
-        var root=table.GetRoot();
-        for (int i=0;i<roster.Candidates.Count;i++)
-        {
-            var candidate=roster.Candidates[i];var row=table.CreateItem(root);row.SetMetadata(0,i);
-            string[] values=[EmployeeName(candidate),candidate.Level?.ToString() ?? "?",candidate.Fun?.ToString() ?? "?",
-                candidate.Graphics?.ToString() ?? "?",candidate.Novelty?.ToString() ?? "?",candidate.Music?.ToString() ?? "?",
-                candidate.Accuracy?.ToString() ?? "?",candidate.ContractFee?.ToString("N0") ?? "?"];
-            for (int col=0;col<values.Length;col++) {row.SetText(col,values[col]);if (col>0) row.SetTextAlignment(col,HorizontalAlignment.Right);}
-        }
-        var details=new HBoxContainer {Name="RecruitmentDetails"};details.AddThemeConstantOverride("separation",5);_content.AddChild(details);
-        _status = new Label { Name="RecruitmentStatus",AutowrapMode=TextServer.AutowrapMode.WordSmart };
-        _content.AddChild(_status);
-        var actions=new HBoxContainer();_content.AddChild(actions);
-        var hire=new Button {Name="HireSelectedCandidate",Text=Tr("HIRE_CONFIRM"),Disabled=true,SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(hire);
-        var cancel=new Button {Text=Tr("CANCEL"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(cancel);
-        cancel.Pressed+=()=>ShowOfficeReconstruction(state);
-        EmployeeState? selected=null;
-        void SelectCandidate()
-        {
-            var row=table.GetSelected();if (row is null) return;
-            int index=row.GetMetadata(0).AsInt32();if (index<0 || index>=roster.Candidates.Count) return;
-            selected=roster.Candidates[index];
-            foreach (Node child in details.GetChildren()) {details.RemoveChild(child);child.QueueFree();}
-            var picture=new VBoxContainer();details.AddChild(picture);
-            picture.AddChild(new TextureRect {Name="EmployeePortrait",Texture=OriginalAssetStore.LoadEmployeePortrait(selected.PortraitId),
-                TextureFilter=TextureFilterEnum.Nearest,ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,
-                StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,CustomMinimumSize=new Vector2(64,64)});
-            picture.AddChild(new Label {Text=$"{Tr("LEVEL")} {selected.Level}/10"});
-            details.AddChild(new EmployeeAbilityChart {Name="RecruitmentAbilityChart",Employee=selected,
-                CustomMinimumSize=new Vector2(210,144),ClipContents=true,MouseFilter=MouseFilterEnum.Ignore});
-            var skills=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};details.AddChild(skills);
-            AddRecruitmentBar(skills,"STAT_DEVELOPMENT_SPEED",selected.DevelopmentSpeed);
-            AddRecruitmentBar(skills,"STAT_INSPIRATION",selected.Inspiration);
-            var technology=new Label {Name="RecruitmentTechnologies",AutowrapMode=TextServer.AutowrapMode.WordSmart};skills.AddChild(technology);
-            var learned=selected.TechnologyLevels?.Where(x=>x.Value>0).OrderBy(x=>x.Key).ToList();
-            technology.Text=learned is null ? Tr("NOT_YET_DECODED") : learned.Count==0 ? Tr("EMPLOYEE_NO_TECHNOLOGIES") :
-                string.Join("\n",learned.Select(x=>CatalogName(_activeCatalog,"TECHNOLOGY",x.Key,_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==x.Key)?.Name ?? "?")));
-            hire.Disabled=selected.ContractFee is not long fee || state.Money is not long money || money<fee;
-        }
-        table.ItemSelected+=SelectCandidate;
-        hire.Pressed+=()=>
-        {
-            if (selected is null) return;
-            var result=_session.Hire(selected);
-            if (result==HireResult.Success) ShowOfficeReconstruction(state);
-            else _status.Text=Tr("HIRE_FAILED")+" "+Tr($"HIRE_RESULT_{result}");
-        };
-        root.GetFirstChild()?.Select(0);
-        if (roster.Candidates.Count == 0) AddHeading(Tr("NO_APPLICANTS"), 18);
+        ShowNativeRecruitment(state,roster);
     }
 
     private void AddRecruitmentBar(VBoxContainer parent,string caption,int? value)
@@ -412,89 +361,20 @@ public partial class Main : Control
 
     private void ShowLicenses(GameState state)
     {
-        ClearContent(); AddHeading(Tr("HARDWARE_LICENSES"), 30);
-        var catalog = _activeCatalog;
-        if (catalog is not null)
-            foreach (var hardware in catalog.Hardware.Where(x => state.AvailableHardware?.Contains(x.SourceIndex) == true))
-            {
-                AddHeading($"{CatalogName(catalog,"HARDWARE",hardware.SourceIndex,hardware.Name)} · {hardware.BitWidth} {Tr("BIT_UNIT")} · {hardware.LicenseFee:N0}", 18);
-                if (state.HardwareLicenses?.Contains(hardware.SourceIndex) == true) AddHeading(Tr("LICENSE_OWNED"), 14);
-                else AddAction("LICENSE_BUY", () =>
-                {
-                    var result = HardwareLicenseService.TryPurchase(state, catalog, hardware.SourceIndex);
-                    ShowLicenses(state); AddHeading(Tr($"LICENSE_RESULT_{result}"), 16);
-                });
-            }
-        AddAction("CANCEL", () => ShowOfficeReconstruction(state));
+        ShowLicenceSelection(state);
     }
 
     private void ShowComputers(GameState state)=>ShowComputerPurchase(state);
 
     private void ShowStaff(GameState state)
     {
-        ClearContent(); AddHeading(Tr("STAFF"), 30);
-        bool completeSources=OriginalPayrollRules.CaptureStaffList(state);
-        long? salaryTotal=null;
-        // Malformed large monetary fields must not crash this information screen.
-        try
-        {
-            if (completeSources)
-            {
-                salaryTotal=OriginalPayrollRules.StaffSalaryTotal(state.EmployeeSources);
-            }
-        }
-        catch (OverflowException) { salaryTotal=null; }
-        _content.AddChild(new Label {Name="StaffSalaryTotal",
-            Text=$"{Tr("MONTHLY_SALARY_TOTAL")}: {salaryTotal?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
-        foreach (var employee in state.Employees)
-        {
-            if (CalendarService.HasPending(state)) AddHeading($"{EmployeeName(employee)}: {employee.MonthlySalary:N0}",18);
-            else AddStaffEmployeeControls(state,employee);
-        }
-        AddAction("CANCEL", () => ShowOfficeReconstruction(state));
-    }
-
-    private VBoxContainer AddStaffEmployeeControls(GameState state,EmployeeState employee)
-    {
-        var panel = AddEmployeeCard(employee);
-        panel.AddChild(new Label {Name=$"MonthlySalary{employee.SourceIndex}",
-            Text=$"{Tr("MONTHLY_SALARY")}: {employee.MonthlySalary?.ToString("N0") ?? Tr("NOT_YET_DECODED")}"});
-        var dismiss=new Button {Name=$"DismissEmployee{employee.SourceIndex}",Text=Tr("DISMISS_EMPLOYEE"),Disabled=employee.SourceIndex is null};
-        dismiss.Pressed+=()=>ShowDismissEmployee(state,employee);panel.AddChild(dismiss);
-        string threshold = employee.Level is >= 1 and <= 10
-            ? EmployeeLevelUpService.RequiredExperience(employee.Level.Value).ToString() : Tr("NOT_YET_DECODED");
-        panel.AddChild(new Label {Text=$"{Tr("EXPERIENCE")}: {employee.Experience?.ToString("0.0") ?? Tr("NOT_YET_DECODED")} / {threshold}"});
-        panel.AddChild(new Label {Text=$"{Tr("STRESS")}: {employee.Stress?.ToString("0.0") ?? Tr("NOT_YET_DECODED")}"});
-        if (employee.Office is OfficeEmployeeState workspace)
-        {
-            panel.AddChild(new Label {Text=workspace.Action is >=6 and <=17
-                ? $"{Tr("DEVELOPMENT_ROOM")} {(workspace.Action-6)/6+1} / {Tr("DESK")} {(workspace.Action-6)%6+1}"
-                : workspace.Action is >=1 and <=5 ? $"{Tr("STUDY_SEAT")} {workspace.Action}" : Tr("LOUNGE")});
-            AddAction("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee));
-            AddAction("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _importer.LoadCatalog()?.Technologies.Count>0);
-            AddAction("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(x=>x.Value>0)==true);
-            AddAction("TAKE_BREAK",()=>
-            {
-                var result=OfficeAssignmentService.TryTakeBreak(state,employee,_session.Random);
-                if (result==OfficeAssignmentResult.Success) ShowOfficeReconstruction(state);
-                else { ShowStaff(state); AddHeading(Tr($"ASSIGNMENT_RESULT_{result}"),16); }
-            },workspace.Action is >=1 and <=17);
-        }
-        if (employee.SourceIndex is int source)
-            AddAction("LEVEL_UP", () =>
-            {
-                var random = _session.Random;
-                var result = LevelUpWithPresentation(state, source, Enumerable.Range(0, 8).Select(_ => random.NextSingle()).ToArray());
-                if(result==LevelUpResult.Success)ShowPendingLevelUp(state);else ShowStaff(state);
-                if (result != LevelUpResult.Success) AddHeading(Tr("LEVEL_UP_FAILED") + " " + Tr($"LEVEL_UP_RESULT_{result}"), 16);
-            }, employee.Level is >= 1 and < 10 && employee.Experience >= EmployeeLevelUpService.RequiredExperience(employee.Level.Value));
-        return panel;
+        ShowStaffSelection(state);
     }
 
     private void ShowCalendar(GameState state)
     {
         // Separate inspector: advancing an incomplete simulation would skip payroll/events.
-        ClearContent(); AddHeading(Tr("CALENDAR_INSPECTOR"), 28);
+        ClearContent();IdentifyManagementWindow("CalendarInspectorWindow"); AddHeading(Tr("CALENDAR_INSPECTOR"), 28);
         var date = new GameDate(state.Year ?? 1, state.Month ?? 4, state.Week ?? 1);
         var label = new Label { Text = $"{date.Year} / {date.Month} / {date.Week}", HorizontalAlignment = HorizontalAlignment.Center };
         _content.AddChild(label); AddHeading(Tr("CALENDAR_INSPECTOR_NOTE"), 14);
@@ -535,13 +415,17 @@ public partial class Main : Control
 
     private void ShowSettings()
     {
-        ClearContent(); AddHeading(Tr("SETTINGS"), 30);
+        ClearContent();IdentifyManagementWindow("SettingsWindow"); AddHeading(Tr("SETTINGS"), 30);
         foreach (var (locale, name) in new[] { ("en", "English"), ("ja", "日本語") })
         {
             var button = new Button { Text = name };
             button.Pressed += () => { SaveInterfaceLanguage(locale); ShowSettings(); };
             _content.AddChild(button);
         }
+        AddHeading(Tr("ORIGINAL_EFFECTS_SETTINGS"),18);
+        var effectsEnabled=new CheckButton {Name="EffectsEnabled",Text=Tr("ORIGINAL_EFFECTS_ENABLED"),ButtonPressed=_effects.Enabled};effectsEnabled.Toggled+=_effects.SetEnabled;_content.AddChild(effectsEnabled);
+        var effectsLabel=new Label {Text=$"{Tr("EFFECTS_VOLUME")}: {_effects.VolumePercent:N0}%"};_content.AddChild(effectsLabel);
+        var effectsVolume=new HSlider {Name="EffectsVolume",MinValue=0,MaxValue=100,Step=1,Value=_effects.VolumePercent};effectsVolume.ValueChanged+=value=>{_effects.SetVolume((float)value);effectsLabel.Text=$"{Tr("EFFECTS_VOLUME")}: {value:N0}%";};_content.AddChild(effectsVolume);
         AddHeading(Tr("MUSIC_SETTINGS"), 18);
         _content.AddChild(new Label { Text = $"{Tr("MUSIC_DIRECTORY")}: {ProjectSettings.GlobalizePath(BackgroundMusic.DirectoryPath)}", AutowrapMode = TextServer.AutowrapMode.WordSmart });
         _content.AddChild(new Label { Text = Tr("MUSIC_LOCAL_NOTE"), AutowrapMode = TextServer.AutowrapMode.WordSmart });

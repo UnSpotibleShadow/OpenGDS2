@@ -75,16 +75,12 @@ public partial class Main
             });
             return;
         }
-        AddHeading(Tr("GRADUATE_RECRUITMENT"),24);
-        AnnualMessage("GraduatePosition",string.Format(Tr("GRADUATE_POSITION"),graduates.CandidateIndex+1,graduates.Candidates.Count));
-        AddEmployeeCard(employee);
-        AnnualButton("HireGraduate","HIRE_CONFIRM",()=>
-        {
-            var result=GraduateService.Hire(state,_session.Random);
-            if (result==HireResult.Success) ShowOfficeReconstruction(state);
-            else _status.Text=Tr($"HIRE_RESULT_{result}");
-        });
-        AnnualButton("DeclineGraduate","GRADUATE_DECLINE",()=>{GraduateService.Decline(state);ShowOfficeReconstruction(state);});
+        ClearContent();var canvas=NativeWindow("GraduateRecruitmentWindow",Tr("GRADUATE_RECRUITMENT"),new(382,239));
+        NativeText(canvas,"GraduatePosition",string.Format(Tr("GRADUATE_POSITION"),graduates.CandidateIndex+1,graduates.Candidates.Count),new(4,3,374,23),10);
+        EmployeePreview(canvas,employee,"Graduate",new(4,31,374,163));
+        _status=NativeText(canvas,"GraduateStatus","",new(4,197,374,14),10);
+        NativeAction(canvas,"HireGraduate","HIRE_CONFIRM",new(156,211,106,25),()=>{var result=GraduateService.Hire(state,_session.Random);if(result==HireResult.Success)ShowOfficeReconstruction(state);else _status.Text=Tr("HIRE_RESULT_"+result);});
+        NativeAction(canvas,"DeclineGraduate","GRADUATE_DECLINE",new(268,211,110,25),()=>{GraduateService.Decline(state);ShowOfficeReconstruction(state);});
     }
     private void AnnualButton(string name,string key,Action action)
     {var button=new Button {Name=name,Text=Tr(key)};_content.AddChild(button);button.Pressed+=action;}

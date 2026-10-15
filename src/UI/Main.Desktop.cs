@@ -83,11 +83,11 @@ public partial class Main
         Menu(menus, "MENU_COMPANY", [("COMPANY_ACTIVITIES", () => ShowCompanyActivities(state)),("BANK",()=>ShowBank(state)),
             ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
             ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
-            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state))]);
+            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state))]);
         Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment)]);
         Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state)),
             ("DEVELOPMENT_PLANNING", () => ShowPlanningPreview(state))]);
-        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state))]);
+        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state)),("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state))]);
         Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
             ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
             ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
@@ -174,7 +174,9 @@ public partial class Main
             }
         }
         var facilities=new Button {Name="CompanyFacilities",Text=Tr("COMPANY_FACILITIES")};
-        facilities.AddThemeFontSizeOverride("font_size",11);company.Body.AddChild(facilities);
+        var companyActions=new HBoxContainer();companyActions.AddThemeConstantOverride("separation",2);company.Body.AddChild(companyActions);
+        facilities.SizeFlagsHorizontal=SizeFlags.ExpandFill;facilities.AddThemeFontSizeOverride("font_size",11);companyActions.AddChild(facilities);
+        var information=new Button {Name="CompanyInformation",Text="…",TooltipText=Tr("COMPANY_WINDOW"),CustomMinimumSize=new(22,0)};companyActions.AddChild(information);information.Pressed+=()=>{if(_dialog is null)ShowCompanyInformation(state);};
         facilities.Pressed+=()=>{if (_dialog is null) ShowFacilities(state);};
         var staff = ChildWindow("EmployeeWindow", Tr("EMPLOYEE_WINDOW"), new Vector2(720, 130), new Vector2(390, 150));
         if (state.FinancialFailure is null && !state.Casino.ActivityOpen) OriginalPayrollRules.CaptureStaffList(state);
@@ -284,6 +286,8 @@ public partial class Main
         "HIRE_EMPLOYEES" => _desktopState?.Recruitment.CandidateDatabaseDecoded == true,
         "DEVELOPMENT_COMPUTERS" => _activeCatalog?.DevelopmentComputers.Count == 4,
         "TECHNOLOGIES" => _activeCatalog?.Technologies.Count > 0,
+        "HARDWARE_MARKET" => _activeCatalog?.Hardware.Count>0,
+        "OWN_HARDWARE_REPORT" => _desktopState?.OwnHardware.Launched is not null,
         "HARDWARE_LICENSES" => _desktopState?.AvailableHardware is not null && _desktopState.HardwareLicenses is not null,
         "BANK" => _desktopState is { } bankState && BankLoanService.CheckBorrow(bankState) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied,
         "COMPANY_ACTIVITIES" => _desktopState?.Company.ActivityCost is not null,
@@ -457,11 +461,17 @@ public partial class Main
     {
         _content.CustomMinimumSize = new Vector2(contentWidth, 0);
         if (_dialog is null || _workspace is null) return;
-        _dialog.Name = name;_dialog.SetNativeIcon(name);
         _dialog.Size = size;
         // Prefer the free space beside the office, keeping the office visible.
         _dialog.Position = new Vector2(Math.Min(480, Math.Max(0, _workspace.Size.X - size.X)),
             Math.Min(36, Math.Max(0, _workspace.Size.Y - size.Y)));
+        IdentifyManagementWindow(name,positionKey);
+    }
+
+    private void IdentifyManagementWindow(string name,string? positionKey=null)
+    {
+        if (_dialog is null) return;
+        _dialog.Name=name;_dialog.SetNativeIcon(name);
         _dialogPositionKey=positionKey??(UsesConversationPosition(name)?null:name);
         if(_dialogPositionKey is string key && _dialogPositions.TryGetValue(key,out var saved))_dialog.SetPositionInsideWorkspace(saved);
         else if (UsesConversationPosition(name) && _conversationPosition is Vector2 position)

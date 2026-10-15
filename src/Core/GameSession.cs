@@ -3,7 +3,7 @@ using OpenGDS2.Import;
 
 namespace OpenGDS2.Core;
 
-public sealed class GameSession
+public sealed partial class GameSession
 {
     private readonly Random _random;
     public Random Random=>_random;
@@ -20,6 +20,7 @@ public sealed class GameSession
         if (string.IsNullOrWhiteSpace(companyName) || string.IsNullOrWhiteSpace(presidentName))
             throw new ArgumentException("Company and president names are required.");
         if (!Enum.IsDefined(mode)) throw new ArgumentOutOfRangeException(nameof(mode));
+        SoundResetRequested?.Invoke();
         var date = CalendarRules.OpeningDate;
         var state = new GameState
         {
@@ -151,7 +152,13 @@ public sealed class GameSession
             if (catalog is not null)
             {
                 if(!resuming)TrainingService.Tick(state,employee,catalog,_random);
+                int workBefore=employee.Office?.WorkTicks ?? -1;
                 DevelopmentSimulation.TickEmployee(state,employee,catalog,_random);
+                if(workBefore==0 && employee.Office is {WorkTicks:>0} office)
+                {
+                    if(office.WorkTier==2)SoundRequested?.Invoke(OriginalSoundCue.Up);
+                    else if(office.WorkTier==3)SoundRequested?.Invoke(OriginalSoundCue.Fire);
+                }
                 if (OwnHardwareService.HasPending(state) || state.PendingProgrammingChallenge is not null)
                 {
                     var pendingSource=state.EmployeeSources.FirstOrDefault(x=>x.SourceIndex==employee.SourceIndex);
@@ -171,12 +178,6 @@ public sealed class GameSession
         }
         FinancialFailureService.Begin(state);
     }
-    public CasinoResult PokerCommand(int command)=>CasinoPokerService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random);
-    public void TickPoker()=>CasinoPokerService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
-    public CasinoResult BlackjackCommand(int command)=>CasinoBlackjackService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random);
-    public void TickBlackjack()=>CasinoBlackjackService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
-    public CasinoResult CardChainCommand(int command,bool direct=false)=>CasinoCardChainService.Command(Current ?? throw new InvalidOperationException("No current session."),command,_random,direct);
-    public void TickCardChain()=>CasinoCardChainService.Tick(Current ?? throw new InvalidOperationException("No current session."),_random);
     public CasinoResult OpenHorse(OriginalCatalog? catalog)=>CasinoHorseService.Open(Current ?? throw new InvalidOperationException("No current session."),catalog,_random);
     public CasinoResult StartHorse()=>CasinoHorseService.Start(Current ?? throw new InvalidOperationException("No current session."),_random);
     public void TickHorseRace()=>CasinoHorseService.TickRace(Current ?? throw new InvalidOperationException("No current session."),_random);
@@ -186,8 +187,10 @@ public sealed class GameSession
     public bool AcknowledgeFinancialFailure()=>Current is { } state && FinancialFailureService.Acknowledge(state,_random);
     public void Restore(GameState state)
     {
+        ArgumentNullException.ThrowIfNull(state);
+        SoundResetRequested?.Invoke();
         Current=state ?? throw new ArgumentNullException(nameof(state));
         if(_random is VbSimulationRandom stream && state.SimulationRandomState is uint seed)stream.Restore(seed);
     }
-    public void Clear() => Current = null;
+    public void Clear() {SoundResetRequested?.Invoke();Current=null;}
 }

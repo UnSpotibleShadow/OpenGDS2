@@ -3071,10 +3071,10 @@ msgid "OWN_HARDWARE_PLAN_RULES"
 msgstr "Choose an empty development room, a console design and a medium. Develop 2,500 points and all four qualities to 800, and apply graphics, music, fun and novelty technologies. Only one console may be developed and launched."
 
 msgid "OWN_HARDWARE_DESIGN_0"
-msgstr "Console design A — ¥200 million"
+msgstr "Home console — ¥200 million"
 
 msgid "OWN_HARDWARE_DESIGN_1"
-msgstr "Console design B — ¥100 million"
+msgstr "Handheld console — ¥100 million"
 
 msgid "OWN_HARDWARE_MEDIUM_0"
 msgstr "Cartridge — ¥200 million"
@@ -4049,3 +4049,108 @@ msgstr "Medium"
 
 msgid "PURCHASE_PRICE"
 msgstr "Price"
+
+msgid "BANK_DUE_DATE"
+msgstr "Due date"
+
+msgid "BANK_PRINCIPAL"
+msgstr "Principal"
+
+msgid "BANK_REPAYMENT_COLUMN"
+msgstr "Repayment"
+
+msgid "LICENSE_COLUMN"
+msgstr "Licence"
+
+msgid "HARDWARE_SHIPPED"
+msgstr "Units shipped"
+
+msgid "HARDWARE_MAKER"
+msgstr "Company"
+
+msgid "LICENSE_OWNED_SHORT"
+msgstr "Owned"
+
+msgid "LICENCE_DESCRIPTION"
+msgstr "{0} · {1}-bit hardware."
+
+msgid "TRAINING_WORK"
+msgstr "Training work"
+
+msgid "BEST_SELLING_GAME"
+msgstr "Best-selling game"
+
+msgid "SECRETARY"
+msgstr "Secretary"
+
+msgid "TRAINING_DESCRIPTION"
+msgstr "Practise {0} to learn its next level. Choose a course and a study seat."
+
+msgid "TECHNOLOGY_USE_DESCRIPTION"
+msgstr "Apply {0} at the employee’s learned level."
+
+msgid "HARDWARE_MARKET"
+msgstr "Hardware market"
+
+msgid "HARDWARE_MARKET_NOTE"
+msgstr "Currently available game hardware"
+
+msgid "OWN_HARDWARE_REPORT"
+msgstr "Own hardware"
+
+msgid "HARDWARE_REQUIREMENTS_NOTE"
+msgstr "All four technologies must be on to complete development."
+
+msgid "LICENCE_FEE"
+msgstr "Licence fee"
+
+msgid "HARDWARE_ANNOUNCEMENT_DESCRIPTION"
+msgstr "{0} is now available. Processing: {1} bits."
+
+msgid "HARDWARE_FORM_0"
+msgstr "Home console"
+
+msgid "HARDWARE_FORM_1"
+msgstr "Handheld console"
+
+msgid "HARDWARE_MEDIA_0"
+msgstr "Cartridge"
+
+msgid "HARDWARE_MEDIA_1"
+msgstr "CD-ROM"
+
+msgid "CARD_CHAIN_REFERENCE"
+msgstr "Previous:"
+
+msgid "BLACKJACK_DEALER_SCORE"
+msgstr "Dealer"
+
+msgid "BLACKJACK_PLAYER_SCORE"
+msgstr "Player"
+
+msgid "HORSE_NUMBER"
+msgstr "#"
+
+msgid "HORSE_JOCKEY"
+msgstr "Jockey"
+
+msgid "HORSE_FORECAST"
+msgstr "Forecast"
+
+msgid "HORSE_ODDS"
+msgstr "Odds"
+
+msgid "CARD_CHAIN_REMAINING"
+msgstr "Cards remaining"
+
+msgid "SAVE_SLOT_NUMBER"
+msgstr "Slot"
+
+msgid "ORIGINAL_EFFECTS_SETTINGS"
+msgstr "Original sound effects"
+
+msgid "ORIGINAL_EFFECTS_ENABLED"
+msgstr "Enable original sound effects"
+
+msgid "EFFECTS_VOLUME"
+msgstr "Effects volume"

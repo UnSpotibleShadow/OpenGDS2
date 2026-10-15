@@ -14,11 +14,10 @@ public partial class Main
     private void ShowMangaSelection(GameState state,int room)
     {
         var catalog=_importer.LoadCatalog() ?? throw new InvalidOperationException("No local catalog.");
-        ClearContent();CompactManagementWindow("MangaSelectionWindow",new Vector2(450,340),430);
+        ClearContent();var canvas=NativeWindow("MangaSelectionWindow",Tr("MANGA_ADAPTATION"),new(426,282));
         _dialog!.SetTitle(Tr("MANGA_ADAPTATION"));
-        if (catalog.Manga.Count==0) {_content.AddChild(new Label {Text=Tr("MANGA_REIMPORT_REQUIRED"),AutowrapMode=TextServer.AutowrapMode.WordSmart});AddAction("CANCEL",()=>ShowDevelopmentRoomActions(state,room));return;}
-        var table=CreateTable("MangaTitles",["GAME_TITLE","POPULARITY","CONTRACT_FEE"],[195,95,110]);
-        table.CustomMinimumSize=new Vector2(420,180);_content.AddChild(table);
+        if(catalog.Manga.Count==0){NativeText(canvas,"MangaMissing",Tr("MANGA_REIMPORT_REQUIRED"),new(4,4,418,80),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;NativeAction(canvas,"CancelManga","CANCEL",new(320,252,102,25),()=>ShowDevelopmentRoomActions(state,room));return;}
+        var table=ManagementTable(canvas,"MangaTitles",["GAME_TITLE","POPULARITY","CONTRACT_FEE"],[197,92,109],new(4,4,418,145));
         foreach (var manga in catalog.Manga)
         {
             var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,manga.SourceIndex);
@@ -26,13 +25,13 @@ public partial class Main
             row.SetText(2,manga.RightsFee.ToString("N0"));row.SetTextAlignment(2,HorizontalAlignment.Right);
         }
         int selected=catalog.Manga[0].SourceIndex;
-        var details=new Label {Name="MangaDetails",AutowrapMode=TextServer.AutowrapMode.WordSmart};_content.AddChild(details);
+        NativeFill(canvas,"MangaDetailBox",new(4,157,418,80),Colors.White,true);var details=NativeText(canvas,"MangaDetails","",new(8,160,410,73),11);details.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         void Refresh()=>details.Text=$"{Tr("AUTHOR")}: {MangaText(catalog,selected,"AUTHOR")}\n{Tr("PUBLISHER")}: {MangaText(catalog,selected,"PUBLISHER")}";
         table.ItemSelected+=()=>{selected=table.GetSelected().GetMetadata(0).AsInt32();Refresh();};
         table.GetRoot().GetFirstChild().Select(0);Refresh();
-        var confirm=new Button {Name="ConfirmManga",Text=Tr("MANGA_RIGHTS_MEETING")};_content.AddChild(confirm);
+        var confirm=NativeAction(canvas,"ConfirmManga","MANGA_RIGHTS_MEETING",new(156,252,158,25),()=>{});
         confirm.Pressed+=()=>ShowMangaRightsMeeting(state,catalog,room,selected);
-        AddAction("CANCEL",()=>ShowDevelopmentRoomActions(state,room));
+        NativeAction(canvas,"CancelManga","CANCEL",new(320,252,102,25),()=>ShowDevelopmentRoomActions(state,room));
     }
     private void ShowMangaRightsMeeting(GameState state,OriginalCatalog catalog,int room,int source)
     {

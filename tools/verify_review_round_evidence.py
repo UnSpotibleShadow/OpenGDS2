@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import struct
+import re
 from pathlib import Path
 from inspect_vb6 import PeImage, ParseError
 
@@ -13,11 +14,26 @@ def verify(data):
     if hashlib.sha256(data).hexdigest() != evidence['source_sha256']:
         raise ParseError('Unsupported executable')
     pe = PeImage(data)
+    # A valid ICO signature alone must not let one form borrow its neighbour's icon.
+    census = json.loads(Path(__file__).with_name('window_census_evidence.json').read_text())
+    markers = []
+    for form in census['forms']:
+        name = form['name'].encode('ascii')
+        hits = [m.start() for m in re.finditer(re.escape(struct.pack('<H', len(name)) + name + b'\0'), data)]
+        if not hits:
+            raise ParseError('Missing serialized form: ' + form['name'])
+        markers.append((max(hits), form['name']))
+    markers.sort()
+    ranges = {name: (start, markers[i + 1][0] if i + 1 < len(markers) else len(data))
+              for i, (start, name) in enumerate(markers)}
     for entry in evidence['procedures']:
         if hashlib.sha256(pe.bytes_at(entry['address'], entry['size'])).hexdigest() != entry['sha256']:
             raise ParseError('Changed procedure: ' + entry['name'])
     for entry in evidence['icons']:
         offset, size = entry['offset'], entry['size']
+        start, end = ranges[entry['form']]
+        if not start <= offset < offset + size <= end:
+            raise ParseError('Icon crosses its serialized form boundary: ' + entry['form'])
         raw = data[offset:offset+size]
         if raw[:4] != b'\0\0\1\0' or hashlib.sha256(raw).hexdigest() != entry['sha256']:
             raise ParseError('Changed form icon: ' + entry['form'])

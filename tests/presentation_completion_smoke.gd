@@ -40,7 +40,7 @@ func run() -> void:
         challenge.State.PendingProgrammingChallenge={"Inspiration":80,"IntroPage":2,"Mode":0}
         challenge.State.OfficeActorContinuation={"ActorSlot":1,"EmployeeSourceIndex":1,"RoomIndex":0}
         await load_fixture(challenge)
-        check(main.find_child("ProgrammingReel",true,false).get_child_count()==10,"Challenge shows all ten ordered slots")
+        check(main.find_children("ProgrammingSlot*","Label",true,false).size()==10,"Challenge shows all ten ordered slots")
         await press_node("ProgrammingCommand")
         await press_node("ProgrammingCommand")
         await press_node("ToolbarSAVE_GAME")
@@ -145,7 +145,7 @@ func run() -> void:
         await process_frame
         var save_slots=main.find_child("SaveSlotList",true,false)
         check(save_slots!=null,"Save menu opens numbered selection")
-        save_slots.item_selected.emit(save_slots.item_count-1)
+        save_slots.get_root().get_child(save_slots.get_root().get_child_count()-1).select(0);save_slots.item_selected.emit()
         await process_frame
         await press_node("ConfirmSaveSlot")
         check(FileAccess.file_exists("user://saves/slot2.json"),"Saving creates a second independent slot")
@@ -154,8 +154,8 @@ func run() -> void:
         await press_node("ToolbarBACK_TO_TITLE")
         await press("LOAD_SAVE_SLOTS")
         var slots=main.find_child("SaveSlotList",true,false)
-        check(slots!=null and slots.item_count>0,"Numbered save picker lists existing modern slots")
-        slots.item_selected.emit(slots.item_count-1)
+        check(slots!=null and slots.get_root().get_child_count()>0,"Numbered save picker lists existing modern slots")
+        slots.get_root().get_child(slots.get_root().get_child_count()-1).select(0);slots.item_selected.emit()
         await process_frame
         check(not main.find_child("ConfirmSaveSlot",true,false).disabled and main.find_child("SaveSlotDetails",true,false).text.contains("Lab test"),"Selected slot has a usable company preview")
         await press_node("ConfirmSaveSlot")

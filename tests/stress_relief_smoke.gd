@@ -25,6 +25,7 @@ func stress_fixture(mapped: bool=true) -> Dictionary:
 
 func open_selected_use() -> void:
     await press("STAFF")
+    await press_node("SelectStaff1")
     for button in main.find_children("*","Button",true,false):
         if button.text==tr("USE_TECHNOLOGY") and not button.disabled:
             button.pressed.emit()
