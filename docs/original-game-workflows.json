@@ -3033,22 +3033,26 @@
         "docs/lawyer-facility-m71.md",
         "docs/management-presentation-m105-step3.md",
         "docs/issue118-implementation.md",
-        "docs/facility-conversation-chains.md"
+        "docs/facility-conversation-chains.md",
+        "docs/facility-promotion-dialogue.md"
       ],
       "adaptation_files": [
         "src/UI/Main.FacilityPresentation.cs",
-        "src/UI/Main.Progression.cs"
+        "src/UI/Main.Progression.cs",
+        "src/Domain/FacilityDialogueRules.cs",
+        "src/UI/Main.FacilityConversation.cs"
       ],
       "tests": [
         "tests/facility_management_smoke.gd",
         "tests/fee_negotiation_smoke.gd",
         "tests/mystery_lab_smoke.gd",
-        "tools/verify_facility_chain_evidence.py"
+        "tools/verify_facility_chain_evidence.py",
+        "tests/facility_promotion_smoke.gd"
       ],
       "open_questions": [
         "Facility art/button identity must match tenant type. Laboratory and lawyer transactions retain their documented gates, not guessed generic services.",
         "Complete per-control semantics, modality/focus/keyboard behavior and original timing acceptance remain pending.",
-        "Confirmed #118 follow-up: direct facility owner lifetimes, hot-spring reactions and source-specific selector/refusal/return routes remain incomplete; see docs/facility-conversation-chains.md."
+        "Source-backed facility chains and six-media promotion follow-up are implemented; owner visual review and paired native focus/timing acceptance remain pending. See docs/facility-promotion-dialogue.md."
       ],
       "scenarios": [
         {

@@ -100,7 +100,13 @@ public static class SaveStore
         MagazineInterviewService.Validate(state);
         PoachingService.Validate(state);
         OwnHardwareService.Validate(state);
-        if (state.PendingFacilityReceipt is { } receipt) FacilityService.ValidateReceipt(receipt);
+        if (state.PendingFacilityReceipt is { } receipt)
+        {
+            FacilityService.ValidateReceipt(receipt);
+            if(receipt.SourceSlot is int slot && state.Calendar?.OriginalSlots0444[slot]!=(int)receipt.Kind ||
+                receipt.CapacityBefore is int before && before+(long)receipt.Gain!.Value!=state.Company.ProductionCapacity)
+                throw new InvalidDataException("Facility result disagrees with company state.");
+        }
         if (state.PendingFeeNegotiation is { } negotiation)
         {
             FeeNegotiationService.Validate(negotiation);

@@ -283,7 +283,7 @@ public partial class Main
 
     private bool DesktopActionEnabled(string key)
     {
-        if(_facilityOwner is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE"))return false;
+        if((_facilityOwner is not null || _facilityChild is not null) && key is not ("SAVE_GAME" or "LOAD_GAME" or "SETTINGS" or "BACK_TO_TITLE"))return false;
         if (_desktopState?.Casino.ActivityOpen==true && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState?.FinancialFailure is not null && key is not ("SAVE_GAME" or "LOAD_GAME" or "BACK_TO_TITLE")) return false;
         if (_desktopState is { } failed && FinancialFailureService.IsComplete(failed) && key=="SAVE_GAME") return false;

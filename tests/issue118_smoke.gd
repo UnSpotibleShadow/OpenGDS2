@@ -22,6 +22,12 @@ func setup_issue118() -> void:
     for name in ["BusinessMeeting","Facility-ProductionLab","Facility-Recycling"]:
         if not FileAccess.file_exists("user://original/Graphic/Embedded/"+name+".png"):png("user://original/Graphic/Embedded/"+name+".png",Vector2i(256,160),Color.LIGHT_BLUE)
 
+func native_facility_text(key: String) -> String:
+    if TranslationServer.get_locale().begins_with("ja") and FileAccess.file_exists("user://original/dialogue.json"):
+        var catalogue=JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
+        if catalogue.Entries.has(key):return catalogue.Entries[key]
+    return tr(key)
+
 func project_value(stage: int=2) -> Dictionary:
     var v=complete_value();var p=stress_fixture().State.DevelopmentProjects[0]
     p.OriginalStage=stage;p.Progress=50 if stage<3 else 100;p.PendingDecision=null;p.PromotionUseCount=0;p.InterviewCompleted=false
@@ -62,10 +68,15 @@ func promotion_cases() -> void:
             await process_frame
             if main.find_child("ConversationWindow",true,false)!=null:break
         Engine.time_scale=1
-        check(main.find_child("PlanningDiscussionPicture",true,false)!=null,"Promotion result has a separate scene")
+        var scene=main.find_child("PlanningDiscussionPicture",true,false)
+        check(scene!=null and scene.texture!=null and scene.texture.get_width()==256 and scene.texture.get_height()==(152 if medium in [1,2] else 160),"Distinct native promotion scene dimensions: "+str(medium))
+        if medium in [3,4,5] and not OS.get_environment("OPENGDS2_PRIVATE_NATIVE_ART").is_empty():
+            check(scene.texture.get_image().get_format()==Image.FORMAT_RGB8,"Native BI_RGB32 scene ignores reserved alpha: "+str(medium))
         await press_node("ToolbarSAVE_GAME");var after=saved()
         check(after.PendingPromotion.Callbacks==27 and after.DevelopmentProjects[0].PromotionUseCount==1,"Promotion outcome committed once")
-        if medium==2:await capture_desktop("promotion")
+        var expected=native_facility_text("PROMOTION_NATIVE_RESULT_"+str(medium)).replace("{title}",str(after.DevelopmentProjects[0].Title)).replace("{gain}",str(int(after.PendingPromotion.Gain)))
+        check(main.find_child("ConversationMessage",true,false).text==expected,"Medium-specific promotion result: "+str(medium))
+        await capture_desktop("promotion-"+str(medium))
         await press_node("ToolbarLOAD_GAME");await press_node("ToolbarSAVE_GAME")
         check(saved().Money==after.Money and saved().PendingPromotion.Gain==after.PendingPromotion.Gain,"Reload never repeats promotion charge or gain")
         await award_page();check(main.find_child("DevelopmentProjectWindow",true,false)!=null,"Secretary acknowledgement returns to development")

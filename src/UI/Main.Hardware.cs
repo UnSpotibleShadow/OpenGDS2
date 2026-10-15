@@ -24,10 +24,17 @@ public partial class Main
         {
             preview.Texture=HardwareDesignPicture(design.GetSelectedId(),medium.GetSelectedId());preview.SetMeta("hardware_picture_index",11+design.GetSelectedId()*2+medium.GetSelectedId());
             cost.Text=$"{Tr("PLANNING_COST")}: ¥{DisplayNumbers.Format(OwnHardwareService.Quote(design.GetSelectedId(),medium.GetSelectedId()))}";
-            var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId());gate.Text=result==OwnHardwareResult.Success?"":Tr("OWN_HARDWARE_RESULT_"+result);accept.Disabled=result!=OwnHardwareResult.Success;
+            var result=OwnHardwareService.CheckStart(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId());gate.Text=result==OwnHardwareResult.Success?"":Tr("OWN_HARDWARE_RESULT_"+result);accept.Disabled=false;
         }
         design.ItemSelected+=_=>{state.OwnHardware.SelectedDesign=design.GetSelectedId();Refresh();};medium.ItemSelected+=_=>{state.OwnHardware.SelectedMedium=medium.GetSelectedId();Refresh();};room.ItemSelected+=_=>Refresh();Refresh();
-        accept.Pressed+=()=>{if(accept.Disabled)return;var result=OwnHardwareService.Start(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId(),Tr("OWN_HARDWARE_PROJECT"));if(result==OwnHardwareResult.Success)ShowOfficeReconstruction(state);else{Refresh();gate.Text=Tr("OWN_HARDWARE_RESULT_"+result);}};
+        accept.Pressed+=()=>{if(accept.Disabled)return;var result=OwnHardwareService.Start(state,catalog,slot,room.GetSelectedId(),design.GetSelectedId(),medium.GetSelectedId(),Tr("OWN_HARDWARE_PROJECT"));if(result==OwnHardwareResult.Success)ShowOfficeReconstruction(state);else
+        {
+            int chosenRoom=room.GetSelectedId();
+            RetainFacilityChild();
+            string body=result==OwnHardwareResult.InsufficientFunds?FacilityText("FACILITY_NO_FUNDS"):
+                result==OwnHardwareResult.RoomOccupied?FacilityText("FACILITY_HARDWARE_ROOM_BUSY").Replace("{room}",(chosenRoom+1).ToString()):Tr("OWN_HARDWARE_RESULT_"+result);
+            ShowConversation(FacilityName((int)FacilityKind.HardwareLab),[new(SecretaryCaption(state.SecretarySourceIndex),body,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>RestoreFacilityChild(state));
+        }};
     }
     private void ShowHardwareProject(GameState state,DevelopmentProjectState project)
     {

@@ -1,3 +1,17 @@
+# Current task — facility and six-media promotion fixes
+
+Owner explicitly authorizes fixing the recovered facility chains and all six
+promotion media. Work is on `codex/facility-promotion-dialogue`, based on
+`065c1e5fcdc2da4f38f83b31c2a6d9e68ff884bb`. Implementation is complete. 562 domain checks, clean app
+build, schema18/374-entry archive import, bilingual rendered facility/all-six-media
+flows and core/hardware/casino/interactive resize regressions pass. Final scene
+loader regression also passes. Publication receipts and the review ZIP are kept
+with the recovery records. Read private checkpoints/logs at
+`/workspace/scratch/facility-promotion-fixes/` before continuing. Do not stop at
+the previous investigation report. Keep accepted Lawyer behavior unchanged.
+Standing merge authorization continues; keep #118/#95 open for review. No export,
+release or unchanged Wine retry. SDK/Godot checks must remain sequential/bounded.
+
 # Current follow-up — facility chains after #121
 
 Owner accepts the Lawyer and requests deeper recovery of the other facilities.

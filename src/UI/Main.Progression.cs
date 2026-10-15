@@ -57,7 +57,7 @@ public partial class Main
                         AnnualButton($"EnterCasino{slot}","CASINO_ENTER",()=>ShowCasino(state));break;
                     case FacilityKind.HotSpring:
                         FacilityAction($"UseHotSpring{slot}","FACILITY_HOT_SPRING_ACTION",EmployeeCareService.HotSpringCost,
-                            ()=>ConfirmFacilityService(state,index,kind,EmployeeCareService.HotSpringCost,()=>FacilityService.HotSpring(state,index)));break;
+                            ()=>ConfirmFacilityService(state,index,kind,EmployeeCareService.HotSpringCost,()=>FacilityService.HotSpring(state,index,_session.Random)));break;
                     case FacilityKind.Recycling:
                         AnnualButton($"RecycleStock{slot}","FACILITY_RECYCLE_ACTION",()=>
                             ConfirmFacilityService(state,index,kind,checked(FacilityService.StockForRecycling(state)*FacilityService.RecyclingPrice),()=>FacilityService.Recycle(state,index)));break;
@@ -98,16 +98,16 @@ public partial class Main
         var button=new Button {Name=name,Text=$"{Tr(key)} — ¥{DisplayNumbers.Format(amount)}"};_content.AddChild(button);button.Pressed+=action;
     }
     private string FacilityName(int value)=>value==-1 ? Tr("FACILITY_EMPTY") : value is >=0 and <=8 ? Tr($"FACILITY_NAME_{(FacilityKind)value}") : string.Format(DisplayNumbers.Provider,Tr("FACILITY_OTHER"),value);
-    private Texture2D? FacilityScene(FacilityKind kind)=>OriginalAssetStore.LoadTexture("Graphic/Embedded/Facility-"+kind+(kind==FacilityKind.MysteryLab?".bmp":".png"));
-    private void FacilityQuestion(GameState state,FacilityKind kind,string question,string name,Action confirm,Action cancel,string confirmName="ConfirmFacilityService")
+    private Texture2D? FacilityScene(FacilityKind kind)=>OriginalSceneArtwork.Facility(kind);
+    private void FacilityQuestion(GameState state,FacilityKind kind,string question,string name,Action confirm,Action cancel,string confirmName="ConfirmFacilityService",string? prompt=null,bool retainOnConfirm=false)
     {
         RetainFacilityOwner();
-        void Cancel(){CloseFacilityOwner();cancel();}
-        void Confirm(){CloseFacilityOwner();confirm();}
+        void Cancel(){cancel();}
+        void Confirm(){if(!retainOnConfirm)CloseFacilityOwner();confirm();}
         ShowConversation(FacilityName((int)kind),[new(SecretaryCaption(state.SecretarySourceIndex),question,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
         {
             ClearContent();var canvas=NativeWindow(name,FacilityName((int)kind),new(330,126));
-            NativeText(canvas,"FacilityConfirmation",question,new(8,5,314,76),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+            NativeText(canvas,"FacilityConfirmation",prompt??question,new(8,5,314,76),11).AutowrapMode=TextServer.AutowrapMode.WordSmart;
             NativeAction(canvas,confirmName,"CONFIRM",new(126,92,94,26),Confirm);
             NativeAction(canvas,"CancelFacilityService","CANCEL",new(226,92,94,26),Cancel);
             _dialog!.CloseRequested=Cancel;
@@ -115,35 +115,55 @@ public partial class Main
     }
     private void ShowFacilityClosure(GameState state,int slot,FacilityKind kind)
     {
-        string question=string.Format(DisplayNumbers.Provider,Tr("FACILITY_CLOSE_CONFIRMATION"),FacilityName((int)kind));
+        string question=FacilityText("FACILITY_CLOSE_INTRO").Replace("{facility}",FacilityName((int)kind));
         FacilityQuestion(state,kind,question,"FacilityClosureWindow",()=>
         {
             if(!ReferenceEquals(_session.Current,state))return;
             var result=FacilityService.Close(state,slot,kind);ShowFacilities(state,slot);
             if(result!=FacilityResult.Success)_status.Text=Tr("FACILITY_RESULT_"+result);
-        },()=>ShowFacilities(state,slot),kind==FacilityKind.School?"ConfirmSchoolClosure":"ConfirmFacilityClosure");
+        },()=>RestoreFacilityOwner(state),kind==FacilityKind.School?"ConfirmSchoolClosure":"ConfirmFacilityClosure",FacilityText("FACILITY_CLOSE_QUESTION").Replace("{facility}",FacilityName((int)kind)));
     }
     private void ConfirmFacilityService(GameState state,int slot,FacilityKind kind,long amount,Func<FacilityResult> action)
     {
-        string question=string.Format(DisplayNumbers.Provider,Tr("FACILITY_CONFIRM_"+kind),amount);
+        string question=FacilityText("FACILITY_INTRO_"+kind).Replace("{fee}",amount.ToDisplayNumber())
+            .Replace("{stock}",kind==FacilityKind.Recycling?FacilityService.StockForRecycling(state).ToDisplayNumber():"");
         FacilityQuestion(state,kind,question,"FacilityConfirmationWindow",()=>
         {
             if(!ReferenceEquals(_session.Current,state))return;
             var result=action();
-            if(result==FacilityResult.Success)ShowOfficeReconstruction(state);
-            else{ShowFacilities(state,slot);_status.Text=Tr("FACILITY_RESULT_"+result);}
-        },()=>ShowFacilities(state,slot));
+            if(result==FacilityResult.Success)
+            {if(state.PendingFacilityReceipt is not null)ShowPendingFacilityReceipt(state);else FinishFacility(state);}
+            else FacilityFailure(state,kind,result);
+        },()=>FinishFacility(state),prompt:FacilityText("FACILITY_QUESTION_"+kind),retainOnConfirm:true);
     }
     private void ShowFacilityTechnologyRoster(GameState state,int slot)=>ShowNativeStudyRoster(state,slot);
     private bool ShowPendingFacilityReceipt(GameState state)
     {
         if(state.PendingFacilityReceipt is not { } receipt)return false;
-        ShowConversation(FacilityName((int)receipt.Kind),[new(SecretaryCaption(state.SecretarySourceIndex),
-            string.Format(DisplayNumbers.Provider,Tr("FACILITY_RECEIPT_"+receipt.Kind),receipt.Amount,receipt.Gain,receipt.EmployeeName),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>
+        EnsureFacilityOwner(state,receipt.Kind,receipt.SourceSlot);
+        if(receipt.Kind==FacilityKind.TechnologySchool && _facilityChild is null && receipt.SourceSlot is int studySlot)
+        {ShowNativeStudyRoster(state,studySlot,receiptView:true);RetainFacilityChild();}
+        int cursor=receipt.PageIndex;
+        string employeeName=state.Employees.FirstOrDefault(e=>e.Name==receipt.EmployeeName) is { } recipient?EmployeeName(recipient):receipt.EmployeeName??"";
+        string body=FacilityText("FACILITY_DONE_"+receipt.Kind).Replace("{amount}",receipt.Amount.ToDisplayNumber())
+            .Replace("{name}",employeeName).Replace("{capacity}",receipt.Gain?.ToDisplayNumber()??"?")
+            .Replace("{before}",receipt.CapacityBefore?.ToDisplayNumber()??"?")
+            .Replace("{after}",receipt.CapacityBefore is int before ? ((long)before+receipt.Gain!.Value).ToDisplayNumber():"?");
+        // Older expansion snapshots never recorded the old capacity.
+        if(receipt.Kind==FacilityKind.ProductionLab && receipt.CapacityBefore is null)
+            body=string.Format(DisplayNumbers.Provider,Tr("FACILITY_RECEIPT_ProductionLab"),receipt.Amount,receipt.Gain,receipt.EmployeeName);
+        ConversationPage page=new(SecretaryCaption(state.SecretarySourceIndex),body,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex));
+        if(cursor>0 && receipt.Reactions is { } reactions)
         {
-            if(!ReferenceEquals(_session.Current,state)||!ReferenceEquals(state.PendingFacilityReceipt,receipt))return;
-            state.PendingFacilityReceipt=null;ShowOfficeReconstruction(state);
-        },scene:FacilityScene(receipt.Kind));return true;
+            var reaction=reactions[cursor-1];var employee=state.Employees.SingleOrDefault(e=>e.SourceIndex==reaction.SourceIndex);
+            page=new(employee is null?reaction.Name:EmployeeName(employee),FacilityText("HOT_SPRING_REACTION_"+reaction.Variant),reaction.PortraitId);
+        }
+        ShowConversation(FacilityName((int)receipt.Kind),[page],()=>
+        {
+            if(!ReferenceEquals(_session.Current,state)||!ReferenceEquals(state.PendingFacilityReceipt,receipt)||receipt.PageIndex!=cursor)return;
+            FacilityService.AcknowledgeReceipt(state);
+            if(state.PendingFacilityReceipt is null)FinishFacility(state);else ShowPendingFacilityReceipt(state);
+        });return true;
     }
     private bool ShowPendingMysteryLabResult(GameState state)
     {

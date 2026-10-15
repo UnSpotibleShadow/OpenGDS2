@@ -4317,3 +4317,127 @@ msgstr "小島"
 
 msgid "SHIPMENT_COPIES"
 msgstr "本数"
+
+# Facility-specific conversations and all six promotion media.
+msgid "FACILITY_INTRO_HotSpring"
+msgstr "全社員の温泉休養には{fee}円かかります。"
+
+msgid "FACILITY_QUESTION_HotSpring"
+msgstr "温泉で休養しますか？"
+
+msgid "FACILITY_DONE_HotSpring"
+msgstr "社員全員が温泉で休養し、ストレスがゼロになりました。"
+
+msgid "FACILITY_INTRO_Recycling"
+msgstr "在庫は{stock}本です。一本500円で全て売却しますか？"
+
+msgid "FACILITY_QUESTION_Recycling"
+msgstr "全てのゲーム在庫をリサイクル業者へ売却しますか？"
+
+msgid "FACILITY_DONE_Recycling"
+msgstr "在庫の売却代金は合計{amount}円です。"
+
+msgid "FACILITY_INTRO_ProductionLab"
+msgstr "生産能力を増やします。費用は{fee}円です。"
+
+msgid "FACILITY_QUESTION_ProductionLab"
+msgstr "生産能力を増やしますか？"
+
+msgid "FACILITY_DONE_ProductionLab"
+msgstr "生産能力が{before}から{after}へ増えました。"
+
+msgid "FACILITY_INTRO_MysteryLab"
+msgstr "何が起こるか不明な実験です。費用は{fee}円です。"
+
+msgid "FACILITY_QUESTION_MysteryLab"
+msgstr "謎の実験を始めますか？"
+
+msgid "FACILITY_MYSTERY_BUSY"
+msgstr "謎の実験は既に進行中です。"
+
+msgid "FACILITY_DONE_TechnologySchool"
+msgstr "{name}が習得できるテクノロジーは{capacity}個になりました。"
+
+msgid "FACILITY_NO_EMPLOYEES"
+msgstr "社員がいません。"
+
+msgid "FACILITY_NO_FUNDS"
+msgstr "資金が不足しています。"
+
+msgid "FACILITY_HARDWARE_LIMIT"
+msgstr "開発できるゲーム機は一台だけです。"
+
+msgid "FACILITY_HARDWARE_BUSY"
+msgstr "ゲーム機は既に開発中です。"
+
+msgid "FACILITY_HARDWARE_ROOM_BUSY"
+msgstr "第{room}開発室は既に使用中です。"
+
+msgid "FACILITY_CASINO_NO_COINS"
+msgstr "コインがありません。先に購入してください。"
+
+msgid "FACILITY_CASINO_COINS_QUESTION"
+msgstr "コイン50枚を1000万円で購入しますか？"
+
+msgid "FACILITY_CLOSE_INTRO"
+msgstr "{facility}を本当に閉鎖しますか？"
+
+msgid "FACILITY_CLOSE_QUESTION"
+msgstr "{facility}を閉鎖します。"
+
+msgid "HOT_SPRING_REACTION_0"
+msgstr "いい温泉でした。すっきりして仕事の意欲も戻りました。"
+
+msgid "HOT_SPRING_REACTION_1"
+msgstr "この会社に入ってよかったです。温泉でストレスが消えました。"
+
+msgid "HOT_SPRING_REACTION_2"
+msgstr "いいお湯でした。明日への元気が湧いてきます。"
+
+msgid "HOT_SPRING_REACTION_3"
+msgstr "社内に温泉があるなんて豪華です。ずっと勤めたいです。"
+
+msgid "HOT_SPRING_REACTION_4"
+msgstr "ゆっくり入浴できて、ストレスもなくなりました。"
+
+msgid "PROMOTION_NATIVE_RESULT_0"
+msgstr "雑誌に広告を出しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_0"
+msgstr "雑誌広告の掲載中"
+
+msgid "PROMOTION_NATIVE_RESULT_1"
+msgstr "ラジオ広告を放送しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_1"
+msgstr "ラジオ広告の放送中"
+
+msgid "PROMOTION_NATIVE_RESULT_2"
+msgstr "テレビ広告を放送しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_2"
+msgstr "テレビ広告の放送中"
+
+msgid "PROMOTION_NATIVE_RESULT_3"
+msgstr "映画館で広告を上映しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_3"
+msgstr "映画館で広告上映中"
+
+msgid "PROMOTION_NATIVE_RESULT_4"
+msgstr "インターネットに広告を出しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_4"
+msgstr "ネット広告の掲載中"
+
+msgid "PROMOTION_NATIVE_RESULT_5"
+msgstr "新聞に広告を出しました。{title}の知名度が{gain}増えました。"
+
+msgid "PROMOTION_ACTIVITY_5"
+msgstr "新聞広告の掲載中"
+
+msgid "FACILITY_ALREADY_OWNED"
+msgstr "{facility}は既に設置されています。"
+
+msgid "FACILITY_SERVICE_FEE"
+msgstr "利用料：{fee}円"

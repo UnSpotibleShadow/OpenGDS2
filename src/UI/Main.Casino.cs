@@ -25,12 +25,17 @@ public partial class Main
         if (state.Casino.BlackjackOpen) {ShowBlackjack(state);return;}
         if (state.Casino.CardChainOpen) {ShowCardChain(state);return;}
         if (state.Casino.HorseOpen) {ShowHorseRacing(state);return;}
+        EnsureFacilityOwner(state,FacilityKind.Casino,null);RetainFacilityOwner();
         var canvas=ManagementCanvas("CasinoSelector",Tr("CASINO_ENTER"),new(214,276));
         NativeText(canvas,"CasinoCoins",string.Format(DisplayNumbers.Provider,Tr("CASINO_COINS"),state.Casino.Coins),new(8,4,198,22));
-        bool cards=state.Casino.Coins>0 && !FacilityService.HasPendingDecision(state);
+        bool cards=!FacilityService.HasPendingDecision(state);
         void OpenCard(Func<CasinoResult> open,Action show)
         {
-            var result=open();if(result==CasinoResult.Success)show();else _status.Text=Tr($"CASINO_RESULT_{result}");
+            var result=open();
+            if(result==CasinoResult.Success){CloseFacilityOwner();show();}
+            else if(result==CasinoResult.NoCoins)
+            {RetainFacilityChild();FacilityMessage(state,FacilityKind.Casino,FacilityText("FACILITY_CASINO_NO_COINS"),()=>RestoreFacilityChild(state));}
+            else _status.Text=Tr($"CASINO_RESULT_{result}");
         }
         // fGMTenantCasinoSn: horse, poker, blackjack, card change, coins, cancel.
         NativeAction(canvas,"CasinoHorse","CASINO_HORSE",new(8,30,198,25),()=>OpenCard(()=>_session.OpenHorse(_activeCatalog),()=>ShowHorseRacing(state)),!FacilityService.HasPendingDecision(state) && state.Money is not null && CasinoHorseService.HasCatalog(_activeCatalog));
@@ -40,22 +45,25 @@ public partial class Main
         NativeAction(canvas,"CasinoBuyCoins","CASINO_BUY_COINS",new(8,158,198,25),()=>ShowCoinPurchase(state),!FacilityService.HasPendingDecision(state) && state.Money is not null);
         _status=NativeText(canvas,"CasinoStatus",state.Casino.Coins<=0?Tr("CASINO_RESULT_NoCoins"):"",new(8,188,198,48),10);_status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         if(!CasinoHorseService.HasCatalog(_activeCatalog))_status.Text+= "\n"+Tr("CASINO_RESULT_CatalogMissing");
-        NativeAction(canvas,"CasinoCancel","BACK_TO_OFFICE",new(8,242,198,25),()=>ShowOfficeReconstruction(state));
+        NativeAction(canvas,"CasinoCancel","BACK_TO_OFFICE",new(8,242,198,25),()=>RestoreFacilityOwner(state));
+        _dialog!.CloseRequested=()=>RestoreFacilityOwner(state);
     }
     private void ShowCoinPurchase(GameState state)
     {
+        RetainFacilityChild();
         var canvas=ManagementCanvas("CasinoCoinPurchase",Tr("CASINO_BUY_COINS"),new(290,151));
         NativeFill(canvas,"CoinPurchaseMessageBox",new(8,8,274,60),Colors.White,true);
-        NativeText(canvas,"CoinPurchaseMessage",Tr("CASINO_PURCHASE_CONFIRM"),new(12,12,266,52)).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeText(canvas,"CoinPurchaseMessage",FacilityText("FACILITY_CASINO_COINS_QUESTION"),new(12,12,266,52)).AutowrapMode=TextServer.AutowrapMode.WordSmart;
         _status=NativeText(canvas,"CasinoPurchaseStatus","",new(8,72,274,37),10);_status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
         bool committed=false;
         NativeAction(canvas,"ConfirmCasinoCoins","CONFIRM",new(48,117,108,25),()=>
         {
             if(committed || !ReferenceEquals(_session.Current,state))return;
             var result=CasinoPokerService.BuyCoins(state);
-            if(result==CasinoResult.Success){committed=true;ShowCasino(state);}else _status.Text=Tr($"CASINO_RESULT_{result}");
+            if(result==CasinoResult.Success){committed=true;FinishFacility(state);}else _status.Text=Tr($"CASINO_RESULT_{result}");
         });
-        NativeAction(canvas,"CancelCasinoCoins","CANCEL",new(164,117,118,25),()=>ShowCasino(state));
+        NativeAction(canvas,"CancelCasinoCoins","CANCEL",new(164,117,118,25),()=>RestoreFacilityChild(state));
+        _dialog!.CloseRequested=()=>RestoreFacilityChild(state);
     }
     private void ShowPoker(GameState state)
     {

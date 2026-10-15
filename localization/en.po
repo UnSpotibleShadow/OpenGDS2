@@ -4494,3 +4494,127 @@ msgstr "Kojima"
 
 msgid "SHIPMENT_COPIES"
 msgstr "Copies"
+
+# Facility-specific conversations and all six promotion media.
+msgid "FACILITY_INTRO_HotSpring"
+msgstr "Everyone will take a relaxing hot-spring break. The cost is ¥{fee}."
+
+msgid "FACILITY_QUESTION_HotSpring"
+msgstr "Take everyone to the hot spring?"
+
+msgid "FACILITY_DONE_HotSpring"
+msgstr "Everyone relaxed at the hot spring. All employee stress is now zero."
+
+msgid "FACILITY_INTRO_Recycling"
+msgstr "We have {stock} copies in stock. Shall we sell them all to the recycler for ¥500 each?"
+
+msgid "FACILITY_QUESTION_Recycling"
+msgstr "Sell all game stock to the recycler?"
+
+msgid "FACILITY_DONE_Recycling"
+msgstr "The recycler paid ¥{amount} in total."
+
+msgid "FACILITY_INTRO_ProductionLab"
+msgstr "We can expand our production capacity. It will cost ¥{fee}."
+
+msgid "FACILITY_QUESTION_ProductionLab"
+msgstr "Expand production capacity?"
+
+msgid "FACILITY_DONE_ProductionLab"
+msgstr "Production capacity increased from {before} to {after}."
+
+msgid "FACILITY_INTRO_MysteryLab"
+msgstr "Nobody knows what this experiment will do. It costs ¥{fee}."
+
+msgid "FACILITY_QUESTION_MysteryLab"
+msgstr "Try the mystery experiment?"
+
+msgid "FACILITY_MYSTERY_BUSY"
+msgstr "A mystery experiment is already underway."
+
+msgid "FACILITY_DONE_TechnologySchool"
+msgstr "{name} can now learn up to {capacity} technologies."
+
+msgid "FACILITY_NO_EMPLOYEES"
+msgstr "There are no employees!"
+
+msgid "FACILITY_NO_FUNDS"
+msgstr "We do not have enough money!"
+
+msgid "FACILITY_HARDWARE_LIMIT"
+msgstr "We can only develop one game console."
+
+msgid "FACILITY_HARDWARE_BUSY"
+msgstr "A game console is already in development."
+
+msgid "FACILITY_HARDWARE_ROOM_BUSY"
+msgstr "Development Room {room} is already in use."
+
+msgid "FACILITY_CASINO_NO_COINS"
+msgstr "We have no coins. Please buy some first."
+
+msgid "FACILITY_CASINO_COINS_QUESTION"
+msgstr "Buy 50 coins for ¥10,000,000?"
+
+msgid "FACILITY_CLOSE_INTRO"
+msgstr "Are you sure you want to close {facility}?"
+
+msgid "FACILITY_CLOSE_QUESTION"
+msgstr "Close {facility}."
+
+msgid "HOT_SPRING_REACTION_0"
+msgstr "What a wonderful hot spring! I feel refreshed and ready to work."
+
+msgid "HOT_SPRING_REACTION_1"
+msgstr "I joined the right company! A hot spring really washes the stress away."
+
+msgid "HOT_SPRING_REACTION_2"
+msgstr "That was a lovely bath. I am full of energy for tomorrow!"
+
+msgid "HOT_SPRING_REACTION_3"
+msgstr "Our own hot spring—what luxury! I could stay at this company forever."
+
+msgid "HOT_SPRING_REACTION_4"
+msgstr "My stress has vanished. That was such a relaxing bath!"
+
+msgid "PROMOTION_NATIVE_RESULT_0"
+msgstr "The magazine advertisement has been published. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_0"
+msgstr "Publishing a magazine advertisement"
+
+msgid "PROMOTION_NATIVE_RESULT_1"
+msgstr "The radio commercial has aired. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_1"
+msgstr "Broadcasting a radio commercial"
+
+msgid "PROMOTION_NATIVE_RESULT_2"
+msgstr "The television commercial has aired. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_2"
+msgstr "Broadcasting a television commercial"
+
+msgid "PROMOTION_NATIVE_RESULT_3"
+msgstr "The cinema advertisement has been screened. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_3"
+msgstr "Screening a cinema advertisement"
+
+msgid "PROMOTION_NATIVE_RESULT_4"
+msgstr "The Internet advertisement has been published. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_4"
+msgstr "Publishing an Internet advertisement"
+
+msgid "PROMOTION_NATIVE_RESULT_5"
+msgstr "The newspaper advertisement has been published. {title}: awareness increased by {gain} points."
+
+msgid "PROMOTION_ACTIVITY_5"
+msgstr "Publishing a newspaper advertisement"
+
+msgid "FACILITY_ALREADY_OWNED"
+msgstr "{facility} is already installed."
+
+msgid "FACILITY_SERVICE_FEE"
+msgstr "Service fee: ¥{fee}"
