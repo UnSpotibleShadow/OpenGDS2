@@ -29,61 +29,71 @@ Recorded graph: **2,829** direct-call/object-reference edges; **18,591** operand
 
 Names below are original technical identifiers. Indentation comes from serialization, not English translation or the current port menu. Shortcut/enabled/visible semantics need a further property pass.
 
-- Menu — `menu:mMenu`: regrouped in current Game menu
-  - New game — `menu:mMenuNewG`: comparison: title/new-company flow; exact in-session reset confirmation unverified
-  - Separator — `menu:mMenuHaihun1`: non-action separator
-  - Save game — `menu:mMenuSave`: comparison: numbered JSON slots; native GD2 format differs
-  - Load game — `menu:mMenuLoad`: comparison: numbered JSON slots; native GD2 format differs
-  - Separator — `menu:mMenuHaihun2`: non-action separator
-  - Exit game — `menu:mMenuEnd`: comparison: application/title exit paths; original confirmation/termination semantics pending
-- Actions — `menu:mKoudou`: regrouped across current menus
-  - Company development — `menu:mKoudouKaisha`: comparison: three UP actions; original nested menu differs
-    - Public relations — `menu:mKoudouTimeido`: comparison: BeginCompanyActivity, PublicRelations
-    - Genre development — `menu:mKoudouLibary`: comparison: BeginCompanyActivity, GenreResearch
-    - Production expansion — `menu:mKoudouZoukyou`: comparison: BeginCompanyActivity, ProductionExpansion
-  - Separator — `menu:mKoudouMinasu1`: non-action separator
-  - Recruit employees — `menu:mKoudouSShinki`: comparison: ShowRecruitment
-  - Poach employees — `menu:mKoudouSHikinuku`: missing gameplay workflow and menu route
-  - Separator — `menu:mKoudouMinasu3`: non-action separator
-  - Secretary settings — `menu:mKoudouHisyoS`: comparison: ShowSecretaryPolicies
-  - Change secretary — `menu:mKoudouHisyoK`: comparison: ShowSecretaryHiring
-  - Separator — `menu:mKoudouMinasu2`: non-action separator
-  - Visit bank — `menu:mKoudouBank`: comparison: ShowBank
-  - Buy development computer — `menu:mKoudouPCK`: comparison: ShowComputers
-  - Buy backup device — `menu:mKoudouBackupK`: missing gameplay purchase; modern save backups differ
-  - Acquire hardware license — `menu:mKoudouLicense`: comparison: ShowLicenses
-  - Buy technology — `menu:mKoudouTechK`: comparison: ShowTechnologies
-  - Go out — `menu:mKoudouGo`: original submenu; current casino tenant route differs; original visibility/gating pending
-    - Go horse racing — `menu:mKoudouGoKeiba`: comparison: horse selection via casino; direct menu route differs
-    - Play poker — `menu:mKoudouGoPoka`: comparison: poker selection via casino; direct menu route differs
-    - Play blackjack — `menu:mKoudouGoBlack`: comparison: blackjack selection via casino; direct menu route differs
-- Information — `menu:mInfo`: regrouped across current menus
-  - All staff information — `menu:mInfoGMsStaffAll`: comparison: ShowStaff; original handler uses local dispatch, target unresolved in direct graph
-  - Own released games — `menu:mInfoGMsZishaGame`: comparison: ShowProductList; original handler uses local dispatch
-  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: comparison: ShowSalesChart; original handler uses local dispatch
-  - Currently released hardware — `menu:mInfoGMHatubaiHard`: comparison: ShowHardwareMarket
-  - Separator — `menu:mInfoGMMinasu`: non-action separator
-  - Own released hardware — `menu:mInfoGMHatubaiZHard`: comparison: ShowOwnHardwareReport
-  - Separator — `menu:mInfoGMMinasu2`: non-action separator
-  - Reach-time rankings — `menu:mInfoGMToutatu`: comparison: ShowRankings
-- Windows — `menu:mWindow`: comparison: office/company/staff/product windows; grouping differs
-  - Visual window — `menu:mWindowVisual`: comparison: office window; exact show/hide state pending
-  - Tool window — `menu:mWindowTool`: source references fGMInfo; comparison company window
-  - Other windows — `menu:mWindowOther`: no bound handler; dynamic window-list behavior unresolved
-- Settings — `menu:mSetup`: original settings hierarchy absent from current in-game menu
-  - Sound — `menu:mSetupSound`: original submenu absent; existing audio settings are a separate comparison
-    - Sound on — `menu:mSetupSoundOn`: original route absent; match mute scope and effect/music separation before restoration
-    - Sound off — `menu:mSetupSoundOff`: original route absent; match mute scope and effect/music separation before restoration
-  - Graphic enlargement — `menu:mSetupGraphic`: original submenu absent; office graphic size behavior pending
-    - Normal size — `menu:mSetupGraphicD`: original route absent; source references fMainVisual
-    - Enlarged size — `menu:mSetupGraphicK`: original route absent; source references fMainVisual
-  - Number display — `menu:mSetupNumber`: original submenu absent; current localization formatting differs
-    - Japanese large-number grouping — `menu:mSetupNumber1`: original route absent; no equivalent in-game choice identified
-    - Thousands grouping — `menu:mSetupNumber2`: original route absent; current localized formatting is not this setting
-- Help — `menu:mHelp`: comparison: Help menu; original About entry differs
-  - Help topics — `menu:mHelpHelp`: comparison: ShowHelp
-  - Separator — `menu:mHelpMinasu1`: non-action separator
-  - Version information — `menu:mHelpVersion`: source references fMainAbout; exact original about/link workflow unresolved
+Each entry states what is available in OpenGDS2 and where the player can find it. These labels describe access and implementation found in the code; original-game behavior and runtime parity remain unverified.
+
+- **Available:** the action exists at the stated menu or button.
+- **Available elsewhere:** the feature exists through the stated alternative path; the original direct menu item is missing.
+- **Missing menu access:** related controls exist at the stated location, but the original in-game menu entry is missing. Any uncertainty about equivalent behavior is stated separately.
+- **Missing option:** no equivalent player-selectable choice was found. Existing graphics or number rendering may still work without that choice.
+- **Missing functionality:** the gameplay action/transaction is not implemented; there is no alternate player path.
+- **Unresolved:** the evidence does not yet establish an equivalent action or its behavior; this is not counted as confirmed missing functionality.
+- **Menu organization / Separator:** describes a container or divider, not a gameplay feature.
+
+- Menu — `menu:mMenu`: Menu organization: OpenGDS2 uses Game for saving/loading and Back to Title; New Game and Quit are on the title screen. See the individual actions below.
+  - New game — `menu:mMenuNewG`: Available elsewhere: title screen > New Game. During play, use Game > Back to Title first; the original direct New Game menu item is missing. Equivalent reset/confirmation behavior remains unverified.
+  - Separator — `menu:mMenuHaihun1`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Save game — `menu:mMenuSave`: Available: Game > Save Game opens the numbered save picker. OpenGDS2 saves JSON; native GD2 compatibility is missing.
+  - Load game — `menu:mMenuLoad`: Available: Game > Load Game opens the numbered load picker. OpenGDS2 loads JSON; native GD2 compatibility is missing.
+  - Separator — `menu:mMenuHaihun2`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Exit game — `menu:mMenuEnd`: Available elsewhere: title screen > Quit closes the application; Game > Back to Title returns there during play. The original direct Exit Game menu item and its confirmation flow are not reproduced.
+- Actions — `menu:mKoudou`: Menu organization: actions are distributed across Company and Employees, the three UP toolbar buttons and casino-facility controls. This does not mean every original action exists; poaching and backup-device purchase are missing below.
+  - Company development — `menu:mKoudouKaisha`: Menu organization: Public relations, Genre research and Expand production exist under Company and as three UP toolbar buttons. The original nested Company development submenu is not reproduced.
+    - Public relations — `menu:mKoudouTimeido`: Available: Company > Public relations, or the Public relations UP toolbar button, opens the activity confirmation.
+    - Genre development — `menu:mKoudouLibary`: Available: Company > Genre research, or the Genre research UP toolbar button, opens the activity confirmation.
+    - Production expansion — `menu:mKoudouZoukyou`: Available: Company > Expand production, or the Expand production UP toolbar button, opens the activity confirmation.
+  - Separator — `menu:mKoudouMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Recruit employees — `menu:mKoudouSShinki`: Available: Employees > Hire Employees, or the recruitment toolbar button, opens recruitment.
+  - Poach employees — `menu:mKoudouSHikinuku`: Missing functionality: employee-poaching offers, negotiation/contract transactions and the menu action are not implemented. There is no alternate player path.
+  - Separator — `menu:mKoudouMinasu3`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Secretary settings — `menu:mKoudouHisyoS`: Available: Company > Secretary policies opens the secretary settings window.
+  - Change secretary — `menu:mKoudouHisyoK`: Available: Company > Hire secretary, or the secretary toolbar button, opens secretary hiring/change.
+  - Separator — `menu:mKoudouMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Visit bank — `menu:mKoudouBank`: Available: Company > Bank, or the bank toolbar button, opens the bank window.
+  - Buy development computer — `menu:mKoudouPCK`: Available: Company > Development Computers, or the computer toolbar button, opens computer purchasing.
+  - Buy backup device — `menu:mKoudouBackupK`: Missing functionality: the purchasable gameplay backup device and its virus-protection ownership/transaction are not implemented. There is no alternate player path; modern save-file backups are a separate feature.
+  - Acquire hardware license — `menu:mKoudouLicense`: Available: Company > Hardware Licenses, or the license toolbar button, opens license purchasing.
+  - Buy technology — `menu:mKoudouTechK`: Available: Company > Technologies, or the technology toolbar button, opens technology purchasing.
+  - Go out — `menu:mKoudouGo`: Available elsewhere: open an existing casino through Company facilities or its office tenant, then choose a game. The original Actions > Go out submenu is missing; its original visibility/eligibility rules remain unverified.
+    - Go horse racing — `menu:mKoudouGoKeiba`: Available elsewhere: casino facility > Casino > Horse racing opens the implemented horse-racing game. The original direct Go horse racing menu item is missing. Catalog, funds and pending-decision guards can disable entry.
+    - Play poker — `menu:mKoudouGoPoka`: Available elsewhere: casino facility > Casino > Poker opens the implemented poker game. The original direct Play poker menu item is missing. Coins and pending-decision guards can disable entry.
+    - Play blackjack — `menu:mKoudouGoBlack`: Available elsewhere: casino facility > Casino > Blackjack opens the implemented blackjack game. The original direct Play blackjack menu item is missing. Coins and pending-decision guards can disable entry.
+- Information — `menu:mInfo`: Menu organization: the corresponding reports are under Employees, Products, Company and Help. The original Information menu grouping is not reproduced.
+  - All staff information — `menu:mInfoGMsStaffAll`: Available: Employees > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified.
+  - Own released games — `menu:mInfoGMsZishaGame`: Available: Products > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
+  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: Available: Help > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified.
+  - Currently released hardware — `menu:mInfoGMHatubaiHard`: Available: Company > Hardware market opens the released-hardware report.
+  - Separator — `menu:mInfoGMMinasu`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Own released hardware — `menu:mInfoGMHatubaiZHard`: Available: Products > Own hardware opens the own-hardware report when its state is available.
+  - Separator — `menu:mInfoGMMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Reach-time rankings — `menu:mInfoGMToutatu`: Available: Help > Global rankings opens the reach-time records view.
+- Windows — `menu:mWindow`: Menu organization: Windows exposes Office, Company, Employees and Products. That grouping differs from the original Visual, Tool and Other windows entries.
+  - Visual window — `menu:mWindowVisual`: Available: Windows > Office reopens the office window. Exact original show/hide behavior remains unverified.
+  - Tool window — `menu:mWindowTool`: Available: Windows > Company reopens the company window, the comparison for original fGMInfo. Exact original page/tool-window behavior remains unverified.
+  - Other windows — `menu:mWindowOther`: Unresolved: the original entry has no bound handler; dynamic window-list behavior has not been established. OpenGDS2 has explicit Windows entries, but they are not a confirmed equivalent.
+- Settings — `menu:mSetup`: Missing menu access: there is no in-game Settings menu. Title screen > Settings contains language, sound-effect and music controls. The original graphic-size and number-grouping choices are missing options below.
+  - Sound — `menu:mSetupSound`: Missing menu access: there is no in-game Settings > Sound submenu. Title screen > Settings provides separate sound-effect and music toggles/volumes; equivalence to the original single sound setting remains unverified.
+    - Sound on — `menu:mSetupSoundOn`: Missing menu access: enable sound effects and/or music through title screen > Settings. The original in-game Sound > On command is missing; whether it controlled the same sounds remains unverified.
+    - Sound off — `menu:mSetupSoundOff`: Missing menu access: disable sound effects and/or music through title screen > Settings. The original in-game Sound > Off command is missing; whether it muted the same sounds remains unverified.
+  - Graphic enlargement — `menu:mSetupGraphic`: Missing option: no Normal/Enlarged office-graphics selector was found in OpenGDS2. The office is rendered, but the original selectable enlargement behavior has no confirmed equivalent.
+    - Normal size — `menu:mSetupGraphicD`: Missing option: there is no player-selectable Normal office-graphics command. Existing default office rendering is not proof of equivalent original sizing; the source references fMainVisual.
+    - Enlarged size — `menu:mSetupGraphicK`: Missing option: there is no player-selectable Enlarged office-graphics command or confirmed alternate enlargement control. The source references fMainVisual; exact original scaling remains unverified.
+  - Number display — `menu:mSetupNumber`: Missing option: there is no player-selectable number-grouping mode. OpenGDS2 already renders numbers with N0 formatting, but does not expose the original two-format choice.
+    - Japanese large-number grouping — `menu:mSetupNumber1`: Missing option: no selector for Japanese large-number grouping was found. Existing number rendering and interface-language selection do not implement this original format choice.
+    - Thousands grouping — `menu:mSetupNumber2`: Missing option: no selector for thousands grouping was found. Current N0-formatted numbers may already use thousands separators, but the player cannot choose this original display mode independently.
+- Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below.
+  - Help topics — `menu:mHelpHelp`: Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer.
+  - Separator — `menu:mHelpMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
+  - Version information — `menu:mHelpVersion`: Unresolved: the original opens fMainAbout. An equivalent interactive About/version/link dialog has not been established in OpenGDS2; there is no confirmed alternate player path for that dialog.
 
 ## Workflow and adaptation index
 
@@ -176,7 +186,7 @@ Values are serialized requests in milliseconds, not observed delivery cadence. `
 
 Original menu hierarchy is freshly recovered from serialized records and metadata bindings. Toolbar/office events are inventoried, but numeric event slots do not by themselves identify Click/KeyDown meanings.
 
-Next: Trace each bound event, array-index switch and keyboard branch; pair all 55 menu dispositions with a current route or explicit absent/dormant state.
+Next: Trace each bound event, array-index switch and keyboard branch; record the current player path separately from missing menu access, missing options, missing functionality and unresolved original behavior.
 
 ### X02: Screens, layouts, buttons and window lifetime
 
@@ -210,7 +220,7 @@ Next: Supply original archive; inventory every entry/hash/type; map all picture 
 
 ### X07: Original audio and music
 
-The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison.
+The evidence manifest identifies four asynchronous single-voice effect selectors and known call sites; selector 3 has no call in the known dispatcher references. Community/meeting/seasonal music paths are a separate comparison. Current sound-effect and music controls are available through title screen > Settings; the original in-game Sound On/Off menu entries are missing access points, not evidence that audio toggling is unimplemented.
 
 Next: Inventory archive audio and every direct/indirect playback site; establish selector/context, interruption/overlap/mute/loop/stop and resume on the original. Do not create a trigger for an unused selector.
 
@@ -252,7 +262,7 @@ These are evidence tasks or known adaptation differences, not authorization to i
 | --- | --- | --- |
 | P0 | G01 | Obtain original archive and runtime evidence; complete external-file denominator and pair 245 scenario recordings. This blocks a claim of complete game coverage. |
 | P1 | G02 | Recover the four-form poaching transaction and its periodic/menu callbacks; adaptation workflow is missing. |
-| P1 | G03 | Resolve all original menu/toolbar/hotspot/keyboard routes, including backup purchase, poaching, casino submenu and information/settings options; distinguish missing, dormant and replaced routes. |
+| P1 | G03 | Reconcile original menu/toolbar/hotspot/keyboard access with the concrete paths listed above. Casino games and title-screen audio controls exist elsewhere; direct casino and in-game Sound entries are missing. Graphic-size/number-grouping selectors are missing options. Backup purchase and poaching are missing gameplay; unresolved behavior must remain separate. |
 | P1 | G04 | Classify dynamic dispatch targets, timer interval/enable writers, scheduler order and actor/callback persistence; direct-call graph alone is incomplete. |
 | P1 | G05 | Complete native GD2 field/type/array mapping and whole-session RNG seed/draw-order comparisons as separate compatibility projects. |
 | P1 | G11 | Implement the source-backed backup-device purchase/ownership and corresponding virus protection only after tracing event mutations/persistence; this is absent from the adaptation and distinct from JSON backup files. |
