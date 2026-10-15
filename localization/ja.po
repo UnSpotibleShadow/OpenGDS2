@@ -3977,3 +3977,6 @@ msgstr "オリジナル効果音を有効にする"
 
 msgid "EFFECTS_VOLUME"
 msgstr "効果音の音量"
+
+msgid "FACILITY_BUY"
+msgstr "施設を購入"
