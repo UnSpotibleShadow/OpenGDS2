@@ -33,8 +33,8 @@ native Help navigation or whole-game fidelity.
   confirmation structure, with an English-width adaptation. Its load handler
   `00994414 +0286..02BB` reads `MDIForm1.ImageFormG[25]` (getter 032C) into the
   picture; that exact 256x160 bitmap is recovered locally at 0x16585. Existing
-  imports need reimporting to acquire it. Japanese lettering inside this newly
-  recovered illustration is retained; it is not an English artwork patch.
+  imports need reimporting to acquire it. English uses a local fingerprint-guarded caption patch (FAME / GENRES /
+  OUTPUT); Japanese and explicit artwork overrides retain their original paths.
 - Remaining generic desktop headings use compact typography and wrap inside
   their content width. Large duplicate headings and unwrapped labels no longer
   determine a fallback dialog's minimum width.
@@ -99,3 +99,13 @@ Completed checks: clean application build (zero warnings/errors), 531 domain
 checks with the optional original fixture, and seven Godot regressions: bilingual
 review112, core loop, casino layouts, management layouts, stress relief, speed
 technology and presentation completion. All passed. Original artwork stays private.
+
+Activity artwork follow-up: replace only the three Japanese label areas using
+community-authored bitmap lettering and reconstructed background strips. The
+arrows, symbols and all pixels outside those bounds are preserved. The patch
+requires the exact decoded source fingerprint; no original/derived asset is
+committed. Added bounds-preservation and bilingual runtime selection checks.
+
+Follow-up verification passed: clean build,532 original-fixture domain checks
+and bilingual review112 rendered checks, including English patch selection and
+unchanged Japanese artwork.

@@ -37,6 +37,16 @@ Test("English Help covers all five original pages and 91 caption blocks",()=>
     Check(OriginalHelpEnglish.Page(4).Any(x=>x.Contains("Hall of Fame")));
     Check(OriginalHelpEnglish.OriginalWebsite=="http://www.bj.wakwak.com/~gamedev2/");
 });
+Test("company activity English captions preserve arrows and every pixel outside the three labels",()=>
+{
+    byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray();var original=(byte[])source.Clone();
+    var patched=LocalSceneCaptionRules.PatchActivity(source);
+    Check(source.SequenceEqual(original) && !source.SequenceEqual(patched));
+    for(int y=0;y<160;y++)for(int x=0;x<256;x++)
+        if(!LocalSceneCaptionRules.ActivityRegions.Any(r=>x>=r.X && x<r.X+r.Width && y>=r.Y && y<r.Y+r.Height))
+            Check(source.AsSpan((y*256+x)*3,3).SequenceEqual(patched.AsSpan((y*256+x)*3,3)));
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchActivity(new byte[8]));
+});
 Test("local scene captions change only their declared area and preserve source pixels",()=>
 {
     byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray();byte[] original=(byte[])source.Clone();

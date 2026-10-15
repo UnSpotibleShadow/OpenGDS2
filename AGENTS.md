@@ -21,7 +21,9 @@ Clean build,531 optional-original domain checks and seven relevant Godot checks
 pass. See docs/review112-help-technology-audit.md. Publication receipt is
 scratch/review-20261015/verification.json; branch codex/review112-help-technology-audit.
 Keep pending PR110/111 independent, #95 open; no merge/export/Actions authorized.
-CompanyActivity.bmp needs reimport and retains original Japanese artwork captions.
+CompanyActivity.bmp needs reimport. Its English FAME/GENRES/OUTPUT labels are
+now patched locally with exact-source fingerprint and bounded region guards;
+Japanese and explicit overrides retain their paths.
 
 ## Active M105 — presentation plan, one step at a time
 

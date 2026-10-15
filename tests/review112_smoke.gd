@@ -51,6 +51,9 @@ func run() -> void:
         await menu_choice("MENU_COMPANY",0);await window("CompanyActivitiesWindow",410,360)
         await press_node("CompanyActivity0");await window("ActivityConfirmationWindow",310,320)
         check(main.find_child("CompanyActivityArtwork",true,false).texture!=null,"Original company activity illustration")
+        var original_art=Image.load_from_file(ProjectSettings.globalize_path("user://original/Graphic/Embedded/CompanyActivity.bmp"));original_art.convert(Image.FORMAT_RGB8)
+        var shown_art=main.find_child("CompanyActivityArtwork",true,false).texture.get_image();shown_art.convert(Image.FORMAT_RGB8)
+        check((shown_art.get_data()!=original_art.get_data())==(locale=="en"),"English captions patched; Japanese artwork preserved")
         # Roster must still respect a pending decision.
         await select_employee(0);check(main.find_child("EmployeeDetailsWindow",true,false)==null,"Pending confirmation blocks roster")
         await press_node("CancelCompanyActivity");await close_window("CompanyActivitiesWindow");await dispose()

@@ -7,6 +7,27 @@ public static class LocalSceneCaptionRules
     public static readonly (int X,int Y,int Width,int Height) ExhibitionRegion=(60,0,137,22);
     public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);
     public static readonly (int X,int Y,int Width,int Height) HardwareRegion=(49,0,164,23);
+    public static readonly (int X,int Y,int Width,int Height)[] ActivityRegions=[(8,134,64,25),(86,91,88,25),(178,134,78,25)];
+    public static byte[] PatchActivity(byte[] source)
+    {
+        const int width=256,height=160;
+        if(source.Length!=width*height*3)throw new InvalidDataException("Unexpected company activity picture.");
+        var output=(byte[])source.Clone();string[] captions=["FAME","GENRES","OUTPUT"];
+        for(int n=0;n<ActivityRegions.Length;n++)
+        {
+            var r=ActivityRegions[n];
+            // Reconstruct only the caption background from its unlettered edges.
+            for(int y=r.Y;y<r.Y+r.Height;y++)for(int x=r.X;x<r.X+r.Width;x++)for(int c=0;c<3;c++)
+            {
+                int left=source[(y*width+r.X-1)*3+c],right=source[(y*width+Math.Min(width-1,r.X+r.Width))*3+c];
+                output[(y*width+x)*3+c]=(byte)Math.Round(left+(right-left)*(x-r.X+1)/(double)(r.Width+1));
+            }
+            int xCaption=r.X+(r.Width-(captions[n].Length*6-1)*2)/2;
+            LocalBitmapLetteringRules.DrawLettering(output,width,height,captions[n],xCaption,r.Y+5,2,2,(255,240,90),1);
+            LocalBitmapLetteringRules.DrawLettering(output,width,height,captions[n],xCaption,r.Y+5,2,2,(218,65,0));
+        }
+        return output;
+    }
     public static byte[] PatchHardware(byte[] source)
     {
         const int width=256,height=160;
