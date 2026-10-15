@@ -4188,3 +4188,6 @@ msgstr "Increases current originality. A zero value remains zero."
 
 msgid "TECHNOLOGY_EFFECT_TIMING"
 msgstr "Experience is charged when accepted. Except speed and stress relief, the effect waits for technology work to finish at the development desk. Level and prior applications affect the percentage; repeated uses can have tiny or zero effects. In hardware development, graphics, sound, fun and originality complete required technology steps instead of adding software quality."
+
+msgid "FACILITY_BUY"
+msgstr "Buy facility"

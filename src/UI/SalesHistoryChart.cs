@@ -38,7 +38,21 @@ public partial class SalesHistoryChart : Control
         }
         Vector2 Point(int i)=>new(left+(right-left)*i/(SalesHistoryRules.CellCount-1),
             bottom-(float)((double)_history[SalesHistoryRules.CellCount-1-i]/ceiling)*(bottom-top));
-        for(int i=1;i<SalesHistoryRules.CellCount;i++)DrawLine(new(Point(i).X,bottom),Point(i),Compact?new Color(0,.55f,0):new Color(.65f,.05f,.05f),Compact?1:2);
+        float cell=(right-left)/(SalesHistoryRules.CellCount-1);
+        for(int i=1;i<SalesHistoryRules.CellCount;i++)
+        {
+            if(_history[SalesHistoryRules.CellCount-1-i]==0)continue;
+            var point=Point(i);float width=Mathf.Max(3,Mathf.Floor(cell*.65f));
+            float depth=Mathf.Min(Compact?2:4,Mathf.Floor((bottom-point.Y)/2));
+            float x=Mathf.Floor(point.X-width-depth),y=Mathf.Max(top+depth,Mathf.Floor(point.Y));
+            var front=Compact?new Color(0,1,0):new Color(.8f,.1f,.1f);
+            DrawRect(new Rect2(x,y,width,Mathf.Max(1,bottom-y)),front);
+            if(depth>0)
+            {
+                DrawColoredPolygon([new(x,y),new(x+depth,y-depth),new(x+width+depth,y-depth),new(x+width,y)],Compact?new Color(.55f,1,.55f):new Color(1,.5f,.5f));
+                DrawColoredPolygon([new(x+width,y),new(x+width+depth,y-depth),new(x+width+depth,bottom-depth),new(x+width,bottom)],Compact?new Color(0,.5f,0):new Color(.45f,0,0));
+            }
+        }
         if(Compact){DrawLine(new(left,top),new(left,bottom),Colors.Black);DrawLine(new(left,bottom),new(right,bottom),Colors.Black);}
         else DrawRect(area,Colors.Black,false);
         DrawString(font,new(left,bottom+(Compact?16:22)),Tr(Compact ? "COMPACT_HISTORY_OLDEST" : "SALES_HISTORY_OLDEST"),HorizontalAlignment.Left,(right-left)/2,fontSize,Colors.Black);
