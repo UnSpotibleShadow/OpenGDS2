@@ -1,5 +1,40 @@
 # Development execution safeguards
 
+## Original-game mapping — 15 October 2026
+
+Owner authorized executing the full original-first mapping plan. Work on
+`codex/original-game-map`, based on main
+`2eb7c0bf7de32b33b76e0bb1dc80840f406188e1`, adds the independent inventory,
+workflow/gap catalog, deterministic verifier and standalone searchable viewer.
+Read `docs/original-game-map.md` before further original-game investigations.
+All 86 objects (84 forms/two modules), 920 control definitions, 572 event slots,
+669 procedures/167189 instructions, 55 serialized menus, 2605 known control
+instances, 536 known picture properties and 36 known timers are accounted for.
+Do not describe those denominators as complete game understanding or parity.
+
+35 workflow dispositions/245 original-versus-port scenarios preserve unknowns.
+The 2829 direct-call/object-reference edges are not a complete call graph;
+13140 dynamic-dispatch candidate sites remain unresolved. Two root and228
+control property parses stop early. Original archive inventory, native runtime
+acceptance, complete table/state/audio/asset semantics and GD2/RNG parity remain
+open. A private Wine11 binary exists, but no complete runnable original
+installation or native Windows acceptance was established. No original code was
+executed by this mapping tool; no gameplay/UI implementation changed.
+
+New source-backed gap: original `mKoudouBackupK` / `0098B1F4` purchases a
+100000000-yen gameplay backup device, sets `00A112E8`, debits the shared financial
+helper and affects `009E3830` virus branches. This is absent from the adaptation
+and distinct from modern save-file backups. Read `docs/original-backup-device-map.md`;
+trace exact event mutations/init/persistence before implementing it. Menu/settings
+routes and the existing graduate/renewal artwork aliases also need reconciliation.
+Do not repeat source inventory or invent working multiplayer/office expansion.
+
+Verification: fresh original rebuild,15 meaningful accounting/graph/view tests
+and Chromium rendered search/filter checks pass. Recovery checkpoints/private
+preview: `/workspace/scratch/original-game-map-20261015/`.
+Keep #95 open. Standing owner authorization permits merging verified open PRs;
+no release/export/Actions/visibility change is authorized.
+
 ## Toolbar year / office date — 15 October 2026
 
 PR114 merged at65a655a8138174ea2d38940323da44376368c08e. Owner requests the
