@@ -116,7 +116,7 @@ public partial class Main
         Gap();
         ToolbarAction(toolbar,"GAME_HELP",()=>ShowHelp(state),3);
         toolbar.AddChild(new Control { SizeFlagsHorizontal = SizeFlags.ExpandFill });
-        _desktopFunds = new Label { Name = "DesktopFunds", CustomMinimumSize = new Vector2(225, 0),
+        _desktopFunds = new Label { Name = "DesktopFunds", CustomMinimumSize = new Vector2(285, 0),
             HorizontalAlignment = HorizontalAlignment.Right,SizeFlagsVertical=SizeFlags.ShrinkCenter };
         var fundsBox=new StyleBoxFlat {BgColor=Colors.White,BorderColor=new(.5f,.5f,.5f),ContentMarginLeft=4,ContentMarginRight=4,ContentMarginTop=1,ContentMarginBottom=1};fundsBox.SetBorderWidthAll(1);
         _desktopFunds.AddThemeStyleboxOverride("normal",fundsBox);_desktopFunds.AddThemeFontSizeOverride("font_size",12);toolbar.AddChild(_desktopFunds);
@@ -346,7 +346,7 @@ public partial class Main
         if (_desktopLoad is not null) _desktopLoad.Disabled = !System.IO.File.Exists(SavePath);
         foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
             button.Disabled=!button.GetMeta("base_enabled").AsBool() || !DesktopActionEnabled(button.Name.ToString()[7..]);
-        _desktopFunds.Text = $"{Tr("FUNDS")}: ¥{state.Money:N0}";
+        _desktopFunds.Text = $"{string.Format(Tr("TOOLBAR_YEAR"),state.Year?.ToString()??"?")}   {Tr("FUNDS")}: ¥{state.Money:N0}";
         _companyMetrics["COMPANY_NAME"].Text = state.Company.Name;
         _companyMetrics["FUNDS"].Text = state.Money?.ToString("N0") ?? "?";
         _companyMetrics["WEEKLY_NET"].Text=state.Company.WeeklyNet?.ToString("N0") ?? "?";

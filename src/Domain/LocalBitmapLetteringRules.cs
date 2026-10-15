@@ -3,6 +3,23 @@ namespace OpenGDS2.Domain;
 /// <summary>Authored 5×7 lettering, applied to locally imported opaque caption interiors.</summary>
 public static class LocalBitmapLetteringRules
 {
+    public static readonly (int X,int Y,int Width,int Height)[] OfficeDateLabelRegions=[(378,22,22,25),(422,22,25,25)];
+    public static byte[] PatchOfficeDateLabels(byte[] source,int width,int height)
+    {
+        if(width!=466 || height!=290 || source.Length!=width*height*3)throw new InvalidDataException("Unexpected office background dimensions.");
+        var output=(byte[])source.Clone();string[] labels=["MO","WK"];
+        for(int n=0;n<OfficeDateLabelRegions.Length;n++)
+        {
+            var r=OfficeDateLabelRegions[n];
+            for(int y=r.Y;y<r.Y+r.Height;y++)for(int x=r.X;x<r.X+r.Width;x++)for(int c=0;c<3;c++)
+            {
+                int left=source[(y*width+r.X-1)*3+c],right=source[(y*width+r.X+r.Width)*3+c];
+                output[(y*width+x)*3+c]=(byte)Math.Round(left+(right-left)*(x-r.X+1)/(double)(r.Width+1));
+            }
+            DrawLettering(output,width,height,labels[n],r.X+(r.Width-11)/2,r.Y+5,1,2,(90,90,200));
+        }
+        return output;
+    }
     private static readonly Dictionary<char,string> Glyphs=new()
     {
         ['0']="01110/10001/10011/10101/11001/10001/01110",

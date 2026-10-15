@@ -4191,3 +4191,6 @@ msgstr "Experience is charged when accepted. Except speed and stress relief, the
 
 msgid "FACILITY_BUY"
 msgstr "Buy facility"
+
+msgid "TOOLBAR_YEAR"
+msgstr "Year {0}"

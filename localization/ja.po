@@ -4014,3 +4014,6 @@ msgstr "使用時に経験値を消費。速度とストレス以外は開発机
 
 msgid "FACILITY_BUY"
 msgstr "施設を購入"
+
+msgid "TOOLBAR_YEAR"
+msgstr "{0}年"
