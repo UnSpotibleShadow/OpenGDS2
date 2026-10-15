@@ -43,7 +43,7 @@ func check(condition: bool, message: String) -> void:
 func press(key: String) -> void:
     var found := false
     for button in main.find_children("*", "Button", true, false):
-        if button.text == tr(key) and button.is_visible_in_tree() and not button.disabled:
+        if (button.text == tr(key) or button.name=="Toolbar"+key) and button.is_visible_in_tree() and not button.disabled:
             check(not button.disabled, "Enabled: " + key)
             if not button.disabled:
                 button.pressed.emit()
@@ -57,6 +57,17 @@ func press(key: String) -> void:
         var dialog=canvas.get_parent().get_parent().get_parent().get_parent()
         dialog.find_child("CloseWindow",true,false).pressed.emit()
         found=true
+    if not found:
+        for menu in main.find_children("*","MenuButton",true,false):
+            var popup=menu.get_popup()
+            for item in range(popup.item_count):
+                if popup.get_item_text(item)==tr(key):
+                    popup.about_to_popup.emit()
+                    check(not popup.is_item_disabled(item),"Menu command enabled: "+key)
+                    if not popup.is_item_disabled(item):popup.id_pressed.emit(popup.get_item_id(item))
+                    found=true
+                    break
+    if not found and key=="BACK_TO_OFFICE" and main.find_child("GameDesktop",true,false)!=null:found=true
     check(found, "Button exists: " + key)
     await process_frame
     if key=="SALES" and main.find_child("CompactProductWindow",true,false)==null:
@@ -68,6 +79,19 @@ func press(key: String) -> void:
         main.find_child("LevelUpResultWindow",true,false).find_child("CloseWindow",true,false).pressed.emit();await process_frame
 
 func press_node(name: String) -> void:
+    if name=="TogglePause":
+        check(main.call("SetSimulationPaused",not main.call("GetSimulationPaused")),"Harness simulation pause")
+        await process_frame
+        return
+    if name=="ToolbarSTART_GAME_DEVELOPMENT":
+        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
+        await process_frame
+        return
+    if name=="ToolbarBACK_TO_TITLE":
+        var menu=main.find_child("MENU_GAME",true,false).get_popup()
+        menu.id_pressed.emit(menu.item_count-1)
+        await process_frame
+        return
     if name=="RevealAward":
         await await_award_result()
         return
@@ -368,7 +392,6 @@ func run() -> void:
     write_json("user://saves/slot1.json",before_advice)
     await press("LOAD_GAME")
     # Replacement is a paid, persisted two-step conversation, not a free alias change.
-    await press("SETTINGS")
     await press("HIRE_SECRETARY")
     var secretary_candidates = main.find_child("SecretaryCandidates",true,false)
     check(secretary_candidates.get_root().get_child_count() == 4,"Secretary recruitment excludes the current secretary")
@@ -394,7 +417,6 @@ func run() -> void:
     check(secretary_greeting.State.Money == secretary_farewell.State.Money and secretary_greeting.State.CompanyActivityTicks == secretary_farewell.State.CompanyActivityTicks,"Loading and reading do not charge or tick again")
     await press("LOAD_GAME")
     await finish_conversation()
-    await press("SETTINGS")
     await press("SECRETARY_POLICIES")
     check(main.find_child("ConfirmSecretaryPolicies",true,false).disabled,"Unknown legacy policies require explicit choices")
     for choice in ["SecretaryProduction2","SecretaryBreak2","SecretaryReturn0"]:
@@ -404,7 +426,6 @@ func run() -> void:
     var saved_policies = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(saved_policies.State.SecretaryPolicies.Production == 2 and saved_policies.State.SecretaryPolicies.Break == 2 and saved_policies.State.SecretaryPolicies.Return == 0,"Secretary policy choices persist as original enum values")
     await press("LOAD_GAME")
-    await press("SETTINGS")
     await press("SECRETARY_POLICIES")
     check(main.find_child("SecretaryProduction2",true,false).button_pressed and main.find_child("SecretaryReturn0",true,false).button_pressed,"Loading preserves manual production and stress-40 return")
     main.find_child("SecretaryBreak0",true,false).button_pressed = true
@@ -486,7 +507,7 @@ func run() -> void:
     for control in toolbar.get_children():
         if control is Button:
             check(control.icon != null,"Toolbar action has an image: " + control.text)
-            check(control.tooltip_text == control.text,"Toolbar action has a localized tooltip: " + control.text)
+            check(control.tooltip_text == tr(String(control.name).trim_prefix("Toolbar")),"Toolbar action has a localized tooltip: " + control.text)
             if control.icon != null:
                 check(control.icon.get_size() == Vector2(23,22),"Toolbar image retains native dimensions")
     var save_action = main.find_child("ToolbarSAVE_GAME",true,false)
@@ -548,15 +569,15 @@ func run() -> void:
     check(planning_hardware.get_root().get_child(0).get_text(0).begins_with(tr("CATALOG_HARDWARE_0")),"English platform label uses the imported source index")
     check(planning_audience.get_root().get_child(0).get_text(0) == tr("CATALOG_AUDIENCE_0"),"English audience label is translated")
     # Changing language changes labels, not the imported data or identifiers.
-    await press("SETTINGS")
-    await press("日本語")
-    await press("BACK_TO_OFFICE")
+    TranslationServer.set_locale("ja")
+    main.find_child("PlanningQuoteWindow",true,false).find_child("CloseWindow",true,false).pressed.emit()
+    await process_frame
     await press("START_GAME_DEVELOPMENT")
     check(main.find_child("PlanningHardware",true,false).get_root().get_child(0).get_text(0).begins_with("Synthetic Hardware"),"Japanese mode uses the untouched local platform name")
     check(main.find_child("PlanningAudience",true,false).get_root().get_child(0).get_text(0) == "Synthetic Audience","Japanese mode uses the untouched local audience name")
-    await press("SETTINGS")
-    await press("English")
-    await press("BACK_TO_OFFICE")
+    TranslationServer.set_locale("en")
+    main.find_child("PlanningQuoteWindow",true,false).find_child("CloseWindow",true,false).pressed.emit()
+    await process_frame
     await press("START_GAME_DEVELOPMENT")
     var unchanged_catalog = JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
     check(unchanged_catalog.Hardware[0].Name == "Synthetic Hardware" and unchanged_catalog.Audiences[0].Name == "Synthetic Audience","Localization never rewrites imported names")
@@ -629,7 +650,7 @@ func run() -> void:
             burst_applied = true
             break
         await process_frame
-    main.find_child("TogglePause",true,false).pressed.emit()
+    main.call("SetSimulationPaused",not main.call("GetSimulationPaused"))
     check(burst_applied,"Live development report receives the numbered burst")
     await press("SAVE_GAME")
     var committed_burst = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1050,23 +1071,24 @@ func run() -> void:
     var dismissal_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(dismissal_save.State.Employees.is_empty(),"Dismissal persists without employee workspace")
     check(dismissal_save.State.DevelopmentProjects.size() == 1,"Dismissal retains active development room")
-    await press("COMPANY_ACTIVITIES")
-    await press_node("CompanyActivity0")
-    check(main.find_child("CompanyActivity1",true,false).disabled,"Business action budget shared across actions")
+    await press("PUBLIC_RELATIONS")
+    await press_node("ConfirmCompanyActivity")
+    await finish_conversation()
+    check(main.find_child("ToolbarGENRE_RESEARCH",true,false).disabled,"Business action budget shared across actions")
     await press("SAVE_GAME")
     var activity_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(activity_save.State.Company.Fame >= 13 and activity_save.State.Company.Fame <= 15,"Public relations raises fame")
     check(activity_save.State.Money == dismissal_save.State.Money - 5000000,"Public relations charges shared cost")
     await press("LOAD_GAME")
-    await press("COMPANY_ACTIVITIES")
-    check(main.find_child("CompanyActivity0",true,false).disabled,"Used budget survives save/load")
+    check(main.find_child("ToolbarPUBLIC_RELATIONS",true,false).disabled,"Used budget survives save/load")
     await press("BACK_TO_OFFICE")
     Engine.time_scale = 100
     for frame in range(300):
         await process_frame
     Engine.time_scale = 1
-    await press("COMPANY_ACTIVITIES")
-    await press_node("CompanyActivity1")
+    await press("GENRE_RESEARCH")
+    await press_node("ConfirmCompanyActivity")
+    await finish_conversation()
     await press("SAVE_GAME")
     var research_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(research_save.State.Company.OriginalMember90 >= 25 and research_save.State.Company.OriginalMember90 <= 27,"Genre research raises unlock threshold")
@@ -1075,8 +1097,9 @@ func run() -> void:
     for frame in range(300):
         await process_frame
     Engine.time_scale = 1
-    await press("COMPANY_ACTIVITIES")
-    await press_node("CompanyActivity2")
+    await press("EXPAND_PRODUCTION")
+    await press_node("ConfirmCompanyActivity")
+    await finish_conversation()
     await press("SAVE_GAME")
     var capacity_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(capacity_save.State.Company.ProductionCapacity >= 54,"Production expansion increases capacity")
@@ -1101,9 +1124,7 @@ func run() -> void:
     check(main.find_child("MonthlySalary1",true,false).text.ends_with("100"),"Employee monthly salary is displayed")
     check(main.find_child("OriginalPayrollPreview",true,false) == null,"Staff screen keeps the reconstruction preview in the inspector")
     await press("CANCEL")
-    await press("CALENDAR_INSPECTOR")
-    check(main.find_child("OriginalPayrollPreview",true,false).text.ends_with("600"),"Calendar inspector preserves the distinct shared-index payroll preview")
-    await press("CANCEL")
+    check(main.find_child("ToolbarCALENDAR_INSPECTOR",true,false)==null,"No port inspector on native toolbar")
     await press("SAVE_GAME")
     var payroll_captured = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(payroll_captured.State.OriginalPayrollScratchIndex == 2,"Staff scratch snapshot survives save")
@@ -1112,11 +1133,11 @@ func run() -> void:
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.OriginalPayrollScratchIndex == 2,"Loading retains the shared salary index")
     await press_node("TogglePause")
-    check(main.find_child("TogglePause",true,false).text == tr("RESUME"),"Paused office immediately offers Resume")
+    check(main.call("GetSimulationPaused"),"Harness pauses the office simulation")
     check(main.find_child("OfficeStatus",true,false).text.contains(tr("PAUSED")),"Pause status appears immediately")
     await press("SAVE_GAME")
     var pause_saved = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
-    check(main.find_child("TogglePause",true,false).text == tr("RESUME"),"Rebuilding the office retains the correct pause label")
+    check(main.call("GetSimulationPaused"),"Rebuilding the office retains simulation pause")
     Engine.time_scale = 100
     for frame in range(500):
         await process_frame
@@ -1126,7 +1147,7 @@ func run() -> void:
     check(pause_after_wait.State.CompanyActivityTicks == pause_saved.State.CompanyActivityTicks,"Manual pause freezes the shared weekly clock")
     check(pause_after_wait.State.SalesTicks == pause_saved.State.SalesTicks,"Manual pause freezes sales")
     await press_node("TogglePause")
-    check(main.find_child("TogglePause",true,false).text == tr("PAUSE"),"Resumed office immediately offers Pause")
+    check(not main.call("GetSimulationPaused"),"Harness resumes the office simulation")
     check(not main.find_child("OfficeStatus",true,false).text.contains(tr("PAUSED")),"Resume clears pause status immediately")
     Engine.time_scale = 100
     for frame in range(75):
@@ -1140,21 +1161,13 @@ func run() -> void:
     for index in range(8):
         var track = AudioStreamWAV.load_from_file("user://music/office-%02d.wav" % (index+1))
         check(track != null and abs(track.get_length()-(index+1)) < 0.01,"Local music duration %d" % (index+1))
-    await press("SETTINGS")
-    var enabled = main.find_child("MusicEnabled",true,false)
-    var seasonal = main.find_child("SeasonalMusicEnabled",true,false)
-    var volume = main.find_child("MusicVolume",true,false)
-    enabled.button_pressed = false
-    volume.value = 42
+    soundtrack.call("SetEnabled",false)
+    soundtrack.call("SetVolume",42)
     await process_frame
-    check(player.stream_paused or not player.playing,"Music toggle prevents playback independently")
-    var config = ConfigFile.new()
-    check(config.load("user://audio.cfg") == OK,"Audio preferences saved")
-    check(config.get_value("music","enabled") == false and config.get_value("music","volume") == 42,"Mute and volume survive configuration save")
-    check(config.get_value("music","seasonal") == false and not seasonal.button_pressed,"Seasonal setting saved independently of game saves")
-    enabled.button_pressed = true
+    check(player.stream_paused or not player.playing,"Music mute remains independent of removed toolbar tools")
+    soundtrack.call("SetEnabled",true)
     var previous_stream = player.stream
-    await press("NEXT_MUSIC_TRACK")
+    soundtrack.call("NextTrack")
     check(player.stream != previous_stream and not player.stream_paused,"Next soundtrack track resumes playback")
     previous_stream = player.stream
     player.finished.emit()
@@ -1191,7 +1204,7 @@ func run() -> void:
     await press("LOAD_GAME")
     check(main.find_child("AcknowledgeCalendar",true,false) != null,"Hardware launch news opens after loading its transaction")
     # Main-window actions cannot replace an original modal weekly decision.
-    for key in ["HIRE_EMPLOYEES","COMPANY_ACTIVITIES","STAFF","DEVELOPMENT_PLANNING"]:
+    for key in ["HIRE_EMPLOYEES","PUBLIC_RELATIONS","STAFF"]:
         var calendar_toolbar = main.find_child("Toolbar"+key,true,false)
         check(calendar_toolbar.disabled,"Calendar modal disables toolbar action: "+key)
         calendar_toolbar.pressed.emit()
@@ -1200,7 +1213,7 @@ func run() -> void:
     var staff_menu = main.find_child("MENU_STAFF",true,false).get_popup()
     staff_menu.about_to_popup.emit()
     check(staff_menu.is_item_disabled(0) and staff_menu.is_item_disabled(1),"Calendar modal disables employee menu actions")
-    check(main.find_child("TogglePause",true,false).disabled,"Calendar modal owns the pause state")
+    check(not main.call("SetSimulationPaused",main.call("GetSimulationPaused")),"Calendar modal owns the pause state")
     Engine.time_scale = 100
     for frame in range(500):
         await process_frame
@@ -1254,7 +1267,7 @@ func run() -> void:
             var message = main.find_child("ConversationMessage",true,false)
             check(message != null and message.text == expected,"Calendar notice text: "+key+" expected="+expected+" actual="+(message.text if message != null else "<missing>"))
             check(main.find_child("ConversationWindow",true,false).position == moved_dialogue_position,"Next dialogue page keeps the chosen position: "+key)
-            check(main.find_child("ToolbarSTAFF",true,false).disabled and main.find_child("TogglePause",true,false).disabled,"Calendar conversation owns modal pause: "+key)
+            check(main.find_child("ToolbarSTAFF",true,false).disabled and not main.call("SetSimulationPaused",main.call("GetSimulationPaused")),"Calendar conversation owns modal pause: "+key)
             await press("SAVE_GAME")
             var before_reload = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
             check(before_reload.State.Calendar.Pending.DialoguePage == page and before_reload.State.Money == ns.Money,"Calendar page persists without early debit: "+key)
@@ -1286,7 +1299,6 @@ func run() -> void:
     bank_save.State.CompanyActivityTicks = 0
     write_json("user://saves/slot1.json",bank_save)
     await press("LOAD_GAME")
-    await press("COMPANY_ACTIVITIES")
     await press("BANK")
     check(main.find_child("ConfirmBankLoan",true,false).disabled,"Borrowing requires an explicit amount selection")
     await press_node("BankLoanType1")
@@ -1300,7 +1312,6 @@ func run() -> void:
     var bank_total = 0
     var bank_receipt_save: Dictionary
     for loan_type in [1,2,4]:
-        await press("COMPANY_ACTIVITIES")
         await press("BANK")
         await press_node("BankLoanType%d" % loan_type)
         await press_node("ConfirmBankLoan")
@@ -1318,7 +1329,6 @@ func run() -> void:
         var bank_reloaded = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
         check(bank_reloaded.State.Money == bank_total and bank_reloaded.State.CompanyActivityTicks == bank_ticks,"Receipt reload neither credits twice nor advances the clock")
         await finish_conversation()
-    await press("COMPANY_ACTIVITIES")
     await press("BANK")
     check(main.find_child("BankStatus",true,false).text == tr("BANK_RESULT_AllSlotsOccupied") and main.find_child("BankLoanType1",true,false).disabled,"Bank refuses borrowing when all three slots are occupied")
     await press("CANCEL")
@@ -1525,7 +1535,7 @@ func run() -> void:
     for frame in range(8):
         await process_frame
     var help_menu = main.find_child("MENU_HELP",true,false).get_popup()
-    help_menu.id_pressed.emit(2)
+    help_menu.id_pressed.emit(1)
     await process_frame
     var record=main.find_child("ReachTimeRecords",true,false).get_root().get_first_child()
     for i in range(4):

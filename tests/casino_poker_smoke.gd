@@ -56,7 +56,7 @@ func run() -> void:
         await create_timer(0.2).timeout
         await press_node("ToolbarSAVE_GAME")
         check(saved().CompanyActivityTicks==ticks,"Card activity pauses office simulation")
-        check(main.find_child("ToolbarSETTINGS",true,false).disabled,"Casino blocks setup while active")
+        check(main.find_child("ToolbarSETTINGS",true,false)==null,"No port setup shortcut in casino")
         await press_node("ToolbarLOAD_GAME")
         await press_node("ToolbarSAVE_GAME")
         check(saved().Casino.Poker.Cards==cards,"Load resumes the same hand without reroll")

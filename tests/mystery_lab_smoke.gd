@@ -18,6 +18,19 @@ func saved() -> Dictionary:
     return JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State
 
 func press_node(name: String) -> void:
+    if name=="TogglePause":
+        check(main.call("SetSimulationPaused",not main.call("GetSimulationPaused")),"Harness simulation pause")
+        await process_frame
+        return
+    if name=="ToolbarSTART_GAME_DEVELOPMENT":
+        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
+        await process_frame
+        return
+    if name=="ToolbarBACK_TO_TITLE":
+        var menu=main.find_child("MENU_GAME",true,false).get_popup()
+        menu.id_pressed.emit(menu.item_count-1)
+        await process_frame
+        return
     var button = main.find_child(name, true, false)
     check(button != null and not button.disabled, name)
     if button != null and not button.disabled:
@@ -27,12 +40,22 @@ func press_node(name: String) -> void:
 func press(key: String) -> void:
     var found := false
     for button in main.find_children("*", "Button", true, false):
-        if button.is_visible_in_tree() and button.text == tr(key):
+        if button.is_visible_in_tree() and (button.text == tr(key) or button.name=="Toolbar"+key):
             check(not button.disabled, "Enabled " + key)
             if not button.disabled:
                 button.pressed.emit()
             found = true
             break
+    if not found:
+        for menu in main.find_children("*","MenuButton",true,false):
+            var popup=menu.get_popup()
+            for item in range(popup.item_count):
+                if popup.get_item_text(item)==tr(key):
+                    popup.about_to_popup.emit()
+                    check(not popup.is_item_disabled(item),"Menu command enabled: "+key)
+                    if not popup.is_item_disabled(item):popup.id_pressed.emit(popup.get_item_id(item))
+                    found=true
+                    break
     check(found, "Localized button " + key)
     await process_frame
 

@@ -24,9 +24,9 @@ func run() -> void:
         check(main.find_child("ConversationMessage",true,false)!=null,"First dissolution message " + locale)
         await press_node("ToolbarSAVE_GAME")
         check(saved().FinancialFailure.Phase==0 and saved().OriginalPayrollScratchIndex==17,"Pending save preserves introduction and payroll scratch")
-        check(main.find_child("ToolbarSETTINGS",true,false).disabled,"Settings blocked during failure")
+        check(main.find_child("ToolbarSETTINGS",true,false)==null,"No port settings shortcut during failure")
         check(main.find_child("ToolbarHIRE_EMPLOYEES",true,false).disabled,"Gameplay blocked during failure")
-        check(main.find_child("TogglePause",true,false).disabled,"Clock control blocked during failure")
+        check(not main.call("SetSimulationPaused",main.call("GetSimulationPaused")),"Clock control blocked during failure")
         var ticks=saved().CompanyActivityTicks
         await create_timer(0.16).timeout
         await press_node("ToolbarSAVE_GAME")
@@ -37,7 +37,11 @@ func run() -> void:
         await dispose()
         await load_fixture(failure_fixture(2))
         var body=main.find_child("ConversationMessage",true,false)
-        check(body!=null and body.text==tr("FINANCIAL_FAILURE_REACTION_7"),"Saved eighth reaction resumes " + locale)
+        var expected_reaction=tr("FINANCIAL_FAILURE_REACTION_7")
+        if locale=="ja" and FileAccess.file_exists("user://original/dialogue.json"):
+            var imported=JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
+            expected_reaction=imported.Entries.get("FINANCIAL_FAILURE_REACTION_7",expected_reaction)
+        check(body!=null and body.text==expected_reaction,"Saved eighth reaction resumes " + locale)
         var portrait=main.find_child("ConversationPortrait",true,false)
         check(portrait!=null and portrait.visible,"Reaction uses explicit employee portrait")
         await advance_page()

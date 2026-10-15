@@ -61,7 +61,7 @@ func run() -> void:
         value.State.EmployeeSources[0].Employee=value.State.Employees[0]
         value.State.EmployeeSources[1].Employee=value.State.Employees[1]
         await load_fixture(value)
-        if main.find_child("TogglePause",true,false)==null:
+        if main.find_child("GameDesktop",true,false)==null:
             for label in main.find_children("*","Label",true,false):
                 if label.text.to_lower().contains("fail") or label.text.to_lower().contains("invalid"):
                     print("Fixture diagnostic: ",label.text)

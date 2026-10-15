@@ -120,6 +120,9 @@ func check_facility_language_switch() -> void:
     var english: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
     var load_control := button("LOAD_GAME")
     TranslationServer.set_locale("ja")
+    main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
+    main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
+    await process_frame
     load_control.pressed.emit()
     var displayed_japanese: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
     for r in regions:
@@ -134,6 +137,9 @@ func check_facility_language_switch() -> void:
         check(same and translated,"Japanese uses the original facility sign and English uses the translated overlay")
     load_control = button("LOAD_GAME")
     TranslationServer.set_locale("en")
+    main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
+    main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
+    await process_frame
     load_control.pressed.emit()
     var restored: PackedByteArray = main.find_child("OriginalOfficeBackground",true,false).texture.get_image().get_data()
     check(restored == english,"Returning to English restores the translated office without changing the save")
@@ -236,12 +242,20 @@ func check(condition: bool, message: String) -> void:
 
 func button(key: String) -> Button:
     for node in nodes_of_type("Button"):
-        if node.text == tr(key) and node.is_visible_in_tree():
+        if (node.text == tr(key) or node.name=="Toolbar"+key) and node.is_visible_in_tree():
             return node
     check(false, "Button missing: " + key)
     return null
 
 func press(key: String) -> void:
+    if key in ["START_GAME_DEVELOPMENT","SECRETARY_ADVICE","SECRETARY_POLICIES","BACK_TO_TITLE"] and main.find_child("GameDesktop",true,false)!=null:
+        for menu in main.find_children("*","MenuButton",true,false):
+            var popup=menu.get_popup()
+            for item in range(popup.item_count):
+                if popup.get_item_text(item)==tr(key):
+                    popup.about_to_popup.emit();check(not popup.is_item_disabled(item),"Native menu command enabled")
+                    if not popup.is_item_disabled(item):popup.id_pressed.emit(popup.get_item_id(item))
+                    await process_frame;return
     var target := button(key)
     if target != null:
         check(not target.disabled, "Button disabled: " + key)
@@ -348,12 +362,14 @@ func run() -> void:
         check(main.find_child(name,true,false) != null,"Original desktop window: " + name)
     check(main.find_child("OriginalDesktopWallpaper",true,false) != null,"Imported original desktop wallpaper")
     check(main.find_child("ToolbarSAVE_GAME",true,false).icon != null,"Original toolbar save icon is loaded")
-    for mapping in [["SAVE_GAME",15],["LOAD_GAME",14],["STAFF",7],["HARDWARE_LICENSES",9],["SALES",6],["COMPANY_ACTIVITIES",8]]:
+    for mapping in [["SAVE_GAME",15],["LOAD_GAME",14],["STAFF",7],["HARDWARE_LICENSES",9],["SALES",6],["HIRE_SECRETARY",8]]:
         var expected = Image.load_from_file("user://original/Graphic/Embedded/Toolbar%d.bmp" % mapping[1])
         var displayed = main.find_child("Toolbar" + mapping[0],true,false).icon.get_image()
         check(displayed.get_data() == expected.get_data(),"Toolbar action uses the intended local bitmap: " + mapping[0])
-    await press("SETTINGS")
-    await press("日本語")
+    TranslationServer.set_locale("ja")
+    main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
+    main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
+    await process_frame
     await press("SECRETARY_ADVICE")
     var local_advice = JSON.parse_string(FileAccess.get_file_as_string("user://original/dialogue.json"))
     check(main.find_child("ConversationMessage",true,false).text == local_advice.Entries.SECRETARY_ADVICE_DevelopGame,"Japanese advice uses locally imported source text")
@@ -370,11 +386,12 @@ func run() -> void:
             matched_secretary_frame = matched_secretary_frame or secretary_pixels.get_data() == expected_secretary.get_data()
         check(matched_secretary_frame,"Secretary conversation uses the verified record-1 portrait and mouth frames")
     await finish_conversation()
-    await press("SETTINGS")
-    await press("English")
-    await press("BACK_TO_OFFICE")
-    check(not button("START_GAME_DEVELOPMENT").disabled, "Development loop is enabled")
-    await press("DEVELOPMENT_PLANNING")
+    TranslationServer.set_locale("en")
+    main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
+    main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
+    await process_frame
+    check(main.find_child("MENU_DEVELOPMENT",true,false)!=null,"Original development menu is available")
+    await press("START_GAME_DEVELOPMENT")
     check(main.find_child("PlanningHardware", true, false).get_root().get_child_count() == 3, "Planning hardware availability")
     check(main.find_child("PlanningAudience", true, false).get_root().get_child_count() == 7, "Planning audience catalog")
     for dropdown_name in ["PlanningHardware", "PlanningAudience"]:
@@ -419,7 +436,7 @@ func run() -> void:
     await press("SAVE_GAME")
     var after_meeting_cancel = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(before_meeting_cancel.State.Money == after_meeting_cancel.State.Money and after_meeting_cancel.State.DevelopmentProjects.is_empty(),"Cancelled discussion does not charge or start development")
-    await press("DEVELOPMENT_PLANNING")
+    await press("START_GAME_DEVELOPMENT")
     await press("PLANNING_MEETING")
     await finish_conversation()
     check(main.find_child("PlanningDiscussionScene",true,false) == null,"Illustration closes before the proposal")
@@ -440,7 +457,7 @@ func run() -> void:
             check(office_background.texture.get_width() == 466 and office_background.texture.get_height() == 290, "Original office bitmap dimensions")
             check(office_background.size == Vector2(466,290), "Office uses original-size pixels")
             check(office_background.get_global_rect().end.x <= main.get_viewport_rect().end.x, "Office fits the viewport")
-            check(button("BACK_TO_TITLE").get_global_rect().end.x <= main.get_viewport_rect().end.x, "Toolbar fits the viewport")
+            check(main.find_child("DesktopToolbar",true,false).get_global_rect().end.x <= main.get_viewport_rect().end.x, "Toolbar fits the viewport")
             for room in range(2):
                 var scale = 1.0 if room == 0 else 2.0
                 office_background.size = Vector2(466,290) if room == 0 else Vector2(932,600)
@@ -484,7 +501,7 @@ func run() -> void:
             await press("SAVE_GAME")
             var after_room_clicks = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
             check(after_room_clicks.State.DevelopmentProjects.is_empty() and after_room_clicks.State.Money == 450000000,"Office action previews do not start work or spend funds")
-            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(3)
+            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
             await process_frame
             var sales_ranking = main.find_child("SalesRankingTable",true,false)
             check(sales_ranking != null and sales_ranking.get_column_title(2) == tr("UNITS_SOLD") and sales_ranking.get_column_title(3) == tr("COMPANY_NAME"),"Sales rankings follow original units-before-company columns")
@@ -510,7 +527,7 @@ func run() -> void:
             buy_buttons[0].pressed.emit()
             await process_frame
         await press("CANCEL")
-        await press("DEVELOPMENT_PLANNING")
+        await press("START_GAME_DEVELOPMENT")
         var selected_hardware = main.find_child("PlanningHardware",true,false)
         var owned_row = selected_hardware.get_root().get_child(2)
         check(owned_row.is_selectable(0),"Purchased license enables quote selection")
@@ -601,8 +618,7 @@ func run() -> void:
             await press("LOAD_GAME")
             if saved != null and saved.State.Employees.size() == 1:
                 # Pause movement before testing actual office-input binding.
-                var pause = main.find_child("TogglePause",true,false)
-                pause.pressed.emit()
+                main.call("SetSimulationPaused",true)
                 await press("SAVE_GAME")
                 var frozen = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
                 var office_image = main.find_child("OriginalOfficeBackground",true,false)
@@ -640,7 +656,7 @@ func run() -> void:
                 await press("CANCEL")
                 check(main.find_child("EmployeeSelectionArrow",true,false) == null,"Closing details removes selected employee arrow")
                 office_image.size = Vector2(466,290)
-                pause.pressed.emit()
+                main.call("SetSimulationPaused",false)
             if OS.get_environment("OPENGDS2_UI_EXPORT_OFFICE") == "1":
                 # Dummy headless rendering does not expose texture.Update pixel
                 # changes through get_image. Reload forces fresh composition.

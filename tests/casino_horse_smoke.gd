@@ -91,7 +91,7 @@ func run() -> void:
         await press_node("ToolbarSAVE_GAME")
         check(saved().Money==draft and saved().Casino.Horse.Stage==1,"Start commits draft once")
         check(saved().CompanyActivityTicks==ticks,"Race freezes office")
-        check(main.find_child("ToolbarSETTINGS",true,false).disabled,"Active race blocks settings")
+        check(main.find_child("ToolbarSETTINGS",true,false)==null,"No port settings shortcut during race")
         await press_node("CloseHorse")
         await dispose()
         await load_raw_fixture(payout_raw(raw_snapshot,award))

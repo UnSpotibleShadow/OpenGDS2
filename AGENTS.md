@@ -1,5 +1,16 @@
 # Development execution safeguards
 
+## Native toolbar correction — 15 October 2026
+
+Owner authorizes merging open PRs. PR110/111/113 are merged; latest main was
+2b303b2e93b04c6c7c1114dda540d85b20265f04 before this follow-up.
+Owner requests the original toolbar order, separate three UP actions, and removal
+of port-only tools from in-game menus as well as the toolbar. Work is on
+codex/native-toolbar-menu. See docs/native-toolbar-20261015.md and external
+scratch/native-toolbar-20261015 checkpoints. Clean build and seven affected checks pass: bilingual toolbar, #112, management,
+presentation continuation, financial failure and window/artwork, plus core loop.
+No exported release, Actions dispatch or visibility change is authorized.
+
 ## Active review tasks — 15 October 2026
 
 The owner authorized execution of all three tasks. Persist the running list in

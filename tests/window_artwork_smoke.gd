@@ -48,7 +48,7 @@ func run() -> void:
         icon=main.find_child("BankWindow",true,false).find_child("WindowTitleIcon",true,false)
         check(icon.texture.get_size()==Vector2(16,16) and icon.texture.get_image().get_pixel(0,0).is_equal_approx(Color.BLUE),"Wrong-sized PNG override falls back to original")
         await close_window("BankWindow")
-        for screen in [["MENU_COMPANY",3,"HardwareLicenceWindow"],["MENU_HELP",2,"ReachTimeRecordsWindow"],["MENU_HELP",3,"SalesRankingWindow"],["MENU_STAFF",0,"StaffRosterWindow"],["MENU_GAME",0,"SaveSlotWindow"],["MENU_GAME",1,"LoadSlotWindow"]]:
+        for screen in [["MENU_COMPANY",3,"HardwareLicenceWindow"],["MENU_HELP",1,"ReachTimeRecordsWindow"],["MENU_HELP",2,"SalesRankingWindow"],["MENU_STAFF",0,"StaffRosterWindow"],["MENU_GAME",0,"SaveSlotWindow"],["MENU_GAME",1,"LoadSlotWindow"]]:
             await menu_choice(screen[0],screen[1]);var dialog=main.find_child(screen[2],true,false)
             check(dialog!=null,"Stable named screen: "+screen[2])
             check(dialog.find_child("WindowTitleIcon",true,false).texture!=null,"Bound native title icon: "+screen[2])
