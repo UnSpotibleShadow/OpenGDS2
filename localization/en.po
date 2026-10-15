@@ -3811,7 +3811,7 @@ msgid "HELP_TOPIC_0"
 msgstr "Game overview"
 
 msgid "HELP_TOPIC_1"
-msgstr "Running the company"
+msgstr "Game flow"
 
 msgid "HELP_TOPIC_2"
 msgstr "Tenants and facilities"
@@ -4154,6 +4154,40 @@ msgstr "Enable original sound effects"
 
 msgid "EFFECTS_VOLUME"
 msgstr "Effects volume"
+
+
+msgid "HELP_PORT_NOTES"
+msgstr "OpenGDS2 notes: The text above translates the original manual. Its poaching reference describes a workflow not yet recovered in OpenGDS2; it is not an available feature. Genre availability follows genre research, rather than an office-size upgrade. Use the employee Training and Use technology screens for learning and activation. Produce more copies from the product report. Saves use modern JSON slots; native GD2 import is not supported. The original website reference is historical."
+
+msgid "HELP_HISTORICAL_WEBSITE"
+msgstr "Original manual website (historical reference)."
+
+msgid "TECHNOLOGY_EFFECT_0"
+msgstr "Reduces the current game's data size. Whole-number rounding applies."
+
+msgid "TECHNOLOGY_EFFECT_1"
+msgstr "Increases current graphics quality. A zero value remains zero."
+
+msgid "TECHNOLOGY_EFFECT_2"
+msgstr "Reduces current bugs. A game with no bugs has nothing to remove."
+
+msgid "TECHNOLOGY_EFFECT_3"
+msgstr "Increases current music quality. A zero value remains zero."
+
+msgid "TECHNOLOGY_EFFECT_4"
+msgstr "Temporarily speeds ordinary work starts; it does not speed debugging. See the original-behavior warning below."
+
+msgid "TECHNOLOGY_EFFECT_5"
+msgstr "Immediately reduces stress. At level 3, the original targets office actor slot 0; see the named recipient below."
+
+msgid "TECHNOLOGY_EFFECT_6"
+msgstr "Increases current fun. A zero value remains zero."
+
+msgid "TECHNOLOGY_EFFECT_7"
+msgstr "Increases current originality. A zero value remains zero."
+
+msgid "TECHNOLOGY_EFFECT_TIMING"
+msgstr "Experience is charged when accepted. Except speed and stress relief, the effect waits for technology work to finish at the development desk. Level and prior applications affect the percentage; repeated uses can have tiny or zero effects. In hardware development, graphics, sound, fun and originality complete required technology steps instead of adding software quality."
 
 msgid "FACILITY_BUY"
 msgstr "Buy facility"

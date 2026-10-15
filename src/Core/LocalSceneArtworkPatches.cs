@@ -5,13 +5,14 @@ namespace OpenGDS2.Core;
 
 public static class LocalSceneArtworkPatches
 {
-    private enum CaptionKind { Hall,Exhibition,Awards,Reviewer,Hardware,Sales,Help }
+    private enum CaptionKind { Hall,Exhibition,Awards,Reviewer,Hardware,Sales,Help,Activity }
     private static readonly Dictionary<string,(string Hash,CaptionKind Caption)> Sources=new()
     {
         ["Graphic/Embedded/SalesAchievement1.bmp"]=("cd90c91984b285314eaa90f2308a7c777c38f8339ce83662deb0f1b1380d503a",CaptionKind.Sales),
         ["Graphic/Embedded/SalesAchievement2.bmp"]=("5408aaf42e6cb6cf62d9f27eb5f11bb9802a76d90ec982e9b59e808ee6a9fd3f",CaptionKind.Sales),
         ["Graphic/Embedded/SalesAchievement3.bmp"]=("75200e805a6dd895690613114db1236685da0567f66bf6004091814d43d0ef0e",CaptionKind.Sales),
         ["Graphic/Embedded/SalesAchievement4.bmp"]=("4d83b70f255f4865121dea66b7d87962a73d51fd751975cf1c804a48712072ad",CaptionKind.Sales),
+        ["Graphic/Embedded/CompanyActivity.bmp"]=("b0785e95880be0733e0b353c48a8c6f6bedb75fc3c0a41d4940f9d6bf78ed783",CaptionKind.Activity),
         ["Graphic/Embedded/HelpTitle.bmp"]=("7e757001444ac208ac36c36ea787a078f79e125fe05b83b714069f452bfb0a97",CaptionKind.Help),
         ["Graphic/Embedded/HardwareLaunchScene.bmp"]=("c8ac9409990d3b897fc7ef49204b99df3e47d0a3d9c20d5dae8cc478497c57c0",CaptionKind.Hardware),
         ["Graphic/Embedded/HallCelebration1.bmp"]=("c0ec11169f963601cfcd731bce62d1dd76b00e11fd1b51b61b079d611ffc23b8",CaptionKind.Hall),
@@ -31,7 +32,7 @@ public static class LocalSceneArtworkPatches
         if(Convert.ToHexString(SHA256.HashData(pixels)).ToLowerInvariant()!=spec.Hash)return null;
         string path=ProjectSettings.GlobalizePath("user://localized-artwork/en/event-captions-m101-v1/"+spec.Hash+"/"+System.IO.Path.GetFileNameWithoutExtension(relative)+".png");
         if(File.Exists(path))return path;
-        using var patch=Image.CreateFromData(image.GetWidth(),image.GetHeight(),false,Image.Format.Rgb8,spec.Caption==CaptionKind.Sales ? LocalSceneCaptionRules.PatchSales(pixels,relative[^5]-'0') : spec.Caption==CaptionKind.Help ? LocalSceneCaptionRules.PatchHelp(pixels) : spec.Caption==CaptionKind.Hardware ? LocalSceneCaptionRules.PatchHardware(pixels) : spec.Caption==CaptionKind.Reviewer ? LocalSceneCaptionRules.PatchReviewer(pixels,relative[^5]-'0') : spec.Caption==CaptionKind.Awards ? LocalSceneCaptionRules.PatchAwards(pixels) : LocalSceneCaptionRules.Patch(pixels,spec.Caption==CaptionKind.Hall));
+        using var patch=Image.CreateFromData(image.GetWidth(),image.GetHeight(),false,Image.Format.Rgb8,spec.Caption==CaptionKind.Activity ? LocalSceneCaptionRules.PatchActivity(pixels) : spec.Caption==CaptionKind.Sales ? LocalSceneCaptionRules.PatchSales(pixels,relative[^5]-'0') : spec.Caption==CaptionKind.Help ? LocalSceneCaptionRules.PatchHelp(pixels) : spec.Caption==CaptionKind.Hardware ? LocalSceneCaptionRules.PatchHardware(pixels) : spec.Caption==CaptionKind.Reviewer ? LocalSceneCaptionRules.PatchReviewer(pixels,relative[^5]-'0') : spec.Caption==CaptionKind.Awards ? LocalSceneCaptionRules.PatchAwards(pixels) : LocalSceneCaptionRules.Patch(pixels,spec.Caption==CaptionKind.Hall));
         Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path)!);
         if(patch.SavePng(path)!=Error.Ok)throw new IOException("Could not write the local English scene caption.");
         return path;

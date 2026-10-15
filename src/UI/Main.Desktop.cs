@@ -182,16 +182,20 @@ public partial class Main
         if (state.FinancialFailure is null && !state.Casino.ActivityOpen) OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
             "SHORT_MUSIC", "SHORT_ACCURACY", "SHORT_SPEED", "SHORT_INSPIRATION", "SHORT_EXPERIENCE"], [86, 32, 22, 22, 22, 22, 22, 22, 22, 50]);
+        staff.EnableVerticalResize();
         staff.Body.AddChild(_staffTable); _staffTable.ItemActivated += () =>
         {
-            if (_dialog is not null) return;
+            if (_dialog is not null && !_clockRunning) return;
             var selected = _staffTable.GetSelected();
             if (selected is null) return;
             int index = _staffRows.IndexOf(selected);
             if (index >= 0 && index < state.Employees.Count) ShowEmployeeDetails(state,state.Employees[index]);
         };
         var products = ChildWindow("ProductWindow", Tr("PRODUCT_WINDOW"), new Vector2(30, 356), new Vector2(390, 150));
-        _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [150, 65, 70, 70]);
+        _productTable = CreateTable("DesktopProductTable", ["GAME_TITLE", "RETAIL_PRICE", "UNITS_SOLD", "STOCK"], [134, 65, 70, 70]);
+        products.EnableVerticalResize();
+        _productTable.ScrollHorizontalEnabled=false;
+        _productTable.AddThemeFontSizeOverride("title_button_font_size",10);
         StyleSelection(_productTable,new(1,.68f,1));
         var instruction=new Label {Text=Tr("PRODUCT_LIST_INSTRUCTION"),HorizontalAlignment=HorizontalAlignment.Center};instruction.AddThemeFontSizeOverride("font_size",10);products.Body.AddChild(instruction);
         products.Body.AddChild(_productTable); _productTable.ItemActivated += () =>
@@ -383,7 +387,7 @@ public partial class Main
         SyncRows(_productTable, _productRows, state.ReleasedGames.Count);
         for (int index = 0; index < state.ReleasedGames.Count; index++)
         {
-            var game = state.ReleasedGames[index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
+            var game = state.ReleasedGames[state.ReleasedGames.Count-1-index];_productRows[index].SetMetadata(0,game.ProductIndex); string[] values = [game.Title, game.Price.ToString("N0"), game.UnitsSold.ToString("N0"), game.Stock.ToString("N0")];
             for (int col = 0; col < values.Length; col++) _productRows[index].SetText(col, values[col]);
             if(game.ProductIndex==selectedProductId)_productRows[index].Select(0);
         }

@@ -5,7 +5,7 @@ public static class NativeWindowArtwork
 {
     private static readonly Dictionary<string,string> Forms=new()
     {
-        ["BankWindow"]="fGMBank",["SaveSlotWindow"]="fGMGameSave",["LoadSlotWindow"]="fGMGameLoad",["ActivityConfirmationWindow"]="fGMSeisanZ",
+        ["CasinoSelector"]="fGMTenantCasinoSn",["CasinoCoinPurchase"]="fGMTenantCasinoSn",["BankWindow"]="fGMBank",["SaveSlotWindow"]="fGMGameSave",["LoadSlotWindow"]="fGMGameLoad",["ActivityConfirmationWindow"]="fGMSeisanZ",
         ["PlanningDiscussionScene"]="fGMKikakuKaigi",["HardwareLicenceWindow"]="fGMHLicense",["StaffRosterWindow"]="fGMSyain",
         ["TechnologyUseWindow"]="fGMInfo",["ReachTimeRecordsWindow"]="fGMToutatuRank",["SalesRankingWindow"]="fGMRank100",["AdditionalProductionWindow"]="fGMSyukkaSai",["SalesHistoryWindow"]="fGMZishaK",
         ["OfficeWindow"]="fMainVisual",["CompanyWindow"]="fGMInfo",["CompanyInformationWindow"]="fGMInfo",["EmployeeDetailsWindow"]="fGMInfo",["EmployeeWindow"]="fGMSyain",["ProductWindow"]="fGMZisha",

@@ -3978,5 +3978,39 @@ msgstr "オリジナル効果音を有効にする"
 msgid "EFFECTS_VOLUME"
 msgstr "効果音の音量"
 
+
+msgid "HELP_PORT_NOTES"
+msgstr "OpenGDS2 の補足"
+
+msgid "HELP_HISTORICAL_WEBSITE"
+msgstr "原作のホームページ（当時の情報です）。"
+
+msgid "TECHNOLOGY_EFFECT_0"
+msgstr "開発中ゲームのデータ量を減らします。整数に切り捨てられます。"
+
+msgid "TECHNOLOGY_EFFECT_1"
+msgstr "現在のグラフィックを増加。元の値が0なら増えません。"
+
+msgid "TECHNOLOGY_EFFECT_2"
+msgstr "現在のバグを減らします。バグ0では変化しません。"
+
+msgid "TECHNOLOGY_EFFECT_3"
+msgstr "現在の音楽を増加。元の値が0なら増えません。"
+
+msgid "TECHNOLOGY_EFFECT_4"
+msgstr "通常作業の開始を一時的に速めます。デバッグは速くなりません。下の原作動作の注意も確認してください。"
+
+msgid "TECHNOLOGY_EFFECT_5"
+msgstr "ストレスを即座に減らします。レベル3では原作同様、社員スロット0が対象です。下の対象者名を確認してください。"
+
+msgid "TECHNOLOGY_EFFECT_6"
+msgstr "現在のおもしろさを増加。元の値が0なら増えません。"
+
+msgid "TECHNOLOGY_EFFECT_7"
+msgstr "現在の斬新さを増加。元の値が0なら増えません。"
+
+msgid "TECHNOLOGY_EFFECT_TIMING"
+msgstr "使用時に経験値を消費。速度とストレス以外は開発机での技術作業が完了してから反映されます。習得レベルと使用回数で効果が変わり、繰り返すと僅か、または0になることがあります。ハード開発では画像・音楽・おもしろさ・斬新さは品質加算でなく必要技術の工程を完了します。"
+
 msgid "FACILITY_BUY"
 msgstr "施設を購入"

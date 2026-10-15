@@ -13,7 +13,23 @@ public partial class DesktopWindow : PanelContainer
     private Vector2 _dragOrigin;
     private Vector2 _mouseOrigin;
     private bool _dragging;
-    public bool IsDragging=>_dragging;
+    private bool _resizing;
+    private float _resizeStartHeight, _resizeStartMouseY, _minimumHeight;
+    public bool IsDragging=>_dragging || _resizing;
+
+    public void EnableVerticalResize()
+    {
+        _minimumHeight=Size.Y;
+        var grip=new Control {Name="VerticalResizeHandle",CustomMinimumSize=new(0,6),MouseDefaultCursorShape=CursorShape.Vsize,TooltipText=""};
+        Body.GetParent().AddChild(grip);
+        grip.GuiInput+=input=>
+        {
+            if(input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} && !_minimized && _restore is null)
+            {
+                _resizing=true;_resizeStartHeight=Size.Y;_resizeStartMouseY=GetGlobalMousePosition().Y;MoveToFront();grip.AcceptEvent();
+            }
+        };
+    }
     private TextureRect? _icon;
     public void SetNativeIcon(string windowName)
     {
@@ -23,9 +39,17 @@ public partial class DesktopWindow : PanelContainer
         _title.Size=new(Math.Max(0,Size.X-_title.Position.X-_captionReserve),20);
     }
     public override void _Input(InputEvent input)
-    {if(_dragging&&input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:false})_dragging=false;}
+    {
+        if(input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:false}) {_dragging=false;_resizing=false;}
+        if(_resizing && input is InputEventMouseMotion && _bounds is not null)
+        {
+            float maximum=Math.Max(_minimumHeight,_bounds.Size.Y-Position.Y);
+            Size=new(Size.X,Math.Clamp(_resizeStartHeight+GetGlobalMousePosition().Y-_resizeStartMouseY,_minimumHeight,maximum));
+            _expandedSize=Size;
+        }
+    }
     public override void _Notification(int what)
-    {if(what==NotificationApplicationFocusOut||what==NotificationVisibilityChanged&&!IsVisibleInTree())_dragging=false;}
+    {if(what==NotificationApplicationFocusOut||what==NotificationVisibilityChanged&&!IsVisibleInTree()){_dragging=false;_resizing=false;}}
     private bool _minimized;
     private Rect2? _restore;
     private Vector2 _expandedSize;
@@ -74,7 +98,7 @@ public partial class DesktopWindow : PanelContainer
     public override void _ExitTree()
     {
         if (_bounds is not null && GodotObject.IsInstanceValid(_bounds)) _bounds.Resized -= FitInsideWorkspace;
-        _bounds = null;_dragging=false;
+        _bounds = null;_dragging=false;_resizing=false;
     }
 
     private void FitInsideWorkspace()

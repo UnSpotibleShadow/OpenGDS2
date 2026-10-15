@@ -1,5 +1,30 @@
 # Development execution safeguards
 
+## Active review tasks — 15 October 2026
+
+The owner authorized execution of all three tasks. Persist the running list in
+`/workspace/review-task-list.md` and read it when continuing this review round.
+Task 1: fully translate the original five Help pages / 91 recovered text blocks
+into English, replacing summaries; retain Japanese and distinguish port-specific
+notes. Implementation is now authorized.
+Task 2: issue #112 is now ready to read/scope. Owner authorizes closing it
+after its requirements are completed and verified.
+Task 3: audit all eight player-activated technologies for actual effects, costs,
+completion/duration, level scaling, interruptions and save/load against original
+behavior. Investigation is authorized; do not assume all currently work.
+
+The October 15 batch is implemented and verified: 91 Help blocks translated;
+#112 source-proven product order, bounded/resizable lists, live-report employee
+activation, native casino selector and activity confirmation; all eight technology
+effects audited and their feedback clarified. No gameplay service was changed.
+Clean build,531 optional-original domain checks and seven relevant Godot checks
+pass. See docs/review112-help-technology-audit.md. Publication receipt is
+scratch/review-20261015/verification.json; branch codex/review112-help-technology-audit.
+Keep pending PR110/111 independent, #95 open; no merge/export/Actions authorized.
+CompanyActivity.bmp needs reimport. Its English FAME/GENRES/OUTPUT labels are
+now patched locally with exact-source fingerprint and bounded region guards;
+Japanese and explicit overrides retain their paths.
+
 ## Active M105 — presentation plan, one step at a time
 
 The owner authorized all remaining steps on 2026-10-14 while going to bed,

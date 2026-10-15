@@ -69,7 +69,7 @@ public partial class Main
             var result=TechnologyApplicationService.CheckUse(state,employee,technology);
             var row=new HBoxContainer();list.AddChild(row);
             var select=new Button {Name="SelectUseTechnology"+technology.SourceIndex,Text=$"{TechnologyName(technology)} · {Tr("LEVEL")} {level}",SizeFlagsHorizontal=SizeFlags.ExpandFill,ClipText=true};select.AddThemeFontSizeOverride("font_size",11);row.AddChild(select);
-            string note=TranslationServer.GetLocale().StartsWith("en")?string.Format(Tr("TECHNOLOGY_USE_DESCRIPTION"),TechnologyName(technology)):technology.Description;
+            string note=TranslationServer.GetLocale().StartsWith("en")?Tr("TECHNOLOGY_EFFECT_"+technology.Identifier)+"\n"+Tr("TECHNOLOGY_EFFECT_TIMING"):technology.Description;
             if(technology.Identifier==4){Boundary("SpeedTechnologyNote",Tr("SPEED_TECHNOLOGY_NOTE"));if(employee.Office is {WorkTier:4,WorkTicks:>0})Boundary("SpeedTechnologyInterruptedWork",Tr("SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"));}
             if(technology.Identifier==4)note+="\n"+Tr("SPEED_TECHNOLOGY_NOTE")+(employee.Office is {WorkTier:4,WorkTicks:>0}?"\n"+Tr("SPEED_TECHNOLOGY_INTERRUPTS_APPLICATION"):"");
             if(technology.Identifier==5&&level==3){var target=TechnologyApplicationService.LevelThreeStressTarget(state);Boundary("StressReliefSourceTarget",target is null?Tr("STRESS_RELIEF_MAPPING_UNKNOWN"):string.Format(Tr("STRESS_RELIEF_SLOT_ZERO"),EmployeeName(target)));}
