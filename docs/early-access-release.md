@@ -1,19 +1,21 @@
 # Early Access release preparation
 
-Prepared version: **0.1.0-ea.1**. The announced target is 16 October 2026,
-19:00 CEST / 17:00 UTC, subject to readiness. The final Windows artifact has not
-yet been exported, accepted or published. Private RC.4/M90 packages are historical
-and must not be relabeled as containing current source changes.
+Prepared version: **0.1.0-ea.1**, proposed tag **v0.1.0-ea.1**.
+The owner completed the final gameplay review on 16 October 2026 with no further
+feedback. The gameplay baseline is PR131, `eca4921353cd48b5525cec3a1c3d351c30175b42`.
+The owner will build and publish the release themselves. No build/export/package,
+tag, GitHub release, upload or visibility change is part of this handoff. The
+previous announced date was a target, not evidence of an available download.
 
-The owner is performing the final gameplay review. The cleanup prepares version
-and UI wording, current documents and package-document rendering. The subsequent
-owner-approved data-folder change sets the permanent name to `OpenGDS2`, across
-versions and release labels, with a one-time non-destructive legacy copy. Gameplay
-and save formats are unchanged. See [data migration](stable-user-data.md).
+Use [the owner handoff](release-handoff.md) for the remaining manual steps and
+[copy-ready GitHub release notes](release-0.1.0-ea.1.md). Final package identity and
+Windows acceptance cannot be recorded until that package exists. Historical
+RC.4/M90 packages must not be relabeled as containing current source changes.
+The permanent data folder is `OpenGDS2`; see [data migration](stable-user-data.md).
 
 ## Release gates
 
-- [ ] Record the owner's final review and fix known crashes, save corruption, duplicate transactions and dead ends in supported workflows.
+- [x] Owner completed final gameplay review with no further feedback (16 October 2026).
 - [ ] Merge the reviewed release-preparation source; freeze its exact commit and version.
 - [ ] Review tracked/history/hosted content before making the repository public; verify original-content exclusions and existing code/runtime/community-music notices.
 - [ ] Build a fresh Windows x64 release export and identify its source, runtime, ZIP and checksums.

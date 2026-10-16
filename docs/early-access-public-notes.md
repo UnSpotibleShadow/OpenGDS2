@@ -27,6 +27,9 @@ exhibition/award conversations, per-facility artwork and messages, and all six
 promotion scenes. The TV's English lettering follows its screen boundaries.
 All 65 rival games, ten rival publishers and development examples have English
 display names; player-entered titles and Japanese names remain unchanged.
+The Company panel restores the original colored sections, profit rows, highest
+sales and tenant information. The title menu and short management notices now
+fit their contents, with a translated title image and the game window icon.
 The five original Help pages have English text. Gameplay backup/virus handling,
 periodic employee poaching and original toolbar/settings routes are connected.
 

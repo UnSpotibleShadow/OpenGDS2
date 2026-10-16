@@ -6,7 +6,7 @@ Run a game studio: hire and train employees, develop games, ship them, follow re
 
 ## Early Access
 
-**Target release: Friday, 16 October 2026, at 19:00 CEST.** This is a release target, not an available download announcement. Current source prepares `0.1.0-ea.1`; the final downloadable package is not yet published.
+**Preparing the first Early Access release, `0.1.0-ea.1`.** The final gameplay review is complete. The maintainer will build and publish the downloadable package; no public download is announced yet.
 
 The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 

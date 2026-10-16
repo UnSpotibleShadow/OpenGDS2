@@ -1,19 +1,19 @@
 # OpenGDS2 working instructions
 
-## Current work — compact text notices, 16 October 2026
+## Current work — release handoff, 16 October 2026
 
-Company summary completed and merged PR130 (`056410b8288ec177509bb4ebefadd22cba26d4f7`),
-seven files synced; bilingual render/value checks, clean build/import, core-loop
-and Python checks passed. Owner additionally requests compact generic notices,
-showing the oversized Consumer Investigation receipt. Branch
-`codex/compact-notice-dialogs`, same base. Recovery:
-`/workspace/scratch/compact-notices-20261016/`. Fit text-only recall/dismissal/
-legacy/failure/calendar/production-block notices to content with compact action
-rows. Keep fixed native/list/artwork layouts, callbacks, accounting, saves and
-acknowledgement behavior. Verify EN/JA wrapping, save status growth, cancel and
-recall acknowledgements. Clean build/import and rendered EN/JA checks passed,
-including Save/Load/Continue, status grow/shrink and no repeated refund. Standing verified-PR merge authorization continues;
-keep #95/#118 open. No export/release/visibility/Actions changes.
+Owner completed the final gameplay review with no further feedback. PR130 restores
+Company summary sections; PR131 compacts text notices. Both are merged and synced.
+Gameplay baseline: `eca4921353cd48b5525cec3a1c3d351c30175b42`.
+Prepare source documentation and copy-ready release notes only. Owner explicitly
+reserves building and GitHub publication: DO NOT build, export, package, tag,
+create a GitHub release, upload assets, change visibility or enable Actions.
+No extra permission question is needed to finish this documentation handoff.
+Keep #95/#118 open. Exact final-package Windows acceptance remains unrecorded;
+the owner's gameplay sign-off must not be described as acceptance of a future ZIP.
+See [owner release handoff](docs/release-handoff.md). Recovery:
+`/workspace/scratch/release-handoff-20261016/`. Verified documentation PR merge
+and explicit snapshot sync remain authorized.
 
 ## Current source and history
 
