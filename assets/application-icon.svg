@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Authored OpenGDS2 fallback. The imported original icon takes over at runtime. -->
+  <path fill="#25354b" d="M6 6h52v40H38v6h16v6H10v-6h16v-6H6z"/>
+  <path fill="#e6eef4" d="M10 10h44v32H10z"/>
+  <path fill="#28aab8" d="M14 14h36v24H14z"/>
+  <path fill="#fff0ae" d="M24 18h6v16h-6zm10 0h6v16h-6z"/>
+</svg>

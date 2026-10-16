@@ -35,7 +35,7 @@ func run() -> void:
         root.add_child(main)
         await process_frame
         check(main.find_child("BuildVersion",true,false).text==tr("EARLY_ACCESS_LABEL")+" — "+str(ProjectSettings.get_setting("application/config/version")),"Localized EA title and configured version "+locale)
-        check(root.title.contains(str(ProjectSettings.get_setting("application/config/version"))),"Application and project versions agree "+locale)
+        check(root.title=="Open Game Dev Story II","Friendly application title "+locale)
         check(not main.find_child("BuildVersion",true,false).text.contains("Private"),"Title has no private-candidate label "+locale)
         check(main.find_child("EarlyAccessBoundary", true, false).text == tr("EARLY_ACCESS_BOUNDARY"), "Localized campaign boundary " + locale)
         main.call("ShowEarlyAccessScope")

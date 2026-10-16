@@ -6187,6 +6187,14 @@ Test("native horse raster keeps masks clipping and even rounding",()=>
 });
 if (args.Length == 2)
 {
+    Test("imported game-start icon matches the separate original application resource",()=>
+    {
+        var exe=File.ReadAllBytes(args[0]);const int offset=0x2301E2;
+        var icon=NativePresentationAssetImporter.Icon(exe.AsSpan(offset,BitConverter.ToInt32(exe,offset-4)).ToArray());
+        var pixels=icon.Rgba;for(int i=0;i<pixels.Length;i+=4)if(pixels[i+3]==0){pixels[i]=pixels[i+1]=pixels[i+2]=0;}
+        Check(icon.Width==16&&icon.Height==16);
+        Check(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(pixels)).ToLowerInvariant()=="c4d94d7c2ab04f612c22c920b3f136e41990e9934224262fee6b4f87474ce719");
+    });
     Test("optional original native window icons match independent decoded pixels",()=>
     {
         var exe=File.ReadAllBytes(args[0]);

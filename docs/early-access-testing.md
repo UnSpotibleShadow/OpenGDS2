@@ -9,7 +9,7 @@ known crashes, save loss, duplicate transactions and supported-workflow dead end
 ## Start safely
 
 1. Extract the entire ZIP into a fresh folder. Keep both executables, the PCK and managed-runtime directory together.
-2. Run OpenGDS2.exe or OpenGDS2.console.exe. The title/window version must match BUILD_MANIFEST.json. No editor or separate .NET installation is required.
+2. Run OpenGDS2.exe or OpenGDS2.console.exe. The window title is Open Game Dev Story II; the in-game version must match BUILD_MANIFEST.json. No editor or separate .NET installation is required.
 3. Read GETTING_STARTED.txt for the package's exact data folder. Back up existing modern saves before upgrading or transferring them. This testing pass must not silently overwrite your ordinary or private-review data.
 4. Import your legally obtained GameDev2DX.lzh locally. Start a fresh company for the fresh-start check and read KNOWN_ISSUES.md. Test an existing compatible modern save separately using a copy. Original saves are unsupported.
 5. To capture diagnostics, run `.\OpenGDS2.console.exe --log-file opengds2-test.log` from a terminal in the extracted directory.

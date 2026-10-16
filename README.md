@@ -1,6 +1,6 @@
 # OpenGDS2
 
-An unofficial community reconstruction of **Game Dev Story 2 DX**, the 2001 PC game, built with **Godot 4 and C#/.NET 8**.
+**Open Game Dev Story II** is an unofficial community reconstruction of **Game Dev Story 2 DX**, the 2001 PC game, built with **Godot 4 and C#/.NET 8**.
 
 Run a game studio: hire and train employees, develop games, ship them, follow reviews and sales, and reinvest in your company. OpenGDS2 brings the original game into a modern engine, with English and Japanese interfaces and modern save support.
 

@@ -26,9 +26,11 @@ func run() -> void:
     await process_frame
     await process_frame
     var version = ProjectSettings.get_setting("application/config/version", "")
-    if not require(root.title == "OpenGDS2 " + version, "Managed Main._Ready executes and identifies the candidate"):
+    if not require(root.title == "Open Game Dev Story II", "Managed Main._Ready applies the friendly game title"):
         return
     if not require(main.find_child("BuildVersion", true, false) != null, "Managed title interface was created"):
+        return
+    if not require(main.find_child("BuildVersion",true,false).text.contains(str(version)), "Exported version remains visible in-game"):
         return
     TranslationServer.set_locale("en")
     if not require(tr("CHECKPOINT_FEE") == "Fee" and tr("CHECKPOINT_EXAMPLES") == "Example titles", "Current translations load in the export"):

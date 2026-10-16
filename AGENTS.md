@@ -1,21 +1,19 @@
 # OpenGDS2 working instructions
 
-## Current work — stable user data, 16 October 2026
+## Current work — application identity, 16 October 2026
 
-Owner requests the permanent `OpenGDS2` data directory with a safe first-launch
-copy from `OpenGDS2-EarlyAccessTesting`. Work on `codex/stable-user-data`, base
-`44ee187b31a1035206fe726939e76a6db7629213`. Recovery records:
-`/workspace/scratch/stable-user-data-20261016/`. Preserve the legacy folder and
-existing destination files; migration must resume safely without mixing save
-backups or hiding failures behind a fresh game. No save-format change. Verified:
-570 original-backed domain checks, clean build/import, 76 Python checks (17
-optional-original skipped), actual migration/load/Retry and bilingual recovery/
-fresh-data UI checks.
-
-The owner is doing the final review. Release/tag/export/visibility/Actions changes
-remain separate release steps. Standing authorization permits merging verified
-PRs. Keep #95/#118 open for review. The release plan is locally recorded at
-`/workspace/release-plan-20261016.md`; update the folder decision there on completion.
+Owner requests the exact window title `Open Game Dev Story II` and the original
+game icon instead of Godot. Branch `codex/application-identity`, base
+`56c621e99df210bc135c0e368a22b2800758f02a`. Recovery records:
+`/workspace/scratch/application-identity-20261016/`. Use the already-imported,
+PE-verified application icon; original pixels remain local. Supply an authored
+fallback before import. Preserve assembly/executable/data identity `OpenGDS2`.
+Verify actual desktop window title/icon, fallback and import refresh; keep the
+version visible in-game. Verified: 571 original-backed domain checks; clean
+build/import; 76 Python checks (17 optional-original skipped); exact native X11
+title/icon pixels before import, after refresh and restart; bilingual startup/
+recovery. No export, release, visibility or Actions changes.
+Standing verified-PR merge authorization continues; keep #95/#118 open.
 
 ## Current source and history
 
