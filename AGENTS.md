@@ -1,20 +1,20 @@
 # OpenGDS2 working instructions
 
-## Current work — compact title menu, 16 October 2026
+## Current work — original Company summary sections, 16 October 2026
 
-Owner requests smaller title-screen buttons and an English pixel-patch of the
-Japanese logo. Branch `codex/compact-title-screen`, base
-`4418f24a0f530e64547f6d30691475760e893013`. Recovery:
-`/workspace/scratch/compact-title-screen-20261016/`. Keep all ten title actions,
-backup availability, version/campaign notes, import and Japanese behavior.
-Use a title-only compact menu; keep other screen layouts unchanged. Generate
-English lettering only over the verified local title image's top 165-pixel band,
-excluding the tower cap; original city/mascot pixels below remain unchanged. Keep original pixels and
-captures outside git. Verify 720p/tall layout, Japanese, custom overrides and
-scope/recovery/startup. All pass: 572 original-backed domain checks, clean build/
-import, rendered bilingual/tall-menu checks, scope/recovery and fresh startup.
-Standing verified-PR merge authorization continues;
-keep #95/#118 open. No export, release, visibility or Actions changes.
+Owner supplies the original Company window and requests matching data/sections.
+Branch `codex/company-summary-sections`, base
+`9680e270a48b7f3f06615e473fe8767e2099b5e0`. Recovery:
+`/workspace/scratch/company-summary-20261016/`. Restore blue identity/funds,
+orange recognition/capacity/library, yellow released/Hall counts and highest-sales
+record, green weekly/monthly/yearly profits, cyan three tenants. Include capacity
+×100 copies and library percentage. Keep unknown legacy values unknown; no save
+format/economics changes. Original rank controls are clipped below the compact
+window, not an established progression system; remove the exposed summary row.
+Verified: clean build/import, rendered English/Japanese values and section bounds,
+records/tenants/unknown saves, existing core-loop and full Python checks.
+Standing verified-PR merge authorization continues; keep #95/#118 open. No export,
+release, visibility or Actions changes. Original pixels/captures remain local.
 
 ## Current source and history
 

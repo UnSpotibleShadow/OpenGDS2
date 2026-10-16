@@ -159,27 +159,8 @@ public partial class Main
             office.Body.AddChild(viewport);viewport.AddChild(officeImage);
         }
         else office.Body.AddChild(new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
-        var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(186, 318));
-        foreach (var group in new[] {
-            new[] { "COMPANY_NAME", "FUNDS" }, new[] { "WEEKLY_NET", "MONTHLY_NET", "YEARLY_NET" }, new[] { "COMPANY_FAME", "PRODUCTION_CAPACITY", "GENRE_RESEARCH" },
-            new[] { "COMPANY_RANK", "RELEASED_COUNT", "HALL_OF_FAME_COUNT" }, new[] { "DATE", "STAFF" } })
-        {
-            var panel = new PanelContainer(); company.Body.AddChild(panel);
-            Color shade = group[0] switch { "COMPANY_NAME" => new Color(0.78f, 0.76f, 1),
-                "COMPANY_FAME" => new Color(1, 0.9f, 0.75f), "COMPANY_RANK" => new Color(1, 1, 0.78f),
-                _ => new Color(0.7f, 0.97f, 1) };
-            panel.AddThemeStyleboxOverride("panel", new StyleBoxFlat { BgColor = shade,
-                ContentMarginLeft = 3, ContentMarginRight = 3 });
-            var rows = new VBoxContainer(); rows.AddThemeConstantOverride("separation", 0); panel.AddChild(rows);
-            foreach (string key in group)
-            {
-                var row = new HBoxContainer(); rows.AddChild(row);
-                var name = new Label { Text = Tr(key), SizeFlagsHorizontal = SizeFlags.ExpandFill };
-                name.AddThemeFontSizeOverride("font_size", 11); row.AddChild(name);
-                var value = new Label { Name="CompanyMetric"+key, HorizontalAlignment = HorizontalAlignment.Right };
-                value.AddThemeFontSizeOverride("font_size", 11); row.AddChild(value); _companyMetrics[key] = value;
-            }
-        }
+        var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(240, 330));
+        BuildCompanySummary(company);
         var facilities=new Button {Name="CompanyFacilities",Text=Tr("COMPANY_FACILITIES")};
         var companyActions=new HBoxContainer();companyActions.AddThemeConstantOverride("separation",2);company.Body.AddChild(companyActions);
         facilities.SizeFlagsHorizontal=SizeFlags.ExpandFill;facilities.AddThemeFontSizeOverride("font_size",11);companyActions.AddChild(facilities);
@@ -357,19 +338,7 @@ public partial class Main
         foreach (var button in _desktop!.FindChildren("Toolbar*","Button",true,false).OfType<Button>())
             button.Disabled=!button.GetMeta("base_enabled").AsBool() || !DesktopActionEnabled(button.Name.ToString()[7..]);
         _desktopFunds.Text = $"{string.Format(DisplayNumbers.Provider,Tr("TOOLBAR_YEAR"),state.Year?.ToString()??"?")}   {Tr("FUNDS")}: ¥{DisplayNumbers.Format(state.Money)}";
-        _companyMetrics["COMPANY_NAME"].Text = state.Company.Name;
-        _companyMetrics["FUNDS"].Text = state.Money?.ToDisplayNumber()?? "?";
-        _companyMetrics["WEEKLY_NET"].Text=state.Company.WeeklyNet?.ToDisplayNumber()?? "?";
-        _companyMetrics["MONTHLY_NET"].Text=state.Company.MonthlyNet?.ToDisplayNumber()?? "?";
-        _companyMetrics["YEARLY_NET"].Text=state.Company.YearlyNet?.ToDisplayNumber()?? "?";
-        _companyMetrics["COMPANY_FAME"].Text = state.Company.Fame is int fame ? $"{fame}%" : "?";
-        _companyMetrics["PRODUCTION_CAPACITY"].Text = state.Company.ProductionCapacity?.ToString() ?? "?";
-        _companyMetrics["GENRE_RESEARCH"].Text = state.Company.OriginalMember90?.ToString() ?? "?";
-        _companyMetrics["COMPANY_RANK"].Text = state.Company.Rank is int rank ? Tr($"COMPANY_RANK_{rank}") : "?";
-        _companyMetrics["DATE"].Text = $"{state.Year}/{state.Month}/{state.Week}";
-        _companyMetrics["STAFF"].Text = state.Employees.Count.ToString();
-        _companyMetrics["RELEASED_COUNT"].Text = state.ReleasedGames.Count.ToString();
-        _companyMetrics["HALL_OF_FAME_COUNT"].Text = state.ReleasedGames.Count(x => x.HallOfFame).ToString();
+        RefreshCompanySummary(state);
         string projects = string.Join(" · ", state.DevelopmentProjects.Select(ProjectSummary).Select(x => x.Replace('\n', ' ')));
         _desktopStatus.Text = !string.IsNullOrEmpty(_toolbarHelp) ? _toolbarHelp :
             (_paused ? Tr("PAUSED") + " · " : "") + (string.IsNullOrEmpty(projects)
