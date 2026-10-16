@@ -163,54 +163,7 @@ public partial class Main : Control
         DestroyDesktop();
         _music?.SetTitleActive();
         ClearContent();
-        var titleTexture = OriginalAssetStore.LoadTexture("Graphic/Title.bmp");
-        if (titleTexture is not null)
-        {
-            var rect = new TextureRect
-            {
-                Texture = titleTexture,
-                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
-                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                CustomMinimumSize = new Vector2(558, 300)
-            };
-            _content.AddChild(rect);
-        }
-        else AddHeading(Tr("APP_TITLE"), 42);
-        _status = new Label { HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart };
-
-        foreach (var (key, enabled) in new[] { ("NEW_GAME", true), ("LOAD_GAME", System.IO.File.Exists(SavePath)), ("SETTINGS", true) })
-        {
-            var button = new Button { Text = Tr(key), Disabled = !enabled, CustomMinimumSize = new Vector2(0, 46) };
-            if (key == "NEW_GAME") button.Pressed += () =>
-            {
-                if (_importer.HasImportedAssets()) ShowCompanySetup();
-                else ShowImporter();
-            };
-            if (key == "LOAD_GAME") button.Pressed += LoadSession;
-            if (key == "SETTINGS") button.Pressed += ShowSettings;
-            _content.AddChild(button);
-        }
-        AddAction("GAME_HELP",()=>ShowHelp());
-        AddAction("LOAD_SAVE_SLOTS",()=>ShowSaveSlots(null,true));
-        AddAction("GLOBAL_RANKINGS",()=>ShowRankings());
-        var previous = new Button { Name = "LoadPreviousSave", Text = Tr("LOAD_PREVIOUS_SAVE"),
-            TooltipText = Tr("LOAD_PREVIOUS_SAVE_NOTE"), Disabled = !System.IO.File.Exists(SaveStore.BackupPath(SavePath)),
-            CustomMinimumSize = new Vector2(0, 46) };
-        previous.Pressed += LoadPreviousSession;
-        _content.AddChild(previous);
-        AddAction("EARLY_ACCESS_SCOPE", ShowEarlyAccessScope);
-        var import = new Button { Text = Tr("IMPORT_BUTTON"), CustomMinimumSize = new Vector2(0, 46) };
-        import.Pressed += ShowImporter;
-        _content.AddChild(import);
-        _content.AddChild(_status);
-        var quit = new Button { Text = Tr("QUIT"), CustomMinimumSize = new Vector2(0, 46) };
-        quit.Pressed += () => GetTree().Quit();
-        _content.AddChild(quit);
-        var note = new Label { Name = "BuildVersion", Text = $"{Tr("EARLY_ACCESS_LABEL")} — {BuildInfo.Version}", HorizontalAlignment = HorizontalAlignment.Center,
-            AutowrapMode = TextServer.AutowrapMode.WordSmart };
-        _content.AddChild(note);
-        _content.AddChild(new Label { Name = "EarlyAccessBoundary", Text = Tr("EARLY_ACCESS_BOUNDARY"),
-            HorizontalAlignment = HorizontalAlignment.Center, AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        BuildTitleMenu();
     }
 
     /// <summary>
@@ -515,6 +468,7 @@ public partial class Main : Control
         if (_desktop is not null) PrepareDesktopDialog();
         else _content = _screenContent;
         _content.CustomMinimumSize = new Vector2(620, 0);
+        _content.AddThemeConstantOverride("separation",14);
         _companyName = null;
         _presidentName = null;
         foreach (Node child in _content.GetChildren()) { _content.RemoveChild(child); child.QueueFree(); }
