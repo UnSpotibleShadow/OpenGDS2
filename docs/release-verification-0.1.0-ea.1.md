@@ -1,5 +1,12 @@
 # Early Access 0.1.0-ea.1 — artifact and publication record
 
+**Subsequent publication:** the owner published their own Windows x86_32/x86_64
+exports and checksum files in release ID415162340 on 16 October 2026. The repository
+is public. The hashes/validation below identify the earlier agent-prepared x64
+artifact, not those independently exported public packages. The upload/visibility
+blockers below are historical; they no longer describe release availability.
+Use the actual published asset names/checksums for downloads.
+
 Prepared 16 October 2026 after owner gameplay sign-off and explicit build/release
 authorization. This record does not announce an available public download.
 

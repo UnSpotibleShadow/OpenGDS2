@@ -1,5 +1,25 @@
 # Current development checkpoint — 16 October 2026
 
+## Public release and community handoff
+
+The owner published [v0.1.0-ea.1](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.1)
+on 16 October 2026 with separate Windows x86_32/x86_64 ZIPs and checksum files.
+The repository and [player wiki](https://github.com/UnSpotibleShadow/OpenGDS2/wiki)
+are public. Earlier export/upload blockers below describe the agent's historical
+attempt, not current availability; its local artifact hashes do not identify the
+owner's separately exported release packages.
+
+The owner authorized post-release branch/issue cleanup. Completed walkthrough
+review trackers #95/#118 are closed and historical handoff #55 is superseded by
+this document and AGENTS.md. Native Windows pacing comparison #94 and exhaustive
+artwork audit #97 remain open research tasks. Community findings should use focused
+issues with version, architecture and reproduction steps. Full original parity
+and original-save import remain unclaimed; known limitations are still documented.
+Actions remain paused. No tag movement or release-asset replacement is part of
+this cleanup. Older progress entries below remain historical evidence.
+
+---
+
 The owner completed final gameplay review on 16 October 2026 with no further
 feedback. The gameplay baseline is PR131, merge
 `eca4921353cd48b5525cec3a1c3d351c30175b42`. PR126–131 prepare Early Access wording,

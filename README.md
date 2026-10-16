@@ -12,11 +12,11 @@ Run a game studio: hire and train employees, develop games, ship them, follow re
 
 ## Early Access
 
-**Preparing the first Early Access release, `0.1.0-ea.1`.** The final gameplay review is complete. The maintainer will build and publish the downloadable package; no public download is announced yet.
+**Early Access `v0.1.0-ea.1` is available.** Download the [Windows release](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.1), with separate **32-bit (`x86_32`)** and **64-bit (`x86_64`)** packages and SHA-256 files.
 
 The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 
-Release downloads will be announced here when available. Historical GitHub Actions development packages are outdated; automatic builds are currently paused.
+Historical GitHub Actions development packages are outdated; use the published release assets. Automatic builds remain paused.
 
 ### What you can play
 
@@ -51,7 +51,7 @@ troubleshooting. A [repository copy](docs/player-guide.md) is also available.
 
 ### Windows release package
 
-Once a release is available:
+Download the matching Windows ZIP from the [release page](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.1), then:
 
 1. Extract the **entire ZIP** into a fresh folder.
 2. Run `OpenGDS2.console.exe`, keeping the accompanying files and folders together. The packaged build does not require the Godot editor or a separate .NET installation.
@@ -84,7 +84,7 @@ Language, mute and volume controls are in **Settings**. Refresh the original imp
 
 Useful reports include the release version, Windows version, display resolution/scaling, reproduction steps, and what you expected versus what happened. Save/reload problems, crashes, duplicate charges and stuck workflows are especially useful to report.
 
-Report bugs through [GitHub Issues](https://github.com/UnSpotibleShadow/OpenGDS2/issues) once the repository becomes public before release. The [Windows testing checklist](docs/early-access-testing.md) is available as a guide for community testers, rather than a requirement that everyone complete every test.
+Report bugs through [GitHub Issues](https://github.com/UnSpotibleShadow/OpenGDS2/issues). The [Windows testing checklist](docs/early-access-testing.md) is available as a guide for community testers, rather than a requirement that everyone complete every test.
 
 Review logs before sharing them: they may contain names or local paths. **Do not upload the original archive, executables, graphics, databases or original saves.** Back up modern saves before trying a newer build.
 
@@ -106,7 +106,7 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 dotnet run --project tests/DomainTests/DomainTests.csproj
 ```
 
-The [development checkpoint](docs/development-checkpoint.md), [original-game comparison](docs/original-comparison.md) and [continuation backlog](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) contain the technical history and outstanding work.
+The [development checkpoint](docs/development-checkpoint.md), [original-game comparison](docs/original-comparison.md) and [open issues](https://github.com/UnSpotibleShadow/OpenGDS2/issues) contain the technical history and outstanding work.
 
 ## License and original content
 

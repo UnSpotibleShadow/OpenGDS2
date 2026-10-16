@@ -1,17 +1,25 @@
 # OpenGDS2 working instructions
 
-## Current work — player wiki, 16 October 2026
+## Current work — post-release community handoff, 16 October 2026
 
-The owner initialized the wiki Home page. The ten player pages plus sidebar and
-footer are now published, preserving initial wiki history. Wiki head:
-`d132c0814fae1c9310a2207e56e3965de4a85942`; source PR136 merge
-`0181dfa1b7b0da1c5f0759319c463c2d95ce5672`. Canonical source: docs/wiki;
-live URL https://github.com/UnSpotibleShadow/OpenGDS2/wiki . Update the README,
-repository index and maintenance notes to point at the live wiki, then sync the
-explicit documentation changes. Do not force-push old disconnected wiki history.
-Recovery: `/workspace/scratch/player-wiki-20261016/`. No build/tag/release/Actions
-changes or issue closures. Do not mutate the immutable v0.1.0-ea.1 tag; owner is
-handling their exports/publication. Source PR merge and snapshot sync authorized.
+The owner published v0.1.0-ea.1 with Windows x86_32/x86_64 ZIPs and checksums;
+repository and player wiki are public. Published release ID415162340. The older
+agent-prepared artifact/draft is historical and must not be confused with the
+owner's uploaded binaries. Never move the v0.1.0-ea.1 tag or replace assets.
+Owner explicitly authorized branch/issue cleanup, superseding earlier keep-open
+instructions for #95/#118. 130 obsolete remote branches were removed after main
+ancestry or exact merged-PR/tree-equivalence checks; a local bundle and all old
+heads are retained externally. Only main remained before this housekeeping PR.
+Closed #95/#118 as completed review rounds; #55 superseded by repository handoff.
+Keep research #94 (native Windows pacing measurement) and #97 (exhaustive artwork
+coverage) open, marked help wanted. Community bugs should get focused issues
+with version, architecture and reproduction steps. Do not imply full parity.
+Recovery: `/workspace/scratch/post-release-cleanup-20261016/`.
+Finish reviewed documentation sync, remove its merged remote topic branch and
+safe merged local branches, then read back remaining refs/issues/tags. Preserve
+unmerged work and active worktrees. No builds, release changes or Actions dispatch.
+The player wiki is live; canonical source is docs/wiki. Keep wiki and unrelated
+local generated sidecars intact. Source PR merge/snapshot sync remain authorized.
 
 ## Current source and history
 
