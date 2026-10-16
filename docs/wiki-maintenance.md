@@ -17,8 +17,9 @@ head first, copy only the reviewed page manifest, commit, push without force and
 read back the result. Preserve unrelated pages. Keep write intents and resulting
 SHAs in an external recovery record. Do not delete another editor's new content.
 
-GitHub currently has the wiki feature enabled but returns Repository not found
-for its uninitialized Git repository. If it cannot be initialized through Git,
-the owner must create the first Home page in the GitHub Wiki web UI. A placeholder
-is enough; then reconcile its head and publish the prepared pages. The source
-pages and repository guide remain usable while that external step is pending.
+The owner initialized Home on 16 October 2026. The twelve reviewed files were
+published on top of that commit, preserving its history. The wiki is live at
+https://github.com/UnSpotibleShadow/OpenGDS2/wiki . Future edits must clone or
+fetch the current wiki head first; do not push the earlier disconnected staging
+history or force-push over other editors. Check all ten public page URLs and
+sidebar/footer after publishing.

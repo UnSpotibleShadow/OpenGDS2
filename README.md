@@ -37,9 +37,9 @@ See the [known issues](docs/early-access-known-issues.md) and [scope and researc
 
 ## Player guide
 
-Read the [player guide](docs/player-guide.md) for installation, saves, development,
-technologies, facilities, sales, recalls and troubleshooting. Its pages are also
-prepared for the GitHub Wiki, with navigation and shared footer.
+Read the [player wiki](https://github.com/UnSpotibleShadow/OpenGDS2/wiki) for
+installation, saves, development, technologies, facilities, sales, recalls and
+troubleshooting. A [repository copy](docs/player-guide.md) is also available.
 
 ## Getting started
 

@@ -1,8 +1,8 @@
 # Player guide
 
-The player wiki source is kept in this repository so changes can be reviewed.
-These pages are prepared for the GitHub Wiki; the links below also provide a
-readable guide directly in the repository.
+The [player wiki](https://github.com/UnSpotibleShadow/OpenGDS2/wiki) is published
+with shared navigation. Its source is kept here so changes can be reviewed.
+The links below provide a readable guide directly in the repository.
 
 - [Open Game Dev Story II](wiki/Home.md)
 - [Getting started](wiki/Getting-Started.md)

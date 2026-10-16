@@ -2,20 +2,16 @@
 
 ## Current work — player wiki, 16 October 2026
 
-Owner made the repository public and requests a player wiki. Current wiki feature
-is enabled, but `OpenGDS2.wiki.git` returns Repository not found (uninitialized).
-Prepare and review docs/wiki pages/navigation, repository index and maintenance
-instructions, then publish by normal non-force wiki Git push if available.
-Keep canonical sources reviewed through a feature PR; preserve unrelated pages.
-Recovery: `/workspace/scratch/player-wiki-20261016/`. Branch codex/player-wiki,
-base main cad7348b939734db33904428cbc034b518e470a1. Owner additionally requested
-quick release notes; copy supplied at /workspace/share/OpenGDS2-v0.1.0-ea.1-release-notes.md.
-Do not change the immutable v0.1.0-ea.1 tag, rebuild or publish an existing draft
-as part of wiki work. Last observed release415139616 remains draft with no assets;
-owner is preparing their own exports. Do not repeat failed uploads/admin writes.
-Actions stay paused. Keep #95/#118 open. No actual original artwork/text/cache in
-wiki source; player-focused summaries and links only. Source PR merge and explicit
-snapshot sync remain authorized.
+The owner initialized the wiki Home page. The ten player pages plus sidebar and
+footer are now published, preserving initial wiki history. Wiki head:
+`d132c0814fae1c9310a2207e56e3965de4a85942`; source PR136 merge
+`0181dfa1b7b0da1c5f0759319c463c2d95ce5672`. Canonical source: docs/wiki;
+live URL https://github.com/UnSpotibleShadow/OpenGDS2/wiki . Update the README,
+repository index and maintenance notes to point at the live wiki, then sync the
+explicit documentation changes. Do not force-push old disconnected wiki history.
+Recovery: `/workspace/scratch/player-wiki-20261016/`. No build/tag/release/Actions
+changes or issue closures. Do not mutate the immutable v0.1.0-ea.1 tag; owner is
+handling their exports/publication. Source PR merge and snapshot sync authorized.
 
 ## Current source and history
 
