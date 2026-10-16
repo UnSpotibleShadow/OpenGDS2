@@ -6,9 +6,18 @@ superseding the earlier owner-only build/publication instruction. This checklist
 records the required work, not evidence that a package has already passed it.
 Actions remain paused. Follow [the release workflow](release-workflow.md).
 
+## Current status
+
+The Windows package, checksums, checks and immutable tag are complete. Publishing
+is blocked by integration permissions: asset upload HTTP401 and visibility change
+HTTP403. The existing release remains a draft with no assets and the repository
+is private. See [artifact identity and manual completion](release-verification-0.1.0-ea.1.md).
+The steps below describe the procedure; do not repeat completed builds or recreate
+the existing tag/draft. Verify remote state before resuming.
+
 ## Source and prepared material
 
-- Version: `0.1.0-ea.1`; suggested tag: `v0.1.0-ea.1` (not created).
+- Version: `0.1.0-ea.1`; tag `v0.1.0-ea.1` is already created and pushed.
 - Gameplay baseline: PR131, `eca4921353cd48b5525cec3a1c3d351c30175b42`.
 - Use the merged documentation-handoff commit or a later reviewed main commit
   for the final source. Record its actual full SHA in the package; do not use

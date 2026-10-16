@@ -27,6 +27,14 @@ existing compact receipt. The verified refund rules and save format are unchange
 see [recall conversations](recall-conversations.md). This source follow-up still
 does not create or publish a release build.
 
+The first release package is now built from PR134 merge
+`83db494daf01a855fd7d9895142c7928265b58fd`, with annotated tag `v0.1.0-ea.1` pushed.
+Artifact checks passed; [the publication record](release-verification-0.1.0-ea.1.md)
+lists exact hashes and validation limits. Upload HTTP401 and visibility HTTP403
+block public release through this integration. The existing draft has no assets,
+and the repository remains private. Do not announce availability or recreate the
+tag/draft. Actions stay paused.
+
 The root [AGENTS.md](../AGENTS.md) contains active working instructions.
 [Archived agent handoffs](archive/agent-handoff-through-20261015.md) preserve the
 older session records. Historical next steps below must not be treated as fresh

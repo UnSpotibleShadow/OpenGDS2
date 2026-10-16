@@ -1,19 +1,24 @@
 # OpenGDS2 working instructions
 
-## Current work — first Early Access release, 16 October 2026
+## Current work — release prepared, publication blocked, 16 October 2026
 
-Owner now explicitly authorizes preparing everything and releasing on GitHub,
-superseding the earlier owner-only build/publication instruction. Prepare the
-lightweight main/PR/tag workflow, freeze its merged source, clean-export Windows
-x64 0.1.0-ea.1 and validate/package it; create immutable v0.1.0-ea.1 and publish
-an Early Access pre-release. Public visibility is within the requested first
-public-release scope after reviewing repository/history/hosted content. Keep
-Actions paused; do not create debug packages or close #95/#118. No new final
-permission question is required by the superseded handoff. Record exact package
-checks honestly: owner gameplay sign-off is not acceptance of a future ZIP.
-Recovery: `/workspace/scratch/ea-release-20261016/`.
-Use bounded operations with mutation intents/read-back. Diagnose the historical
-uploads.github.com HTTP401; do not repeat ambiguous mutations blindly.
+Owner authorized building and first public release. Workflow PR134 merged.
+Release source is frozen at `83db494daf01a855fd7d9895142c7928265b58fd` and annotated
+tag `v0.1.0-ea.1` is already pushed. NEVER recreate, move or retarget that tag.
+Windows ZIP is built and verified; see docs/release-verification-0.1.0-ea.1.md.
+Draft release ID415139616 exists, with notes and no assets. Repository stays private.
+The GitHub integration rejects uploads.github.com asset upload with HTTP401 and
+repository visibility changes with HTTP403. Reads confirmed no asset upload and
+no visibility change. No unchanged upload/admin retries; these are connection
+permission blockers, not outstanding user authorization. Actions remain paused.
+Owner can upload the three verified /workspace/share release files, make the
+repository public and publish the existing draft. Then verify anonymous access
+and downloaded ZIP hash before announcing availability. On resume read remote
+state first; never duplicate the existing draft/tag or overwrite assets.
+Recovery: `/workspace/scratch/ea-release-20261016/`. Keep #95/#118 open.
+Native Windows package acceptance is unrun; export-host checks are not native.
+The optional legacy original/UI omnibus harness has stale expectations and 25
+failures; focused fresh import/save/restart and migration checks passed separately.
 
 ## Current source and history
 

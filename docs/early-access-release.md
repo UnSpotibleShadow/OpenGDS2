@@ -14,6 +14,13 @@ Windows acceptance cannot be recorded until that package exists. Historical
 RC.4/M90 packages must not be relabeled as containing current source changes.
 The permanent data folder is `OpenGDS2`; see [data migration](stable-user-data.md).
 
+Current artifact status: the clean Windows ZIP and immutable `v0.1.0-ea.1` tag
+are prepared. Draft release ID415139616 exists, but upload HTTP401 and visibility
+HTTP403 block publication through this integration. See [the exact verification
+and remaining manual steps](release-verification-0.1.0-ea.1.md). The repository
+remains private and the draft has no uploaded assets; no public availability is
+claimed. Do not create another tag/draft or rebuild unnecessarily.
+
 ## Release gates
 
 - [x] Owner completed final gameplay review with no further feedback (16 October 2026).
