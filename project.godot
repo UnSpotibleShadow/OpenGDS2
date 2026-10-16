@@ -5,11 +5,15 @@
 config_version=5
 
 [application]
-config/name="OpenGDS2"
+config/name="Open Game Dev Story II"
 config/version="0.1.0-ea.1"
+config/icon="res://assets/application-icon.svg"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="OpenGDS2"
 run/main_scene="res://scenes/Main.tscn"
+
+[dotnet]
+project/assembly_name="OpenGDS2"
 
 [display]
 window/size/viewport_width=1280

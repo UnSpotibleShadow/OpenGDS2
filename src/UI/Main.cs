@@ -68,7 +68,7 @@ public partial class Main : Control
     {
         var migration=UserDataMigration.Run(ProjectSettings.GlobalizePath("user://"));
         LoadInterfaceLanguage();
-        GetWindow().Title = $"OpenGDS2 {BuildInfo.Version}";
+        ApplyApplicationIdentity();
         BuildShell();
         if(!migration.Succeeded){ShowDataMigrationFailure(migration);return;}
         _music = new BackgroundMusic { Name = "BackgroundMusic" };
@@ -157,6 +157,7 @@ public partial class Main : Control
 
     private void ShowTitleScreen()
     {
+        ApplyApplicationIdentity();
         _effects?.Stop();
         if (_session.Current is { } old) {CasinoPokerService.Close(old);CasinoBlackjackService.Close(old);CasinoCardChainService.Close(old);CasinoHorseService.Close(old);}
         DestroyDesktop();
