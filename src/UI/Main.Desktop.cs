@@ -462,5 +462,6 @@ public partial class Main
         if(_dialogPositionKey is string key && _dialogPositions.TryGetValue(key,out var saved))_dialog.SetPositionInsideWorkspace(saved);
         else if (UsesConversationPosition(name) && _conversationPosition is Vector2 position)
             _dialog.SetPositionInsideWorkspace(position);
+        QueueCompactNotice(name);
     }
 }
