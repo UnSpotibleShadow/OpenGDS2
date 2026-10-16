@@ -1,20 +1,19 @@
 # OpenGDS2 working instructions
 
-## Current work — original Company summary sections, 16 October 2026
+## Current work — compact text notices, 16 October 2026
 
-Owner supplies the original Company window and requests matching data/sections.
-Branch `codex/company-summary-sections`, base
-`9680e270a48b7f3f06615e473fe8767e2099b5e0`. Recovery:
-`/workspace/scratch/company-summary-20261016/`. Restore blue identity/funds,
-orange recognition/capacity/library, yellow released/Hall counts and highest-sales
-record, green weekly/monthly/yearly profits, cyan three tenants. Include capacity
-×100 copies and library percentage. Keep unknown legacy values unknown; no save
-format/economics changes. Original rank controls are clipped below the compact
-window, not an established progression system; remove the exposed summary row.
-Verified: clean build/import, rendered English/Japanese values and section bounds,
-records/tenants/unknown saves, existing core-loop and full Python checks.
-Standing verified-PR merge authorization continues; keep #95/#118 open. No export,
-release, visibility or Actions changes. Original pixels/captures remain local.
+Company summary completed and merged PR130 (`056410b8288ec177509bb4ebefadd22cba26d4f7`),
+seven files synced; bilingual render/value checks, clean build/import, core-loop
+and Python checks passed. Owner additionally requests compact generic notices,
+showing the oversized Consumer Investigation receipt. Branch
+`codex/compact-notice-dialogs`, same base. Recovery:
+`/workspace/scratch/compact-notices-20261016/`. Fit text-only recall/dismissal/
+legacy/failure/calendar/production-block notices to content with compact action
+rows. Keep fixed native/list/artwork layouts, callbacks, accounting, saves and
+acknowledgement behavior. Verify EN/JA wrapping, save status growth, cancel and
+recall acknowledgements. Clean build/import and rendered EN/JA checks passed,
+including Save/Load/Continue, status grow/shrink and no repeated refund. Standing verified-PR merge authorization continues;
+keep #95/#118 open. No export/release/visibility/Actions changes.
 
 ## Current source and history
 
