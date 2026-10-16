@@ -21,6 +21,12 @@ presentation remain open. Original assets, private caches and captures stay
 outside git. Public-content review and exact Windows-package checks remain
 separate maintainer tasks; no public availability is implied.
 
+A subsequent presentation follow-up restores consumer-representative and secretary
+recall explanations, including quantity, per-copy rate and total, ahead of the
+existing compact receipt. The verified refund rules and save format are unchanged;
+see [recall conversations](recall-conversations.md). This source follow-up still
+does not create or publish a release build.
+
 The root [AGENTS.md](../AGENTS.md) contains active working instructions.
 [Archived agent handoffs](archive/agent-handoff-through-20261015.md) preserve the
 older session records. Historical next steps below must not be treated as fresh

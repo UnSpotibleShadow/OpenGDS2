@@ -5155,3 +5155,39 @@ msgstr "{0} ({1}本)"
 
 msgid "COMPANY_SUMMARY_MONEY"
 msgstr "{0}円"
+
+msgid "RECALL_REPRESENTATIVE"
+msgstr "消費者団体代表"
+
+msgid "RECALL_DIALOGUE_INVESTIGATION"
+msgstr "「{title}」の不具合について調査しています。結果が出たらお知らせします。"
+
+msgid "RECALL_DIALOGUE_WAIT"
+msgstr "調査結果が出るまで５週間かかります。結果を待ちましょう。"
+
+msgid "RECALL_DIALOGUE_RESULT"
+msgstr "「{title}」の調査結果が出ました。"
+
+msgid "RECALL_DIALOGUE_FULL"
+msgstr "重大な不具合が見つかりました。１本あたり定価の{price}円で回収してください。"
+
+msgid "RECALL_DIALOGUE_FIXED"
+msgstr "不具合が見つかりました。１本あたり{price}円で回収してください。"
+
+msgid "RECALL_DIALOGUE_REACTION"
+msgstr "回収対象になってしまいました！"
+
+msgid "RECALL_DIALOGUE_QUANTITY"
+msgstr "売れた本数と在庫の合計は{quantity}本です。１本{price}円で回収します。"
+
+msgid "RECALL_DIALOGUE_COST"
+msgstr "回収費用は合計{refund}円です。"
+
+msgid "RECALL_DIALOGUE_CAUTION"
+msgstr "大変なことになりました。次の発売前には、不具合の確認をもっと徹底しましょう。"
+
+msgid "RECALL_DIALOGUE_DISMISSED"
+msgstr "「{title}」は回収対象になりませんでした。安心しました！"
+
+msgid "RECALL_QUANTITY_UNKNOWN"
+msgstr "不明"

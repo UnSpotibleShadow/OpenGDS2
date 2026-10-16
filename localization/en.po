@@ -5332,3 +5332,39 @@ msgstr "{0} ({1} copies)"
 
 msgid "COMPANY_SUMMARY_MONEY"
 msgstr "¥{0}"
+
+msgid "RECALL_REPRESENTATIVE"
+msgstr "Consumer representative"
+
+msgid "RECALL_DIALOGUE_INVESTIGATION"
+msgstr "We are investigating reports of bugs in “{title}”. We will notify you when our investigation is complete."
+
+msgid "RECALL_DIALOGUE_WAIT"
+msgstr "The investigation will take five weeks. We must wait for the result."
+
+msgid "RECALL_DIALOGUE_RESULT"
+msgstr "The investigation of “{title}” is complete."
+
+msgid "RECALL_DIALOGUE_FULL"
+msgstr "Serious bugs were found. You must recall the game at its full retail price of ¥{price} per copy."
+
+msgid "RECALL_DIALOGUE_FIXED"
+msgstr "Bugs were found. You must recall the game at ¥{price} per copy."
+
+msgid "RECALL_DIALOGUE_REACTION"
+msgstr "Our game has been ordered recalled!"
+
+msgid "RECALL_DIALOGUE_QUANTITY"
+msgstr "Sold copies plus remaining stock total {quantity} copies. All must be recalled at ¥{price} each."
+
+msgid "RECALL_DIALOGUE_COST"
+msgstr "The total recall charge is ¥{refund}."
+
+msgid "RECALL_DIALOGUE_CAUTION"
+msgstr "This is serious. We must check for bugs more carefully before releasing our next game."
+
+msgid "RECALL_DIALOGUE_DISMISSED"
+msgstr "“{title}” does not need to be recalled. What a relief!"
+
+msgid "RECALL_QUANTITY_UNKNOWN"
+msgstr "unknown"

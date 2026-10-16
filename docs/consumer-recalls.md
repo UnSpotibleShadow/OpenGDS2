@@ -1,5 +1,8 @@
 # Consumer investigations and recalls — M21
 
+Current presentation: [consumer/secretary conversations](recall-conversations.md)
+explain quantity, per-copy recall price and total before the saved receipt.
+
 Evidence is targeted static P-Code for the supported executable. The original
 Windows runtime and a complete global RNG sequence have not been compared.
 The supported product investigation pipeline now runs on the recovered budget
@@ -39,8 +42,9 @@ Result mode `009EFA40 +3A58..4186` draws one of four outcomes:
 Units sold may be signed because the original sales result has no lower clamp.
 Refund arithmetic retains this behavior. The financial helper `0097DD04` adds
 its signed argument directly to funds and three accounting cells, with no zero
-clamp. M21 can therefore persist negative funds after a refund. Original
-bankruptcy/game-over handling remains unresolved; no debt forgiveness is added.
+clamp. M21 can therefore persist negative funds after a refund. The recovered
+negative-cash dissolution is now implemented; see
+[financial failure](financial-failure-m84.md). No debt forgiveness is added.
 
 Sales continue during an acknowledged investigation. Those receipts and new
 inventory affect the eventual result. Reprints are allowed while state is one;

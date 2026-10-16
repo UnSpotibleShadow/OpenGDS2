@@ -89,6 +89,10 @@ func read_conversation_page() -> void:
         await create_timer(.03).timeout;message.gui_input.emit(enter);await process_frame
 
 func press_node(name: String) -> void:
+    if name=="AcknowledgeRecall":
+        for page in range(8):
+            if main.find_child("ConversationMessage",true,false)==null:break
+            await read_conversation_page()
     if name in ["ConfirmSchoolClosure","ConfirmFacilityClosure","ConfirmFacilityService"] and main.find_child("ConversationWindow",true,false)!=null:
         await read_conversation_page()
     if name=="TogglePause":
@@ -981,6 +985,7 @@ func run() -> void:
     var investigation_receipts = decision_save.State.ReleasedGames[0].NetSalesReceipts-recall_save.State.ReleasedGames[0].NetSalesReceipts
     check(decision_save.State.Money == 100000000+investigation_receipts-expected_refund,"Recall charges once alongside ongoing sales")
     await press("LOAD_GAME")
+    await await_node("AcknowledgeRecall")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == decision_save.State.Money,"Result reload does not charge a second refund")
     await press_node("AcknowledgeRecall")
