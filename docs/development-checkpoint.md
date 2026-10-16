@@ -1,28 +1,25 @@
 # Current development checkpoint — 16 October 2026
 
-The source is in final owner review before the first public Early Access release.
-The latest gameplay batch is PR125, merge
-`2226cb6858e9de39230a51ad2254f3c9711e4b35`: 65 rival games, ten publishers and
-153 development example/magazine names now use English display aliases while
-preserving player titles, Japanese and saved/imported identities. Its 565 domain
-checks, clean build, bilingual rendered checks, award continuation and core loop
-passed. These are source/host results, not final Windows-package acceptance.
+The owner completed final gameplay review on 16 October 2026 with no further
+feedback. The gameplay baseline is PR131, merge
+`eca4921353cd48b5525cec3a1c3d351c30175b42`. PR126–131 prepare Early Access wording,
+stable user data and migration, game title/icon, compact translated title menu,
+original Company summary groups and compact text notices. Source version remains
+`0.1.0-ea.1`. See [release handoff](release-handoff.md).
 
-PR123 implemented facility-specific conversation chains and all six promotion
-media; PR124 corrected the TV patch to stay inside the CRT. Earlier current
-implementation/evidence is recorded in [map backlog](map-backlog-implementation.md)
-and [issue 118](issue118-implementation.md). The original Help, toolbar/settings,
-backup/virus and poaching routes are connected; original save compatibility,
-whole-session native RNG and complete original presentation remain open.
+PR130 passed clean build/import, English/Japanese Company rendering/value checks,
+core-loop and Python checks. PR131 passed clean build/import and rendered
+English/Japanese notice checks, including Save/Load/Continue, refund persistence
+and status-driven resizing. Earlier PR125 alias/domain/award checks and PR123–124
+facility/promotion/TV evidence remain recorded in their feature documents. These
+are source/host results, not acceptance of a future Windows release ZIP.
 
-Current cleanup prepares version `0.1.0-ea.1`, removes private-candidate UI copy,
-refreshes release documents and fixes packaged document metadata/links. PR126 kept the data
-folder and gameplay unchanged. The subsequent owner decision sets a permanent
-`OpenGDS2` folder and first-launch non-destructive legacy migration; see
-[stable user data](stable-user-data.md). No final export, publication or visibility
-change is implied. Follow [release preparation](early-access-release.md) and
-[the decision register](early-access-decisions.md) for the remaining gates.
-Actions stay paused. Original assets, private caches and captures stay outside git.
+The owner explicitly reserves building and publishing. This documentation pass
+must not build/export/package, tag, publish, upload, change visibility or enable
+Actions. Original-save compatibility, whole-session native RNG and full original
+presentation remain open. Original assets, private caches and captures stay
+outside git. Public-content review and exact Windows-package checks remain
+separate maintainer tasks; no public availability is implied.
 
 The root [AGENTS.md](../AGENTS.md) contains active working instructions.
 [Archived agent handoffs](archive/agent-handoff-through-20261015.md) preserve the
