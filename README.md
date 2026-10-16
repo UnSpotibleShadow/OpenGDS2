@@ -35,6 +35,12 @@ Recent research has recovered more of the original systems, but recovered eviden
 
 See the [known issues](docs/early-access-known-issues.md) and [scope and research decisions](docs/early-access-decisions.md) for details. Historical milestone documents describe the evidence and older testing decisions; the current release checklist is [here](docs/early-access-release.md).
 
+## Player guide
+
+Read the [player guide](docs/player-guide.md) for installation, saves, development,
+technologies, facilities, sales, recalls and troubleshooting. Its pages are also
+prepared for the GitHub Wiki, with navigation and shared footer.
+
 ## Getting started
 
 ### Windows release package
