@@ -5305,3 +5305,30 @@ msgstr "Your previous data could not be fully copied to OpenGDS2. Your OpenGDS2-
 
 msgid "DATA_MIGRATION_RETRY"
 msgstr "Retry copying previous data"
+
+msgid "COMPANY_SUMMARY_LIBRARY"
+msgstr "Library level"
+
+msgid "COMPANY_SUMMARY_HIGHEST_SALES"
+msgstr "Highest sales"
+
+msgid "COMPANY_SUMMARY_WEEKLY_PROFIT"
+msgstr "This week's profit"
+
+msgid "COMPANY_SUMMARY_MONTHLY_PROFIT"
+msgstr "This month's profit"
+
+msgid "COMPANY_SUMMARY_YEARLY_PROFIT"
+msgstr "This year's profit"
+
+msgid "COMPANY_SUMMARY_TENANT"
+msgstr "Tenant {0}"
+
+msgid "COMPANY_SUMMARY_NO_TENANT"
+msgstr "None"
+
+msgid "COMPANY_SUMMARY_CAPACITY"
+msgstr "{0} ({1} copies)"
+
+msgid "COMPANY_SUMMARY_MONEY"
+msgstr "¥{0}"

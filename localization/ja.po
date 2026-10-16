@@ -5128,3 +5128,30 @@ msgstr "以前のデータをOpenGDS2に完全にコピーできませんでし�
 
 msgid "DATA_MIGRATION_RETRY"
 msgstr "以前のデータのコピーを再試行"
+
+msgid "COMPANY_SUMMARY_LIBRARY"
+msgstr "ライブラリ度"
+
+msgid "COMPANY_SUMMARY_HIGHEST_SALES"
+msgstr "最高売上"
+
+msgid "COMPANY_SUMMARY_WEEKLY_PROFIT"
+msgstr "今週利益"
+
+msgid "COMPANY_SUMMARY_MONTHLY_PROFIT"
+msgstr "今月利益"
+
+msgid "COMPANY_SUMMARY_YEARLY_PROFIT"
+msgstr "今年利益"
+
+msgid "COMPANY_SUMMARY_TENANT"
+msgstr "テナント{0}"
+
+msgid "COMPANY_SUMMARY_NO_TENANT"
+msgstr "なし"
+
+msgid "COMPANY_SUMMARY_CAPACITY"
+msgstr "{0} ({1}本)"
+
+msgid "COMPANY_SUMMARY_MONEY"
+msgstr "{0}円"
