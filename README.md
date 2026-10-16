@@ -1,5 +1,11 @@
 # OpenGDS2
 
+## Support the project
+
+OpenGDS2 is **free of charge**. If you would like to support development, you can do so through Ko-fi. Support is entirely optional.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0P228889O)
+
 **Open Game Dev Story II** is an unofficial community reconstruction of **Game Dev Story 2 DX**, the 2001 PC game, built with **Godot 4 and C#/.NET 8**.
 
 Run a game studio: hire and train employees, develop games, ship them, follow reviews and sales, and reinvest in your company. OpenGDS2 brings the original game into a modern engine, with English and Japanese interfaces and modern save support.
@@ -52,6 +58,8 @@ Once a release is available:
 3. On the title screen, select **Import original assets** and choose your legally obtained `GameDev2DX.lzh`.
 4. Start a new company and choose Beginner or Normal mode.
 
+Original game: [Kairosoft’s official Game Dev Story 2 DX page](https://kairosoft.net/game/pc/gamedev2.html).
+
 **The original LZH archive is required to play.** Original game files and imported assets are not bundled. The self-extracting `.exe` installer is not a supported import input; choose the `.lzh` archive instead. The title screen and settings work before importing.
 
 Imports, settings and saves use the permanent **`OpenGDS2`** data folder,
@@ -99,12 +107,6 @@ dotnet run --project tests/DomainTests/DomainTests.csproj
 ```
 
 The [development checkpoint](docs/development-checkpoint.md), [original-game comparison](docs/original-comparison.md) and [continuation backlog](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55) contain the technical history and outstanding work.
-
-## Support the project
-
-OpenGDS2 is **free of charge**. If you would like to support development, you can do so through Ko-fi. Support is entirely optional.
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0P228889O)
 
 ## License and original content
 
