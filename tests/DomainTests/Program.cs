@@ -35,6 +35,17 @@ GameState VirusFixture(bool owned=false)
             Office=new() {SlotIndex=0,Action=6,SeatedAction=6,WorkEngaged=true,MovementState=0}}],
         DevelopmentProjects=[new() {Title="Project",RoomIndex=0,RequiredPoints=100,Progress=30,Focus=new(25,25,25,25)}]};
 }
+Test("English title patch preserves the city and mascots, is deterministic and rejects wrong dimensions",()=>
+{
+    byte[] source=Enumerable.Range(0,558*385*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])source.Clone();
+    var patched=LocalTitleArtworkRules.Patch(source);
+    Check(source.SequenceEqual(copy)&&!patched.SequenceEqual(source));
+    Check(patched.SequenceEqual(LocalTitleArtworkRules.Patch(source)));
+    Check(patched.AsSpan(558*165*3).SequenceEqual(source.AsSpan(558*165*3)));
+    for(int y=161;y<165;y++)Check(patched.AsSpan((y*558+269)*3,22*3).SequenceEqual(source.AsSpan((y*558+269)*3,22*3)));
+    Throws<InvalidDataException>(()=>LocalTitleArtworkRules.Patch(new byte[1]));
+});
+
 Test("original number display retains fixed lower Japanese groups and comma thousands",()=>
 {
     Check(OriginalNumberFormatter.Format(9999,NumberGrouping.Japanese)=="9999");

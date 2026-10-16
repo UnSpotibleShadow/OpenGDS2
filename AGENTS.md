@@ -1,19 +1,20 @@
 # OpenGDS2 working instructions
 
-## Current work — application identity, 16 October 2026
+## Current work — compact title menu, 16 October 2026
 
-Owner requests the exact window title `Open Game Dev Story II` and the original
-game icon instead of Godot. Branch `codex/application-identity`, base
-`56c621e99df210bc135c0e368a22b2800758f02a`. Recovery records:
-`/workspace/scratch/application-identity-20261016/`. Use the already-imported,
-PE-verified application icon; original pixels remain local. Supply an authored
-fallback before import. Preserve assembly/executable/data identity `OpenGDS2`.
-Verify actual desktop window title/icon, fallback and import refresh; keep the
-version visible in-game. Verified: 571 original-backed domain checks; clean
-build/import; 76 Python checks (17 optional-original skipped); exact native X11
-title/icon pixels before import, after refresh and restart; bilingual startup/
-recovery. No export, release, visibility or Actions changes.
-Standing verified-PR merge authorization continues; keep #95/#118 open.
+Owner requests smaller title-screen buttons and an English pixel-patch of the
+Japanese logo. Branch `codex/compact-title-screen`, base
+`4418f24a0f530e64547f6d30691475760e893013`. Recovery:
+`/workspace/scratch/compact-title-screen-20261016/`. Keep all ten title actions,
+backup availability, version/campaign notes, import and Japanese behavior.
+Use a title-only compact menu; keep other screen layouts unchanged. Generate
+English lettering only over the verified local title image's top 165-pixel band,
+excluding the tower cap; original city/mascot pixels below remain unchanged. Keep original pixels and
+captures outside git. Verify 720p/tall layout, Japanese, custom overrides and
+scope/recovery/startup. All pass: 572 original-backed domain checks, clean build/
+import, rendered bilingual/tall-menu checks, scope/recovery and fresh startup.
+Standing verified-PR merge authorization continues;
+keep #95/#118 open. No export, release, visibility or Actions changes.
 
 ## Current source and history
 
