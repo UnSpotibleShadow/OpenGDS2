@@ -12,6 +12,8 @@ Recent work restores facility-specific artwork and conversations, all six
 promotion scenes, award dialogue, review speech bubbles and sales block charts.
 English rival game names, the translated title artwork, original toolbar routes,
 Company summary sections and more compact windows round out the presentation.
+Consumer investigations now explain recall quantities, per-copy rates and total
+charges through representative and secretary conversations.
 
 ## Getting started
 

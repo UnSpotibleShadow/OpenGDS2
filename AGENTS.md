@@ -1,19 +1,19 @@
 # OpenGDS2 working instructions
 
-## Current work — release handoff, 16 October 2026
+## Current work — recall presentation, 16 October 2026
 
-Owner completed the final gameplay review with no further feedback. PR130 restores
-Company summary sections; PR131 compacts text notices. Both are merged and synced.
-Gameplay baseline: `eca4921353cd48b5525cec3a1c3d351c30175b42`.
-Prepare source documentation and copy-ready release notes only. Owner explicitly
-reserves building and GitHub publication: DO NOT build, export, package, tag,
-create a GitHub release, upload assets, change visibility or enable Actions.
-No extra permission question is needed to finish this documentation handoff.
-Keep #95/#118 open. Exact final-package Windows acceptance remains unrecorded;
-the owner's gameplay sign-off must not be described as acceptance of a future ZIP.
-See [owner release handoff](docs/release-handoff.md). Recovery:
-`/workspace/scratch/release-handoff-20261016/`. Verified documentation PR merge
-and explicit snapshot sync remain authorized.
+Owner requested restoring the consumer investigation explanation after a fresh
+bounded original-executable audit confirmed the financial rules. Branch
+`codex/recall-conversations`, base PR132 merge `5d71103a9d5b36724f0673a3bfc87cf96ce7e80c`.
+Restore localized representative/secretary pages before the existing compact
+receipt; preserve finance, RNG, countdown, save format and acknowledgements.
+See docs/recall-conversations.md. Recovery:
+`/workspace/scratch/recall-presentation-20261016/`.
+Clean development compile/import, EN/JA rendered all-outcome/save-replay checks,
+core-loop (137s) and 93 Python tests (17 optional skips) passed.
+Owner reserves release building/publication. Development compilation/UI checks
+only; no release export/package/tag/upload/visibility/Actions changes. Keep
+#95/#118 open. Verified PR merge and explicit snapshot sync remain authorized.
 
 ## Current source and history
 
