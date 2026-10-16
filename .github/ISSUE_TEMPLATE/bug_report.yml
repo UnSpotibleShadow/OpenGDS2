@@ -6,7 +6,7 @@ body:
     id: version
     attributes:
       label: Build version and source commit
-      placeholder: "0.1.0-ea.1-rc.1; source commit from BUILD_MANIFEST.json"
+      placeholder: "0.1.0-ea.1; source commit from BUILD_MANIFEST.json"
     validations:
       required: true
   - type: input

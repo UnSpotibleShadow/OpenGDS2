@@ -1,24 +1,30 @@
-# Known limitations — current source / historical RC.4
+# Known limitations — Early Access
 
-The game requires the supported, locally imported GameDev2DX.lzh. The title/settings work without it; gameplay needs the import. No original files are bundled.
+The supported GameDev2DX.lzh is required and imported locally. The title and
+settings work before import. Original game files are not bundled.
 
-| Area | Candidate boundary |
+| Area | Supported scope and remaining limitations |
 | --- | --- |
-| Campaign | Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds now trigger company dissolution and return to the title in either mode. Original presentation still differs; older saves with incomplete source rosters stop with an explicit recovery message. No complete original campaign parity is claimed. |
-| Development | Original projects, eligible Hall of Fame sequels, manga adaptations, meetings, cancellation, debugging and shipment are supported. Polishing and external/contract work are unavailable. |
-| Economy | Verified payroll/calendar events, borrowing and annual repayment are supported. Some upstream economy/menu gates and payroll scratch writers need original comparison; missing data pauses with an explanation rather than fabricated values. |
-| Facilities | School, hot springs, recycling, technology capacity, production expansion, lawyer consultation, mystery-lab experiments and own-hardware development/launch are supported with saved results. Casino coin purchase and all four recovered activities are supported. Cards use modern text. Blackjack preserves unusual ace scoring and retained win/payout behavior; out-of-range tenth-card requests pause with guidance. Card-chain preserves initial/replacement bonuses and lowercase shortcuts; exhausted decks pause without a fabricated award. Horse racing requires a refreshed original import for its 44 runners/10 jockeys; original pair-index/cap/refund defects and overwritten temporary winnings are preserved, with explanations in the interface. Annual school recruitment is supported; periodic student skill growth has no recovered writer and is not an established missing feature. |
-| Fidelity | Automatic conversation scheduling/cadence, some growth effects/form geometry/bubbles/bitmap labels and provisional English name readings remain open. Existing English facility vacancy signs are translated locally. |
-| Saves | Modern JSON only. Saving retains one previous valid slot; the title's Load Previous Save restores earlier progress without changing the current file until explicit Save. Original save import is unsupported; future versions may require a fresh company. Back up saves before upgrading. |
-| Package | Windows x86_64 standard SDK/Godot release export, matching official Godot 4.4.1 .NET templates and .NET 8.0.31. All 25 exact OGG sources are locally verified and resources regenerated. Build-host adapters are excluded. |
-| Acceptance | Automated domain, source-host and exported-host checks do not establish native Windows acceptance. Full graphical, multi-year and sustained Windows testing is assigned to the community; untested behavior is disclosed rather than treated as accepted. |
+| Campaign | Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play. Negative funds trigger company dissolution and return to the title. Complete original campaign/office progression is not established. |
+| Development | Original games, eligible Hall of Fame sequels, manga adaptations, meetings, cancellation, debugging and shipment are supported. Separate polishing and external-job workflows have not been established as original routes. |
+| Economy and conversations | Calendar/payroll events, loans/repayment, annual events, periodic poaching and the gameplay backup-device/virus branch are implemented. Unknown older-save source mappings can pause a workflow with an explanation. Exact native scheduling, payroll scratch behavior and whole-session RNG parity remain under comparison. |
+| Facilities and promotions | The nine facility types have recovered artwork and service-specific flows, including hot-spring staff reactions and saved results. All six promotion media have their own scenes/results. These implementations do not establish exact original timing or native Windows presentation. Annual school recruitment is supported; automatic student skill growth has no established original writer. |
+| Casino | Coin purchase, poker, blackjack, card-chain and horse racing are supported. Original quirks are retained: unusual blackjack ace scoring/payout retention; out-of-range tenth-card requests stop with guidance; exhausted card-chain decks pause without inventing an award; horse pair-index/cap/refund defects and discarded temporary winnings remain. Read the in-game explanations before wagering. |
+| Technology | Learned technologies are employee actions, not blanket passive quality boosts. Level-three stress relief targets the recovered actor-slot-0 recipient and spends the selected employee's experience. Speed affects ordinary work starts, not debugging. Replacing an in-progress application can stall it; changing assignment resets it. Unknown old-save eligibility is guarded before spending. |
+| Presentation and language | Reviews, sales block charts, exhibitions, award conversations, facility scenes and window behavior have received fidelity fixes. English rival game/publisher names and development examples are display-only; Japanese and player-entered names are preserved. Some bitmap text, geometry and provisional personal-name readings still need comparison. Complete native visual/timing parity is not claimed. |
+| Saves | Modern JSON saves only; original-game save import is unsupported. Saving retains one previous valid slot. Load Previous Save restores earlier progress in memory without replacing the current slot until explicit Save. Back up saves before upgrades; future versions may require a new company. |
+| Original import | Use the supported LZH, not the self-extracting EXE. Refresh the local import when a build requests newly recovered resources/dialogue. Do not bundle or share the imported cache. |
+| Package and testing | The release is intended for Windows x64 with its own .NET runtime. Exact package/source/runtime identity comes from BUILD_MANIFEST.json and SHA256SUMS. Automated and exported-host checks are separate from native Windows acceptance. Full display, sustained and multi-year Windows testing remains community work. |
 
-The title and mode selection disclose the campaign boundary. Detailed unresolved evidence and release decisions are in DECISIONS.md / `early-access-decisions.md`. TEST_CHECKLIST.md guides community testing; its full completion is not a pre-release requirement. Known crashes, save corruption, duplicate transactions and supported-workflow dead ends need fixing before publication. The target is 16 October 2026, 19:00 CEST; the exact final artifact is still to be selected.
+See the accompanying TEST_CHECKLIST.md and DECISIONS.md for test recording and
+scope decisions. In the source repository these are
+[the testing guide](early-access-testing.md) and
+[the decision register](early-access-decisions.md). A row without a recorded
+Windows result remains untested. Crashes, corrupted saves, duplicate charges and
+dead ends in supported workflows require fixes before publication; cosmetic
+findings are recorded separately.
 
-M80 fixes unsupported payroll-state resets when visiting ordinary technology screens. M82 adds mystery-lab experiments; M83 adds own hardware and protects bank borrowing during pending results. These source changes are not in the existing RC.4 ZIP; use the final package’s manifest to identify the code actually shipped.
-
-M84 adds the recovered financial-failure sequence. See [evidence and modern continuation rules](financial-failure-m84.md). These changes are not in the unchanged RC.4 ZIP; rebuild the final source before release.
-
-Level-three stress relief follows the recovered actor-slot-0 target, spending the selected employee’s experience. Its screen identifies the actual recipient; an unknown slot mapping disables use before spending experience. Speed technology uses the separate timer and retained worker eligibility; it accelerates ordinary starts, not debugging. Replacing an in-progress technology can leave work stalled, as in the original; change the employee's assignment to reset it. Older saves with unknown retained eligibility disable speed until an ordinary work pass establishes it. See [M91 evidence](speed-technology-m91.md).
-
-Checkpoint discussions now select and save their employee speakers and update the original payroll scratch count. Planning, final completion, awards, sales/shipment commentary and periodic poaching still need their remaining dialogue-writer integration. Incomplete or empty employee maps use an explicit safe presentation boundary rather than inventing a person. See [M92 evidence](checkpoint-speakers-m92.md).
+Use the version, source commit and data folder recorded in the actual package.
+Historical private test packages predate recent work and are not substitutes for
+a fresh final export. No public-download or final-package acceptance is implied
+by these source documents.

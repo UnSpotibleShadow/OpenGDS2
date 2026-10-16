@@ -161,15 +161,6 @@ msgstr "Contract Fee"
 msgid "HIRE_CONFIRM"
 msgstr "Hire"
 
-msgid "HIRING_FORM_VERIFIED"
-msgstr "The original employee-hiring form and its displayed stat schema have been recovered from the VB6 executable."
-
-msgid "APPLICANT_ROSTER_PENDING"
-msgstr "Applicant source names and values are still being decoded; the roster algorithm is recovered, and no placeholder candidates are invented in this build."
-
-msgid "APPLICANT_REFRESH_EVIDENCE"
-msgstr "The original form rebuilds its five-slot roster when opened. Its random selection rule is recovered; source records remain pending."
-
 msgid "APPLICANT_COUNT"
 msgstr "Applicants: {0}"
 
@@ -2740,8 +2731,8 @@ msgstr "All three loan slots are occupied. Repay a loan before borrowing again."
 msgid "BITMAP_FACILITY_AVAILABLE"
 msgstr "FOR RENT"
 
-msgid "EARLY_ACCESS_CANDIDATE"
-msgstr "Private Early Access test candidate"
+msgid "EARLY_ACCESS_LABEL"
+msgstr "Early Access"
 
 msgid "CANCEL_PROJECT"
 msgstr "Cancel project"

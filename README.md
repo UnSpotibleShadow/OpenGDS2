@@ -6,7 +6,7 @@ Run a game studio: hire and train employees, develop games, ship them, follow re
 
 ## Early Access
 
-**Target release: Friday, 16 October 2026, at 19:00 CEST.** This is a release target, not an available download announcement. The current private candidate is `0.1.0-ea.1-rc.4`.
+**Target release: Friday, 16 October 2026, at 19:00 CEST.** This is a release target, not an available download announcement. Current source prepares `0.1.0-ea.1`; the final downloadable package is not yet published.
 
 The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 
@@ -22,7 +22,8 @@ Release downloads will be announced here when available. Historical GitHub Actio
 - Develop and launch your own console, then make games for its growing market.
 - Buy casino coins and play poker, blackjack and card-chain, including their distinct double-up games. Cash-wager horse races are also playable; their original wager and discarded-winnings defects are preserved and disclosed.
 - Save and resume supported workflows, with a previous-valid-save recovery option.
-- Use English or Japanese text and adjust music and audio settings.
+- Use English or Japanese text, read the translated original Help, and adjust music and audio settings.
+- Follow facility-specific conversations, all six promotion methods, translated rival game names and the recovered award ceremony.
 
 **Beginner mode** ends after Year 2, December, week 4. **Normal mode** supports experimental ongoing play. In either mode, negative funds trigger the recovered company-dissolution sequence and return to the title. Full original presentation and company progression are still under review.
 
@@ -32,7 +33,7 @@ Original-game save importing remains outside the supported Early Access scope. C
 
 Recent research has recovered more of the original systems, but recovered evidence does not mean those systems are implemented.
 
-See the [known issues](docs/early-access-known-issues.md) and [scope and research decisions](docs/early-access-decisions.md) for details. Older documents may still describe the previous owner-testing release gates; the current plan is a community-tested Early Access release.
+See the [known issues](docs/early-access-known-issues.md) and [scope and research decisions](docs/early-access-decisions.md) for details. Historical milestone documents describe the evidence and older testing decisions; the current release checklist is [here](docs/early-access-release.md).
 
 ## Getting started
 
@@ -47,7 +48,7 @@ Once a release is available:
 
 **The original LZH archive is required to play.** Original game files and imported assets are not bundled. The self-extracting `.exe` installer is not a supported import input; choose the `.lzh` archive instead. The title screen and settings work before importing.
 
-The current RC.4 candidate keeps imports, settings and saves in `%APPDATA%\OpenGDS2-EarlyAccessTesting`, separate from ordinary OpenGDS2 data. Follow the final release's package notes for its data location and save compatibility.
+Source builds currently keep imports, settings and saves in `%APPDATA%\OpenGDS2-EarlyAccessTesting`, separate from ordinary OpenGDS2 data. Follow the final release's package notes for its data location and save compatibility.
 
 ### Your first game
 

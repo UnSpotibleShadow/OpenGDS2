@@ -4,11 +4,39 @@ import argparse
 import hashlib
 import json
 import os
+import posixpath
 import re
 from pathlib import Path
 import shutil
 import zipfile
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
+
+def public_document(text, target, version, data_directory, report_url, source_commit):
+    """Identify the artifact and keep bundled-document links usable offline."""
+    if target == "KNOWN_ISSUES.md":
+        text = re.sub(r"\A# [^\r\n]+", f"# Known limitations — {version}", text, count=1)
+    bundled = {"docs/early-access-testing.md": "TEST_CHECKLIST.md",
+               "docs/early-access-known-issues.md": "KNOWN_ISSUES.md",
+               "docs/early-access-decisions.md": "DECISIONS.md",
+               "docs/early-access-public-notes.md": "RELEASE_NOTES.md"}
+
+    def link(match):
+        destination = match.group(2)
+        parsed = urlparse(destination)
+        if parsed.scheme or parsed.netloc or destination.startswith(("#", "/")):
+            return match.group(0)
+        path = posixpath.normpath(posixpath.join("docs", parsed.path))
+        resolved = bundled.get(path)
+        if resolved is None:
+            resolved = f"https://github.com/UnSpotibleShadow/OpenGDS2/blob/{source_commit}/" + quote(path, safe="/")
+        if parsed.fragment:
+            resolved += "#" + parsed.fragment
+        return f"[{match.group(1)}]({resolved})"
+
+    text = re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)", link, text)
+    return (f"Packaged build: {version}. Data folder: `%APPDATA%\\{data_directory}`. "
+            f"Report bugs: {report_url}\n\n" + text)
+
 
 def package(source, export, platform, notices, output, configuration="release", candidate=False, source_commit=None,
             early_access=False, report_url=None):
@@ -154,14 +182,11 @@ The original LZH requirement and game rules are the same as the release export.
                                  ("early-access-known-issues.md", "KNOWN_ISSUES.md"),
                                  ("early-access-decisions.md", "DECISIONS.md")]:
             text = (source / "docs" / filename).read_text(encoding="utf-8")
-            if target == "KNOWN_ISSUES.md":
-                text = text.replace("# Known limitations — 0.1.0-ea.1-rc.4", f"# Known limitations — {version}", 1)
-                text = text.replace("This private test candidate requires", "This Early Access release requires", 1)
-            # Keep historical evidence intact; identify the artifact these notes accompany.
-            text = f"Packaged build: {version}. Report bugs: {report_url}\n\n" + text
+            text = public_document(text, target, version, data_directory, report_url, source_commit)
             (export / target).write_text(text, encoding="utf-8")
         notes = (source / "docs" / "early-access-public-notes.md").read_text(encoding="utf-8")
         notes = notes.replace("@VERSION@", version).replace("@REPORT_URL@", report_url).replace("@DATA_DIRECTORY@", data_directory)
+        notes = public_document(notes, "RELEASE_NOTES.md", version, data_directory, report_url, source_commit)
         (export / "RELEASE_NOTES.md").write_text(notes, encoding="utf-8")
         (export / "GETTING_STARTED.txt").write_text(
             f"OpenGDS2 {version} — COMMUNITY EARLY ACCESS\n\n"

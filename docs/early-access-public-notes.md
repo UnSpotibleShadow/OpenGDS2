@@ -22,10 +22,13 @@ Beginner ends after Year 2, December, week 4. Normal is experimental ongoing
 play. Negative funds in either mode trigger company dissolution and return
 to the title. Original presentation and full campaign parity remain incomplete. Original-save import is deferred. See KNOWN_ISSUES.md for the remaining boundaries.
 
-This release includes the payroll-screen fix: visiting ordinary technology
-purchase, training or application screens preserves an established payroll
-snapshot rather than clearing it and potentially stopping month-end progress.
-This does not complete every original payroll scratch writer.
+Recent presentation work includes review speech bubbles, sales block charts,
+exhibition/award conversations, per-facility artwork and messages, and all six
+promotion scenes. The TV's English lettering follows its screen boundaries.
+All 65 rival games, ten rival publishers and development examples have English
+display names; player-entered titles and Japanese names remain unchanged.
+The five original Help pages have English text. Gameplay backup/virus handling,
+periodic employee poaching and original toolbar/settings routes are connected.
 
 ## Start playing
 
@@ -57,5 +60,3 @@ rows as untested.
 Code and documentation use the MIT License. Community music has separate
 distribution terms. See LICENSE, notice.md and licenses/ for the code, engine,
 runtime and music notices.
-
-M84 adds the recovered financial-failure sequence. See [evidence and modern continuation rules](financial-failure-m84.md). These changes are not in the unchanged RC.4 ZIP; rebuild the final source before release.

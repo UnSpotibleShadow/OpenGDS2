@@ -1,42 +1,55 @@
-# Windows community testing guide — RC.4 baseline
+# Windows community testing guide — Early Access
 
-This matrix describes the unpublished Windows x86_64 RC.4 baseline. The owner chose community testing for the announced Early Access release; completing all nineteen rows is not a pre-release gate. Use the final package’s version, data-path notes and manifest when testing a newer build. RC.4 predates the M80 payroll-screen fix. Record pass/fail, Windows version, resolution/scaling, language and exact steps. Report the visible version and source commit from BUILD_MANIFEST.json. Do not mark an untested row as passed.
+Test the version and source commit in the accompanying BUILD_MANIFEST.json.
+Record Windows version, resolution/scaling, language, exact steps and pass/fail.
+Unrun checks remain untested. The full matrix guides community testing; the
+release gate is basic final-package launch/import/save/reload plus fixes for
+known crashes, save loss, duplicate transactions and supported-workflow dead ends.
 
 ## Start safely
 
-1. Extract the entire ZIP into a fresh folder. Keep OpenGDS2.pck and data_OpenGDS2_windows_x86_64 beside both executables.
-2. Run OpenGDS2.console.exe. The title should identify 0.1.0-ea.1-rc.4 as a private Early Access test candidate. No editor or separate .NET install is required.
-3. Candidate imports, settings and saves use `%APPDATA%\OpenGDS2-EarlyAccessTesting`. Ordinary `%APPDATA%\Godot\app_userdata\OpenGDS2` data remains separate. Do not move your ordinary save into this candidate for the fresh-start test.
-4. Import your supported GameDev2DX.lzh locally. Start a new company. Read KNOWN_ISSUES.md before testing.
-5. Capture diagnostics from a terminal in the extracted folder: `.\OpenGDS2.console.exe --log-file opengds2-test.log`.
+1. Extract the entire ZIP into a fresh folder. Keep both executables, the PCK and managed-runtime directory together.
+2. Run OpenGDS2.exe or OpenGDS2.console.exe. The title/window version must match BUILD_MANIFEST.json. No editor or separate .NET installation is required.
+3. Read GETTING_STARTED.txt for the package's exact data folder. Back up existing modern saves before upgrading or transferring them. This testing pass must not silently overwrite your ordinary or private-review data.
+4. Import your legally obtained GameDev2DX.lzh locally. Start a fresh company for the fresh-start check and read KNOWN_ISSUES.md. Test an existing compatible modern save separately using a copy. Original saves are unsupported.
+5. To capture diagnostics, run `.\OpenGDS2.console.exe --log-file opengds2-test.log` from a terminal in the extracted directory.
 
-## Acceptance matrix
+Source builds currently retain `OpenGDS2-EarlyAccessTesting` as their custom data
+folder. Final package instructions identify the actual shipped location; a
+version-label change alone does not move imports, settings or saves.
+
+## Community test matrix
 
 | Test | Expected outcome | Result |
 | --- | --- | --- |
 | Fresh launch without import | Title, settings and quit work; gameplay guides you to import | Untested on Windows |
 | Fresh import and restart | Supported LZH imports locally; assets/catalogs persist after restart | Untested on Windows |
 | Import failure | Invalid/unsupported archive reports an error without breaking the title | Untested on Windows |
-| Settings | English/Japanese, mute and volume persist after restart | Untested on Windows |
-| Office | Hire staff, assign all desk orientations, upgrade PC; PCs sit above desks with no atlas-border marks | Untested on Windows |
-| Facilities | Purchase/close supported facilities in each plot; occupied artwork updates/reloads; hot spring/recycling/technology/production and lawyer results resume without duplicate effects | Untested on Windows |
-| Conversations/meetings | Move a dialogue and meeting window; later pages/windows keep the position; each phase track continues between pages | Untested on Windows |
+| Settings and audio | English/Japanese, mute and volume persist; appropriate music/sound cues play | Untested on Windows |
+| Office | Hire staff, assign desks, upgrade PC; artwork/hit regions remain usable | Untested on Windows |
+| Facilities | Purchase/use/cancel/close all supported types; artwork, selector ownership and facility-specific results resume without duplicate effects | Untested on Windows |
+| Conversations and windows | Drag/resize pauses time until release; window positions persist through meetings, selections and later pages | Untested on Windows |
 | Original game loop | Plan, choose focus/type/genre, develop, debug, ship, acknowledge reviews, sell and reprint | Untested on Windows |
+| Promotions | All six media show their own scene/result and charge/increase recognition once through save/reload | Untested on Windows |
 | Additional projects | Eligible sequel and manga adaptation complete through shipment without duplicate fees | Untested on Windows |
-| Save/reload checkpoints | Quit/relaunch at planning, paid meeting choice, shipment/review, bank receipt and annual event; no lost progress or duplicate money/bonuses | Untested on Windows |
-| Cancellation | Confirm/cancel in both rooms; no refund; assigned staff stress/reactions and summary resume after reload | Untested on Windows |
-| Save recovery | Save twice; Load Previous Save restores earlier progress; current file stays untouched until explicit Save. With a damaged current slot, the previous valid save remains recoverable | Untested on Windows |
-| Scope | Title/mode-selection disclose Beginner ending and experimental Normal; unavailable systems are explained | Untested on Windows |
-| Pending development bursts | Another worker triggers Alpha/Beta/Final: the burst survives checkpoint/reload and resumes. Compare immediate shipment (unfinished gain excluded) with Continue Debugging until it finishes (gain included) | Untested on Windows |
-| Annual economy | In Normal mode, continue at least three game years; calendar events, payroll/renewal, bank repayments and awards do not stall or double-charge | Untested on Windows |
-| Beginner ending | Beginner ends after Year 2, December, week 4; a terminal save/reload preserves the ending and Normal continues into Year 3 | Untested on Windows |
-| Display | At 1280×720 and a larger display, test 100% and 150% scaling; text/caret readable, controls and windows reachable | Untested on Windows |
-| Stability | Repeated saves, reloads, title returns and an hour of play produce no crash or stuck modal | Untested on Windows |
-| Data isolation | Ordinary OpenGDS2 data is unchanged; candidate files stay in its separate directory | Untested on Windows |
-
-Known crashes, unusable imports, corrupted saves, duplicate transactions or dead ends in supported workflows require fixes before publication. Unrun rows remain untested rather than blocking solely because they have not run. Log cosmetic defects separately with screenshots. Keep negative-funds/progression limitations visible; the candidate boundary is documented in DECISIONS.md and must be accepted as part of the exact final release scope.
+| Save/reload checkpoints | Planning, paid choices, shipment/review, bank receipts and annual events resume without lost progress or duplicate effects | Untested on Windows |
+| Cancellation | Both rooms preserve no-refund behavior and saved staff reactions/results | Untested on Windows |
+| Save recovery | Save twice; Load Previous Save restores the previous slot without replacing the current file until Save, including when the current file is damaged | Untested on Windows |
+| Technology actions | Training returns staff; each learned action uses its documented target/cost/effect and does not imply a passive boost | Untested on Windows |
+| Pending development bursts | Checkpoint/reload retains a pending gain; immediate shipment excludes unfinished gain while continued debugging can finish it | Untested on Windows |
+| Annual events and economy | Payroll/renewals, loans, exhibitions and award conversations continue without stalls or duplicate effects; English rival names appear throughout awards/rankings | Untested on Windows |
+| Campaign boundaries | Beginner ends after Year 2, December, week 4; Normal continues; negative funds trigger dissolution and return to title | Untested on Windows |
+| Display | Test 1280×720/larger displays and 100%/150% scaling; text, controls and windows remain reachable | Untested on Windows |
+| Stability and data | Sustained play, repeated reloads and title returns do not crash; data stays in the documented folder and other installations remain untouched | Untested on Windows |
 
 ## Reporting
 
-Use the public reporting destination linked in the release notes. The repository is currently private, so its GitHub bug template alone is not yet accessible to community testers. Include version/source SHA, Windows/display/language settings, numbered reproduction steps, expected/actual outcome and a redacted log excerpt. Logs and modern saves may include names/paths: review them before sharing. Never upload the LZH, original executables/graphics/catalogs or original saves. Modern reproduction saves should be shared privately only when requested.
+Use the reporting URL in the package's release notes. Public issue access must
+be verified when publication happens; these source instructions do not establish
+that it is already accessible. Include version/source SHA, Windows/display/
+language settings, numbered steps, expected/actual results and a redacted log.
 
+Logs and modern saves can contain names and local paths. Never upload the LZH,
+original executables, graphics, catalogs or original saves. Share modern
+reproduction saves privately only when requested. Keep cosmetic reports distinct
+from crashes, save corruption and blocked progress.

@@ -142,6 +142,48 @@ class DesktopPackageTests(unittest.TestCase):
                 digest, name = line.split("  ", 1)
                 self.assertEqual(hashlib.sha256(archive.read(prefix + name)).hexdigest(), digest)
 
+    def test_public_documents_use_current_source_copy_and_working_links(self):
+        self.public_fixture(directory="OpenGDS2-AuthoredTest")
+        repository = Path(__file__).parents[1]
+        for name in ["testing", "known-issues", "decisions", "public-notes"]:
+            filename = f"early-access-{name}.md"
+            (self.source / "docs" / filename).write_text((repository / "docs" / filename).read_text())
+        self.public_package()
+        with zipfile.ZipFile(self.output) as archive:
+            prefix = "OpenGDS2-windows-0.1.0-ea.1/"
+            names = set(archive.namelist())
+            for filename in ["KNOWN_ISSUES.md", "TEST_CHECKLIST.md", "DECISIONS.md", "RELEASE_NOTES.md"]:
+                text = archive.read(prefix + filename).decode()
+                self.assertIn("Packaged build: 0.1.0-ea.1", text)
+                self.assertIn("%APPDATA%\\OpenGDS2-AuthoredTest", text)
+                self.assertIn("https://example.test/bugs", text)
+                self.assertNotIn("@VERSION@", text)
+                self.assertNotIn("@DATA_DIRECTORY@", text)
+                for destination in desktop.re.findall(r"\]\(([^)\s]+)\)", text):
+                    if not destination.startswith(("https://", "http://", "#")):
+                        self.assertIn(prefix + destination.split("#", 1)[0], names)
+            issues = archive.read(prefix + "KNOWN_ISSUES.md").decode()
+            checklist = archive.read(prefix + "TEST_CHECKLIST.md").decode()
+            self.assertIn("# Known limitations — 0.1.0-ea.1", issues)
+            self.assertIn("](TEST_CHECKLIST.md)", issues)
+            self.assertIn("](DECISIONS.md)", issues)
+            self.assertNotIn("as a private Early Access test candidate", checklist)
+            self.assertNotIn("RC.4 baseline", checklist)
+            self.assertIn("must match BUILD_MANIFEST.json", checklist)
+
+    def test_public_known_issue_heading_handles_the_historical_source_shape(self):
+        self.public_fixture()
+        (self.source / "docs" / "early-access-known-issues.md").write_text(
+            "# Known limitations — current source / historical RC.4\n\n"
+            "Historical evidence stays intact. See [evidence](financial-failure-m84.md#details).\n")
+        self.public_package()
+        with zipfile.ZipFile(self.output) as archive:
+            text = archive.read("OpenGDS2-windows-0.1.0-ea.1/KNOWN_ISSUES.md").decode()
+            self.assertIn("# Known limitations — 0.1.0-ea.1", text)
+            self.assertNotIn("# Known limitations — current source / historical RC.4", text)
+            self.assertIn("Historical evidence stays intact.", text)
+            self.assertIn("https://github.com/UnSpotibleShadow/OpenGDS2/blob/" + "b" * 40 + "/docs/financial-failure-m84.md#details", text)
+
     def test_public_ea_rejects_rc_version_debug_missing_commit_and_invalid_reporting_url(self):
         self.public_fixture(version="0.1.0-ea.1-rc.4")
         with self.assertRaisesRegex(ValueError, "final EA version"):
