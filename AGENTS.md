@@ -1,23 +1,21 @@
 # OpenGDS2 working instructions
 
-## Current work — release cleanup, 16 October 2026
+## Current work — stable user data, 16 October 2026
 
-Owner authorizes the bounded cleanup before the final review/release: current
-release copy, documentation, packaging document rendering and contributor handoff.
-Work on `codex/release-cleanup`, based on
-`2226cb6858e9de39230a51ad2254f3c9711e4b35`. Recovery records are outside git at
-`/workspace/scratch/release-cleanup-20261016/`. Implementation is verified: 75 Python checks pass (17 optional original fixtures
-skipped), clean build/import, bilingual scope/recovery and fresh-data startup.
-Gameplay, saves and data-folder behavior are unchanged. Preparing the EA version
-is not publication or acceptance.
+Owner requests the permanent `OpenGDS2` data directory with a safe first-launch
+copy from `OpenGDS2-EarlyAccessTesting`. Work on `codex/stable-user-data`, base
+`44ee187b31a1035206fe726939e76a6db7629213`. Recovery records:
+`/workspace/scratch/stable-user-data-20261016/`. Preserve the legacy folder and
+existing destination files; migration must resume safely without mixing save
+backups or hiding failures behind a fresh game. No save-format change. Verified:
+570 original-backed domain checks, clean build/import, 76 Python checks (17
+optional-original skipped), actual migration/load/Retry and bilingual recovery/
+fresh-data UI checks.
 
-The owner is doing the final playthrough. The release plan is recorded locally
-at `/workspace/release-plan-20261016.md`; its next stages require a fresh exact-
-source Windows package and basic native launch/import/save/reload checks. The full
-Windows matrix remains community testing. No release/tag, desktop export,
-visibility change or Actions dispatch is authorized by this cleanup request.
-Standing authorization permits merging verified code/documentation PRs. Keep
-#95/#118 open for owner review; no automatic issue closure.
+The owner is doing the final review. Release/tag/export/visibility/Actions changes
+remain separate release steps. Standing authorization permits merging verified
+PRs. Keep #95/#118 open for review. The release plan is locally recorded at
+`/workspace/release-plan-20261016.md`; update the folder decision there on completion.
 
 ## Current source and history
 

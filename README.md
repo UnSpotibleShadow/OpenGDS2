@@ -48,7 +48,17 @@ Once a release is available:
 
 **The original LZH archive is required to play.** Original game files and imported assets are not bundled. The self-extracting `.exe` installer is not a supported import input; choose the `.lzh` archive instead. The title screen and settings work before importing.
 
-Source builds currently keep imports, settings and saves in `%APPDATA%\OpenGDS2-EarlyAccessTesting`, separate from ordinary OpenGDS2 data. Follow the final release's package notes for its data location and save compatibility.
+Imports, settings and saves use the permanent **`OpenGDS2`** data folder,
+independent of the version or Early Access label. On Windows this is
+`%APPDATA%\OpenGDS2` (Linux: `$XDG_DATA_HOME/OpenGDS2` or
+`~/.local/share/OpenGDS2`; macOS: `~/Library/Application Support/OpenGDS2`).
+
+On the first launch, existing `OpenGDS2-EarlyAccessTesting` imports, preferences,
+saves/backups, playlists and artwork overrides are copied automatically. Close
+the old game first. The old folder is kept, existing destination files are never
+overwritten, and conflicting save/backup pairs are kept together. If copying
+fails, the game offers Retry before continuing. See [data migration](docs/stable-user-data.md)
+for recovery and manual-transfer details.
 
 ### Your first game
 

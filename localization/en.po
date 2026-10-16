@@ -5295,3 +5295,13 @@ msgstr "The Wandering Pachinko Guy"
 
 msgid "CATALOG_TYPE_EXAMPLE_50_2"
 msgstr "Go, Pachinko!"
+
+
+msgid "DATA_MIGRATION_TITLE"
+msgstr "Your previous game data"
+
+msgid "DATA_MIGRATION_ERROR"
+msgstr "Your previous data could not be fully copied to OpenGDS2. Your OpenGDS2-EarlyAccessTesting folder has been kept unchanged, and existing destination files have not been replaced. Close other copies of the game, check disk space and folder access, then retry.\n\nDetails: {reason}"
+
+msgid "DATA_MIGRATION_RETRY"
+msgstr "Retry copying previous data"

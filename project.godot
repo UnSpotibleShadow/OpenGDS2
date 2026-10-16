@@ -8,7 +8,7 @@ config_version=5
 config/name="OpenGDS2"
 config/version="0.1.0-ea.1"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="OpenGDS2-EarlyAccessTesting"
+config/custom_user_dir_name="OpenGDS2"
 run/main_scene="res://scenes/Main.tscn"
 
 [display]

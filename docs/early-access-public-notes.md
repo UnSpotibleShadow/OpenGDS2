@@ -37,8 +37,13 @@ or separate .NET installation is needed. Import your legally obtained
 GameDev2DX.lzh from the title; the self-extracting installer is not supported
 as an import input. Original game files are not bundled.
 
-Data is stored in `%APPDATA%\@DATA_DIRECTORY@`. Start a fresh company for testing
-and back up modern saves before upgrading. Original saves are unsupported.
+Data is stored in `%APPDATA%\@DATA_DIRECTORY@`, with the permanent name
+`OpenGDS2` across versions and release labels. Close the old game before the first
+launch: prior `OpenGDS2-EarlyAccessTesting` imports, preferences, saves/backups,
+playlists and overrides are copied once. The old folder and existing destination
+files are preserved. Conflicting save pairs stay together; copy failures offer
+Retry before gameplay starts. Back up modern saves before upgrading. Original
+game saves remain unsupported. See [data migration](stable-user-data.md).
 
 ## Report problems
 

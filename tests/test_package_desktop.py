@@ -73,7 +73,7 @@ class DesktopPackageTests(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
     def test_candidate_records_source_and_handoff_in_checked_archive(self):
-        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\n')
+        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="OpenGDS2"\n')
         docs = self.source / "docs"
         docs.mkdir()
         for name in ["testing", "known-issues", "release-notes", "decisions"]:
@@ -86,6 +86,8 @@ class DesktopPackageTests(unittest.TestCase):
             prefix = "OpenGDS2-windows-0.1.0-ea.1-rc.4/"
             manifest = json.loads(archive.read(prefix+"BUILD_MANIFEST.json"))
             self.assertEqual(manifest["source_commit"], commit)
+            self.assertEqual(manifest["candidate_data_directory"], "OpenGDS2")
+            self.assertIn("%APPDATA%\\OpenGDS2.", archive.read(prefix+"GETTING_STARTED.txt").decode())
             self.assertEqual(manifest["runtime_packs"], ["microsoft.netcore.app.runtime.win-x64/8.0.0"])
             self.assertEqual(manifest["native_windows_acceptance"], "pending owner testing")
             self.assertEqual(archive.read(prefix+"DECISIONS.md"), b"Authored candidate fixture")
@@ -94,14 +96,14 @@ class DesktopPackageTests(unittest.TestCase):
                 self.assertEqual(hashlib.sha256(archive.read(prefix+name)).hexdigest(), digest)
 
     def test_candidate_rejects_debug_and_unidentified_source(self):
-        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\n')
+        (self.source / "project.godot").write_text('config/version="0.1.0-ea.1-rc.4"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="OpenGDS2"\n')
         for configuration, commit in [("debug", "a" * 40), ("release", None)]:
             with self.assertRaisesRegex(ValueError, "candidate requires"):
                 desktop.package(self.source, self.export, "windows", self.notices,
                                 self.output, configuration, True, commit)
         self.assertFalse(self.output.exists())
 
-    def public_fixture(self, version="0.1.0-ea.1", directory="OpenGDS2-EarlyAccessTesting"):
+    def public_fixture(self, version="0.1.0-ea.1", directory="OpenGDS2"):
         (self.source / "project.godot").write_text(
             f'config/version="{version}"\nconfig/use_custom_user_dir=true\n'
             f'config/custom_user_dir_name="{directory}"\n')
@@ -183,6 +185,16 @@ class DesktopPackageTests(unittest.TestCase):
             self.assertNotIn("# Known limitations — current source / historical RC.4", text)
             self.assertIn("Historical evidence stays intact.", text)
             self.assertIn("https://github.com/UnSpotibleShadow/OpenGDS2/blob/" + "b" * 40 + "/docs/financial-failure-m84.md#details", text)
+
+    def test_release_label_does_not_change_the_stable_data_directory(self):
+        for version in ["0.1.0-ea.1", "0.1.0-ea.2"]:
+            self.public_fixture(version=version)
+            self.public_package()
+            with zipfile.ZipFile(self.output) as archive:
+                prefix=f"OpenGDS2-windows-{version}/"
+                manifest=json.loads(archive.read(prefix+"BUILD_MANIFEST.json"))
+                self.assertEqual(manifest["data_directory"], "OpenGDS2")
+                self.assertIn("%APPDATA%\\OpenGDS2.",archive.read(prefix+"GETTING_STARTED.txt").decode())
 
     def test_public_ea_rejects_rc_version_debug_missing_commit_and_invalid_reporting_url(self):
         self.public_fixture(version="0.1.0-ea.1-rc.4")

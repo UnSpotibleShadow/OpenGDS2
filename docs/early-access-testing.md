@@ -14,9 +14,12 @@ known crashes, save loss, duplicate transactions and supported-workflow dead end
 4. Import your legally obtained GameDev2DX.lzh locally. Start a fresh company for the fresh-start check and read KNOWN_ISSUES.md. Test an existing compatible modern save separately using a copy. Original saves are unsupported.
 5. To capture diagnostics, run `.\OpenGDS2.console.exe --log-file opengds2-test.log` from a terminal in the extracted directory.
 
-Source builds currently retain `OpenGDS2-EarlyAccessTesting` as their custom data
-folder. Final package instructions identify the actual shipped location; a
-version-label change alone does not move imports, settings or saves.
+The permanent folder is `OpenGDS2`, including source builds. The first launch
+copies existing `OpenGDS2-EarlyAccessTesting` data once, keeping the old folder and
+existing destination files. Test that migration with copies of a profile; include
+save backups and confirm language/audio preferences apply on the first startup.
+Changing the version label must not change the folder. See
+[data migration](stable-user-data.md) for conflicts and retry behavior.
 
 ## Community test matrix
 

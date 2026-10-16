@@ -120,6 +120,89 @@ Test("interview rejects malformed saved phases, overlapping decisions and altere
     Check(ReleaseService.TryRelease(s,s.DevelopmentProjects[0],new OriginalCatalog(),"Blocked",5800,100,new FailureRandom())==ReleaseResult.NotReady);
     s.PendingProjectCancellation=new() {RoomIndex=0};Throws<InvalidDataException>(()=>SaveStore.Deserialize(SaveStore.Serialize(s)));
 });
+Test("stable user data migration copies imports preferences saves and backups without moving originals",()=>
+{
+    string parent=Path.Combine(Path.GetTempPath(),"opengds-migrate-"+Guid.NewGuid().ToString("N"));
+    try
+    {
+        string old=Path.Combine(parent,UserDataMigration.LegacyDirectoryName),current=Path.Combine(parent,UserDataMigration.DirectoryName);
+        var data=new Dictionary<string,string>{{"interface.cfg","language=ja"},{"audio.cfg","muted=true"},{"rankings.json","authored rankings"},
+            {"employee-name-readings.json","authored readings"},{"saves/slot1.json","current save"},{"saves/slot1.json.bak","previous save"},
+            {"original/Graphic/nested/art.txt","imported fixture"},{"music/local.ogg","authored music bytes"},{"asset-overrides/Graphic/patch.txt","authored override"}};
+        foreach(var (name,text) in data){string path=Path.Combine(old,name);Directory.CreateDirectory(Path.GetDirectoryName(path)!);File.WriteAllText(path,text);}
+        Directory.CreateDirectory(Path.Combine(old,"logs"));File.WriteAllText(Path.Combine(old,"logs/godot.log"),"old running log");
+        var r=UserDataMigration.Run(current);Check(r.Succeeded&&r.CopiedFiles==data.Count&&File.Exists(Path.Combine(current,UserDataMigration.CompletionFile)));
+        foreach(var (name,text) in data)Check(File.ReadAllText(Path.Combine(current,name))==text&&File.ReadAllText(Path.Combine(old,name))==text);
+        Check(!Directory.Exists(Path.Combine(current,"logs")));
+        File.Delete(Path.Combine(current,"saves/slot1.json"));
+        Check(UserDataMigration.Run(current).Succeeded&&!File.Exists(Path.Combine(current,"saves/slot1.json")));
+        Check(!Directory.EnumerateFiles(current,".migration-*.tmp",SearchOption.AllDirectories).Any());
+    }
+    finally{if(Directory.Exists(parent))Directory.Delete(parent,true);}
+});
+Test("migration retains destination save families and resumes identical partially copied saves",()=>
+{
+    string parent=Path.Combine(Path.GetTempPath(),"opengds-migrate-"+Guid.NewGuid().ToString("N"));
+    try
+    {
+        string old=Path.Combine(parent,UserDataMigration.LegacyDirectoryName),current=Path.Combine(parent,UserDataMigration.DirectoryName);
+        Directory.CreateDirectory(Path.Combine(old,"saves"));Directory.CreateDirectory(Path.Combine(current,"saves"));
+        for(int i=1;i<=3;i++){File.WriteAllText(Path.Combine(old,$"saves/slot{i}.json"),"old "+i);File.WriteAllText(Path.Combine(old,$"saves/slot{i}.json.bak"),"backup "+i);}
+        File.WriteAllText(Path.Combine(old,"interface.cfg"),"old language");File.WriteAllText(Path.Combine(current,"interface.cfg"),"new language");
+        File.WriteAllText(Path.Combine(current,"saves/slot1.json"),"existing current");
+        File.WriteAllText(Path.Combine(current,"saves/slot2.json.bak"),"existing backup");
+        File.WriteAllText(Path.Combine(current,"saves/slot3.json"),"old 3");
+        var r=UserDataMigration.Run(current);Check(r.Succeeded);
+        Check(File.ReadAllText(Path.Combine(current,"interface.cfg"))=="new language");
+        Check(File.ReadAllText(Path.Combine(current,"saves/slot1.json"))=="existing current"&&!File.Exists(Path.Combine(current,"saves/slot1.json.bak")));
+        Check(File.ReadAllText(Path.Combine(current,"saves/slot2.json.bak"))=="existing backup"&&!File.Exists(Path.Combine(current,"saves/slot2.json")));
+        Check(File.ReadAllText(Path.Combine(current,"saves/slot3.json.bak"))=="backup 3");
+    }
+    finally{if(Directory.Exists(parent))Directory.Delete(parent,true);}
+});
+Test("failed data migration is retryable and never marks a partial copy complete",()=>
+{
+    string parent=Path.Combine(Path.GetTempPath(),"opengds-migrate-"+Guid.NewGuid().ToString("N"));
+    try
+    {
+        string old=Path.Combine(parent,UserDataMigration.LegacyDirectoryName),current=Path.Combine(parent,UserDataMigration.DirectoryName);
+        Directory.CreateDirectory(Path.Combine(old,"original"));Directory.CreateDirectory(current);
+        File.WriteAllText(Path.Combine(old,"interface.cfg"),"original preference");File.WriteAllText(Path.Combine(old,"original/import.txt"),"import bytes");
+        File.WriteAllText(Path.Combine(current,"original"),"destination obstacle");
+        Check(!UserDataMigration.Run(current).Succeeded&&!File.Exists(Path.Combine(current,UserDataMigration.CompletionFile)));
+        Check(File.ReadAllText(Path.Combine(current,"original"))=="destination obstacle");
+        File.Delete(Path.Combine(current,"original"));File.WriteAllText(Path.Combine(current,"interface.cfg"),"preserve partial destination");
+        Check(UserDataMigration.Run(current).Succeeded);
+        Check(File.ReadAllText(Path.Combine(current,"original/import.txt"))=="import bytes"&&File.ReadAllText(Path.Combine(current,"interface.cfg"))=="preserve partial destination");
+    }
+    finally{if(Directory.Exists(parent))Directory.Delete(parent,true);}
+});
+Test("fresh profiles and custom data roots do not repeatedly ingest legacy data",()=>
+{
+    string parent=Path.Combine(Path.GetTempPath(),"opengds-migrate-"+Guid.NewGuid().ToString("N"));
+    try
+    {
+        string current=Path.Combine(parent,UserDataMigration.DirectoryName),old=Path.Combine(parent,UserDataMigration.LegacyDirectoryName);
+        Check(UserDataMigration.Run(current).Succeeded);Directory.CreateDirectory(old);File.WriteAllText(Path.Combine(old,"interface.cfg"),"late old settings");
+        Check(UserDataMigration.Run(current).Succeeded&&!File.Exists(Path.Combine(current,"interface.cfg")));
+        string custom=Path.Combine(parent,"CustomProfile");Check(UserDataMigration.Run(custom).Succeeded&&!Directory.Exists(custom));
+        File.WriteAllText(Path.Combine(current,UserDataMigration.CompletionFile),"damaged marker");Check(!UserDataMigration.Run(current).Succeeded);
+    }
+    finally{if(Directory.Exists(parent))Directory.Delete(parent,true);}
+});
+if(!OperatingSystem.IsWindows())Test("automatic migration refuses symbolic links and preserves their targets",()=>
+{
+    string parent=Path.Combine(Path.GetTempPath(),"opengds-migrate-"+Guid.NewGuid().ToString("N"));
+    try
+    {
+        string old=Path.Combine(parent,UserDataMigration.LegacyDirectoryName),current=Path.Combine(parent,UserDataMigration.DirectoryName);
+        Directory.CreateDirectory(old);string target=Path.Combine(parent,"outside.txt");File.WriteAllText(target,"must remain intact");
+        File.CreateSymbolicLink(Path.Combine(old,"interface.cfg"),target);
+        Check(!UserDataMigration.Run(current).Succeeded&&!File.Exists(Path.Combine(current,"interface.cfg")));
+        Check(File.ReadAllText(target)=="must remain intact");
+    }
+    finally{if(Directory.Exists(parent))Directory.Delete(parent,true);}
+});
 Test("game-title aliases preserve player names and require a matching imported rival",()=>
 {
     var rival=new RivalProduct {Title="Authored rival",Owner=2};
