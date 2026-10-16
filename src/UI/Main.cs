@@ -203,7 +203,7 @@ public partial class Main : Control
         var quit = new Button { Text = Tr("QUIT"), CustomMinimumSize = new Vector2(0, 46) };
         quit.Pressed += () => GetTree().Quit();
         _content.AddChild(quit);
-        var note = new Label { Name = "BuildVersion", Text = $"{Tr("EARLY_ACCESS_CANDIDATE")} — {BuildInfo.Version}", HorizontalAlignment = HorizontalAlignment.Center,
+        var note = new Label { Name = "BuildVersion", Text = $"{Tr("EARLY_ACCESS_LABEL")} — {BuildInfo.Version}", HorizontalAlignment = HorizontalAlignment.Center,
             AutowrapMode = TextServer.AutowrapMode.WordSmart };
         _content.AddChild(note);
         _content.AddChild(new Label { Name = "EarlyAccessBoundary", Text = Tr("EARLY_ACCESS_BOUNDARY"),

@@ -1,72 +1,43 @@
 # Early Access release preparation
 
-Target version: **0.1.0-ea.1**, with private candidate **0.1.0-ea.1-rc.4**. The announced target is Friday, 16 October 2026, at 19:00 CEST (17:00 UTC). The owner chose community testing for Early Access; completing the full native Windows matrix is not a pre-release gate. The existing RC.4 remains a private historical artifact, and announcing the target does not identify or publish the final package.
+Prepared version: **0.1.0-ea.1**. The announced target is 16 October 2026,
+19:00 CEST / 17:00 UTC, subject to readiness. The final Windows artifact has not
+yet been exported, accepted or published. Private RC.4/M90 packages are historical
+and must not be relabeled as containing current source changes.
 
-## Minimum scope
+The owner is performing the final gameplay review. The cleanup prepares version
+and UI wording, current documents and package-document rendering. It changes no
+gameplay, save format or data-folder behavior. Source builds still use
+`OpenGDS2-EarlyAccessTesting`; the actual final package must state its data folder
+and any deliberate transfer instructions. Never silently move or overwrite saves.
 
-A community release needs a dependable new-company → hire/assign → develop → meetings → ship/reviews → sales/reprints → calendar/annual loop, safe modern saves, clear controls, local original import, English interface/audio and a Windows package with basic launch/import/save/reload checks. Multi-year play, display coverage and sustained native testing are community acceptance work. Disclose untested behavior; fix known crashes, save corruption, duplicate charges and supported-workflow dead ends before publishing.
+## Release gates
 
-The supported facilities include school, hot springs, recycling, technology capacity, production expansion, lawyer consultation, mystery-lab experiments and own-hardware development/launch. Casino coin purchase and all four recovered activities are supported with documented original quirks. Horse racing requires a refreshed original import and preserves the broken native settlement path. Original-save compatibility and final cosmetic parity remain deferred. Separate external-work and polishing workflows have not been established by static evidence. The explicit campaign boundary is Beginner’s verified ending plus experimental ongoing Normal play: negative funds in either mode trigger the recovered dissolution flow and return to the title. Full original presentation and campaign parity remain incomplete. The title, mode selection and package disclose this scope. See [decision register](early-access-decisions.md).
+- [ ] Record the owner's final review and fix known crashes, save corruption, duplicate transactions and dead ends in supported workflows.
+- [ ] Merge the reviewed release-preparation source; freeze its exact commit and version.
+- [ ] Review tracked/history/hosted content before making the repository public; verify original-content exclusions and existing code/runtime/community-music notices.
+- [ ] Build a fresh Windows x64 release export and identify its source, runtime, ZIP and checksums.
+- [ ] Check that exact ZIP on Windows: launch, original LZH import, new company, save/exit/reload and a backed-up compatible modern save. Record unrun checks honestly.
+- [ ] Present the concrete artifact, notes, limitations and validation for the final publication decision.
+- [ ] After approval, make the repository public and publish the reviewed release/tag; verify unauthenticated issue access, asset download and the downloaded ZIP hash before announcing availability.
 
-## Public release gates
+The full Windows/display/multi-year matrix remains community testing, per the
+owner's existing decision. Unrun rows alone are not known defects. Complete native
+presentation/RNG/save compatibility is not claimed. The current supported scope
+and quirks are in [known issues](early-access-known-issues.md) and
+[the decision register](early-access-decisions.md); use
+[the Windows guide](early-access-testing.md) to record actual results.
 
-- [x] Private versioned candidate with visible build identification.
-- [x] Candidate data directory separated from ordinary development data.
-- [x] Known limitations, owner test checklist, release-note draft and bug template prepared.
-- [x] Durable GitHub backlog: [#55](https://github.com/UnSpotibleShadow/OpenGDS2/issues/55).
-- [ ] Check final-package launch, original LZH import and a new-game save/reload; record exactly what ran and what remains untested.
-- [x] Full nineteen-row Windows matrix moved to community testing by owner decision on 2026-10-11; multi-year playthrough is not a pre-release requirement.
-- [ ] Resolve known crashes, save corruption, duplicate transactions and supported-workflow dead ends; rerun relevant regressions. Unrun community checklist rows do not count as known defects.
-- [x] Decide and visibly document the allowed campaign boundary (EA-02); final owner release acceptance remains separate.
-- [x] Restore all twelve exact seasonal source OGGs locally and pass source integrity checks, preserving existing remote blobs (2026-10-07).
-- [x] Produce a clean Windows source export using Godot 4.4.1 .NET/.NET 8 and matching templates; packaged resource, license and checksum checks passed in M73. Native Windows community acceptance remains separate.
-- [ ] Review community-recording distribution permission, code/runtime notices and original-content exclusions for the actual public package.
-- [x] Merge the validated M56–M62 branch stack in order (#50 → #51 → #52 → #53 → #54 → #57 → #58); owner confirmed the complete branch/PR/merge workflow on 2026-10-07.
-- [ ] Finalize the exact source SHA, final Windows ZIP/hash, known-issue list and distribution destination for owner publication approval.
-- [x] Reporting destination chosen: the owner plans to make OpenGDS2 public before release; use https://github.com/UnSpotibleShadow/OpenGDS2/issues.
-- [ ] Verify the repository and issue form are accessible without owner access after the owner changes visibility. Choosing the route does not close public-access verification.
+## Build and package the exact source
 
-Keep Actions paused. Never change repository visibility, publish a GitHub release or distribute to the community as part of candidate preparation. After approval, publish the reviewed artifact with notes/checksums and link the backlog/bug-report route. Keep source/asset licensing boundaries and required LZH import explicit.
+Use Godot 4.4.1 .NET, matching official .NET release templates and .NET SDK 8.
+The release configuration pins its self-contained runtime to .NET 8.0.31.
+Use a fresh checkout/export directory at the frozen source commit and a clean
+release build/import. Follow [building](building.md) and the bounded execution
+rules in [AGENTS.md](../AGENTS.md). The restricted-host adapter is for local build
+execution only and must not enter the distributed game.
 
-## Reproduction
-
-Install Godot 4.4.1 .NET, matching .NET export templates and .NET SDK 8. The
-ExportRelease configuration pins the self-contained runtime to 8.0.31. On an
-ordinary machine, build/import and run the Windows Desktop release exporter;
-use the bounded commands in building.md. On this restricted Linux host, use
-`tools/workspace_sdk.py` inside `tools/bounded_process.py`; see workspace-runtime.md.
-No original archive or trusted old desktop artifact is needed to build the package. M80 changes source gameplay after RC.4: rebuild from the selected final source; do not relabel the existing RC.4 ZIP as containing later fixes.
-
-Generate notices through `tools/export_licenses.gd` using that editor, then run:
-
-```sh
-python3 tools/package_desktop.py --source . --export /path/to/windows-export \
-  --platform windows --configuration release --notices /path/to/notices \
-  --candidate --source-commit <exact-source-sha> \
-  --output /path/to/OpenGDS2-windows-0.1.0-ea.1-rc.4.zip
-```
-
-Set NUGET_PACKAGES to the cache used for the export so runtime notices match the
-actual publish. BUILD_MANIFEST.json records source/assembly/runtime provenance;
-SHA256SUMS covers all packaged files. Include current testing, limitation,
-release-note and decision documents. Validate every PCK payload digest,
-resource decoding, archive integrity and content exclusions before handoff.
-Native Windows test results remain separate from exported-host checks.
-
-See [M73 validation](windows-source-export-m73.md) for this source export's
-provenance, checks and remaining acceptance gates. Actions remain paused.
-
-## Public Early Access packaging — M81
-
-The packager now has a separate `--early-access` mode; ordinary development and
-private `--candidate` modes remain available. It requires a Windows release
-export, a final `x.y.z-ea.n` project version (RC labels are rejected), exact source
-commit, HTTPS reporting URL and explicit custom data directory. It does not
-publish a release or verify that the reporting URL is publicly accessible.
-
-Before the final export, select the final source/version and update the in-game
-private-candidate wording. The current source still identifies RC.4; this command
-intentionally refuses it. Build and export that final source normally, then:
+Generate actual engine/runtime notices with `tools/export_licenses.gd`, then run:
 
 ```sh
 python3 tools/package_desktop.py --source . --export /path/to/windows-export \
@@ -76,17 +47,34 @@ python3 tools/package_desktop.py --source . --export /path/to/windows-export \
   --output /path/to/OpenGDS2-windows-0.1.0-ea.1.zip
 ```
 
-Public packages include generated getting-started instructions, the public
-release-note template, limitations/community checklist/decision notes, runtime
-licenses, source/assembly provenance and checksums. They record native Windows
-acceptance as incomplete; no owner-test completion or public URL availability
-is inferred. The data directory is read from the source project settings.
-Reusing an export directory replaces private candidate handoff files with the
-public ones, but a fresh final export is still required for updated gameplay.
+Set NUGET_PACKAGES to the export's runtime-pack cache so its bundled .NET notices
+match. The public mode requires a final EA version, exact SHA, HTTPS reporting
+URL and explicit custom data folder; it rejects private-candidate/debug modes.
+It writes BUILD_MANIFEST.json, SHA256SUMS, release notes, getting-started text,
+limitations, community checklist, decisions and license notices. Public documents
+identify the actual version/data folder; links between bundled notes remain local
+and links to unbundled evidence point at the exact source commit.
 
-Ten authored-fixture package tests pass, including full archive checksum
-verification, version/source/mode guards, reporting/data requirements, original
-content exclusions and replacement of a private-candidate handoff. These tests
-create no distributable game build and do not establish native acceptance.
+Verify ZIP and PCK contents/digests, resource decoding, music and notices, plus
+exclusion of original files, caches, saves and private traces. Produce an external
+ZIP SHA-256 as well as the internal file list. Test the packaged executable, not
+only an editor/source run. Linux/exported-host checks must not be reported as
+native Windows playthrough acceptance.
 
-M84 adds the recovered financial-failure sequence. See [evidence and modern continuation rules](financial-failure-m84.md). These changes are not in the unchanged RC.4 ZIP; rebuild the final source before release.
+## Publication and handoff
+
+Keep Actions paused. Package preparation does not authorize a release, tag or
+visibility change. The final decision reviews a concrete tested artifact and its
+notes together. The reporting destination is
+https://github.com/UnSpotibleShadow/OpenGDS2/issues; public access must be checked
+after the visibility change, not assumed from that URL.
+
+A previous upload to uploads.github.com returned HTTP401. Diagnose delivery
+before relying on it; read back ambiguous mutations rather than retrying blindly.
+If the configured upload route is unavailable, hand the owner the same verified
+ZIP/checksum/notes for upload and verify the resulting download afterwards.
+
+Historical export provenance is in [M73](windows-source-export-m73.md).
+[Public release notes](early-access-public-notes.md) are the package template;
+[release-note preparation](early-access-release-notes.md) describes current work.
+Historical candidate checks are evidence for those artifacts only.

@@ -1,3 +1,36 @@
+# Current development checkpoint — 16 October 2026
+
+The source is in final owner review before the first public Early Access release.
+The latest gameplay batch is PR125, merge
+`2226cb6858e9de39230a51ad2254f3c9711e4b35`: 65 rival games, ten publishers and
+153 development example/magazine names now use English display aliases while
+preserving player titles, Japanese and saved/imported identities. Its 565 domain
+checks, clean build, bilingual rendered checks, award continuation and core loop
+passed. These are source/host results, not final Windows-package acceptance.
+
+PR123 implemented facility-specific conversation chains and all six promotion
+media; PR124 corrected the TV patch to stay inside the CRT. Earlier current
+implementation/evidence is recorded in [map backlog](map-backlog-implementation.md)
+and [issue 118](issue118-implementation.md). The original Help, toolbar/settings,
+backup/virus and poaching routes are connected; original save compatibility,
+whole-session native RNG and complete original presentation remain open.
+
+Current cleanup prepares version `0.1.0-ea.1`, removes private-candidate UI copy,
+refreshes release documents and fixes packaged document metadata/links. The data
+folder and gameplay are unchanged. No final export, publication or visibility
+change is implied. Follow [release preparation](early-access-release.md) and
+[the decision register](early-access-decisions.md) for the remaining gates.
+Actions stay paused. Original assets, private caches and captures stay outside git.
+
+The root [AGENTS.md](../AGENTS.md) contains active working instructions.
+[Archived agent handoffs](archive/agent-handoff-through-20261015.md) preserve the
+older session records. Historical next steps below must not be treated as fresh
+instructions or current implementation gaps.
+
+---
+
+## Historical development checkpoints
+
 # Development checkpoint — M74 continuation, 2026-10-10
 
 Baseline: main `cd82cea6a5e51385f0c6b0ac9f7e8971f79b5c09` (M73/RC.4). Work proceeds on `codex/m74-validation-and-progression`; the audit is PR #72. The entries below are historical checkpoints, not instructions to resume their old branches.

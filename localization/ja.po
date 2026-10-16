@@ -161,15 +161,6 @@ msgstr "契約金"
 msgid "HIRE_CONFIRM"
 msgstr "雇用決定"
 
-msgid "HIRING_FORM_VERIFIED"
-msgstr "オリジナルの社員雇用フォームと表示される能力項目をVB6実行ファイルから復元しました。"
-
-msgid "APPLICANT_ROSTER_PENDING"
-msgstr "応募者の元データにある名前・能力値は解析中です。候補選出アルゴリズムは復元済みで、このビルドでは仮の応募者を作成しません。"
-
-msgid "APPLICANT_REFRESH_EVIDENCE"
-msgstr "オリジナルの雇用フォームは開くたびに5人の候補枠を再構築します。乱数選出ルールは復元済みで、元の人物データは解析中です。"
-
 msgid "APPLICANT_COUNT"
 msgstr "応募者: {0}"
 
@@ -2740,8 +2731,8 @@ msgstr "借入枠が3件とも使用中です。返済が済むまで新しく�
 msgid "BITMAP_FACILITY_AVAILABLE"
 msgstr "テナント募集中"
 
-msgid "EARLY_ACCESS_CANDIDATE"
-msgstr "アーリーアクセス非公開テスト候補"
+msgid "EARLY_ACCESS_LABEL"
+msgstr "アーリーアクセス"
 
 msgid "CANCEL_PROJECT"
 msgstr "開発を中止"

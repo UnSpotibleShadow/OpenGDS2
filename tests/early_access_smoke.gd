@@ -34,12 +34,23 @@ func run() -> void:
         main = load("res://scenes/Main.tscn").instantiate()
         root.add_child(main)
         await process_frame
+        check(main.find_child("BuildVersion",true,false).text==tr("EARLY_ACCESS_LABEL")+" — "+str(ProjectSettings.get_setting("application/config/version")),"Localized EA title and configured version "+locale)
+        check(root.title.contains(str(ProjectSettings.get_setting("application/config/version"))),"Application and project versions agree "+locale)
+        check(not main.find_child("BuildVersion",true,false).text.contains("Private"),"Title has no private-candidate label "+locale)
         check(main.find_child("EarlyAccessBoundary", true, false).text == tr("EARLY_ACCESS_BOUNDARY"), "Localized campaign boundary " + locale)
         main.call("ShowEarlyAccessScope")
         await process_frame
         var labels = main.find_children("*", "Label", true, false)
         check(labels.any(func(label): return label.text == tr("EARLY_ACCESS_DEFERRED")), "Unavailable mechanics are explained " + locale)
-        main.call("ShowModeSelection", "Fixture", "Tester")
+        # Exercise the actual form transition; ShowModeSelection now takes a
+        # domain-state argument and is intentionally not a Godot-callable method.
+        main.call("ShowCompanySetup")
+        await process_frame
+        var fields=main.find_children("*","LineEdit",true,false).filter(func(field):return field.is_visible_in_tree())
+        check(fields.size()==2,"Company form has both name fields "+locale)
+        fields[0].text="Fixture";fields[1].text="Tester"
+        for button in main.find_children("*","Button",true,false):
+            if button.is_visible_in_tree() and button.text==tr("CONFIRM"):button.pressed.emit();break
         await process_frame
         check(main.find_child("EarlyAccessModeBoundary", true, false) != null, "Boundary before starting a mode " + locale)
         main.call("ShowTitleScreen")
