@@ -1,24 +1,21 @@
 # OpenGDS2 working instructions
 
-## Current work — release prepared, publication blocked, 16 October 2026
+## Current work — player wiki, 16 October 2026
 
-Owner authorized building and first public release. Workflow PR134 merged.
-Release source is frozen at `83db494daf01a855fd7d9895142c7928265b58fd` and annotated
-tag `v0.1.0-ea.1` is already pushed. NEVER recreate, move or retarget that tag.
-Windows ZIP is built and verified; see docs/release-verification-0.1.0-ea.1.md.
-Draft release ID415139616 exists, with notes and no assets. Repository stays private.
-The GitHub integration rejects uploads.github.com asset upload with HTTP401 and
-repository visibility changes with HTTP403. Reads confirmed no asset upload and
-no visibility change. No unchanged upload/admin retries; these are connection
-permission blockers, not outstanding user authorization. Actions remain paused.
-Owner can upload the three verified /workspace/share release files, make the
-repository public and publish the existing draft. Then verify anonymous access
-and downloaded ZIP hash before announcing availability. On resume read remote
-state first; never duplicate the existing draft/tag or overwrite assets.
-Recovery: `/workspace/scratch/ea-release-20261016/`. Keep #95/#118 open.
-Native Windows package acceptance is unrun; export-host checks are not native.
-The optional legacy original/UI omnibus harness has stale expectations and 25
-failures; focused fresh import/save/restart and migration checks passed separately.
+Owner made the repository public and requests a player wiki. Current wiki feature
+is enabled, but `OpenGDS2.wiki.git` returns Repository not found (uninitialized).
+Prepare and review docs/wiki pages/navigation, repository index and maintenance
+instructions, then publish by normal non-force wiki Git push if available.
+Keep canonical sources reviewed through a feature PR; preserve unrelated pages.
+Recovery: `/workspace/scratch/player-wiki-20261016/`. Branch codex/player-wiki,
+base main cad7348b939734db33904428cbc034b518e470a1. Owner additionally requested
+quick release notes; copy supplied at /workspace/share/OpenGDS2-v0.1.0-ea.1-release-notes.md.
+Do not change the immutable v0.1.0-ea.1 tag, rebuild or publish an existing draft
+as part of wiki work. Last observed release415139616 remains draft with no assets;
+owner is preparing their own exports. Do not repeat failed uploads/admin writes.
+Actions stay paused. Keep #95/#118 open. No actual original artwork/text/cache in
+wiki source; player-focused summaries and links only. Source PR merge and explicit
+snapshot sync remain authorized.
 
 ## Current source and history
 
