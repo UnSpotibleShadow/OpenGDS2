@@ -1,19 +1,19 @@
 # OpenGDS2 working instructions
 
-## Current work — recall presentation, 16 October 2026
+## Current work — first Early Access release, 16 October 2026
 
-Owner requested restoring the consumer investigation explanation after a fresh
-bounded original-executable audit confirmed the financial rules. Branch
-`codex/recall-conversations`, base PR132 merge `5d71103a9d5b36724f0673a3bfc87cf96ce7e80c`.
-Restore localized representative/secretary pages before the existing compact
-receipt; preserve finance, RNG, countdown, save format and acknowledgements.
-See docs/recall-conversations.md. Recovery:
-`/workspace/scratch/recall-presentation-20261016/`.
-Clean development compile/import, EN/JA rendered all-outcome/save-replay checks,
-core-loop (137s) and 93 Python tests (17 optional skips) passed.
-Owner reserves release building/publication. Development compilation/UI checks
-only; no release export/package/tag/upload/visibility/Actions changes. Keep
-#95/#118 open. Verified PR merge and explicit snapshot sync remain authorized.
+Owner now explicitly authorizes preparing everything and releasing on GitHub,
+superseding the earlier owner-only build/publication instruction. Prepare the
+lightweight main/PR/tag workflow, freeze its merged source, clean-export Windows
+x64 0.1.0-ea.1 and validate/package it; create immutable v0.1.0-ea.1 and publish
+an Early Access pre-release. Public visibility is within the requested first
+public-release scope after reviewing repository/history/hosted content. Keep
+Actions paused; do not create debug packages or close #95/#118. No new final
+permission question is required by the superseded handoff. Record exact package
+checks honestly: owner gameplay sign-off is not acceptance of a future ZIP.
+Recovery: `/workspace/scratch/ea-release-20261016/`.
+Use bounded operations with mutation intents/read-back. Diagnose the historical
+uploads.github.com HTTP401; do not repeat ambiguous mutations blindly.
 
 ## Current source and history
 

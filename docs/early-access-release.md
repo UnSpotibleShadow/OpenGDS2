@@ -3,8 +3,9 @@
 Prepared version: **0.1.0-ea.1**, proposed tag **v0.1.0-ea.1**.
 The owner completed the final gameplay review on 16 October 2026 with no further
 feedback. The gameplay baseline is PR131, `eca4921353cd48b5525cec3a1c3d351c30175b42`.
-The owner will build and publish the release themselves. No build/export/package,
-tag, GitHub release, upload or visibility change is part of this handoff. The
+The owner subsequently authorized preparing and publishing the release on
+GitHub. That authorization supersedes the earlier owner-only handoff; record
+actual package/publication results separately from preparation. The
 previous announced date was a target, not evidence of an available download.
 
 Use [the owner handoff](release-handoff.md) for the remaining manual steps and
@@ -66,8 +67,8 @@ native Windows playthrough acceptance.
 ## Publication and handoff
 
 Keep Actions paused. Package preparation does not authorize a release, tag or
-visibility change. The final decision reviews a concrete tested artifact and its
-notes together. The reporting destination is
+visibility change. The owner has authorized this release; prepare and verify the concrete artifact
+and notes before publishing. The reporting destination is
 https://github.com/UnSpotibleShadow/OpenGDS2/issues; public access must be checked
 after the visibility change, not assumed from that URL.
 

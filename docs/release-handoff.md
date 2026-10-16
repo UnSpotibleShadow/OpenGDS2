@@ -1,9 +1,10 @@
 # Maintainer release handoff — 0.1.0-ea.1
 
 The owner signed off the gameplay review on 16 October 2026 with no further
-feedback. Building and GitHub publication are reserved to the owner. No new
-build, export, ZIP, checksum, tag, release, upload or visibility change was made
-for this handoff. Actions remain paused.
+feedback. The owner subsequently authorized preparation and publication on GitHub,
+superseding the earlier owner-only build/publication instruction. This checklist
+records the required work, not evidence that a package has already passed it.
+Actions remain paused. Follow [the release workflow](release-workflow.md).
 
 ## Source and prepared material
 
@@ -17,7 +18,7 @@ for this handoff. Actions remain paused.
   [known issues](early-access-known-issues.md), [Windows checklist](early-access-testing.md)
   and [data migration](stable-user-data.md).
 
-## Owner's remaining steps
+## Build and publication steps
 
 1. Record the exact reviewed source commit. Use Godot 4.4.1 .NET, matching release
    templates and .NET SDK 8 with the pinned self-contained runtime. Build a fresh
