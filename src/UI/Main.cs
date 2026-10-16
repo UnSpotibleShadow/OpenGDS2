@@ -66,9 +66,11 @@ public partial class Main : Control
 
     public override void _Ready()
     {
+        var migration=UserDataMigration.Run(ProjectSettings.GlobalizePath("user://"));
         LoadInterfaceLanguage();
         GetWindow().Title = $"OpenGDS2 {BuildInfo.Version}";
         BuildShell();
+        if(!migration.Succeeded){ShowDataMigrationFailure(migration);return;}
         _music = new BackgroundMusic { Name = "BackgroundMusic" };
         AddChild(_music);
         _effects=new OriginalSoundEffects {Name="OriginalSoundEffects"};AddChild(_effects);

@@ -5118,3 +5118,13 @@ msgstr ""
 
 msgid "CATALOG_TYPE_EXAMPLE_50_2"
 msgstr ""
+
+
+msgid "DATA_MIGRATION_TITLE"
+msgstr "以前のゲームデータ"
+
+msgid "DATA_MIGRATION_ERROR"
+msgstr "以前のデータをOpenGDS2に完全にコピーできませんでした。OpenGDS2-EarlyAccessTestingフォルダーは変更されず、コピー先の既存ファイルも上書きされていません。ほかのゲームを閉じ、ディスクの空き容量とフォルダーのアクセス権を確認してから再試行してください。\n\n詳細：{reason}"
+
+msgid "DATA_MIGRATION_RETRY"
+msgstr "以前のデータのコピーを再試行"

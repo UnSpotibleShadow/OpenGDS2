@@ -57,9 +57,10 @@ def package(source, export, platform, notices, output, configuration="release", 
         if (not report_url or any(c.isspace() for c in report_url) or
             urlparse(report_url).scheme != "https" or not urlparse(report_url).hostname):
             raise ValueError("Public Early Access requires an HTTPS community reporting URL")
+    if candidate or early_access:
         directory = re.search(r'^config/custom_user_dir_name="([^"\\/]+)"$', project, re.M)
         if not re.search(r'^config/use_custom_user_dir=true$', project, re.M) or not directory:
-            raise ValueError("Public Early Access requires an explicit custom data directory")
+            raise ValueError("Early Access packaging requires an explicit custom data directory")
         data_directory = directory.group(1)
     executable = "OpenGDS2.x86_64" if platform == "linux" else "OpenGDS2.exe"
     if not (export / executable).is_file() or not (export / "OpenGDS2.pck").is_file():
@@ -153,7 +154,7 @@ The original LZH requirement and game rules are the same as the release export.
             "No editor or separate .NET installation is needed. Import your legally obtained\n"
             "GameDev2DX.lzh from the title. No original game files are included.\n"
             "Read LICENSE, notice.md and licenses/ for code, engine, runtime and music notices.\n\n"
-            "Data folder: %APPDATA%\\OpenGDS2-EarlyAccessTesting. Start a new company.\n"
+            f"Data folder: %APPDATA%\\{data_directory}. Back up existing saves.\n"
             "Modern JSON saves are supported; original saves are not. Back up before upgrading.\n"
             "Load Previous Save recovers the previous valid slot without overwriting the current file.\n\n"
             "Read TEST_CHECKLIST.md, KNOWN_ISSUES.md, RELEASE_NOTES.md and DECISIONS.md.\n"
@@ -170,7 +171,7 @@ The original LZH requirement and game rules are the same as the release export.
             "platform": platform, "configuration": configuration,
             "build_method": "standard Godot .NET source export",
             "private_early_access_candidate": True,
-            "candidate_data_directory": "OpenGDS2-EarlyAccessTesting",
+            "candidate_data_directory": data_directory,
             "runtime_packs": [f"{name}/{ver}" for name, ver in sorted(runtime_packs)],
             "assembly_sha256": hashlib.sha256(next(export.rglob("OpenGDS2.dll")).read_bytes()).hexdigest(),
             "native_windows_acceptance": "pending owner testing",
@@ -196,6 +197,9 @@ The original LZH requirement and game rules are the same as the release export.
             "No original game files are included.\n\n"
             f"Data folder: %APPDATA%\\{data_directory}. Back up saves before upgrading.\n"
             "Modern JSON saves and previous-valid-save recovery are supported; original saves are not.\n"
+            "With the standard OpenGDS2 folder, the first launch copies prior OpenGDS2-EarlyAccessTesting\n"
+            "imports, settings, saves, playlists and overrides without deleting originals or replacing destination files.\n"
+            "Close the old game before that launch. Conflicting save/backup pairs stay together; copy problems offer Retry.\n"
             "Beginner ends after Year 2, December, week 4. Normal is experimental ongoing play.\n"
             "Mystery lab, own hardware, negative-funds dissolution, casino coins and all four casino activities are supported with documented original quirks, including discarded horse winnings. Original saves remain deferred.\n\n"
             "Read RELEASE_NOTES.md, KNOWN_ISSUES.md and the community TEST_CHECKLIST.md.\n"

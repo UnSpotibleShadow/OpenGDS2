@@ -6,10 +6,10 @@ yet been exported, accepted or published. Private RC.4/M90 packages are historic
 and must not be relabeled as containing current source changes.
 
 The owner is performing the final gameplay review. The cleanup prepares version
-and UI wording, current documents and package-document rendering. It changes no
-gameplay, save format or data-folder behavior. Source builds still use
-`OpenGDS2-EarlyAccessTesting`; the actual final package must state its data folder
-and any deliberate transfer instructions. Never silently move or overwrite saves.
+and UI wording, current documents and package-document rendering. The subsequent
+owner-approved data-folder change sets the permanent name to `OpenGDS2`, across
+versions and release labels, with a one-time non-destructive legacy copy. Gameplay
+and save formats are unchanged. See [data migration](stable-user-data.md).
 
 ## Release gates
 
@@ -17,7 +17,7 @@ and any deliberate transfer instructions. Never silently move or overwrite saves
 - [ ] Merge the reviewed release-preparation source; freeze its exact commit and version.
 - [ ] Review tracked/history/hosted content before making the repository public; verify original-content exclusions and existing code/runtime/community-music notices.
 - [ ] Build a fresh Windows x64 release export and identify its source, runtime, ZIP and checksums.
-- [ ] Check that exact ZIP on Windows: launch, original LZH import, new company, save/exit/reload and a backed-up compatible modern save. Record unrun checks honestly.
+- [ ] Check that exact ZIP on Windows: launch, original LZH import, new company, save/exit/reload and a copied legacy test profile (including backup/settings). Verify migration preserves both old and existing destination data. Record unrun checks honestly.
 - [ ] Present the concrete artifact, notes, limitations and validation for the final publication decision.
 - [ ] After approval, make the repository public and publish the reviewed release/tag; verify unauthenticated issue access, asset download and the downloaded ZIP hash before announcing availability.
 

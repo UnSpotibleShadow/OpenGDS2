@@ -16,8 +16,10 @@ backup/virus and poaching routes are connected; original save compatibility,
 whole-session native RNG and complete original presentation remain open.
 
 Current cleanup prepares version `0.1.0-ea.1`, removes private-candidate UI copy,
-refreshes release documents and fixes packaged document metadata/links. The data
-folder and gameplay are unchanged. No final export, publication or visibility
+refreshes release documents and fixes packaged document metadata/links. PR126 kept the data
+folder and gameplay unchanged. The subsequent owner decision sets a permanent
+`OpenGDS2` folder and first-launch non-destructive legacy migration; see
+[stable user data](stable-user-data.md). No final export, publication or visibility
 change is implied. Follow [release preparation](early-access-release.md) and
 [the decision register](early-access-decisions.md) for the remaining gates.
 Actions stay paused. Original assets, private caches and captures stay outside git.

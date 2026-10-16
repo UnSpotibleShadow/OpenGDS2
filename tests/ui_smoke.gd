@@ -270,7 +270,7 @@ func run() -> void:
     await process_frame
     check(main.find_child("BuildVersion",true,false).text == tr("EARLY_ACCESS_LABEL")+" — "+str(ProjectSettings.get_setting("application/config/version")),"Title identifies the configured Early Access version")
     check(root.title.contains(str(ProjectSettings.get_setting("application/config/version"))),"Window identifies the configured version")
-    check(ProjectSettings.globalize_path("user://").contains("OpenGDS2-EarlyAccessTesting"),"Existing review data remains in its configured isolated directory")
+    check(ProjectSettings.get_setting("application/config/custom_user_dir_name")=="OpenGDS2","User data directory is stable across release labels")
     check(button("NEW_GAME") != null, "Title C# initialization")
     await press("SETTINGS")
     if DirAccess.get_files_at("user://music").is_empty():
