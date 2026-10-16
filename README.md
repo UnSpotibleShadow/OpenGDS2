@@ -105,3 +105,8 @@ OpenGDS2 is **free of charge**. If you would like to support development, you ca
 Community-written code and documentation use the [MIT License](LICENSE). Bundled community music has separate [distribution terms](audio/community/NOTICE.md); it is not covered by the code license.
 
 OpenGDS2 is an unofficial community project. Original game files and imported data remain outside the repository and release packages. See [notice.md](notice.md) for third-party notices and exclusions.
+
+## Development workflow
+
+Changes use topic branches and reviewed PRs into `main`. Published packages are
+identified by immutable version tags. See [branches, tags and releases](docs/release-workflow.md).

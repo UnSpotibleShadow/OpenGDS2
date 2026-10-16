@@ -14,9 +14,9 @@ and status-driven resizing. Earlier PR125 alias/domain/award checks and PR123–
 facility/promotion/TV evidence remain recorded in their feature documents. These
 are source/host results, not acceptance of a future Windows release ZIP.
 
-The owner explicitly reserves building and publishing. This documentation pass
-must not build/export/package, tag, publish, upload, change visibility or enable
-Actions. Original-save compatibility, whole-session native RNG and full original
+The owner subsequently authorized building and publishing the first release.
+Follow [the release workflow](release-workflow.md), freeze the exact source and
+record actual artifact verification before tagging/publication. Keep Actions paused. Original-save compatibility, whole-session native RNG and full original
 presentation remain open. Original assets, private caches and captures stay
 outside git. Public-content review and exact Windows-package checks remain
 separate maintainer tasks; no public availability is implied.
