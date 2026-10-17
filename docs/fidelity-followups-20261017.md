@@ -11,8 +11,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 1 | Horse-race scenery, camera and finish post | Merged into develop in [PR140](https://github.com/UnSpotibleShadow/OpenGDS2/pull/140); final Actions run passed. |
 | 2 | Oversized new-company setup | Merged into develop in [PR141](https://github.com/UnSpotibleShadow/OpenGDS2/pull/141); Actions passed. |
 | 3 | New-company Enter/default confirmation | Merged into develop in [PR143](https://github.com/UnSpotibleShadow/OpenGDS2/pull/143); Actions passed. |
-| 4 | Missing original About/version/link dialog | Implemented and locally validated on `feature/original-about-dialog`; PR targets develop. |
-| 5 | Original menu organization | Not started. |
+| 4 | Missing original About/version/link dialog | Merged into develop in [PR144](https://github.com/UnSpotibleShadow/OpenGDS2/pull/144); Actions passed. |
+| 5 | Original menu organization | Implemented and locally validated on `feature/original-menu-organization`; PR targets develop. |
 | 6 | Facility conversation/transaction ordering | Not started. |
 | 7 | Consumer Investigation paraphrasing and extra receipt | Not started. |
 | 8 | Original GD2 save compatibility | Not started; a separate compatibility feature, not a UI-only fix. |
@@ -164,3 +164,36 @@ the bilingual About fixture pass with zero failures. A fresh supported-original
 map rebuild passes for all 86 objects / 669 procedures / 35 workflow dispositions;
 generated Markdown/HTML and the source catalog are synchronized. Workflow lint
 also passes. Source CI includes the new fixture; no export or release is requested.
+
+## Step 5: original menu organization
+
+The supported original menu inventory recovers six roots in this order: Menu,
+Actions (`mKoudou`), Information (`mInfo`), Windows, Settings and Help. The port
+now uses that order (the translated first caption remains Game), including the
+native separators and Company development / Go out nested actions. Recruitment,
+poaching, secretary policies/change, purchases and bank are under Actions; staff,
+products, sales rankings, released hardware, own hardware and reach-time records
+are under Information in native order. Help contains topics, a divider and About.
+Existing command callbacks and transaction/availability guards are reused.
+
+Existing port navigation is retained as a separated Back to Title entry, More
+actions (planning shortcut and secretary advice), and Game details (expanded sales
+history/reviews). These additions are not claimed as original menu entries.
+Windows now has Office, Company and Other windows. The latter explicitly groups
+Employees/Products; the original unbound Other-windows entry's automatic MDI list
+behavior remains unresolved, rather than being guessed from its caption.
+The three UP toolbar actions and other toolbar routes are unchanged.
+
+Public fixtures now use the moved menu commands/submenus instead of the removed
+Company/Employees/Development/Products top-level groups. The new bilingual menu
+fixture checks ordering, separators, nested company/direct-game choices, guarded
+own-hardware access, moved bank/ranking callbacks, employee-window reopening,
+New Game/cancel and unchanged funds. Step 6 (facility conversation/transaction
+ordering) still requires owner permission. No release or main promotion is part
+of this change.
+
+Local validation: application build has zero warnings/errors; editor import,
+bilingual menu fixture, original Settings fixture and full core-loop UI check
+pass with zero failures. Fresh
+supported-original map rebuild and workflow lint pass. Source Actions includes the
+menu fixture; native Windows menu/pixel acceptance remains unrun.

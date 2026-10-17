@@ -33,9 +33,9 @@ func run() -> void:
         var go=main.find_child("OriginalGoOutMenu",true,false)
         check(go!=null and go.item_count==3,"Go out exposes the three original direct games")
         var game=main.find_child("MENU_GAME",true,false).get_popup()
-        check(game.get_item_text(2)==tr("NEW_GAME") and game.get_item_text(3)==tr("QUIT"),"In-game New Game and Exit routes are present")
+        check(game.get_item_text(0)==tr("NEW_GAME") and game.get_item_text(5)==tr("QUIT"),"In-game New Game and Exit routes are present")
         var office_position=main.find_child("OfficeWindow",true,false).position
-        game.id_pressed.emit(2);await process_frame;await press("CANCEL");await press_node("ToolbarSAVE_GAME")
+        game.id_pressed.emit(0);await process_frame;await press("CANCEL");await press_node("ToolbarSAVE_GAME")
         check(saved().Money==123456789 and main.find_child("OfficeWindow",true,false).position==office_position,"Cancelling in-game New Game retains the company and window position")
         await dispose()
     print("Original settings smoke failures: ",failures);quit(0 if failures==0 else 1)

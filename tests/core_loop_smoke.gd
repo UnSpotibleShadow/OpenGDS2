@@ -60,8 +60,7 @@ func press(key: String) -> void:
         dialog.find_child("CloseWindow",true,false).pressed.emit()
         found=true
     if not found:
-        for menu in main.find_children("*","MenuButton",true,false):
-            var popup=menu.get_popup()
+        for popup in desktop_popups():
             for item in range(popup.item_count):
                 if popup.get_item_text(item)==tr(key):
                     popup.about_to_popup.emit()
@@ -100,7 +99,7 @@ func press_node(name: String) -> void:
         await process_frame
         return
     if name=="ToolbarSTART_GAME_DEVELOPMENT":
-        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
+        main.find_child("AdditionalActionsMenu",true,false).id_pressed.emit(0)
         await process_frame
         return
     if name=="ToolbarBACK_TO_TITLE":
@@ -571,7 +570,7 @@ func run() -> void:
     check(employee_window.position == original_position,"Employee window restores original position")
     employee_window.find_child("CloseWindow",true,false).pressed.emit()
     check(not employee_window.visible,"Employee child window closes")
-    main.find_child("MENU_WINDOWS",true,false).get_popup().id_pressed.emit(2)
+    main.find_child("OtherWindowsMenu",true,false).id_pressed.emit(0)
     await process_frame
     check(employee_window.visible,"Window menu reopens employee list")
     root.size = Vector2i(1920,1080)
@@ -880,7 +879,7 @@ func run() -> void:
     check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
     check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
     check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).tooltip_text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
-    main.find_child("MENU_PRODUCTS",true,false).get_popup().id_pressed.emit(1)
+    main.find_child("ProductDetailsMenu",true,false).id_pressed.emit(0)
     await process_frame
     check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
     check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
@@ -1229,9 +1228,9 @@ func run() -> void:
         calendar_toolbar.pressed.emit()
         await process_frame
         check(main.find_child("AcknowledgeCalendar",true,false) != null,"Calendar guards direct action callbacks: "+key)
-    var staff_menu = main.find_child("MENU_STAFF",true,false).get_popup()
+    var staff_menu = main.find_child("MENU_ACTIONS",true,false).get_popup()
     staff_menu.about_to_popup.emit()
-    check(staff_menu.is_item_disabled(0) and staff_menu.is_item_disabled(1),"Calendar modal disables employee menu actions")
+    check(staff_menu.is_item_disabled(2) and staff_menu.is_item_disabled(3),"Calendar modal disables employee menu actions")
     check(not main.call("SetSimulationPaused",main.call("GetSimulationPaused")),"Calendar modal owns the pause state")
     Engine.time_scale = 100
     for frame in range(500):
@@ -1553,8 +1552,8 @@ func run() -> void:
     await press_node("ContinueAwards")
     for frame in range(8):
         await process_frame
-    var help_menu = main.find_child("MENU_HELP",true,false).get_popup()
-    help_menu.id_pressed.emit(1)
+    var help_menu = main.find_child("MENU_INFORMATION",true,false).get_popup()
+    help_menu.id_pressed.emit(7)
     await process_frame
     var record=main.find_child("ReachTimeRecords",true,false).get_root().get_first_child()
     for i in range(4):
@@ -1892,3 +1891,11 @@ func run() -> void:
     await process_frame
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)
+
+func desktop_popups() -> Array:
+    var popups=[]
+    for menu in main.find_children("*","MenuButton",true,false):
+        var popup=menu.get_popup()
+        popups.append(popup)
+        popups.append_array(popup.find_children("*","PopupMenu",true,false))
+    return popups

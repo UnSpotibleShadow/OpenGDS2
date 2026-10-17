@@ -5206,3 +5206,18 @@ msgstr "カイロソフトのサイトへ行く"
 
 msgid "ABOUT_WEBSITE_FAILED"
 msgstr "ブラウザーを開けません。このアドレスをコピーしてください:"
+
+msgid "MENU_ACTIONS"
+msgstr "行動"
+
+msgid "MENU_INFORMATION"
+msgstr "情報"
+
+msgid "COMPANY_DEVELOPMENT"
+msgstr "会社の発展"
+
+msgid "OTHER_WINDOWS"
+msgstr "その他のウィンドウ"
+
+msgid "ADDITIONAL_ACTIONS"
+msgstr "その他の行動"
