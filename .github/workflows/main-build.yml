@@ -1,13 +1,25 @@
-name: Validate
-# Automatic runs are paused at the owner's request to avoid Actions usage.
-# Do not dispatch this workflow without renewed authorization.
+name: Build merged main
+# Export packages only after a same-repository develop PR is merged into main.
+# Ordinary source validation stays in fidelity-validation.yml.
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [closed]
+permissions:
+  contents: read
+concurrency:
+  group: main-build-${{ github.event.pull_request.merge_commit_sha }}
+  cancel-in-progress: false
 jobs:
   domain:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          persist-credentials: false
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -15,9 +27,14 @@ jobs:
       - run: python3 -m pip install -r requirements-tools.txt
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
   godot:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          persist-credentials: false
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -36,9 +53,13 @@ jobs:
           XDG_DATA_HOME: ${{ runner.temp }}/opengds2-core-loop-smoke
   desktop:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [domain, godot]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          persist-credentials: false
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -70,6 +91,9 @@ jobs:
           python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64.zip
           python3 tools/package_desktop.py --export builds/linux-debug --platform linux --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64-debug.zip
           python3 tools/package_desktop.py --export builds/windows-debug --platform windows --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64-debug.zip
+          for package in builds/*.zip; do
+            (cd builds && sha256sum "$(basename "$package")") > "$package.sha256"
+          done
       - name: Run packaged Linux release and debug core loops outside the checkout
         run: |
           mkdir -p /tmp/opengds2-export-run
@@ -84,32 +108,40 @@ jobs:
           XDG_DATA_HOME: ${{ runner.temp }}/opengds2-export-smoke
       - uses: actions/upload-artifact@v4
         with:
-          name: OpenGDS2-desktop-development
+          name: OpenGDS2-desktop-${{ github.event.pull_request.merge_commit_sha }}
           path: |
             builds/OpenGDS2-linux-x86_64.zip
+            builds/OpenGDS2-linux-x86_64.zip.sha256
             builds/OpenGDS2-windows-x86_64.zip
+            builds/OpenGDS2-windows-x86_64.zip.sha256
           if-no-files-found: error
           retention-days: 14
       - uses: actions/upload-artifact@v4
         with:
-          name: OpenGDS2-desktop-debug
+          name: OpenGDS2-desktop-debug-${{ github.event.pull_request.merge_commit_sha }}
           path: |
             builds/OpenGDS2-linux-x86_64-debug.zip
+            builds/OpenGDS2-linux-x86_64-debug.zip.sha256
             builds/OpenGDS2-windows-x86_64-debug.zip
+            builds/OpenGDS2-windows-x86_64-debug.zip.sha256
           if-no-files-found: error
           retention-days: 14
   desktop-windows:
     runs-on: windows-latest
+    timeout-minutes: 15
     needs: desktop
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: OpenGDS2-desktop-development
+          name: OpenGDS2-desktop-${{ github.event.pull_request.merge_commit_sha }}
           path: ${{ runner.temp }}/opengds2-desktop
       - uses: actions/download-artifact@v4
         with:
-          name: OpenGDS2-desktop-debug
+          name: OpenGDS2-desktop-debug-${{ github.event.pull_request.merge_commit_sha }}
           path: ${{ runner.temp }}/opengds2-desktop
       - name: Run packaged Windows release and debug core loops
         shell: pwsh

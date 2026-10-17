@@ -11,7 +11,12 @@ start from `develop` and PRs target `develop`; `main` receives reviewed release/
 had only main, so develop starts at its current released-source descendant.
 The owner explicitly permits Actions again now the repository is public. Use
 validation-only CI for these steps; no release, tag, asset replacement or desktop
-packaging is requested. These instructions supersede the older pauses and direct
+packaging is requested by the fidelity steps. Separately, the owner authorized
+an automatic desktop build only after a same-repository `develop` PR merges into
+`main`. The main-build workflow may export release/debug packages and upload
+Actions artifacts with checksums; it must not publish a release or tag. Feature
+PRs and ordinary pushes must not trigger desktop packaging. These instructions
+supersede the older pauses and direct
 feature-to-main workflow below. Preserve the published release.
 
 ## Current work — post-release community handoff, 16 October 2026
