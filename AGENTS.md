@@ -8,8 +8,11 @@ then ask before starting the next, naming that next step. Step 1 is merged in
 PR140, step 2 in PR141, step 3 in PR143, step 4 in PR144, step 5 in PR145,
 step 6 in PR146 and step 7 in PR147. The owner requested an English pixel patch
 for the step-2 registration illustration and explicitly skipped step 8 (original
-GD2 save compatibility). Complete this artwork follow-up, then ask before step 9
-(persisted active casino rounds); step 9 is not authorized yet.
+GD2 save compatibility). The artwork follow-up is merged in PR148. Step 9
+(persisted active casino rounds) was authorized and reviewed: retain modern
+continuation, supported by native serialization evidence and fresh-session tests.
+Ask before step 10 (casino exhaustion and numeric-boundary recovery); step 10 is
+not authorized yet.
 Follow git-flow: `feature/...` branches
 start from `develop` and PRs target `develop`; `main` receives reviewed release/hotfix integrations. The remote
 had only main, so develop starts at its current released-source descendant.
