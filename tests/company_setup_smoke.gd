@@ -28,6 +28,38 @@ func authored_database() -> Dictionary:
     for i in range(60):database.Employees.append({"SourceIndex":i,"Name":"Authored employee %d"%i,"RawAttributes":[1,1,1,1,1,1,1],"ContractFee":10})
     return database
 
+func submit_name(field: LineEdit, keycode: int) -> void:
+    field.grab_focus()
+    await process_frame
+    check(field.has_focus(),"Name field receives keyboard focus")
+    var event=InputEventKey.new();event.keycode=keycode;event.pressed=true
+    Input.parse_input_event(event)
+    await process_frame
+    event=InputEventKey.new();event.keycode=keycode;event.pressed=false
+    Input.parse_input_event(event)
+    await settle_setup()
+
+func check_keyboard_confirmation() -> void:
+    for field_name in ["CompanyNameInput","PresidentNameInput"]:
+        for keycode in [KEY_ENTER,KEY_KP_ENTER]:
+            for missing in ["CompanyNameInput","PresidentNameInput"]:
+                main.find_child("CompanyNameInput",true,false).text="  Keyboard Company  "
+                main.find_child("PresidentNameInput",true,false).text="  Keyboard President  "
+                main.find_child(missing,true,false).text="   "
+                var field=main.find_child(field_name,true,false)
+                await submit_name(field,keycode)
+                check(is_instance_valid(field) and field.is_inside_tree() and field.has_focus(),"Invalid Enter keeps the setup and input focus")
+                var validation=main.find_child("CompanySetupValidation",true,false)
+                check(validation!=null and not validation.text.is_empty(),"Enter validates either missing name")
+                check(main.find_child("EarlyAccessModeBoundary",true,false)==null,"Invalid Enter cannot open mode selection")
+            main.find_child("CompanyNameInput",true,false).text="  Keyboard Company  "
+            main.find_child("PresidentNameInput",true,false).text="  Keyboard President  "
+            await submit_name(main.find_child(field_name,true,false),keycode)
+            check(main.find_child("CompanyNameInput",true,false)==null and main.find_child("EarlyAccessModeBoundary",true,false)!=null,"Enter advances once to mode selection, without starting a game")
+            await press("CANCEL")
+            await settle_setup()
+            check(main.find_child("CompanyNameInput",true,false).text=="Keyboard Company" and main.find_child("PresidentNameInput",true,false).text=="Keyboard President","Keyboard confirmation trims both drafts like clicking Confirm")
+
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
     root.size=Vector2i(1280,720)
@@ -47,6 +79,7 @@ func run() -> void:
         await press_node("ConfirmCompanySetup")
         check(not main.find_child("CompanySetupValidation",true,false).text.is_empty(),"Empty names show an inline message")
         await check_setup()
+        await check_keyboard_confirmation()
         var company="Community "+"X".repeat(22)
         var president="Chair "+"Y".repeat(26)
         main.find_child("CompanyNameInput",true,false).text=company
@@ -62,6 +95,7 @@ func run() -> void:
         check(main.find_child("CompanySetupWindow",true,false)==null and main.find_child("OfficeWindow",true,false)!=null,"Window close cancels the in-game draft")
         main.call("ShowTitleScreen");await settle_setup()
         await press("NEW_GAME");await check_setup()
+        await check_keyboard_confirmation()
         await press_node("CancelCompanySetup")
         check(main.find_child("TitlePrimaryActions",true,false)!=null,"Title setup cancels back to the title")
         await dispose()

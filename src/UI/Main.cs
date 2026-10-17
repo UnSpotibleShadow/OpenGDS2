@@ -191,7 +191,7 @@ public partial class Main : Control
         _presidentName=Field("PresidentNameInput","PRESIDENT_NAME",presidentDraft,202);
         var validation=NativeText(canvas,"CompanySetupValidation","",new(8,230,324,28),10,HorizontalAlignment.Center);
         validation.AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        NativeAction(canvas,"ConfirmCompanySetup","CONFIRM",new(146,262,90,25),()=>
+        void Confirm()
         {
             var company = _companyName.Text.Trim();
             var president = _presidentName.Text.Trim();
@@ -201,7 +201,11 @@ public partial class Main : Control
                 return;
             }
             ShowModeSelection(company, president,previous);
-        });
+        }
+        NativeAction(canvas,"ConfirmCompanySetup","CONFIRM",new(146,262,90,25),Confirm);
+        // fGMGameNew.Command1 is the original form's default action.
+        _companyName.TextSubmitted += _=>Confirm();
+        _presidentName.TextSubmitted += _=>Confirm();
         void Cancel(){if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);}
         NativeAction(canvas,"CancelCompanySetup","CANCEL",new(242,262,90,25),Cancel);
         if(_dialog is not null)_dialog.CloseRequested=Cancel;
