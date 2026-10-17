@@ -89,8 +89,9 @@ public partial class Main
             string key=p.Phase switch {0=>c.Bet==50 ? "POKER_RETAINED_BET" : "POKER_BET",1=>p.Tick<45 ? "POKER_REVEAL" : "POKER_HOLD",2=>"POKER_REVEAL",
                 3=>p.AwardReady ? "POKER_WIN" : "POKER_RESULT_WAIT",4=>"POKER_COLLECTING",5=>p.Tick<18 ? "POKER_REVEAL" : "POKER_CHOOSE_DOUBLE",_=>p.TieRedeal ? "POKER_TIE" : "POKER_REVEAL"};
             message.Text=Tr(key);
-            if (p.Phase==3 && p.AwardReady && (c.PendingPayout>long.MaxValue/2 || c.Coins>long.MaxValue-c.PendingPayout)) message.Text+="\n"+Tr("CASINO_RESULT_NumericLimit");
-            if (p.Phase==3) message.Text+="\n"+Tr($"POKER_OUTCOME_{p.Outcome}");
+            bool numericLimit=p.Phase==3 && p.AwardReady && (c.PendingPayout>long.MaxValue/2 || c.Coins>long.MaxValue-c.PendingPayout);
+            if (numericLimit) message.Text=Tr("CASINO_NUMERIC_LIMIT_NOTE");
+            if (p.Phase==3 && !numericLimit) message.Text+="\n"+Tr($"POKER_OUTCOME_{p.Outcome}");
             bet.Text=Tr(p.Phase is 3 or 4 ? "POKER_COLLECT" : "POKER_ADD_BET");
             deal.Text=Tr(p.Phase==1 ? "POKER_DRAW" : p.Phase is >=3 and <=6 ? "POKER_DOUBLE" : "POKER_DEAL");
             bet.Disabled=!CasinoPokerService.CanCommand(state,0);deal.Disabled=!CasinoPokerService.CanCommand(state,1);

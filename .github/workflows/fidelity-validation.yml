@@ -40,7 +40,7 @@ jobs:
       - name: Compile application
         run: python3 tools/bounded_process.py --label build --timeout 180 --checkpoint "$RUNNER_TEMP/build.json" -- dotnet build
       - name: Import project
-        run: python3 tools/bounded_process.py --label import --timeout 180 --checkpoint "$RUNNER_TEMP/import.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --path . --editor --quit
+        run: python3 tools/bounded_process.py --label import --timeout 180 --checkpoint "$RUNNER_TEMP/import.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --path . --import
       - name: UI layouts and continuation
         run: |
           XDG_DATA_HOME="$RUNNER_TEMP/casino-layout" python3 tools/bounded_process.py --label casino-layout --timeout 180 --checkpoint "$RUNNER_TEMP/casino-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_layout_smoke.gd
@@ -52,3 +52,4 @@ jobs:
           XDG_DATA_HOME="$RUNNER_TEMP/recall-dialogue" python3 tools/bounded_process.py --label recall-dialogue --timeout 180 --checkpoint "$RUNNER_TEMP/recall-dialogue.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/compact_notice_smoke.gd
           XDG_DATA_HOME="$RUNNER_TEMP/registration-artwork" python3 tools/bounded_process.py --label registration-artwork --timeout 180 --checkpoint "$RUNNER_TEMP/registration-artwork.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/company_setup_artwork_smoke.gd
           XDG_DATA_HOME="$RUNNER_TEMP/casino-continuity" python3 tools/bounded_process.py --label casino-continuity --timeout 180 --checkpoint "$RUNNER_TEMP/casino-continuity.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_save_continuity_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-boundaries" python3 tools/bounded_process.py --label casino-boundaries --timeout 180 --checkpoint "$RUNNER_TEMP/casino-boundaries.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_boundary_smoke.gd

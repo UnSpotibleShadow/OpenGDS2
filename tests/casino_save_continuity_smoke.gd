@@ -30,7 +30,10 @@ func run() -> void:
             if game[0]=="CardChain":
                 check(round.ChainCount==1 and round.Round.UsedCards.size()==6,"Restored replacement executes once")
             else:check(round.Tick>0,"Restored reveal timer advances: "+game[0])
-            check(state.Casino.Coins==9 and state.Casino.Bet==1,"Reload and callbacks do not repeat bet debit: "+game[0])
+            # The replacement can legitimately lose and clear the stake. Coins must
+            # still reflect exactly the original one-coin debit in either outcome.
+            var expected_bet=0 if game[0]=="CardChain" and round.Round.Phase==0 else 1
+            check(state.Casino.Coins==9 and state.Casino.Bet==expected_bet,"Reload preserves the correct stake without another debit: "+game[0])
             check(state.OriginalPayrollScratchIndex==17 and state.CompanyActivityTicks==value.State.CompanyActivityTicks,"Casino continuation preserves office scratch and clock")
             await dispose()
     print("Casino save continuity smoke failures: ",failures);quit(0 if failures==0 else 1)

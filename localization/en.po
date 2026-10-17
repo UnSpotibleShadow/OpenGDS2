@@ -3325,7 +3325,7 @@ msgid "BLACKJACK_RULES"
 msgstr "Original rules: natural 21 pays 2×. Stay with 5/6/7 cards pays 4×/6×/20×; three sixes pays 25×; 8+ cards pays 100×. Ace retries lower all aces together."
 
 msgid "BLACKJACK_CARD_BOUNDARY"
-msgstr "The original only predeals nine cards per side. This next draw reaches an unsupported array boundary; close this table to continue."
+msgstr "Nine-card limit reached. Close this table to continue."
 
 msgid "CASINO_CARD_CHAIN"
 msgstr "Card-chain"
@@ -3343,7 +3343,7 @@ msgid "CARD_CHAIN_KEYS"
 msgstr "Original shortcuts: 1–5 select cards; lowercase q/w invoke the two commands, including the copied replacement path."
 
 msgid "CARD_CHAIN_EXHAUSTED"
-msgstr "All 52 cards have been used. The original retries forever here. This table is paused; close it to continue. No cards are recycled or awards invented."
+msgstr "All 52 cards used. Close this table to continue."
 
 msgid "CARD_CHAIN_DEALER_KEY"
 msgstr "The shortcut selected the dealer card. The original comparison only resolves player choices 2–5, so this path waits. Close the table to continue."
@@ -5410,3 +5410,6 @@ msgstr "We have been ordered to recall it at the full retail price!"
 
 msgid "RECALL_DIALOGUE_GROAN"
 msgstr "Oh no! This has turned into a disaster…"
+
+msgid "CASINO_NUMERIC_LIMIT_NOTE"
+msgstr "Numeric limit. Close table."
