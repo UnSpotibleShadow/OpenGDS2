@@ -111,14 +111,14 @@ func run() -> void:
             var after := saved()
             check(after.PendingFacilityReceipt != null,"Saved result snapshot")
             if kind == 1:
-                check(after.Money == 92000000 and after.Employees[0].Stress == 0 and after.EmployeeSources[0].Employee.Stress == 0,"Hot spring debit and stress relief")
+                check(after.Money == 92000000 and after.Employees[0].Stress == 80 and after.EmployeeSources[0].Employee.Stress == 80,"Hot spring debit precedes secretary acknowledgement")
             elif kind == 2:
-                check(after.Money == 100003500 and after.ReleasedGames[0].Stock == 0 and after.ReleasedGames[0].UnitsSold == 9,"Stock sale at 500 per copy")
+                check(after.Money == 100000000 and after.ReleasedGames[0].Stock == 0 and after.ReleasedGames[0].UnitsSold == 9,"Stock disposal precedes proceeds acknowledgement")
             elif kind == 3:
                 check(after.Money == 60000000 and after.Employees[0].RawParameter34 == 3 and after.EmployeeSources[0].Employee.RawParameter34 == 3,"Study capacity and source synchronization")
                 check(after.OriginalPayrollScratchIndex == 1,"Technology selector scratch writer")
             else:
-                check(after.Money == 90000000 and after.Company.ProductionCapacity >= 65 and after.Company.ProductionCapacity <= 69,"Production gain and direct debit")
+                check(after.Money == 100000000 and after.Company.ProductionCapacity == 50,"Production waits for result acknowledgement")
                 check(after.Company.WeeklyNet == 11,"Production debit does not change financial accumulator")
             var result_text: String = main.find_child("FacilityServiceResult",true,false).text
             check(not result_text.begins_with("FACILITY_"),"Translated service result")

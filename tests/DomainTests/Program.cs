@@ -2605,12 +2605,13 @@ Test("hot spring ownership receipt and reload prevent repeated spending and clea
     var e=Worker(source:0);e.Stress=99;s.Employees=[e];
     var source=Worker(source:0);source.Stress=99;s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=source}];
     Check(FacilityService.HotSpring(s,1)==FacilityResult.NotOwned && s.Money==8_000_000);
-    Check(FacilityService.HotSpring(s,0)==FacilityResult.Success && s.Money==0 && e.Stress==0 && source.Stress==0);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.Success && s.Money==0 && e.Stress==99 && source.Stress==99);
     Check(s.Company.WeeklyNet==11-8_000_000 && s.PendingFacilityReceipt!.Kind==FacilityKind.HotSpring);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));string before=SaveStore.Serialize(s);
     Check(FacilityService.HotSpring(s,0)==FacilityResult.EventPending && SaveStore.Serialize(s)==before);
     var session=new GameSession();session.Restore(s);session.TickOffice();Check(SaveStore.Serialize(s)==before);
-    s.PendingFacilityReceipt=null;Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
+    Check(FacilityService.AcknowledgeReceipt(s) && s.Employees[0].Stress==0 && s.EmployeeSources[0].Employee.Stress==0);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
 });
 Test("hot spring chain consumes eager source draws and saves each named reaction without repeat payments",()=>
 {
@@ -2625,12 +2626,13 @@ Test("hot spring chain consumes eager source draws and saves each named reaction
     var random=new GreetingRandom(.2f);
     Check(FacilityService.HotSpring(state,0,random)==FacilityResult.Success && random.GreetingCalls==8);
     Check(state.PendingFacilityReceipt!.Reactions!.Select(r=>r.SourceIndex).SequenceEqual(new[]{0,3}) && state.PendingFacilityReceipt.Reactions!.All(r=>r.Variant==1));
-    Check(state.Money==92_000_000 && state.Employees.All(e=>e.Stress==0));
+    Check(state.Money==92_000_000 && state.Employees.All(e=>e.Stress==80));
     for(int page=0;page<3;page++)
     {
         state=SaveStore.Deserialize(SaveStore.Serialize(state));Check(state.PendingFacilityReceipt!.PageIndex==page && state.Money==92_000_000);
         Check(FacilityService.HotSpring(state,0,random)==FacilityResult.EventPending && random.GreetingCalls==8);
         Check(FacilityService.AcknowledgeReceipt(state));
+        Check(state.Employees.All(e=>e.Stress==0) && state.EmployeeSources.Where(x=>x.GateValue==1).All(x=>x.Employee.Stress==0));
     }
     Check(state.PendingFacilityReceipt is null && !FacilityService.AcknowledgeReceipt(state) && state.Money==92_000_000);
 });
@@ -2666,11 +2668,14 @@ Test("recycling zeroes stock and pays exactly once without changing sales or pro
     var p=new ReleasedGameState {Title="Recycle A",Stock=7,UnitsSold=9,ProductionSpending=123,NetSalesReceipts=456};
     var q=new ReleasedGameState {Title="Recycle B",ProductIndex=1,Stock=3};s.ReleasedGames=[p,q];
     long before=s.Money!.Value;
-    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000 && p.Stock==0 && q.Stock==0);
-    Check(s.Company.WeeklyNet==5011 && p.UnitsSold==9 && p.ProductionSpending==123 && p.NetSalesReceipts==456);
+    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before && p.Stock==0 && q.Stock==0);
+    Check(s.Company.WeeklyNet==11 && p.UnitsSold==9 && p.ProductionSpending==123 && p.NetSalesReceipts==456);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));
     Check(FacilityService.Recycle(s,0)==FacilityResult.EventPending && s.PendingFacilityReceipt!.Amount==5000);
-    s.PendingFacilityReceipt=null;Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000);
+    Check(s.Money==before && s.PendingFacilityReceipt.EffectsPending);
+    Check(FacilityService.AcknowledgeReceipt(s) && s.Money==before+5000 && s.Company.WeeklyNet==5011);
+    Check(!FacilityService.AcknowledgeReceipt(s) && s.Money==before+5000);
+    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000);
 });
 Test("recycling overflow is atomic before stock disposal",()=>
 {
@@ -2714,10 +2719,14 @@ Test("production facility preserves single draw 15 to 19 gain negative cash and 
     {
         var (s,_)=CalendarFixture(money:0);s.Calendar!.OriginalSlots0444[0]=7;s.Company.ProductionCapacity=50;s.CompanyActivityPerformed=true;
         var random=new GreetingRandom(roll);
-        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.Success && s.Money==-10_000_000 && s.Company.ProductionCapacity==50+gain && random.GreetingCalls==1);
+        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.Success && s.Money==0 && s.Company.ProductionCapacity==50 && random.GreetingCalls==1);
         Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33 && s.CompanyActivityPerformed==true);
         s=SaveStore.Deserialize(SaveStore.Serialize(s));
         Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.EventPending && random.GreetingCalls==1 && s.PendingFacilityReceipt!.Gain==gain);
+        Check(s.Money==0 && s.Company.ProductionCapacity==50 && s.PendingFacilityReceipt.EffectsPending);
+        Check(FacilityService.AcknowledgeReceipt(s) && s.Money==-10_000_000 && s.Company.ProductionCapacity==50+gain);
+        Check(!FacilityService.AcknowledgeReceipt(s) && random.GreetingCalls==1 && s.Company.WeeklyNet==11);
+
     }
 });
 Test("production expansion invalid draw and overflow are atomic",()=>
@@ -2730,6 +2739,30 @@ Test("production expansion invalid draw and overflow are atomic",()=>
     }
     var (t,_c)=CalendarFixture(money:long.MinValue);t.Calendar!.OriginalSlots0444[0]=7;t.Company.ProductionCapacity=50;
     Throws<OverflowException>(()=>FacilityService.ExpandProduction(t,0,new GreetingRandom(0)));Check(t.Company.ProductionCapacity==50 && t.Money==long.MinValue);
+});
+Test("legacy already-applied facility receipts never replay effects",()=>
+{
+    foreach(var kind in new[]{FacilityKind.Recycling,FacilityKind.ProductionLab})
+    {
+        var (state,_)=CalendarFixture();state.Calendar!.OriginalSlots0444[0]=(int)kind;
+        state.Company.ProductionCapacity=65;
+        state.PendingFacilityReceipt=new(){Kind=kind,Amount=kind==FacilityKind.Recycling?500:10_000_000,
+            SourceSlot=0,Gain=kind==FacilityKind.ProductionLab?15:null,CapacityBefore=kind==FacilityKind.ProductionLab?50:null};
+        var legacy=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(state))!;
+        legacy["State"]!["PendingFacilityReceipt"]!.AsObject().Remove("EffectsPending");
+        state=SaveStore.Deserialize(legacy.ToJsonString());long? money=state.Money;
+        Check(!state.PendingFacilityReceipt!.EffectsPending && FacilityService.AcknowledgeReceipt(state));
+        Check(state.Money==money && state.Company.ProductionCapacity==65 && !FacilityService.AcknowledgeReceipt(state));
+    }
+});
+Test("pending facility snapshots reject unappliable or advanced effects",()=>
+{
+    var (state,_)=CalendarFixture();state.Calendar!.OriginalSlots0444[0]=7;state.Company.ProductionCapacity=50;
+    FacilityService.ExpandProduction(state,0,new GreetingRandom(0));state.Company.ProductionCapacity=65;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));state.Company.ProductionCapacity=50;
+    state.PendingFacilityReceipt!.PageIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.PendingFacilityReceipt.PageIndex=0;state.Money=long.MinValue;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
 });
 Test("facility changes are blocked during other pending game decisions",()=>
 {

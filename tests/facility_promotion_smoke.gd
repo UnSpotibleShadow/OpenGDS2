@@ -108,7 +108,12 @@ func construction_cases() -> void:
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
     setup_issue118()
-    for locale in ["en","ja"]:
+    var locales=["en","ja"]
+    var selected=OS.get_environment("OPENGDS2_FACILITY_SMOKE_LOCALE")
+    if not selected.is_empty():
+        if selected not in locales:quit(1);return
+        locales=[selected]
+    for locale in locales:
         var settings=ConfigFile.new();settings.set_value("language","locale",locale);settings.set_value("display","number_grouping",1);settings.save("user://interface.cfg")
         await chain_cases();await hardware_chain_cases();await construction_cases();await service_cases();await all_facility_closures();await promotion_cases()
     print("Facility and six-media promotion failures: ",failures);quit(0 if failures==0 else 1)

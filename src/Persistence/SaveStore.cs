@@ -103,8 +103,9 @@ public static class SaveStore
         if (state.PendingFacilityReceipt is { } receipt)
         {
             FacilityService.ValidateReceipt(receipt);
+            FacilityService.ValidatePendingEffects(state,receipt);
             if(receipt.SourceSlot is int slot && state.Calendar?.OriginalSlots0444[slot]!=(int)receipt.Kind ||
-                receipt.CapacityBefore is int before && before+(long)receipt.Gain!.Value!=state.Company.ProductionCapacity)
+                receipt.CapacityBefore is int before && before+(receipt.EffectsPending?0L:receipt.Gain!.Value)!=state.Company.ProductionCapacity)
                 throw new InvalidDataException("Facility result disagrees with company state.");
         }
         if (state.PendingFeeNegotiation is { } negotiation)
