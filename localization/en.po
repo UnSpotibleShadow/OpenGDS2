@@ -5368,3 +5368,18 @@ msgstr "“{title}” does not need to be recalled. What a relief!"
 
 msgid "RECALL_QUANTITY_UNKNOWN"
 msgstr "unknown"
+
+msgid "ABOUT_GAME"
+msgstr "About / Version"
+
+msgid "ABOUT_PORT_VERSION"
+msgstr "Port version {0}"
+
+msgid "ABOUT_ORIGINAL_CREDIT"
+msgstr "Original game © 2001–2008 Kairosoft"
+
+msgid "ABOUT_VISIT_WEBSITE"
+msgstr "Visit the Kairosoft website"
+
+msgid "ABOUT_WEBSITE_FAILED"
+msgstr "Could not open the browser. Copy this address:"

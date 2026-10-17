@@ -10,8 +10,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | --- | --- | --- |
 | 1 | Horse-race scenery, camera and finish post | Merged into develop in [PR140](https://github.com/UnSpotibleShadow/OpenGDS2/pull/140); final Actions run passed. |
 | 2 | Oversized new-company setup | Merged into develop in [PR141](https://github.com/UnSpotibleShadow/OpenGDS2/pull/141); Actions passed. |
-| 3 | New-company Enter/default confirmation | Implemented and locally validated on `feature/company-setup-enter`; PR targets develop. |
-| 4 | Missing original About/version/link dialog | Not started. |
+| 3 | New-company Enter/default confirmation | Merged into develop in [PR143](https://github.com/UnSpotibleShadow/OpenGDS2/pull/143); Actions passed. |
+| 4 | Missing original About/version/link dialog | Implemented and locally validated on `feature/original-about-dialog`; PR targets develop. |
 | 5 | Original menu organization | Not started. |
 | 6 | Facility conversation/transaction ordering | Not started. |
 | 7 | Consumer Investigation paraphrasing and extra receipt | Not started. |
@@ -120,10 +120,47 @@ The bilingual company-setup smoke fixture sends actual Enter and keypad Enter
 press/release events with each name field focused. It covers either missing name,
 inline validation/focus retention, valid advancement, trimmed drafts after
 canceling mode selection, title and in-game routes, and the existing cancellation,
-artwork and layout checks. Step 4 (original About/version/link dialog) still needs
-owner permission.
+artwork and layout checks. Step 4 is recorded below.
 
 Local result: application build passes with zero warnings/errors; the expanded
 company-setup keyboard/layout smoke check passes with zero failures in both
 languages. The existing Actions workflow runs this fixture on the PR. No export,
 release, main promotion or unrelated fidelity step is part of this change.
+
+## Step 4: About/version/website dialog
+
+Original `fMainAbout` has a 268×255 client, a 254×175 logo control at (8,8),
+website/copyright labels at y=192, a Version label at y=208 and a website button
+at y=224. The original local logo payload begins at executable file offset
+`31EDEC` (250×171 BMP); the complete serialized picture record starts at `31EDE4`.
+The existing importer already recovers it. No original pixels are committed.
+The two ImageY controls are serialized below the client (y=280), so they are not
+invented as visible controls in this adaptation.
+
+The website label caption is `http://kairosoft.net/`; Command1's caption is
+“Go to the Kairosoft website.” Their handlers `00980260` and `009801B4` have the
+same decoded call sequence through the same imported target at +004B, with no
+form-unload call before returning. The port uses the HTTPS form of that official
+homepage for both actions and leaves About open. OS/browser launch acceptance
+remains a native desktop check; automated fixtures never open a real browser.
+
+Help > About / Version now opens a compact 300×296 client using the locally
+imported original logo and form icon. A separate port-name/version row clearly
+identifies Open Game Dev Story II and `BuildInfo.Version`; the original game's
+2001–2008 Kairosoft copyright stays separately attributed. The small height
+increase allows readable English labels. Missing artwork gives the bounded
+reimport hint. Window close returns to the existing office without changing its
+company or funds. Existing Help actions retain their order; broader menu changes
+remain step 5 and still require owner permission.
+
+The bilingual public fixture covers the real Help-menu route, client/control
+bounds, exact current port identity/version, copyright, imported artwork/icon,
+missing-art fallback, both connected website controls, repeated opening and close
+return with unchanged company/funds. It uses authored graphics, not original
+artwork. Native Windows pixel/IME/browser acceptance remains unrun.
+
+Local result: application build has zero warnings/errors; Godot editor import and
+the bilingual About fixture pass with zero failures. A fresh supported-original
+map rebuild passes for all 86 objects / 669 procedures / 35 workflow dispositions;
+generated Markdown/HTML and the source catalog are synchronized. Workflow lint
+also passes. Source CI includes the new fixture; no export or release is requested.

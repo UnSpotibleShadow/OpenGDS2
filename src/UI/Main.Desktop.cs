@@ -99,7 +99,7 @@ public partial class Main
             ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
         OriginalGoOutMenu(menus,state);
         OriginalSettingsMenu(menus);
-        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
+        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state)),("ABOUT_GAME",()=>ShowAbout(state))]);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0,24) };
         toolbar.AddThemeConstantOverride("separation",1);layout.AddChild(toolbar);
