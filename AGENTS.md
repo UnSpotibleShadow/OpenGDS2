@@ -11,8 +11,10 @@ for the step-2 registration illustration and explicitly skipped step 8 (original
 GD2 save compatibility). The artwork follow-up is merged in PR148. Step 9
 (persisted active casino rounds) was authorized and reviewed: retain modern
 continuation, supported by native serialization evidence and fresh-session tests.
-Ask before step 10 (casino exhaustion and numeric-boundary recovery); step 10 is
-not authorized yet.
+Step 9 is merged in PR149. The owner authorized step 10 (casino exhaustion and
+numeric-boundary recovery). Complete its focused fixes/checks and merge into
+develop. Step 8 remains explicitly skipped; there is no release/main promotion
+authorization in this fidelity plan.
 Follow git-flow: `feature/...` branches
 start from `develop` and PRs target `develop`; `main` receives reviewed release/hotfix integrations. The remote
 had only main, so develop starts at its current released-source descendant.

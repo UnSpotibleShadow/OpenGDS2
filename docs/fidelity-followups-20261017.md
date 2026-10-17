@@ -16,8 +16,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 6 | Facility conversation/transaction ordering | Merged into develop in [PR146](https://github.com/UnSpotibleShadow/OpenGDS2/pull/146); Actions passed. |
 | 7 | Consumer Investigation paraphrasing and extra receipt | Merged into develop in [PR147](https://github.com/UnSpotibleShadow/OpenGDS2/pull/147); Actions passed. |
 | 8 | Original GD2 save compatibility | Skipped at the owner’s explicit request; original GD2 compatibility remains unimplemented. |
-| 9 | Persisted active casino rounds | Reviewed: retain the deliberate modern continuity policy; native evidence and fresh-session continuation regressions recorded in [the review](casino-save-continuity-review.md). |
-| 10 | Casino exhaustion and numeric-boundary recovery | Not started; intentional protection against native hangs/errors to review. |
+| 9 | Persisted active casino rounds | Merged into develop in [PR149](https://github.com/UnSpotibleShadow/OpenGDS2/pull/149); retain modern continuity; Actions passed. |
+| 10 | Casino exhaustion and numeric-boundary recovery | Reviewed: retain safeguards; poker save validation and compact bilingual recovery warnings implemented. See [review](casino-boundary-recovery-review.md). |
 
 ## Step 1: scenery recovery
 
@@ -312,4 +312,16 @@ checks compare uninterrupted play with a fresh session restored every callback
 for all four activities, including saved RNG and partial collections. The full
 565-check public suite and bilingual card-game UI continuation pass. Source CI
 runs the new UI fixture alongside the existing horse fixture. Native Windows
-save/load acceptance is still unrun. Step 10 remains pending owner permission.
+save/load acceptance is still unrun. The owner subsequently authorized step 10; its review follows below.
+
+
+## Step 10: retain safeguards and fix recovery gaps
+
+The [boundary review](casino-boundary-recovery-review.md) retains paused,
+closable recovery from exhausted decks, out-of-range blackjack cards and modern
+numeric limits. It adds the missing poker active-collection overflow validation
+without changing normal payouts or the save schema. Compact bilingual warnings
+keep close/continue guidance visible instead of clipping technical paragraphs.
+Five new domain checks bring the public suite to 570 checks; a focused bilingual
+UI fixture is included in source CI. This is the final plan step; step 8 remains
+explicitly skipped and no release/main integration is requested.

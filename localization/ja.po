@@ -3295,7 +3295,7 @@ msgid "BLACKJACK_RULES"
 msgstr "原作のルール：最初の21は2倍。5・6・7枚で勝負すると4・6・20倍、6が3枚なら25倍、8枚以上なら100倍。再計算ではAをまとめて1にします。"
 
 msgid "BLACKJACK_CARD_BOUNDARY"
-msgstr "原作は各側に9枚まで先に配ります。次のカードは配列の範囲外になるため、この台を閉じて続行してください。"
+msgstr "9枚の上限に達しました。台を閉じて続行してください。"
 
 msgid "CASINO_CARD_CHAIN"
 msgstr "カードチェーン"
@@ -3313,7 +3313,7 @@ msgid "CARD_CHAIN_KEYS"
 msgstr "原作のキー：1～5でカードを選択、小文字のq/wで操作します。wは流用された交換処理も呼び出します。"
 
 msgid "CARD_CHAIN_EXHAUSTED"
-msgstr "52枚をすべて使用しました。原作ではここで再試行が終わらなくなります。この台を閉じて続行してください。カードの再使用や追加の賞金はありません。"
+msgstr "52枚をすべて使用しました。台を閉じて続行してください。"
 
 msgid "CARD_CHAIN_DEALER_KEY"
 msgstr "キーでディーラーのカードを選びました。原作では2～5番のカードだけを比較するため、この処理は待機します。台を閉じて続行してください。"
@@ -5233,3 +5233,6 @@ msgstr "定価で全本数を回収するよう求められてしまいました
 
 msgid "RECALL_DIALOGUE_GROAN"
 msgstr "これは困りました。大変な事態です……"
+
+msgid "CASINO_NUMERIC_LIMIT_NOTE"
+msgstr "数値の上限です。台を閉じるか、可能な操作を選んでください。"

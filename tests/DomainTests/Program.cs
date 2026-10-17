@@ -1521,6 +1521,64 @@ Test("casino numeric boundary rejects an unrepresentable action before changing 
     Check(CasinoPokerService.Command(s,1,random)==CasinoResult.NumericLimit && random.Calls==2);
     Check(s.Casino.Coins==100 && s.Casino.PendingPayout==long.MaxValue && p.Phase==3);
 });
+Test("poker rejects overflowing saved collection before loading or replacing a slot",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=4;
+    Check(CasinoPokerService.Command(s,0,new FailureRandom(0))==CasinoResult.Success);
+    string valid=SaveStore.Serialize(s);
+    s.Casino.Coins=long.MaxValue;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    var raw=System.Text.Json.Nodes.JsonNode.Parse(valid)!;
+    raw["State"]!["Casino"]!["Coins"]=long.MaxValue;
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(raw.ToJsonString()));
+    string folder=Path.Combine(Path.GetTempPath(),"casino-limit-"+Guid.NewGuid().ToString("N")),path=Path.Combine(folder,"slot.json");
+    try
+    {
+        Directory.CreateDirectory(folder);File.WriteAllText(path,valid);
+        Throws<InvalidDataException>(()=>SaveStore.Save(path,s));Check(File.ReadAllText(path)==valid && !File.Exists(SaveStore.BackupPath(path)));
+    }
+    finally {if(Directory.Exists(folder))Directory.Delete(folder,true);}
+});
+Test("poker maximum representable collection credits exactly once per pair of callbacks",()=>
+{
+    var s=PokerFixture(long.MaxValue-4);var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=4;
+    Check(CasinoPokerService.Command(s,0,new FailureRandom(0))==CasinoResult.Success);
+    s=CheckCasinoContinuation(s,session=>session.TickPoker(),10);
+    Check(s.Casino.Coins==long.MaxValue && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("exhausted card-chain stays saved paused and closable without recycling or financial changes",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    p.UsedCards=Enumerable.Range(0,52).ToHashSet();s.Casino.CardChain.ChainCount=47;
+    s.Casino.CardChain.PreviousCard=new(0,0);s.Casino.PendingPayout=12;s.Casino.ChainBonus=7;Check(CasinoCardChainService.SelectCard(s,0));
+    for(int i=0;i<3;i++)CasinoCardChainService.Tick(s,new FailureRandom());
+    Check(s.Casino.CardChain.DeckExhausted);
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.Coins==100 && s.Casino.Bet==1 && s.Casino.PendingPayout==12 && s.Casino.ChainBonus==7);
+    Check(!CasinoCardChainService.CanCommand(s,0) && !CasinoCardChainService.CanSelect(s,0,direct:true));
+    Check(CasinoCardChainService.Close(s));Check(!s.Casino.ActivityOpen && s.CompanyActivityPerformed==true);
+});
+Test("blackjack card boundary stays saved paused and closable without a refund or invented card",()=>
+{
+    var s=BlackjackFixture();BlackjackDecision(s,9);CasinoBlackjackService.Command(s,1,new FailureRandom());
+    Check(s.Casino.Blackjack.BoundaryReached);
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.Coins==100 && s.Casino.Bet==1 && s.Casino.Blackjack.Cards.Count==18);
+    Check(!CasinoBlackjackService.CanCommand(s,1) && CasinoBlackjackService.Close(s));
+    Check(!s.Casino.ActivityOpen && s.CompanyActivityPerformed==true);
+});
+Test("card-chain bonus numeric boundary remains saved and closable without overflowing",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(0,2),new(0,4),new(0,7),new(0,11));s.Casino.ChainBonus=long.MaxValue;
+    Check(CasinoCardChainService.SelectCard(s,0));
+    var draw=new FailureRandom(CardDraws(new CasinoCard(0,9)));
+    for(int i=0;i<3;i++)CasinoCardChainService.Tick(s,draw);
+    Check(s.Casino.CardChain.NumericBoundary && draw.Calls==2 && s.Casino.ChainBonus==long.MaxValue);
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.PendingPayout==0 && s.Casino.Bet==1 && CasinoCardChainService.Close(s));
+});
 Test("new company resets original coins while preserving native shared casino scratch storage",()=>
 {
     var s=PokerFixture();s.Casino.Bet=17;s.Casino.PendingPayout=37;s.Casino.ChainBonus=5;
