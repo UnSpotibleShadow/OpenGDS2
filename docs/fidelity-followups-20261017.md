@@ -14,8 +14,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 4 | Missing original About/version/link dialog | Merged into develop in [PR144](https://github.com/UnSpotibleShadow/OpenGDS2/pull/144); Actions passed. |
 | 5 | Original menu organization | Merged into develop in [PR145](https://github.com/UnSpotibleShadow/OpenGDS2/pull/145); Actions passed. |
 | 6 | Facility conversation/transaction ordering | Merged into develop in [PR146](https://github.com/UnSpotibleShadow/OpenGDS2/pull/146); Actions passed. |
-| 7 | Consumer Investigation paraphrasing and extra receipt | Implemented and locally validated on `feature/original-recall-dialogue`; PR targets develop. |
-| 8 | Original GD2 save compatibility | Not started; a separate compatibility feature, not a UI-only fix. |
+| 7 | Consumer Investigation paraphrasing and extra receipt | Merged into develop in [PR147](https://github.com/UnSpotibleShadow/OpenGDS2/pull/147); Actions passed. |
+| 8 | Original GD2 save compatibility | Skipped at the owner’s explicit request; original GD2 compatibility remains unimplemented. |
 | 9 | Persisted active casino rounds | Not started; intentional continuity adaptation to review. |
 | 10 | Casino exhaustion and numeric-boundary recovery | Not started; intentional protection against native hangs/errors to review. |
 
@@ -272,3 +272,27 @@ original domain checks, bilingual recall UI checks (zero failures) and the full
 core-loop UI check (zero failures) pass. Workflow lint also passes. Source CI
 includes the recall fixture. Native Windows modal/pixel acceptance remains unrun;
 no export or release is requested.
+
+## Step 2 follow-up: registration illustration pixel patch
+
+The owner requested this missing artwork translation after step 7 and explicitly
+skipped step 8. The original registration bitmap is 256×160 at file offset
+`047345`. Both the semantic CompanySetup alias and recovered-resource path now
+use the existing verified-local-art patch pipeline in English. The source RGB
+fingerprint is `1db83a89b10937eecb87433be0901367ecd94c923ded83d66c59c63b14d02b7a`.
+
+Authored pixel lettering replaces only the town-hall sign and bottom registration
+caption with TOWN HALL / REGISTRATION. The latter restores the original road/curb
+gradient per scanline from adjacent clean pixels, instead of painting a flat box.
+Both bounded interiors preserve all other pixels, including the character and
+buildings. Japanese, unknown/modified source art and explicit user overrides are
+preserved. The source import remains untouched; generated English PNGs live only
+in the local localized-artwork cache. No original image bytes enter Git.
+
+Public tests use authored data for bounds, immutable input, determinism, alias,
+language and override behavior. A private original fixture exercises the real
+fingerprint and produces a nearest-neighbor enlarged preview for visual review.
+Validation: 560 domain checks, the C# build (zero warnings/errors), workflow lint
+and both public/authored and private/original bilingual artwork fixtures pass.
+The enlarged generated image was visually inspected.
+Step 9 (persisted active casino rounds) still requires owner permission.
