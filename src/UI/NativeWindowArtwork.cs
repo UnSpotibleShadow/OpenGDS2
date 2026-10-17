@@ -6,6 +6,7 @@ public static class NativeWindowArtwork
     private static readonly Dictionary<string,string> Forms=new()
     {
         ["CompanySetupWindow"]="fGMGameNew",
+        ["AboutWindow"]="fMainAbout",
         ["PoachingSelectionWindow"]="fGMHikinukiSel",["PoachingWindow"]="fGMHikinuki",["PoachingDonationWindow"]="fGMHikinukiKnS",["PoachingContractWindow"]="fGMHikinukiKeS",
         ["CasinoSelector"]="fGMTenantCasinoSn",["CasinoCoinPurchase"]="fGMTenantCasinoSn",["BankWindow"]="fGMBank",["SaveSlotWindow"]="fGMGameSave",["LoadSlotWindow"]="fGMGameLoad",["ActivityConfirmationWindow"]="fGMSeisanZ",
         ["PlanningDiscussionScene"]="fGMKikakuKaigi",["HardwareLicenceWindow"]="fGMHLicense",["StaffRosterWindow"]="fGMSyain",

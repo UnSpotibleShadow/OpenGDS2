@@ -5,8 +5,9 @@
 The owner authorized the ten ordered findings in
 [fidelity follow-ups](docs/fidelity-followups-20261017.md). Complete one step,
 then ask before starting the next, naming that next step. Step 1 is merged in
-PR140 and step 2 in PR141. The owner authorized step 3 (Enter/default confirmation)
-with 30% usage remaining. Step 4 (About/version/link dialog) still needs permission.
+PR140, step 2 in PR141 and step 3 in PR143. The owner authorized step 4
+(About/version/link dialog) with 24% usage remaining. Step 5 (original menu
+organization) still needs permission.
 Follow git-flow: `feature/...` branches
 start from `develop` and PRs target `develop`; `main` receives reviewed release/hotfix integrations. The remote
 had only main, so develop starts at its current released-source descendant.

@@ -5191,3 +5191,18 @@ msgstr "「{title}」は回収対象になりませんでした。安心しま�
 
 msgid "RECALL_QUANTITY_UNKNOWN"
 msgstr "不明"
+
+msgid "ABOUT_GAME"
+msgstr "バージョン情報"
+
+msgid "ABOUT_PORT_VERSION"
+msgstr "移植版バージョン {0}"
+
+msgid "ABOUT_ORIGINAL_CREDIT"
+msgstr "原作 © 2001–2008 カイロソフト"
+
+msgid "ABOUT_VISIT_WEBSITE"
+msgstr "カイロソフトのサイトへ行く"
+
+msgid "ABOUT_WEBSITE_FAILED"
+msgstr "ブラウザーを開けません。このアドレスをコピーしてください:"

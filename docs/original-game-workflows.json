@@ -6091,7 +6091,7 @@
       "workflows": [
         "W28"
       ],
-      "disposition": "Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below."
+      "disposition": "Menu organization: Help > Game help opens the implemented topic viewer. Version information/About is restored in the separate About dialog."
     },
     {
       "id": "menu:mHelpHelp",
@@ -6115,7 +6115,7 @@
       "workflows": [
         "W32"
       ],
-      "disposition": "Unresolved: the original opens fMainAbout. An equivalent interactive About/version/link dialog has not been established in OpenGDS2; there is no confirmed alternate player path for that dialog."
+      "disposition": "Available: Help > About / Version opens the compact AboutWindow corresponding to fMainAbout, with local original artwork/icon, current port version, original copyright and interactive Kairosoft website controls. See [fidelity follow-ups, step 4](fidelity-followups-20261017.md#step-4-aboutversionwebsite-dialog); native browser/pixel acceptance remains unrun."
     }
   ],
   "catalog_families": [

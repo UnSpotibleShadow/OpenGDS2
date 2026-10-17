@@ -90,10 +90,10 @@ Each entry states what is available in OpenGDS2 and where the player can find it
   - Number display — `menu:mSetupNumber`: Available: Settings > Number display selects Japanese or comma-separated thousands grouping across the UI; the choice is stored in company saves.
     - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京.
     - Thousands grouping — `menu:mSetupNumber2`: Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language.
-- Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below.
+- Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. Version information/About is restored in the separate About dialog.
   - Help topics — `menu:mHelpHelp`: Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer.
   - Separator — `menu:mHelpMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Version information — `menu:mHelpVersion`: Unresolved: the original opens fMainAbout. An equivalent interactive About/version/link dialog has not been established in OpenGDS2; there is no confirmed alternate player path for that dialog.
+  - Version information — `menu:mHelpVersion`: Available: Help > About / Version opens the compact AboutWindow corresponding to fMainAbout, with local original artwork/icon, current port version, original copyright and interactive Kairosoft website controls. See [fidelity follow-ups, step 4](fidelity-followups-20261017.md#step-4-aboutversionwebsite-dialog); native browser/pixel acceptance remains unrun.
 
 ## Workflow and adaptation index
 
