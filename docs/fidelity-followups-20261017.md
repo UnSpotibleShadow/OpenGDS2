@@ -13,8 +13,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 3 | New-company Enter/default confirmation | Merged into develop in [PR143](https://github.com/UnSpotibleShadow/OpenGDS2/pull/143); Actions passed. |
 | 4 | Missing original About/version/link dialog | Merged into develop in [PR144](https://github.com/UnSpotibleShadow/OpenGDS2/pull/144); Actions passed. |
 | 5 | Original menu organization | Merged into develop in [PR145](https://github.com/UnSpotibleShadow/OpenGDS2/pull/145); Actions passed. |
-| 6 | Facility conversation/transaction ordering | Implemented and locally validated on `feature/facility-transaction-order`; PR targets develop. |
-| 7 | Consumer Investigation paraphrasing and extra receipt | Not started. |
+| 6 | Facility conversation/transaction ordering | Merged into develop in [PR146](https://github.com/UnSpotibleShadow/OpenGDS2/pull/146); Actions passed. |
+| 7 | Consumer Investigation paraphrasing and extra receipt | Implemented and locally validated on `feature/original-recall-dialogue`; PR targets develop. |
 | 8 | Original GD2 save compatibility | Not started; a separate compatibility feature, not a UI-only fix. |
 | 9 | Persisted active casino rounds | Not started; intentional continuity adaptation to review. |
 | 10 | Casino exhaustion and numeric-boundary recovery | Not started; intentional protection against native hangs/errors to review. |
@@ -245,3 +245,30 @@ new boundaries and a locale filter permits independent bounded processes; record
 those final process results separately. Both independent English/Japanese full
 facility and six-media promotion runs subsequently pass with zero failures and
 clean exits. Native Windows modal timing and pixel acceptance remain unrun.
+
+## Step 7: Consumer Investigation dialogue and completion
+
+Recover the actual three-page investigation and eight-page refund / two-page
+no-recall result chains from `009EFA40 +38A0..4186`; see
+[recall conversations](recall-conversations.md) for anchors, text bindings and
+translation details. The native one-month dialogue wording stays distinct from
+the existing five-week countdown. Missing secretary introductions, the distinct
+full-price reaction and the separate dismayed reaction are restored. Schema 19
+imports 15 local-only text entries (389 total); schemas 1–18 remain supported.
+The final page acknowledges directly and returns to the existing sales route,
+removing the authored receipt and its extra confirmation. Desktop save/load and
+legacy pending events retain their accounting and replay behavior. No economic,
+random, timing or bankruptcy rules are changed.
+
+The bilingual UI fixture covers investigation and all four results, original page
+counts, replaced parameters, zero-price legacy quantity fallback, unread save/load,
+direct acknowledgement and completed reloads. The core-loop fixture uses the
+real conversation boundary rather than waiting for the removed receipt button.
+Optional-original domain checks cover schema/count and native constant-pool text
+bindings. Step 8 (original GD2 save compatibility) still needs owner permission.
+
+Local validation: clean build (zero warnings/errors), editor import, 577 optional-
+original domain checks, bilingual recall UI checks (zero failures) and the full
+core-loop UI check (zero failures) pass. Workflow lint also passes. Source CI
+includes the recall fixture. Native Windows modal/pixel acceptance remains unrun;
+no export or release is requested.

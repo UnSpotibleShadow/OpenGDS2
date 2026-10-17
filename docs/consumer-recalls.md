@@ -1,7 +1,8 @@
 # Consumer investigations and recalls — M21
 
 Current presentation: [consumer/secretary conversations](recall-conversations.md)
-explain quantity, per-copy recall price and total before the saved receipt.
+explain quantity, per-copy recall price and total; the final page acknowledges
+the event directly without a separate receipt.
 
 Evidence is targeted static P-Code for the supported executable. The original
 Windows runtime and a complete global RNG sequence have not been compared.

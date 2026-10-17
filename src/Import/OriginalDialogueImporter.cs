@@ -13,7 +13,7 @@ public static class OriginalDialogueImporter
         var pe = new EmployeeDatabaseImporter.Image(data);
         // fGMSKoyou: floor(Rnd * 10), after employee copy; ten greeting arms.
         pe.Require(pe.Offset(0x99FFC8 + 0xE4),0x27,0x6C,0xFF,0x0A,0x0B,0,4,0,0xF4,0x0A,0xEB,0xB3,0xFB,0xE6);
-        var result = new OriginalDialogueCatalog {SchemaVersion=18,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
+        var result = new OriginalDialogueCatalog {SchemaVersion=19,SourceHash=EmployeeDatabaseImporter.ExpectedHash};
         const int poachPool=0x606824;
         int[] rivalMessages=[0x40,0x41,0x42,0x44,0x45,0x46,0x47,0x48,0x49,0x4A];
         for(int i=0;i<10;i++)result.Entries.Add("POACHING_RIVAL_MESSAGE_"+i,pe.String(poachPool,rivalMessages[i]));
@@ -67,6 +67,23 @@ public static class OriginalDialogueImporter
         result.Entries.Add("HIRE_GREETING_9",pe.String(pool,0x1A)+"{company}"+pe.String(pool,0x1C));
         result.Entries.Add("NEW_EMPLOYEE",pe.String(pool,0x10));
         const int meetingPool=0x5FAFCC;
+        // fGMKikakuKaigi 009EFA40, meeting modes 11 and 12.
+        string R(int index)=>pe.String(meetingPool,index);
+        result.Entries.Add("RECALL_REPRESENTATIVE",R(0xEF));
+        result.Entries.Add("RECALL_DIALOGUE_ALERT",R(0xED)+"{title}"+R(0xEE));
+        result.Entries.Add("RECALL_DIALOGUE_INVESTIGATION",R(0xF0)+"{title}"+R(0xF1));
+        result.Entries.Add("RECALL_DIALOGUE_WAIT",R(0xF2));
+        result.Entries.Add("RECALL_DIALOGUE_RESULT_INTRO","{title}"+R(0xF3));
+        result.Entries.Add("RECALL_DIALOGUE_RESULT",R(0xF5)+"{title}"+R(0xF6));
+        result.Entries.Add("RECALL_DIALOGUE_FULL",R(0xF7)+"{price}"+R(0xF8));
+        result.Entries.Add("RECALL_DIALOGUE_FIXED",R(0xF7)+"{price}"+R(0x103));
+        result.Entries.Add("RECALL_DIALOGUE_REACTION_FULL",R(0xFA));
+        result.Entries.Add("RECALL_DIALOGUE_REACTION",R(0x104));
+        result.Entries.Add("RECALL_DIALOGUE_QUANTITY",R(0xFD)+"{quantity}"+R(0xFE)+"{price}"+R(0xFF));
+        result.Entries.Add("RECALL_DIALOGUE_COST","{refund}"+R(0x100));
+        result.Entries.Add("RECALL_DIALOGUE_GROAN",R(0x101));
+        result.Entries.Add("RECALL_DIALOGUE_CAUTION",R(0x102));
+        result.Entries.Add("RECALL_DIALOGUE_DISMISSED",R(0x105));
         const int periodicPool=0x5F99AC;
         const int springPool=0x5F6354,recyclePool=0x5F1A68,productionPool=0x5F4400,mysteryPool=0x5F5D08;
         result.Entries.Add("FACILITY_INTRO_HotSpring",pe.String(springPool,8)+"{fee}"+pe.String(springPool,9));

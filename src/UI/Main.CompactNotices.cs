@@ -6,7 +6,7 @@ public partial class Main
 {
     private void QueueCompactNotice(string name)
     {
-        if(name is not ("RecallNoticeWindow" or "EmployeeDismissalWindow" or "LegacyRosterNoticeWindow" or
+        if(name is not ("EmployeeDismissalWindow" or "LegacyRosterNoticeWindow" or
             "FinancialFailureNoticeWindow" or "CalendarInspectorWindow" or "CalendarEventWindow" or "AdditionalProductionWindow"))return;
         if(_dialog is not { } window || _workspace is null)return;
         var content=_content;

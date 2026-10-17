@@ -6585,10 +6585,17 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==374 && dialogue.SchemaVersion==18 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==389 && dialogue.SchemaVersion==19 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
+        Check(RecallDialogueRules.ImportKeys.All(key=>dialogue.Entries.ContainsKey(key)));
+        var image=new EmployeeDatabaseImporter.Image(File.ReadAllBytes(args[0]));
+        Check(dialogue.Entries["RECALL_DIALOGUE_WAIT"]==image.String(0x5FAFCC,0xF2));
+        Check(dialogue.Entries["RECALL_DIALOGUE_FULL"]==image.String(0x5FAFCC,0xF7)+"{price}"+image.String(0x5FAFCC,0xF8));
+        Check(dialogue.Entries["RECALL_DIALOGUE_FIXED"]==image.String(0x5FAFCC,0xF7)+"{price}"+image.String(0x5FAFCC,0x103));
+        Check(dialogue.Entries["RECALL_DIALOGUE_GROAN"]==image.String(0x5FAFCC,0x101));
+        Check(dialogue.Entries["RECALL_DIALOGUE_ALERT"].Contains("{title}") && dialogue.Entries["RECALL_DIALOGUE_QUANTITY"].Contains("{quantity}") && dialogue.Entries["RECALL_DIALOGUE_COST"].Contains("{refund}"));
         Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
         Check(MysteryLabService.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
         Check(dialogue.Entries["CANCELLATION_EMPLOYEE_NAMED"].Contains("{name}") && dialogue.Entries["CANCELLATION_STRESS_SUMMARY"].Contains("{room}"));
