@@ -44,9 +44,14 @@ drawing runners. The renderer previously cloned a fixed starting backdrop and
 never used the camera to draw this post.
 
 Rendering now reconstructs the applicable backdrop and cumulative scroll from
-the saved phase/tick/camera. Repeated redraws and reloads do not advance scenery,
-consume randomness, mutate race state or change wagers/results. The close-up's
-first scroll is at tick 46 and the finishing scroll starts at tick 201. Missing
+the saved phase/tick/camera. The native front-buffer copy precedes the background
+scroll; tick increments and scene transitions happen after presentation. Saved
+ticks 45 and 200 therefore still display the preceding scene. At tick 200 the
+renderer reverses the known position transform for that last close-up frame;
+sprite frames likewise use the pre-increment tick. The first visible close-up
+scroll is tick 47 and the first visible finishing scroll is tick 202. Repeated
+redraws and reloads do not advance scenery, consume randomness, mutate race state
+or change wagers/results. Missing
 scene files retain the reimport hint. Native timer delivery and final Windows
 pixel acceptance remain separate from these recovered drawing rules.
 
@@ -56,7 +61,7 @@ and compares repeated rendering plus JSON restoration without state changes.
 CI validates source and casino workflows only; it does not export or publish.
 
 Local validation: application build with zero warnings/errors; clean Godot 4.4.1
-.NET editor import; 574 domain checks with the private original executable and
+.NET editor import; 575 domain checks with the private original executable and
 independently recovered employee fixture; 93 Python checks (17 optional skips); English/Japanese casino
 layouts and horse save/reload/settlement workflows with zero failures. The source
 verifier checks all 32 rendering literals, including 25 new scenery/post anchors.

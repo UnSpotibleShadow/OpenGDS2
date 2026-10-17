@@ -6190,11 +6190,23 @@ Test("native horse raster keeps masks clipping and even rounding",()=>
 {
     byte[] background=Enumerable.Repeat((byte)100,421*173*3).ToArray(),colors=new byte[233*316*3],masks=Enumerable.Repeat((byte)255,233*316*3).ToArray();
     void Pixel(int x,int y,byte r,byte g,byte b){int at=(y*233+x)*3;colors[at]=r;colors[at+1]=g;colors[at+2]=b;masks[at]=masks[at+1]=masks[at+2]=0;}
-    Pixel(29,0,20,30,40);var race=new HorseRaceState {Tick=1,Positions=[2.5,-999,-999,-999,-999,-999,-999,-999]};var image=HorseRasterRules.Compose(background,colors,masks,race);
+    Pixel(29,0,20,30,40);var race=new HorseRaceState {Tick=2,Positions=[2.5,-999,-999,-999,-999,-999,-999,-999]};var image=HorseRasterRules.Compose(background,colors,masks,race);
     Check(image.AsSpan((38*421+2)*3,3).SequenceEqual(new byte[]{20,30,40}));Check(image[(38*421+3)*3]==100);
     Pixel(31,0,10,20,30);int maskAt=31*3;masks[maskAt]=15;masks[maskAt+1]=240;masks[maskAt+2]=255;race.Positions[0]=-1.5;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan(38*421*3,3).SequenceEqual(new byte[]{14,116,122}));
-    Pixel(116,0,7,8,9);race.Tick=0;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
-    Pixel(58,0,18,19,20);race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
+    Pixel(116,0,7,8,9);race.Tick=47;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
+    Pixel(58,0,18,19,20);race.Tick=201;race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
+});
+Test("horse drawing retains the preceding scene and frame at native transitions",()=>
+{
+    var background=Enumerable.Repeat((byte)100,421*173*3).ToArray();var colors=new byte[233*316*3];var masks=Enumerable.Repeat((byte)255,colors.Length).ToArray();
+    void Pixel(int x,byte value){for(int c=0;c<3;c++){colors[x*3+c]=value;masks[x*3+c]=0;}}
+    Pixel(0,11);Pixel(177,22);Pixel(58,33);
+    var race=new HorseRaceState {Tick=45,RacePhase=1,Positions=[10,-999,-999,-999,-999,-999,-999,-999]};
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(38*421+10)*3]==11);
+    race.Tick=200;race.RacePhase=2;race.FrontDistance=100;race.Positions=[0,20,20,20,20,20,20,20];
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(130*421+15)*3]==22);
+    race.Tick=201;race.Positions=[-405,-999,-999,-999,-999,-999,-999,-999];
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(38*421+10)*3]==33);
 });
 Test("horse scenery matches sequential native scrolls across phases and reloads",()=>
 {
@@ -6218,13 +6230,14 @@ Test("horse scenery matches sequential native scrolls across phases and reloads"
     }
     var start=Scene(173,0);var closeup=Scene(217,20);var finish=Scene(173,40);
     var colors=new byte[233*316*3];var masks=Enumerable.Repeat((byte)255,colors.Length).ToArray();
-    foreach(int tick in new[]{0,44,45,46,47,100,199,200,201,270,370,371,400})
+    foreach(int tick in new[]{0,44,45,46,47,100,199,200,201,202,270,370,371,372,400})
     {
         var race=new HorseRaceState {Tick=tick,RacePhase=tick<45?0:tick<200?1:2,
             Camera=700-Math.Min(Math.Max(tick-200,0),171)*10,Positions=Enumerable.Repeat(-10000d,8).ToList()};
-        var expected=(race.RacePhase==0?start:race.RacePhase==1?closeup:finish).AsSpan(0,start.Length).ToArray();
-        if(race.RacePhase==1)for(int i=45;i<tick;i++){NativeScroll(expected,0,77,2);NativeScroll(expected,82,91,6);}
-        if(race.RacePhase==2)for(int i=0;i<Math.Min(tick-200,171);i++)NativeScroll(expected,0,173,10);
+        int presented=tick<=45?0:tick<=200?1:2;
+        var expected=(presented==0?start:presented==1?closeup:finish).AsSpan(0,start.Length).ToArray();
+        if(presented==1)for(int i=46;i<tick;i++){NativeScroll(expected,0,77,2);NativeScroll(expected,82,91,6);}
+        if(presented==2)for(int i=0;i<Math.Min(tick-201,171);i++)NativeScroll(expected,0,173,10);
         string saved=System.Text.Json.JsonSerializer.Serialize(race);
         var actual=HorseRasterRules.Compose(start,colors,masks,race,closeup,finish);
         if(!actual.SequenceEqual(expected))throw new Exception($"Scenery differs at tick {tick}");
@@ -6251,7 +6264,7 @@ Test("horse finish post follows camera with mask clipping and draws behind runne
     race.Camera=-1220;image=HorseRasterRules.Compose(background,colors,masks,race);
     Check(image[(10*421+420)*3]==3);
     race.Camera=-1230;Check(HorseRasterRules.Compose(background,colors,masks,race).SequenceEqual(background));
-    Pixel(0,197,12);Pixel(58,0,22);race.Camera=-800;race.Positions[0]=-415;
+    Pixel(0,197,12);Pixel(58,0,22);race.Tick=281;race.Camera=-800;race.Positions[0]=-415;
     image=HorseRasterRules.Compose(background,colors,masks,race);Check(image[(38*421)*3]==22);
 });
 if (args.Length == 2)
