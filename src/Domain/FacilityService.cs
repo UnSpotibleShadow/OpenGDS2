@@ -3,7 +3,7 @@ namespace OpenGDS2.Domain;
 public enum FacilityKind { School, HotSpring, Recycling, TechnologySchool, Casino, Lawyer, MysteryLab, ProductionLab, HardwareLab }
 public enum FacilityResult { Success, CalendarUnknown, EventPending, InvalidSlot, SlotOccupied, AlreadyOwned, MoneyUnknown, InsufficientFunds, NotOwned, StateUnknown, NoEmployees, NotEmployed, ExperimentRunning }
 
-/// <summary>Authored result snapshot; applying a service and acknowledging it are separate operations.</summary>
+/// <summary>Saved service result; EffectsPending records effects due after its secretary page.</summary>
 public sealed record FacilityStaffReaction(int SourceIndex,string Name,int? PortraitId,int Variant);
 
 public sealed class FacilityReceipt
@@ -17,6 +17,8 @@ public sealed class FacilityReceipt
     public int? SourceSlot {get;set;}
     public int? CapacityBefore {get;set;}
     public int PageIndex {get;set;}
+    // Absent/false preserves already-applied receipts from earlier saves.
+    public bool EffectsPending {get;set;}
     // Null means a pre-chain receipt. Never roll historical reactions on load.
     public List<FacilityStaffReaction>? Reactions {get;set;}
 }
@@ -70,10 +72,11 @@ public static class FacilityService
     public static FacilityResult HotSpring(GameState state,int slot)
     {
         var result=CheckService(state,slot,FacilityKind.HotSpring);if (result!=FacilityResult.Success) return result;
-        var care=EmployeeCareService.TryHotSpring(state);
-        if (care!=EmployeeCareResult.Success) return care switch
-        {EmployeeCareResult.NoEmployees=>FacilityResult.NoEmployees,EmployeeCareResult.MoneyUnknown=>FacilityResult.MoneyUnknown,_=>FacilityResult.InsufficientFunds};
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot};
+        if(state.Employees.Count==0)return FacilityResult.NoEmployees;
+        if(state.Money is not long money)return FacilityResult.MoneyUnknown;
+        if(money<EmployeeCareService.HotSpringCost)return FacilityResult.InsufficientFunds;
+        FinancialRules.Apply(state,-EmployeeCareService.HotSpringCost);
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot,EffectsPending=true};
         return FacilityResult.Success;
     }
     public static FacilityResult HotSpring(GameState state,int slot,Random random)
@@ -97,14 +100,30 @@ public static class FacilityService
                 reactions.Add(new(row.SourceIndex,row.Employee.Name,row.Employee.PortraitId,CompanyEventService.Draw(random,5)));
         }
         finance.Commit(state);
-        foreach(var employee in state.Employees)employee.Stress=0;
-        foreach(var row in employed)row.Employee.Stress=0;
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot,Reactions=reactions};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.HotSpring,Amount=EmployeeCareService.HotSpringCost,SourceSlot=slot,Reactions=reactions,EffectsPending=true};
         return FacilityResult.Success;
     }
     public static bool AcknowledgeReceipt(GameState state)
     {
         if(state.PendingFacilityReceipt is not { } receipt)return false;
+        if(receipt.EffectsPending)
+        {
+            ValidatePendingEffects(state,receipt);
+            switch(receipt.Kind)
+            {
+                case FacilityKind.HotSpring:
+                    foreach(var employee in state.Employees)employee.Stress=0;
+                    foreach(var row in state.EmployeeSources.Where(x=>x.GateValue==1))row.Employee.Stress=0;
+                    break;
+                case FacilityKind.Recycling:FinancialRules.Apply(state,receipt.Amount);break;
+                case FacilityKind.ProductionLab:
+                    long cash=checked(state.Money!.Value-ProductionExpansionCost);
+                    int capacity=checked(receipt.CapacityBefore!.Value+receipt.Gain!.Value);
+                    state.Money=cash;state.Company.ProductionCapacity=capacity;
+                    break;
+            }
+            receipt.EffectsPending=false;
+        }
         if(receipt.PageIndex<(receipt.Reactions?.Count??0))receipt.PageIndex++;
         else state.PendingFacilityReceipt=null;
         return true;
@@ -114,9 +133,9 @@ public static class FacilityService
         var result=CheckService(state,slot,FacilityKind.Recycling);if (result!=FacilityResult.Success) return result;
         if (state.Money is null) return FacilityResult.MoneyUnknown;
         long stock=StockForRecycling(state),amount=checked(stock*RecyclingPrice);
-        var finance=FinancialRules.Prepare(state,amount);
+        _=FinancialRules.Prepare(state,amount);
         foreach (var product in state.ReleasedGames) product.Stock=0;
-        finance.Commit(state);state.PendingFacilityReceipt=new() {Kind=FacilityKind.Recycling,Amount=amount,SourceSlot=slot};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.Recycling,Amount=amount,SourceSlot=slot,EffectsPending=true};
         return FacilityResult.Success;
     }
     public static long StockForRecycling(GameState state)
@@ -165,12 +184,31 @@ public static class FacilityService
         if (state.Company.ProductionCapacity is not int capacity || capacity<0) return FacilityResult.StateUnknown;
         float draw=random.NextSingle();
         if (!float.IsFinite(draw) || draw<0 || draw>=1) throw new ArgumentOutOfRangeException(nameof(random));
-        int gain=15+(int)Math.Floor(draw*5d),next=checked(capacity+gain);
-        long cash=checked(money-ProductionExpansionCost);
+        int gain=15+(int)Math.Floor(draw*5d);
+        _=checked(capacity+gain);_=checked(money-ProductionExpansionCost);
         // This branch neither checks affordability nor calls the accumulator.
-        state.Company.ProductionCapacity=next;state.Money=cash;
-        state.PendingFacilityReceipt=new() {Kind=FacilityKind.ProductionLab,Amount=ProductionExpansionCost,Gain=gain,CapacityBefore=capacity,SourceSlot=slot};
+        state.PendingFacilityReceipt=new() {Kind=FacilityKind.ProductionLab,Amount=ProductionExpansionCost,Gain=gain,CapacityBefore=capacity,SourceSlot=slot,EffectsPending=true};
         return FacilityResult.Success;
+    }
+    public static void ValidatePendingEffects(GameState state,FacilityReceipt receipt)
+    {
+        if(!receipt.EffectsPending)return;
+        ValidateReceipt(receipt);
+        if(state.Calendar?.OriginalSlots0444[receipt.SourceSlot!.Value]!=(int)receipt.Kind ||
+            receipt.Kind==FacilityKind.ProductionLab && state.Company.ProductionCapacity!=receipt.CapacityBefore ||
+            receipt.Kind==FacilityKind.Recycling && state.ReleasedGames.Any(p=>p.Stock!=0))
+            throw new InvalidDataException("Pending facility effects disagree with company state.");
+        try
+        {
+            if(receipt.Kind==FacilityKind.Recycling)_=FinancialRules.Prepare(state,receipt.Amount);
+            if(receipt.Kind==FacilityKind.ProductionLab)
+            {
+                if(state.Money is not long money)throw new InvalidDataException("Unknown facility funds.");
+                _=checked(money-ProductionExpansionCost);
+            }
+        }
+        catch(Exception ex) when(ex is OverflowException or InvalidOperationException)
+        {throw new InvalidDataException("Invalid pending facility transaction.",ex);}
     }
     public static void ValidateReceipt(FacilityReceipt receipt)
     {
@@ -182,6 +220,9 @@ public static class FacilityService
             FacilityKind.ProductionLab=>receipt.Amount==ProductionExpansionCost && receipt.Gain is >=15 and <=19 && receipt.EmployeeName is null,
             _=>false
         };
+        if(receipt.EffectsPending && (receipt.PageIndex!=0 || receipt.SourceSlot is null ||
+            receipt.Kind is not (FacilityKind.HotSpring or FacilityKind.Recycling or FacilityKind.ProductionLab) ||
+            receipt.Kind==FacilityKind.ProductionLab && receipt.CapacityBefore is null))valid=false;
         if(receipt.SourceSlot is <0 or >2 || receipt.CapacityBefore is <0 ||
             receipt.Kind!=FacilityKind.ProductionLab && receipt.CapacityBefore is not null ||
             receipt.CapacityBefore is int before && (long)before+receipt.Gain>int.MaxValue ||

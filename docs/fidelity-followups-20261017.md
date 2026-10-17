@@ -12,8 +12,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 2 | Oversized new-company setup | Merged into develop in [PR141](https://github.com/UnSpotibleShadow/OpenGDS2/pull/141); Actions passed. |
 | 3 | New-company Enter/default confirmation | Merged into develop in [PR143](https://github.com/UnSpotibleShadow/OpenGDS2/pull/143); Actions passed. |
 | 4 | Missing original About/version/link dialog | Merged into develop in [PR144](https://github.com/UnSpotibleShadow/OpenGDS2/pull/144); Actions passed. |
-| 5 | Original menu organization | Implemented and locally validated on `feature/original-menu-organization`; PR targets develop. |
-| 6 | Facility conversation/transaction ordering | Not started. |
+| 5 | Original menu organization | Merged into develop in [PR145](https://github.com/UnSpotibleShadow/OpenGDS2/pull/145); Actions passed. |
+| 6 | Facility conversation/transaction ordering | Implemented and locally validated on `feature/facility-transaction-order`; PR targets develop. |
 | 7 | Consumer Investigation paraphrasing and extra receipt | Not started. |
 | 8 | Original GD2 save compatibility | Not started; a separate compatibility feature, not a UI-only fix. |
 | 9 | Persisted active casino rounds | Not started; intentional continuity adaptation to review. |
@@ -197,3 +197,51 @@ bilingual menu fixture, original Settings fixture and full core-loop UI check
 pass with zero failures. Fresh
 supported-original map rebuild and workflow lint pass. Source Actions includes the
 menu fixture; native Windows menu/pixel acceptance remains unrun.
+
+## Step 6: facility result boundaries
+
+The earlier chain implementation deliberately committed all service effects before
+showing saved results. Static instruction ordering establishes three observable
+mismatches: recycling clears stock, calls the result dialogue (`0098DDC4 +0195`),
+then calls the financial accumulator (`+01CE`); production reports its result
+(`00988DAC +0109`) before the capacity/cash global stores (`+0138`, `+0146`);
+Hot Spring debits (`0099E164 +01B2`), reports relaxation (`+01F6`), then clears
+source stress in the loop (`+0213..0270`) before employee reactions.
+These anchors are from the supported original and the existing facility-chain
+fingerprints. Technology study already debits and increases capacity before its
+result, so it is not changed. No generic delay is imposed on the other facility
+flows, whose recovered chains are documented in the facility audit.
+
+New receipts use additive `EffectsPending` (absent/false for older saves).
+Recycling clears stock on acceptance but credits cash/profit accumulators only
+when its result is acknowledged. Production saves the single rolled gain and old
+capacity, then applies capacity and the direct cash debit on acknowledgement;
+there is still no affordability gate or profit-accumulator debit. Hot Spring
+still charges first, then clears both employee/source stress on acknowledgement
+of the secretary page, before staff pages. Selected reaction snapshots remain
+reserved at acceptance to preserve the established deterministic save/resume
+path; this does not claim native RNG callback timing during the modal dialogue.
+
+Pending effects are validated against their source plot, page, stock/capacity
+state and applicable numeric bounds. Applying and clearing the pending flag is
+one synchronous acknowledgement; reload cannot reroll or repeat the effects.
+Old unread receipts remain already applied and are never credited/debited again.
+Overflow preflight remains before irreversible stock disposal. Save/load and UI
+transaction guards keep other services and the office clock suspended.
+
+Domain regressions cover the before/after boundary, saved results, single draws,
+negative cash, unchanged production profit totals, legacy already-applied
+receipts, duplicate acknowledgements and invalid pending snapshots. The bilingual
+UI fixture exercises all three through actual facility/result/save/load routes.
+Step 7 (Consumer Investigation wording and extra receipt) still needs permission.
+
+Local validation: 559 domain tests pass, including missing-field legacy-save
+coverage; clean application build has zero warnings/errors; bilingual ordering UI
+fixture passes with zero failures. The original-chain verifier passes all 56
+procedure fingerprints / nine illustration and event bindings. The long combined
+facility/promotion runner initially used stale payment assertions and hit a Godot
+.NET shutdown assertion after finishing. Its assertions were updated for the
+new boundaries and a locale filter permits independent bounded processes; record
+those final process results separately. Both independent English/Japanese full
+facility and six-media promotion runs subsequently pass with zero failures and
+clean exits. Native Windows modal timing and pixel acceptance remain unrun.
