@@ -41,7 +41,8 @@ jobs:
         run: python3 tools/bounded_process.py --label build --timeout 180 --checkpoint "$RUNNER_TEMP/build.json" -- dotnet build
       - name: Import project
         run: python3 tools/bounded_process.py --label import --timeout 180 --checkpoint "$RUNNER_TEMP/import.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --path . --editor --quit
-      - name: Casino layouts and horse-race continuation
+      - name: UI layouts and continuation
         run: |
           XDG_DATA_HOME="$RUNNER_TEMP/casino-layout" python3 tools/bounded_process.py --label casino-layout --timeout 180 --checkpoint "$RUNNER_TEMP/casino-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_layout_smoke.gd
           XDG_DATA_HOME="$RUNNER_TEMP/casino-horse" python3 tools/bounded_process.py --label casino-horse --timeout 180 --checkpoint "$RUNNER_TEMP/casino-horse.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_horse_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/company-setup" python3 tools/bounded_process.py --label company-setup --timeout 180 --checkpoint "$RUNNER_TEMP/company-setup.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/company_setup_smoke.gd
