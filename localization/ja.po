@@ -5235,4 +5235,4 @@ msgid "RECALL_DIALOGUE_GROAN"
 msgstr "これは困りました。大変な事態です……"
 
 msgid "CASINO_NUMERIC_LIMIT_NOTE"
-msgstr "数値の上限です。台を閉じるか、可能な操作を選んでください。"
+msgstr "数値の上限です。\n他の操作か、台を閉じてください。"
