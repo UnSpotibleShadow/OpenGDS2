@@ -1416,6 +1416,97 @@ Test("modern poker saves resume reveal and partial payout without replaying draw
     Check(s.Casino.Coins==101 && s.Casino.PendingPayout==3);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Casino.Coins==101 && s.Casino.Poker.Phase==4);
 });
+// Compare uninterrupted play with a fresh process-equivalent session restored before
+// every callback. Use the real saved RNG stream, not a fixed fake draw sequence.
+GameState CheckCasinoContinuation(GameState initial,Action<GameSession> next,int callbacks)
+{
+    initial.SimulationRandomState=0x123456;initial.OriginalPayrollScratchIndex=17;
+    var live=new GameSession(new VbSimulationRandom(0));live.Restore(initial);
+    var resumed=new GameSession(new VbSimulationRandom(0xABCDEF));
+    resumed.Restore(SaveStore.Deserialize(SaveStore.Serialize(initial)));
+    for(int i=0;i<callbacks;i++)
+    {
+        string saved=SaveStore.Serialize(resumed.Current!);
+        resumed=new GameSession(new VbSimulationRandom(0xABCDEF));
+        resumed.Restore(SaveStore.Deserialize(saved));
+        Check(SaveStore.Serialize(resumed.Current!)==saved); // Restore itself cannot draw, charge or award.
+        string beforeOffice=SaveStore.Serialize(resumed.Current!);resumed.TickOffice();
+        Check(SaveStore.Serialize(resumed.Current!)==beforeOffice);
+        next(live);next(resumed);
+        Check(SaveStore.Serialize(live.Current!)==SaveStore.Serialize(resumed.Current!));
+        Check(resumed.Current!.OriginalPayrollScratchIndex==17);
+    }
+    return resumed.Current!;
+}
+Test("poker fresh-session reloads preserve reveal replacement and future RNG draws",()=>
+{
+    var s=PokerFixture();CasinoPokerService.Command(s,0,new FailureRandom(0));
+    CasinoPokerService.Command(s,1,new VbSimulationRandom(42));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var p=session.Current!.Casino.Poker;
+        if(p.Phase==1 && p.Tick>=45) {CasinoPokerService.SelectCard(session.Current!,0);session.PokerCommand(1);}
+        session.TickPoker();
+    },100);
+    Check(s.Casino.Poker.UsedCards.Count==9 && s.Casino.Coins==99);
+});
+Test("poker fresh-session reloads preserve double-up and partial collection exactly",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=7;
+    CasinoPokerService.Command(s,1,new FailureRandom(0));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var p=session.Current!.Casino.Poker;
+        if(p.Phase==5 && p.Tick>=18) CasinoPokerService.SelectCard(session.Current!,1);
+        session.TickPoker();
+    },65);
+    Check(s.Casino.Poker.Phase is 0 or 3 or 5 or 6);
+    // A separate known award makes collection coverage independent of the double-up outcome.
+    s=PokerFixture();p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=7;
+    CasinoPokerService.Command(s,0,new FailureRandom(0));CasinoPokerService.Tick(s,new FailureRandom());
+    s=CheckCasinoContinuation(s,session=>session.TickPoker(),20);
+    Check(s.Casino.Coins==107 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("blackjack fresh-session reloads preserve predealt reveals and partial collection",()=>
+{
+    var s=BlackjackFixture();CasinoBlackjackService.Command(s,2,new FailureRandom());
+    CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(BlackjackDeck())));
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),75);
+    Check(s.Casino.Blackjack.PlayerCount==2 && s.Casino.Blackjack.DealerCount==1 && s.Casino.Blackjack.Phase==2);
+    s=BlackjackFixture();var b=BlackjackDecision(s,5);CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<29;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(b.AwardReady);CasinoBlackjackService.Command(s,2,new FailureRandom());CasinoBlackjackService.Tick(s,new FailureRandom());
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),10);
+    Check(s.Casino.Coins==104 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("card-chain fresh-session reloads preserve pending replacement and stepped collection",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    Check(CasinoCardChainService.SelectCard(s,0));
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),4);
+    Check(s.Casino.CardChain.ChainCount==1 && s.Casino.CardChain.Round.UsedCards.Count==6);
+    s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    p.Phase=3;s.Casino.PendingPayout=150;CasinoCardChainService.Command(s,0,new FailureRandom(0));
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),290);
+    Check(s.Casino.Coins==250 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("horse fresh-session reloads preserve draft commit race motion and next-card RNG",()=>
+{
+    var s=HorseFixture();CasinoHorseService.AdjustWager(s,1);s.Casino.Horse.HeldAdjustment=1;
+    var saved=SaveStore.Serialize(s);s=SaveStore.Deserialize(saved);
+    Check(s.Casino.Horse.HeldAdjustment==0 && s.Casino.Horse.DraftCash==9900 && s.Money==10000);
+    CasinoHorseService.Start(s,new VbSimulationRandom(45));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var race=session.Current!.Casino.Horse;
+        if(race.Stage==1) session.TickHorseRace();
+        else if(race.Stage==2) session.TickHorseResult(HorseCatalog());
+        else if(race.Stage==3) session.AcceptHorsePayout(HorseCatalog());
+    },550);
+    Check(s.Money==9900 && s.Casino.Horse.Stage==0 && s.Casino.Horse.RaceCounter==1);
+});
 Test("casino pauses office and blocks other modal transactions while preserving accounting",()=>
 {
     var s=PokerFixture();var session=new GameSession(new FailureRandom());session.Restore(s);string before=SaveStore.Serialize(s);

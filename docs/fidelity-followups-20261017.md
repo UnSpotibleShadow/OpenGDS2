@@ -16,7 +16,7 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | 6 | Facility conversation/transaction ordering | Merged into develop in [PR146](https://github.com/UnSpotibleShadow/OpenGDS2/pull/146); Actions passed. |
 | 7 | Consumer Investigation paraphrasing and extra receipt | Merged into develop in [PR147](https://github.com/UnSpotibleShadow/OpenGDS2/pull/147); Actions passed. |
 | 8 | Original GD2 save compatibility | Skipped at the owner’s explicit request; original GD2 compatibility remains unimplemented. |
-| 9 | Persisted active casino rounds | Not started; intentional continuity adaptation to review. |
+| 9 | Persisted active casino rounds | Reviewed: retain the deliberate modern continuity policy; native evidence and fresh-session continuation regressions recorded in [the review](casino-save-continuity-review.md). |
 | 10 | Casino exhaustion and numeric-boundary recovery | Not started; intentional protection against native hangs/errors to review. |
 
 ## Step 1: scenery recovery
@@ -295,4 +295,21 @@ fingerprint and produces a nearest-neighbor enlarged preview for visual review.
 Validation: 560 domain checks, the C# build (zero warnings/errors), workflow lint
 and both public/authored and private/original bilingual artwork fixtures pass.
 The enlarged generated image was visually inspected.
-Step 9 (persisted active casino rounds) still requires owner permission.
+The owner subsequently authorized step 9; its review follows below.
+
+
+## Step 9: retain modern casino save continuity
+
+The [save continuity review](casino-save-continuity-review.md) re-verifies original
+coin serialization and the absence of shared card-round scratch from all 130
+paired record templates. Native form-open resets are distinguished from company
+save loading and process lifetime. The existing modern policy is retained:
+loading a saved active game resumes it, without rerolling, recharging or replaying
+payouts. Dropping that state would risk paid hands and partial awards.
+
+No gameplay or save-schema change is warranted by this evidence. Five new domain
+checks compare uninterrupted play with a fresh session restored every callback
+for all four activities, including saved RNG and partial collections. The full
+565-check public suite and bilingual card-game UI continuation pass. Source CI
+runs the new UI fixture alongside the existing horse fixture. Native Windows
+save/load acceptance is still unrun. Step 10 remains pending owner permission.
