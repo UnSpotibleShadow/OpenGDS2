@@ -5163,7 +5163,7 @@ msgid "RECALL_DIALOGUE_INVESTIGATION"
 msgstr "「{title}」の不具合について調査しています。結果が出たらお知らせします。"
 
 msgid "RECALL_DIALOGUE_WAIT"
-msgstr "調査結果が出るまで５週間かかります。結果を待ちましょう。"
+msgstr "調査結果は約一か月後です。最悪の場合、全本数を会社の負担で回収することになります。"
 
 msgid "RECALL_DIALOGUE_RESULT"
 msgstr "「{title}」の調査結果が出ました。"
@@ -5221,3 +5221,15 @@ msgstr "その他のウィンドウ"
 
 msgid "ADDITIONAL_ACTIONS"
 msgstr "その他の行動"
+
+msgid "RECALL_DIALOGUE_ALERT"
+msgstr "大変な知らせです。「{title}」の重大な不具合について、消費者団体が調査を始めたそうです。"
+
+msgid "RECALL_DIALOGUE_RESULT_INTRO"
+msgstr "「{title}」の不具合に関する消費者団体の調査結果が届いたようです。"
+
+msgid "RECALL_DIALOGUE_REACTION_FULL"
+msgstr "定価で全本数を回収するよう求められてしまいました。"
+
+msgid "RECALL_DIALOGUE_GROAN"
+msgstr "これは困りました。大変な事態です……"

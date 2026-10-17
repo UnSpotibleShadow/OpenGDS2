@@ -5337,34 +5337,34 @@ msgid "RECALL_REPRESENTATIVE"
 msgstr "Consumer representative"
 
 msgid "RECALL_DIALOGUE_INVESTIGATION"
-msgstr "We are investigating reports of bugs in “{title}”. We will notify you when our investigation is complete."
+msgstr "Hello, I represent the consumer group. We received a report that your game “{title}” has a major bug, and we are investigating."
 
 msgid "RECALL_DIALOGUE_WAIT"
-msgstr "The investigation will take five weeks. We must wait for the result."
+msgstr "The results will be ready in a month. In the worst case, you will have to recall every copy at your own expense."
 
 msgid "RECALL_DIALOGUE_RESULT"
-msgstr "The investigation of “{title}” is complete."
+msgstr "Hello. The investigation results for your game “{title}” are ready."
 
 msgid "RECALL_DIALOGUE_FULL"
-msgstr "Serious bugs were found. You must recall the game at its full retail price of ¥{price} per copy."
+msgstr "Unfortunately, we found a serious bug. You must recall each copy at its retail price of ¥{price}."
 
 msgid "RECALL_DIALOGUE_FIXED"
-msgstr "Bugs were found. You must recall the game at ¥{price} per copy."
+msgstr "Unfortunately, we found a serious bug. You must recall each copy for ¥{price}."
 
 msgid "RECALL_DIALOGUE_REACTION"
-msgstr "Our game has been ordered recalled!"
+msgstr "We have been ordered to recall it!"
 
 msgid "RECALL_DIALOGUE_QUANTITY"
-msgstr "Sold copies plus remaining stock total {quantity} copies. All must be recalled at ¥{price} each."
+msgstr "We must recall the total of {quantity} sold and in-stock copies at ¥{price} each."
 
 msgid "RECALL_DIALOGUE_COST"
-msgstr "The total recall charge is ¥{refund}."
+msgstr "That will cost ¥{refund}…"
 
 msgid "RECALL_DIALOGUE_CAUTION"
-msgstr "This is serious. We must check for bugs more carefully before releasing our next game."
+msgstr "We must check for bugs very carefully so this never happens again!"
 
 msgid "RECALL_DIALOGUE_DISMISSED"
-msgstr "“{title}” does not need to be recalled. What a relief!"
+msgstr "It seems no recall is required. What a relief!"
 
 msgid "RECALL_QUANTITY_UNKNOWN"
 msgstr "unknown"
@@ -5398,3 +5398,15 @@ msgstr "Other windows"
 
 msgid "ADDITIONAL_ACTIONS"
 msgstr "More actions"
+
+msgid "RECALL_DIALOGUE_ALERT"
+msgstr "This is serious! Apparently “{title}” has a major bug, and a consumer group has begun an investigation."
+
+msgid "RECALL_DIALOGUE_RESULT_INTRO"
+msgstr "The consumer group was investigating “{title}” for a bug-related recall. The results seem to be in…"
+
+msgid "RECALL_DIALOGUE_REACTION_FULL"
+msgstr "We have been ordered to recall it at the full retail price!"
+
+msgid "RECALL_DIALOGUE_GROAN"
+msgstr "Oh no! This has turned into a disaster…"
