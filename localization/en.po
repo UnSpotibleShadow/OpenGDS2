@@ -5412,4 +5412,4 @@ msgid "RECALL_DIALOGUE_GROAN"
 msgstr "Oh no! This has turned into a disaster…"
 
 msgid "CASINO_NUMERIC_LIMIT_NOTE"
-msgstr "Numeric limit.\nUse another action or close."
+msgstr "Numeric limit. Close table."

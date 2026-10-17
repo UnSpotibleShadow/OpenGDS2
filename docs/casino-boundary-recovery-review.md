@@ -73,7 +73,10 @@ original material stays outside Git and native Windows acceptance remains unrun.
 CI also exposed a brittle step-9 UI assertion: a real random card-chain
 replacement can legitimately lose and clear the bet. The fixture now checks the
 correct bet for the resulting phase while still requiring exactly one coin debit;
-this does not change gameplay.
+this does not change gameplay. CI font coverage also required a shorter numeric
+warning. The CI import phase now uses Godot’s `--import`, which waits for resource
+imports to finish before quitting, instead of an early editor `--quit`; this
+avoids checks running with missing imported resources.
 
 This closes the last authorized fidelity-plan step. Original GD2 compatibility
 (step 8) remains skipped. No release, tag, package or main promotion is requested.

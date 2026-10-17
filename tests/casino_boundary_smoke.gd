@@ -21,6 +21,7 @@ func check_boundary(value: Dictionary, label_name: String, key: String, close_na
     check(label!=null,"Boundary warning exists: "+label_name)
     if label==null:await dispose();return
     check(label.text==tr(key),"Correct localized recovery warning: "+label_name)
+    print("Warning metrics: ",TranslationServer.get_locale(),"/",key," lines=",label.get_line_count()," height=",label.get_line_height()," box=",label.size)
     check(label.get_line_count()*label.get_line_height()<=label.size.y,"Full recovery warning fits: "+label_name)
     for control in controls:check(main.find_child(control,true,false).disabled,"Boundary stops unsafe action: "+control)
     check(not main.find_child(close_name,true,false).disabled,"Close remains available")
