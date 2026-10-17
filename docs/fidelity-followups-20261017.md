@@ -9,8 +9,8 @@ native Windows playthrough. Deliberate adaptations need review before removal.
 | Step | Finding | Status |
 | --- | --- | --- |
 | 1 | Horse-race scenery, camera and finish post | Merged into develop in [PR140](https://github.com/UnSpotibleShadow/OpenGDS2/pull/140); final Actions run passed. |
-| 2 | Oversized new-company setup | Implemented and locally validated on `feature/compact-company-setup`; PR targets develop. |
-| 3 | New-company Enter/default confirmation | Not started. |
+| 2 | Oversized new-company setup | Merged into develop in [PR141](https://github.com/UnSpotibleShadow/OpenGDS2/pull/141); Actions passed. |
+| 3 | New-company Enter/default confirmation | Implemented and locally validated on `feature/company-setup-enter`; PR targets develop. |
 | 4 | Missing original About/version/link dialog | Not started. |
 | 5 | Original menu organization | Not started. |
 | 6 | Facility conversation/transaction ordering | Not started. |
@@ -88,7 +88,7 @@ Validation messages have reserved space. Name limits and validation, trimmed
 drafts returning from mode selection, explicit cancellation and window-close
 cancellation retain the existing behavior. Missing illustration data shows the
 reimport hint within the picture area. Mode-selection presentation and Enter
-confirmation are separate from this layout step; step 3 still needs permission.
+confirmation are separate from this layout step; step 3 is recorded below.
 
 The dedicated bilingual UI fixture checks containment at 720p and in a tall
 window, original-art cache binding, missing artwork, inline validation, full
@@ -100,3 +100,30 @@ Local result: application build passes with zero warnings/errors. The bilingual
 company-setup smoke check passes with zero failures, including both entry routes,
 draft restoration, cancellation and artwork fallback. Compact input padding keeps
 the inherited desktop font and focus outline within the 25-pixel field height.
+
+## Step 3: Enter confirms new-company names
+
+The supported original's `fGMGameNew.Command1` record at file offset `235E1C`
+serializes property 19 (`Default`) as true: marker/value `13 FF` at `235E42`.
+The indexed property name/type is recorded in `tools/vb6_property_types.json`.
+This is static evidence for the form's default Confirm action; native Windows
+keyboard/IME acceptance remains unrun. It does not establish a separate
+Enter handler on both original text controls.
+
+Both port name fields now use Godot's `TextSubmitted` signal to call the same
+local confirmation function as the Confirm button. Blank or whitespace-only
+names keep the form and inline validation; valid names are trimmed before mode
+selection. Submission is scoped to the name fields and does not start a game
+or select a mode. Existing button and cancel behavior remain intact.
+
+The bilingual company-setup smoke fixture sends actual Enter and keypad Enter
+press/release events with each name field focused. It covers either missing name,
+inline validation/focus retention, valid advancement, trimmed drafts after
+canceling mode selection, title and in-game routes, and the existing cancellation,
+artwork and layout checks. Step 4 (original About/version/link dialog) still needs
+owner permission.
+
+Local result: application build passes with zero warnings/errors; the expanded
+company-setup keyboard/layout smoke check passes with zero failures in both
+languages. The existing Actions workflow runs this fixture on the PR. No export,
+release, main promotion or unrelated fidelity step is part of this change.
