@@ -11,6 +11,8 @@ func open_casino(game: String) -> void:
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
     root.size=Vector2i(1280,800);blank_bmp("user://original/Graphic/Embedded/OfficeBase.bmp",466,290,true);setup_catalog()
+    for scene in [["Beibazyo.bmp",421,173],["Beibazyo2.bmp",421,217],["Beibazyo3.bmp",421,173],["KeibaC.bmp",233,316],["KeibaM.bmp",233,316]]:
+        blank_bmp("user://original/Graphic/"+scene[0],scene[1],scene[2],true)
     var catalog=JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"));catalog.Horses=[];catalog.Jockeys=[]
     for i in range(44):catalog.Horses.append({"SourceIndex":i,"Name":"Runner %02d"%i,"RawWeight":450,"RawKind":3,"RawParameter":13,"Strength":i+.13})
     for i in range(10):catalog.Jockeys.append({"SourceIndex":i,"Name":"Rider %d"%i,"RawValue":5})

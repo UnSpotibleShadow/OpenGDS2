@@ -1,5 +1,18 @@
 # OpenGDS2 working instructions
 
+## Current work — fidelity follow-ups, 17 October 2026
+
+The owner authorized the ten ordered findings in
+[fidelity follow-ups](docs/fidelity-followups-20261017.md). Complete one step,
+then ask before starting the next, naming that next step. Only step 1 is currently
+authorized. Follow git-flow: `feature/...` branches start from `develop` and PRs
+target `develop`; `main` receives reviewed release/hotfix integrations. The remote
+had only main, so develop starts at its current released-source descendant.
+The owner explicitly permits Actions again now the repository is public. Use
+validation-only CI for these steps; no release, tag, asset replacement or desktop
+packaging is requested. These instructions supersede the older pauses and direct
+feature-to-main workflow below. Preserve the published release.
+
 ## Current work — post-release community handoff, 16 October 2026
 
 The owner published v0.1.0-ea.1 with Windows x86_32/x86_64 ZIPs and checksums;
@@ -42,8 +55,8 @@ local generated sidecars intact. Source PR merge/snapshot sync remain authorized
 - Full git checkout: `/workspace/scratch/m105-review-git`. The primary snapshot
   `/workspace/OpenGDS2` has no .git; sync only explicit verified changed files
   after merge, checking its base contents before replacement.
-- Create a feature branch, commit there and open a PR into main. Do not publish
-  development commits directly to main. Preserve unrelated changes and generated
+- Create a feature branch from develop, commit there and open a PR into develop.
+  Do not publish development commits directly to main. Preserve unrelated changes and generated
   sidecars; do not blanket-clean or stage them.
 - Original LZH import remains required. Never commit imported original graphics,
   sounds, executables, databases, saves, extraction caches or full private traces.
@@ -52,7 +65,7 @@ local generated sidecars intact. Source PR merge/snapshot sync remain authorized
 - Keep the README Ko-fi section and code/runtime/community-music notices.
   Community audio has recorded distribution authorization and separate terms;
   the MIT code license does not grant standalone music rights.
-- Keep Actions paused. Do not generate desktop debug packages, publish releases,
+- Actions source validation is authorized. Do not generate desktop debug packages, publish releases,
   change visibility or communicate externally without the relevant authorization.
 - Use the existing GitHub connection; never ask for a separate browser login.
   A historical uploads.github.com HTTP401 is unresolved. Diagnose the upload

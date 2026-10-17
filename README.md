@@ -16,7 +16,7 @@ Run a game studio: hire and train employees, develop games, ship them, follow re
 
 The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 
-Historical GitHub Actions development packages are outdated; use the published release assets. Automatic builds remain paused.
+Historical GitHub Actions development packages are outdated; use the published release assets. Source validation runs on pull requests; it does not publish a release.
 
 ### What you can play
 

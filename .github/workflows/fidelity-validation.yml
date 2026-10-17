@@ -1,0 +1,47 @@
+name: Fidelity validation
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fidelity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Domain regressions
+        run: python3 tools/bounded_process.py --label domain --timeout 180 --checkpoint "$RUNNER_TEMP/domain.json" -- dotnet run --project tests/DomainTests/DomainTests.csproj
+      - name: Python regressions
+        run: |
+          python3 -m pip install -r requirements-tools.txt
+          python3 tools/bounded_process.py --label python --timeout 180 --checkpoint "$RUNNER_TEMP/python.json" -- python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Install pinned Godot .NET editor
+        run: |
+          curl --retry 3 --max-time 120 -fL https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_mono_linux_x86_64.zip -o "$RUNNER_TEMP/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.4.1-stable_mono_linux_x86_64/Godot_v4.4.1-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Compile application
+        run: python3 tools/bounded_process.py --label build --timeout 180 --checkpoint "$RUNNER_TEMP/build.json" -- dotnet build
+      - name: Import project
+        run: python3 tools/bounded_process.py --label import --timeout 180 --checkpoint "$RUNNER_TEMP/import.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --path . --editor --quit
+      - name: Casino layouts and horse-race continuation
+        run: |
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-layout" python3 tools/bounded_process.py --label casino-layout --timeout 180 --checkpoint "$RUNNER_TEMP/casino-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_layout_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-horse" python3 tools/bounded_process.py --label casino-horse --timeout 180 --checkpoint "$RUNNER_TEMP/casino-horse.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_horse_smoke.gd
