@@ -74,6 +74,14 @@ public static class ClassicTheme
         return box;
     }
 
+    public static StyleBoxTexture CompactInput()
+    {
+        var box=Bevel(Colors.White,true);
+        box.ContentMarginLeft=3;box.ContentMarginRight=3;
+        box.ContentMarginTop=1;box.ContentMarginBottom=1;
+        return box;
+    }
+
     private static StyleBoxTexture Bevel(Color color, bool pressed)
     {
         using var image = Image.CreateEmpty(8, 8, false, Image.Format.Rgb8);

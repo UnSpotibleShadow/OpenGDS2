@@ -174,21 +174,24 @@ public partial class Main : Control
     private void ShowCompanySetup()=>ShowCompanySetup(null);
     private void ShowCompanySetup(GameState? previous,string companyDraft="",string presidentDraft="")
     {
-        ClearContent();
-        AddHeading(Tr("NEW_GAME"), 34);
-
-        _companyName = AddField(Tr("COMPANY_NAME"), companyDraft, 32);
-        _presidentName = AddField(Tr("PRESIDENT_NAME"), presidentDraft, 32);
-
-        var validation = new Label
+        var canvas=ManagementCanvas("CompanySetupWindow",Tr("NEW_GAME"),new(340,292));
+        var artwork=OriginalSceneArtwork.CompanySetup();
+        NativePlace(canvas,Picture("CompanySetupArtwork",artwork,new(256,160)),new(42,4,256,160));
+        if(artwork is null)
+            NativeText(canvas,"CompanySetupArtworkMissing",Tr("EVENT_ARTWORK_REIMPORT"),new(42,4,256,160),11,HorizontalAlignment.Center).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        LineEdit Field(string name,string caption,string value,int y)
         {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            AutowrapMode = TextServer.AutowrapMode.WordSmart
-        };
-        _content.AddChild(validation);
-
-        var confirm = new Button { Text = Tr("CONFIRM"), CustomMinimumSize = new Vector2(0, 46) };
-        confirm.Pressed += () =>
+            NativeText(canvas,name+"Caption",Tr(caption),new(8,y,112,25));
+            var edit=new LineEdit {Name=name,Text=value,MaxLength=32};
+            edit.AddThemeFontSizeOverride("font_size",11);
+            edit.AddThemeStyleboxOverride("normal",ClassicTheme.CompactInput());
+            return NativePlace(canvas,edit,new(122,y,210,25));
+        }
+        _companyName=Field("CompanyNameInput","COMPANY_NAME",companyDraft,172);
+        _presidentName=Field("PresidentNameInput","PRESIDENT_NAME",presidentDraft,202);
+        var validation=NativeText(canvas,"CompanySetupValidation","",new(8,230,324,28),10,HorizontalAlignment.Center);
+        validation.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeAction(canvas,"ConfirmCompanySetup","CONFIRM",new(146,262,90,25),()=>
         {
             var company = _companyName.Text.Trim();
             var president = _presidentName.Text.Trim();
@@ -198,12 +201,10 @@ public partial class Main : Control
                 return;
             }
             ShowModeSelection(company, president,previous);
-        };
-        _content.AddChild(confirm);
-
-        var cancel = new Button { Text = Tr("CANCEL"), CustomMinimumSize = new Vector2(0, 46) };
-        cancel.Pressed += ()=>{if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);};
-        _content.AddChild(cancel);
+        });
+        void Cancel(){if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);}
+        NativeAction(canvas,"CancelCompanySetup","CANCEL",new(242,262,90,25),Cancel);
+        if(_dialog is not null)_dialog.CloseRequested=Cancel;
     }
 
     /// <summary>
@@ -422,22 +423,6 @@ public partial class Main : Control
         var right = new Label { Text = value, HorizontalAlignment = HorizontalAlignment.Right };
         right.AddThemeFontSizeOverride("font_size", 13);
         grid.AddChild(right);
-    }
-
-    private LineEdit AddField(string labelText, string initialValue, int maxLength)
-    {
-        var label = new Label { Text = labelText };
-        label.AddThemeFontSizeOverride("font_size", 18);
-        _content.AddChild(label);
-
-        var edit = new LineEdit
-        {
-            Text = initialValue,
-            MaxLength = maxLength,
-            CustomMinimumSize = new Vector2(0, 44)
-        };
-        _content.AddChild(edit);
-        return edit;
     }
 
     private void AddHeading(string text, int size)
