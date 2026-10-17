@@ -6196,6 +6196,64 @@ Test("native horse raster keeps masks clipping and even rounding",()=>
     Pixel(116,0,7,8,9);race.Tick=0;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
     Pixel(58,0,18,19,20);race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
 });
+Test("horse scenery matches sequential native scrolls across phases and reloads",()=>
+{
+    byte[] Scene(int height,int tint)
+    {
+        var data=new byte[421*height*3];
+        for(int y=0;y<height;y++)for(int x=0;x<421;x++)
+        {int at=(y*421+x)*3;data[at]=(byte)x;data[at+1]=(byte)(x>>8);data[at+2]=(byte)(y+tint);}
+        return data;
+    }
+    // Independent oracle: execute each overlapping self-copy, then read the
+    // resulting tail for the second copy, as the two native BitBlts do.
+    void NativeScroll(byte[] data,int y,int height,int shift)
+    {
+        var before=(byte[])data.Clone();
+        for(int row=y;row<y+height;row++)
+            Array.Copy(before,row*421*3,data,(row*421+shift)*3,(421-shift)*3);
+        var shifted=(byte[])data.Clone();
+        for(int row=y;row<y+height;row++)
+            Array.Copy(shifted,(row*421+421-shift)*3,data,row*421*3,shift*3);
+    }
+    var start=Scene(173,0);var closeup=Scene(217,20);var finish=Scene(173,40);
+    var colors=new byte[233*316*3];var masks=Enumerable.Repeat((byte)255,colors.Length).ToArray();
+    foreach(int tick in new[]{0,44,45,46,47,100,199,200,201,270,370,371,400})
+    {
+        var race=new HorseRaceState {Tick=tick,RacePhase=tick<45?0:tick<200?1:2,
+            Camera=700-Math.Min(Math.Max(tick-200,0),171)*10,Positions=Enumerable.Repeat(-10000d,8).ToList()};
+        var expected=(race.RacePhase==0?start:race.RacePhase==1?closeup:finish).AsSpan(0,start.Length).ToArray();
+        if(race.RacePhase==1)for(int i=45;i<tick;i++){NativeScroll(expected,0,77,2);NativeScroll(expected,82,91,6);}
+        if(race.RacePhase==2)for(int i=0;i<Math.Min(tick-200,171);i++)NativeScroll(expected,0,173,10);
+        string saved=System.Text.Json.JsonSerializer.Serialize(race);
+        var actual=HorseRasterRules.Compose(start,colors,masks,race,closeup,finish);
+        if(!actual.SequenceEqual(expected))throw new Exception($"Scenery differs at tick {tick}");
+        Check(HorseRasterRules.Compose(start,colors,masks,race,closeup,finish).SequenceEqual(actual));
+        Check(System.Text.Json.JsonSerializer.Serialize(race)==saved);
+        Check(HorseRasterRules.Compose(start,colors,masks,System.Text.Json.JsonSerializer.Deserialize<HorseRaceState>(saved)!,closeup,finish).SequenceEqual(actual));
+    }
+    Check(start.SequenceEqual(Scene(173,0))&&closeup.SequenceEqual(Scene(217,20))&&finish.SequenceEqual(Scene(173,40)));
+});
+Test("horse finish post follows camera with mask clipping and draws behind runners",()=>
+{
+    byte[] background=Enumerable.Repeat((byte)100,421*173*3).ToArray(),colors=new byte[233*316*3],masks=Enumerable.Repeat((byte)255,233*316*3).ToArray();
+    // Mark both edges of the recovered 12x147 finish tile at sheet (0,169).
+    void Pixel(int x,int y,byte color,byte mask=0)
+    {int at=(y*233+x)*3;for(int c=0;c<3;c++){colors[at+c]=color;masks[at+c]=mask;}}
+    Pixel(0,169,7,15);Pixel(11,315,31);
+    var race=new HorseRaceState {Tick=280,RacePhase=2,Camera=-800,Positions=Enumerable.Repeat(-10000d,8).ToList()};
+    var image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421)*3]==3&&image[(156*421+11)*3]==31);
+    race.Camera=-810;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421+10)*3]==3&&image[(156*421+21)*3]==31&&image[(10*421)*3]==100);
+    race.Camera=-790;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(156*421+1)*3]==31&&image[(10*421)*3]==100);
+    race.Camera=-1220;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421+420)*3]==3);
+    race.Camera=-1230;Check(HorseRasterRules.Compose(background,colors,masks,race).SequenceEqual(background));
+    Pixel(0,197,12);Pixel(58,0,22);race.Camera=-800;race.Positions[0]=-415;
+    image=HorseRasterRules.Compose(background,colors,masks,race);Check(image[(38*421)*3]==22);
+});
 if (args.Length == 2)
 {
     Test("imported game-start icon matches the separate original application resource",()=>
