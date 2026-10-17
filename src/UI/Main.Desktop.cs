@@ -84,22 +84,7 @@ public partial class Main
         var layout = new VBoxContainer(); layout.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         layout.AddThemeConstantOverride("separation", 0); _desktop.AddChild(layout);
         var menus = new HBoxContainer { CustomMinimumSize = new Vector2(0, 24) }; layout.AddChild(menus);
-        OriginalGameMenu(menus,state);
-        Menu(menus, "MENU_COMPANY", [("PUBLIC_RELATIONS", () => BeginCompanyActivity(state,CompanyActivity.PublicRelations)),("BANK",()=>ShowBank(state)),
-            ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
-            ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
-            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state)),
-            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion)),("BUY_BACKUP_DEVICE",()=>BeginBackupDevice(state))]);
-        Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment),("POACH_EMPLOYEE",()=>ShowPoachingSelection(state))]);
-        Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state))]);
-        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state)),("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state))]);
-        Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
-            ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
-            ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
-            ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
-        OriginalGoOutMenu(menus,state);
-        OriginalSettingsMenu(menus);
-        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state)),("ABOUT_GAME",()=>ShowAbout(state))]);
+        OriginalDesktopMenus(menus,state);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0,24) };
         toolbar.AddThemeConstantOverride("separation",1);layout.AddChild(toolbar);
@@ -250,16 +235,31 @@ public partial class Main
         if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true}) CloseEmployeeDetails();
     }
 
-    private void Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)
+    private PopupMenu Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)
     {
         var menu = new MenuButton { Name = title, Text = Tr(title) + " " }; parent.AddChild(menu);
-        for (int index = 0; index < actions.Length; index++) menu.GetPopup().AddItem(Tr(actions[index].Key), index);
-        menu.GetPopup().AboutToPopup += () =>
+        FillMenu(menu.GetPopup(),actions);
+        return menu.GetPopup();
+    }
+
+    private void FillMenu(PopupMenu popup,(string Key,Action Action)[] actions)
+    {
+        for(int i=0;i<actions.Length;i++)
+            if(actions[i].Key.Length==0)popup.AddSeparator("",i);else popup.AddItem(Tr(actions[i].Key),i);
+        popup.AboutToPopup+=()=>
         {
-            for (int index = 0; index < actions.Length; index++)
-                menu.GetPopup().SetItemDisabled(index, !DesktopActionEnabled(actions[index].Key));
+            for(int i=0;i<actions.Length;i++)
+                if(actions[i].Key.Length>0)popup.SetItemDisabled(i,!DesktopActionEnabled(actions[i].Key));
         };
-        menu.GetPopup().IdPressed += id => { if (id>=0 && id<actions.Length && DesktopActionEnabled(actions[(int)id].Key)) actions[(int)id].Action(); };
+        popup.IdPressed+=id=>
+        {
+            if(id>=0 && id<actions.Length && actions[(int)id].Key.Length>0 && DesktopActionEnabled(actions[(int)id].Key))actions[(int)id].Action();
+        };
+    }
+
+    private void MenuChild(PopupMenu parent,int index,string name,(string Key,Action Action)[] actions)
+    {
+        var child=new PopupMenu {Name=name};parent.AddChild(child);FillMenu(child,actions);parent.SetItemSubmenuNode(index,child);
     }
 
     private bool DesktopActionEnabled(string key)

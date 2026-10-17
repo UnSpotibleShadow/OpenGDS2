@@ -141,7 +141,7 @@ func run() -> void:
         await process_frame
         check(main.find_child("HelpTitlePicture",true,false).texture!=null,"About topic uses the separate title illustration")
         await press("BACK_TO_OFFICE")
-        main.find_child("MENU_GAME",true,false).get_popup().id_pressed.emit(0)
+        main.find_child("MENU_GAME",true,false).get_popup().id_pressed.emit(2)
         await process_frame
         var save_slots=main.find_child("SaveSlotList",true,false)
         check(save_slots!=null,"Save menu opens numbered selection")
@@ -176,7 +176,7 @@ func run() -> void:
             {"Title":"Synthetic leader","Owner":0,"Hardware":0,"UnitsSold":100,"Demand":0,"SalesPower":0},
             {"Title":"Synthetic rising game","Owner":1,"Hardware":0,"UnitsSold":0,"Demand":99,"SalesPower":100}]}
         await load_fixture(chart)
-        main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
+        main.find_child("MENU_INFORMATION",true,false).get_popup().id_pressed.emit(2)
         await process_frame
         var table=main.find_child("SalesRankingTable",true,false)
         check(table.get_root().get_child_count()==2,"Live chart has no phantom container row")

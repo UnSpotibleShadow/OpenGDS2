@@ -5682,7 +5682,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "Menu organization: OpenGDS2 uses Game for saving/loading and Back to Title; New Game and Quit are on the title screen. See the individual actions below."
+      "disposition": "Menu organization: Game follows original New Game, Save, Load and Quit ordering/separators. A separated Back to Title entry retains port navigation."
     },
     {
       "id": "menu:mMenuNewG",
@@ -5690,7 +5690,7 @@
       "workflows": [
         "W01"
       ],
-      "disposition": "Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Exact native setup presentation is pending."
+      "disposition": "Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Compact setup and Enter confirmation are implemented; native Windows font/IME acceptance remains pending."
     },
     {
       "id": "menu:mMenuHaihun1",
@@ -5738,7 +5738,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Menu organization: actions remain grouped under Company and Employees; three UP actions are also on the toolbar. Backup purchase and employee poaching are implemented below."
+      "disposition": "Menu organization: Actions restores original Company development, recruitment/poaching, secretary settings/change, purchases/bank and Go out grouping. A separated More actions submenu retains port planning/advice shortcuts."
     },
     {
       "id": "menu:mKoudouKaisha",
@@ -5746,7 +5746,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "Menu organization: Public relations, Genre research and Expand production exist under Company and as three UP toolbar buttons. The original nested Company development submenu is not reproduced."
+      "disposition": "Available: Actions > Company development contains Public relations, Genre research and Expand production in original order; the three UP toolbar actions remain."
     },
     {
       "id": "menu:mKoudouTimeido",
@@ -5754,7 +5754,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "Available: Company > Public relations, or the Public relations UP toolbar button, opens the activity confirmation."
+      "disposition": "Available: Actions > Company development > Public relations, or the Public relations UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouLibary",
@@ -5762,7 +5762,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "Available: Company > Genre research, or the Genre research UP toolbar button, opens the activity confirmation."
+      "disposition": "Available: Actions > Company development > Genre research, or the Genre research UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouZoukyou",
@@ -5770,7 +5770,7 @@
       "workflows": [
         "W19"
       ],
-      "disposition": "Available: Company > Expand production, or the Expand production UP toolbar button, opens the activity confirmation."
+      "disposition": "Available: Actions > Company development > Expand production, or the Expand production UP toolbar button, opens the activity confirmation."
     },
     {
       "id": "menu:mKoudouMinasu1",
@@ -5786,7 +5786,7 @@
       "workflows": [
         "W05"
       ],
-      "disposition": "Available: Employees > Hire Employees, or the recruitment toolbar button, opens recruitment."
+      "disposition": "Available: Actions > Hire Employees, or the recruitment toolbar button, opens recruitment."
     },
     {
       "id": "menu:mKoudouSHikinuku",
@@ -5794,7 +5794,7 @@
       "workflows": [
         "W30"
       ],
-      "disposition": "Available: Employees > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending."
+      "disposition": "Available: Actions > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending."
     },
     {
       "id": "menu:mKoudouMinasu3",
@@ -5810,7 +5810,7 @@
       "workflows": [
         "W06"
       ],
-      "disposition": "Available: Company > Secretary policies opens the secretary settings window."
+      "disposition": "Available: Actions > Secretary policies opens the secretary settings window."
     },
     {
       "id": "menu:mKoudouHisyoK",
@@ -5818,7 +5818,7 @@
       "workflows": [
         "W06"
       ],
-      "disposition": "Available: Company > Hire secretary, or the secretary toolbar button, opens secretary hiring/change."
+      "disposition": "Available: Actions > Hire secretary, or the secretary toolbar button, opens secretary hiring/change."
     },
     {
       "id": "menu:mKoudouMinasu2",
@@ -5834,7 +5834,7 @@
       "workflows": [
         "W27"
       ],
-      "disposition": "Available: Company > Bank, or the bank toolbar button, opens the bank window."
+      "disposition": "Available: Actions > Bank, or the bank toolbar button, opens the bank window."
     },
     {
       "id": "menu:mKoudouPCK",
@@ -5842,7 +5842,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "Available: Company > Development Computers, or the computer toolbar button, opens computer purchasing."
+      "disposition": "Available: Actions > Development Computers, or the computer toolbar button, opens computer purchasing."
     },
     {
       "id": "menu:mKoudouBackupK",
@@ -5850,7 +5850,7 @@
       "workflows": [
         "W35"
       ],
-      "disposition": "Available: Company > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature."
+      "disposition": "Available: Actions > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature."
     },
     {
       "id": "menu:mKoudouLicense",
@@ -5858,7 +5858,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "Available: Company > Hardware Licenses, or the license toolbar button, opens license purchasing."
+      "disposition": "Available: Actions > Hardware Licenses, or the license toolbar button, opens license purchasing."
     },
     {
       "id": "menu:mKoudouTechK",
@@ -5866,7 +5866,7 @@
       "workflows": [
         "W07"
       ],
-      "disposition": "Available: Company > Technologies, or the technology toolbar button, opens technology purchasing."
+      "disposition": "Available: Actions > Technologies, or the technology toolbar button, opens technology purchasing."
     },
     {
       "id": "menu:mKoudouGo",
@@ -5875,7 +5875,7 @@
         "W22",
         "W26"
       ],
-      "disposition": "Available: Company > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending."
+      "disposition": "Available: Actions > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending."
     },
     {
       "id": "menu:mKoudouGoKeiba",
@@ -5883,7 +5883,7 @@
       "workflows": [
         "W26"
       ],
-      "disposition": "Available: Company > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply."
+      "disposition": "Available: Actions > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply."
     },
     {
       "id": "menu:mKoudouGoPoka",
@@ -5891,7 +5891,7 @@
       "workflows": [
         "W23"
       ],
-      "disposition": "Available: Company > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply."
+      "disposition": "Available: Actions > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply."
     },
     {
       "id": "menu:mKoudouGoBlack",
@@ -5899,7 +5899,7 @@
       "workflows": [
         "W24"
       ],
-      "disposition": "Available: Company > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply."
+      "disposition": "Available: Actions > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply."
     },
     {
       "id": "menu:mInfo",
@@ -5907,7 +5907,7 @@
       "workflows": [
         "W03"
       ],
-      "disposition": "Menu organization: the corresponding reports are under Employees, Products, Company and Help. The original Information menu grouping is not reproduced."
+      "disposition": "Menu organization: Information restores staff, own games, cumulative sales rankings, released hardware, own hardware and reach-time rankings in original order/separators. A separated Game details submenu retains port history/review shortcuts."
     },
     {
       "id": "menu:mInfoGMsStaffAll",
@@ -5915,7 +5915,7 @@
       "workflows": [
         "W05"
       ],
-      "disposition": "Available: Employees > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified."
+      "disposition": "Available: Information > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified."
     },
     {
       "id": "menu:mInfoGMsZishaGame",
@@ -5923,7 +5923,7 @@
       "workflows": [
         "W15"
       ],
-      "disposition": "Available: Products > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified."
+      "disposition": "Available: Information > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMsTusan100",
@@ -5931,7 +5931,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "Available: Help > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified."
+      "disposition": "Available: Information > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMHatubaiHard",
@@ -5939,7 +5939,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "Available: Company > Hardware market opens the released-hardware report."
+      "disposition": "Available: Information > Hardware market opens the released-hardware report."
     },
     {
       "id": "menu:mInfoGMMinasu",
@@ -5955,7 +5955,7 @@
       "workflows": [
         "W21"
       ],
-      "disposition": "Available: Products > Own hardware opens the own-hardware report when its state is available."
+      "disposition": "Available: Information > Own hardware opens the own-hardware report when its state is available."
     },
     {
       "id": "menu:mInfoGMMinasu2",
@@ -5971,7 +5971,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "Available: Help > Global rankings opens the reach-time records view."
+      "disposition": "Available: Information > Global rankings opens the reach-time records view."
     },
     {
       "id": "menu:mWindow",
@@ -5979,7 +5979,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Menu organization: Windows exposes Office, Company, Employees and Products. That grouping differs from the original Visual, Tool and Other windows entries."
+      "disposition": "Menu organization: Windows contains Office, Company and Other windows. Other windows explicitly groups Employees/Products; exact native automatic MDI-list behavior remains unresolved."
     },
     {
       "id": "menu:mWindowVisual",
@@ -6003,7 +6003,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Unresolved: the original entry has no bound handler; dynamic window-list behavior has not been established. OpenGDS2 has explicit Windows entries, but they are not a confirmed equivalent."
+      "disposition": "Unresolved native MDI behavior: the original entry has no bound handler. Windows > Other windows explicitly reopens Employees/Products as retained port navigation; this does not establish native dynamic-list equivalence."
     },
     {
       "id": "menu:mSetup",

@@ -37,10 +37,33 @@ public partial class Main
         if(_desktop?.FindChild("OfficeViewport",true,false) is ScrollContainer viewport)
         {viewport.ScrollHorizontal=0;viewport.ScrollVertical=0;}
     }
-    private void OriginalGameMenu(HBoxContainer parent,GameState state)
+    private void OriginalDesktopMenus(HBoxContainer parent,GameState state)
     {
-        Menu(parent,"MENU_GAME",[("SAVE_GAME",()=>ShowSaveSlots(state,false)),("LOAD_GAME",()=>ShowSaveSlots(state,true)),
-            ("NEW_GAME",()=>ShowCompanySetup(state)),("QUIT",()=>GetTree().Quit()),("BACK_TO_TITLE",ShowTitleScreen)]);
+        var separator=("",(Action)(()=>{}));
+        Menu(parent,"MENU_GAME",[("NEW_GAME",()=>ShowCompanySetup(state)),separator,
+            ("SAVE_GAME",()=>ShowSaveSlots(state,false)),("LOAD_GAME",()=>ShowSaveSlots(state,true)),separator,
+            ("QUIT",()=>GetTree().Quit()),separator,("BACK_TO_TITLE",ShowTitleScreen)]);
+        var actions=Menu(parent,"MENU_ACTIONS",[("COMPANY_DEVELOPMENT",()=>{}),separator,
+            ("HIRE_EMPLOYEES",ShowRecruitment),("POACH_EMPLOYEE",()=>ShowPoachingSelection(state)),separator,
+            ("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),separator,
+            ("BANK",()=>ShowBank(state)),("DEVELOPMENT_COMPUTERS",()=>ShowComputers(state)),("BUY_BACKUP_DEVICE",()=>BeginBackupDevice(state)),
+            ("HARDWARE_LICENSES",()=>ShowLicenses(state)),("TECHNOLOGIES",()=>ShowTechnologies(state)),("GO_OUT",()=>{}),separator,("ADDITIONAL_ACTIONS",()=>{})]);
+        MenuChild(actions,0,"OriginalCompanyDevelopmentMenu",[("PUBLIC_RELATIONS",()=>BeginCompanyActivity(state,CompanyActivity.PublicRelations)),
+            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion))]);
+        MenuChild(actions,13,"OriginalGoOutMenu",[("CASINO_HORSE",()=>DirectCasino(state,"CASINO_HORSE")),
+            ("CASINO_POKER",()=>DirectCasino(state,"CASINO_POKER")),("CASINO_BLACKJACK",()=>DirectCasino(state,"CASINO_BLACKJACK"))]);
+        // Retain existing port navigation separately from the recovered native entries.
+        MenuChild(actions,15,"AdditionalActionsMenu",[("START_GAME_DEVELOPMENT",()=>ShowPlanningPreview(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state))]);
+        var information=Menu(parent,"MENU_INFORMATION",[("STAFF",()=>ShowStaff(state)),("SALES",()=>ShowProductList(state)),
+            ("SALES_CHART",()=>ShowSalesChart(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state)),separator,
+            ("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state)),separator,("GLOBAL_RANKINGS",()=>ShowRankings(state)),separator,("PRODUCT_DETAILS",()=>{})]);
+        MenuChild(information,9,"ProductDetailsMenu",[("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state))]);
+        var windows=Menu(parent,"MENU_WINDOWS",[("OFFICE_WINDOW",()=>_windows["OfficeWindow"].Reopen()),
+            ("COMPANY_WINDOW",()=>_windows["CompanyWindow"].Reopen()),("OTHER_WINDOWS",()=>{})]);
+        MenuChild(windows,2,"OtherWindowsMenu",[("EMPLOYEE_WINDOW",()=>{OriginalPayrollRules.CaptureStaffList(state);_windows["EmployeeWindow"].Reopen();}),
+            ("PRODUCT_WINDOW",()=>_windows["ProductWindow"].Reopen())]);
+        OriginalSettingsMenu(parent);
+        Menu(parent,"MENU_HELP",[("GAME_HELP",()=>ShowHelp(state)),separator,("ABOUT_GAME",()=>ShowAbout(state))]);
     }
     private void DirectCasino(GameState state,string game)
     {
@@ -48,14 +71,5 @@ public partial class Main
         if(result==CasinoResult.Success)
         {if(game=="CASINO_POKER")ShowPoker(state);else if(game=="CASINO_BLACKJACK")ShowBlackjack(state);else ShowHorseRacing(state);}
         else ShowConversation(Tr(game),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("CASINO_RESULT_"+result))],()=>ShowOfficeReconstruction(state));
-    }
-    private void OriginalGoOutMenu(HBoxContainer parent,GameState state)
-    {
-        var company=parent.GetChildren().OfType<MenuButton>().Single(m=>m.Name=="MENU_COMPANY").GetPopup();
-        var menu=new PopupMenu {Name="OriginalGoOutMenu"};company.AddChild(menu);company.AddSubmenuNodeItem(Tr("GO_OUT"),menu);
-        foreach(string key in new[]{"CASINO_HORSE","CASINO_POKER","CASINO_BLACKJACK"})
-        {int id=menu.ItemCount;menu.AddItem(Tr(key),id);}
-        menu.IdPressed+=id=>{string key=new[]{"CASINO_HORSE","CASINO_POKER","CASINO_BLACKJACK"}[(int)id];if(DesktopActionEnabled(key))DirectCasino(state,key);};
-        menu.AboutToPopup+=()=>{for(int i=0;i<3;i++)menu.SetItemDisabled(i,!DesktopActionEnabled("CASINO_POKER"));};
     }
 }

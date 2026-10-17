@@ -5383,3 +5383,18 @@ msgstr "Visit the Kairosoft website"
 
 msgid "ABOUT_WEBSITE_FAILED"
 msgstr "Could not open the browser. Copy this address:"
+
+msgid "MENU_ACTIONS"
+msgstr "Actions"
+
+msgid "MENU_INFORMATION"
+msgstr "Information"
+
+msgid "COMPANY_DEVELOPMENT"
+msgstr "Company development"
+
+msgid "OTHER_WINDOWS"
+msgstr "Other windows"
+
+msgid "ADDITIONAL_ACTIONS"
+msgstr "More actions"

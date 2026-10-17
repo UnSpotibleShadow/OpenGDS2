@@ -38,7 +38,7 @@ func press_node(name: String) -> void:
         await process_frame
         return
     if name=="ToolbarSTART_GAME_DEVELOPMENT":
-        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
+        main.find_child("AdditionalActionsMenu",true,false).id_pressed.emit(0)
         await process_frame
         return
     if name=="ToolbarBACK_TO_TITLE":
@@ -62,8 +62,7 @@ func press(key: String) -> void:
             found = true
             break
     if not found:
-        for menu in main.find_children("*","MenuButton",true,false):
-            var popup=menu.get_popup()
+        for popup in desktop_popups():
             for item in range(popup.item_count):
                 if popup.get_item_text(item)==tr(key):
                     popup.about_to_popup.emit()
@@ -184,3 +183,11 @@ func run() -> void:
         await process_frame
         await process_frame
     quit(1 if failures else 0)
+
+func desktop_popups() -> Array:
+    var popups=[]
+    for menu in main.find_children("*","MenuButton",true,false):
+        var popup=menu.get_popup()
+        popups.append(popup)
+        popups.append_array(popup.find_children("*","PopupMenu",true,false))
+    return popups

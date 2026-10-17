@@ -249,8 +249,7 @@ func button(key: String) -> Button:
 
 func press(key: String) -> void:
     if key in ["START_GAME_DEVELOPMENT","SECRETARY_ADVICE","SECRETARY_POLICIES","BACK_TO_TITLE"] and main.find_child("GameDesktop",true,false)!=null:
-        for menu in main.find_children("*","MenuButton",true,false):
-            var popup=menu.get_popup()
+        for popup in desktop_popups():
             for item in range(popup.item_count):
                 if popup.get_item_text(item)==tr(key):
                     popup.about_to_popup.emit();check(not popup.is_item_disabled(item),"Native menu command enabled")
@@ -390,7 +389,7 @@ func run() -> void:
     main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
     main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
     await process_frame
-    check(main.find_child("MENU_DEVELOPMENT",true,false)!=null,"Original development menu is available")
+    check(main.find_child("AdditionalActionsMenu",true,false)!=null,"Development navigation remains available")
     await press("START_GAME_DEVELOPMENT")
     check(main.find_child("PlanningHardware", true, false).get_root().get_child_count() == 3, "Planning hardware availability")
     check(main.find_child("PlanningAudience", true, false).get_root().get_child_count() == 7, "Planning audience catalog")
@@ -501,7 +500,7 @@ func run() -> void:
             await press("SAVE_GAME")
             var after_room_clicks = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
             check(after_room_clicks.State.DevelopmentProjects.is_empty() and after_room_clicks.State.Money == 450000000,"Office action previews do not start work or spend funds")
-            main.find_child("MENU_HELP",true,false).get_popup().id_pressed.emit(2)
+            main.find_child("MENU_INFORMATION",true,false).get_popup().id_pressed.emit(2)
             await process_frame
             var sales_ranking = main.find_child("SalesRankingTable",true,false)
             check(sales_ranking != null and sales_ranking.get_column_title(2) == tr("UNITS_SOLD") and sales_ranking.get_column_title(3) == tr("COMPANY_NAME"),"Sales rankings follow original units-before-company columns")
@@ -738,3 +737,11 @@ func run() -> void:
         await finish_conversation()
     print("UI smoke checks complete; failures=", failures)
     quit(0 if failures == 0 else 1)
+
+func desktop_popups() -> Array:
+    var popups=[]
+    for menu in main.find_children("*","MenuButton",true,false):
+        var popup=menu.get_popup()
+        popups.append(popup)
+        popups.append_array(popup.find_children("*","PopupMenu",true,false))
+    return popups

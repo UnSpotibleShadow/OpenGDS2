@@ -18,7 +18,7 @@ func run() -> void:
         var language=ConfigFile.new();language.set_value("language","locale",locale);check(language.save("user://interface.cfg")==OK,"Remaining layouts locale")
         var v=complete_value();v.State.DevelopmentProjects=[];v.State.Recruitment={"CandidateDatabaseDecoded":true}
         await load_fixture(v);await press_node("TogglePause")
-        for screen in [["MENU_GAME",0,"SaveSlotWindow",450,400],["MENU_GAME",1,"LoadSlotWindow",450,400],["MENU_HELP",0,"HelpTopicWindow",425,405],["MENU_HELP",1,"ReachTimeRecordsWindow",580,278],["MENU_HELP",2,"SalesRankingWindow",525,323],["MENU_STAFF",1,"RecruitmentWindow",495,414]]:
+        for screen in [["MENU_GAME",2,"SaveSlotWindow",450,400],["MENU_GAME",3,"LoadSlotWindow",450,400],["MENU_HELP",0,"HelpTopicWindow",425,405],["MENU_INFORMATION",7,"ReachTimeRecordsWindow",580,278],["MENU_INFORMATION",2,"SalesRankingWindow",525,323],["MENU_ACTIONS",2,"RecruitmentWindow",495,414]]:
             await menu_choice(screen[0],screen[1])
             if screen[2] in ["SaveSlotWindow","LoadSlotWindow"]:
                 var slots=main.find_child("SaveSlotList",true,false);slots.get_root().get_first_child().select(0);slots.item_selected.emit()

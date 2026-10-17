@@ -1,7 +1,9 @@
 extends "res://tests/review_round_smoke.gd"
 
 func menu_choice(menu: String,index: int) -> void:
-    main.find_child(menu,true,false).get_popup().id_pressed.emit(index)
+    var target=main.find_child(menu,true,false)
+    var popup=target.get_popup() if target is MenuButton else target
+    popup.id_pressed.emit(index)
     for frame in range(4):await process_frame
 
 func close_window(name: String) -> void:
@@ -38,17 +40,17 @@ func run() -> void:
         var v=complete_value();var game=product();game.Recall={"OriginalState":1,"WeeksRemaining":0};game.ReviewPending=false;game.ReviewDisplayCallbacks=90;v.State.ReleasedGames=[game];v.State.ProductionPerformedThisWeek=false
         await load_fixture(v)
         await press_node("TogglePause")
-        await menu_choice("MENU_COMPANY",1)
+        await menu_choice("MENU_ACTIONS",8)
         var bank=main.find_child("BankWindow",true,false)
         var icon=bank.find_child("WindowTitleIcon",true,false)
         check(icon.visible and icon.texture.get_image().get_pixel(0,0).is_equal_approx(Color.MAGENTA),"Native PNG override takes precedence")
         await close_window("BankWindow")
         png("user://asset-overrides/Graphic/Embedded/WindowIcon-fGMBank.png",Vector2i(32,32),Color.GREEN)
-        await menu_choice("MENU_COMPANY",1)
+        await menu_choice("MENU_ACTIONS",8)
         icon=main.find_child("BankWindow",true,false).find_child("WindowTitleIcon",true,false)
         check(icon.texture.get_size()==Vector2(16,16) and icon.texture.get_image().get_pixel(0,0).is_equal_approx(Color.BLUE),"Wrong-sized PNG override falls back to original")
         await close_window("BankWindow")
-        for screen in [["MENU_COMPANY",3,"HardwareLicenceWindow"],["MENU_HELP",1,"ReachTimeRecordsWindow"],["MENU_HELP",2,"SalesRankingWindow"],["MENU_STAFF",0,"StaffRosterWindow"],["MENU_GAME",0,"SaveSlotWindow"],["MENU_GAME",1,"LoadSlotWindow"]]:
+        for screen in [["MENU_ACTIONS",11,"HardwareLicenceWindow"],["MENU_INFORMATION",7,"ReachTimeRecordsWindow"],["MENU_INFORMATION",2,"SalesRankingWindow"],["MENU_INFORMATION",0,"StaffRosterWindow"],["MENU_GAME",2,"SaveSlotWindow"],["MENU_GAME",3,"LoadSlotWindow"]]:
             await menu_choice(screen[0],screen[1]);var dialog=main.find_child(screen[2],true,false)
             check(dialog!=null,"Stable named screen: "+screen[2])
             check(dialog.find_child("WindowTitleIcon",true,false).texture!=null,"Bound native title icon: "+screen[2])
@@ -68,7 +70,7 @@ func run() -> void:
         await select_employee(1)
         check(main.find_child("EmployeeDetailsWindow",true,false).position==Vector2(750,170),"Returning from Level Up retains detail position")
         await close_window("EmployeeDetailsWindow")
-        await menu_choice("MENU_PRODUCTS",0)
+        await menu_choice("MENU_INFORMATION",1)
         var table=main.find_child("DesktopProductTable",true,false);table.get_root().get_first_child().select(0);table.item_activated.emit();await process_frame
         await press_node("CompactProduceMore")
         check(main.find_child("AdditionalProductionWindow",true,false)!=null,"Reproduction has its own stable identity")
