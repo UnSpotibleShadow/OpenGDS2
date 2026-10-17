@@ -3,6 +3,24 @@ namespace OpenGDS2.Domain;
 /// <summary>Authored lettering over bounded caption areas in locally owned scenes.</summary>
 public static class LocalSceneCaptionRules
 {
+    public static readonly (int X,int Y,int Width,int Height)[] RegistrationRegions=[(1,76,62,16),(166,132,85,27)];
+    public static byte[] PatchRegistration(byte[] source)
+    {
+        const int width=256,height=160;
+        if(source.Length!=width*height*3)throw new InvalidDataException("Unexpected registration illustration.");
+        var output=(byte[])source.Clone();
+        var sign=RegistrationRegions[0];
+        for(int y=sign.Y;y<sign.Y+sign.Height;y++)for(int x=sign.X;x<sign.X+sign.Width;x++)
+        {int i=(y*width+x)*3;output[i]=output[i+1]=output[i+2]=251;}
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"TOWN HALL",5,80,1,1,(38,38,38));
+        var caption=RegistrationRegions[1];
+        // The unlettered road at x=160 preserves each original gradient/curb row.
+        for(int y=caption.Y;y<caption.Y+caption.Height;y++)for(int x=caption.X;x<caption.X+caption.Width;x++)
+            Array.Copy(source,(y*width+160)*3,output,(y*width+x)*3,3);
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"REGISTRATION",173,139,1,2,(57,49,39),1);
+        LocalBitmapLetteringRules.DrawLettering(output,width,height,"REGISTRATION",173,139,1,2,(255,255,255));
+        return output;
+    }
     public static readonly (int X,int Y,int Width,int Height) HallRegion=(20,68,222,66);
     public static readonly (int X,int Y,int Width,int Height) ExhibitionRegion=(60,0,137,22);
     public static readonly (int X,int Y,int Width,int Height) AwardsRegion=(29,4,182,18);

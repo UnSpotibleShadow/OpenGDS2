@@ -258,6 +258,19 @@ Test("secretary badge English patch preserves the face and all mouth frames",()=
     for(int y=0;y<64;y++)for(int x=0;x<64;x++)if(y<52||y>=62||x<18||x>=48)
         for(int c=0;c<3;c++)Check(patch[(y*64+x)*3+c]==copy[(y*64+x)*3+c]);
 });
+Test("registration English lettering preserves the scene outside both caption interiors",()=>
+{
+    byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray(),copy=(byte[])source.Clone();
+    var patch=LocalSceneCaptionRules.PatchRegistration(source);
+    Check(source.SequenceEqual(copy) && !patch.SequenceEqual(source) && patch.SequenceEqual(LocalSceneCaptionRules.PatchRegistration(source)));
+    for(int y=0;y<160;y++)for(int x=0;x<256;x++)
+        if(!((x>=1 && x<63 && y>=76 && y<92)||(x>=166 && x<251 && y>=132 && y<159)))
+            Check(source.AsSpan((y*256+x)*3,3).SequenceEqual(patch.AsSpan((y*256+x)*3,3)));
+    // Independent glyph anchors prove both English captions are present.
+    Check(patch.AsSpan((80*256+5)*3,3).SequenceEqual(new byte[]{38,38,38}));
+    Check(patch.AsSpan((139*256+173)*3,3).SequenceEqual(new byte[]{255,255,255}));
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchRegistration(new byte[1]));
+});
 Test("television English patch stays inside the original CRT glass",()=>
 {
     byte[] pixels=Enumerable.Range(0,256*152*3).Select(i=>(byte)(i%251)).ToArray();var copy=(byte[])pixels.Clone();
