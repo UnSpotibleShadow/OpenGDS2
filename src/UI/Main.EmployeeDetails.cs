@@ -24,13 +24,13 @@ public partial class Main
         {_selectionArrow.GetParent()?.RemoveChild(_selectionArrow);_selectionArrow.QueueFree();}
         _employeeDetails=null;_selectedEmployee=null;_selectionArrow=null;_employeeChart=null;_employeeLevelUp=null;
         _employeeAbilities=null;_employeeTechnologies=null;_employeeDetailsLabels.Clear();_employeeDetailsBars.Clear();
-        if (_windows.TryGetValue("CompanyWindow",out var company) && GodotObject.IsInstanceValid(company)) company.Show();
+        if (_companyResearchWindow is null && _windows.TryGetValue("CompanyWindow",out var company) && GodotObject.IsInstanceValid(company)) company.Show();
     }
     private void ShowEmployeeDetails(GameState state,EmployeeState employee)
     {
         if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
         if (!state.Employees.Contains(employee)) return;
-        ShowOfficeReconstruction(state);CloseEmployeeDetails();
+        ShowOfficeReconstruction(state);CloseCompanyResearch();CloseEmployeeDetails();
         _selectedEmployee=employee;
         _employeeDetails=new DesktopWindow {Name="EmployeeDetailsWindow"};_workspace!.AddChild(_employeeDetails);
         var position=_windows["CompanyWindow"].Position;
@@ -95,7 +95,16 @@ public partial class Main
         });
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
         dismiss.TooltipText=Tr("DISMISS_EMPLOYEE");dismiss.Disabled=employee.SourceIndex is null;
+        var use=EmployeeDetailButton(technologyContents,"EmployeeUseTechnology","USE_TECHNOLOGY",()=>{if(_dialog is null&&DesktopActionEnabled("USE_TECHNOLOGY"))ShowTechnologyUse(state,employee);});
+        use.Disabled=employee.TechnologyLevels?.Any(p=>p.Value>0)!=true;
         var actions=new HBoxContainer();_employeeDetails.Body.AddChild(actions);
+        var training=EmployeeDetailButton(actions,"EmployeeTraining","TRAINING",()=>
+        {
+            if(_dialog is not null||!DesktopActionEnabled("TRAINING"))return;
+            if(employee.Office?.Action is >=1 and <=5)ShowTraining(state,employee);
+            else ShowConversation(Tr("TRAINING"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("TRAINING_RESULT_NotAtStudySeat"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>ShowEmployeeDetails(state,employee));
+        });
+        training.Disabled=employee.TechnologyLevels is null||_activeCatalog?.Technologies.Count is not >0;
         EmployeeDetailButton(actions,"CloseEmployeeDetails","CANCEL",CloseEmployeeDetails);
         var officeImage=_windows["OfficeWindow"].FindChild("OriginalOfficeBackground",true,false) as TextureRect;
         if (officeImage is not null)

@@ -10,23 +10,46 @@ public partial class Main
 
     private void ShowTechnologies(GameState state)=>ShowTechnologyPurchase(state);
 
-    private void ShowStudyComputer(GameState state,EmployeeState employee)
+    private DesktopWindow? _companyResearchWindow;
+    private Action? _refreshCompanyResearch;
+    private void CloseCompanyResearch()
     {
-        ClearContent();var canvas=NativeWindow("StudyComputerWindow",EmployeeName(employee),new(190,276));
-        NativeFill(canvas,"StudyOwnedHeading",new(4,3,182,20),new(.77f,1,.77f));
-        NativeText(canvas,"StudyOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,3,178,20),11,HorizontalAlignment.Center);
-        var owned=ManagementTable(canvas,"StudyOwnedTechnologies",["TECHNOLOGY_NAME"],[174],new(4,27,182,95));owned.ColumnTitlesVisible=false;
-        foreach(var t in _activeCatalog?.Technologies??[])
-            if(employee.TechnologyLevels?.GetValueOrDefault(t.SourceIndex)>0)
-            {var row=owned.CreateItem(owned.GetRoot());row.SetText(0,TechnologyName(t));row.SetMetadata(0,t.SourceIndex);}
-        NativeAction(canvas,"StudyTechnologyUse","USE_TECHNOLOGY",new(4,128,182,26),()=>ShowTechnologyUse(state,employee));
-        NativeFill(canvas,"StudyAvailableHeading",new(4,162,182,20),new(1,.85f,.65f));
-        NativeText(canvas,"StudyAvailableCaption",Tr("AVAILABLE_TRAINING"),new(6,162,178,20),11,HorizontalAlignment.Center);
-        var available=ManagementTable(canvas,"StudyAvailableTechnologies",["TECHNOLOGY_NAME"],[174],new(4,186,182,86));available.ColumnTitlesVisible=false;
-        foreach(var t in _activeCatalog?.Technologies??[])
-            if(employee.TechnologyLevels?.TryGetValue(t.SourceIndex,out int level)==true && level<3 && state.TechnologyOwnershipLevels?.GetValueOrDefault(t.SourceIndex)>level)
-            {var row=available.CreateItem(available.GetRoot());row.SetText(0,TechnologyName(t));row.SetMetadata(0,t.SourceIndex);}
-        available.ItemActivated+=()=>{if(available.GetSelected() is { } row)ShowTraining(state,employee,row.GetMetadata(0).AsInt32());};
+        _refreshCompanyResearch=null;
+        if(_companyResearchWindow is { } window&&GodotObject.IsInstanceValid(window))
+        {_dialogPositions["CompanyResearchWindow"]=window.Position;_workspace?.RemoveChild(window);window.QueueFree();}
+        _companyResearchWindow=null;
+        if(_employeeDetails is null&&_windows.TryGetValue("CompanyWindow",out var company)&&GodotObject.IsInstanceValid(company))company.Show();
+    }
+    private void ShowCompanyResearch(GameState state)
+    {
+        CloseEmployeeDetails();CloseCompanyResearch();
+        var company=_windows["CompanyWindow"];company.Hide();
+        var window=new DesktopWindow {Name="CompanyResearchWindow"};_workspace!.AddChild(window);_companyResearchWindow=window;
+        window.Initialize(Tr("TECHNOLOGIES"),_dialogPositions.GetValueOrDefault("CompanyResearchWindow",company.Position),new(198,308));
+        window.CloseRequested=CloseCompanyResearch;
+        var canvas=new Control {Name="NativeDialogCanvas",CustomMinimumSize=new(190,276)};window.Body.AddChild(canvas);
+        NativeFill(canvas,"ResearchOwnedHeading",new(4,3,182,20),new(.77f,1,.77f));
+        NativeText(canvas,"ResearchOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,3,178,20),11,HorizontalAlignment.Center);
+        var owned=ManagementTable(canvas,"ResearchOwnedTechnologies",["TECHNOLOGY_NAME"],[174],new(4,27,182,95));owned.ColumnTitlesVisible=false;
+        var buy=NativeAction(canvas,"ResearchBuyTechnology","BUY_TECHNOLOGIES",new(4,128,182,26),()=>
+        {if(DesktopActionEnabled("TECHNOLOGIES")&&(_dialog is null||_clockRunning))ShowTechnologies(state);});
+        NativeFill(canvas,"ResearchGenresHeading",new(4,162,182,20),new(1,.85f,.65f));
+        NativeText(canvas,"ResearchGenresCaption",Tr("AVAILABLE_GENRES"),new(6,162,178,20),11,HorizontalAlignment.Center);
+        var genres=ManagementTable(canvas,"ResearchAvailableGenres",["PROJECT_GENRE"],[174],new(4,186,182,86));genres.ColumnTitlesVisible=false;
+        string? signature=null;
+        _refreshCompanyResearch=()=>
+        {
+            buy.Disabled=!DesktopActionEnabled("TECHNOLOGIES")||(_dialog is not null&&!_clockRunning);
+            string current=string.Join(",",state.TechnologyOwnershipLevels?.OrderBy(p=>p.Key).Select(p=>$"{p.Key}:{p.Value}")??[])+":"+state.Company.OriginalMember90;
+            if(current==signature)return;signature=current;owned.Clear();owned.CreateItem();genres.Clear();genres.CreateItem();
+            foreach(var t in _activeCatalog?.Technologies??[])
+                if(state.TechnologyOwnershipLevels?.GetValueOrDefault(t.SourceIndex)>0)
+                {var row=owned.CreateItem(owned.GetRoot());row.SetText(0,TechnologyName(t));row.SetMetadata(0,t.SourceIndex);}
+            foreach(var genre in _activeCatalog?.Genres??[])
+                if(state.Company.OriginalMember90 is int research&&DevelopmentSelectionRules.IsGenreEligible(genre,research))
+                {var row=genres.CreateItem(genres.GetRoot());row.SetText(0,CatalogName(_activeCatalog,"GENRE",genre.SourceIndex,genre.Name));}
+        };
+        _refreshCompanyResearch();
     }
     private void ShowTraining(GameState state,EmployeeState employee,int? selectedSource=null)
     {

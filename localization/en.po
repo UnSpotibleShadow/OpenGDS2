@@ -5607,10 +5607,10 @@ msgid "NATIVE_PROGRESS"
 msgstr "Progress"
 
 msgid "OWNED_TECHNOLOGIES"
-msgstr "Learned technologies"
+msgstr "Owned technologies"
 
-msgid "AVAILABLE_TRAINING"
-msgstr "Available training"
+msgid "BUY_TECHNOLOGIES"
+msgstr "Buy technology"
 
 msgid "RELEASE_MEDIA_INTRO"
 msgstr "Before shipping, let’s check the media capacity and cost."

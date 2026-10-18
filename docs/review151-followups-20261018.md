@@ -44,12 +44,16 @@ Supported executable SHA-256:
   Main loop `00A0283C +2374..246C` supplies their positions/source rectangles;
   `+2717..27AE` applies the model/task source offsets through member 2218.
   Occupied study PCs now project from those imported tiles, preserving depth.
-* Clicking an occupied study PC opens the compact learned/available technology
-  selector from the supplied screenshot. It routes to existing application and
-  training services. No new training costs, boosts or timing rules are invented.
-  The employee Actions dropdown has no counterpart established by the recovered
-  employee presentation and is removed. Existing staff controls and technology
-  pages retain their routes.
+* The PC-area panel in the screenshot is the company research page: owned
+  technologies, a technology-purchase button and eligible genres. The serialized
+  fGMInfo headings at file offsets 0x2A28CD/0x2A2922 and Command2 identify those
+  controls. This remains a nonmodal company tool page, with live ownership/genre
+  refresh. It is not an employee course picker. The office training-area hit
+  (`009C66BC +06BD..071B`) opens that page. The dedicated employee training
+  button is established separately by fGMInfo.Command6 (`0098232C`): actions
+  1–5 open fGMWSTech, otherwise its message asks for a study workstation.
+  This restores both routes without the unsupported employee Actions dropdown.
+  Existing training/application costs and timing are unchanged.
 * Planning's green summary contains hardware, audience and cost. Work and its
   green marker sit below the distribution. Bugs use a common red strip with a
   white number; development points are labelled Progress. Progress bars share
@@ -96,7 +100,7 @@ Headless tests never make the request; authored cached metadata exercises the UI
 
 Source checks cover version selection, original study hit regions and PC depth;
 bilingual UI fixtures cover menus/audio/About, office study/rest interactions,
-training charges, release ordering, compact bounds and notification persistence.
+employee training charges, release ordering, compact bounds and notification persistence.
 Existing casino, save continuation and main core-loop coverage remain applicable.
 Exact check results are recorded in the PR. Original Windows execution and the
 owner's final side-by-side visual acceptance remain unrun here. Original EXE,

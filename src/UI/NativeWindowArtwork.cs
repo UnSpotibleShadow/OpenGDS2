@@ -10,7 +10,7 @@ public static class NativeWindowArtwork
         ["PoachingSelectionWindow"]="fGMHikinukiSel",["PoachingWindow"]="fGMHikinuki",["PoachingDonationWindow"]="fGMHikinukiKnS",["PoachingContractWindow"]="fGMHikinukiKeS",
         ["CasinoSelector"]="fGMTenantCasinoSn",["CasinoCoinPurchase"]="fGMTenantCasinoSn",["BankWindow"]="fGMBank",["SaveSlotWindow"]="fGMGameSave",["LoadSlotWindow"]="fGMGameLoad",["ActivityConfirmationWindow"]="fGMSeisanZ",
         ["PlanningDiscussionScene"]="fGMKikakuKaigi",["HardwareLicenceWindow"]="fGMHLicense",["StaffRosterWindow"]="fGMSyain",
-        ["TechnologyUseWindow"]="fGMInfo",["ReachTimeRecordsWindow"]="fGMToutatuRank",["SalesRankingWindow"]="fGMRank100",["AdditionalProductionWindow"]="fGMSyukkaSai",["SalesHistoryWindow"]="fGMZishaK",
+        ["CompanyResearchWindow"]="fGMInfo",["TechnologyUseWindow"]="fGMInfo",["ReachTimeRecordsWindow"]="fGMToutatuRank",["SalesRankingWindow"]="fGMRank100",["AdditionalProductionWindow"]="fGMSyukkaSai",["SalesHistoryWindow"]="fGMZishaK",
         ["OfficeWindow"]="fMainVisual",["CompanyWindow"]="fGMInfo",["CompanyInformationWindow"]="fGMInfo",["EmployeeDetailsWindow"]="fGMInfo",["EmployeeWindow"]="fGMSyain",["ProductWindow"]="fGMZisha",
         ["ManagementWindow"]="fGMComK",["RecruitmentWindow"]="fGMSKoyouKz",["SecretaryHiringWindow"]="fGMHisyoK",["SecretaryPolicyWindow"]="fGMHisyoSet",
         ["SequelSelectionWindow"]="fGMZokuhen",["PromotionSelectorWindow"]="fGMSendenBaitai",["CompletionWindow"]="fGMKansei",["DevelopmentProjectWindow2"]="fGMDevW2",

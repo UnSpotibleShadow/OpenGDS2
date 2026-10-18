@@ -47,6 +47,7 @@ public partial class Main
         _music?.SetMeetingPhase(-1);
         RememberConversationPosition();
         CloseConversationScene();
+        CloseCompanyResearch();
         CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
@@ -210,9 +211,8 @@ public partial class Main
         }
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         if(employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} &&
-            OfficeInteractionRules.StudyDeskAt(pixel.X,pixel.Y) is int studyDesk &&
-            state.Employees.FirstOrDefault(e=>e.Office?.Action==studyDesk) is { } student)
-        {image.AcceptEvent();ShowStudyComputer(state,student);return;}
+            OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y))
+        {image.AcceptEvent();ShowCompanyResearch(state);return;}
         var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
         var tenants=OfficeInteractionRules.TenantSlotsAt(pixel.X,pixel.Y);
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);

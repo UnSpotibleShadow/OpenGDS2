@@ -35,7 +35,7 @@ public partial class Main : Control
         TickConversation(delta);
         TickPokerInterface(delta);
         TickPoachingInterface(delta);
-        if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
+        if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();_refreshCompanyResearch?.Invoke();}
         RefreshEmployeeSelectionArrow();
         if (GetTree().GetNodesInGroup("GameplayWindows").OfType<DesktopWindow>().Any(w=>w.IsDragging&&w.IsVisibleInTree())){_officeElapsed=0;return;}
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;

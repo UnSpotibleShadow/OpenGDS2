@@ -6,32 +6,45 @@ func run() -> void:
     blank_bmp("user://original/Graphic/Embedded/OfficeBase.bmp",466,290,true);setup_catalog()
     var catalog=JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
     catalog.Technologies=[{"SourceIndex":0,"Identifier":0,"Name":"Authored technique","Description":"Authored description","RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable1568":[1,2,3],"RawTable158C":[1,2,3]}]
+    catalog.Genres[-1].RawMembers["125C"]=24
     write_json("user://original/catalog.json",integer_tokens(catalog))
     for locale in ["en","ja"]:
         var language=ConfigFile.new();language.set_value("language","locale",locale);language.save("user://interface.cfg")
-        var v=complete_value();v.State.TechnologyOwnershipLevels={"0":3}
+        var v=complete_value();v.State.SecretarySourceIndex=1;v.State.Company.OriginalMember90=23;v.State.TechnologyOwnershipLevels={"0":3}
         for e in v.State.Employees:e.TechnologyLevels={"0":0};e.MaximumTechnologies=4
         await load_fixture(v);await press_node("TogglePause");await select_employee(0)
         check(main.find_child("EmployeeActions",true,false)==null,"Employee popup omits unsupported action dropdown")
+        await press_node("EmployeeTraining")
+        check(main.find_child("ConversationWindow",true,false)!=null,"Employee training first requires a study workstation")
+        for page in range(4):
+            if main.find_child("ConversationWindow",true,false)==null:break
+            await award_page()
         await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68));await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Office.Action==1,"Right-click study desk assigns selected employee")
         await office_input(MOUSE_BUTTON_RIGHT,Vector2(350,155));await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Office.Action>=18,"Right-click vending area sends selected employee to rest")
         await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68))
-        await office_input(MOUSE_BUTTON_LEFT,Vector2(165,58));await window("StudyComputerWindow",205,315)
-        var courses=main.find_child("StudyAvailableTechnologies",true,false)
-        check(courses.get_root().get_first_child()!=null,"Study PC offers company-owned training")
-        courses.get_root().get_first_child().select(0);courses.item_activated.emit();await process_frame
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(165,48));await window("CompanyResearchWindow",205,315)
+        var technologies=main.find_child("ResearchOwnedTechnologies",true,false)
+        check(technologies.get_root().get_first_child()!=null,"PC-area panel lists company-owned technology")
+        check(main.find_child("ResearchAvailableGenres",true,false).get_root().get_child_count()==catalog.Genres.size()-1,"Research page filters genres using company research level")
+        check(main.call("SetSimulationPaused",false) and main.call("SetSimulationPaused",true),"Research page keeps nonmodal clock controls available")
+        await press_node("ResearchBuyTechnology");check(main.find_child("TechnologyPurchaseWindow",true,false)!=null,"Research page opens technology purchase")
+        await close_window("TechnologyPurchaseWindow")
+        check(main.find_child("CompanyResearchWindow",true,false).visible,"Company research page survives the purchase child window")
+        await close_window("CompanyResearchWindow");await select_employee(0)
+        await press_node("EmployeeTraining")
         await press_node("TrainTechnology0");await press_node("ToolbarSAVE_GAME")
-        check(saved().Employees[0].Office.Training.TechnologySourceIndex==0 and saved().Employees[0].Experience==90,"Study PC starts one course and charges experience once")
+        check(saved().Employees[0].Office.Training.TechnologySourceIndex==0 and saved().Employees[0].Experience==90,"Native employee training action starts one course and charges experience once")
         check(main.find_child("CompanyFacilities",true,false)==null and main.find_child("CompanyInformation",true,false)==null,"Company overview omits extra buttons")
         await dispose()
-        v=complete_value();var p=stress_fixture().State.DevelopmentProjects[0].duplicate(true)
+        v=complete_value();v.State.SecretarySourceIndex=1;var p=stress_fixture().State.DevelopmentProjects[0].duplicate(true)
         p.PendingDecision=2;p.DecisionIntroductionAcknowledged=2;p.OriginalStage=3;p.Progress=p.RequiredPoints;p.GameTypeSourceIndex=0;p.GenreSourceIndex=0;p.Bugs=3
         v.State.DevelopmentProjects=[p]
         await load_fixture(v)
         check(main.find_child("CompletionQualityFields",true,false)!=null,"Completion has shared quality region")
         var release=main.find_child("CompletionRelease",true,false);release.pressed.emit();await process_frame
+        check(main.find_child("ConversationPortrait",true,false).visible,"Release secretary has a portrait slot")
         check(main.find_child("ConversationWindow",true,false)!=null and main.find_child("ShipmentWindow",true,false)==null,"Release begins with secretary dialogue")
         for page in range(8):
             if main.find_child("ConversationWindow",true,false)==null:break

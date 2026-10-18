@@ -5270,8 +5270,8 @@ msgstr "進行"
 msgid "OWNED_TECHNOLOGIES"
 msgstr "所有テクノロジー"
 
-msgid "AVAILABLE_TRAINING"
-msgstr "使用可能なジャンル"
+msgid "BUY_TECHNOLOGIES"
+msgstr "テクノロジー購入"
 
 msgid "RELEASE_MEDIA_INTRO"
 msgstr "出荷前にメディアの容量と費用を確認しましょう。"

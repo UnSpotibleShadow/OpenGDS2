@@ -268,7 +268,7 @@ public partial class Main
     }
     private void BeginRelease(GameState state,DevelopmentProjectState project)
     {
-        ShowConversation(Tr("RELEASE_GAME"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("RELEASE_MEDIA_INTRO"))],
+        ShowConversation(Tr("RELEASE_GAME"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("RELEASE_MEDIA_INTRO"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],
             ()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowRelease(state,project),keepMeetingMusic:true),
             ()=>ShowProject(state,project),musicPhase:_music.MeetingPhaseIndex>=0?(MeetingMusicPhase)_music.MeetingPhaseIndex:null);
     }
