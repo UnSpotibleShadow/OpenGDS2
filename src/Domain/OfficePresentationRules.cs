@@ -17,7 +17,9 @@ public static class OfficePresentationRules
                 sprite=sprite with {SourceX=48+(portrait-1)*152};
             if (state.DevelopmentComputerIndex is int computer)
             {
-                if (sprite.Id==140) sprite=sprite with {X=91,Y=96,SourceX=571+computer*74,SourceY=318};
+                if(sprite.Id is >=45 and <=49 && state.Employees.FirstOrDefault(e=>e.Office?.Action==sprite.Id-44) is { } student)
+                    sprite=OfficeDeskPresentationRules.ForStudy(sprite,sprite.Id-44,computer,student.Office!.Training is not null);
+                else if (sprite.Id==140) sprite=sprite with {X=91,Y=96,SourceX=571+computer*74,SourceY=318};
                 else if (sprite.Id is >=50 and <=61)
                 {
                     int action=6+(sprite.Id-50);

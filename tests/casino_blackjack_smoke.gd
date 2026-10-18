@@ -29,6 +29,7 @@ func award_fixture() -> Dictionary:
     return value
 
 func run() -> void:
+    blank_office_fixture()
     if OS.get_environment("XDG_DATA_HOME").is_empty():
         push_error("casino_blackjack_smoke requires disposable XDG_DATA_HOME")
         quit(1)

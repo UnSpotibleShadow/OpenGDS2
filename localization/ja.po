@@ -4226,10 +4226,10 @@ msgid "ORIGINAL_NUMBER_DISPLAY"
 msgstr "数字表示"
 
 msgid "NUMBER_JAPANESE"
-msgstr "万・億・兆で表示"
+msgstr "100万0000"
 
 msgid "NUMBER_THOUSANDS"
-msgstr "3桁区切り"
+msgstr "1,000,000"
 
 msgid "GO_OUT"
 msgstr "外出する"
@@ -5236,3 +5236,213 @@ msgstr "これは困りました。大変な事態です……"
 
 msgid "CASINO_NUMERIC_LIMIT_NOTE"
 msgstr "上限です。閉じてください。"
+
+msgid "AUDIO_VOLUME"
+msgstr "音量…"
+
+msgid "NATIVE_PRODUCTS"
+msgstr "製品"
+
+msgid "NATIVE_TOP100"
+msgstr "トップ100"
+
+msgid "NATIVE_PLATFORMS"
+msgstr "ハードウェア"
+
+msgid "NATIVE_OWN_CONSOLES"
+msgstr "自社ハード"
+
+msgid "NATIVE_TIME_RECORDS"
+msgstr "到達記録"
+
+msgid "ABOUT_PORT_CREDIT"
+msgstr "UnSpotibleShadow と貢献者による移植"
+
+msgid "ABOUT_REPOSITORY"
+msgstr "OpenGDS2 リポジトリ"
+
+msgid "NATIVE_WORK"
+msgstr "作業"
+
+msgid "NATIVE_PROGRESS"
+msgstr "進行"
+
+msgid "OWNED_TECHNOLOGIES"
+msgstr "所有テクノロジー"
+
+msgid "BUY_TECHNOLOGIES"
+msgstr "テクノロジー購入"
+
+msgid "RELEASE_MEDIA_INTRO"
+msgstr "出荷前にメディアの容量と費用を確認しましょう。"
+
+msgid "UPDATE_AVAILABLE"
+msgstr "更新があります: {0}"
+
+msgid "UPDATE_VIEW"
+msgstr "リリースを見る"
+
+msgid "UPDATE_CHECKS_ENABLED"
+msgstr "GitHub の更新を確認"
+
+msgid "CATALOG_HORSE_0"
+msgstr "CATALOG_HORSE_0"
+
+msgid "CATALOG_HORSE_1"
+msgstr "CATALOG_HORSE_1"
+
+msgid "CATALOG_HORSE_2"
+msgstr "CATALOG_HORSE_2"
+
+msgid "CATALOG_HORSE_3"
+msgstr "CATALOG_HORSE_3"
+
+msgid "CATALOG_HORSE_4"
+msgstr "CATALOG_HORSE_4"
+
+msgid "CATALOG_HORSE_5"
+msgstr "CATALOG_HORSE_5"
+
+msgid "CATALOG_HORSE_6"
+msgstr "CATALOG_HORSE_6"
+
+msgid "CATALOG_HORSE_7"
+msgstr "CATALOG_HORSE_7"
+
+msgid "CATALOG_HORSE_8"
+msgstr "CATALOG_HORSE_8"
+
+msgid "CATALOG_HORSE_9"
+msgstr "CATALOG_HORSE_9"
+
+msgid "CATALOG_HORSE_10"
+msgstr "CATALOG_HORSE_10"
+
+msgid "CATALOG_HORSE_11"
+msgstr "CATALOG_HORSE_11"
+
+msgid "CATALOG_HORSE_12"
+msgstr "CATALOG_HORSE_12"
+
+msgid "CATALOG_HORSE_13"
+msgstr "CATALOG_HORSE_13"
+
+msgid "CATALOG_HORSE_14"
+msgstr "CATALOG_HORSE_14"
+
+msgid "CATALOG_HORSE_15"
+msgstr "CATALOG_HORSE_15"
+
+msgid "CATALOG_HORSE_16"
+msgstr "CATALOG_HORSE_16"
+
+msgid "CATALOG_HORSE_17"
+msgstr "CATALOG_HORSE_17"
+
+msgid "CATALOG_HORSE_18"
+msgstr "CATALOG_HORSE_18"
+
+msgid "CATALOG_HORSE_19"
+msgstr "CATALOG_HORSE_19"
+
+msgid "CATALOG_HORSE_20"
+msgstr "CATALOG_HORSE_20"
+
+msgid "CATALOG_HORSE_21"
+msgstr "CATALOG_HORSE_21"
+
+msgid "CATALOG_HORSE_22"
+msgstr "CATALOG_HORSE_22"
+
+msgid "CATALOG_HORSE_23"
+msgstr "CATALOG_HORSE_23"
+
+msgid "CATALOG_HORSE_24"
+msgstr "CATALOG_HORSE_24"
+
+msgid "CATALOG_HORSE_25"
+msgstr "CATALOG_HORSE_25"
+
+msgid "CATALOG_HORSE_26"
+msgstr "CATALOG_HORSE_26"
+
+msgid "CATALOG_HORSE_27"
+msgstr "CATALOG_HORSE_27"
+
+msgid "CATALOG_HORSE_28"
+msgstr "CATALOG_HORSE_28"
+
+msgid "CATALOG_HORSE_29"
+msgstr "CATALOG_HORSE_29"
+
+msgid "CATALOG_HORSE_30"
+msgstr "CATALOG_HORSE_30"
+
+msgid "CATALOG_HORSE_31"
+msgstr "CATALOG_HORSE_31"
+
+msgid "CATALOG_HORSE_32"
+msgstr "CATALOG_HORSE_32"
+
+msgid "CATALOG_HORSE_33"
+msgstr "CATALOG_HORSE_33"
+
+msgid "CATALOG_HORSE_34"
+msgstr "CATALOG_HORSE_34"
+
+msgid "CATALOG_HORSE_35"
+msgstr "CATALOG_HORSE_35"
+
+msgid "CATALOG_HORSE_36"
+msgstr "CATALOG_HORSE_36"
+
+msgid "CATALOG_HORSE_37"
+msgstr "CATALOG_HORSE_37"
+
+msgid "CATALOG_HORSE_38"
+msgstr "CATALOG_HORSE_38"
+
+msgid "CATALOG_HORSE_39"
+msgstr "CATALOG_HORSE_39"
+
+msgid "CATALOG_HORSE_40"
+msgstr "CATALOG_HORSE_40"
+
+msgid "CATALOG_HORSE_41"
+msgstr "CATALOG_HORSE_41"
+
+msgid "CATALOG_HORSE_42"
+msgstr "CATALOG_HORSE_42"
+
+msgid "CATALOG_HORSE_43"
+msgstr "CATALOG_HORSE_43"
+
+msgid "CATALOG_JOCKEY_0"
+msgstr "CATALOG_JOCKEY_0"
+
+msgid "CATALOG_JOCKEY_1"
+msgstr "CATALOG_JOCKEY_1"
+
+msgid "CATALOG_JOCKEY_2"
+msgstr "CATALOG_JOCKEY_2"
+
+msgid "CATALOG_JOCKEY_3"
+msgstr "CATALOG_JOCKEY_3"
+
+msgid "CATALOG_JOCKEY_4"
+msgstr "CATALOG_JOCKEY_4"
+
+msgid "CATALOG_JOCKEY_5"
+msgstr "CATALOG_JOCKEY_5"
+
+msgid "CATALOG_JOCKEY_6"
+msgstr "CATALOG_JOCKEY_6"
+
+msgid "CATALOG_JOCKEY_7"
+msgstr "CATALOG_JOCKEY_7"
+
+msgid "CATALOG_JOCKEY_8"
+msgstr "CATALOG_JOCKEY_8"
+
+msgid "CATALOG_JOCKEY_9"
+msgstr "CATALOG_JOCKEY_9"

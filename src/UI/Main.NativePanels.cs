@@ -37,13 +37,13 @@ public partial class Main
             values[i]=NativeText(panel,$"ProjectQuality{i}","",new(x+3,y+16,54,21),18);
             weights[i]=NativeText(panel,$"ProjectFocus{i}","",new(x+61,y+20,39,16),10,HorizontalAlignment.Right);weights[i].AddThemeColorOverride("font_color",Colors.Red);
         }
+        NativeFill(panel,"ProjectBugBox",new(78,152,76,20),Colors.Red);
         NativeText(panel,"ProjectBugsCaption",Tr("BUGS"),new(78,152,40,19));
-        NativeFill(panel,"ProjectBugBox",new(118,152,36,20),Colors.Red);
         var bugs=NativeText(panel,"ProjectBugCount","",new(118,152,36,20),14,HorizontalAlignment.Center);
+        bugs.AddThemeColorOverride("font_color",Colors.White);
         var recognition=NativeText(panel,"ProjectRecognition","",new(165,152,121,20),10);
         var progress=NativeText(panel,"ProjectPointSummary","",new(78,173,208,16),10);
         var bar=new ProgressBar {Name="ProjectSummaryProgress",MinValue=0,MaxValue=100,ShowPercentage=false};
-        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=Colors.White});bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=Colors.Green});
         NativePlace(panel,bar,new(78,190,166,8));
         var percent=NativeText(panel,"ProjectProgressPercent","",new(246,184,42,18),10,HorizontalAlignment.Right);
         void Refresh()
@@ -56,7 +56,7 @@ public partial class Main
             int?[] f=[project.Focus?.Fun,project.Focus?.Novelty,project.Focus?.Graphics,project.Focus?.Music];
             for(int i=0;i<4;i++){values[i].Text=$"{DisplayNumbers.Format(q[i])}";weights[i].Text=$"{f[i]?.ToString() ?? "?"}%";}
             bugs.Text=project.Bugs.ToString();recognition.Text=$"{Tr("NATIVE_RECOGNITION")}: {DisplayNumbers.Format(project.Recognition)}%";
-            progress.Text=$"{Tr("DEVELOPMENT_POINTS")}: {DisplayNumbers.Format(Math.Floor(project.Progress))}/{DisplayNumbers.Format(project.RequiredPoints)}";
+            progress.Text=$"{Tr("NATIVE_PROGRESS")}: {DisplayNumbers.Format(Math.Floor(project.Progress))}/{DisplayNumbers.Format(project.RequiredPoints)}";
             int value=OfficeRoomPresentationRules.Percentage(project);bar.Value=value;percent.Text=value+"%";
         }
         Refresh();return Refresh;

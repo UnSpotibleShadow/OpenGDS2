@@ -8,11 +8,22 @@ func run() -> void:
         var v=complete_value();v.State.Money=123456789
         await load_fixture(v);check(main.call("SetSimulationPaused",true),"Freeze settings fixture")
         var settings=main.find_child("MENU_SETTINGS",true,false)
-        check(settings!=null and settings.get_popup().item_count==3,"Original settings has Sound, Graphics and Numbers submenus")
+        check(settings!=null and settings.get_popup().item_count==7,"Settings includes master sound, independent voices, volume, graphics and numbers")
         var sound=main.find_child("OriginalSoundMenu",true,false)
         sound.id_pressed.emit(1);sound.about_to_popup.emit()
         check(sound.is_item_checked(1),"Original Sound Off updates effects setting")
         var audio=ConfigFile.new();audio.load("user://audio.cfg");check(not audio.get_value("effects","enabled",true),"Sound setting is durable")
+        check(not main.find_child("BackgroundMusic",true,false).get("Enabled"),"Sound Off also mutes music")
+        var music=main.find_child("MusicMenu",true,false);music.id_pressed.emit(0)
+        check(main.find_child("BackgroundMusic",true,false).get("Enabled"),"Music can be enabled independently")
+        audio.load("user://audio.cfg");check(not audio.get_value("effects","enabled",true),"Changing music preserves effects settings")
+        settings.get_popup().id_pressed.emit(100);await process_frame
+        var music_volume=main.find_child("MusicVolume",true,false);var effects_volume=main.find_child("EffectsVolume",true,false)
+        check(music_volume!=null and effects_volume!=null,"Quick audio dialog exposes both volume sliders")
+        music_volume.value=42;effects_volume.value=61
+        audio.load("user://audio.cfg")
+        check(audio.get_value("music","volume",0)==42 and audio.get_value("effects","volume",0)==61 and not audio.get_value("effects","enabled",true),"Quick volumes persist without re-enabling a muted channel")
+        await press_node("CloseAudioVolume")
         sound.id_pressed.emit(0)
         var graphics=main.find_child("OriginalGraphicsMenu",true,false)
         graphics.id_pressed.emit(2);await process_frame

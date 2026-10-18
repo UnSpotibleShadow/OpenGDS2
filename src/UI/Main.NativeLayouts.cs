@@ -51,10 +51,11 @@ public partial class Main
         string[] captions=["TARGET_HARDWARE","PROJECT_GENRE","PROJECT_CONTENT"],metadata=[hardware,genre,type];
         for(int i=0;i<3;i++)
         {
+            NativeFill(canvas,"CompletionMetadataCell"+i,new(4,198+i*16,170,16),new(.77f,1,.77f));
             NativeText(canvas,"CompletionMetadataCaption"+i,Tr(captions[i]),new(4,198+i*16,98,16),10);
-            NativeFill(canvas,"CompletionMetadataCell"+i,new(104,198+i*16,70,16),new(.77f,1,.77f));
             NativeText(canvas,"CompletionMetadata"+i,metadata[i],new(106,198+i*16,66,16),10);
         }
+        NativeFill(canvas,"CompletionQualityFields",new(16,250,158,64),new(.77f,.77f,1));
         double[] q=[project.Quality.Fun,project.Quality.Novelty,project.Quality.Graphics,project.Quality.Music];
         string[] keys=["STAT_FUN","STAT_NOVELTY","STAT_GRAPHICS","STAT_MUSIC"];
         Color[] colors=[Colors.Blue,Colors.Yellow,new(.7f,0,.8f),Colors.Cyan];

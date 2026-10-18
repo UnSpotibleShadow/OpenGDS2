@@ -81,8 +81,9 @@ employee use handler `009A98E8` establishes its costs and distinguishes immediat
 stress relief, temporary speed boosts and timed project effects. Speed and top-level stress relief remain unresolved. Buying or studying a
 technology does not itself apply a permanent stat bonus.
 
-The original study progress/icon tiles, completion-message timing and Windows
-behavioral comparison remain unfinished. M17 renders employee reading animation
-and provides course progress in the staff screen; it does not fabricate the
-missing original icon behavior. Other workstation task states, external jobs,
-calendar economics and company progression remain separately unresolved.
+The 18 October #154 follow-up restores occupied study PC tiles and office click
+routes from the original assignment hit regions and member-2218 sprite mappings;
+see [review evidence](review151-followups-20261018.md). Course-progress artwork,
+completion-message timing and native Windows behavioral acceptance remain
+separate limitations. Other workstation task states and external jobs are not
+established by the study-PC change.

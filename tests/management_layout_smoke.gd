@@ -1,9 +1,5 @@
 extends "res://tests/window_artwork_smoke.gd"
 
-func selected_action(index: int) -> void:
-    main.find_child("EmployeeActions",true,false).get_popup().id_pressed.emit(index)
-    for frame in range(4):await process_frame
-
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
     root.size=Vector2i(1280,800)
@@ -45,9 +41,7 @@ func run() -> void:
         check(main.find_child("EmployeeTechnologies",true,false).button_pressed,"Selected employee tab is pressed")
         await select_employee(1);check(main.find_child("EmployeeTechnologiesPage",true,false).visible,"Employee switch retains selected page")
         await close_window("EmployeeDetailsWindow")
-        await press_node("CompanyInformation");await window("CompanyInformationWindow",348,353)
-        check(main.find_child("CompanyTenant2",true,false)!=null and main.find_child("CompanySalesRecordTitle",true,false).text==game.Title,"Company tenant and sales-record fields")
-        await close_window("CompanyInformationWindow")
+        check(main.find_child("CompanyFacilities",true,false)==null and main.find_child("CompanyInformation",true,false)==null,"Company overview has no port-only navigation buttons")
         await menu_choice("MENU_ACTIONS",6);await window("SecretaryHiringWindow",398,291)
         table=main.find_child("SecretaryCandidates",true,false)
         check(table.columns==3 and table.get_column_title(1)==tr("CONTRACT_FEE"),"Secretary native three-column order")

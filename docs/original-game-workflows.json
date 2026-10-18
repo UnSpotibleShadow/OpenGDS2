@@ -5738,7 +5738,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Menu organization: Actions restores original Company development, recruitment/poaching, secretary settings/change, purchases/bank and Go out grouping. A separated More actions submenu retains port planning/advice shortcuts."
+      "disposition": "Menu organization: Actions uses the original grouping without Extra Actions. Development-room and secretary clicks retain their original access routes."
     },
     {
       "id": "menu:mKoudouKaisha",
@@ -5907,7 +5907,7 @@
       "workflows": [
         "W03"
       ],
-      "disposition": "Menu organization: Information restores staff, own games, cumulative sales rankings, released hardware, own hardware and reach-time rankings in original order/separators. A separated Game details submenu retains port history/review shortcuts."
+      "disposition": "Menu organization: Information contains Staff, Products, Top 100, Platforms, Our consoles and Time records in the comparison screenshot order. The extra Game details submenu is removed."
     },
     {
       "id": "menu:mInfoGMsStaffAll",
@@ -5923,7 +5923,7 @@
       "workflows": [
         "W15"
       ],
-      "disposition": "Available: Information > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified."
+      "disposition": "Available: Information > Products, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMsTusan100",
@@ -5931,7 +5931,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "Available: Information > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified."
+      "disposition": "Available: Information > Top 100, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified."
     },
     {
       "id": "menu:mInfoGMHatubaiHard",
@@ -5939,7 +5939,7 @@
       "workflows": [
         "W18"
       ],
-      "disposition": "Available: Information > Hardware market opens the released-hardware report."
+      "disposition": "Available: Information > Platforms opens the released-hardware report."
     },
     {
       "id": "menu:mInfoGMMinasu",
@@ -5955,7 +5955,7 @@
       "workflows": [
         "W21"
       ],
-      "disposition": "Available: Information > Own hardware opens the own-hardware report when its state is available."
+      "disposition": "Available: Information > Our consoles opens the own-hardware report when its state is available."
     },
     {
       "id": "menu:mInfoGMMinasu2",
@@ -5971,7 +5971,7 @@
       "workflows": [
         "W29"
       ],
-      "disposition": "Available: Information > Global rankings opens the reach-time records view."
+      "disposition": "Available: Information > Time records opens the reach-time records view."
     },
     {
       "id": "menu:mWindow",
@@ -5979,7 +5979,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Menu organization: Windows contains Office, Company and Other windows. Other windows explicitly groups Employees/Products; exact native automatic MDI-list behavior remains unresolved."
+      "disposition": "Menu organization: Windows contains Office, Company and Other windows; the latter lists numbered current child-window titles with the front window checked."
     },
     {
       "id": "menu:mWindowVisual",
@@ -6003,7 +6003,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Unresolved native MDI behavior: the original entry has no bound handler. Windows > Other windows explicitly reopens Employees/Products as retained port navigation; this does not establish native dynamic-list equivalence."
+      "disposition": "Available: Other windows builds a numbered child-window list and reopens the selected window. The original entry has no explicit bound handler (native MDI bookkeeping); exact Windows runtime focus behavior remains unverified."
     },
     {
       "id": "menu:mSetup",
@@ -6019,7 +6019,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Sound controls native effects independently of community music, matching the recovered native dispatcher guard."
+      "disposition": "Available: Sound On/Off controls effects and the optional community music together. Separate channel switches and volume controls are an accepted port extension."
     },
     {
       "id": "menu:mSetupSoundOn",
@@ -6027,7 +6027,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Sound > On enables original sound effects; community music keeps its separate setting."
+      "disposition": "Available: Sound > On enables both effects and community music. Independent channel controls remain available."
     },
     {
       "id": "menu:mSetupSoundOff",
@@ -6035,7 +6035,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Sound > Off disables original sound effects; community music keeps its separate setting."
+      "disposition": "Available: Sound > Off mutes both effects and community music. Independent channel controls remain available."
     },
     {
       "id": "menu:mSetupGraphic",
@@ -6075,7 +6075,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京."
+      "disposition": "Available: Number display > 100\u4e070000 uses Japanese four-digit grouping, matching the original option caption. Modern Int64 values additionally support \u4eac."
     },
     {
       "id": "menu:mSetupNumber2",
@@ -6083,7 +6083,7 @@
       "workflows": [
         "W02"
       ],
-      "disposition": "Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language."
+      "disposition": "Available: Number display > 1,000,000 uses comma-separated three-digit grouping, matching the original option caption."
     },
     {
       "id": "menu:mHelp",

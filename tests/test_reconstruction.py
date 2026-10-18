@@ -146,7 +146,7 @@ class PublicTests(unittest.TestCase):
         import re
         text=(ROOT/'localization'/'en.po').read_text()
         entries=dict(re.findall(r'^msgid "([^"\n]+)"\nmsgstr "([^"\n]*)"$',text,re.M))
-        for category,count in {'GENRE':18,'TYPE':51,'AUDIENCE':7,'HARDWARE':11,'COMPUTER':4}.items():
+        for category,count in {'GENRE':18,'TYPE':51,'AUDIENCE':7,'HARDWARE':11,'COMPUTER':4,'HORSE':44,'JOCKEY':10}.items():
             for index in range(count):
                 key=f'CATALOG_{category}_{index}'
                 self.assertIn(key,entries,key)

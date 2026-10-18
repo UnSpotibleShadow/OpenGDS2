@@ -174,17 +174,20 @@ public partial class Main
     {
         ClearContent(keepMeetingMusic:true);
         _music.SetMeetingPhase((int)MeetingMusicPhase.Planning);
-        var canvas=NativeWindow("PlanningMeetingWindow",Tr("PLANNING_MEETING"),new(310,350));
+        var canvas=NativeWindow("PlanningMeetingWindow",Tr("PLANNING_MEETING"),new(310,370));
         var defaultTitle=predecessorProductIndex is int parent ? SequelDevelopmentRules.SuggestedTitle(state.ReleasedGames.Single(x=>x.ProductIndex==parent)) : mangaSourceIndex is int manga ? MangaText(catalog,manga,"TITLE") : Tr("NEW_PROJECT_TITLE");
         var illustration=OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningProposal.bmp");
         NativePlace(canvas,Picture("ProposalIllustration",illustration,new(256,160)),new(27,4,256,160));
         NativePlace(canvas,Picture("ProposalHardwarePicture",HardwarePicture(state,hardwareId),new(64,64)),new(4,176,64,64));
         NativeText(canvas,"ProposalHardwareName",CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),new(2,238,72,18),10,HorizontalAlignment.Center);
-        NativeFill(canvas,"ProposalTerms",new(78,174,228,74),new(.77f,1,.77f));
+        NativeFill(canvas,"ProposalTerms",new(78,174,228,62),new(.77f,1,.77f));
         NativeText(canvas,"ProposalHardware",Tr("TARGET_HARDWARE")+": "+CatalogName(catalog,"HARDWARE",hardwareId,catalog.Hardware.Single(x=>x.SourceIndex==hardwareId).Name),new(80,176,224,18));
         NativeText(canvas,"ProposalAudience",Tr("PROJECT_AUDIENCE")+": "+CatalogName(catalog,"AUDIENCE",audienceId,catalog.Audiences.Single(x=>x.SourceIndex==audienceId).Name),new(80,194,224,18));
-        var quote=NativeText(canvas,"PlanningQuote","",new(80,213,224,32),10);quote.AutowrapMode=TextServer.AutowrapMode.WordSmart;
-        var gate=NativeText(canvas,"PlanningGate","",new(4,329,144,18),10);
+        var quote=NativeText(canvas,"PlanningQuote","",new(80,213,224,20),10);quote.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        NativeText(canvas,"ProposalWorkDot","●",new(4,328,12,18)).AddThemeColorOverride("font_color",Colors.LimeGreen);
+        NativeText(canvas,"ProposalWorkCaption",Tr("NATIVE_WORK"),new(18,328,60,18),11);
+        var work=NativeText(canvas,"ProposalWork","",new(80,328,62,18),11,HorizontalAlignment.Right);
+        var gate=NativeText(canvas,"PlanningGate","",new(4,348,302,18),10);
         var grid=new Control {Name="PlanningFocus"};NativePlace(canvas,grid,new(4,260,140,64));
         var start=NativeAction(canvas,"AcceptPlan","START_GAME_DEVELOPMENT",new(156,259,150,25),()=>{});
         void ShowFocus()
@@ -201,7 +204,7 @@ public partial class Main
         void RefreshQuote()
         {
             var result=CheckPlanning(state,catalog,roomIndex,hardwareId,audienceId,predecessorProductIndex,out var value,mangaSourceIndex);
-            quote.Text=$"{Tr("PLANNING_COST")}: ¥{DisplayNumbers.Format(value.Cost)}\n{Tr("DEVELOPMENT_POINTS")}: {value.Points}";
+            quote.Text=$"{Tr("PLANNING_COST")}: ¥{DisplayNumbers.Format(value.Cost)}";work.Text=DisplayNumbers.Format(value.Points);
             gate.Text=Tr($"PLANNING_RESULT_{result}");gate.Visible=result!=DevelopmentPlanningResult.Success;
             start.Disabled=result!=DevelopmentPlanningResult.Success;
         }

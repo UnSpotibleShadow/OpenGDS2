@@ -1,4 +1,14 @@
-# Current development checkpoint — 16 October 2026
+# Current development checkpoint — 18 October 2026
+
+The owner authorized review #151 follow-ups (#152–154), native application icon
+corrections and an optional startup GitHub release notice. See
+[scope, original evidence and acceptance limits](review151-followups-20261018.md).
+The earlier ten fidelity steps are integrated through PR150; original GD2 save
+compatibility remains explicitly skipped. Source validation Actions are enabled.
+Integration stays on develop; #151 remains open for owner acceptance. There is
+no authorization here for a new main promotion, release/tag or desktop export.
+
+## Historical checkpoint — 16 October 2026
 
 ## Public release and community handoff
 

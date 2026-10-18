@@ -44,7 +44,7 @@ public partial class Main
         var refreshPanel=ProjectPanel(canvas,state,project,OwnHardwareService.Catalog(state,_importer.LoadCatalog()!));
         var promotion=NativeAction(canvas,"ProjectPromotion","PAID_PROMOTION",new(4,103,70,25),()=>ShowPromotionSelector(state,project));
         var cancel=NativeAction(canvas,"ProjectCancel","CANCEL",new(4,132,70,25),()=>ShowProjectCancellation(state,project));
-        var shipment=NativeAction(canvas,"ProjectRelease","PRODUCT_SHIP",new(4,161,70,25),()=>ShowRelease(state,project),project.OriginalStage==3);
+        var shipment=NativeAction(canvas,"ProjectRelease","PRODUCT_SHIP",new(4,161,70,25),()=>BeginRelease(state,project),project.OriginalStage==3);
         var media=NativeAction(canvas,"ProjectMedia","NATIVE_MEDIA",new(4,188,70,20),()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowProject(state,project)));
         var report=_dialog!;
         Action refreshReport=()=>
@@ -153,7 +153,8 @@ public partial class Main
                         _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                     };
                 }
-                _content.AddChild(chosen);_content.AddChild(confirm);
+                _content.AddChild(chosen);
+                NativePlace(_dialog!.FindChild("NativeDialogCanvas",true,false) as Control??throw new InvalidOperationException(),confirm,new(4,90,70,28));
                 confirm.Pressed+=()=>
                 {
                     if (!selected.HasValue) return;
@@ -187,7 +188,8 @@ public partial class Main
                     _status.Text=confirm.Disabled ? Tr(state.Money is null ? "SELECTION_RESULT_MoneyUnknown" : "SELECTION_RESULT_InsufficientFunds") : string.Empty;
                 };
             }
-            _content.AddChild(chosen);_content.AddChild(confirm);
+            _content.AddChild(chosen);
+                NativePlace(_dialog!.FindChild("NativeDialogCanvas",true,false) as Control??throw new InvalidOperationException(),confirm,new(4,90,70,28));
             confirm.Pressed+=()=>
             {
                 if (!selected.HasValue) return;
@@ -203,7 +205,7 @@ public partial class Main
             NativeText(canvas,"CompletionCaption","== "+Tr("DEVELOPMENT_COMPLETE")+" ==",new(6,3,356,19),11,HorizontalAlignment.Center);
             NativePlace(canvas,Picture("CompletionIllustration",OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),new(256,160)),new(56,26,256,160));
             NativeCompletionSummary(canvas,state,project,catalog);
-            NativeAction(canvas,"CompletionRelease","RELEASE_GAME",new(254,245,110,27),()=>ShowRelease(state,project));
+            NativeAction(canvas,"CompletionRelease","RELEASE_GAME",new(254,245,110,27),()=>BeginRelease(state,project));
             NativeAction(canvas,"CompletionDebug","NATIVE_DEBUG",new(254,278,110,27),()=>{project.PendingDecision=null;ShowProject(state,project);});
             if(project.Bugs>=60)NativeText(canvas,"CompletionBugWarning",Tr("RELEASE_BUG_WARNING"),new(4,298,240,16),9);
         }
@@ -263,6 +265,12 @@ public partial class Main
             if (project.PendingDecision.HasValue || CheckpointMeetingRules.HasPending(project)) ShowProjectDecision(state,project);
             else ShowOfficeReconstruction(state);
         },scene:OriginalAssetStore.LoadTexture("Graphic/Embedded/PlanningMeeting.bmp"),musicPhase:MeetingMusicRules.ForMilestone(meeting.Milestone));
+    }
+    private void BeginRelease(GameState state,DevelopmentProjectState project)
+    {
+        ShowConversation(Tr("RELEASE_GAME"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("RELEASE_MEDIA_INTRO"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],
+            ()=>ShowMediaInformation(state,project.HardwareSourceIndex,project.DataSize,()=>ShowRelease(state,project),keepMeetingMusic:true),
+            ()=>ShowProject(state,project),musicPhase:_music.MeetingPhaseIndex>=0?(MeetingMusicPhase)_music.MeetingPhaseIndex:null);
     }
     private void ShowRelease(GameState state,DevelopmentProjectState project,string? draftTitle=null,long? draftPrice=null,long? draftCopies=null)
     {

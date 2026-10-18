@@ -24,13 +24,13 @@ public partial class Main
         {_selectionArrow.GetParent()?.RemoveChild(_selectionArrow);_selectionArrow.QueueFree();}
         _employeeDetails=null;_selectedEmployee=null;_selectionArrow=null;_employeeChart=null;_employeeLevelUp=null;
         _employeeAbilities=null;_employeeTechnologies=null;_employeeDetailsLabels.Clear();_employeeDetailsBars.Clear();
-        if (_windows.TryGetValue("CompanyWindow",out var company) && GodotObject.IsInstanceValid(company)) company.Show();
+        if (_companyResearchWindow is null && _windows.TryGetValue("CompanyWindow",out var company) && GodotObject.IsInstanceValid(company)) company.Show();
     }
     private void ShowEmployeeDetails(GameState state,EmployeeState employee)
     {
         if (CalendarService.HasPending(state)) {ShowPendingCalendarEvent(state);return;}
         if (!state.Employees.Contains(employee)) return;
-        ShowOfficeReconstruction(state);CloseEmployeeDetails();
+        ShowOfficeReconstruction(state);CloseCompanyResearch();CloseEmployeeDetails();
         _selectedEmployee=employee;
         _employeeDetails=new DesktopWindow {Name="EmployeeDetailsWindow"};_workspace!.AddChild(_employeeDetails);
         var position=_windows["CompanyWindow"].Position;
@@ -95,17 +95,16 @@ public partial class Main
         });
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
         dismiss.TooltipText=Tr("DISMISS_EMPLOYEE");dismiss.Disabled=employee.SourceIndex is null;
+        var use=EmployeeDetailButton(technologyContents,"EmployeeUseTechnology","USE_TECHNOLOGY",()=>{if(_dialog is null&&DesktopActionEnabled("USE_TECHNOLOGY"))ShowTechnologyUse(state,employee);});
+        use.Disabled=employee.TechnologyLevels?.Any(p=>p.Value>0)!=true;
         var actions=new HBoxContainer();_employeeDetails.Body.AddChild(actions);
-        var more=new MenuButton {Name="EmployeeActions",Text=Tr("EMPLOYEE_ACTIONS"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(more);
-        (string Key,Action Action,bool Enabled)[] choices=[
-            ("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee),employee.Office is not null),
-            ("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _activeCatalog?.Technologies.Count>0),
-            ("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(p=>p.Value>0)==true),
-            ("TAKE_BREAK",()=> {var result=OfficeAssignmentService.TryTakeBreak(state,employee,_session.Random);RefreshEmployeeDetails();
-                if (result!=OfficeAssignmentResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{result}");},employee.Office?.Action is >=1 and <=17),
-            ("STAFF",()=>ShowStaff(state),true)];
-        for (int i=0;i<choices.Length;i++) {more.GetPopup().AddItem(Tr(choices[i].Key),i);more.GetPopup().SetItemDisabled(i,!choices[i].Enabled);}
-        more.GetPopup().IdPressed+=id=> {if (_dialog is null && !CalendarService.HasPending(state) && choices[(int)id].Enabled) choices[(int)id].Action();};
+        var training=EmployeeDetailButton(actions,"EmployeeTraining","TRAINING",()=>
+        {
+            if(_dialog is not null||!DesktopActionEnabled("TRAINING"))return;
+            if(employee.Office?.Action is >=1 and <=5)ShowTraining(state,employee);
+            else ShowConversation(Tr("TRAINING"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("TRAINING_RESULT_NotAtStudySeat"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>ShowEmployeeDetails(state,employee));
+        });
+        training.Disabled=employee.TechnologyLevels is null||_activeCatalog?.Technologies.Count is not >0;
         EmployeeDetailButton(actions,"CloseEmployeeDetails","CANCEL",CloseEmployeeDetails);
         var officeImage=_windows["OfficeWindow"].FindChild("OriginalOfficeBackground",true,false) as TextureRect;
         if (officeImage is not null)
@@ -136,10 +135,7 @@ public partial class Main
         var label=new Label {Text=Tr(caption),CustomMinimumSize=new Vector2(88,0)};row.AddChild(label);
         var bar=new ProgressBar {Name="EmployeeBar"+key,MaxValue=maximum,ShowPercentage=false,CustomMinimumSize=new Vector2(76,8),
             SizeFlagsHorizontal=SizeFlags.ExpandFill,SizeFlagsVertical=SizeFlags.ShrinkCenter};
-        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=new Color(0,0,.7f),BorderColor=Colors.Black,
-            BorderWidthTop=1,BorderWidthBottom=1,BorderWidthLeft=1,BorderWidthRight=1});
-        bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new Color(0,1,0),BorderColor=Colors.Black,
-            BorderWidthTop=1,BorderWidthBottom=1,BorderWidthLeft=1,BorderWidthRight=1});row.AddChild(bar);_employeeDetailsBars[key]=bar;
+        row.AddChild(bar);_employeeDetailsBars[key]=bar;
         var number=new Label {Name="EmployeeValue"+key,CustomMinimumSize=new Vector2(23,0),HorizontalAlignment=HorizontalAlignment.Right};row.AddChild(number);_employeeDetailsLabels[key]=number;
     }
     private void RefreshEmployeeDetails()

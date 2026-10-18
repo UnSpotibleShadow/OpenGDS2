@@ -17,14 +17,26 @@ func write_json(path: String, value: Dictionary) -> void:
 func saved() -> Dictionary:
     return JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State
 
+func office_input(button_index: int,pixel: Vector2) -> void:
+    var office=main.find_child("OriginalOfficeBackground",true,false)
+    check(office!=null,"Office input surface exists")
+    if office==null:return
+    var scale: float=min(office.size.x/466.0,office.size.y/290.0)
+    var click=InputEventMouseButton.new();click.button_index=button_index;click.pressed=true
+    click.position=(office.size-Vector2(466,290)*scale)/2.0+pixel*scale
+    office.gui_input.emit(click);await process_frame
+
 func press_node(name: String) -> void:
     if name=="TogglePause":
         check(main.call("SetSimulationPaused",not main.call("GetSimulationPaused")),"Harness simulation pause")
         await process_frame
         return
     if name=="ToolbarSTART_GAME_DEVELOPMENT":
-        main.find_child("AdditionalActionsMenu",true,false).id_pressed.emit(0)
-        await process_frame
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(192,150))
+        await press_node("RoomOriginalGame")
+        return
+    if name=="CompanyFacilities":
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(80,220))
         return
     if name=="ToolbarBACK_TO_TITLE":
         var menu=main.find_child("MENU_GAME",true,false).get_popup()
@@ -36,6 +48,15 @@ func press_node(name: String) -> void:
     if button != null and not button.disabled:
         button.pressed.emit()
     await process_frame
+    if name in ["CompletionRelease","ProjectRelease"]:
+        for page in range(50):
+            var message=main.find_child("ConversationMessage",true,false)
+            if message==null:break
+            var key=InputEventKey.new();key.keycode=KEY_ENTER;key.pressed=true
+            message.gui_input.emit(key);await process_frame
+            if is_instance_valid(message) and message.is_inside_tree():
+                await create_timer(.03).timeout;message.gui_input.emit(key);await process_frame
+        if main.find_child("CloseMediaInformation",true,false)!=null:await press_node("CloseMediaInformation")
 
 func press(key: String) -> void:
     for popup in desktop_popups():
