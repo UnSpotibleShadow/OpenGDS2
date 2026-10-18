@@ -79,7 +79,12 @@ public partial class Main
             {int id=other.ItemCount;other.AddCheckItem($"{id+1} {window.Caption}",id);other.SetItemChecked(id,window==active);other.SetItemMetadata(id,window.GetInstanceId());}
         }
         other.AboutToPopup+=ListWindows;
-        other.IdPressed+=id=>{if(id>=0&&id<other.ItemCount&&GodotObject.InstanceFromId(other.GetItemMetadata((int)id).AsUInt64()) is DesktopWindow window)window.Reopen();};
+        other.IdPressed+=id=>
+        {
+            if(!DesktopActionEnabled("OTHER_WINDOWS"))return;
+            if(id>=0&&id<other.ItemCount&&GodotObject.InstanceFromId(other.GetItemMetadata((int)id).AsUInt64()) is DesktopWindow window)
+            {if(window.Name=="EmployeeWindow")OriginalPayrollRules.CaptureStaffList(state);window.Reopen();}
+        };
         ListWindows();
         OriginalSettingsMenu(parent);
         Menu(parent,"MENU_HELP",[("GAME_HELP",()=>ShowHelp(state)),separator,("ABOUT_GAME",()=>ShowAbout(state))]);
