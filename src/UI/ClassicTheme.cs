@@ -56,6 +56,9 @@ public static class ClassicTheme
         theme.SetColor("font_color","TooltipLabel",Colors.Black);
         theme.SetColor("font_shadow_color","TooltipLabel",Colors.Transparent);
         theme.SetFontSize("font_size","TooltipLabel",13);
+        var progressBackground=new StyleBoxFlat {BgColor=Colors.Blue,BorderColor=Colors.Black};progressBackground.SetBorderWidthAll(1);
+        theme.SetStylebox("background","ProgressBar",progressBackground);
+        theme.SetStylebox("fill","ProgressBar",new StyleBoxFlat {BgColor=new Color(0,1,0)});
         return theme;
     }
 

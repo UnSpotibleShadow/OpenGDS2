@@ -18,6 +18,40 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("release ordering includes numeric prereleases and stable versions",()=>
+{
+    Check(ReleaseUpdateRules.Compare("v0.1.0-ea.10","0.1.0-ea.9")>0);
+    Check(ReleaseUpdateRules.Compare("0.1.0","0.1.0-ea.10")>0);
+    Check(ReleaseUpdateRules.Compare("0.1.0-ea.01","0.1.0-ea.1") is null);
+    Check(ReleaseUpdateRules.Compare("0.1.0+build.1","v0.1.0+build.2")==0);
+    Check(ReleaseUpdateRules.Compare("0.1.0-1","0.1.0-ea")<0);
+    Check(ReleaseUpdateRules.Compare("invalid","0.1.0") is null);
+});
+Test("release notices ignore drafts older builds and foreign links",()=>
+{
+    string Item(string tag,string url,bool draft=false)=>System.Text.Json.JsonSerializer.Serialize(new {tag_name=tag,html_url=url,draft});
+    const string url="https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/";
+    string json="["+string.Join(",",Item("v0.1.0-ea.9",url+"v0.1.0-ea.9"),Item("v0.1.0-ea.10",url+"v0.1.0-ea.10"),Item("v1.0.0",url+"v1.0.0",true),Item("v2.0.0","https://example.com/"))+"]";
+    Check(ReleaseUpdateRules.Select(json,"0.1.0-ea.1")?.Version=="v0.1.0-ea.10");
+    Check(ReleaseUpdateRules.Select(json,"0.1.0") is null);
+    Check(ReleaseUpdateRules.Select("broken","0.1.0") is null);
+});
+Test("study desks retain native diamond boundaries and occupied PC depth",()=>
+{
+    for(int action=1;action<=4;action++)
+    {
+        int x=166+(action-1)*32,y=68+(action-1)*16;
+        Check(OfficeInteractionRules.StudyDeskAt(x,y)==action);
+        var tile=new OfficeSpriteDefinition(44+action,-100,43+(action-1)*16,162,226,36,29,33);
+        var pc=OfficeDeskPresentationRules.ForStudy(tile,action,2,true);
+        Check(pc.X==147+(action-1)*32&&pc.SourceX==756&&pc.SourceY==288&&pc.SortKey==tile.SortKey);
+    }
+    Check(OfficeInteractionRules.StudyDeskAt(296,110)==5);
+    Check(OfficeInteractionRules.StudyDeskAt(180,80)==2);
+    Check(OfficeInteractionRules.StudyDeskAt(280,115)==4);
+    Check(OfficeInteractionRules.StudyDeskAt(double.NaN,100) is null);
+    Check(OfficeInteractionRules.StudyDeskAt(0,0) is null);
+});
 GameState ProgrammingFixture(int index=5)
 {
     var actor=new EmployeeState {Name="Actor",SourceIndex=0,PortraitId=1,Level=1,Experience=20,Stress=10,Inspiration=80,DevelopmentSpeed=50,

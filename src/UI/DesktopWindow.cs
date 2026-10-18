@@ -15,6 +15,9 @@ public partial class DesktopWindow : PanelContainer
     private bool _dragging;
     private bool _resizing;
     private float _resizeStartHeight, _resizeStartMouseY, _minimumHeight;
+    private static long _nextOrder;
+    public long CreationOrder {get;}=++_nextOrder;
+    public string Caption=>_title.Text;
     public bool IsDragging=>_dragging || _resizing;
 
     public void EnableVerticalResize()

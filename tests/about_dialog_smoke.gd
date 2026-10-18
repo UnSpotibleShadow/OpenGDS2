@@ -13,10 +13,10 @@ func open_about() -> void:
     await settle_about()
 
 func check_about(artwork: bool) -> void:
-    await window("AboutWindow",308,328)
+    await window("AboutWindow",308,390)
     check(main.find_child("AboutWindow",true,false).find_child("WindowTitleIcon",true,false).texture!=null,"About reuses its original window icon")
     var canvas=main.find_child("NativeDialogCanvas",true,false)
-    check(canvas!=null and canvas.size==Vector2(300,296),"About keeps a compact client")
+    check(canvas!=null and canvas.size==Vector2(300,358),"About keeps a compact client")
     if canvas==null:return
     for control in canvas.find_children("*","Control",true,false):
         if control.is_visible_in_tree():
@@ -30,6 +30,7 @@ func check_about(artwork: bool) -> void:
     var visit=main.find_child("VisitKairosoftWebsite",true,false)
     check(link is LinkButton and link.text=="https://kairosoft.net/" and not link.disabled,"Official website is a readable interactive link")
     check(not link.get_signal_connection_list("pressed").is_empty() and not visit.get_signal_connection_list("pressed").is_empty(),"Both original website controls have activation handlers")
+    check(main.find_child("VisitPortRepository",true,false)!=null and main.find_child("AboutPortCredit",true,false)!=null,"Port attribution and repository button are present")
     # Do not launch an external browser from an automated fixture.
 
 func run() -> void:

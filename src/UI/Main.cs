@@ -77,6 +77,7 @@ public partial class Main : Control
         _session.SoundRequested+=_effects.Play;
         _session.SoundResetRequested+=_effects.Stop;
         ShowTitleScreen();
+        CheckForReleaseUpdate();
     }
 
     public override void _ExitTree()
@@ -320,8 +321,7 @@ public partial class Main : Control
     {
         parent.AddChild(new Label {Text=$"{Tr(caption)}: {value?.ToString() ?? "?"}",AutowrapMode=TextServer.AutowrapMode.WordSmart});
         var bar=new ProgressBar {MaxValue=99,Value=value ?? 0,ShowPercentage=false,CustomMinimumSize=new Vector2(140,9)};
-        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=new Color(0,0,.7f)});
-        bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new Color(0,1,0)});parent.AddChild(bar);
+        parent.AddChild(bar);
     }
 
     private void ShowLicenses(GameState state)
@@ -387,6 +387,7 @@ public partial class Main : Control
             button.Pressed += () => { SaveInterfaceLanguage(locale); ShowSettings(); };
             _content.AddChild(button);
         }
+        var updates=new CheckButton {Name="UpdateChecksEnabled",Text=Tr("UPDATE_CHECKS_ENABLED"),ButtonPressed=UpdateChecksEnabled()};updates.Toggled+=SetUpdateChecksEnabled;_content.AddChild(updates);
         AddHeading(Tr("ORIGINAL_EFFECTS_SETTINGS"),18);
         var effectsEnabled=new CheckButton {Name="EffectsEnabled",Text=Tr("ORIGINAL_EFFECTS_ENABLED"),ButtonPressed=_effects.Enabled};effectsEnabled.Toggled+=_effects.SetEnabled;_content.AddChild(effectsEnabled);
         var effectsLabel=new Label {Text=$"{Tr("EFFECTS_VOLUME")}: {DisplayNumbers.Format(_effects.VolumePercent)}%"};_content.AddChild(effectsLabel);

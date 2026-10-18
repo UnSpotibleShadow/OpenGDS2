@@ -107,7 +107,7 @@ func run() -> void:
             if main.find_child("ConversationWindow",true,false)==null:
                 break
             await advance_page()
-        await window("PlanningMeetingWindow",330,390)
+        await window("PlanningMeetingWindow",330,410)
         await press_node("CancelProposal")
         await dispose()
         for phase in [-1,0,1,2]:
@@ -148,7 +148,7 @@ func run() -> void:
                 check(main.find_children("ProjectSummaryProgress","ProgressBar",true,false).size()==1 and main.find_child("DevelopmentProgress",true,false)==null,"One project progress display")
                 await press_node("ProjectMedia")
                 await window("MediaInformationWindow",350,290)
-                check(main.find_child("MediaCapacityTable",true,false).size.y>=100,"Capacity table exposes all four rows")
+                check(main.find_child("MediaCapacityTable",true,false).size.y>=80,"Capacity table exposes four compact rows")
             elif phase==2:
                 await press_node("CompletionRelease")
                 var copies=main.find_child("ReleaseCopies",true,false)

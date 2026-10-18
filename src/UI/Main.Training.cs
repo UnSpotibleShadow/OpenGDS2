@@ -10,6 +10,24 @@ public partial class Main
 
     private void ShowTechnologies(GameState state)=>ShowTechnologyPurchase(state);
 
+    private void ShowStudyComputer(GameState state,EmployeeState employee)
+    {
+        ClearContent();var canvas=NativeWindow("StudyComputerWindow",EmployeeName(employee),new(190,276));
+        NativeFill(canvas,"StudyOwnedHeading",new(4,3,182,20),new(.77f,1,.77f));
+        NativeText(canvas,"StudyOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,3,178,20),11,HorizontalAlignment.Center);
+        var owned=ManagementTable(canvas,"StudyOwnedTechnologies",["TECHNOLOGY_NAME"],[174],new(4,27,182,95));owned.ColumnTitlesVisible=false;
+        foreach(var t in _activeCatalog?.Technologies??[])
+            if(employee.TechnologyLevels?.GetValueOrDefault(t.SourceIndex)>0)
+            {var row=owned.CreateItem(owned.GetRoot());row.SetText(0,TechnologyName(t));row.SetMetadata(0,t.SourceIndex);}
+        NativeAction(canvas,"StudyTechnologyUse","USE_TECHNOLOGY",new(4,128,182,26),()=>ShowTechnologyUse(state,employee));
+        NativeFill(canvas,"StudyAvailableHeading",new(4,162,182,20),new(1,.85f,.65f));
+        NativeText(canvas,"StudyAvailableCaption",Tr("AVAILABLE_TRAINING"),new(6,162,178,20),11,HorizontalAlignment.Center);
+        var available=ManagementTable(canvas,"StudyAvailableTechnologies",["TECHNOLOGY_NAME"],[174],new(4,186,182,86));available.ColumnTitlesVisible=false;
+        foreach(var t in _activeCatalog?.Technologies??[])
+            if(employee.TechnologyLevels?.TryGetValue(t.SourceIndex,out int level)==true && level<3 && state.TechnologyOwnershipLevels?.GetValueOrDefault(t.SourceIndex)>level)
+            {var row=available.CreateItem(available.GetRoot());row.SetText(0,TechnologyName(t));row.SetMetadata(0,t.SourceIndex);}
+        available.ItemActivated+=()=>{if(available.GetSelected() is { } row)ShowTraining(state,employee,row.GetMetadata(0).AsInt32());};
+    }
     private void ShowTraining(GameState state,EmployeeState employee,int? selectedSource=null)
     {
         ClearContent();var canvas=NativeWindow("TrainingWindow",Tr("TRAINING"),new(370,352));

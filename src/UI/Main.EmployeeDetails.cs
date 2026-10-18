@@ -96,16 +96,6 @@ public partial class Main
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
         dismiss.TooltipText=Tr("DISMISS_EMPLOYEE");dismiss.Disabled=employee.SourceIndex is null;
         var actions=new HBoxContainer();_employeeDetails.Body.AddChild(actions);
-        var more=new MenuButton {Name="EmployeeActions",Text=Tr("EMPLOYEE_ACTIONS"),SizeFlagsHorizontal=SizeFlags.ExpandFill};actions.AddChild(more);
-        (string Key,Action Action,bool Enabled)[] choices=[
-            ("ASSIGN_DESK",()=>ShowDeskAssignment(state,employee),employee.Office is not null),
-            ("TRAINING",()=>ShowTraining(state,employee),employee.TechnologyLevels is not null && _activeCatalog?.Technologies.Count>0),
-            ("USE_TECHNOLOGY",()=>ShowTechnologyUse(state,employee),employee.TechnologyLevels?.Any(p=>p.Value>0)==true),
-            ("TAKE_BREAK",()=> {var result=OfficeAssignmentService.TryTakeBreak(state,employee,_session.Random);RefreshEmployeeDetails();
-                if (result!=OfficeAssignmentResult.Success && _desktopStatus is not null) _desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{result}");},employee.Office?.Action is >=1 and <=17),
-            ("STAFF",()=>ShowStaff(state),true)];
-        for (int i=0;i<choices.Length;i++) {more.GetPopup().AddItem(Tr(choices[i].Key),i);more.GetPopup().SetItemDisabled(i,!choices[i].Enabled);}
-        more.GetPopup().IdPressed+=id=> {if (_dialog is null && !CalendarService.HasPending(state) && choices[(int)id].Enabled) choices[(int)id].Action();};
         EmployeeDetailButton(actions,"CloseEmployeeDetails","CANCEL",CloseEmployeeDetails);
         var officeImage=_windows["OfficeWindow"].FindChild("OriginalOfficeBackground",true,false) as TextureRect;
         if (officeImage is not null)
@@ -136,10 +126,7 @@ public partial class Main
         var label=new Label {Text=Tr(caption),CustomMinimumSize=new Vector2(88,0)};row.AddChild(label);
         var bar=new ProgressBar {Name="EmployeeBar"+key,MaxValue=maximum,ShowPercentage=false,CustomMinimumSize=new Vector2(76,8),
             SizeFlagsHorizontal=SizeFlags.ExpandFill,SizeFlagsVertical=SizeFlags.ShrinkCenter};
-        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=new Color(0,0,.7f),BorderColor=Colors.Black,
-            BorderWidthTop=1,BorderWidthBottom=1,BorderWidthLeft=1,BorderWidthRight=1});
-        bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new Color(0,1,0),BorderColor=Colors.Black,
-            BorderWidthTop=1,BorderWidthBottom=1,BorderWidthLeft=1,BorderWidthRight=1});row.AddChild(bar);_employeeDetailsBars[key]=bar;
+        row.AddChild(bar);_employeeDetailsBars[key]=bar;
         var number=new Label {Name="EmployeeValue"+key,CustomMinimumSize=new Vector2(23,0),HorizontalAlignment=HorizontalAlignment.Right};row.AddChild(number);_employeeDetailsLabels[key]=number;
     }
     private void RefreshEmployeeDetails()

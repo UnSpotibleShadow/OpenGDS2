@@ -1,6 +1,15 @@
 # OpenGDS2 working instructions
 
-## Current work — fidelity follow-ups, 17 October 2026
+## Current work — review follow-ups, 18 October 2026
+
+The owner authorized implementation of #152, #153 and #154, application/taskbar
+identity and optional startup release notices. Work through focused feature PRs
+into develop; the earlier per-step pauses applied to the completed fidelity plan.
+Keep #151 open for owner acceptance. No main promotion, release or desktop export.
+Private evidence/checkpoints: /workspace/private/review-followups-20261018/.
+Current checkout: /workspace/scratch/comparison-20261017/OpenGDS2.
+
+## Previous work — fidelity follow-ups, 17 October 2026
 
 The owner authorized the ten ordered findings in
 [fidelity follow-ups](docs/fidelity-followups-20261017.md). Complete one step,
@@ -11,9 +20,8 @@ for the step-2 registration illustration and explicitly skipped step 8 (original
 GD2 save compatibility). The artwork follow-up is merged in PR148. Step 9
 (persisted active casino rounds) was authorized and reviewed: retain modern
 continuation, supported by native serialization evidence and fresh-session tests.
-Step 9 is merged in PR149. The owner authorized step 10 (casino exhaustion and
-numeric-boundary recovery). Complete its focused fixes/checks and merge into
-develop. Step 8 remains explicitly skipped; there is no release/main promotion
+Step 9 is merged in PR149. Step 10 (casino exhaustion and numeric-boundary recovery) is merged in PR150.
+The ten-step plan is complete with step 8 explicitly skipped. Step 8 remains explicitly skipped; there is no release/main promotion
 authorization in this fidelity plan.
 Follow git-flow: `feature/...` branches
 start from `develop` and PRs target `develop`; `main` receives reviewed release/hotfix integrations. The remote

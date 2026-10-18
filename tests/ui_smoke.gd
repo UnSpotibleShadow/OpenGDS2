@@ -389,7 +389,7 @@ func run() -> void:
     main.find_child("ToolbarSAVE_GAME",true,false).pressed.emit()
     main.find_child("ToolbarLOAD_GAME",true,false).pressed.emit()
     await process_frame
-    check(main.find_child("AdditionalActionsMenu",true,false)!=null,"Development navigation remains available")
+    check(main.find_child("AdditionalActionsMenu",true,false)==null,"Port-only actions submenu is removed")
     await press("START_GAME_DEVELOPMENT")
     check(main.find_child("PlanningHardware", true, false).get_root().get_child_count() == 3, "Planning hardware availability")
     check(main.find_child("PlanningAudience", true, false).get_root().get_child_count() == 7, "Planning audience catalog")

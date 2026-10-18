@@ -10,7 +10,7 @@ public partial class Main
 
     private void ShowAbout(GameState state)
     {
-        var canvas=ManagementCanvas("AboutWindow",Tr("ABOUT_GAME"),new(300,296));
+        var canvas=ManagementCanvas("AboutWindow",Tr("ABOUT_GAME"),new(300,358));
         var artwork=OriginalSceneArtwork.About();
         NativePlace(canvas,Picture("AboutArtwork",artwork,new(250,171)),new(25,8,250,171));
         if(artwork is null)
@@ -30,6 +30,8 @@ public partial class Main
         }
         website.Pressed+=VisitWebsite;
         NativeAction(canvas,"VisitKairosoftWebsite","ABOUT_VISIT_WEBSITE",new(8,268,284,25),VisitWebsite);
+        NativeText(canvas,"AboutPortCredit",Tr("ABOUT_PORT_CREDIT"),new(8,298,284,20),11,HorizontalAlignment.Center);
+        NativeAction(canvas,"VisitPortRepository","ABOUT_REPOSITORY",new(8,324,284,25),()=>OS.ShellOpen("https://github.com/UnSpotibleShadow/OpenGDS2"));
         if(_dialog is not null)_dialog.CloseRequested=()=>ShowOfficeReconstruction(state);
     }
 }

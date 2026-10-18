@@ -46,7 +46,7 @@ Each entry states what is available in OpenGDS2 and where the player can find it
   - Load game — `menu:mMenuLoad`: Available: Game > Load Game opens the numbered load picker. OpenGDS2 loads JSON; native GD2 compatibility is missing.
   - Separator — `menu:mMenuHaihun2`: Separator: decorative menu divider; no action or gameplay is expected.
   - Exit game — `menu:mMenuEnd`: Available: Game > Quit closes the application. Native unload/confirmation equivalence remains pending.
-- Actions — `menu:mKoudou`: Menu organization: Actions restores original Company development, recruitment/poaching, secretary settings/change, purchases/bank and Go out grouping. A separated More actions submenu retains port planning/advice shortcuts.
+- Actions — `menu:mKoudou`: Menu organization: Actions uses the original grouping without Extra Actions. Development-room and secretary clicks retain their original access routes.
   - Company development — `menu:mKoudouKaisha`: Available: Actions > Company development contains Public relations, Genre research and Expand production in original order; the three UP toolbar actions remain.
     - Public relations — `menu:mKoudouTimeido`: Available: Actions > Company development > Public relations, or the Public relations UP toolbar button, opens the activity confirmation.
     - Genre development — `menu:mKoudouLibary`: Available: Actions > Company development > Genre research, or the Genre research UP toolbar button, opens the activity confirmation.
@@ -67,29 +67,29 @@ Each entry states what is available in OpenGDS2 and where the player can find it
     - Go horse racing — `menu:mKoudouGoKeiba`: Available: Actions > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply.
     - Play poker — `menu:mKoudouGoPoka`: Available: Actions > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply.
     - Play blackjack — `menu:mKoudouGoBlack`: Available: Actions > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply.
-- Information — `menu:mInfo`: Menu organization: Information restores staff, own games, cumulative sales rankings, released hardware, own hardware and reach-time rankings in original order/separators. A separated Game details submenu retains port history/review shortcuts.
+- Information — `menu:mInfo`: Menu organization: Information contains Staff, Products, Top 100, Platforms, Our consoles and Time records in the comparison screenshot order. The extra Game details submenu is removed.
   - All staff information — `menu:mInfoGMsStaffAll`: Available: Information > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified.
-  - Own released games — `menu:mInfoGMsZishaGame`: Available: Information > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
-  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: Available: Information > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified.
-  - Currently released hardware — `menu:mInfoGMHatubaiHard`: Available: Information > Hardware market opens the released-hardware report.
+  - Own released games — `menu:mInfoGMsZishaGame`: Available: Information > Products, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
+  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: Available: Information > Top 100, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified.
+  - Currently released hardware — `menu:mInfoGMHatubaiHard`: Available: Information > Platforms opens the released-hardware report.
   - Separator — `menu:mInfoGMMinasu`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Own released hardware — `menu:mInfoGMHatubaiZHard`: Available: Information > Own hardware opens the own-hardware report when its state is available.
+  - Own released hardware — `menu:mInfoGMHatubaiZHard`: Available: Information > Our consoles opens the own-hardware report when its state is available.
   - Separator — `menu:mInfoGMMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Reach-time rankings — `menu:mInfoGMToutatu`: Available: Information > Global rankings opens the reach-time records view.
-- Windows — `menu:mWindow`: Menu organization: Windows contains Office, Company and Other windows. Other windows explicitly groups Employees/Products; exact native automatic MDI-list behavior remains unresolved.
+  - Reach-time rankings — `menu:mInfoGMToutatu`: Available: Information > Time records opens the reach-time records view.
+- Windows — `menu:mWindow`: Menu organization: Windows contains Office, Company and Other windows; the latter lists numbered current child-window titles with the front window checked.
   - Visual window — `menu:mWindowVisual`: Available: Windows > Office reopens the office window. Exact original show/hide behavior remains unverified.
   - Tool window — `menu:mWindowTool`: Available: Windows > Company reopens the company window, the comparison for original fGMInfo. Exact original page/tool-window behavior remains unverified.
-  - Other windows — `menu:mWindowOther`: Unresolved native MDI behavior: the original entry has no bound handler. Windows > Other windows explicitly reopens Employees/Products as retained port navigation; this does not establish native dynamic-list equivalence.
+  - Other windows — `menu:mWindowOther`: Available: Other windows builds a numbered child-window list and reopens the selected window. The original entry has no explicit bound handler (native MDI bookkeeping); exact Windows runtime focus behavior remains unverified.
 - Settings — `menu:mSetup`: Available: in-game Settings exposes the original Sound, Graphic enlargement and Number display submenus. Title-screen Settings retains community music and language preferences.
-  - Sound — `menu:mSetupSound`: Available: Settings > Sound controls native effects independently of community music, matching the recovered native dispatcher guard.
-    - Sound on — `menu:mSetupSoundOn`: Available: Settings > Sound > On enables original sound effects; community music keeps its separate setting.
-    - Sound off — `menu:mSetupSoundOff`: Available: Settings > Sound > Off disables original sound effects; community music keeps its separate setting.
+  - Sound — `menu:mSetupSound`: Available: Sound On/Off controls effects and the optional community music together. Separate channel switches and volume controls are an accepted port extension.
+    - Sound on — `menu:mSetupSoundOn`: Available: Sound > On enables both effects and community music. Independent channel controls remain available.
+    - Sound off — `menu:mSetupSoundOff`: Available: Sound > Off mutes both effects and community music. Independent channel controls remain available.
   - Graphic enlargement — `menu:mSetupGraphic`: Available: Settings > Graphic enlargement selects Normal/Enlarged office graphics. The saved choice uses native-size pixels or 2x pixels with a bounded scroll viewport.
     - Normal size — `menu:mSetupGraphicD`: Available: Settings > Graphic enlargement > Normal restores native office resolution and clears the visible scroll position.
     - Enlarged size — `menu:mSetupGraphicK`: Available: Settings > Graphic enlargement > Enlarged doubles office pixels and preserves office input-coordinate mapping. Native panning/focus acceptance remains pending.
   - Number display — `menu:mSetupNumber`: Available: Settings > Number display selects Japanese or comma-separated thousands grouping across the UI; the choice is stored in company saves.
-    - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京.
-    - Thousands grouping — `menu:mSetupNumber2`: Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language.
+    - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Number display > 100万0000 uses Japanese four-digit grouping, matching the original option caption. Modern Int64 values additionally support 京.
+    - Thousands grouping — `menu:mSetupNumber2`: Available: Number display > 1,000,000 uses comma-separated three-digit grouping, matching the original option caption.
 - Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. Version information/About is restored in the separate About dialog.
   - Help topics — `menu:mHelpHelp`: Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer.
   - Separator — `menu:mHelpMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
