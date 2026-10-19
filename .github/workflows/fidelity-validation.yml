@@ -6,6 +6,12 @@ on:
   push:
     branches: [develop]
   workflow_dispatch:
+    inputs:
+      publish_ea2:
+        description: Publish the already verified Windows ea.2 artifacts (one-time maintainer action)
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -60,3 +66,32 @@ jobs:
           XDG_DATA_HOME="$RUNNER_TEMP/management-layout" python3 tools/bounded_process.py --label management-layout --timeout 180 --checkpoint "$RUNNER_TEMP/management-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/management_layout_smoke.gd
           XDG_DATA_HOME="$RUNNER_TEMP/employee-learning" python3 tools/bounded_process.py --label employee-learning --timeout 180 --checkpoint "$RUNNER_TEMP/employee-learning.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/employee_learning_smoke.gd
           XDG_DATA_HOME="$RUNNER_TEMP/core-loop" python3 tools/bounded_process.py --label core-loop --timeout 180 --checkpoint "$RUNNER_TEMP/core-loop.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/core_loop_smoke.gd
+
+  publish-ea2:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_ea2
+    needs: source
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: OpenGDS2-desktop-fb4d8f2969b6288349f4f1db0b68f71438003e82
+          run-id: 39251557441
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/ea2-packages
+      - name: Publish exact verified Windows packages and verify anonymous downloads
+        run: node tools/publish_ea2.mjs "$RUNNER_TEMP/ea2-packages" --publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ea2-publication-record
+          path: ${{ runner.temp }}/ea2-publication
+          if-no-files-found: warn
