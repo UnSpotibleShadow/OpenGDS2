@@ -176,6 +176,7 @@ jobs:
             $game = Join-Path $runRoot "$($case.Root)/OpenGDS2.console.exe"
             Set-Location $runRoot
             $env:APPDATA = Join-Path $runRoot "profile"
+            $env:XDG_DATA_HOME = $env:APPDATA
             $env:OPENGDS2_EXPECT_DEBUG = $case.Debug
             & $game --headless --quit-after 5
             if ($LASTEXITCODE -ne 0) { throw "Packaged Windows startup failed: $LASTEXITCODE ($($case.Zip))" }
