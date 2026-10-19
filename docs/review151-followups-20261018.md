@@ -59,8 +59,8 @@ Supported executable SHA-256:
   compact green/orange headings, tightly spaced lists and Buy Technology between
   them. Separate square scroll tracks and up/down arrows remain visible even
   when the owned list is empty; the arrows drive the actual list scroll range.
-  The overview Training button remains removed; the separate Staff training route
-  still opens the existing course picker. PC clicks use the rendered rectangles,
+  The generic overview Training button remains removed; Learn beside Use in
+  the employee technology view opens the separate course picker. PC clicks use the rendered rectangles,
   including portions outside the broad research-area diamond.
   Existing training/application costs and timing are unchanged.
 * Planning's green summary contains hardware, audience and cost. Work and its
@@ -140,3 +140,29 @@ explicitly reject TrainingWindow on PC clicks, require the two screenshot headin
 and narrow bounds, and retain the panel/position across its purchase child and
 close/reopen. Merely opening the panel cannot spend funds/experience or begin a
 course. This supersedes PR156's direct-course shortcut interpretation.
+
+## Native employee Learn control restored
+
+The owner requires the original employee route, not a Staff-window workaround.
+The employee technology page now contains **Learn** (fGMInfo.Command6, 習得) beside
+**Use** (Command9, 使う). Command6's `0098232C` handler checks office actions 1–5,
+otherwise showing its workstation message. The course form is reconstructed from
+fGMWSTech's serialized 273×238 client layout with its original headers, description,
+experience and Learn/Cancel controls. Added seat-assignment and persistence buttons
+are removed. Ownership/level filtering, next-level labels and confirmation-time
+secretary experience/capacity refusals follow `009ABC7C` and `00993A2C`. The
+underlying training costs, replacement and tick rules are unchanged. PC clicks
+retain PR157's separate company research panel.
+
+The employee view refreshes active learning, learned levels and Use availability
+through the existing live refresh. English/Japanese authored fixtures verify the
+native route, gate, filtering, refusal/cancellation without charges, one start
+charge, completion and compact bounds. Native Windows visual acceptance is still
+an owner review, not established by these local checks.
+
+The full core-loop check now releases its long coroutine's local references and
+drains unused managed resource finalizers before headless Godot shutdown. The
+cleanup node is compiled only for Debug checks, not ExportDebug/ExportRelease;
+it has no game UI or gameplay effect. This avoids treating a zero-assertion run
+with a C# shutdown failure as a clean test result. The source workflow runs both
+the focused learning test and full core-loop regression.

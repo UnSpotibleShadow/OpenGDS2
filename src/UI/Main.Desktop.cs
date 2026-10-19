@@ -440,9 +440,9 @@ public partial class Main
         "ConversationWindow" or "SecretaryAdviceWindow" or "PlanningQuoteWindow" or
         "PlanningMeetingWindow" or "TypeMeetingWindow" or "GenreMeetingWindow" or "MangaRightsWindow";
 
-    private void PrepareDesktopDialog()
+    private void PrepareDesktopDialog(bool keepEmployeeDetails=false)
     {
-        CloseEmployeeDetails();
+        if(!keepEmployeeDetails)CloseEmployeeDetails();
         CloseDesktopDialog();
         _dialog = new DesktopWindow { Name = "ManagementWindow" }; _workspace!.AddChild(_dialog);
         _dialog.Initialize(Tr("APP_TITLE"), new Vector2(430, 36), new Vector2(670, 520));

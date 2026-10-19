@@ -14,6 +14,10 @@ public partial class Main
     private readonly Dictionary<string,Label> _employeeDetailsLabels=new();
     private readonly Dictionary<string,ProgressBar> _employeeDetailsBars=new();
     private Button? _employeeLevelUp;
+    private Tree? _employeeTechnologyTable;
+    private Button? _employeeUseTechnology;
+    private Label? _employeeLearningStatus;
+    private string? _employeeTechnologySignature;
     private Control? _employeeAbilities;
     private ScrollContainer? _employeeTechnologies;
     private void CloseEmployeeDetails()
@@ -23,7 +27,7 @@ public partial class Main
         if (_selectionArrow is not null && GodotObject.IsInstanceValid(_selectionArrow))
         {_selectionArrow.GetParent()?.RemoveChild(_selectionArrow);_selectionArrow.QueueFree();}
         _employeeDetails=null;_selectedEmployee=null;_selectionArrow=null;_employeeChart=null;_employeeLevelUp=null;
-        _employeeAbilities=null;_employeeTechnologies=null;_employeeDetailsLabels.Clear();_employeeDetailsBars.Clear();
+        _employeeAbilities=null;_employeeTechnologies=null;_employeeTechnologyTable=null;_employeeUseTechnology=null;_employeeLearningStatus=null;_employeeTechnologySignature=null;_employeeDetailsLabels.Clear();_employeeDetailsBars.Clear();
         if (_companyResearchWindow is null && _windows.TryGetValue("CompanyWindow",out var company) && GodotObject.IsInstanceValid(company)) company.Show();
     }
     private void ShowEmployeeDetails(GameState state,EmployeeState employee)
@@ -76,14 +80,12 @@ public partial class Main
         _employeeTechnologies=new ScrollContainer {Name="EmployeeTechnologiesPage",CustomMinimumSize=new Vector2(210,210),Visible=false};selected.AddChild(_employeeTechnologies);
         var technologyContents=new VBoxContainer {SizeFlagsHorizontal=SizeFlags.ExpandFill};_employeeTechnologies.AddChild(technologyContents);
         technologyContents.AddChild(new Label {Name="EmployeeTechnologyCapacity",Text=$"{Tr("MAXIMUM_TECHNOLOGIES")}: {employee.MaximumTechnologies?.ToString()??"?"}"});
-        var technologies=CreateTable("EmployeeTechnologyTable",["TECHNOLOGY_NAME","EMPLOYEE_LEVEL"],[154,35]);technologies.CustomMinimumSize=new(210,184);technologies.ScrollHorizontalEnabled=false;technologies.AddThemeFontSizeOverride("title_button_font_size",10);technologyContents.AddChild(technologies);
-        if(employee.TechnologyLevels is null){var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,Tr("NOT_YET_DECODED"));}
-        else
-        {
-            var learned=employee.TechnologyLevels.Where(p=>p.Value>0).OrderBy(p=>p.Key).ToList();
-            if(learned.Count==0){var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,Tr("EMPLOYEE_NO_TECHNOLOGIES"));}
-            foreach(var skill in learned){var original=_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==skill.Key);var row=technologies.CreateItem(technologies.GetRoot());row.SetText(0,original is null?"?":TechnologyName(original));row.SetText(1,skill.Value.ToString());row.SetTextAlignment(1,HorizontalAlignment.Right);}
-        }
+        var technologyActions=new HBoxContainer {Name="EmployeeTechnologyActions"};technologyActions.AddThemeConstantOverride("separation",3);technologyContents.AddChild(technologyActions);
+        var learn=EmployeeDetailButton(technologyActions,"EmployeeLearnTechnology","LEARN_TECHNOLOGY",()=>BeginEmployeeLearning(state,employee));
+        learn.Disabled=employee.TechnologyLevels is null||_activeCatalog?.Technologies.Count is not >0;
+        _employeeUseTechnology=EmployeeDetailButton(technologyActions,"EmployeeUseTechnology","USE_TECHNOLOGY_SHORT",()=>{if(_dialog is null&&DesktopActionEnabled("USE_TECHNOLOGY"))ShowTechnologyUse(state,employee);});
+        _employeeLearningStatus=new Label {Name="EmployeeLearningStatus",ClipText=true,Visible=false};_employeeLearningStatus.AddThemeFontSizeOverride("font_size",10);technologyContents.AddChild(_employeeLearningStatus);
+        _employeeTechnologyTable=CreateTable("EmployeeTechnologyTable",["TECHNOLOGY_NAME","EMPLOYEE_LEVEL"],[154,35]);_employeeTechnologyTable.CustomMinimumSize=new(210,124);_employeeTechnologyTable.ScrollHorizontalEnabled=false;_employeeTechnologyTable.AddThemeFontSizeOverride("title_button_font_size",10);technologyContents.AddChild(_employeeTechnologyTable);
         _employeeAbilities.Visible=!_employeeTechnologyPage;_employeeTechnologies.Visible=_employeeTechnologyPage;
         var footer=new HBoxContainer();footer.AddThemeConstantOverride("separation",2);_employeeDetails.Body.AddChild(footer);
         AddEmployeeDetailLabel(footer,"Experience","",false);
@@ -95,8 +97,6 @@ public partial class Main
         });
         var dismiss=EmployeeDetailButton(footer,$"DismissEmployee{employee.SourceIndex}","EMPLOYEE_DISMISS_SHORT",()=>ShowDismissEmployee(state,employee));
         dismiss.TooltipText=Tr("DISMISS_EMPLOYEE");dismiss.Disabled=employee.SourceIndex is null;
-        var use=EmployeeDetailButton(technologyContents,"EmployeeUseTechnology","USE_TECHNOLOGY",()=>{if(_dialog is null&&DesktopActionEnabled("USE_TECHNOLOGY"))ShowTechnologyUse(state,employee);});
-        use.Disabled=employee.TechnologyLevels?.Any(p=>p.Value>0)!=true;
         var actions=new HBoxContainer();_employeeDetails.Body.AddChild(actions);
         EmployeeDetailButton(actions,"CloseEmployeeDetails","CANCEL",CloseEmployeeDetails);
         var officeImage=_windows["OfficeWindow"].FindChild("OriginalOfficeBackground",true,false) as TextureRect;
@@ -141,6 +141,29 @@ public partial class Main
         foreach (var (key,value) in new (string,double?)[] {("Speed",e.DevelopmentSpeed),("Inspiration",e.Inspiration),("Stress",e.Stress)})
         {_employeeDetailsLabels[key].Text=value is double v ? Math.Floor(v).ToString() : "?";_employeeDetailsBars[key].Visible=value is not null;_employeeDetailsBars[key].Value=value ?? 0;}
         if (_employeeLevelUp is not null) _employeeLevelUp.Disabled=e.SourceIndex is null || e.Level is not (>=1 and <10) || e.Experience is not double experience || experience<EmployeeLevelUpService.RequiredExperience(e.Level.Value);
+        if(_employeeUseTechnology is not null)_employeeUseTechnology.Disabled=e.TechnologyLevels?.Any(p=>p.Value>0)!=true;
+        if(_employeeLearningStatus is not null)
+        {
+            var course=e.Office?.Training;_employeeLearningStatus.Visible=course is not null;
+            if(course is not null)
+            {
+                var definition=_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==course.TechnologySourceIndex);
+                _employeeLearningStatus.Text=Tr("LEARNING_IN_PROGRESS")+": "+(definition is null?"?":TechnologyName(definition));
+                _employeeLearningStatus.TooltipText=_employeeLearningStatus.Text;
+            }
+        }
+        string signature=e.TechnologyLevels is null?"unknown":string.Join(",",e.TechnologyLevels.OrderBy(p=>p.Key).Select(p=>$"{p.Key}:{p.Value}"));
+        if(_employeeTechnologyTable is { } table && signature!=_employeeTechnologySignature)
+        {
+            _employeeTechnologySignature=signature;table.Clear();var root=table.CreateItem();
+            var learned=e.TechnologyLevels?.Where(p=>p.Value>0).OrderBy(p=>p.Key).ToArray()??[];
+            if(learned.Length==0){var row=table.CreateItem(root);row.SetText(0,Tr(e.TechnologyLevels is null?"NOT_YET_DECODED":"EMPLOYEE_NO_TECHNOLOGIES"));}
+            foreach(var skill in learned)
+            {
+                var definition=_activeCatalog?.Technologies.SingleOrDefault(t=>t.SourceIndex==skill.Key);var row=table.CreateItem(root);
+                row.SetText(0,definition is null?"?":TechnologyName(definition));row.SetText(1,skill.Value.ToString());row.SetTextAlignment(1,HorizontalAlignment.Right);
+            }
+        }
         _employeeChart?.QueueRedraw();
     }
     private void RefreshEmployeeSelectionArrow()

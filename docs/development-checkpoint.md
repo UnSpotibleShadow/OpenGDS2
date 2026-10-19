@@ -8,12 +8,12 @@ compatibility remains explicitly skipped. Source validation Actions are enabled.
 Integration stays on develop; #151 remains open for owner acceptance. There is
 no authorization here for a new main promotion, release/tag or desktop export.
 
-The owner accepted #152 and #153 after review; both issues are closed. #151's
-visual checklist now accepts all other items, including the meeting command
-column. Only #154's PC panel remains: its latest screenshot shows the narrow
-Owned Technologies / Buy Technology / Available Genres company panel. Occupied
-PCs must open that panel, not the employee course picker. The direct-course
-shortcut in PR156 is superseded; the separate Staff course picker remains.
+The owner accepted #152/#153 and the non-training review items. The PC research
+panel was corrected in PR157. Remaining learning work restores the original
+employee technology view's Learn / Use controls and the workstation-gated,
+filtered fGMWSTech dialog. The Staff route is not a substitute for that native
+entry. The generic overview Training footer stays removed; Learn is part of the
+technology view. #151/#154 remain open for owner review of the learning flow.
 
 Consumer Investigation is accepted by the owner for the release review because
 it cannot be reliably forced during play. This is a manual-test waiver, not a

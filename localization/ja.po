@@ -681,7 +681,7 @@ msgid "TRAINING_RESULT_StateUnknown"
 msgstr "訓練データが不明です。"
 
 msgid "TRAINING_RESULT_NotAtStudySeat"
-msgstr "まず学習席を選んでください。"
+msgstr "テクノロジーを習得するには、ワークステーションに座らせてください。"
 
 msgid "TRAINING_RESULT_Unavailable"
 msgstr "このレベルの訓練は利用できません。"
@@ -3898,7 +3898,7 @@ msgid "SECRETARY"
 msgstr "秘書"
 
 msgid "TRAINING_DESCRIPTION"
-msgstr "{0}の次のレベルを習得します。訓練内容と学習席を選択してください。"
+msgstr "{0} Lv.{1}を習得します。開始時に経験値を消費します。"
 
 msgid "TECHNOLOGY_USE_DESCRIPTION"
 msgstr "習得したレベルの{0}を使用します。"
@@ -5446,3 +5446,42 @@ msgstr "CATALOG_JOCKEY_8"
 
 msgid "CATALOG_JOCKEY_9"
 msgstr "CATALOG_JOCKEY_9"
+
+msgid "LEARN_TECHNOLOGY"
+msgstr "習得"
+
+msgid "USE_TECHNOLOGY_SHORT"
+msgstr "使う"
+
+msgid "LEARNING_DIALOG"
+msgstr "テクノロジー習得"
+
+msgid "CONFIRM_LEARNING"
+msgstr "習得させる"
+
+msgid "LEARNING_TIME"
+msgstr "習得時間"
+
+msgid "REQUIRED_EXPERIENCE"
+msgstr "必要経験値"
+
+msgid "LEARNING_IN_PROGRESS"
+msgstr "習得中"
+
+msgid "NO_PURCHASED_TECHNOLOGIES"
+msgstr "テクノロジーをひとつも購入していません。"
+
+msgid "NO_LEARNABLE_TECHNOLOGIES"
+msgstr "習得できるテクノロジーはありません。"
+
+msgid "LEARNING_INSUFFICIENT_EXPERIENCE"
+msgstr "経験値がたりません！"
+
+msgid "LEARNING_CANNOT_LEARN"
+msgstr "{0}さんはﾃｸﾉﾛｼﾞｰの習得ができません。"
+
+msgid "LEARNING_CAPACITY_REACHED"
+msgstr "{0}さんは最大{1}つのテクノロジーしか習得できません。"
+
+msgid "EMPLOYEE_LEARNING_EXPERIENCE"
+msgstr "{0}さんの現在の経験値"

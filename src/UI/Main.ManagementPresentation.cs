@@ -116,7 +116,7 @@ public partial class Main
         NativeText(canvas,"StaffSelectedStress",$"{Tr("STRESS")}: {person.Stress?.ToString("0.0")??"?"}",new(4,276,160,19));
         NativePlace(canvas,new EmployeeAbilityChart {Name="StaffAbilityChart",Employee=person,Compact=true,MouseFilter=MouseFilterEnum.Ignore},new(168,144,164,124));
         if(CalendarService.HasPending(state))return;
-        NativeAction(canvas,"StaffTraining","TRAINING",new(338,145,100,25),()=>ShowTraining(state,person),person.TechnologyLevels is not null&&_activeCatalog?.Technologies.Count>0);
+        NativeAction(canvas,"StaffTraining","TRAINING",new(338,145,100,25),()=>{ShowOfficeReconstruction(state);BeginEmployeeLearning(state,person);},person.TechnologyLevels is not null&&_activeCatalog?.Technologies.Count>0);
         NativeAction(canvas,"StaffTechnologyUse","USE_TECHNOLOGY",new(338,177,100,25),()=>ShowTechnologyUse(state,person),person.TechnologyLevels?.Any(x=>x.Value>0)==true);
         NativeAction(canvas,"StaffDesk","ASSIGN_DESK",new(338,209,100,25),()=>ShowDeskAssignment(state,person),person.Office is not null);
         NativeAction(canvas,"StaffBreak","TAKE_BREAK",new(338,241,100,25),()=>{var result=OfficeAssignmentService.TryTakeBreak(state,person,_session.Random);if(result==OfficeAssignmentResult.Success)ShowOfficeReconstruction(state);else ShowStaffSelection(state,person);},person.Office?.Action is >=1 and <=17);

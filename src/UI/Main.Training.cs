@@ -78,45 +78,63 @@ public partial class Main
         };
         _refreshCompanyResearch();
     }
+    // fGMInfo.Command6 (0098232C) opens fGMWSTech only for study actions 1–5.
+    private void BeginEmployeeLearning(GameState state,EmployeeState employee)
+    {
+        if(_dialog is not null||!DesktopActionEnabled("TRAINING")||!state.Employees.Contains(employee))return;
+        _employeeTechnologyPage=true;
+        if(_selectedEmployee!=employee)ShowEmployeeDetails(state,employee);
+        if(employee.Office?.Action is >=1 and <=5)ShowTraining(state,employee);
+        else ShowConversation(Tr("LEARNING_DIALOG"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("TRAINING_RESULT_NotAtStudySeat"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>ShowOfficeReconstruction(state),keepEmployeeDetails:true);
+    }
     private void ShowTraining(GameState state,EmployeeState employee,int? selectedSource=null)
     {
-        ClearContent();var canvas=NativeWindow("TrainingWindow",Tr("TRAINING"),new(370,352));
+        if(_selectedEmployee!=employee){_employeeTechnologyPage=true;ShowEmployeeDetails(state,employee);}
+        ClearContent(keepEmployeeDetails:true);var canvas=NativeWindow("TrainingWindow",Tr("LEARNING_DIALOG"),new(273,238));
         var catalog=_importer.LoadCatalog();
-        var courses=catalog?.Technologies.Where(t=>employee.TechnologyLevels?.ContainsKey(t.SourceIndex)==true).OrderBy(t=>t.SourceIndex).ToArray() ?? [];
-        NativeText(canvas,"TrainingEmployeeName",EmployeeName(employee),new(4,2,362,20));
-        var table=ManagementTable(canvas,"TrainingCourses",["TECHNOLOGY_NAME","TRAINING_WORK","EXPERIENCE"],[174,81,91],new(4,26,362,137));
-        NativeFill(canvas,"TrainingDescriptionBox",new(4,170,362,54),Colors.White,true);
-        var description=new RichTextLabel {Name="TrainingDescription",ScrollActive=true};description.AddThemeFontSizeOverride("normal_font_size",10);NativePlace(canvas,description,new(7,173,356,48));
-        NativeText(canvas,"TrainingExperience",$"{Tr("EXPERIENCE")}: {employee.Experience:0.0} / {Tr("MAXIMUM_TECHNOLOGIES")}: {employee.MaximumTechnologies}",new(4,225,362,20),10);
-        var seats=NativePlace(canvas,new HBoxContainer {Name="StudySeats"},new(4,247,166,23));seats.AddThemeConstantOverride("separation",2);
-        for(int action=1;action<=5;action++)
-        {
-            int studyAction=action;var button=new Button {Name=$"AssignStudySeat{action}",Text=action.ToString(),CustomMinimumSize=new(29,23),TooltipText=$"{Tr("STUDY_SEAT")} {action}",Disabled=state.Employees.Any(x=>x.Office?.Action==studyAction)};
-            button.AddThemeFontSizeOverride("font_size",10);seats.AddChild(button);
-            button.Pressed+=()=>{var result=OfficeAssignmentService.TryAssignStudySeat(state,employee,studyAction);ShowTraining(state,employee,table.GetSelected()?.GetMetadata(0).AsInt32());if(result!=OfficeAssignmentResult.Success)_status.Text=Tr("ASSIGNMENT_RESULT_"+result);};
-        }
+        var courses=catalog?.Technologies.Where(t=>employee.TechnologyLevels?.TryGetValue(t.SourceIndex,out int level)==true&&level<3&&state.TechnologyOwnershipLevels?.GetValueOrDefault(t.SourceIndex)>level).OrderBy(t=>t.SourceIndex).ToArray()??[];
+        NativeText(canvas,"TrainingNameHeading",Tr("TECHNOLOGY_NAME"),new(16,8,102,14),9);
+        NativeText(canvas,"TrainingTimeHeading",Tr("LEARNING_TIME"),new(120,8,54,14),9);
+        NativeText(canvas,"TrainingExperienceHeading",Tr("REQUIRED_EXPERIENCE"),new(176,8,89,14),9);
+        var table=ManagementTable(canvas,"TrainingCourses",["TECHNOLOGY_NAME","LEARNING_TIME","REQUIRED_EXPERIENCE"],[124,56,73],new(8,24,257,113));table.ColumnTitlesVisible=false;
+        foreach(string key in new[]{"v_separation","inner_item_margin_top","inner_item_margin_bottom","draw_guides"})table.AddThemeConstantOverride(key,0);
+        NativeFill(canvas,"TrainingDescriptionBox",new(8,144,239,45),Colors.White,true);
+        var description=new RichTextLabel {Name="TrainingDescription",ScrollActive=true};description.AddThemeFontSizeOverride("normal_font_size",10);NativePlace(canvas,description,new(11,147,233,39));
+        if(courses.Length==0)description.Text=Tr(state.TechnologyOwnershipLevels?.Values.Any(v=>v>0)==true?"NO_LEARNABLE_TECHNOLOGIES":"NO_PURCHASED_TECHNOLOGIES");
+        NativeText(canvas,"TrainingExperienceCaption",string.Format(DisplayNumbers.Provider,Tr("EMPLOYEE_LEARNING_EXPERIENCE"),EmployeeName(employee)),new(8,192,193,14),10);
+        NativeText(canvas,"TrainingExperience",employee.Experience?.ToDisplayNumber()??"?",new(200,192,49,14),10,HorizontalAlignment.Right);
         TechnologyDefinition? selected=null;
-        var train=NativeAction(canvas,"TrainSelectedTechnology","TRAINING",new(178,247,98,25),()=>{},false);
-        NativeAction(canvas,"CancelTraining","BACK_TO_OFFICE",new(282,247,84,25),()=>ShowOfficeReconstruction(state));
-        _status=NativeText(canvas,"TrainingStatus",Tr("TRAINING_NOTE"),new(4,275,362,42),10);_status.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        var train=NativeAction(canvas,"TrainSelectedTechnology","CONFIRM_LEARNING",new(80,208,81,25),()=>
+        {
+            if(selected is null)return;
+            var result=TrainingService.TryStart(state,employee,selected);
+            if(result==TrainingResult.Success){ShowOfficeReconstruction(state);RefreshEmployeeDetails();return;}
+            int source=selected.SourceIndex;
+            string message=result switch
+            {
+                TrainingResult.InsufficientExperience=>Tr("LEARNING_INSUFFICIENT_EXPERIENCE"),
+                TrainingResult.CapacityReached when employee.MaximumTechnologies==0=>string.Format(DisplayNumbers.Provider,Tr("LEARNING_CANNOT_LEARN"),EmployeeName(employee)),
+                TrainingResult.CapacityReached=>string.Format(DisplayNumbers.Provider,Tr("LEARNING_CAPACITY_REACHED"),EmployeeName(employee),employee.MaximumTechnologies),
+                _=>Tr("TRAINING_RESULT_"+result)
+            };
+            ShowConversation(Tr("LEARNING_DIALOG"),[new(SecretaryCaption(state.SecretarySourceIndex),message,SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>ShowTraining(state,employee,source),keepEmployeeDetails:true);
+        },false);
+        NativeAction(canvas,"CancelTraining","CANCEL",new(168,208,81,25),()=>ShowOfficeReconstruction(state));
         void Select()
         {
-            if(table.GetSelected() is not { } row)return;selected=courses.Single(t=>t.SourceIndex==row.GetMetadata(0).AsInt32());int level=employee.TechnologyLevels![selected.SourceIndex];
-            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(DisplayNumbers.Provider,Tr("TRAINING_DESCRIPTION"),TechnologyName(selected)):selected.Description;
-            if(employee.Office?.Training?.TechnologySourceIndex==selected.SourceIndex)description.Text+=$"\n{Tr("TRAINING_PROGRESS")}: {employee.Office.Training.Progress} / {selected.RequiredTrainingWork.ElementAtOrDefault(level)}\n{Tr("TRAINING_RESUME_NOTE")}";
-            train.Name="TrainTechnology"+selected.SourceIndex;train.Disabled=TrainingEligibility(state,employee,selected)!=TrainingResult.Success;
+            if(table.GetSelected() is not { } row)return;selected=courses.Single(t=>t.SourceIndex==row.GetMetadata(0).AsInt32());
+            description.Text=TranslationServer.GetLocale().StartsWith("en")?string.Format(DisplayNumbers.Provider,Tr("TRAINING_DESCRIPTION"),TechnologyName(selected),employee.TechnologyLevels![selected.SourceIndex]+1):selected.Description;
+            train.Name="TrainTechnology"+selected.SourceIndex;train.Disabled=TrainingEligibility(state,employee,selected) is TrainingResult.StateUnknown or TrainingResult.NotEmployed or TrainingResult.NotAtStudySeat or TrainingResult.Unavailable;
             train.TooltipText=Tr("TRAINING_RESULT_"+TrainingEligibility(state,employee,selected));
         }
         table.ItemSelected+=Select;
         foreach(var course in courses)
         {
-            int level=employee.TechnologyLevels![course.SourceIndex];var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,course.SourceIndex);row.SetText(0,$"{TechnologyName(course)} · {Tr("LEVEL")} {level}");
-            row.SetText(1,level is >=0 and <3 && course.RequiredTrainingWork.Count==3?course.RequiredTrainingWork[level].ToString():"—");
-            row.SetText(2,level is >=0 and <3 && course.ExperienceCosts.Count==3?course.ExperienceCosts[level].ToString():"—");row.SetTextAlignment(1,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);if(course.SourceIndex==selectedSource)row.Select(0);
+            int level=employee.TechnologyLevels![course.SourceIndex];var row=table.CreateItem(table.GetRoot());row.SetMetadata(0,course.SourceIndex);row.SetText(0,$"{TechnologyName(course)} Lv.{level+1}");row.SetTooltipText(0,row.GetText(0));
+            row.SetText(1,course.RequiredTrainingWork.ElementAtOrDefault(level).ToString());row.SetText(2,course.ExperienceCosts.ElementAtOrDefault(level).ToString());
+            row.SetTextAlignment(1,HorizontalAlignment.Right);row.SetTextAlignment(2,HorizontalAlignment.Right);if(course.SourceIndex==selectedSource)row.Select(0);
         }
         if(table.GetSelected() is null)table.GetRoot().GetFirstChild()?.Select(0);Select();
-        ManagementSaveActions(canvas,state,323,362);
-        train.Pressed+=()=>{if(train.Disabled||selected is null)return;var result=TrainingService.TryStart(state,employee,selected);if(result==TrainingResult.Success)ShowOfficeReconstruction(state);else _status.Text=Tr("TRAINING_RESULT_"+result);};
     }
     private void ShowTechnologyUse(GameState state,EmployeeState employee)
     {
