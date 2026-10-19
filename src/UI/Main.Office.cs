@@ -7,8 +7,8 @@ public partial class Main
 {
     private string OfficeHoverText(GameState state,Vector2 pixel,EmployeeState? employee,int? room,IReadOnlyList<int> tenants)
     {
-        if(OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y) is { } student)
-            return EmployeeName(student)+"\n"+Tr("TRAINING");
+        if(OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y) is not null)
+            return Tr("OWNED_TECHNOLOGIES")+"\n"+Tr("AVAILABLE_GENRES");
         if(employee is not null)return EmployeeName(employee)+"\n"+Tr("OFFICE_EMPLOYEE_HELP");
         if(room is int r)
         {

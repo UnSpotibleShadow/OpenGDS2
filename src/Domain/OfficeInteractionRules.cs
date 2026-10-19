@@ -35,7 +35,7 @@ public static class OfficeInteractionRules
         }
         return result;
     }
-    /// <summary>Direct training shortcut for the occupant of a rendered study PC.</summary>
+    /// <summary>Find the occupant of a rendered study PC for office input routing.</summary>
     public static EmployeeState? StudyComputerEmployeeAt(GameState state,double x,double y)
     {
         ArgumentNullException.ThrowIfNull(state);
