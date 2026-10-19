@@ -441,7 +441,7 @@ public partial class Main : Control
 
     private void AddSpacer(float height) => _content.AddChild(new Control { CustomMinimumSize = new Vector2(0, height) });
 
-    private void ClearContent(bool keepConversationScene=false,bool keepMeetingMusic=false)
+    private void ClearContent(bool keepConversationScene=false,bool keepMeetingMusic=false,bool keepEmployeeDetails=false)
     {
         if (!keepMeetingMusic) _music?.SetMeetingPhase(-1);
         if (!keepConversationScene) CloseConversationScene();
@@ -455,7 +455,7 @@ public partial class Main : Control
             _officeTexture = null;
         }
         _officeElapsed = 0;
-        if (_desktop is not null) PrepareDesktopDialog();
+        if (_desktop is not null) PrepareDesktopDialog(keepEmployeeDetails);
         else _content = _screenContent;
         _content.CustomMinimumSize = new Vector2(620, 0);
         _content.AddThemeConstantOverride("separation",14);

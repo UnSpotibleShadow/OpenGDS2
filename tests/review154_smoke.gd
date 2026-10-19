@@ -49,9 +49,9 @@ func run() -> void:
         check(main.find_child("CompanyResearchWindow",true,false).position==Vector2(650,90),"PC panel reopens at its saved position")
         await close_window("CompanyResearchWindow");await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Experience==100 and saved().Employees[0].Office.Training==null and saved().Money==v.State.Money,"Opening or cancelling the PC panel never starts training or charges funds/experience")
-        await menu_choice("MENU_INFORMATION",0);await press("TRAINING")
+        await select_employee(0);await press_node("EmployeeTechnologies");await press_node("EmployeeLearnTechnology")
         await press_node("TrainTechnology0");await press_node("ToolbarSAVE_GAME")
-        check(saved().Employees[0].Office.Training.TechnologySourceIndex==0 and saved().Employees[0].Experience==90,"Separate course picker still starts training and charges once")
+        check(saved().Employees[0].Office.Training.TechnologySourceIndex==0 and saved().Employees[0].Experience==90,"Employee Learn control starts training and charges once")
         check(main.find_child("CompanyFacilities",true,false)==null and main.find_child("CompanyInformation",true,false)==null,"Company overview omits extra buttons")
         await dispose()
         v.State.TechnologyOwnershipLevels={}

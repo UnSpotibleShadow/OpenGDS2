@@ -1033,8 +1033,10 @@ func run() -> void:
     Engine.time_scale = 1
     await press("STAFF")
     await press("TRAINING")
-    check(main.find_child("TrainTechnology0",true,false).disabled,"Training needs a study seat")
-    await press_node("AssignStudySeat1")
+    check(main.find_child("ConversationWindow",true,false)!=null and main.find_child("TrainingWindow",true,false)==null,"Original Learn action requires a study workstation")
+    await finish_conversation()
+    await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68))
+    await press_node("EmployeeLearnTechnology")
     await press_node("TrainTechnology0")
     await press("SAVE_GAME")
     var training_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1052,7 +1054,7 @@ func run() -> void:
     await press("LOAD_GAME")
     await press("STAFF")
     await press("TRAINING")
-    check(main.find_child("AssignStudySeat1",true,false).disabled,"Study seat survives reload")
+    check(main.find_child("TrainingWindow",true,false)!=null and main.find_child("StudySeats",true,false)==null,"Reloaded study seat opens the original learning dialog directly")
     await press("BACK_TO_OFFICE")
     await press("STAFF")
     # Authored ready-project fixture isolates application from checkpoint modals.
@@ -1916,6 +1918,22 @@ func run() -> void:
     main = null
     await process_frame
     await process_frame
+    # Let this long coroutine release its local window/resource references before
+    # Godot tears down the C# bindings at process exit.
+    call_deferred("finish_core_loop")
+
+func finish_core_loop() -> void:
+    await process_frame
+    await process_frame
+    if DisplayServer.get_name()=="headless":
+        var cleanup=load("res://tests/ManagedTestCleanup.cs").new()
+        root.add_child(cleanup)
+        # Themes release styleboxes, which in turn release image textures. Allow
+        # native deferred disposal between collections of those resource layers.
+        for pass_index in range(4):
+            cleanup.Drain()
+            await process_frame
+        cleanup.free()
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)
 

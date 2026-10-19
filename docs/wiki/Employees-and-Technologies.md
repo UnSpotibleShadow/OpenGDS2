@@ -17,7 +17,9 @@ a separate passive game-quality bonus has not been established.
 These are different steps:
 
 1. **Company purchase:** buy a technology in Technologies to make training available.
-2. **Employee training:** assign an eligible employee to a study seat and train.
+2. **Employee training:** select the employee, right-click a study workstation,
+   then open the employee’s technology view and click **Learn**, beside **Use**.
+   Choose a course and confirm **Learn**.
    Training requires experience, available technology levels and learning capacity.
 3. **Application:** return the employee to a development desk in the intended
    project room and select the learned technology when eligible.

@@ -209,7 +209,10 @@ public partial class Main
             }
             return;
         }
-        var student=OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y);
+        // The original employee hit overrides the research-area hit when the
+        // seated character overlaps their computer.
+        var employee=OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
+        var student=employee is null?OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y):null;
         if(student is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();
@@ -217,7 +220,6 @@ public partial class Main
             else ShowCompanyResearch(state);
             return;
         }
-        var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         if(employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} &&
             OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y))
         {image.AcceptEvent();ShowCompanyResearch(state);return;}
@@ -440,9 +442,9 @@ public partial class Main
         "ConversationWindow" or "SecretaryAdviceWindow" or "PlanningQuoteWindow" or
         "PlanningMeetingWindow" or "TypeMeetingWindow" or "GenreMeetingWindow" or "MangaRightsWindow";
 
-    private void PrepareDesktopDialog()
+    private void PrepareDesktopDialog(bool keepEmployeeDetails=false)
     {
-        CloseEmployeeDetails();
+        if(!keepEmployeeDetails)CloseEmployeeDetails();
         CloseDesktopDialog();
         _dialog = new DesktopWindow { Name = "ManagementWindow" }; _workspace!.AddChild(_dialog);
         _dialog.Initialize(Tr("APP_TITLE"), new Vector2(430, 36), new Vector2(670, 520));

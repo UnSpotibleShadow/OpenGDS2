@@ -59,7 +59,7 @@ public partial class Main
             ExpandMode=TextureRect.ExpandModeEnum.IgnoreSize,StretchMode=TextureRect.StretchModeEnum.KeepCentered});
         _dialog.MoveToFront();
     }
-    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null,MeetingMusicPhase? musicPhase=null)
+    private void ShowConversation(string heading,IReadOnlyList<ConversationPage> pages,Action completed,Action? cancelled=null,Texture2D? scene=null,MeetingMusicPhase? musicPhase=null,bool keepEmployeeDetails=false)
     {
         _music.SetMeetingPhase(musicPhase is MeetingMusicPhase phase ? (int)phase : -1);
         CloseConversationScene();
@@ -67,7 +67,7 @@ public partial class Main
         int pageIndex=0;
         void ShowPage()
         {
-            ClearContent(keepConversationScene:true,keepMeetingMusic:true);
+            ClearContent(keepConversationScene:true,keepMeetingMusic:true,keepEmployeeDetails:keepEmployeeDetails);
             CompactManagementWindow("ConversationWindow",new Vector2(330,142),314);
             _content.AddThemeConstantOverride("separation",0);
             _dialog!.SetTitle(heading);

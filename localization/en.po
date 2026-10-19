@@ -681,7 +681,7 @@ msgid "TRAINING_RESULT_StateUnknown"
 msgstr "Training data is unavailable."
 
 msgid "TRAINING_RESULT_NotAtStudySeat"
-msgstr "Choose a study seat first."
+msgstr "To learn a technology, seat the employee at a workstation."
 
 msgid "TRAINING_RESULT_Unavailable"
 msgstr "This training level is unavailable."
@@ -4075,7 +4075,7 @@ msgid "SECRETARY"
 msgstr "Secretary"
 
 msgid "TRAINING_DESCRIPTION"
-msgstr "Practise {0} to learn its next level. Choose a course and a study seat."
+msgstr "Learn {0} Lv.{1}. Experience is spent when learning starts."
 
 msgid "TECHNOLOGY_USE_DESCRIPTION"
 msgstr "Apply {0} at the employee’s learned level."
@@ -5623,3 +5623,42 @@ msgstr "View release"
 
 msgid "UPDATE_CHECKS_ENABLED"
 msgstr "Check GitHub for updates"
+
+msgid "LEARN_TECHNOLOGY"
+msgstr "Learn"
+
+msgid "USE_TECHNOLOGY_SHORT"
+msgstr "Use"
+
+msgid "LEARNING_DIALOG"
+msgstr "Learn technology"
+
+msgid "CONFIRM_LEARNING"
+msgstr "Learn"
+
+msgid "LEARNING_TIME"
+msgstr "Learn time"
+
+msgid "REQUIRED_EXPERIENCE"
+msgstr "Required XP"
+
+msgid "LEARNING_IN_PROGRESS"
+msgstr "Learning"
+
+msgid "NO_PURCHASED_TECHNOLOGIES"
+msgstr "No technologies have been purchased."
+
+msgid "NO_LEARNABLE_TECHNOLOGIES"
+msgstr "There are no technologies this employee can learn or advance."
+
+msgid "LEARNING_INSUFFICIENT_EXPERIENCE"
+msgstr "Not enough experience!"
+
+msgid "LEARNING_CANNOT_LEARN"
+msgstr "{0} cannot learn technologies."
+
+msgid "LEARNING_CAPACITY_REACHED"
+msgstr "{0} can only learn {1} technologies."
+
+msgid "EMPLOYEE_LEARNING_EXPERIENCE"
+msgstr "{0}'s experience"
