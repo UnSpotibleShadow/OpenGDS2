@@ -88,10 +88,11 @@ completion-message timing and native Windows behavioral acceptance remain
 separate limitations. Other workstation task states and external jobs are not
 established by the study-PC change.
 
-The 19 October owner review adds direct course selection by clicking the occupied
-study PC. The target is the PC's assigned employee, even while someone else is
-selected. The employee-overview Training button is removed; empty research-area
-space still opens the company research page. Opening/cancelling course selection
-never charges experience. Confirming a course retains the existing eligibility,
-cost and continuation rules. This PC shortcut is the requested port interaction;
-it is not claimed as newly established native executable behavior.
+The 19 October screenshot clarification restores the PC's company research
+panel: Owned Technologies above, Buy Technology in the middle, Available Genres
+below. Both occupied study PCs and the research area open this same compact,
+nonmodal panel. The direct-course shortcut in PR156 was the wrong destination
+and is superseded. The employee-overview Training button remains removed;
+the existing Staff training action still opens the separate employee course
+picker. Opening/cancelling the PC panel never starts a course or charges funds
+or experience. Training eligibility, costs and continuation remain unchanged.

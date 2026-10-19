@@ -11,14 +11,16 @@ Current checkout: /workspace/scratch/comparison-20261017/OpenGDS2.
 
 ## Owner re-review — 19 October 2026
 
-#152 is accepted; #153 is accepted and closed. #154's remaining findings are the
-alpha Confirm overlap and a required occupied-PC training route, replacing the
-employee-overview Training button. Fix on a feature branch into develop; keep
-#151/#154 open for owner visual acceptance. Original research-page evidence and
-the owner's requested direct training shortcut must remain clearly distinguished.
+#152 and #153 are accepted and closed. #151 now accepts every visual item except
+#154's PC panel. The new reference in comment 6262361440 identifies the narrow
+Owned Technologies / Buy Technology / Available Genres company panel. PC clicks
+must open that panel, not the employee course picker introduced by PR156.
+Correct on a feature branch into develop; keep #151/#154 open for owner acceptance.
+The employee-overview Training button remains removed; retain the separate Staff
+training course route. This clarification supersedes the direct-course shortcut.
 Consumer Investigation is accepted with a manual-test waiver because the owner
 cannot force it; do not claim a completed native reproduction. No main/release
-promotion or desktop export. Recovery: /workspace/private/review154-20261019/.
+promotion or desktop export. Recovery: /workspace/private/review154-panel-20261019/.
 
 ## Previous work — fidelity follow-ups, 17 October 2026
 

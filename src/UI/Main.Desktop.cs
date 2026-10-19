@@ -214,7 +214,7 @@ public partial class Main
         {
             image.AcceptEvent();
             if(CalendarService.HasPending(state))ShowPendingCalendarEvent(state);
-            else if(DesktopActionEnabled("TRAINING"))ShowTraining(state,student);
+            else ShowCompanyResearch(state);
             return;
         }
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);

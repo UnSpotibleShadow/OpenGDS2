@@ -52,13 +52,14 @@ Supported executable SHA-256:
   (`009C66BC +06BD..071B`) opens that page. The dedicated employee training
   button is established separately by fGMInfo.Command6 (`0098232C`): actions
   1–5 open fGMWSTech, otherwise its message asks for a study workstation.
-  The 19 October owner review requests a direct occupied-PC training route instead
-  of the employee-overview Training button. That button is now removed: clicking
-  a rendered occupied PC opens its assigned employee's course picker, regardless
-  of the currently selected employee. Empty research-area space still opens the
-  nonmodal company research page. PC hit rectangles share the rendered positions;
-  all five seats and overlapping rectangles are checked. This direct shortcut is
-  the requested port interaction, not a newly proven original MouseDown branch.
+  The owner's subsequent screenshot clarification establishes the remaining
+  presentation target: the narrow company technology/genre panel, not the
+  employee course picker. Clicking either an occupied study PC or the surrounding
+  research area now opens that same nonmodal panel. Its 172×305 window contains
+  compact green/orange headings, two lists and Buy Technology between them.
+  The overview Training button remains removed; the separate Staff training route
+  still opens the existing course picker. PC clicks use the rendered rectangles,
+  including portions outside the broad research-area diamond.
   Existing training/application costs and timing are unchanged.
 * Planning's green summary contains hardware, audience and cost. Work and its
   green marker sit below the distribution. Bugs use a common red strip with a
@@ -118,7 +119,8 @@ artwork, dialogue dumps, screenshots and imported catalogs stay private.
 ## Owner re-review — 19 October 2026
 
 #152 is accepted by the owner; #153 was accepted and closed. #154 remains open
-for the corrected PC-training route and command column to be visually rechecked.
+only for the PC panel destination/presentation to be visually rechecked; the
+meeting command column and other review items are accepted.
 The owner accepts Consumer Investigation for #151 because it cannot be reliably
 triggered in their play session. Treat this as a manual-test waiver; it adds no
 new native execution evidence and changes no refund or receipt rules.
@@ -129,3 +131,10 @@ bounds and management-layout checks. The source validation workflow runs these
 UI regressions on the PR and integrated develop commit. The full local core-loop
 check completes with zero failures and a clean exit. Confirm uses one action
 handler; an initial duplicate no-op subscription was removed before final checks.
+
+The later #154 comment (6262361440) confirms that opening the course picker from
+an occupied PC was still the wrong destination. The current regression checks
+explicitly reject TrainingWindow on PC clicks, require the two screenshot headings
+and narrow bounds, and retain the panel/position across its purchase child and
+close/reopen. Merely opening the panel cannot spend funds/experience or begin a
+course. This supersedes PR156's direct-course shortcut interpretation.

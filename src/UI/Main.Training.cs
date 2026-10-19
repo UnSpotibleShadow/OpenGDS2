@@ -25,17 +25,17 @@ public partial class Main
         CloseEmployeeDetails();CloseCompanyResearch();
         var company=_windows["CompanyWindow"];company.Hide();
         var window=new DesktopWindow {Name="CompanyResearchWindow"};_workspace!.AddChild(window);_companyResearchWindow=window;
-        window.Initialize(Tr("TECHNOLOGIES"),_dialogPositions.GetValueOrDefault("CompanyResearchWindow",company.Position),new(198,308));
+        window.Initialize(Tr("TECHNOLOGIES"),_dialogPositions.GetValueOrDefault("CompanyResearchWindow",company.Position),new(172,305));
         window.CloseRequested=CloseCompanyResearch;
-        var canvas=new Control {Name="NativeDialogCanvas",CustomMinimumSize=new(190,276)};window.Body.AddChild(canvas);
-        NativeFill(canvas,"ResearchOwnedHeading",new(4,3,182,20),new(.77f,1,.77f));
-        NativeText(canvas,"ResearchOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,3,178,20),11,HorizontalAlignment.Center);
-        var owned=ManagementTable(canvas,"ResearchOwnedTechnologies",["TECHNOLOGY_NAME"],[174],new(4,27,182,95));owned.ColumnTitlesVisible=false;
-        var buy=NativeAction(canvas,"ResearchBuyTechnology","BUY_TECHNOLOGIES",new(4,128,182,26),()=>
+        var canvas=new Control {Name="NativeDialogCanvas",CustomMinimumSize=new(164,273)};window.Body.AddChild(canvas);
+        NativeFill(canvas,"ResearchOwnedHeading",new(6,5,132,13),new(.77f,1,.77f));
+        NativeText(canvas,"ResearchOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,5,132,13),10,HorizontalAlignment.Center);
+        var owned=ManagementTable(canvas,"ResearchOwnedTechnologies",["TECHNOLOGY_NAME"],[132],new(6,22,152,97));owned.ColumnTitlesVisible=false;
+        var buy=NativeAction(canvas,"ResearchBuyTechnology","BUY_TECHNOLOGIES",new(6,126,136,25),()=>
         {if(DesktopActionEnabled("TECHNOLOGIES")&&(_dialog is null||_clockRunning))ShowTechnologies(state);});
-        NativeFill(canvas,"ResearchGenresHeading",new(4,162,182,20),new(1,.85f,.65f));
-        NativeText(canvas,"ResearchGenresCaption",Tr("AVAILABLE_GENRES"),new(6,162,178,20),11,HorizontalAlignment.Center);
-        var genres=ManagementTable(canvas,"ResearchAvailableGenres",["PROJECT_GENRE"],[174],new(4,186,182,86));genres.ColumnTitlesVisible=false;
+        NativeFill(canvas,"ResearchGenresHeading",new(6,158,132,13),new(1,.85f,.65f));
+        NativeText(canvas,"ResearchGenresCaption",Tr("AVAILABLE_GENRES"),new(6,158,132,13),10,HorizontalAlignment.Center);
+        var genres=ManagementTable(canvas,"ResearchAvailableGenres",["PROJECT_GENRE"],[132],new(6,175,152,95));genres.ColumnTitlesVisible=false;
         string? signature=null;
         _refreshCompanyResearch=()=>
         {

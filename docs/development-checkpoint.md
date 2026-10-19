@@ -8,11 +8,12 @@ compatibility remains explicitly skipped. Source validation Actions are enabled.
 Integration stays on develop; #151 remains open for owner acceptance. There is
 no authorization here for a new main promotion, release/tag or desktop export.
 
-The owner accepted #152 and #153 after review; both issues are closed. The remaining #154 follow-up fixes
-alpha/beta Confirm overlap and moves direct employee training to the occupied
-study PC, removing the rejected overview Training button. The research-area page
-remains available. See the distinction between original evidence and the owner’s
-requested PC shortcut in the linked review notes.
+The owner accepted #152 and #153 after review; both issues are closed. #151's
+visual checklist now accepts all other items, including the meeting command
+column. Only #154's PC panel remains: its latest screenshot shows the narrow
+Owned Technologies / Buy Technology / Available Genres company panel. Occupied
+PCs must open that panel, not the employee course picker. The direct-course
+shortcut in PR156 is superseded; the separate Staff course picker remains.
 
 Consumer Investigation is accepted by the owner for the release review because
 it cannot be reliably forced during play. This is a manual-test waiver, not a
