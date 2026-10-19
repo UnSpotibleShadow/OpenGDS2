@@ -69,3 +69,18 @@ published tags remain.
 
 See [release preparation](early-access-release.md), [known issues](early-access-known-issues.md)
 and [the maintainer checklist](release-handoff.md).
+
+## One-time ea.2 publication
+
+The connected credential can edit release metadata but receives HTTP401 on
+uploads.github.com. The owner authorized completing publication through Actions.
+A manual `Fidelity validation` dispatch on develop with `publish_ea2=true` uses a
+separate, narrowly scoped write-permission job after source validation. Normal
+push/PR validation stays read-only; Build merged main is unchanged.
+
+`tools/publish_ea2.mjs` accepts only the exact successful build39251557441,
+source `fb4d8f2969b6288349f4f1db0b68f71438003e82` and preverified Windows ZIP
+hashes. It does not build, overwrite an asset or move a tag. Guarded writes record
+checkpoints; publication is followed by anonymous download/hash verification.
+The audit record is uploaded as an Actions artifact. This route publishes only
+v0.1.0-ea.2; it is not automatic publication of future main merges.
