@@ -87,3 +87,11 @@ see [review evidence](review151-followups-20261018.md). Course-progress artwork,
 completion-message timing and native Windows behavioral acceptance remain
 separate limitations. Other workstation task states and external jobs are not
 established by the study-PC change.
+
+The 19 October owner review adds direct course selection by clicking the occupied
+study PC. The target is the PC's assigned employee, even while someone else is
+selected. The employee-overview Training button is removed; empty research-area
+space still opens the company research page. Opening/cancelling course selection
+never charges experience. Confirming a course retains the existing eligibility,
+cost and continuation rules. This PC shortcut is the requested port interaction;
+it is not claimed as newly established native executable behavior.

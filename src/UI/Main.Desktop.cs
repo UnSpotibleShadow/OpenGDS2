@@ -209,6 +209,14 @@ public partial class Main
             }
             return;
         }
+        var student=OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y);
+        if(student is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
+        {
+            image.AcceptEvent();
+            if(CalendarService.HasPending(state))ShowPendingCalendarEvent(state);
+            else if(DesktopActionEnabled("TRAINING"))ShowTraining(state,student);
+            return;
+        }
         var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
         if(employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} &&
             OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y))
@@ -218,7 +226,7 @@ public partial class Main
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
         bool deskTarget=_selectedEmployee is not null && OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is not null;
         image.TooltipText=OfficeHoverText(state,pixel,employee,room,tenants);
-        image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
+        image.MouseDefaultCursorShape = student is null && !OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y) && employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
         if(employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();ShowEmployeeDetails(state,employee);return;

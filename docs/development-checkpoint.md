@@ -1,4 +1,4 @@
-# Current development checkpoint — 18 October 2026
+# Current development checkpoint — 19 October 2026
 
 The owner authorized review #151 follow-ups (#152–154), native application icon
 corrections and an optional startup GitHub release notice. See
@@ -7,6 +7,17 @@ The earlier ten fidelity steps are integrated through PR150; original GD2 save
 compatibility remains explicitly skipped. Source validation Actions are enabled.
 Integration stays on develop; #151 remains open for owner acceptance. There is
 no authorization here for a new main promotion, release/tag or desktop export.
+
+The owner accepted #152 and #153 after review; both issues are closed. The remaining #154 follow-up fixes
+alpha/beta Confirm overlap and moves direct employee training to the occupied
+study PC, removing the rejected overview Training button. The research-area page
+remains available. See the distinction between original evidence and the owner’s
+requested PC shortcut in the linked review notes.
+
+Consumer Investigation is accepted by the owner for the release review because
+it cannot be reliably forced during play. This is a manual-test waiver, not a
+claim that a native Windows reproduction was completed. #151 remains the overall
+release gate; no main/release/build promotion is authorized.
 
 ## Historical checkpoint — 16 October 2026
 

@@ -52,6 +52,29 @@ Test("study desks retain native diamond boundaries and occupied PC depth",()=>
     Check(OfficeInteractionRules.StudyDeskAt(double.NaN,100) is null);
     Check(OfficeInteractionRules.StudyDeskAt(0,0) is null);
 });
+Test("study PC clicks select their occupant and reject empty or unavailable computers",()=>
+{
+    var state=new GameState {DevelopmentComputerIndex=0};
+    var first=new EmployeeState {Name="First",Office=new() {SlotIndex=0,Action=1}};
+    var second=new EmployeeState {Name="Second",Office=new() {SlotIndex=1,Action=2}};
+    state.Employees=[first,second];
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45)==first);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,180,65)==second);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,230,90) is null);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,double.NaN,45) is null);
+    for(int action=1;action<=5;action++)
+    {
+        first.Office!.Action=action;state.Employees=[first];
+        var b=OfficeDeskPresentationRules.StudyComputerBounds(action);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X,b.Y)==first);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X+b.Width,b.Y) is null);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X,b.Y+b.Height) is null);
+    }
+    first.Office!.Action=6;
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45) is null);
+    first.Office.Action=1;state.DevelopmentComputerIndex=null;
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45) is null);
+});
 GameState ProgrammingFixture(int index=5)
 {
     var actor=new EmployeeState {Name="Actor",SourceIndex=0,PortraitId=1,Level=1,Experience=20,Stress=10,Inspiration=80,DevelopmentSpeed=50,

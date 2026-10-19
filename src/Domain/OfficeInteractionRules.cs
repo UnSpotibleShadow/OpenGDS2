@@ -35,6 +35,20 @@ public static class OfficeInteractionRules
         }
         return result;
     }
+    /// <summary>Direct training shortcut for the occupant of a rendered study PC.</summary>
+    public static EmployeeState? StudyComputerEmployeeAt(GameState state,double x,double y)
+    {
+        ArgumentNullException.ThrowIfNull(state);
+        if(!double.IsFinite(x)||!double.IsFinite(y)||state.DevelopmentComputerIndex is not (>=0 and <=3))return null;
+        // Reverse render depth where neighbouring computer rectangles overlap.
+        return state.Employees.Where(e=>e.Office?.Action is >=1 and <=5)
+            .OrderByDescending(e=>OfficeDeskPresentationRules.StudyComputerBounds(e.Office!.Action).Y)
+            .FirstOrDefault(e=>
+            {
+                var b=OfficeDeskPresentationRules.StudyComputerBounds(e.Office!.Action);
+                return x>=b.X&&x<b.X+b.Width&&y>=b.Y&&y<b.Y+b.Height;
+            });
+    }
     /// <summary>009C66BC +071F..0741: inclusive secretary advice hit.</summary>
     public static bool SecretaryAt(double x,double y)=>double.IsFinite(x) && double.IsFinite(y) &&
         x>=104 && x<=114 && y>=80 && y<=104;
