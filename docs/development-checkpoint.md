@@ -8,8 +8,7 @@ compatibility remains explicitly skipped. Source validation Actions are enabled.
 Integration stays on develop; #151 remains open for owner acceptance. There is
 no authorization here for a new main promotion, release/tag or desktop export.
 
-The owner accepted #152 (its acceptance comment is recorded; issue closure is
-housekeeping) and closed #153 after review. The remaining #154 follow-up fixes
+The owner accepted #152 and #153 after review; both issues are closed. The remaining #154 follow-up fixes
 alpha/beta Confirm overlap and moves direct employee training to the occupied
 study PC, removing the rejected overview Training button. The research-area page
 remains available. See the distinction between original evidence and the owner’s

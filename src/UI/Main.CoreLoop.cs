@@ -135,9 +135,15 @@ public partial class Main
                 var candidates=DevelopmentSimulation.PrepareTypeCandidates(state,project,catalog,_session.Random);
                 int? selected=null;
                 var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
-                var confirm=NativeAction((Control)_dialog!.FindChild("NativeDialogCanvas",true,false),"ConfirmTypeChoice","CONFIRM",new(4,90,70,28),()=>{},false);
+                var confirm=NativeAction((Control)_dialog!.FindChild("NativeDialogCanvas",true,false),"ConfirmTypeChoice","CONFIRM",new(4,90,70,28),()=>
+                {
+                    if (!selected.HasValue) return;
+                    var result=CheckpointMeetingRules.TrySelectType(state,project,catalog,selected.Value);
+                    if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
+                    else _status.Text=Tr($"SELECTION_RESULT_{result}");
+                },false);
                 NativeButtonArtwork.Apply(confirm,project.PendingDecision==DevelopmentMilestone.SelectType?0x27DC18:0x270A71);
-                var group=new ButtonGroup();
+            var group=new ButtonGroup();
                 var options=CheckpointOptions(includeExamples:true);
                 int listIndex=0;
                 foreach (int source in candidates)
@@ -154,13 +160,6 @@ public partial class Main
                     };
                 }
                 _content.AddChild(chosen);
-                confirm.Pressed+=()=>
-                {
-                    if (!selected.HasValue) return;
-                    var result=CheckpointMeetingRules.TrySelectType(state,project,catalog,selected.Value);
-                    if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
-                    else _status.Text=Tr($"SELECTION_RESULT_{result}");
-                };
             }
             catch (InvalidOperationException) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");}
         }
@@ -172,9 +171,15 @@ public partial class Main
             if (state.Company.OriginalMember90 is not int companyValue) {_status.Text=Tr("LEGACY_ROSTER_UNKNOWN");return;}
             int? selected=null;
             var chosen=new Label {Name="CheckpointChoice",Text=Tr("CHECKPOINT_NO_CHOICE"),Visible=false};
-            var confirm=NativeAction((Control)_dialog!.FindChild("NativeDialogCanvas",true,false),"ConfirmGenreChoice","CONFIRM",new(4,90,70,28),()=>{},false);
+            var confirm=NativeAction((Control)_dialog!.FindChild("NativeDialogCanvas",true,false),"ConfirmGenreChoice","CONFIRM",new(4,90,70,28),()=>
+                {
+                    if (!selected.HasValue) return;
+                    var result=CheckpointMeetingRules.TrySelectGenre(state,project,catalog,selected.Value);
+                    if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
+                    else _status.Text=Tr($"SELECTION_RESULT_{result}");
+                },false);
             NativeButtonArtwork.Apply(confirm,project.PendingDecision==DevelopmentMilestone.SelectType?0x27DC18:0x270A71);
-                var group=new ButtonGroup();
+            var group=new ButtonGroup();
             var options=CheckpointOptions();
             foreach (var genre in catalog.Genres.Where(x=>DevelopmentSelectionRules.IsGenreEligible(x,companyValue)))
             {
@@ -188,13 +193,6 @@ public partial class Main
                 };
             }
             _content.AddChild(chosen);
-            confirm.Pressed+=()=>
-            {
-                if (!selected.HasValue) return;
-                var result=CheckpointMeetingRules.TrySelectGenre(state,project,catalog,selected.Value);
-                if (result==DevelopmentSelectionResult.Success) ShowProjectDecision(state,project);
-                else _status.Text=Tr($"SELECTION_RESULT_{result}");
-            };
         }
         else
         {

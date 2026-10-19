@@ -126,4 +126,6 @@ new native execution evidence and changes no refund or receipt rules.
 The follow-up passes a clean application build, 574 domain checks and bilingual
 study-PC input, course charge/cancellation, icon-bearing alpha/beta command
 bounds and management-layout checks. The source validation workflow runs these
-UI regressions on the PR and integrated develop commit.
+UI regressions on the PR and integrated develop commit. The full local core-loop
+check completes with zero failures and a clean exit. Confirm uses one action
+handler; an initial duplicate no-op subscription was removed before final checks.
