@@ -20,6 +20,33 @@ public partial class Main
         _companyResearchWindow=null;
         if(_employeeDetails is null&&_windows.TryGetValue("CompanyWindow",out var company)&&GodotObject.IsInstanceValid(company))company.Show();
     }
+    private Tree ResearchList(Control canvas,string name,Rect2 rect)
+    {
+        var table=ManagementTable(canvas,name,["TECHNOLOGY_NAME"],[112],new(rect.Position,new(rect.Size.X-20,rect.Size.Y)));
+        table.ColumnTitlesVisible=false;
+        foreach(string key in new[]{"v_separation","inner_item_margin_top","inner_item_margin_bottom","draw_guides"})
+            table.AddThemeConstantOverride(key,0);
+        // Keep the original separate arrow/track rail visible even for an empty list.
+        var source=table.GetChildren(true).OfType<VScrollBar>().Single();
+        source.Modulate=Colors.Transparent;source.MouseFilter=Control.MouseFilterEnum.Ignore;
+        float x=rect.End.X-16;
+        var rail=NativePlace(canvas,new VScrollBar {Name=name+"Scroll"},new(x,rect.Position.Y+16,16,rect.Size.Y-32));
+        rail.AddThemeStyleboxOverride("scroll",ClassicTheme.CompactInput());
+        foreach(string key in new[]{"grabber","grabber_highlight","grabber_pressed"})
+            rail.AddThemeStyleboxOverride(key,ClassicTheme.CompactButton());
+        var up=NativeAction(canvas,name+"ScrollUp","▲",new(x,rect.Position.Y,16,16),()=>source.Value-=16);
+        var down=NativeAction(canvas,name+"ScrollDown","▼",new(x,rect.End.Y-16,16,16),()=>source.Value+=16);
+        up.AddThemeFontSizeOverride("font_size",8);down.AddThemeFontSizeOverride("font_size",8);
+        bool syncing=false;
+        void Sync()
+        {
+            syncing=true;rail.MaxValue=source.MaxValue;rail.Page=source.Page;
+            rail.SetValueNoSignal(source.Value);syncing=false;
+        }
+        source.Changed+=Sync;source.ValueChanged+=_=>Sync();
+        rail.ValueChanged+=value=>{if(!syncing)source.Value=value;};Sync();
+        return table;
+    }
     private void ShowCompanyResearch(GameState state)
     {
         CloseEmployeeDetails();CloseCompanyResearch();
@@ -30,12 +57,12 @@ public partial class Main
         var canvas=new Control {Name="NativeDialogCanvas",CustomMinimumSize=new(164,273)};window.Body.AddChild(canvas);
         NativeFill(canvas,"ResearchOwnedHeading",new(6,5,132,13),new(.77f,1,.77f));
         NativeText(canvas,"ResearchOwnedCaption",Tr("OWNED_TECHNOLOGIES"),new(6,5,132,13),10,HorizontalAlignment.Center);
-        var owned=ManagementTable(canvas,"ResearchOwnedTechnologies",["TECHNOLOGY_NAME"],[132],new(6,22,152,97));owned.ColumnTitlesVisible=false;
+        var owned=ResearchList(canvas,"ResearchOwnedTechnologies",new(6,22,152,97));
         var buy=NativeAction(canvas,"ResearchBuyTechnology","BUY_TECHNOLOGIES",new(6,126,136,25),()=>
         {if(DesktopActionEnabled("TECHNOLOGIES")&&(_dialog is null||_clockRunning))ShowTechnologies(state);});
         NativeFill(canvas,"ResearchGenresHeading",new(6,158,132,13),new(1,.85f,.65f));
         NativeText(canvas,"ResearchGenresCaption",Tr("AVAILABLE_GENRES"),new(6,158,132,13),10,HorizontalAlignment.Center);
-        var genres=ManagementTable(canvas,"ResearchAvailableGenres",["PROJECT_GENRE"],[132],new(6,175,152,95));genres.ColumnTitlesVisible=false;
+        var genres=ResearchList(canvas,"ResearchAvailableGenres",new(6,175,152,95));
         string? signature=null;
         _refreshCompanyResearch=()=>
         {

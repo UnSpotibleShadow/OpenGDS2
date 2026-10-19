@@ -56,7 +56,9 @@ Supported executable SHA-256:
   presentation target: the narrow company technology/genre panel, not the
   employee course picker. Clicking either an occupied study PC or the surrounding
   research area now opens that same nonmodal panel. Its 172×305 window contains
-  compact green/orange headings, two lists and Buy Technology between them.
+  compact green/orange headings, tightly spaced lists and Buy Technology between
+  them. Separate square scroll tracks and up/down arrows remain visible even
+  when the owned list is empty; the arrows drive the actual list scroll range.
   The overview Training button remains removed; the separate Staff training route
   still opens the existing course picker. PC clicks use the rendered rectangles,
   including portions outside the broad research-area diamond.
