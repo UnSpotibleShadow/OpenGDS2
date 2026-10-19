@@ -97,6 +97,10 @@ public partial class Main
         NativeText(canvas,"TrainingTimeHeading",Tr("LEARNING_TIME"),new(120,8,54,14),9);
         NativeText(canvas,"TrainingExperienceHeading",Tr("REQUIRED_EXPERIENCE"),new(176,8,89,14),9);
         var table=ManagementTable(canvas,"TrainingCourses",["TECHNOLOGY_NAME","LEARNING_TIME","REQUIRED_EXPERIENCE"],[124,56,73],new(8,24,257,113));table.ColumnTitlesVisible=false;
+        // Headers are separate original-style labels; hidden Tree titles must
+        // not impose font-dependent minimum widths on this fixed native form.
+        for(int column=0;column<3;column++){table.SetColumnTitle(column,"");table.SetColumnClipContent(column,true);}
+        table.Size=new(257,113);
         foreach(string key in new[]{"v_separation","inner_item_margin_top","inner_item_margin_bottom","draw_guides"})table.AddThemeConstantOverride(key,0);
         NativeFill(canvas,"TrainingDescriptionBox",new(8,144,239,45),Colors.White,true);
         var description=new RichTextLabel {Name="TrainingDescription",ScrollActive=true};description.AddThemeFontSizeOverride("normal_font_size",10);NativePlace(canvas,description,new(11,147,233,39));

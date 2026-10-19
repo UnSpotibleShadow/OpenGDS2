@@ -51,11 +51,17 @@ func run() -> void:
         await acknowledge();await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68))
         main.find_child("EmployeeDetailsWindow",true,false).position=Vector2(650,90)
         var employee_window_id=main.find_child("EmployeeDetailsWindow",true,false).get_instance_id()
+        var normal_title_font=main.get_theme_font("title_button_font","Tree")
+        var wide_title_font=FontVariation.new();wide_title_font.base_font=normal_title_font;wide_title_font.spacing_glyph=12
+        main.theme.set_font("title_button_font","Tree",wide_title_font)
         await press_node("EmployeeLearnTechnology");await window("TrainingWindow",281,270)
+        main.theme.set_font("title_button_font","Tree",normal_title_font)
         check(main.find_child("EmployeeDetailsWindow",true,false).get_instance_id()==employee_window_id and main.find_child("EmployeeDetailsWindow",true,false).position==Vector2(650,90),"Native learning child preserves its employee owner and position")
         var courses=main.find_child("TrainingCourses",true,false)
         check(courses.get_root().get_child_count()==1 and courses.get_root().get_first_child().get_metadata(0)==0,"Learning list excludes unpurchased and fully mastered technologies")
         if locale=="en":check(main.find_child("TrainingDescription",true,false).text.contains("Lv.1"),"English description exposes the next level when the compact name column clips")
+        for frame in range(4):await process_frame
+        check(courses.size.x<=257,"Localized hidden headers cannot widen the original course list")
         check(main.find_child("StudySeats",true,false)==null and main.find_child("ManagementSave",true,false)==null and main.find_child("ManagementLoad",true,false)==null,"Original course dialog has no added assignment or persistence buttons")
         await press_node("CancelTraining");await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Experience==100 and saved().Employees[0].Office.Training==null,"Cancelling course selection preserves experience and assignment")
@@ -102,6 +108,10 @@ func run() -> void:
         for frame in range(8):await process_frame
         check(not main.find_child("EmployeeLearningStatus",true,false).visible and not main.find_child("EmployeeUseTechnology",true,false).disabled,"Employee view refreshes completion and enables Use without reopening")
         check(main.find_child("EmployeeTechnologyTable",true,false).get_root().get_first_child().get_text(1)=="1","Completed skill appears immediately in the employee technology list")
+        var actor=saved().Employees[0].Office
+        var character=Vector2(actor.X+actor.OffsetX+8,actor.Y+actor.OffsetY+10)
+        await office_input(MOUSE_BUTTON_LEFT,character)
+        check(main.find_child("EmployeeDetailsWindow",true,false)!=null and main.find_child("CompanyResearchWindow",true,false)==null,"Clicking the seated character selects the employee even over the study PC")
         await press_node("EmployeeLearnTechnology")
         var upgrade=main.find_child("TrainingCourses",true,false).get_root().get_first_child()
         check(upgrade.get_text(0).ends_with("Lv.2") and upgrade.get_text(2)=="20","Next learning level uses its own original experience cost")

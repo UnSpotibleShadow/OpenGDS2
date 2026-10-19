@@ -120,3 +120,9 @@ or cancellation spends experience. Confirmation retains the original domain
 transaction, replacement-course cost and study completion rules above. The
 employee technology view updates its learning status, learned levels and Use
 availability as the course completes, without reopening the window.
+
+The original office MouseDown sets research mode at `009C66BC +0716..071B`,
+then its employee hit scan overrides that mode at `+0879..0893`. Employee selection
+therefore takes priority when a seated character overlaps a study PC; clicking
+the computer's uncovered area still opens company research. The native learning
+UI regression clicks the seated character before requesting the next level.
