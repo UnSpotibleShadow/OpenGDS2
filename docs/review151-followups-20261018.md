@@ -52,13 +52,22 @@ Supported executable SHA-256:
   (`009C66BC +06BD..071B`) opens that page. The dedicated employee training
   button is established separately by fGMInfo.Command6 (`0098232C`): actions
   1–5 open fGMWSTech, otherwise its message asks for a study workstation.
-  This restores both routes without the unsupported employee Actions dropdown.
+  The 19 October owner review requests a direct occupied-PC training route instead
+  of the employee-overview Training button. That button is now removed: clicking
+  a rendered occupied PC opens its assigned employee's course picker, regardless
+  of the currently selected employee. Empty research-area space still opens the
+  nonmodal company research page. PC hit rectangles share the rendered positions;
+  all five seats and overlapping rectangles are checked. This direct shortcut is
+  the requested port interaction, not a newly proven original MouseDown branch.
   Existing training/application costs and timing are unchanged.
 * Planning's green summary contains hardware, audience and cost. Work and its
   green marker sit below the distribution. Bugs use a common red strip with a
   white number; development points are labelled Progress. Progress bars share
   the classic green fill/blue remainder treatment.
-* Meeting Confirm sits above Cancel in the left command column. Completion
+* Meeting Confirm sits above Cancel in the left command column. The 19 October
+  follow-up removes the stale 86-pixel minimum from its 70-pixel slot and shares
+  the compact Cancel styling, retaining the imported glyph. Both alpha and beta
+  commands are checked against the adjacent quality region in English/Japanese. Completion
   metadata and quality have shared colored regions. Release opens secretary
   dialogue, then the compact media table, then shipment finalization. The new
   introduction is authored English/Japanese presentation text, not a claim to
@@ -105,3 +114,16 @@ Existing casino, save continuation and main core-loop coverage remain applicable
 Exact check results are recorded in the PR. Original Windows execution and the
 owner's final side-by-side visual acceptance remain unrun here. Original EXE,
 artwork, dialogue dumps, screenshots and imported catalogs stay private.
+
+## Owner re-review — 19 October 2026
+
+#152 is accepted by the owner; #153 was accepted and closed. #154 remains open
+for the corrected PC-training route and command column to be visually rechecked.
+The owner accepts Consumer Investigation for #151 because it cannot be reliably
+triggered in their play session. Treat this as a manual-test waiver; it adds no
+new native execution evidence and changes no refund or receipt rules.
+
+The follow-up passes a clean application build, 574 domain checks and bilingual
+study-PC input, course charge/cancellation, icon-bearing alpha/beta command
+bounds and management-layout checks. The source validation workflow runs these
+UI regressions on the PR and integrated develop commit.

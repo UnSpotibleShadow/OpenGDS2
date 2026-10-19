@@ -9,6 +9,17 @@ Keep #151 open for owner acceptance. No main promotion, release or desktop expor
 Private evidence/checkpoints: /workspace/private/review-followups-20261018/.
 Current checkout: /workspace/scratch/comparison-20261017/OpenGDS2.
 
+## Owner re-review — 19 October 2026
+
+#152 is accepted; #153 is accepted and closed. #154's remaining findings are the
+alpha Confirm overlap and a required occupied-PC training route, replacing the
+employee-overview Training button. Fix on a feature branch into develop; keep
+#151/#154 open for owner visual acceptance. Original research-page evidence and
+the owner's requested direct training shortcut must remain clearly distinguished.
+Consumer Investigation is accepted with a manual-test waiver because the owner
+cannot force it; do not claim a completed native reproduction. No main/release
+promotion or desktop export. Recovery: /workspace/private/review154-20261019/.
+
 ## Previous work — fidelity follow-ups, 17 October 2026
 
 The owner authorized the ten ordered findings in

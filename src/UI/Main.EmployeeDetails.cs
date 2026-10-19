@@ -98,13 +98,6 @@ public partial class Main
         var use=EmployeeDetailButton(technologyContents,"EmployeeUseTechnology","USE_TECHNOLOGY",()=>{if(_dialog is null&&DesktopActionEnabled("USE_TECHNOLOGY"))ShowTechnologyUse(state,employee);});
         use.Disabled=employee.TechnologyLevels?.Any(p=>p.Value>0)!=true;
         var actions=new HBoxContainer();_employeeDetails.Body.AddChild(actions);
-        var training=EmployeeDetailButton(actions,"EmployeeTraining","TRAINING",()=>
-        {
-            if(_dialog is not null||!DesktopActionEnabled("TRAINING"))return;
-            if(employee.Office?.Action is >=1 and <=5)ShowTraining(state,employee);
-            else ShowConversation(Tr("TRAINING"),[new(SecretaryCaption(state.SecretarySourceIndex),Tr("TRAINING_RESULT_NotAtStudySeat"),SecretaryAdviceRules.PortraitId(state.SecretarySourceIndex))],()=>ShowEmployeeDetails(state,employee));
-        });
-        training.Disabled=employee.TechnologyLevels is null||_activeCatalog?.Technologies.Count is not >0;
         EmployeeDetailButton(actions,"CloseEmployeeDetails","CANCEL",CloseEmployeeDetails);
         var officeImage=_windows["OfficeWindow"].FindChild("OriginalOfficeBackground",true,false) as TextureRect;
         if (officeImage is not null)
