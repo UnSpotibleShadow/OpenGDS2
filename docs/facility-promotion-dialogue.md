@@ -48,8 +48,11 @@ New receipt fields are additive: source plot, old capacity, response snapshots
 and page position. Old unread single-page receipts remain single-page; historical
 random choices and old capacity are not invented. Save validation rejects bad
 pages, unordered/duplicate speakers, inconsistent facility plots and altered
-capacity snapshots. Modern service commits remain atomic before their saved
-result is displayed; exact native instruction-level mutation timing is not claimed.
+capacity snapshots. The later [fidelity follow-ups, step 6](fidelity-followups-20261017.md#step-6-facility-result-boundaries)
+restores recycling credit, production capacity/debit and Hot Spring stress changes
+to the appropriate result acknowledgement. Old receipts remain already applied;
+reserved Hot Spring response snapshots keep their existing deterministic resume
+behavior. Native modal RNG callback timing is not claimed.
 
 ## All six promotion media
 

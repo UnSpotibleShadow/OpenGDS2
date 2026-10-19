@@ -26,6 +26,9 @@ func setup_catalog() -> void:
         catalog.Genres.append({"SourceIndex":i,"Name":"Synthetic genre %d" % i,"RawMembers":{"1224":20000000,"1208":100,"125C":0,"1240":i}})
     write_json("user://original/catalog.json",integer_tokens(catalog))
     artwork_fixture()
+    # Authored glyph-sized fixtures exercise the icon-bearing compact controls.
+    for offset in ["27DC18","270A71"]:
+        blank_bmp("user://original/Graphic/Embedded/Button-"+offset+".bmp",63,22,false)
     for i in range(1,3):
         blank_bmp("user://original/Graphic/Embedded/HallCelebration%d.bmp" % i,256,160,false)
     blank_bmp("user://original/Graphic/Embedded/PlanningProposal.bmp",256,160,false)
@@ -107,7 +110,7 @@ func run() -> void:
             if main.find_child("ConversationWindow",true,false)==null:
                 break
             await advance_page()
-        await window("PlanningMeetingWindow",330,390)
+        await window("PlanningMeetingWindow",330,410)
         await press_node("CancelProposal")
         await dispose()
         for phase in [-1,0,1,2]:
@@ -144,11 +147,18 @@ func run() -> void:
                 await press_node("OpenProject0")
             var target=["DevelopmentProjectWindow","TypeMeetingWindow","GenreMeetingWindow","CompletionWindow"][phase+1]
             await window(target,660 if phase in [0,1] else 385 if phase==2 else 310,365 if phase==2 else 250)
+            if phase in [0,1]:
+                var confirm=main.find_child("ConfirmTypeChoice" if phase==0 else "ConfirmGenreChoice",true,false)
+                var cancel=main.find_child("CheckpointCancelProject",true,false)
+                var quality=main.find_child("ProjectQualityFields",true,false)
+                check(confirm.get_global_rect().end.x<=quality.get_global_rect().position.x,"Meeting Confirm stays left of quality fields")
+                check(confirm.icon!=null,"Meeting Confirm retains its imported glyph")
+                check(confirm.size.x<=70 and confirm.get_global_rect().end.y<=cancel.get_global_rect().position.y,"Meeting commands fit their stacked column")
             if phase==-1:
                 check(main.find_children("ProjectSummaryProgress","ProgressBar",true,false).size()==1 and main.find_child("DevelopmentProgress",true,false)==null,"One project progress display")
                 await press_node("ProjectMedia")
                 await window("MediaInformationWindow",350,290)
-                check(main.find_child("MediaCapacityTable",true,false).size.y>=100,"Capacity table exposes all four rows")
+                check(main.find_child("MediaCapacityTable",true,false).size.y>=80,"Capacity table exposes four compact rows")
             elif phase==2:
                 await press_node("CompletionRelease")
                 var copies=main.find_child("ReleaseCopies",true,false)

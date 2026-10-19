@@ -59,14 +59,14 @@ func service_cases() -> void:
         await press_node("ToolbarSAVE_GAME")
         var result=saved()
         var cost={1:8000000,2:-500000,3:40000000,6:25000000,7:10000000}[kind]
-        check(result.Money==v.State.Money-cost,"Facility source service amount: "+str(kind))
+        check(result.Money==v.State.Money-(0 if kind in [2,7] else cost),"Facility payment boundary before result: "+str(kind))
         if kind!=6:
             await capture_desktop("facility-result-"+str(kind))
             if kind==7:check(result.PendingFacilityReceipt.CapacityBefore==v.State.Company.ProductionCapacity,"Production keeps its old capacity for the result")
             await press_node("ToolbarLOAD_GAME")
             for page in range(12):
                 await award_page();await press_node("ToolbarSAVE_GAME")
-                check(saved().Money==result.Money,"Facility page never repeats payment")
+                check(saved().Money==v.State.Money-cost,"Facility acknowledgement applies each payment exactly once")
                 if saved().PendingFacilityReceipt==null:break
             check(saved().PendingFacilityReceipt==null,"Facility chain completes: "+str(kind))
         else:check(result.MysteryLab.Progress>0,"Mystery experiment remains active after its confirmation")

@@ -18,6 +18,63 @@ void Test(string name, Action test)
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 void Throws<T>(Action action) where T : Exception
 { try { action(); } catch (T) { return; } throw new Exception("Expected " + typeof(T).Name); }
+Test("release ordering includes numeric prereleases and stable versions",()=>
+{
+    Check(ReleaseUpdateRules.Compare("v0.1.0-ea.10","0.1.0-ea.9")>0);
+    Check(ReleaseUpdateRules.Compare("0.1.0","0.1.0-ea.10")>0);
+    Check(ReleaseUpdateRules.Compare("0.1.0-ea.01","0.1.0-ea.1") is null);
+    Check(ReleaseUpdateRules.Compare("0.1.0+build.1","v0.1.0+build.2")==0);
+    Check(ReleaseUpdateRules.Compare("0.1.0-1","0.1.0-ea")<0);
+    Check(ReleaseUpdateRules.Compare("invalid","0.1.0") is null);
+});
+Test("release notices ignore drafts older builds and foreign links",()=>
+{
+    string Item(string tag,string url,bool draft=false)=>System.Text.Json.JsonSerializer.Serialize(new {tag_name=tag,html_url=url,draft});
+    const string url="https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/";
+    string json="["+string.Join(",",Item("v0.1.0-ea.9",url+"v0.1.0-ea.9"),Item("v0.1.0-ea.10",url+"v0.1.0-ea.10"),Item("v1.0.0",url+"v1.0.0",true),Item("v2.0.0","https://example.com/"))+"]";
+    Check(ReleaseUpdateRules.Select(json,"0.1.0-ea.1")?.Version=="v0.1.0-ea.10");
+    Check(ReleaseUpdateRules.Select(json,"0.1.0") is null);
+    Check(ReleaseUpdateRules.Select("broken","0.1.0") is null);
+});
+Test("study desks retain native diamond boundaries and occupied PC depth",()=>
+{
+    for(int action=1;action<=4;action++)
+    {
+        int x=166+(action-1)*32,y=68+(action-1)*16;
+        Check(OfficeInteractionRules.StudyDeskAt(x,y)==action);
+        var tile=new OfficeSpriteDefinition(44+action,-100,43+(action-1)*16,162,226,36,29,33);
+        var pc=OfficeDeskPresentationRules.ForStudy(tile,action,2,true);
+        Check(pc.X==147+(action-1)*32&&pc.SourceX==756&&pc.SourceY==288&&pc.SortKey==tile.SortKey);
+    }
+    Check(OfficeInteractionRules.StudyDeskAt(296,110)==5);
+    Check(OfficeInteractionRules.StudyDeskAt(180,80)==2);
+    Check(OfficeInteractionRules.StudyDeskAt(280,115)==4);
+    Check(OfficeInteractionRules.StudyDeskAt(double.NaN,100) is null);
+    Check(OfficeInteractionRules.StudyDeskAt(0,0) is null);
+});
+Test("study PC clicks select their occupant and reject empty or unavailable computers",()=>
+{
+    var state=new GameState {DevelopmentComputerIndex=0};
+    var first=new EmployeeState {Name="First",Office=new() {SlotIndex=0,Action=1}};
+    var second=new EmployeeState {Name="Second",Office=new() {SlotIndex=1,Action=2}};
+    state.Employees=[first,second];
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45)==first);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,180,65)==second);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,230,90) is null);
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,double.NaN,45) is null);
+    for(int action=1;action<=5;action++)
+    {
+        first.Office!.Action=action;state.Employees=[first];
+        var b=OfficeDeskPresentationRules.StudyComputerBounds(action);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X,b.Y)==first);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X+b.Width,b.Y) is null);
+        Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,b.X,b.Y+b.Height) is null);
+    }
+    first.Office!.Action=6;
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45) is null);
+    first.Office.Action=1;state.DevelopmentComputerIndex=null;
+    Check(OfficeInteractionRules.StudyComputerEmployeeAt(state,150,45) is null);
+});
 GameState ProgrammingFixture(int index=5)
 {
     var actor=new EmployeeState {Name="Actor",SourceIndex=0,PortraitId=1,Level=1,Experience=20,Stress=10,Inspiration=80,DevelopmentSpeed=50,
@@ -257,6 +314,19 @@ Test("secretary badge English patch preserves the face and all mouth frames",()=
     var patch=LocalSceneCaptionRules.PatchSecretary(source);Check(source.SequenceEqual(copy)&&!patch.SequenceEqual(copy));
     for(int y=0;y<64;y++)for(int x=0;x<64;x++)if(y<52||y>=62||x<18||x>=48)
         for(int c=0;c<3;c++)Check(patch[(y*64+x)*3+c]==copy[(y*64+x)*3+c]);
+});
+Test("registration English lettering preserves the scene outside both caption interiors",()=>
+{
+    byte[] source=Enumerable.Range(0,256*160*3).Select(i=>(byte)(i%251)).ToArray(),copy=(byte[])source.Clone();
+    var patch=LocalSceneCaptionRules.PatchRegistration(source);
+    Check(source.SequenceEqual(copy) && !patch.SequenceEqual(source) && patch.SequenceEqual(LocalSceneCaptionRules.PatchRegistration(source)));
+    for(int y=0;y<160;y++)for(int x=0;x<256;x++)
+        if(!((x>=1 && x<63 && y>=76 && y<92)||(x>=166 && x<251 && y>=132 && y<159)))
+            Check(source.AsSpan((y*256+x)*3,3).SequenceEqual(patch.AsSpan((y*256+x)*3,3)));
+    // Independent glyph anchors prove both English captions are present.
+    Check(patch.AsSpan((80*256+5)*3,3).SequenceEqual(new byte[]{38,38,38}));
+    Check(patch.AsSpan((139*256+173)*3,3).SequenceEqual(new byte[]{255,255,255}));
+    Throws<InvalidDataException>(()=>LocalSceneCaptionRules.PatchRegistration(new byte[1]));
 });
 Test("television English patch stays inside the original CRT glass",()=>
 {
@@ -1403,6 +1473,97 @@ Test("modern poker saves resume reveal and partial payout without replaying draw
     Check(s.Casino.Coins==101 && s.Casino.PendingPayout==3);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));Check(s.Casino.Coins==101 && s.Casino.Poker.Phase==4);
 });
+// Compare uninterrupted play with a fresh process-equivalent session restored before
+// every callback. Use the real saved RNG stream, not a fixed fake draw sequence.
+GameState CheckCasinoContinuation(GameState initial,Action<GameSession> next,int callbacks)
+{
+    initial.SimulationRandomState=0x123456;initial.OriginalPayrollScratchIndex=17;
+    var live=new GameSession(new VbSimulationRandom(0));live.Restore(initial);
+    var resumed=new GameSession(new VbSimulationRandom(0xABCDEF));
+    resumed.Restore(SaveStore.Deserialize(SaveStore.Serialize(initial)));
+    for(int i=0;i<callbacks;i++)
+    {
+        string saved=SaveStore.Serialize(resumed.Current!);
+        resumed=new GameSession(new VbSimulationRandom(0xABCDEF));
+        resumed.Restore(SaveStore.Deserialize(saved));
+        Check(SaveStore.Serialize(resumed.Current!)==saved); // Restore itself cannot draw, charge or award.
+        string beforeOffice=SaveStore.Serialize(resumed.Current!);resumed.TickOffice();
+        Check(SaveStore.Serialize(resumed.Current!)==beforeOffice);
+        next(live);next(resumed);
+        Check(SaveStore.Serialize(live.Current!)==SaveStore.Serialize(resumed.Current!));
+        Check(resumed.Current!.OriginalPayrollScratchIndex==17);
+    }
+    return resumed.Current!;
+}
+Test("poker fresh-session reloads preserve reveal replacement and future RNG draws",()=>
+{
+    var s=PokerFixture();CasinoPokerService.Command(s,0,new FailureRandom(0));
+    CasinoPokerService.Command(s,1,new VbSimulationRandom(42));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var p=session.Current!.Casino.Poker;
+        if(p.Phase==1 && p.Tick>=45) {CasinoPokerService.SelectCard(session.Current!,0);session.PokerCommand(1);}
+        session.TickPoker();
+    },100);
+    Check(s.Casino.Poker.UsedCards.Count==9 && s.Casino.Coins==99);
+});
+Test("poker fresh-session reloads preserve double-up and partial collection exactly",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=7;
+    CasinoPokerService.Command(s,1,new FailureRandom(0));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var p=session.Current!.Casino.Poker;
+        if(p.Phase==5 && p.Tick>=18) CasinoPokerService.SelectCard(session.Current!,1);
+        session.TickPoker();
+    },65);
+    Check(s.Casino.Poker.Phase is 0 or 3 or 5 or 6);
+    // A separate known award makes collection coverage independent of the double-up outcome.
+    s=PokerFixture();p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=7;
+    CasinoPokerService.Command(s,0,new FailureRandom(0));CasinoPokerService.Tick(s,new FailureRandom());
+    s=CheckCasinoContinuation(s,session=>session.TickPoker(),20);
+    Check(s.Casino.Coins==107 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("blackjack fresh-session reloads preserve predealt reveals and partial collection",()=>
+{
+    var s=BlackjackFixture();CasinoBlackjackService.Command(s,2,new FailureRandom());
+    CasinoBlackjackService.Command(s,1,new FailureRandom(CardDraws(BlackjackDeck())));
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),75);
+    Check(s.Casino.Blackjack.PlayerCount==2 && s.Casino.Blackjack.DealerCount==1 && s.Casino.Blackjack.Phase==2);
+    s=BlackjackFixture();var b=BlackjackDecision(s,5);CasinoBlackjackService.Command(s,2,new FailureRandom());
+    for(int i=0;i<29;i++) CasinoBlackjackService.Tick(s,new FailureRandom());
+    Check(b.AwardReady);CasinoBlackjackService.Command(s,2,new FailureRandom());CasinoBlackjackService.Tick(s,new FailureRandom());
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),10);
+    Check(s.Casino.Coins==104 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("card-chain fresh-session reloads preserve pending replacement and stepped collection",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    Check(CasinoCardChainService.SelectCard(s,0));
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),4);
+    Check(s.Casino.CardChain.ChainCount==1 && s.Casino.CardChain.Round.UsedCards.Count==6);
+    s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    p.Phase=3;s.Casino.PendingPayout=150;CasinoCardChainService.Command(s,0,new FailureRandom(0));
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),290);
+    Check(s.Casino.Coins==250 && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("horse fresh-session reloads preserve draft commit race motion and next-card RNG",()=>
+{
+    var s=HorseFixture();CasinoHorseService.AdjustWager(s,1);s.Casino.Horse.HeldAdjustment=1;
+    var saved=SaveStore.Serialize(s);s=SaveStore.Deserialize(saved);
+    Check(s.Casino.Horse.HeldAdjustment==0 && s.Casino.Horse.DraftCash==9900 && s.Money==10000);
+    CasinoHorseService.Start(s,new VbSimulationRandom(45));
+    s=CheckCasinoContinuation(s,session=>
+    {
+        var race=session.Current!.Casino.Horse;
+        if(race.Stage==1) session.TickHorseRace();
+        else if(race.Stage==2) session.TickHorseResult(HorseCatalog());
+        else if(race.Stage==3) session.AcceptHorsePayout(HorseCatalog());
+    },550);
+    Check(s.Money==9900 && s.Casino.Horse.Stage==0 && s.Casino.Horse.RaceCounter==1);
+});
 Test("casino pauses office and blocks other modal transactions while preserving accounting",()=>
 {
     var s=PokerFixture();var session=new GameSession(new FailureRandom());session.Restore(s);string before=SaveStore.Serialize(s);
@@ -1416,6 +1577,64 @@ Test("casino numeric boundary rejects an unrepresentable action before changing 
     var random=new FailureRandom(0,0);Check(CasinoPokerService.Command(s,0,random)==CasinoResult.NumericLimit);
     Check(CasinoPokerService.Command(s,1,random)==CasinoResult.NumericLimit && random.Calls==2);
     Check(s.Casino.Coins==100 && s.Casino.PendingPayout==long.MaxValue && p.Phase==3);
+});
+Test("poker rejects overflowing saved collection before loading or replacing a slot",()=>
+{
+    var s=PokerFixture();var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=4;
+    Check(CasinoPokerService.Command(s,0,new FailureRandom(0))==CasinoResult.Success);
+    string valid=SaveStore.Serialize(s);
+    s.Casino.Coins=long.MaxValue;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(s));
+    var raw=System.Text.Json.Nodes.JsonNode.Parse(valid)!;
+    raw["State"]!["Casino"]!["Coins"]=long.MaxValue;
+    Throws<InvalidDataException>(()=>SaveStore.Deserialize(raw.ToJsonString()));
+    string folder=Path.Combine(Path.GetTempPath(),"casino-limit-"+Guid.NewGuid().ToString("N")),path=Path.Combine(folder,"slot.json");
+    try
+    {
+        Directory.CreateDirectory(folder);File.WriteAllText(path,valid);
+        Throws<InvalidDataException>(()=>SaveStore.Save(path,s));Check(File.ReadAllText(path)==valid && !File.Exists(SaveStore.BackupPath(path)));
+    }
+    finally {if(Directory.Exists(folder))Directory.Delete(folder,true);}
+});
+Test("poker maximum representable collection credits exactly once per pair of callbacks",()=>
+{
+    var s=PokerFixture(long.MaxValue-4);var p=ReadyPoker(s,new(0,9),new(1,9),new(2,4),new(3,7),new(0,11));
+    p.Phase=3;p.Outcome=1;p.AwardReady=true;s.Casino.PendingPayout=4;
+    Check(CasinoPokerService.Command(s,0,new FailureRandom(0))==CasinoResult.Success);
+    s=CheckCasinoContinuation(s,session=>session.TickPoker(),10);
+    Check(s.Casino.Coins==long.MaxValue && s.Casino.PendingPayout==0 && s.Casino.Bet==0);
+});
+Test("exhausted card-chain stays saved paused and closable without recycling or financial changes",()=>
+{
+    var s=CardChainFixture();var p=ChainHand(s,new(0,0),new(1,1),new(1,3),new(2,5),new(3,7));
+    p.UsedCards=Enumerable.Range(0,52).ToHashSet();s.Casino.CardChain.ChainCount=47;
+    s.Casino.CardChain.PreviousCard=new(0,0);s.Casino.PendingPayout=12;s.Casino.ChainBonus=7;Check(CasinoCardChainService.SelectCard(s,0));
+    for(int i=0;i<3;i++)CasinoCardChainService.Tick(s,new FailureRandom());
+    Check(s.Casino.CardChain.DeckExhausted);
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.Coins==100 && s.Casino.Bet==1 && s.Casino.PendingPayout==12 && s.Casino.ChainBonus==7);
+    Check(!CasinoCardChainService.CanCommand(s,0) && !CasinoCardChainService.CanSelect(s,0,direct:true));
+    Check(CasinoCardChainService.Close(s));Check(!s.Casino.ActivityOpen && s.CompanyActivityPerformed==true);
+});
+Test("blackjack card boundary stays saved paused and closable without a refund or invented card",()=>
+{
+    var s=BlackjackFixture();BlackjackDecision(s,9);CasinoBlackjackService.Command(s,1,new FailureRandom());
+    Check(s.Casino.Blackjack.BoundaryReached);
+    s=CheckCasinoContinuation(s,session=>session.TickBlackjack(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.Coins==100 && s.Casino.Bet==1 && s.Casino.Blackjack.Cards.Count==18);
+    Check(!CasinoBlackjackService.CanCommand(s,1) && CasinoBlackjackService.Close(s));
+    Check(!s.Casino.ActivityOpen && s.CompanyActivityPerformed==true);
+});
+Test("card-chain bonus numeric boundary remains saved and closable without overflowing",()=>
+{
+    var s=CardChainFixture();ChainHand(s,new(0,0),new(0,2),new(0,4),new(0,7),new(0,11));s.Casino.ChainBonus=long.MaxValue;
+    Check(CasinoCardChainService.SelectCard(s,0));
+    var draw=new FailureRandom(CardDraws(new CasinoCard(0,9)));
+    for(int i=0;i<3;i++)CasinoCardChainService.Tick(s,draw);
+    Check(s.Casino.CardChain.NumericBoundary && draw.Calls==2 && s.Casino.ChainBonus==long.MaxValue);
+    s=CheckCasinoContinuation(s,session=>session.TickCardChain(),30);
+    Check(s.SimulationRandomState==0x123456 && s.Casino.PendingPayout==0 && s.Casino.Bet==1 && CasinoCardChainService.Close(s));
 });
 Test("new company resets original coins while preserving native shared casino scratch storage",()=>
 {
@@ -2605,12 +2824,13 @@ Test("hot spring ownership receipt and reload prevent repeated spending and clea
     var e=Worker(source:0);e.Stress=99;s.Employees=[e];
     var source=Worker(source:0);source.Stress=99;s.EmployeeSources=[new() {SourceIndex=0,GateValue=1,Employee=source}];
     Check(FacilityService.HotSpring(s,1)==FacilityResult.NotOwned && s.Money==8_000_000);
-    Check(FacilityService.HotSpring(s,0)==FacilityResult.Success && s.Money==0 && e.Stress==0 && source.Stress==0);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.Success && s.Money==0 && e.Stress==99 && source.Stress==99);
     Check(s.Company.WeeklyNet==11-8_000_000 && s.PendingFacilityReceipt!.Kind==FacilityKind.HotSpring);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));string before=SaveStore.Serialize(s);
     Check(FacilityService.HotSpring(s,0)==FacilityResult.EventPending && SaveStore.Serialize(s)==before);
     var session=new GameSession();session.Restore(s);session.TickOffice();Check(SaveStore.Serialize(s)==before);
-    s.PendingFacilityReceipt=null;Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
+    Check(FacilityService.AcknowledgeReceipt(s) && s.Employees[0].Stress==0 && s.EmployeeSources[0].Employee.Stress==0);
+    Check(FacilityService.HotSpring(s,0)==FacilityResult.InsufficientFunds);
 });
 Test("hot spring chain consumes eager source draws and saves each named reaction without repeat payments",()=>
 {
@@ -2625,12 +2845,13 @@ Test("hot spring chain consumes eager source draws and saves each named reaction
     var random=new GreetingRandom(.2f);
     Check(FacilityService.HotSpring(state,0,random)==FacilityResult.Success && random.GreetingCalls==8);
     Check(state.PendingFacilityReceipt!.Reactions!.Select(r=>r.SourceIndex).SequenceEqual(new[]{0,3}) && state.PendingFacilityReceipt.Reactions!.All(r=>r.Variant==1));
-    Check(state.Money==92_000_000 && state.Employees.All(e=>e.Stress==0));
+    Check(state.Money==92_000_000 && state.Employees.All(e=>e.Stress==80));
     for(int page=0;page<3;page++)
     {
         state=SaveStore.Deserialize(SaveStore.Serialize(state));Check(state.PendingFacilityReceipt!.PageIndex==page && state.Money==92_000_000);
         Check(FacilityService.HotSpring(state,0,random)==FacilityResult.EventPending && random.GreetingCalls==8);
         Check(FacilityService.AcknowledgeReceipt(state));
+        Check(state.Employees.All(e=>e.Stress==0) && state.EmployeeSources.Where(x=>x.GateValue==1).All(x=>x.Employee.Stress==0));
     }
     Check(state.PendingFacilityReceipt is null && !FacilityService.AcknowledgeReceipt(state) && state.Money==92_000_000);
 });
@@ -2666,11 +2887,14 @@ Test("recycling zeroes stock and pays exactly once without changing sales or pro
     var p=new ReleasedGameState {Title="Recycle A",Stock=7,UnitsSold=9,ProductionSpending=123,NetSalesReceipts=456};
     var q=new ReleasedGameState {Title="Recycle B",ProductIndex=1,Stock=3};s.ReleasedGames=[p,q];
     long before=s.Money!.Value;
-    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000 && p.Stock==0 && q.Stock==0);
-    Check(s.Company.WeeklyNet==5011 && p.UnitsSold==9 && p.ProductionSpending==123 && p.NetSalesReceipts==456);
+    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before && p.Stock==0 && q.Stock==0);
+    Check(s.Company.WeeklyNet==11 && p.UnitsSold==9 && p.ProductionSpending==123 && p.NetSalesReceipts==456);
     s=SaveStore.Deserialize(SaveStore.Serialize(s));
     Check(FacilityService.Recycle(s,0)==FacilityResult.EventPending && s.PendingFacilityReceipt!.Amount==5000);
-    s.PendingFacilityReceipt=null;Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000);
+    Check(s.Money==before && s.PendingFacilityReceipt.EffectsPending);
+    Check(FacilityService.AcknowledgeReceipt(s) && s.Money==before+5000 && s.Company.WeeklyNet==5011);
+    Check(!FacilityService.AcknowledgeReceipt(s) && s.Money==before+5000);
+    Check(FacilityService.Recycle(s,0)==FacilityResult.Success && s.Money==before+5000);
 });
 Test("recycling overflow is atomic before stock disposal",()=>
 {
@@ -2714,10 +2938,14 @@ Test("production facility preserves single draw 15 to 19 gain negative cash and 
     {
         var (s,_)=CalendarFixture(money:0);s.Calendar!.OriginalSlots0444[0]=7;s.Company.ProductionCapacity=50;s.CompanyActivityPerformed=true;
         var random=new GreetingRandom(roll);
-        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.Success && s.Money==-10_000_000 && s.Company.ProductionCapacity==50+gain && random.GreetingCalls==1);
+        Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.Success && s.Money==0 && s.Company.ProductionCapacity==50 && random.GreetingCalls==1);
         Check(s.Company.WeeklyNet==11 && s.Company.MonthlyNet==22 && s.Company.YearlyNet==33 && s.CompanyActivityPerformed==true);
         s=SaveStore.Deserialize(SaveStore.Serialize(s));
         Check(FacilityService.ExpandProduction(s,0,random)==FacilityResult.EventPending && random.GreetingCalls==1 && s.PendingFacilityReceipt!.Gain==gain);
+        Check(s.Money==0 && s.Company.ProductionCapacity==50 && s.PendingFacilityReceipt.EffectsPending);
+        Check(FacilityService.AcknowledgeReceipt(s) && s.Money==-10_000_000 && s.Company.ProductionCapacity==50+gain);
+        Check(!FacilityService.AcknowledgeReceipt(s) && random.GreetingCalls==1 && s.Company.WeeklyNet==11);
+
     }
 });
 Test("production expansion invalid draw and overflow are atomic",()=>
@@ -2730,6 +2958,30 @@ Test("production expansion invalid draw and overflow are atomic",()=>
     }
     var (t,_c)=CalendarFixture(money:long.MinValue);t.Calendar!.OriginalSlots0444[0]=7;t.Company.ProductionCapacity=50;
     Throws<OverflowException>(()=>FacilityService.ExpandProduction(t,0,new GreetingRandom(0)));Check(t.Company.ProductionCapacity==50 && t.Money==long.MinValue);
+});
+Test("legacy already-applied facility receipts never replay effects",()=>
+{
+    foreach(var kind in new[]{FacilityKind.Recycling,FacilityKind.ProductionLab})
+    {
+        var (state,_)=CalendarFixture();state.Calendar!.OriginalSlots0444[0]=(int)kind;
+        state.Company.ProductionCapacity=65;
+        state.PendingFacilityReceipt=new(){Kind=kind,Amount=kind==FacilityKind.Recycling?500:10_000_000,
+            SourceSlot=0,Gain=kind==FacilityKind.ProductionLab?15:null,CapacityBefore=kind==FacilityKind.ProductionLab?50:null};
+        var legacy=System.Text.Json.Nodes.JsonNode.Parse(SaveStore.Serialize(state))!;
+        legacy["State"]!["PendingFacilityReceipt"]!.AsObject().Remove("EffectsPending");
+        state=SaveStore.Deserialize(legacy.ToJsonString());long? money=state.Money;
+        Check(!state.PendingFacilityReceipt!.EffectsPending && FacilityService.AcknowledgeReceipt(state));
+        Check(state.Money==money && state.Company.ProductionCapacity==65 && !FacilityService.AcknowledgeReceipt(state));
+    }
+});
+Test("pending facility snapshots reject unappliable or advanced effects",()=>
+{
+    var (state,_)=CalendarFixture();state.Calendar!.OriginalSlots0444[0]=7;state.Company.ProductionCapacity=50;
+    FacilityService.ExpandProduction(state,0,new GreetingRandom(0));state.Company.ProductionCapacity=65;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));state.Company.ProductionCapacity=50;
+    state.PendingFacilityReceipt!.PageIndex=1;Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
+    state.PendingFacilityReceipt.PageIndex=0;state.Money=long.MinValue;
+    Throws<InvalidDataException>(()=>SaveStore.Serialize(state));
 });
 Test("facility changes are blocked during other pending game decisions",()=>
 {
@@ -6190,11 +6442,82 @@ Test("native horse raster keeps masks clipping and even rounding",()=>
 {
     byte[] background=Enumerable.Repeat((byte)100,421*173*3).ToArray(),colors=new byte[233*316*3],masks=Enumerable.Repeat((byte)255,233*316*3).ToArray();
     void Pixel(int x,int y,byte r,byte g,byte b){int at=(y*233+x)*3;colors[at]=r;colors[at+1]=g;colors[at+2]=b;masks[at]=masks[at+1]=masks[at+2]=0;}
-    Pixel(29,0,20,30,40);var race=new HorseRaceState {Tick=1,Positions=[2.5,-999,-999,-999,-999,-999,-999,-999]};var image=HorseRasterRules.Compose(background,colors,masks,race);
+    Pixel(29,0,20,30,40);var race=new HorseRaceState {Tick=2,Positions=[2.5,-999,-999,-999,-999,-999,-999,-999]};var image=HorseRasterRules.Compose(background,colors,masks,race);
     Check(image.AsSpan((38*421+2)*3,3).SequenceEqual(new byte[]{20,30,40}));Check(image[(38*421+3)*3]==100);
     Pixel(31,0,10,20,30);int maskAt=31*3;masks[maskAt]=15;masks[maskAt+1]=240;masks[maskAt+2]=255;race.Positions[0]=-1.5;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan(38*421*3,3).SequenceEqual(new byte[]{14,116,122}));
-    Pixel(116,0,7,8,9);race.Tick=0;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
-    Pixel(58,0,18,19,20);race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
+    Pixel(116,0,7,8,9);race.Tick=47;race.RacePhase=1;race.Positions[0]=100;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((130*421+15)*3,3).SequenceEqual(new byte[]{7,8,9}));
+    Pixel(58,0,18,19,20);race.Tick=201;race.RacePhase=2;race.Positions[0]=-414;image=HorseRasterRules.Compose(background,colors,masks,race);Check(image.AsSpan((38*421+1)*3,3).SequenceEqual(new byte[]{18,19,20}));
+});
+Test("horse drawing retains the preceding scene and frame at native transitions",()=>
+{
+    var background=Enumerable.Repeat((byte)100,421*173*3).ToArray();var colors=new byte[233*316*3];var masks=Enumerable.Repeat((byte)255,colors.Length).ToArray();
+    void Pixel(int x,byte value){for(int c=0;c<3;c++){colors[x*3+c]=value;masks[x*3+c]=0;}}
+    Pixel(0,11);Pixel(177,22);Pixel(58,33);
+    var race=new HorseRaceState {Tick=45,RacePhase=1,Positions=[10,-999,-999,-999,-999,-999,-999,-999]};
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(38*421+10)*3]==11);
+    race.Tick=200;race.RacePhase=2;race.FrontDistance=100;race.Positions=[0,20,20,20,20,20,20,20];
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(130*421+15)*3]==22);
+    race.Tick=201;race.Positions=[-405,-999,-999,-999,-999,-999,-999,-999];
+    Check(HorseRasterRules.Compose(background,colors,masks,race)[(38*421+10)*3]==33);
+});
+Test("horse scenery matches sequential native scrolls across phases and reloads",()=>
+{
+    byte[] Scene(int height,int tint)
+    {
+        var data=new byte[421*height*3];
+        for(int y=0;y<height;y++)for(int x=0;x<421;x++)
+        {int at=(y*421+x)*3;data[at]=(byte)x;data[at+1]=(byte)(x>>8);data[at+2]=(byte)(y+tint);}
+        return data;
+    }
+    // Independent oracle: execute each overlapping self-copy, then read the
+    // resulting tail for the second copy, as the two native BitBlts do.
+    void NativeScroll(byte[] data,int y,int height,int shift)
+    {
+        var before=(byte[])data.Clone();
+        for(int row=y;row<y+height;row++)
+            Array.Copy(before,row*421*3,data,(row*421+shift)*3,(421-shift)*3);
+        var shifted=(byte[])data.Clone();
+        for(int row=y;row<y+height;row++)
+            Array.Copy(shifted,(row*421+421-shift)*3,data,row*421*3,shift*3);
+    }
+    var start=Scene(173,0);var closeup=Scene(217,20);var finish=Scene(173,40);
+    var colors=new byte[233*316*3];var masks=Enumerable.Repeat((byte)255,colors.Length).ToArray();
+    foreach(int tick in new[]{0,44,45,46,47,100,199,200,201,202,270,370,371,372,400})
+    {
+        var race=new HorseRaceState {Tick=tick,RacePhase=tick<45?0:tick<200?1:2,
+            Camera=700-Math.Min(Math.Max(tick-200,0),171)*10,Positions=Enumerable.Repeat(-10000d,8).ToList()};
+        int presented=tick<=45?0:tick<=200?1:2;
+        var expected=(presented==0?start:presented==1?closeup:finish).AsSpan(0,start.Length).ToArray();
+        if(presented==1)for(int i=46;i<tick;i++){NativeScroll(expected,0,77,2);NativeScroll(expected,82,91,6);}
+        if(presented==2)for(int i=0;i<Math.Min(tick-201,171);i++)NativeScroll(expected,0,173,10);
+        string saved=System.Text.Json.JsonSerializer.Serialize(race);
+        var actual=HorseRasterRules.Compose(start,colors,masks,race,closeup,finish);
+        if(!actual.SequenceEqual(expected))throw new Exception($"Scenery differs at tick {tick}");
+        Check(HorseRasterRules.Compose(start,colors,masks,race,closeup,finish).SequenceEqual(actual));
+        Check(System.Text.Json.JsonSerializer.Serialize(race)==saved);
+        Check(HorseRasterRules.Compose(start,colors,masks,System.Text.Json.JsonSerializer.Deserialize<HorseRaceState>(saved)!,closeup,finish).SequenceEqual(actual));
+    }
+    Check(start.SequenceEqual(Scene(173,0))&&closeup.SequenceEqual(Scene(217,20))&&finish.SequenceEqual(Scene(173,40)));
+});
+Test("horse finish post follows camera with mask clipping and draws behind runners",()=>
+{
+    byte[] background=Enumerable.Repeat((byte)100,421*173*3).ToArray(),colors=new byte[233*316*3],masks=Enumerable.Repeat((byte)255,233*316*3).ToArray();
+    // Mark both edges of the recovered 12x147 finish tile at sheet (0,169).
+    void Pixel(int x,int y,byte color,byte mask=0)
+    {int at=(y*233+x)*3;for(int c=0;c<3;c++){colors[at+c]=color;masks[at+c]=mask;}}
+    Pixel(0,169,7,15);Pixel(11,315,31);
+    var race=new HorseRaceState {Tick=280,RacePhase=2,Camera=-800,Positions=Enumerable.Repeat(-10000d,8).ToList()};
+    var image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421)*3]==3&&image[(156*421+11)*3]==31);
+    race.Camera=-810;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421+10)*3]==3&&image[(156*421+21)*3]==31&&image[(10*421)*3]==100);
+    race.Camera=-790;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(156*421+1)*3]==31&&image[(10*421)*3]==100);
+    race.Camera=-1220;image=HorseRasterRules.Compose(background,colors,masks,race);
+    Check(image[(10*421+420)*3]==3);
+    race.Camera=-1230;Check(HorseRasterRules.Compose(background,colors,masks,race).SequenceEqual(background));
+    Pixel(0,197,12);Pixel(58,0,22);race.Tick=281;race.Camera=-800;race.Positions[0]=-415;
+    image=HorseRasterRules.Compose(background,colors,masks,race);Check(image[(38*421)*3]==22);
 });
 if (args.Length == 2)
 {
@@ -6481,10 +6804,17 @@ if (args.Length == 2)
     Test("optional original hire dialogue imports locally with ten branches",()=>
     {
         var dialogue=OriginalDialogueImporter.Extract(File.ReadAllBytes(args[0]));
-        Check(dialogue.Entries.Count==374 && dialogue.SchemaVersion==18 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
+        Check(dialogue.Entries.Count==389 && dialogue.SchemaVersion==19 && dialogue.SourceHash==EmployeeDatabaseImporter.ExpectedHash);
         Check(FinancialFailureService.ImportKeys.All(k=>dialogue.Entries.ContainsKey(k)) && dialogue.Entries["FINANCIAL_FAILURE_NAMED"].Contains("{name}"));
         Check(Enumerable.Range(0,10).All(i=>!string.IsNullOrWhiteSpace(dialogue.Entries[$"HIRE_GREETING_{i}"])));
         Check(dialogue.Entries["HIRE_GREETING_9"].Contains("{company}"));
+        Check(RecallDialogueRules.ImportKeys.All(key=>dialogue.Entries.ContainsKey(key)));
+        var image=new EmployeeDatabaseImporter.Image(File.ReadAllBytes(args[0]));
+        Check(dialogue.Entries["RECALL_DIALOGUE_WAIT"]==image.String(0x5FAFCC,0xF2));
+        Check(dialogue.Entries["RECALL_DIALOGUE_FULL"]==image.String(0x5FAFCC,0xF7)+"{price}"+image.String(0x5FAFCC,0xF8));
+        Check(dialogue.Entries["RECALL_DIALOGUE_FIXED"]==image.String(0x5FAFCC,0xF7)+"{price}"+image.String(0x5FAFCC,0x103));
+        Check(dialogue.Entries["RECALL_DIALOGUE_GROAN"]==image.String(0x5FAFCC,0x101));
+        Check(dialogue.Entries["RECALL_DIALOGUE_ALERT"].Contains("{title}") && dialogue.Entries["RECALL_DIALOGUE_QUANTITY"].Contains("{quantity}") && dialogue.Entries["RECALL_DIALOGUE_COST"].Contains("{refund}"));
         Check(ProjectCancellationDialogueRules.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
         Check(MysteryLabService.ImportKeys.All(key=>!string.IsNullOrWhiteSpace(dialogue.Entries[key])));
         Check(dialogue.Entries["CANCELLATION_EMPLOYEE_NAMED"].Contains("{name}") && dialogue.Entries["CANCELLATION_STRESS_SUMMARY"].Contains("{room}"));

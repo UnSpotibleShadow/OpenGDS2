@@ -6,7 +6,7 @@ func run() -> void:
     for locale in ["en","ja"]:
         var language=ConfigFile.new();language.set_value("language","locale",locale);language.save("user://interface.cfg")
         var v=complete_value();v.State.DevelopmentProjects=[];var p=product();p.ReviewPending=false;p.ReviewDisplayCallbacks=90;p.Recall={"OriginalState":1,"WeeksRemaining":0};p.WeeklySalesHistory=[0,10000,8000,4000,0,1000,0,6000,0,2000,0,5000,0];v.State.ReleasedGames=[p]
-        await load_fixture(v);await press_node("TogglePause");await menu_choice("MENU_PRODUCTS",0)
+        await load_fixture(v);await press_node("TogglePause");await menu_choice("MENU_INFORMATION",1)
         var table=main.find_child("DesktopProductTable",true,false);table.get_root().get_first_child().select(0);table.item_activated.emit();await window("CompactProductWindow",195,325)
         var chart=main.find_child("CompactWeeklySalesChart",true,false)
         await RenderingServer.frame_post_draw

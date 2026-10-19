@@ -1,9 +1,5 @@
 extends "res://tests/window_artwork_smoke.gd"
 
-func selected_action(index: int) -> void:
-    main.find_child("EmployeeActions",true,false).get_popup().id_pressed.emit(index)
-    for frame in range(4):await process_frame
-
 func run() -> void:
     if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
     root.size=Vector2i(1280,800)
@@ -23,10 +19,10 @@ func run() -> void:
         for employee in v.State.Employees:employee.TechnologyLevels={"0":0};employee.MaximumTechnologies=4
         var game=product();game.Recall={"OriginalState":1,"WeeksRemaining":0};game.ReviewPending=false;game.ReviewDisplayCallbacks=90;v.State.ReleasedGames=[game]
         await load_fixture(v);await press_node("TogglePause")
-        await menu_choice("MENU_COMPANY",1);await window("BankWindow",422,252)
+        await menu_choice("MENU_ACTIONS",8);await window("BankWindow",422,252)
         check(main.find_child("BankLoanDate2",true,false)!=null and main.find_child("BankLoanType4",true,false)!=null,"Three loan records and four borrowing choices")
         await close_window("BankWindow")
-        await menu_choice("MENU_COMPANY",3);await window("HardwareLicenceWindow",398,306)
+        await menu_choice("MENU_ACTIONS",11);await window("HardwareLicenceWindow",398,306)
         var table=main.find_child("HardwareLicenceTable",true,false)
         check(table.columns==4 and table.get_column_title(3)==tr("HARDWARE_MAKER"),"Licence company column")
         await press_node("ToolbarSAVE_GAME");var before_licence=saved().Money
@@ -34,29 +30,27 @@ func run() -> void:
         check(saved().HardwareLicenses.size()==1 and int(saved().HardwareLicenses[0])==0 and saved().Money==before_licence-20000000,"Licence charges once")
         check(main.find_child("BuySelectedLicence",true,false).disabled,"Owned licence cannot repeat purchase")
         await close_window("HardwareLicenceWindow")
-        await menu_choice("MENU_STAFF",0);await window("StaffRosterWindow",450,394)
-        await press("TRAINING");await window("TrainingWindow",378,384)
-        check(main.find_child("TrainingCourses",true,false).columns==3,"Compact training columns")
-        check(main.find_child("TrainTechnology0",true,false).disabled,"Study-seat gate retained")
-        await press_node("AssignStudySeat1");check(not main.find_child("TrainTechnology0",true,false).disabled,"Study seat enables course")
+        await menu_choice("MENU_INFORMATION",0);await window("StaffRosterWindow",450,394);await close_window("StaffRosterWindow")
+        await select_employee(0);await press_node("EmployeeTechnologies")
+        await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68));await press_node("EmployeeLearnTechnology");await window("TrainingWindow",281,270)
+        check(main.find_child("TrainingCourses",true,false).columns==3,"Original learning columns")
+        check(main.find_child("StudySeats",true,false)==null and main.find_child("ManagementSave",true,false)==null,"Learning dialog omits added seat and persistence controls")
         await press_node("TrainTechnology0");await press_node("ToolbarSAVE_GAME")
         check(saved().Employees[0].Office.Training!=null and saved().Employees[0].Experience==90,"Training saves cost and active course")
-        await select_employee(0);await press_node("EmployeeTechnologies")
+        await select_employee(0)
         check(main.find_child("EmployeeTechnologies",true,false).button_pressed,"Selected employee tab is pressed")
         await select_employee(1);check(main.find_child("EmployeeTechnologiesPage",true,false).visible,"Employee switch retains selected page")
         await close_window("EmployeeDetailsWindow")
-        await press_node("CompanyInformation");await window("CompanyInformationWindow",348,353)
-        check(main.find_child("CompanyTenant2",true,false)!=null and main.find_child("CompanySalesRecordTitle",true,false).text==game.Title,"Company tenant and sales-record fields")
-        await close_window("CompanyInformationWindow")
-        await menu_choice("MENU_COMPANY",6);await window("SecretaryHiringWindow",398,291)
+        check(main.find_child("CompanyFacilities",true,false)==null and main.find_child("CompanyInformation",true,false)==null,"Company overview has no port-only navigation buttons")
+        await menu_choice("MENU_ACTIONS",6);await window("SecretaryHiringWindow",398,291)
         table=main.find_child("SecretaryCandidates",true,false)
         check(table.columns==3 and table.get_column_title(1)==tr("CONTRACT_FEE"),"Secretary native three-column order")
         await close_window("SecretaryHiringWindow")
-        await menu_choice("MENU_COMPANY",7);await window("SecretaryPolicyWindow",428,332)
+        await menu_choice("MENU_ACTIONS",5);await window("SecretaryPolicyWindow",428,332)
         check(main.find_child("SecretaryProductionFrame",true,false)!=null and main.find_child("SecretaryReturnFrame",true,false)!=null,"Boxed policy groups")
         check(main.find_child("SecretaryProduction2",true,false).button_pressed,"Saved policy selected")
         await close_window("SecretaryPolicyWindow")
-        await menu_choice("MENU_PRODUCTS",0)
+        await menu_choice("MENU_INFORMATION",1)
         table=main.find_child("DesktopProductTable",true,false);table.get_root().get_first_child().select(0);table.item_activated.emit();await process_frame
         await press_node("CompactProduceMore");await window("AdditionalProductionWindow",414,358)
         check(main.find_child("ProductionRetailer",true,false)!=null and main.find_child("ProductionReadonlyPrice",true,false)!=null,"Reproduction includes distribution and readonly price")

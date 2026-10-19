@@ -1,5 +1,68 @@
 # OpenGDS2 working instructions
 
+## Release authorization — 19 October 2026
+
+The owner approved the final PR158 implementation, then explicitly authorized
+completing the release end to end, including a version bump and Windows 32-bit
+and 64-bit packages. Prepare 0.1.0-ea.2 through a feature PR into develop, then
+a develop-to-main release PR. The approved main merge triggers Actions exports.
+Verify exact packages and checksums, tag the verified main commit and publish a
+GitHub prerelease. Preserve v0.1.0-ea.1 and its assets. This supersedes prior
+no-release/no-main instructions for the accepted review. Keep native Windows
+manual testing limits honest; use Actions packaged Windows checks. Recovery:
+/workspace/private/release-ea2-20261019/.
+
+## Current work — review follow-ups, 18 October 2026
+
+The owner authorized implementation of #152, #153 and #154, application/taskbar
+identity and optional startup release notices. Work through focused feature PRs
+into develop; the earlier per-step pauses applied to the completed fidelity plan.
+Keep #151 open for owner acceptance. No main promotion, release or desktop export.
+Private evidence/checkpoints: /workspace/private/review-followups-20261018/.
+Current checkout: /workspace/scratch/comparison-20261017/OpenGDS2.
+
+## Owner re-review — 19 October 2026
+
+#152/#153 and the non-training review items are accepted. The owner explicitly
+requires the original employee technology view's Learn (習得) beside Use (使う),
+with Command6's study-workstation gate and fGMWSTech's filtered course dialog.
+The Staff route is not a substitute. Restore the native route while retaining
+PR157's narrow company research panel for PC clicks. The generic overview
+Training footer stays removed; Learn belongs inside the technology view.
+Use a feature PR into develop; keep #151/#154 open for owner acceptance. No main
+promotion, release/tag or desktop export. Native evidence and recovery:
+/workspace/private/employee-learning-20261019/.
+Consumer Investigation is accepted with a manual-test waiver because the owner
+cannot force it; do not claim a completed native reproduction. No main/release
+promotion or desktop export.
+
+## Previous work — fidelity follow-ups, 17 October 2026
+
+The owner authorized the ten ordered findings in
+[fidelity follow-ups](docs/fidelity-followups-20261017.md). Complete one step,
+then ask before starting the next, naming that next step. Step 1 is merged in
+PR140, step 2 in PR141, step 3 in PR143, step 4 in PR144, step 5 in PR145,
+step 6 in PR146 and step 7 in PR147. The owner requested an English pixel patch
+for the step-2 registration illustration and explicitly skipped step 8 (original
+GD2 save compatibility). The artwork follow-up is merged in PR148. Step 9
+(persisted active casino rounds) was authorized and reviewed: retain modern
+continuation, supported by native serialization evidence and fresh-session tests.
+Step 9 is merged in PR149. Step 10 (casino exhaustion and numeric-boundary recovery) is merged in PR150.
+The ten-step plan is complete with step 8 explicitly skipped. Step 8 remains explicitly skipped; there is no release/main promotion
+authorization in this fidelity plan.
+Follow git-flow: `feature/...` branches
+start from `develop` and PRs target `develop`; `main` receives reviewed release/hotfix integrations. The remote
+had only main, so develop starts at its current released-source descendant.
+The owner explicitly permits Actions again now the repository is public. Use
+validation-only CI for these steps; no release, tag, asset replacement or desktop
+packaging is requested by the fidelity steps. Separately, the owner authorized
+an automatic desktop build only after a same-repository `develop` PR merges into
+`main`. The main-build workflow may export release/debug packages and upload
+Actions artifacts with checksums; it must not publish a release or tag. Feature
+PRs and ordinary pushes must not trigger desktop packaging. These instructions
+supersede the older pauses and direct
+feature-to-main workflow below. Preserve the published release.
+
 ## Current work — post-release community handoff, 16 October 2026
 
 The owner published v0.1.0-ea.1 with Windows x86_32/x86_64 ZIPs and checksums;
@@ -42,8 +105,8 @@ local generated sidecars intact. Source PR merge/snapshot sync remain authorized
 - Full git checkout: `/workspace/scratch/m105-review-git`. The primary snapshot
   `/workspace/OpenGDS2` has no .git; sync only explicit verified changed files
   after merge, checking its base contents before replacement.
-- Create a feature branch, commit there and open a PR into main. Do not publish
-  development commits directly to main. Preserve unrelated changes and generated
+- Create a feature branch from develop, commit there and open a PR into develop.
+  Do not publish development commits directly to main. Preserve unrelated changes and generated
   sidecars; do not blanket-clean or stage them.
 - Original LZH import remains required. Never commit imported original graphics,
   sounds, executables, databases, saves, extraction caches or full private traces.
@@ -52,7 +115,7 @@ local generated sidecars intact. Source PR merge/snapshot sync remain authorized
 - Keep the README Ko-fi section and code/runtime/community-music notices.
   Community audio has recorded distribution authorization and separate terms;
   the MIT code license does not grant standalone music rights.
-- Keep Actions paused. Do not generate desktop debug packages, publish releases,
+- Actions source validation is authorized. Do not generate desktop debug packages, publish releases,
   change visibility or communicate externally without the relevant authorization.
 - Use the existing GitHub connection; never ask for a separate browser login.
   A historical uploads.github.com HTTP401 is unresolved. Diagnose the upload

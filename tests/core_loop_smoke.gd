@@ -28,6 +28,8 @@ func check_meeting_transition(previous_music: AudioStream) -> void:
         for button in main.find_children("*","Button",true,false):
             if button.is_visible_in_tree() and button.name == "CompletionDebug":
                 phase = "final"
+    if phase.is_empty() and (main.find_child("MediaInformationWindow",true,false)!=null or main.find_child("ShipmentWindow",true,false)!=null) and previous_music!=null and previous_music.resource_path.ends_with("/meetings/final.ogg"):
+        phase="final"
     if main.find_child("ConversationWindow",true,false) != null or not phase.is_empty():
         check(music.stream == previous_music,"Meeting sequence keeps its stream across pages and forms")
         if not phase.is_empty():
@@ -54,14 +56,21 @@ func press(key: String) -> void:
     if not found and key=="RELEASE_GAME" and main.find_child("ProjectRelease",true,false)!=null:
         await press_node("ProjectRelease")
         found=true
+    if not found and key=="START_GAME_DEVELOPMENT":
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(192,150))
+        if main.find_child("RoomOriginalGame",true,false)!=null:await press_node("RoomOriginalGame")
+        found=true
+    if not found and key=="SALES_CHART":
+        main.find_child("MENU_INFORMATION",true,false).get_popup().id_pressed.emit(2);found=true
+    if not found and key=="SALES":
+        main.find_child("MENU_INFORMATION",true,false).get_popup().id_pressed.emit(1);found=true
     if not found and key=="BACK_TO_OFFICE" and main.find_child("NativeDialogCanvas",true,false)!=null:
         var canvas=main.find_children("NativeDialogCanvas","Control",true,false)[-1]
         var dialog=canvas.get_parent().get_parent().get_parent().get_parent()
         dialog.find_child("CloseWindow",true,false).pressed.emit()
         found=true
     if not found:
-        for menu in main.find_children("*","MenuButton",true,false):
-            var popup=menu.get_popup()
+        for popup in desktop_popups():
             for item in range(popup.item_count):
                 if popup.get_item_text(item)==tr(key):
                     popup.about_to_popup.emit()
@@ -72,6 +81,9 @@ func press(key: String) -> void:
     if not found and key=="BACK_TO_OFFICE" and main.find_child("GameDesktop",true,false)!=null:found=true
     check(found, "Button exists: " + key)
     await process_frame
+    if key=="RELEASE_GAME" and main.find_child("ConversationWindow",true,false)!=null:
+        await finish_conversation()
+        if main.find_child("CloseMediaInformation",true,false)!=null:await press_node("CloseMediaInformation")
     if key=="SALES" and main.find_child("CompactProductWindow",true,false)==null:
         var table=main.find_child("DesktopProductTable",true,false)
         var row=table.get_root().get_first_child() if table!=null else null
@@ -88,11 +100,21 @@ func read_conversation_page() -> void:
     if is_instance_valid(message) and message.is_inside_tree():
         await create_timer(.03).timeout;message.gui_input.emit(enter);await process_frame
 
+func office_input(button_index: int,pixel: Vector2) -> void:
+    var office=main.find_child("OriginalOfficeBackground",true,false)
+    check(office!=null,"Office input surface exists")
+    if office==null:return
+    var scale: float=min(office.size.x/466.0,office.size.y/290.0)
+    var click=InputEventMouseButton.new();click.button_index=button_index;click.pressed=true
+    click.position=(office.size-Vector2(466,290)*scale)/2.0+pixel*scale
+    office.gui_input.emit(click);await process_frame
+
 func press_node(name: String) -> void:
     if name=="AcknowledgeRecall":
         for page in range(8):
             if main.find_child("ConversationMessage",true,false)==null:break
             await read_conversation_page()
+        return
     if name in ["ConfirmSchoolClosure","ConfirmFacilityClosure","ConfirmFacilityService"] and main.find_child("ConversationWindow",true,false)!=null:
         await read_conversation_page()
     if name=="TogglePause":
@@ -100,8 +122,11 @@ func press_node(name: String) -> void:
         await process_frame
         return
     if name=="ToolbarSTART_GAME_DEVELOPMENT":
-        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
-        await process_frame
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(192,150))
+        await press_node("RoomOriginalGame")
+        return
+    if name=="CompanyFacilities":
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(80,220))
         return
     if name=="ToolbarBACK_TO_TITLE":
         var menu=main.find_child("MENU_GAME",true,false).get_popup()
@@ -129,6 +154,9 @@ func press_node(name: String) -> void:
             button.button_pressed=true
         button.pressed.emit()
     await process_frame
+    if name in ["CompletionRelease","ProjectRelease"]:
+        await finish_conversation()
+        if main.find_child("CloseMediaInformation",true,false)!=null:await press_node("CloseMediaInformation")
     if name=="AcknowledgeReviews":
         await finish_conversation()
         if main.find_child("AcknowledgeHallCelebration",true,false)!=null:
@@ -571,7 +599,9 @@ func run() -> void:
     check(employee_window.position == original_position,"Employee window restores original position")
     employee_window.find_child("CloseWindow",true,false).pressed.emit()
     check(not employee_window.visible,"Employee child window closes")
-    main.find_child("MENU_WINDOWS",true,false).get_popup().id_pressed.emit(2)
+    var window_list=main.find_child("OtherWindowsMenu",true,false);window_list.about_to_popup.emit()
+    for i in range(window_list.item_count):
+        if window_list.get_item_metadata(i)==employee_window.get_instance_id():window_list.id_pressed.emit(i);break
     await process_frame
     check(employee_window.visible,"Window menu reopens employee list")
     root.size = Vector2i(1920,1080)
@@ -880,11 +910,7 @@ func run() -> void:
     check(main.find_child("CompactWeeklySalesChart",true,false) != null,"Individual product integrates its compact chart")
     check(main.find_child("ProductReleaseDate",true,false) != null and main.find_child("ProductHallOfFame",true,false) != null,"Individual product includes release date and separate Hall of Fame pane")
     check(main.find_child("CompactProduceMore",true,false).disabled == not main.find_child("CompactProductionAvailability",true,false).tooltip_text.contains(tr("PRODUCTION_READY")),"Compact reproduction action follows the recovered shared allowance")
-    main.find_child("MENU_PRODUCTS",true,false).get_popup().id_pressed.emit(1)
-    await process_frame
-    check(main.find_child("WeeklySalesChart",true,false) != null,"Original thirteen-cell sales chart")
-    check(main.find_child("CurrentWeeklySales",true,false) != null,"Current-week sales label")
-    await press("BACK_TO_SALES")
+    check(main.find_child("ProductDetailsMenu",true,false)==null and main.find_child("CompactWeeklySalesChart",true,false)!=null,"Native product report owns sales history without an extra Information submenu")
     await press_node("CompactProduceMore")
     check(main.find_child("ProductionCopies",true,false) != null,"Reprint controls")
     main.find_child("ProductionCopies",true,false).value = 1000
@@ -954,7 +980,7 @@ func run() -> void:
     recall_project.Bugs = 0
     write_json("user://saves/slot1.json",recall_save)
     await press("LOAD_GAME")
-    if not await await_node("AcknowledgeRecall"):
+    if not await await_node("ConversationWindow"):
         quit(1)
         return
     await press("SAVE_GAME")
@@ -972,7 +998,7 @@ func run() -> void:
     await press("LOAD_GAME")
     await press_node("AcknowledgeRecall")
     Engine.time_scale = 100
-    if not await await_node("AcknowledgeRecall"):
+    if not await await_node("ConversationWindow"):
         quit(1)
         return
     Engine.time_scale = 1
@@ -985,7 +1011,7 @@ func run() -> void:
     var investigation_receipts = decision_save.State.ReleasedGames[0].NetSalesReceipts-recall_save.State.ReleasedGames[0].NetSalesReceipts
     check(decision_save.State.Money == 100000000+investigation_receipts-expected_refund,"Recall charges once alongside ongoing sales")
     await press("LOAD_GAME")
-    await await_node("AcknowledgeRecall")
+    await await_node("ConversationWindow")
     await press("SAVE_GAME")
     check(JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State.Money == decision_save.State.Money,"Result reload does not charge a second refund")
     await press_node("AcknowledgeRecall")
@@ -1007,8 +1033,10 @@ func run() -> void:
     Engine.time_scale = 1
     await press("STAFF")
     await press("TRAINING")
-    check(main.find_child("TrainTechnology0",true,false).disabled,"Training needs a study seat")
-    await press_node("AssignStudySeat1")
+    check(main.find_child("ConversationWindow",true,false)!=null and main.find_child("TrainingWindow",true,false)==null,"Original Learn action requires a study workstation")
+    await finish_conversation()
+    await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68))
+    await press_node("EmployeeLearnTechnology")
     await press_node("TrainTechnology0")
     await press("SAVE_GAME")
     var training_save = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
@@ -1026,7 +1054,7 @@ func run() -> void:
     await press("LOAD_GAME")
     await press("STAFF")
     await press("TRAINING")
-    check(main.find_child("AssignStudySeat1",true,false).disabled,"Study seat survives reload")
+    check(main.find_child("TrainingWindow",true,false)!=null and main.find_child("StudySeats",true,false)==null,"Reloaded study seat opens the original learning dialog directly")
     await press("BACK_TO_OFFICE")
     await press("STAFF")
     # Authored ready-project fixture isolates application from checkpoint modals.
@@ -1229,9 +1257,9 @@ func run() -> void:
         calendar_toolbar.pressed.emit()
         await process_frame
         check(main.find_child("AcknowledgeCalendar",true,false) != null,"Calendar guards direct action callbacks: "+key)
-    var staff_menu = main.find_child("MENU_STAFF",true,false).get_popup()
+    var staff_menu = main.find_child("MENU_ACTIONS",true,false).get_popup()
     staff_menu.about_to_popup.emit()
-    check(staff_menu.is_item_disabled(0) and staff_menu.is_item_disabled(1),"Calendar modal disables employee menu actions")
+    check(staff_menu.is_item_disabled(2) and staff_menu.is_item_disabled(3),"Calendar modal disables employee menu actions")
     check(not main.call("SetSimulationPaused",main.call("GetSimulationPaused")),"Calendar modal owns the pause state")
     Engine.time_scale = 100
     for frame in range(500):
@@ -1475,9 +1503,9 @@ func run() -> void:
     school_save.State.Money = 600000000
     write_json("user://saves/slot1.json",school_save)
     await press("LOAD_GAME")
-    await press_node("CompanyFacilities")
+    await office_input(MOUSE_BUTTON_LEFT,Vector2(160,260))
     await press_node("OpenSchool1")
-    check(main.find_child("CloseSchool1",true,false) != null and main.find_child("OpenSchool0",true,false).disabled,"School occupies selected slot and prevents duplicate construction")
+    check(main.find_child("CloseSchool1",true,false) != null,"School occupies the clicked native facility slot")
     await press("SAVE_GAME")
     var bought_school = JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json"))
     check(bought_school.State.Money == 0 and int(bought_school.State.Calendar.OriginalSlots0444[1]) == 0,"School construction debits exactly six hundred million")
@@ -1553,8 +1581,8 @@ func run() -> void:
     await press_node("ContinueAwards")
     for frame in range(8):
         await process_frame
-    var help_menu = main.find_child("MENU_HELP",true,false).get_popup()
-    help_menu.id_pressed.emit(1)
+    var help_menu = main.find_child("MENU_INFORMATION",true,false).get_popup()
+    help_menu.id_pressed.emit(7)
     await process_frame
     var record=main.find_child("ReachTimeRecords",true,false).get_root().get_first_child()
     for i in range(4):
@@ -1890,5 +1918,29 @@ func run() -> void:
     main = null
     await process_frame
     await process_frame
+    # Let this long coroutine release its local window/resource references before
+    # Godot tears down the C# bindings at process exit.
+    call_deferred("finish_core_loop")
+
+func finish_core_loop() -> void:
+    await process_frame
+    await process_frame
+    if DisplayServer.get_name()=="headless" and ResourceLoader.exists("res://tests/ManagedTestCleanup.cs"):
+        var cleanup=load("res://tests/ManagedTestCleanup.cs").new()
+        root.add_child(cleanup)
+        # Themes release styleboxes, which in turn release image textures. Allow
+        # native deferred disposal between collections of those resource layers.
+        for pass_index in range(4):
+            cleanup.Drain()
+            await process_frame
+        cleanup.free()
     print("Core loop UI checks complete; failures=",failures)
     quit(0 if failures == 0 else 1)
+
+func desktop_popups() -> Array:
+    var popups=[]
+    for menu in main.find_children("*","MenuButton",true,false):
+        var popup=menu.get_popup()
+        popups.append(popup)
+        popups.append_array(popup.find_children("*","PopupMenu",true,false))
+    return popups

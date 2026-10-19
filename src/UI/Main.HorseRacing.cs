@@ -4,6 +4,12 @@ using OpenGDS2.Core;
 namespace OpenGDS2.UI;
 public partial class Main
 {
+    private string HorseName(RaceRunner runner)
+        =>_activeCatalog?.Horses.SingleOrDefault(h=>h.SourceIndex==runner.SourceIndex)?.Name==runner.Name
+            ?CatalogName(_activeCatalog,"HORSE",runner.SourceIndex,runner.Name):runner.Name;
+    private string JockeyName(RaceRunner runner)
+        =>_activeCatalog?.Jockeys.SingleOrDefault(j=>j.SourceIndex==runner.JockeySourceIndex)?.Name==runner.JockeyName
+            ?CatalogName(_activeCatalog,"JOCKEY",runner.JockeySourceIndex,runner.JockeyName):runner.JockeyName;
     private double _horseElapsed;
     private void TickHorseInterface(GameState state,double delta)
     {
@@ -71,16 +77,16 @@ public partial class Main
             for(int i=0;i<8;i++)
             {
                 var h=r.Runners[i];string forecasts=string.Join("/",r.ForecastRanks.Select(row=>(row[i]+1).ToString()));
-                var entry=rosterRows[i];entry.SetText(0,(i+1).ToString());entry.SetText(1,h.Name);entry.SetText(2,h.JockeyName);entry.SetText(3,forecasts);entry.SetText(4,r.WinOdds[i].ToString("0.0"));entry.SetTextAlignment(4,HorizontalAlignment.Right);
+                var entry=rosterRows[i];entry.SetText(0,(i+1).ToString());entry.SetText(1,HorseName(h));entry.SetText(2,JockeyName(h));entry.SetText(3,forecasts);entry.SetText(4,r.WinOdds[i].ToString("0.0"));entry.SetTextAlignment(4,HorizontalAlignment.Right);
                 if(r.PairSelected&&i==r.SelectedFirst){matrixButtons[i].Text="—";matrixButtons[i].Disabled=true;}
                 else{double cellOdds=r.PairSelected?r.PairOdds[r.SelectedFirst][CasinoHorseService.CompressedColumn(r.SelectedFirst,i)]:r.WinOdds[i];long cellStake=r.PairSelected?r.PairStakes[r.SelectedFirst][i]:r.SingleStakes[i];matrixButtons[i].Text=$"{(r.PairSelected?(r.SelectedFirst+1)+"–":"")}{i+1}: {cellOdds:0.0} · ¥{DisplayNumbers.Format(cellStake)}";matrixButtons[i].Disabled=r.Stage!=0;}
             }
             table.Visible=r.Stage!=1;track.Visible=r.Stage==1;track.Race=r;track.QueueRedraw();
             kind.Select(r.PairSelected ? 1 : 0);
             bool changed=!ReferenceEquals(roster,r.Runners);
-            if(changed) {first.Clear();for(int i=0;i<8;i++) first.AddItem($"{i+1}: {r.Runners[i].Name}",i);}
+            if(changed) {first.Clear();for(int i=0;i<8;i++) first.AddItem($"{i+1}: {HorseName(r.Runners[i])}",i);}
             if(changed || lastFirst!=r.SelectedFirst)
-            {second.Clear();for(int i=0;i<8;i++) if(i!=r.SelectedFirst) second.AddItem($"{i+1}: {r.Runners[i].Name}",i);}
+            {second.Clear();for(int i=0;i<8;i++) if(i!=r.SelectedFirst) second.AddItem($"{i+1}: {HorseName(r.Runners[i])}",i);}
             roster=r.Runners;lastFirst=r.SelectedFirst;
             first.Select(r.SelectedFirst);second.Select(CasinoHorseService.CompressedColumn(r.SelectedFirst,r.SelectedSecond));second.Visible=r.PairSelected;
             long stake=r.PairSelected ? r.PairStakes[r.SelectedFirst][r.SelectedSecond] : r.SingleStakes[r.SelectedFirst];

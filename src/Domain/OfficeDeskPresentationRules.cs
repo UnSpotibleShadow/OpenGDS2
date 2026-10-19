@@ -3,6 +3,20 @@ namespace OpenGDS2.Domain;
 /// <summary>Assigned-development-computer rectangles, Module2 11 +2362..27AE.</summary>
 public static class OfficeDeskPresentationRules
 {
+    public static (int X,int Y,int Width,int Height) StudyComputerBounds(int action)
+    {
+        if(action is <1 or >5)throw new ArgumentOutOfRangeException(nameof(action));
+        return (action==5?277:147+(action-1)*32,action==5?86:43+(action-1)*16,36,29);
+    }
+
+    // Initializer +331D..34F9 maps actions 1–5 to IDs 45–49. Main loop
+    // +2374..246C and +2717..27AE supplies their occupied PC rectangles.
+    public static OfficeSpriteDefinition ForStudy(OfficeSpriteDefinition original,int action,int computer,bool training)
+    {
+        if(action is <1 or >5||computer is <0 or >3||original.Id!=44+action)throw new ArgumentOutOfRangeException(nameof(action));
+        var (x,y,_,_)=StudyComputerBounds(action);
+        return original with {X=x,Y=y,SourceX=(action==5?571:608)+74*computer,SourceY=228+(training?60:0),DepthOffset=original.Y+original.DepthOffset-y};
+    }
     public static OfficeSpriteDefinition ForAssignment(OfficeSpriteDefinition original, int action, int computer)
     {
         if (action is <6 or >17 || computer is <0 or >3) throw new ArgumentOutOfRangeException(nameof(action));

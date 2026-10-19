@@ -169,6 +169,7 @@ The original LZH requirement and game rules are the same as the release export.
         manifest = {
             "build_label": candidate_version.group(1), "source_commit": source_commit,
             "platform": platform, "configuration": configuration,
+            "runtime_identifiers": sorted(name.removeprefix("microsoft.netcore.app.runtime.") for name, _ in runtime_packs),
             "build_method": "standard Godot .NET source export",
             "private_early_access_candidate": True,
             "candidate_data_directory": data_directory,
@@ -214,6 +215,7 @@ The original LZH requirement and game rules are the same as the release export.
         manifest = {
             "build_label": version, "source_commit": source_commit,
             "platform": platform, "configuration": configuration,
+            "runtime_identifiers": sorted(name.removeprefix("microsoft.netcore.app.runtime.") for name, _ in runtime_packs),
             "build_method": "standard Godot .NET source export",
             "private_early_access_candidate": False, "public_early_access": True,
             "data_directory": data_directory, "community_report_url": report_url,

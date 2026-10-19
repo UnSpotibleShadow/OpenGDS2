@@ -39,61 +39,61 @@ Each entry states what is available in OpenGDS2 and where the player can find it
 - **Unresolved:** the evidence does not yet establish an equivalent action or its behavior; this is not counted as confirmed missing functionality.
 - **Menu organization / Separator:** describes a container or divider, not a gameplay feature.
 
-- Menu — `menu:mMenu`: Menu organization: OpenGDS2 uses Game for saving/loading and Back to Title; New Game and Quit are on the title screen. See the individual actions below.
-  - New game — `menu:mMenuNewG`: Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Exact native setup presentation is pending.
+- Menu — `menu:mMenu`: Menu organization: Game follows original New Game, Save, Load and Quit ordering/separators. A separated Back to Title entry retains port navigation.
+  - New game — `menu:mMenuNewG`: Available: Game > New Game opens a draft without replacing the company until start; cancelling returns to the current company. The title-screen route also remains available. Compact setup and Enter confirmation are implemented; native Windows font/IME acceptance remains pending.
   - Separator — `menu:mMenuHaihun1`: Separator: decorative menu divider; no action or gameplay is expected.
   - Save game — `menu:mMenuSave`: Available: Game > Save Game opens the numbered save picker. OpenGDS2 saves JSON; native GD2 compatibility is missing.
   - Load game — `menu:mMenuLoad`: Available: Game > Load Game opens the numbered load picker. OpenGDS2 loads JSON; native GD2 compatibility is missing.
   - Separator — `menu:mMenuHaihun2`: Separator: decorative menu divider; no action or gameplay is expected.
   - Exit game — `menu:mMenuEnd`: Available: Game > Quit closes the application. Native unload/confirmation equivalence remains pending.
-- Actions — `menu:mKoudou`: Menu organization: actions remain grouped under Company and Employees; three UP actions are also on the toolbar. Backup purchase and employee poaching are implemented below.
-  - Company development — `menu:mKoudouKaisha`: Menu organization: Public relations, Genre research and Expand production exist under Company and as three UP toolbar buttons. The original nested Company development submenu is not reproduced.
-    - Public relations — `menu:mKoudouTimeido`: Available: Company > Public relations, or the Public relations UP toolbar button, opens the activity confirmation.
-    - Genre development — `menu:mKoudouLibary`: Available: Company > Genre research, or the Genre research UP toolbar button, opens the activity confirmation.
-    - Production expansion — `menu:mKoudouZoukyou`: Available: Company > Expand production, or the Expand production UP toolbar button, opens the activity confirmation.
+- Actions — `menu:mKoudou`: Menu organization: Actions uses the original grouping without Extra Actions. Development-room and secretary clicks retain their original access routes.
+  - Company development — `menu:mKoudouKaisha`: Available: Actions > Company development contains Public relations, Genre research and Expand production in original order; the three UP toolbar actions remain.
+    - Public relations — `menu:mKoudouTimeido`: Available: Actions > Company development > Public relations, or the Public relations UP toolbar button, opens the activity confirmation.
+    - Genre development — `menu:mKoudouLibary`: Available: Actions > Company development > Genre research, or the Genre research UP toolbar button, opens the activity confirmation.
+    - Production expansion — `menu:mKoudouZoukyou`: Available: Actions > Company development > Expand production, or the Expand production UP toolbar button, opens the activity confirmation.
   - Separator — `menu:mKoudouMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Recruit employees — `menu:mKoudouSShinki`: Available: Employees > Hire Employees, or the recruitment toolbar button, opens recruitment.
-  - Poach employees — `menu:mKoudouSHikinuku`: Available: Employees > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending.
+  - Recruit employees — `menu:mKoudouSShinki`: Available: Actions > Hire Employees, or the recruitment toolbar button, opens recruitment.
+  - Poach employees — `menu:mKoudouSHikinuku`: Available: Actions > Poach employee opens the source-eligible target roster and timed negotiation. Automatic defensive offers, donations, contract changes and saved outcomes are implemented; native runtime comparison remains pending.
   - Separator — `menu:mKoudouMinasu3`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Secretary settings — `menu:mKoudouHisyoS`: Available: Company > Secretary policies opens the secretary settings window.
-  - Change secretary — `menu:mKoudouHisyoK`: Available: Company > Hire secretary, or the secretary toolbar button, opens secretary hiring/change.
+  - Secretary settings — `menu:mKoudouHisyoS`: Available: Actions > Secretary policies opens the secretary settings window.
+  - Change secretary — `menu:mKoudouHisyoK`: Available: Actions > Hire secretary, or the secretary toolbar button, opens secretary hiring/change.
   - Separator — `menu:mKoudouMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Visit bank — `menu:mKoudouBank`: Available: Company > Bank, or the bank toolbar button, opens the bank window.
-  - Buy development computer — `menu:mKoudouPCK`: Available: Company > Development Computers, or the computer toolbar button, opens computer purchasing.
-  - Buy backup device — `menu:mKoudouBackupK`: Available: Company > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature.
-  - Acquire hardware license — `menu:mKoudouLicense`: Available: Company > Hardware Licenses, or the license toolbar button, opens license purchasing.
-  - Buy technology — `menu:mKoudouTechK`: Available: Company > Technologies, or the technology toolbar button, opens technology purchasing.
-  - Go out — `menu:mKoudouGo`: Available: Company > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending.
-    - Go horse racing — `menu:mKoudouGoKeiba`: Available: Company > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply.
-    - Play poker — `menu:mKoudouGoPoka`: Available: Company > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply.
-    - Play blackjack — `menu:mKoudouGoBlack`: Available: Company > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply.
-- Information — `menu:mInfo`: Menu organization: the corresponding reports are under Employees, Products, Company and Help. The original Information menu grouping is not reproduced.
-  - All staff information — `menu:mInfoGMsStaffAll`: Available: Employees > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified.
-  - Own released games — `menu:mInfoGMsZishaGame`: Available: Products > Sales, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
-  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: Available: Help > Sales rankings, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified.
-  - Currently released hardware — `menu:mInfoGMHatubaiHard`: Available: Company > Hardware market opens the released-hardware report.
+  - Visit bank — `menu:mKoudouBank`: Available: Actions > Bank, or the bank toolbar button, opens the bank window.
+  - Buy development computer — `menu:mKoudouPCK`: Available: Actions > Development Computers, or the computer toolbar button, opens computer purchasing.
+  - Buy backup device — `menu:mKoudouBackupK`: Available: Actions > Buy backup device implements the one-time gameplay purchase and virus-protection flag. Modern save-file .bak recovery is a separate feature.
+  - Acquire hardware license — `menu:mKoudouLicense`: Available: Actions > Hardware Licenses, or the license toolbar button, opens license purchasing.
+  - Buy technology — `menu:mKoudouTechK`: Available: Actions > Technologies, or the technology toolbar button, opens technology purchasing.
+  - Go out — `menu:mKoudouGo`: Available: Actions > Go out contains the original three direct game choices. The casino facility route also remains available. Existing ownership/coins/modal guards are retained; exact native menu gating remains pending.
+    - Go horse racing — `menu:mKoudouGoKeiba`: Available: Actions > Go out > Horse racing, or the casino facility selector. Existing catalog/funds/ownership/modal guards still apply.
+    - Play poker — `menu:mKoudouGoPoka`: Available: Actions > Go out > Poker, or the casino facility selector. Existing ownership/coin/modal guards still apply.
+    - Play blackjack — `menu:mKoudouGoBlack`: Available: Actions > Go out > Blackjack, or the casino facility selector. Existing ownership/coin/modal guards still apply.
+- Information — `menu:mInfo`: Menu organization: Information contains Staff, Products, Top 100, Platforms, Our consoles and Time records in the comparison screenshot order. The extra Game details submenu is removed.
+  - All staff information — `menu:mInfoGMsStaffAll`: Available: Information > Staff, or the staff toolbar button, opens the implemented staff roster. The original handler uses local dispatch whose target is unresolved in the direct-call graph; exact native equivalence remains unverified.
+  - Own released games — `menu:mInfoGMsZishaGame`: Available: Information > Products, or the products toolbar button, opens the implemented own-product list. Exact original local-dispatch behavior remains unverified.
+  - Top 100 cumulative sales — `menu:mInfoGMsTusan100`: Available: Information > Top 100, or the sales-ranking toolbar button, opens the implemented ranking report. Exact original local-dispatch behavior remains unverified.
+  - Currently released hardware — `menu:mInfoGMHatubaiHard`: Available: Information > Platforms opens the released-hardware report.
   - Separator — `menu:mInfoGMMinasu`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Own released hardware — `menu:mInfoGMHatubaiZHard`: Available: Products > Own hardware opens the own-hardware report when its state is available.
+  - Own released hardware — `menu:mInfoGMHatubaiZHard`: Available: Information > Our consoles opens the own-hardware report when its state is available.
   - Separator — `menu:mInfoGMMinasu2`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Reach-time rankings — `menu:mInfoGMToutatu`: Available: Help > Global rankings opens the reach-time records view.
-- Windows — `menu:mWindow`: Menu organization: Windows exposes Office, Company, Employees and Products. That grouping differs from the original Visual, Tool and Other windows entries.
+  - Reach-time rankings — `menu:mInfoGMToutatu`: Available: Information > Time records opens the reach-time records view.
+- Windows — `menu:mWindow`: Menu organization: Windows contains Office, Company and Other windows; the latter lists numbered current child-window titles with the front window checked.
   - Visual window — `menu:mWindowVisual`: Available: Windows > Office reopens the office window. Exact original show/hide behavior remains unverified.
   - Tool window — `menu:mWindowTool`: Available: Windows > Company reopens the company window, the comparison for original fGMInfo. Exact original page/tool-window behavior remains unverified.
-  - Other windows — `menu:mWindowOther`: Unresolved: the original entry has no bound handler; dynamic window-list behavior has not been established. OpenGDS2 has explicit Windows entries, but they are not a confirmed equivalent.
+  - Other windows — `menu:mWindowOther`: Available: Other windows builds a numbered child-window list and reopens the selected window. The original entry has no explicit bound handler (native MDI bookkeeping); exact Windows runtime focus behavior remains unverified.
 - Settings — `menu:mSetup`: Available: in-game Settings exposes the original Sound, Graphic enlargement and Number display submenus. Title-screen Settings retains community music and language preferences.
-  - Sound — `menu:mSetupSound`: Available: Settings > Sound controls native effects independently of community music, matching the recovered native dispatcher guard.
-    - Sound on — `menu:mSetupSoundOn`: Available: Settings > Sound > On enables original sound effects; community music keeps its separate setting.
-    - Sound off — `menu:mSetupSoundOff`: Available: Settings > Sound > Off disables original sound effects; community music keeps its separate setting.
+  - Sound — `menu:mSetupSound`: Available: Sound On/Off controls effects and the optional community music together. Separate channel switches and volume controls are an accepted port extension.
+    - Sound on — `menu:mSetupSoundOn`: Available: Sound > On enables both effects and community music. Independent channel controls remain available.
+    - Sound off — `menu:mSetupSoundOff`: Available: Sound > Off mutes both effects and community music. Independent channel controls remain available.
   - Graphic enlargement — `menu:mSetupGraphic`: Available: Settings > Graphic enlargement selects Normal/Enlarged office graphics. The saved choice uses native-size pixels or 2x pixels with a bounded scroll viewport.
     - Normal size — `menu:mSetupGraphicD`: Available: Settings > Graphic enlargement > Normal restores native office resolution and clears the visible scroll position.
     - Enlarged size — `menu:mSetupGraphicK`: Available: Settings > Graphic enlargement > Enlarged doubles office pixels and preserves office input-coordinate mapping. Native panning/focus acceptance remains pending.
   - Number display — `menu:mSetupNumber`: Available: Settings > Number display selects Japanese or comma-separated thousands grouping across the UI; the choice is stored in company saves.
-    - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Settings > Number display > Japanese grouping uses four-digit groups with 万/億/兆 and zero-filled lower groups. Modern Int64 values can additionally use 京.
-    - Thousands grouping — `menu:mSetupNumber2`: Available: Settings > Number display > Thousands grouping uses comma-separated three-digit groups independently of interface language.
-- Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. The original Version information/About action is unresolved separately below.
+    - Japanese large-number grouping — `menu:mSetupNumber1`: Available: Number display > 100万0000 uses Japanese four-digit grouping, matching the original option caption. Modern Int64 values additionally support 京.
+    - Thousands grouping — `menu:mSetupNumber2`: Available: Number display > 1,000,000 uses comma-separated three-digit grouping, matching the original option caption.
+- Help — `menu:mHelp`: Menu organization: Help > Game help opens the implemented topic viewer. Version information/About is restored in the separate About dialog.
   - Help topics — `menu:mHelpHelp`: Available: Help > Game help, or the help toolbar button, opens the five-topic original Help viewer.
   - Separator — `menu:mHelpMinasu1`: Separator: decorative menu divider; no action or gameplay is expected.
-  - Version information — `menu:mHelpVersion`: Unresolved: the original opens fMainAbout. An equivalent interactive About/version/link dialog has not been established in OpenGDS2; there is no confirmed alternate player path for that dialog.
+  - Version information — `menu:mHelpVersion`: Available: Help > About / Version opens the compact AboutWindow corresponding to fMainAbout, with local original artwork/icon, current port version, original copyright and interactive Kairosoft website controls. See [fidelity follow-ups, step 4](fidelity-followups-20261017.md#step-4-aboutversionwebsite-dialog); native browser/pixel acceptance remains unrun.
 
 ## Workflow and adaptation index
 

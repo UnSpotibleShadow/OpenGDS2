@@ -29,6 +29,17 @@ and retain matching save/backup pairs.
 Original-game save importing is unsupported. Do not copy an original binary save
 into the modern saves folder and expect it to load.
 
+## Saving during casino games
+
+Modern saves retain active poker, blackjack, card-chain and horse-racing rounds.
+Loading continues the saved hand or race, including wagers and partially
+collected payouts, without making a fresh deal or charging the bet again. Held
+wager buttons are released on load. Closing and reopening a game follows its
+separate close rules; it does not automatically refund a bet.
+
+This continuation is an OpenGDS feature. Original saves do not contain a complete
+resumable card hand; this behavior does not imply original-save compatibility.
+
 ## Upgrading from the old test folder
 
 First launch copies eligible data from the neighboring

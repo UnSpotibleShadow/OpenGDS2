@@ -47,6 +47,7 @@ public partial class Main
         _music?.SetMeetingPhase(-1);
         RememberConversationPosition();
         CloseConversationScene();
+        CloseCompanyResearch();
         CloseEmployeeDetails();
         if (_desktop is not null) { RemoveChild(_desktop); _desktop.QueueFree(); }
         _desktop = null; _desktopState = null; _workspace = null; _dialog = null;
@@ -84,22 +85,7 @@ public partial class Main
         var layout = new VBoxContainer(); layout.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         layout.AddThemeConstantOverride("separation", 0); _desktop.AddChild(layout);
         var menus = new HBoxContainer { CustomMinimumSize = new Vector2(0, 24) }; layout.AddChild(menus);
-        OriginalGameMenu(menus,state);
-        Menu(menus, "MENU_COMPANY", [("PUBLIC_RELATIONS", () => BeginCompanyActivity(state,CompanyActivity.PublicRelations)),("BANK",()=>ShowBank(state)),
-            ("DEVELOPMENT_COMPUTERS", () => ShowComputers(state)), ("HARDWARE_LICENSES", () => ShowLicenses(state)),
-            ("TECHNOLOGIES", () => ShowTechnologies(state)),("SECRETARY_ADVICE",()=>ShowSecretaryAdvice(state)),
-            ("HIRE_SECRETARY",()=>ShowSecretaryHiring(state)),("SECRETARY_POLICIES",()=>ShowSecretaryPolicies(state)),("HARDWARE_MARKET",()=>ShowHardwareMarket(state)),
-            ("GENRE_RESEARCH",()=>BeginCompanyActivity(state,CompanyActivity.GenreResearch)),("EXPAND_PRODUCTION",()=>BeginCompanyActivity(state,CompanyActivity.ProductionExpansion)),("BUY_BACKUP_DEVICE",()=>BeginBackupDevice(state))]);
-        Menu(menus, "MENU_STAFF", [("STAFF", () => ShowStaff(state)), ("HIRE_EMPLOYEES", ShowRecruitment),("POACH_EMPLOYEE",()=>ShowPoachingSelection(state))]);
-        Menu(menus, "MENU_DEVELOPMENT", [("START_GAME_DEVELOPMENT", () => ShowPlanningPreview(state))]);
-        Menu(menus, "MENU_PRODUCTS", [("SALES", () => ShowProductList(state)),("SALES_HISTORY",()=>ShowSelectedProductHistory(state)),("MAGAZINE_REVIEWS",()=>ShowSelectedProductReviews(state)),("OWN_HARDWARE_REPORT",()=>ShowOwnHardwareReport(state))]);
-        Menu(menus, "MENU_WINDOWS", [("OFFICE_WINDOW", () => _windows["OfficeWindow"].Reopen()),
-            ("COMPANY_WINDOW", () => _windows["CompanyWindow"].Reopen()),
-            ("EMPLOYEE_WINDOW", () => { OriginalPayrollRules.CaptureStaffList(state); _windows["EmployeeWindow"].Reopen(); }),
-            ("PRODUCT_WINDOW", () => _windows["ProductWindow"].Reopen())]);
-        OriginalGoOutMenu(menus,state);
-        OriginalSettingsMenu(menus);
-        Menu(menus, "MENU_HELP", [("GAME_HELP",()=>ShowHelp(state)),("GLOBAL_RANKINGS",()=>ShowRankings(state)),("SALES_CHART",()=>ShowSalesChart(state))]);
+        OriginalDesktopMenus(menus,state);
 
         var toolbar = new HBoxContainer { Name = "DesktopToolbar", CustomMinimumSize = new Vector2(0,24) };
         toolbar.AddThemeConstantOverride("separation",1);layout.AddChild(toolbar);
@@ -161,11 +147,6 @@ public partial class Main
         else office.Body.AddChild(new Label { Text = Tr("OFFICE_IMPORT_REQUIRED"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var company = ChildWindow("CompanyWindow", Tr("COMPANY_WINDOW"), new Vector2(480, 4), new Vector2(240, 330));
         BuildCompanySummary(company);
-        var facilities=new Button {Name="CompanyFacilities",Text=Tr("COMPANY_FACILITIES")};
-        var companyActions=new HBoxContainer();companyActions.AddThemeConstantOverride("separation",2);company.Body.AddChild(companyActions);
-        facilities.SizeFlagsHorizontal=SizeFlags.ExpandFill;facilities.AddThemeFontSizeOverride("font_size",11);companyActions.AddChild(facilities);
-        var information=new Button {Name="CompanyInformation",Text="…",TooltipText=Tr("COMPANY_WINDOW"),CustomMinimumSize=new(22,0)};companyActions.AddChild(information);information.Pressed+=()=>{if(_dialog is null)ShowCompanyInformation(state);};
-        facilities.Pressed+=()=>{if (_dialog is null) ShowFacilities(state);};
         var staff = ChildWindow("EmployeeWindow", Tr("EMPLOYEE_WINDOW"), new Vector2(720, 130), new Vector2(390, 150));
         if (state.FinancialFailure is null && !state.Casino.ActivityOpen) OriginalPayrollRules.CaptureStaffList(state);
         _staffTable = CreateTable("DesktopEmployeeTable", ["EMPLOYEE_NAME", "EMPLOYEE_LEVEL", "SHORT_FUN", "SHORT_NOVELTY", "SHORT_GRAPHICS",
@@ -213,23 +194,41 @@ public partial class Main
         if (pixel.X < 0 || pixel.Y < 0 || pixel.X >= native.X || pixel.Y >= native.Y) return;
         if(input is InputEventMouseButton {ButtonIndex:MouseButton.Right,Pressed:true})
         {
-            if(_selectedEmployee is { } selected && state.Employees.Contains(selected) &&
-                OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is int desk && !CalendarService.HasPending(state))
+            if(_selectedEmployee is { } selected && state.Employees.Contains(selected) && !CalendarService.HasPending(state))
             {
-                image.AcceptEvent();
-                var result=OfficeAssignmentService.TryAssignDeskFromOffice(state,selected,desk);
-                RefreshDesktop();RefreshEmployeeDetails();
-                if(_desktopStatus is not null) _desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{result}");
+                OfficeAssignmentResult? result=null;
+                if(OfficeInteractionRules.StudyDeskAt(pixel.X,pixel.Y) is int study)
+                    result=OfficeAssignmentService.TryAssignStudySeat(state,selected,study);
+                else if(OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is int desk)
+                    result=OfficeAssignmentService.TryAssignDeskFromOffice(state,selected,desk);
+                else if(OfficeInteractionRules.VendingAt(pixel.X,pixel.Y))
+                    result=OfficeAssignmentService.TryTakeBreak(state,selected,_session.Random);
+                if(result is { } outcome)
+                {image.AcceptEvent();RefreshDesktop();RefreshEmployeeDetails();if(_officeRenderer is not null&&_officeTexture is not null)_officeRenderer.UpdateTexture(_officeTexture,state);
+                    if(_desktopStatus is not null)_desktopStatus.Text=Tr($"ASSIGNMENT_RESULT_{outcome}");}
             }
             return;
         }
-        var employee = OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
+        // The original employee hit overrides the research-area hit when the
+        // seated character overlaps their computer.
+        var employee=OfficeInteractionRules.EmployeeAt(state,pixel.X,pixel.Y);
+        var student=employee is null?OfficeInteractionRules.StudyComputerEmployeeAt(state,pixel.X,pixel.Y):null;
+        if(student is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
+        {
+            image.AcceptEvent();
+            if(CalendarService.HasPending(state))ShowPendingCalendarEvent(state);
+            else ShowCompanyResearch(state);
+            return;
+        }
+        if(employee is null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true} &&
+            OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y))
+        {image.AcceptEvent();ShowCompanyResearch(state);return;}
         var room=OfficeInteractionRules.DevelopmentRoomAt(pixel.X,pixel.Y);
         var tenants=OfficeInteractionRules.TenantSlotsAt(pixel.X,pixel.Y);
         bool secretary=OfficeInteractionRules.SecretaryAt(pixel.X,pixel.Y);
         bool deskTarget=_selectedEmployee is not null && OfficeInteractionRules.DeskAt(pixel.X,pixel.Y) is not null;
         image.TooltipText=OfficeHoverText(state,pixel,employee,room,tenants);
-        image.MouseDefaultCursorShape = employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
+        image.MouseDefaultCursorShape = student is null && !OfficeInteractionRules.TrainingAreaAt(pixel.X,pixel.Y) && employee is null && room is null && tenants.Count==0 && !secretary && !deskTarget ? CursorShape.Arrow : CursorShape.PointingHand;
         if(employee is not null && input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true})
         {
             image.AcceptEvent();ShowEmployeeDetails(state,employee);return;
@@ -250,16 +249,31 @@ public partial class Main
         if (input is InputEventMouseButton {ButtonIndex:MouseButton.Left,Pressed:true}) CloseEmployeeDetails();
     }
 
-    private void Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)
+    private PopupMenu Menu(HBoxContainer parent, string title, (string Key, Action Action)[] actions)
     {
         var menu = new MenuButton { Name = title, Text = Tr(title) + " " }; parent.AddChild(menu);
-        for (int index = 0; index < actions.Length; index++) menu.GetPopup().AddItem(Tr(actions[index].Key), index);
-        menu.GetPopup().AboutToPopup += () =>
+        FillMenu(menu.GetPopup(),actions);
+        return menu.GetPopup();
+    }
+
+    private void FillMenu(PopupMenu popup,(string Key,Action Action)[] actions)
+    {
+        for(int i=0;i<actions.Length;i++)
+            if(actions[i].Key.Length==0)popup.AddSeparator("",i);else popup.AddItem(Tr(actions[i].Key),i);
+        popup.AboutToPopup+=()=>
         {
-            for (int index = 0; index < actions.Length; index++)
-                menu.GetPopup().SetItemDisabled(index, !DesktopActionEnabled(actions[index].Key));
+            for(int i=0;i<actions.Length;i++)
+                if(actions[i].Key.Length>0)popup.SetItemDisabled(i,!DesktopActionEnabled(actions[i].Key));
         };
-        menu.GetPopup().IdPressed += id => { if (id>=0 && id<actions.Length && DesktopActionEnabled(actions[(int)id].Key)) actions[(int)id].Action(); };
+        popup.IdPressed+=id=>
+        {
+            if(id>=0 && id<actions.Length && actions[(int)id].Key.Length>0 && DesktopActionEnabled(actions[(int)id].Key))actions[(int)id].Action();
+        };
+    }
+
+    private void MenuChild(PopupMenu parent,int index,string name,(string Key,Action Action)[] actions)
+    {
+        var child=new PopupMenu {Name=name};parent.AddChild(child);FillMenu(child,actions);parent.SetItemSubmenuNode(index,child);
     }
 
     private bool DesktopActionEnabled(string key)
@@ -280,7 +294,7 @@ public partial class Main
         "DEVELOPMENT_COMPUTERS" => _activeCatalog?.DevelopmentComputers.Count == 4,
         "TECHNOLOGIES" => _activeCatalog?.Technologies.Count > 0,
         "HARDWARE_MARKET" => _activeCatalog?.Hardware.Count>0,
-        "OWN_HARDWARE_REPORT" => _desktopState?.OwnHardware.Launched is not null,
+        "OWN_HARDWARE_REPORT" or "NATIVE_OWN_CONSOLES" => _desktopState?.OwnHardware.Launched is not null,
         "HARDWARE_LICENSES" => _desktopState?.AvailableHardware is not null && _desktopState.HardwareLicenses is not null,
         "BANK" => _desktopState is { } bankState && BankLoanService.CheckBorrow(bankState) is BankLoanResult.Success or BankLoanResult.AllSlotsOccupied,
         "COMPANY_ACTIVITIES" => _desktopState?.Company.ActivityCost is not null,
@@ -428,9 +442,9 @@ public partial class Main
         "ConversationWindow" or "SecretaryAdviceWindow" or "PlanningQuoteWindow" or
         "PlanningMeetingWindow" or "TypeMeetingWindow" or "GenreMeetingWindow" or "MangaRightsWindow";
 
-    private void PrepareDesktopDialog()
+    private void PrepareDesktopDialog(bool keepEmployeeDetails=false)
     {
-        CloseEmployeeDetails();
+        if(!keepEmployeeDetails)CloseEmployeeDetails();
         CloseDesktopDialog();
         _dialog = new DesktopWindow { Name = "ManagementWindow" }; _workspace!.AddChild(_dialog);
         _dialog.Initialize(Tr("APP_TITLE"), new Vector2(430, 36), new Vector2(670, 520));

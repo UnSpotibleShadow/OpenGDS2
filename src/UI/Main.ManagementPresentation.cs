@@ -58,19 +58,24 @@ public partial class Main
     }
     private void ShowAdditionalProduction(GameState state,ReleasedGameState product,OriginalCatalog catalog,long? draftCopies)
     {
-        ClearContent();var canvas=NativeWindow("AdditionalProductionWindow",Tr("PRODUCE_MORE"),new(406,326));
-        NativeText(canvas,"ProductionProductTitle",product.Title,new(4,4,398,22),12,HorizontalAlignment.Center);
+        ClearContent();var canvas=NativeWindow("AdditionalProductionWindow",Tr("PRODUCE_MORE"),new(406,302));
+        NativeFill(canvas,"ProductionHeaderStrip",new(4,3,398,19),Colors.White,true);
+        NativeText(canvas,"ProductionHeading",Tr("SHIPMENT_PROFIT_TABLE"),new(6,3,394,19),10,HorizontalAlignment.Center);
         NativeFill(canvas,"ReproductionCostTable",new(4,30,398,174),Colors.White,true);
         long unit=ReleaseService.UnitProductionCost(catalog.Hardware.Single(h=>h.SourceIndex==product.HardwareSourceIndex),product.DataSize);
         string[] keys=["SHIPMENT_MEDIA_COST","SHIPMENT_PACKAGE_COST","SHIPMENT_UNIT_COST","PRODUCTION_COST","RETAIL_PRICE","SHIPMENT_RETAILER_SHARE","SHIPMENT_TRANSPORT_SHARE","NET_PER_COPY","SHIPMENT_ALL_SOLD"];
         string[] names=["ProductionMediaCost","ProductionPackageCost","ProductionUnitCost","ProductionTotalCost","ProductionRetailPrice","ProductionRetailer","ProductionTransport","ProductionNetCopy","ProductionAllSold"];
         var values=new Label[9];
-        for(int i=0;i<9;i++){int y=34+i*18+(i>=4?6:0);NativeText(canvas,"ProductionCaption"+i,Tr(keys[i]),new(10,y,238,18),10);values[i]=NativeText(canvas,names[i],"",new(250,y,145,18),11,HorizontalAlignment.Right);}
-        NativePlace(canvas,Picture("ProductionHardwarePicture",HardwarePicture(state,product.HardwareSourceIndex),new(64,64)),new(4,213,64,64));
-        NativeText(canvas,"ProductionQuantityCaption",Tr("PRODUCTION_COPIES"),new(76,216,129,24),10);
+        for(int i=0;i<9;i++){int y=34+i*18+(i>=4?6:0);
+            NativeFill(canvas,"ProductionRow"+i,new(8,y,390,18),i<4?new(1,1,.72f):new(.65f,1,1),true);
+            NativeFill(canvas,"ProductionDivider"+i,new(249,y,1,18),Colors.Black);
+            NativeText(canvas,"ProductionCaption"+i,Tr(keys[i]),new(10,y,238,18),10);values[i]=NativeText(canvas,names[i],"",new(250,y,145,18),11,HorizontalAlignment.Right);}
+        NativeText(canvas,"ProductionTitleCaption",Tr("GAME_TITLE"),new(76,210,60,22),10);
+        NativeText(canvas,"ProductionProductTitle",product.Title,new(138,210,160,22),10);
+        NativeText(canvas,"ProductionQuantityCaption",Tr("SHIPMENT_COPIES"),new(76,238,60,24),10);
         var copies=ProductionQuantity(state,"ProductionCopies");_content.RemoveChild(copies);if(draftCopies.HasValue)copies.Value=draftCopies.Value;
-        var field=new HBoxContainer {Name="ProductionQuantityField"};NativePlace(canvas,field,new(208,214,194,26));field.AddChild(copies);field.AddChild(HeldShipmentButtons(copies,true));
-        NativeText(canvas,"ProductionReadonlyPrice",$"{Tr("RETAIL_PRICE")}: ¥{DisplayNumbers.Format(product.Price)}",new(76,245,326,22));
+        var field=new HBoxContainer {Name="ProductionQuantityField"};NativePlace(canvas,field,new(138,238,160,26));field.AddThemeConstantOverride("separation",0);copies.CustomMinimumSize=new(112,24);field.AddChild(copies);field.AddChild(HeldShipmentButtons(copies,true));
+        NativeText(canvas,"ProductionReadonlyPrice",$"{Tr("RETAIL_PRICE")}: ¥{DisplayNumbers.Format(product.Price)}",new(76,268,222,22));
         void Refresh()
         {
             long? net=state.SalesFee1 is long fee1&&state.SalesFee2 is long fee2?product.Price-fee1-fee2:null;
@@ -78,10 +83,12 @@ public partial class Main
             for(int i=0;i<9;i++)values[i].Text=amounts[i] is long amount?$"¥{DisplayNumbers.Format(amount)}":"?";
         }
         copies.ValueChanged+=_=>Refresh();Refresh();
-        _status=NativeText(canvas,"ProductionStatus","",new(4,278,398,18),10);
-        NativeAction(canvas,"ProductionMediaInformation","MEDIA_INFORMATION",new(4,298,164,25),()=>{long selectedCopies=(long)copies.Value;ShowMediaInformation(state,product.HardwareSourceIndex,product.DataSize,()=>ShowProduction(state,product,selectedCopies));});
-        NativeAction(canvas,"ConfirmProduction","CONFIRM",new(176,298,110,25),()=>{var result=ReleaseService.TryProduce(state,product,catalog,(long)copies.Value);if(result==ReleaseResult.Success)ShowSales(state);else _status.Text=Tr("RELEASE_RESULT_"+result);});
-        NativeAction(canvas,"CancelProduction","CANCEL",new(292,298,110,25),()=>ShowSales(state));
+        _status=NativeText(canvas,"ProductionStatus","",new(4,288,398,14),10);
+        var media=NativePlace(canvas,new Button {Name="ProductionMediaInformation",TooltipText=Tr("MEDIA_INFORMATION")},new(4,216,64,64));
+        media.AddChild(Picture("ProductionHardwarePicture",HardwarePicture(state,product.HardwareSourceIndex),new(64,64)));
+        media.Pressed+=()=>{long selectedCopies=(long)copies.Value;ShowMediaInformation(state,product.HardwareSourceIndex,product.DataSize,()=>ShowProduction(state,product,selectedCopies));};
+        NativeAction(canvas,"ConfirmProduction","CONFIRM",new(304,236,98,25),()=>{var result=ReleaseService.TryProduce(state,product,catalog,(long)copies.Value);if(result==ReleaseResult.Success)ShowSales(state);else _status.Text=Tr("RELEASE_RESULT_"+result);});
+        NativeAction(canvas,"CancelProduction","CANCEL",new(304,267,98,25),()=>ShowSales(state));
     }
     private void ShowStaffSelection(GameState state,EmployeeState? selected=null)
     {
@@ -109,7 +116,7 @@ public partial class Main
         NativeText(canvas,"StaffSelectedStress",$"{Tr("STRESS")}: {person.Stress?.ToString("0.0")??"?"}",new(4,276,160,19));
         NativePlace(canvas,new EmployeeAbilityChart {Name="StaffAbilityChart",Employee=person,Compact=true,MouseFilter=MouseFilterEnum.Ignore},new(168,144,164,124));
         if(CalendarService.HasPending(state))return;
-        NativeAction(canvas,"StaffTraining","TRAINING",new(338,145,100,25),()=>ShowTraining(state,person),person.TechnologyLevels is not null&&_activeCatalog?.Technologies.Count>0);
+        NativeAction(canvas,"StaffTraining","TRAINING",new(338,145,100,25),()=>{ShowOfficeReconstruction(state);BeginEmployeeLearning(state,person);},person.TechnologyLevels is not null&&_activeCatalog?.Technologies.Count>0);
         NativeAction(canvas,"StaffTechnologyUse","USE_TECHNOLOGY",new(338,177,100,25),()=>ShowTechnologyUse(state,person),person.TechnologyLevels?.Any(x=>x.Value>0)==true);
         NativeAction(canvas,"StaffDesk","ASSIGN_DESK",new(338,209,100,25),()=>ShowDeskAssignment(state,person),person.Office is not null);
         NativeAction(canvas,"StaffBreak","TAKE_BREAK",new(338,241,100,25),()=>{var result=OfficeAssignmentService.TryTakeBreak(state,person,_session.Random);if(result==OfficeAssignmentResult.Success)ShowOfficeReconstruction(state);else ShowStaffSelection(state,person);},person.Office?.Action is >=1 and <=17);

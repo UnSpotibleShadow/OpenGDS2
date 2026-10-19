@@ -10,6 +10,8 @@ public static class OriginalSceneArtwork
     private static readonly string[] PromotionFiles=["0F0704.bmp","18151E.bmp","0BEA30.bmp","10E76E.bmp","0969C6.bmp","0C869A.bmp"];
     public static Texture2D? Promotion(int medium)=>medium is >=0 and <6 ? Load("Promotion"+medium+".bmp",PromotionFiles[medium]):null;
     public static Texture2D? Publisher()=>Load("PublisherMeeting.bmp","1634B4.bmp");
+    public static Texture2D? CompanySetup()=>Load("CompanySetup.bmp","047345.bmp");
+    public static Texture2D? About()=>Load("AboutTitle.bmp","31EDEC.bmp");
     public static Texture2D? BusinessMeeting()=>LoadGif("BusinessMeeting.png","08FCD0.gif");
     public static Texture2D? Facility(FacilityKind kind)
     {

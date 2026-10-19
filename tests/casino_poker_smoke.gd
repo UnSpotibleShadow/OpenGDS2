@@ -19,6 +19,7 @@ func await_phase(phase: int) -> bool:
     return false
 
 func run() -> void:
+    blank_office_fixture()
     if OS.get_environment("XDG_DATA_HOME").is_empty():
         push_error("casino_poker_smoke requires disposable XDG_DATA_HOME")
         quit(1)

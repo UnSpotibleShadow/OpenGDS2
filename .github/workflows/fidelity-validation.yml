@@ -1,0 +1,62 @@
+name: Fidelity validation
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fidelity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Domain regressions
+        run: python3 tools/bounded_process.py --label domain --timeout 180 --checkpoint "$RUNNER_TEMP/domain.json" -- dotnet run --project tests/DomainTests/DomainTests.csproj
+      - name: Python regressions
+        run: |
+          python3 -m pip install -r requirements-tools.txt
+          python3 tools/bounded_process.py --label python --timeout 180 --checkpoint "$RUNNER_TEMP/python.json" -- python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Install pinned Godot .NET editor
+        run: |
+          curl --retry 3 --max-time 120 -fL https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_mono_linux_x86_64.zip -o "$RUNNER_TEMP/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.4.1-stable_mono_linux_x86_64/Godot_v4.4.1-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
+      - name: Compile application
+        run: python3 tools/bounded_process.py --label build --timeout 180 --checkpoint "$RUNNER_TEMP/build.json" -- dotnet build
+      - name: Import project
+        run: python3 tools/bounded_process.py --label import --timeout 180 --checkpoint "$RUNNER_TEMP/import.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --path . --import
+      - name: UI layouts and continuation
+        run: |
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-layout" python3 tools/bounded_process.py --label casino-layout --timeout 180 --checkpoint "$RUNNER_TEMP/casino-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_layout_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-horse" python3 tools/bounded_process.py --label casino-horse --timeout 180 --checkpoint "$RUNNER_TEMP/casino-horse.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_horse_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/company-setup" python3 tools/bounded_process.py --label company-setup --timeout 180 --checkpoint "$RUNNER_TEMP/company-setup.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/company_setup_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/about-dialog" python3 tools/bounded_process.py --label about-dialog --timeout 180 --checkpoint "$RUNNER_TEMP/about-dialog.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/about_dialog_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/original-menus" python3 tools/bounded_process.py --label original-menus --timeout 180 --checkpoint "$RUNNER_TEMP/original-menus.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/original_menus_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/facility-order" python3 tools/bounded_process.py --label facility-order --timeout 180 --checkpoint "$RUNNER_TEMP/facility-order.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/facility_order_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/recall-dialogue" python3 tools/bounded_process.py --label recall-dialogue --timeout 180 --checkpoint "$RUNNER_TEMP/recall-dialogue.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/compact_notice_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/registration-artwork" python3 tools/bounded_process.py --label registration-artwork --timeout 180 --checkpoint "$RUNNER_TEMP/registration-artwork.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/company_setup_artwork_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-continuity" python3 tools/bounded_process.py --label casino-continuity --timeout 180 --checkpoint "$RUNNER_TEMP/casino-continuity.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_save_continuity_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/casino-boundaries" python3 tools/bounded_process.py --label casino-boundaries --timeout 180 --checkpoint "$RUNNER_TEMP/casino-boundaries.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/casino_boundary_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/review154" python3 tools/bounded_process.py --label review154 --timeout 180 --checkpoint "$RUNNER_TEMP/review154.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/review154_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/original-settings" python3 tools/bounded_process.py --label original-settings --timeout 180 --checkpoint "$RUNNER_TEMP/original-settings.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/original_settings_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/release-notice" python3 tools/bounded_process.py --label release-notice --timeout 180 --checkpoint "$RUNNER_TEMP/release-notice.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/release_notice_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/native-layout" python3 tools/bounded_process.py --label native-layout --timeout 180 --checkpoint "$RUNNER_TEMP/native-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/native_layout_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/management-layout" python3 tools/bounded_process.py --label management-layout --timeout 180 --checkpoint "$RUNNER_TEMP/management-layout.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/management_layout_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/employee-learning" python3 tools/bounded_process.py --label employee-learning --timeout 180 --checkpoint "$RUNNER_TEMP/employee-learning.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/employee_learning_smoke.gd
+          XDG_DATA_HOME="$RUNNER_TEMP/core-loop" python3 tools/bounded_process.py --label core-loop --timeout 180 --checkpoint "$RUNNER_TEMP/core-loop.json" --fail-pattern 'SCRIPT ERROR:|Unhandled exception' -- "$GODOT_BIN" --headless --fixed-fps 60 --path . --script res://tests/core_loop_smoke.gd

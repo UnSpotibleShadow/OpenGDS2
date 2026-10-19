@@ -6,8 +6,9 @@ config_version=5
 
 [application]
 config/name="Open Game Dev Story II"
-config/version="0.1.0-ea.1"
+config/version="0.1.0-ea.2"
 config/icon="res://assets/application-icon.svg"
+config/windows_native_icon="res://assets/application-icon.ico"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="OpenGDS2"
 run/main_scene="res://scenes/Main.tscn"

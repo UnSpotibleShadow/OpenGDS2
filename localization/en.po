@@ -681,7 +681,7 @@ msgid "TRAINING_RESULT_StateUnknown"
 msgstr "Training data is unavailable."
 
 msgid "TRAINING_RESULT_NotAtStudySeat"
-msgstr "Choose a study seat first."
+msgstr "To learn a technology, seat the employee at a workstation."
 
 msgid "TRAINING_RESULT_Unavailable"
 msgstr "This training level is unavailable."
@@ -3325,7 +3325,7 @@ msgid "BLACKJACK_RULES"
 msgstr "Original rules: natural 21 pays 2×. Stay with 5/6/7 cards pays 4×/6×/20×; three sixes pays 25×; 8+ cards pays 100×. Ace retries lower all aces together."
 
 msgid "BLACKJACK_CARD_BOUNDARY"
-msgstr "The original only predeals nine cards per side. This next draw reaches an unsupported array boundary; close this table to continue."
+msgstr "Nine-card limit reached. Close this table to continue."
 
 msgid "CASINO_CARD_CHAIN"
 msgstr "Card-chain"
@@ -3343,7 +3343,7 @@ msgid "CARD_CHAIN_KEYS"
 msgstr "Original shortcuts: 1–5 select cards; lowercase q/w invoke the two commands, including the copied replacement path."
 
 msgid "CARD_CHAIN_EXHAUSTED"
-msgstr "All 52 cards have been used. The original retries forever here. This table is paused; close it to continue. No cards are recycled or awards invented."
+msgstr "All 52 cards used. Close this table to continue."
 
 msgid "CARD_CHAIN_DEALER_KEY"
 msgstr "The shortcut selected the dealer card. The original comparison only resolves player choices 2–5, so this path waits. Close the table to continue."
@@ -4075,7 +4075,7 @@ msgid "SECRETARY"
 msgstr "Secretary"
 
 msgid "TRAINING_DESCRIPTION"
-msgstr "Practise {0} to learn its next level. Choose a course and a study seat."
+msgstr "Learn {0} Lv.{1}. Experience is spent when learning starts."
 
 msgid "TECHNOLOGY_USE_DESCRIPTION"
 msgstr "Apply {0} at the employee’s learned level."
@@ -4403,10 +4403,10 @@ msgid "ORIGINAL_NUMBER_DISPLAY"
 msgstr "Number display"
 
 msgid "NUMBER_JAPANESE"
-msgstr "Japanese grouping (万 / 億 / 兆)"
+msgstr "100万0000"
 
 msgid "NUMBER_THOUSANDS"
-msgstr "Thousands grouping"
+msgstr "1,000,000"
 
 msgid "GO_OUT"
 msgstr "Go out"
@@ -5337,34 +5337,328 @@ msgid "RECALL_REPRESENTATIVE"
 msgstr "Consumer representative"
 
 msgid "RECALL_DIALOGUE_INVESTIGATION"
-msgstr "We are investigating reports of bugs in “{title}”. We will notify you when our investigation is complete."
+msgstr "Hello, I represent the consumer group. We received a report that your game “{title}” has a major bug, and we are investigating."
 
 msgid "RECALL_DIALOGUE_WAIT"
-msgstr "The investigation will take five weeks. We must wait for the result."
+msgstr "The results will be ready in a month. In the worst case, you will have to recall every copy at your own expense."
 
 msgid "RECALL_DIALOGUE_RESULT"
-msgstr "The investigation of “{title}” is complete."
+msgstr "Hello. The investigation results for your game “{title}” are ready."
 
 msgid "RECALL_DIALOGUE_FULL"
-msgstr "Serious bugs were found. You must recall the game at its full retail price of ¥{price} per copy."
+msgstr "Unfortunately, we found a serious bug. You must recall each copy at its retail price of ¥{price}."
 
 msgid "RECALL_DIALOGUE_FIXED"
-msgstr "Bugs were found. You must recall the game at ¥{price} per copy."
+msgstr "Unfortunately, we found a serious bug. You must recall each copy for ¥{price}."
 
 msgid "RECALL_DIALOGUE_REACTION"
-msgstr "Our game has been ordered recalled!"
+msgstr "We have been ordered to recall it!"
 
 msgid "RECALL_DIALOGUE_QUANTITY"
-msgstr "Sold copies plus remaining stock total {quantity} copies. All must be recalled at ¥{price} each."
+msgstr "We must recall the total of {quantity} sold and in-stock copies at ¥{price} each."
 
 msgid "RECALL_DIALOGUE_COST"
-msgstr "The total recall charge is ¥{refund}."
+msgstr "That will cost ¥{refund}…"
 
 msgid "RECALL_DIALOGUE_CAUTION"
-msgstr "This is serious. We must check for bugs more carefully before releasing our next game."
+msgstr "We must check for bugs very carefully so this never happens again!"
 
 msgid "RECALL_DIALOGUE_DISMISSED"
-msgstr "“{title}” does not need to be recalled. What a relief!"
+msgstr "It seems no recall is required. What a relief!"
 
 msgid "RECALL_QUANTITY_UNKNOWN"
 msgstr "unknown"
+
+msgid "ABOUT_GAME"
+msgstr "About / Version"
+
+msgid "ABOUT_PORT_VERSION"
+msgstr "Port version {0}"
+
+msgid "ABOUT_ORIGINAL_CREDIT"
+msgstr "Original game © 2001–2008 Kairosoft"
+
+msgid "ABOUT_VISIT_WEBSITE"
+msgstr "Visit the Kairosoft website"
+
+msgid "ABOUT_WEBSITE_FAILED"
+msgstr "Could not open the browser. Copy this address:"
+
+msgid "MENU_ACTIONS"
+msgstr "Actions"
+
+msgid "MENU_INFORMATION"
+msgstr "Information"
+
+msgid "COMPANY_DEVELOPMENT"
+msgstr "Company development"
+
+msgid "OTHER_WINDOWS"
+msgstr "Other windows"
+
+msgid "ADDITIONAL_ACTIONS"
+msgstr "More actions"
+
+msgid "RECALL_DIALOGUE_ALERT"
+msgstr "This is serious! Apparently “{title}” has a major bug, and a consumer group has begun an investigation."
+
+msgid "RECALL_DIALOGUE_RESULT_INTRO"
+msgstr "The consumer group was investigating “{title}” for a bug-related recall. The results seem to be in…"
+
+msgid "RECALL_DIALOGUE_REACTION_FULL"
+msgstr "We have been ordered to recall it at the full retail price!"
+
+msgid "RECALL_DIALOGUE_GROAN"
+msgstr "Oh no! This has turned into a disaster…"
+
+msgid "CASINO_NUMERIC_LIMIT_NOTE"
+msgstr "Numeric limit. Close table."
+
+msgid "AUDIO_VOLUME"
+msgstr "Audio volume…"
+
+msgid "NATIVE_PRODUCTS"
+msgstr "Products"
+
+msgid "NATIVE_TOP100"
+msgstr "Top 100"
+
+msgid "NATIVE_PLATFORMS"
+msgstr "Platforms"
+
+msgid "NATIVE_OWN_CONSOLES"
+msgstr "Our consoles"
+
+msgid "NATIVE_TIME_RECORDS"
+msgstr "Time records"
+
+msgid "ABOUT_PORT_CREDIT"
+msgstr "Community port by UnSpotibleShadow and contributors"
+
+msgid "ABOUT_REPOSITORY"
+msgstr "OpenGDS2 repository"
+
+msgid "CATALOG_HORSE_0"
+msgstr "Running Taboo"
+
+msgid "CATALOG_HORSE_1"
+msgstr "Daiko Sacks"
+
+msgid "CATALOG_HORSE_2"
+msgstr "Tsuzuki Aratakar"
+
+msgid "CATALOG_HORSE_3"
+msgstr "Kimura Hayaizo"
+
+msgid "CATALOG_HORSE_4"
+msgstr "Thunder Volvo"
+
+msgid "CATALOG_HORSE_5"
+msgstr "Henperor"
+
+msgid "CATALOG_HORSE_6"
+msgstr "Summer Gifter"
+
+msgid "CATALOG_HORSE_7"
+msgstr "Pork Fillet Steak"
+
+msgid "CATALOG_HORSE_8"
+msgstr "Ultra Super Fool"
+
+msgid "CATALOG_HORSE_9"
+msgstr "Japan Pan"
+
+msgid "CATALOG_HORSE_10"
+msgstr "Winterer"
+
+msgid "CATALOG_HORSE_11"
+msgstr "Certain Fall"
+
+msgid "CATALOG_HORSE_12"
+msgstr "Onara Cap"
+
+msgid "CATALOG_HORSE_13"
+msgstr "Mejiro Permaman"
+
+msgid "CATALOG_HORSE_14"
+msgstr "Golden City"
+
+msgid "CATALOG_HORSE_15"
+msgstr "Yamane Thunder"
+
+msgid "CATALOG_HORSE_16"
+msgstr "Yamano Olympic"
+
+msgid "CATALOG_HORSE_17"
+msgstr "Red Ranger"
+
+msgid "CATALOG_HORSE_18"
+msgstr "Mr. Honda"
+
+msgid "CATALOG_HORSE_19"
+msgstr "Umakawa Barta"
+
+msgid "CATALOG_HORSE_20"
+msgstr "Aida-san"
+
+msgid "CATALOG_HORSE_21"
+msgstr "DVDine"
+
+msgid "CATALOG_HORSE_22"
+msgstr "Potato Longer"
+
+msgid "CATALOG_HORSE_23"
+msgstr "Golden Putt"
+
+msgid "CATALOG_HORSE_24"
+msgstr "Tokaido-da"
+
+msgid "CATALOG_HORSE_25"
+msgstr "Chuo Main Line"
+
+msgid "CATALOG_HORSE_26"
+msgstr "Marl Polo"
+
+msgid "CATALOG_HORSE_27"
+msgstr "Dream Caster"
+
+msgid "CATALOG_HORSE_28"
+msgstr "Segata-san"
+
+msgid "CATALOG_HORSE_29"
+msgstr "Speaker Hope"
+
+msgid "CATALOG_HORSE_30"
+msgstr "Pakarap Pakara"
+
+msgid "CATALOG_HORSE_31"
+msgstr "Short Hope"
+
+msgid "CATALOG_HORSE_32"
+msgstr "Peace Light"
+
+msgid "CATALOG_HORSE_33"
+msgstr "Playdia Fool"
+
+msgid "CATALOG_HORSE_34"
+msgstr "Toshimaen Attack"
+
+msgid "CATALOG_HORSE_35"
+msgstr "Kyushu Region"
+
+msgid "CATALOG_HORSE_36"
+msgstr "Funbarigaoka"
+
+msgid "CATALOG_HORSE_37"
+msgstr "Akihabarist"
+
+msgid "CATALOG_HORSE_38"
+msgstr "Three D O"
+
+msgid "CATALOG_HORSE_39"
+msgstr "One Stroke"
+
+msgid "CATALOG_HORSE_40"
+msgstr "Bacalarc"
+
+msgid "CATALOG_HORSE_41"
+msgstr "Mach One Half"
+
+msgid "CATALOG_HORSE_42"
+msgstr "Head Teacher"
+
+msgid "CATALOG_HORSE_43"
+msgstr "Top Form"
+
+msgid "CATALOG_JOCKEY_0"
+msgstr "Yamashita"
+
+msgid "CATALOG_JOCKEY_1"
+msgstr "Kimura"
+
+msgid "CATALOG_JOCKEY_2"
+msgstr "Ogata"
+
+msgid "CATALOG_JOCKEY_3"
+msgstr "Tanabe"
+
+msgid "CATALOG_JOCKEY_4"
+msgstr "Yamada"
+
+msgid "CATALOG_JOCKEY_5"
+msgstr "Kinoshita"
+
+msgid "CATALOG_JOCKEY_6"
+msgstr "Koyama"
+
+msgid "CATALOG_JOCKEY_7"
+msgstr "Ono"
+
+msgid "CATALOG_JOCKEY_8"
+msgstr "Yamamura"
+
+msgid "CATALOG_JOCKEY_9"
+msgstr "Todoroki"
+
+msgid "NATIVE_WORK"
+msgstr "Work"
+
+msgid "NATIVE_PROGRESS"
+msgstr "Progress"
+
+msgid "OWNED_TECHNOLOGIES"
+msgstr "Owned technologies"
+
+msgid "BUY_TECHNOLOGIES"
+msgstr "Buy technology"
+
+msgid "RELEASE_MEDIA_INTRO"
+msgstr "Before shipping, let’s check the media capacity and cost."
+
+msgid "UPDATE_AVAILABLE"
+msgstr "An update is available: {0}"
+
+msgid "UPDATE_VIEW"
+msgstr "View release"
+
+msgid "UPDATE_CHECKS_ENABLED"
+msgstr "Check GitHub for updates"
+
+msgid "LEARN_TECHNOLOGY"
+msgstr "Learn"
+
+msgid "USE_TECHNOLOGY_SHORT"
+msgstr "Use"
+
+msgid "LEARNING_DIALOG"
+msgstr "Learn technology"
+
+msgid "CONFIRM_LEARNING"
+msgstr "Learn"
+
+msgid "LEARNING_TIME"
+msgstr "Learn time"
+
+msgid "REQUIRED_EXPERIENCE"
+msgstr "Required XP"
+
+msgid "LEARNING_IN_PROGRESS"
+msgstr "Learning"
+
+msgid "NO_PURCHASED_TECHNOLOGIES"
+msgstr "No technologies have been purchased."
+
+msgid "NO_LEARNABLE_TECHNOLOGIES"
+msgstr "There are no technologies this employee can learn or advance."
+
+msgid "LEARNING_INSUFFICIENT_EXPERIENCE"
+msgstr "Not enough experience!"
+
+msgid "LEARNING_CANNOT_LEARN"
+msgstr "{0} cannot learn technologies."
+
+msgid "LEARNING_CAPACITY_REACHED"
+msgstr "{0} can only learn {1} technologies."
+
+msgid "EMPLOYEE_LEARNING_EXPERIENCE"
+msgstr "{0}'s experience"

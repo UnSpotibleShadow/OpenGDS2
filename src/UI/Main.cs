@@ -35,7 +35,7 @@ public partial class Main : Control
         TickConversation(delta);
         TickPokerInterface(delta);
         TickPoachingInterface(delta);
-        if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();}
+        if (++_desktopRefreshFrame % 6 == 0) {RefreshDesktop();RefreshEmployeeDetails();_refreshCompanyResearch?.Invoke();}
         RefreshEmployeeSelectionArrow();
         if (GetTree().GetNodesInGroup("GameplayWindows").OfType<DesktopWindow>().Any(w=>w.IsDragging&&w.IsVisibleInTree())){_officeElapsed=0;return;}
         if (!_clockRunning || _paused || _session.Current is not GameState state) return;
@@ -77,6 +77,7 @@ public partial class Main : Control
         _session.SoundRequested+=_effects.Play;
         _session.SoundResetRequested+=_effects.Stop;
         ShowTitleScreen();
+        CheckForReleaseUpdate();
     }
 
     public override void _ExitTree()
@@ -174,21 +175,24 @@ public partial class Main : Control
     private void ShowCompanySetup()=>ShowCompanySetup(null);
     private void ShowCompanySetup(GameState? previous,string companyDraft="",string presidentDraft="")
     {
-        ClearContent();
-        AddHeading(Tr("NEW_GAME"), 34);
-
-        _companyName = AddField(Tr("COMPANY_NAME"), companyDraft, 32);
-        _presidentName = AddField(Tr("PRESIDENT_NAME"), presidentDraft, 32);
-
-        var validation = new Label
+        var canvas=ManagementCanvas("CompanySetupWindow",Tr("NEW_GAME"),new(340,292));
+        var artwork=OriginalSceneArtwork.CompanySetup();
+        NativePlace(canvas,Picture("CompanySetupArtwork",artwork,new(256,160)),new(42,4,256,160));
+        if(artwork is null)
+            NativeText(canvas,"CompanySetupArtworkMissing",Tr("EVENT_ARTWORK_REIMPORT"),new(42,4,256,160),11,HorizontalAlignment.Center).AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        LineEdit Field(string name,string caption,string value,int y)
         {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            AutowrapMode = TextServer.AutowrapMode.WordSmart
-        };
-        _content.AddChild(validation);
-
-        var confirm = new Button { Text = Tr("CONFIRM"), CustomMinimumSize = new Vector2(0, 46) };
-        confirm.Pressed += () =>
+            NativeText(canvas,name+"Caption",Tr(caption),new(8,y,112,25));
+            var edit=new LineEdit {Name=name,Text=value,MaxLength=32};
+            edit.AddThemeFontSizeOverride("font_size",11);
+            edit.AddThemeStyleboxOverride("normal",ClassicTheme.CompactInput());
+            return NativePlace(canvas,edit,new(122,y,210,25));
+        }
+        _companyName=Field("CompanyNameInput","COMPANY_NAME",companyDraft,172);
+        _presidentName=Field("PresidentNameInput","PRESIDENT_NAME",presidentDraft,202);
+        var validation=NativeText(canvas,"CompanySetupValidation","",new(8,230,324,28),10,HorizontalAlignment.Center);
+        validation.AutowrapMode=TextServer.AutowrapMode.WordSmart;
+        void Confirm()
         {
             var company = _companyName.Text.Trim();
             var president = _presidentName.Text.Trim();
@@ -198,12 +202,14 @@ public partial class Main : Control
                 return;
             }
             ShowModeSelection(company, president,previous);
-        };
-        _content.AddChild(confirm);
-
-        var cancel = new Button { Text = Tr("CANCEL"), CustomMinimumSize = new Vector2(0, 46) };
-        cancel.Pressed += ()=>{if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);};
-        _content.AddChild(cancel);
+        }
+        NativeAction(canvas,"ConfirmCompanySetup","CONFIRM",new(146,262,90,25),Confirm);
+        // fGMGameNew.Command1 is the original form's default action.
+        _companyName.TextSubmitted += _=>Confirm();
+        _presidentName.TextSubmitted += _=>Confirm();
+        void Cancel(){if(previous is null)ShowTitleScreen();else ShowOfficeReconstruction(previous);}
+        NativeAction(canvas,"CancelCompanySetup","CANCEL",new(242,262,90,25),Cancel);
+        if(_dialog is not null)_dialog.CloseRequested=Cancel;
     }
 
     /// <summary>
@@ -315,8 +321,7 @@ public partial class Main : Control
     {
         parent.AddChild(new Label {Text=$"{Tr(caption)}: {value?.ToString() ?? "?"}",AutowrapMode=TextServer.AutowrapMode.WordSmart});
         var bar=new ProgressBar {MaxValue=99,Value=value ?? 0,ShowPercentage=false,CustomMinimumSize=new Vector2(140,9)};
-        bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=new Color(0,0,.7f)});
-        bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new Color(0,1,0)});parent.AddChild(bar);
+        parent.AddChild(bar);
     }
 
     private void ShowLicenses(GameState state)
@@ -382,6 +387,7 @@ public partial class Main : Control
             button.Pressed += () => { SaveInterfaceLanguage(locale); ShowSettings(); };
             _content.AddChild(button);
         }
+        var updates=new CheckButton {Name="UpdateChecksEnabled",Text=Tr("UPDATE_CHECKS_ENABLED"),ButtonPressed=UpdateChecksEnabled()};updates.Toggled+=SetUpdateChecksEnabled;_content.AddChild(updates);
         AddHeading(Tr("ORIGINAL_EFFECTS_SETTINGS"),18);
         var effectsEnabled=new CheckButton {Name="EffectsEnabled",Text=Tr("ORIGINAL_EFFECTS_ENABLED"),ButtonPressed=_effects.Enabled};effectsEnabled.Toggled+=_effects.SetEnabled;_content.AddChild(effectsEnabled);
         var effectsLabel=new Label {Text=$"{Tr("EFFECTS_VOLUME")}: {DisplayNumbers.Format(_effects.VolumePercent)}%"};_content.AddChild(effectsLabel);
@@ -424,22 +430,6 @@ public partial class Main : Control
         grid.AddChild(right);
     }
 
-    private LineEdit AddField(string labelText, string initialValue, int maxLength)
-    {
-        var label = new Label { Text = labelText };
-        label.AddThemeFontSizeOverride("font_size", 18);
-        _content.AddChild(label);
-
-        var edit = new LineEdit
-        {
-            Text = initialValue,
-            MaxLength = maxLength,
-            CustomMinimumSize = new Vector2(0, 44)
-        };
-        _content.AddChild(edit);
-        return edit;
-    }
-
     private void AddHeading(string text, int size)
     {
         var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center,
@@ -451,7 +441,7 @@ public partial class Main : Control
 
     private void AddSpacer(float height) => _content.AddChild(new Control { CustomMinimumSize = new Vector2(0, height) });
 
-    private void ClearContent(bool keepConversationScene=false,bool keepMeetingMusic=false)
+    private void ClearContent(bool keepConversationScene=false,bool keepMeetingMusic=false,bool keepEmployeeDetails=false)
     {
         if (!keepMeetingMusic) _music?.SetMeetingPhase(-1);
         if (!keepConversationScene) CloseConversationScene();
@@ -465,7 +455,7 @@ public partial class Main : Control
             _officeTexture = null;
         }
         _officeElapsed = 0;
-        if (_desktop is not null) PrepareDesktopDialog();
+        if (_desktop is not null) PrepareDesktopDialog(keepEmployeeDetails);
         else _content = _screenContent;
         _content.CustomMinimumSize = new Vector2(620, 0);
         _content.AddThemeConstantOverride("separation",14);

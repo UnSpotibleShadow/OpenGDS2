@@ -35,7 +35,6 @@ public partial class Main
             {
                 NativeText(details,"Renewal"+item.Item1,Tr(item.Item1),new(274,y,143,16),10);
                 var bar=new ProgressBar {MaxValue=99,Value=item.Item2 ?? 0,ShowPercentage=false};
-                bar.AddThemeStyleboxOverride("background",new StyleBoxFlat {BgColor=Colors.Blue});bar.AddThemeStyleboxOverride("fill",new StyleBoxFlat {BgColor=new(0,.7f,0)});
                 NativePlace(details,bar,new(419,y+4,48,8));NativeText(details,"RenewalValue"+item.Item1,item.Item2?.ToString()??"?",new(470,y,22,16),10,HorizontalAlignment.Right);y+=19;
             }
             var descriptions=new RichTextLabel {Name="RenewalTechnologyList",ScrollActive=true};descriptions.AddThemeFontSizeOverride("normal_font_size",10);NativePlace(details,descriptions,new(274,42,218,58));

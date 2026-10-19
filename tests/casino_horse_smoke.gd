@@ -52,6 +52,7 @@ func load_raw_fixture(text: String) -> void:
     await press("LOAD_GAME")
 
 func run() -> void:
+    blank_office_fixture()
     if OS.get_environment("XDG_DATA_HOME").is_empty():
         push_error("casino_horse_smoke requires disposable XDG_DATA_HOME")
         quit(1)
@@ -72,6 +73,11 @@ func run() -> void:
         await press_node("CasinoHorse")
         await press_node("ToolbarSAVE_GAME")
         check(saved().Casino.Coins==0 and saved().Casino.Horse.Runners.size()==8,"Cash race opens without coins with eight runners")
+        var runner=saved().Casino.Horse.Runners[0]
+        var row=main.find_child("HorseRoster",true,false).get_root().get_first_child()
+        check(row.get_text(1)==(tr("CATALOG_HORSE_"+str(int(runner.SourceIndex))) if locale=="en" else runner.Name),"Horse names use English display aliases and retain Japanese-mode catalog text")
+        check(row.get_text(2)==(tr("CATALOG_JOCKEY_"+str(int(runner.JockeySourceIndex))) if locale=="en" else runner.JockeyName),"Jockey aliases follow imported identity")
+        check(runner.Name.begins_with("Synthetic runner"),"Display aliases never rewrite saved runner names")
         var add=main.find_child("HorseAddWager",true,false)
         add.button_down.emit()
         await create_timer(0.13).timeout

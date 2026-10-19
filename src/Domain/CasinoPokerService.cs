@@ -257,7 +257,7 @@ public static class CasinoPokerService
             p.UsedCards.Count>10 || p.UsedCards.Any(x=>x is <0 or >51) || (p.Phase!=5 || p.Tick>=18) && p.Cards.Any(x=>!p.UsedCards.Contains(x.Identifier)) ||
             p.RevealOrder.Any(x=>x is <0 or >4) || p.RevealOrder.Distinct().Count()!=p.RevealOrder.Count || p.ChosenCard is <1 or >4 ||
             p.Phase!=0 && (p.Cards.Count!=5 || c.Bet==0) || p.Phase==6 && p.ChosenCard is null ||
-            p.Phase is 4 or 5 or 6 && c.PendingPayout==0 ||
+            p.Phase is 4 or 5 or 6 && c.PendingPayout==0 || p.Phase==4 && c.Coins>long.MaxValue-c.PendingPayout ||
             p.Phase==3 && (p.Outcome==0 || !p.AwardReady && p.AwardTick is <1 or >=34) ||
             p.Phase is 5 or 6 && c.PendingPayout>long.MaxValue/2 ||
             p.TieRedeal && (p.Phase!=6 || p.Tick!=28 || p.TieTick is <2 or >=30) || p.AwardReady && (p.Phase!=3 || c.PendingPayout==0) ||

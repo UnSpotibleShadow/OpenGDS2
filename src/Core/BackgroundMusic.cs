@@ -270,7 +270,7 @@ public partial class BackgroundMusic : Node
 
     private void SaveSettings()
     {
-        var settings = new ConfigFile(); settings.SetValue("music", "enabled", Enabled);
+        var settings = new ConfigFile(); settings.Load(SettingsPath); settings.SetValue("music", "enabled", Enabled);
         settings.SetValue("music", "volume", VolumePercent);
         settings.SetValue("music", "seasonal", SeasonalEnabled);
         var result = settings.Save(SettingsPath);

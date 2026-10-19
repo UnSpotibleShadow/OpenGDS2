@@ -1,4 +1,38 @@
-# Current development checkpoint — 16 October 2026
+# Release preparation — 0.1.0-ea.2
+
+The owner approved PR158 and authorized end-to-end release preparation and
+publication on 19 October 2026, with both Windows x86_32 and x86_64. Version
+strings are 0.1.0-ea.2. Follow feature → develop → main PRs, verify Actions
+packages, then publish a prerelease at the tested main commit. Preserve ea.1.
+#154 is completed; #151 now tracks release tasks only. Consumer Investigation
+retains its manual-test waiver. No new native manual playthrough is claimed.
+See [release preparation](early-access-release.md).
+
+---
+
+# Current development checkpoint — 19 October 2026
+
+The owner authorized review #151 follow-ups (#152–154), native application icon
+corrections and an optional startup GitHub release notice. See
+[scope, original evidence and acceptance limits](review151-followups-20261018.md).
+The earlier ten fidelity steps are integrated through PR150; original GD2 save
+compatibility remains explicitly skipped. Source validation Actions are enabled.
+Integration stays on develop; #151 remains open for owner acceptance. There is
+no authorization here for a new main promotion, release/tag or desktop export.
+
+The owner accepted #152/#153 and the non-training review items. The PC research
+panel was corrected in PR157. Remaining learning work restores the original
+employee technology view's Learn / Use controls and the workstation-gated,
+filtered fGMWSTech dialog. The Staff route is not a substitute for that native
+entry. The generic overview Training footer stays removed; Learn is part of the
+technology view. #151/#154 remain open for owner review of the learning flow.
+
+Consumer Investigation is accepted by the owner for the release review because
+it cannot be reliably forced during play. This is a manual-test waiver, not a
+claim that a native Windows reproduction was completed. #151 remains the overall
+release gate; no main/release/build promotion is authorized.
+
+## Historical checkpoint — 16 October 2026
 
 ## Public release and community handoff
 

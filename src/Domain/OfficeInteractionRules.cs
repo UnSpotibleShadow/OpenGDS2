@@ -20,6 +20,35 @@ public static class OfficeInteractionRules
                 difference>d.MinD && difference<d.MaxD) result=d.Action;
         return result;
     }
+    /// <summary>fMainVisual MouseDown +093F..0B2E: the five native study diamonds.</summary>
+    public static int? StudyDeskAt(double x,double y)
+    {
+        if(!double.IsFinite(x)||!double.IsFinite(y))return null;
+        float sum=(float)(y+x/2),difference=(float)(y-x/2);
+        int? result=null;
+        // Native tests are independent: later hits overwrite earlier ones.
+        foreach(int action in new[]{1,2,3,5,4})
+        {
+            bool hit=action==5?x>=272&&x<=319&&sum>244&&sum<271&&difference> -59&&difference< -18:
+                x>=146+(action-1)*32&&x<=191+(action-1)*32&&sum>133+(action-1)*32&&sum<176+(action-1)*32&&difference> -27&&difference< -2;
+            if(hit)result=action;
+        }
+        return result;
+    }
+    /// <summary>Find the occupant of a rendered study PC for office input routing.</summary>
+    public static EmployeeState? StudyComputerEmployeeAt(GameState state,double x,double y)
+    {
+        ArgumentNullException.ThrowIfNull(state);
+        if(!double.IsFinite(x)||!double.IsFinite(y)||state.DevelopmentComputerIndex is not (>=0 and <=3))return null;
+        // Reverse render depth where neighbouring computer rectangles overlap.
+        return state.Employees.Where(e=>e.Office?.Action is >=1 and <=5)
+            .OrderByDescending(e=>OfficeDeskPresentationRules.StudyComputerBounds(e.Office!.Action).Y)
+            .FirstOrDefault(e=>
+            {
+                var b=OfficeDeskPresentationRules.StudyComputerBounds(e.Office!.Action);
+                return x>=b.X&&x<b.X+b.Width&&y>=b.Y&&y<b.Y+b.Height;
+            });
+    }
     /// <summary>009C66BC +071F..0741: inclusive secretary advice hit.</summary>
     public static bool SecretaryAt(double x,double y)=>double.IsFinite(x) && double.IsFinite(y) &&
         x>=104 && x<=114 && y>=80 && y<=104;

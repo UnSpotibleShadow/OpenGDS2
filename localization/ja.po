@@ -681,7 +681,7 @@ msgid "TRAINING_RESULT_StateUnknown"
 msgstr "訓練データが不明です。"
 
 msgid "TRAINING_RESULT_NotAtStudySeat"
-msgstr "まず学習席を選んでください。"
+msgstr "テクノロジーを習得するには、ワークステーションに座らせてください。"
 
 msgid "TRAINING_RESULT_Unavailable"
 msgstr "このレベルの訓練は利用できません。"
@@ -3295,7 +3295,7 @@ msgid "BLACKJACK_RULES"
 msgstr "原作のルール：最初の21は2倍。5・6・7枚で勝負すると4・6・20倍、6が3枚なら25倍、8枚以上なら100倍。再計算ではAをまとめて1にします。"
 
 msgid "BLACKJACK_CARD_BOUNDARY"
-msgstr "原作は各側に9枚まで先に配ります。次のカードは配列の範囲外になるため、この台を閉じて続行してください。"
+msgstr "9枚の上限に達しました。台を閉じて続行してください。"
 
 msgid "CASINO_CARD_CHAIN"
 msgstr "カードチェーン"
@@ -3313,7 +3313,7 @@ msgid "CARD_CHAIN_KEYS"
 msgstr "原作のキー：1～5でカードを選択、小文字のq/wで操作します。wは流用された交換処理も呼び出します。"
 
 msgid "CARD_CHAIN_EXHAUSTED"
-msgstr "52枚をすべて使用しました。原作ではここで再試行が終わらなくなります。この台を閉じて続行してください。カードの再使用や追加の賞金はありません。"
+msgstr "52枚をすべて使用しました。台を閉じて続行してください。"
 
 msgid "CARD_CHAIN_DEALER_KEY"
 msgstr "キーでディーラーのカードを選びました。原作では2～5番のカードだけを比較するため、この処理は待機します。台を閉じて続行してください。"
@@ -3898,7 +3898,7 @@ msgid "SECRETARY"
 msgstr "秘書"
 
 msgid "TRAINING_DESCRIPTION"
-msgstr "{0}の次のレベルを習得します。訓練内容と学習席を選択してください。"
+msgstr "{0} Lv.{1}を習得します。開始時に経験値を消費します。"
 
 msgid "TECHNOLOGY_USE_DESCRIPTION"
 msgstr "習得したレベルの{0}を使用します。"
@@ -4226,10 +4226,10 @@ msgid "ORIGINAL_NUMBER_DISPLAY"
 msgstr "数字表示"
 
 msgid "NUMBER_JAPANESE"
-msgstr "万・億・兆で表示"
+msgstr "100万0000"
 
 msgid "NUMBER_THOUSANDS"
-msgstr "3桁区切り"
+msgstr "1,000,000"
 
 msgid "GO_OUT"
 msgstr "外出する"
@@ -5163,7 +5163,7 @@ msgid "RECALL_DIALOGUE_INVESTIGATION"
 msgstr "「{title}」の不具合について調査しています。結果が出たらお知らせします。"
 
 msgid "RECALL_DIALOGUE_WAIT"
-msgstr "調査結果が出るまで５週間かかります。結果を待ちましょう。"
+msgstr "調査結果は約一か月後です。最悪の場合、全本数を会社の負担で回収することになります。"
 
 msgid "RECALL_DIALOGUE_RESULT"
 msgstr "「{title}」の調査結果が出ました。"
@@ -5191,3 +5191,297 @@ msgstr "「{title}」は回収対象になりませんでした。安心しま�
 
 msgid "RECALL_QUANTITY_UNKNOWN"
 msgstr "不明"
+
+msgid "ABOUT_GAME"
+msgstr "バージョン情報"
+
+msgid "ABOUT_PORT_VERSION"
+msgstr "移植版バージョン {0}"
+
+msgid "ABOUT_ORIGINAL_CREDIT"
+msgstr "原作 © 2001–2008 カイロソフト"
+
+msgid "ABOUT_VISIT_WEBSITE"
+msgstr "カイロソフトのサイトへ行く"
+
+msgid "ABOUT_WEBSITE_FAILED"
+msgstr "ブラウザーを開けません。このアドレスをコピーしてください:"
+
+msgid "MENU_ACTIONS"
+msgstr "行動"
+
+msgid "MENU_INFORMATION"
+msgstr "情報"
+
+msgid "COMPANY_DEVELOPMENT"
+msgstr "会社の発展"
+
+msgid "OTHER_WINDOWS"
+msgstr "その他のウィンドウ"
+
+msgid "ADDITIONAL_ACTIONS"
+msgstr "その他の行動"
+
+msgid "RECALL_DIALOGUE_ALERT"
+msgstr "大変な知らせです。「{title}」の重大な不具合について、消費者団体が調査を始めたそうです。"
+
+msgid "RECALL_DIALOGUE_RESULT_INTRO"
+msgstr "「{title}」の不具合に関する消費者団体の調査結果が届いたようです。"
+
+msgid "RECALL_DIALOGUE_REACTION_FULL"
+msgstr "定価で全本数を回収するよう求められてしまいました。"
+
+msgid "RECALL_DIALOGUE_GROAN"
+msgstr "これは困りました。大変な事態です……"
+
+msgid "CASINO_NUMERIC_LIMIT_NOTE"
+msgstr "上限です。閉じてください。"
+
+msgid "AUDIO_VOLUME"
+msgstr "音量…"
+
+msgid "NATIVE_PRODUCTS"
+msgstr "製品"
+
+msgid "NATIVE_TOP100"
+msgstr "トップ100"
+
+msgid "NATIVE_PLATFORMS"
+msgstr "ハードウェア"
+
+msgid "NATIVE_OWN_CONSOLES"
+msgstr "自社ハード"
+
+msgid "NATIVE_TIME_RECORDS"
+msgstr "到達記録"
+
+msgid "ABOUT_PORT_CREDIT"
+msgstr "UnSpotibleShadow と貢献者による移植"
+
+msgid "ABOUT_REPOSITORY"
+msgstr "OpenGDS2 リポジトリ"
+
+msgid "NATIVE_WORK"
+msgstr "作業"
+
+msgid "NATIVE_PROGRESS"
+msgstr "進行"
+
+msgid "OWNED_TECHNOLOGIES"
+msgstr "所有テクノロジー"
+
+msgid "BUY_TECHNOLOGIES"
+msgstr "テクノロジー購入"
+
+msgid "RELEASE_MEDIA_INTRO"
+msgstr "出荷前にメディアの容量と費用を確認しましょう。"
+
+msgid "UPDATE_AVAILABLE"
+msgstr "更新があります: {0}"
+
+msgid "UPDATE_VIEW"
+msgstr "リリースを見る"
+
+msgid "UPDATE_CHECKS_ENABLED"
+msgstr "GitHub の更新を確認"
+
+msgid "CATALOG_HORSE_0"
+msgstr "CATALOG_HORSE_0"
+
+msgid "CATALOG_HORSE_1"
+msgstr "CATALOG_HORSE_1"
+
+msgid "CATALOG_HORSE_2"
+msgstr "CATALOG_HORSE_2"
+
+msgid "CATALOG_HORSE_3"
+msgstr "CATALOG_HORSE_3"
+
+msgid "CATALOG_HORSE_4"
+msgstr "CATALOG_HORSE_4"
+
+msgid "CATALOG_HORSE_5"
+msgstr "CATALOG_HORSE_5"
+
+msgid "CATALOG_HORSE_6"
+msgstr "CATALOG_HORSE_6"
+
+msgid "CATALOG_HORSE_7"
+msgstr "CATALOG_HORSE_7"
+
+msgid "CATALOG_HORSE_8"
+msgstr "CATALOG_HORSE_8"
+
+msgid "CATALOG_HORSE_9"
+msgstr "CATALOG_HORSE_9"
+
+msgid "CATALOG_HORSE_10"
+msgstr "CATALOG_HORSE_10"
+
+msgid "CATALOG_HORSE_11"
+msgstr "CATALOG_HORSE_11"
+
+msgid "CATALOG_HORSE_12"
+msgstr "CATALOG_HORSE_12"
+
+msgid "CATALOG_HORSE_13"
+msgstr "CATALOG_HORSE_13"
+
+msgid "CATALOG_HORSE_14"
+msgstr "CATALOG_HORSE_14"
+
+msgid "CATALOG_HORSE_15"
+msgstr "CATALOG_HORSE_15"
+
+msgid "CATALOG_HORSE_16"
+msgstr "CATALOG_HORSE_16"
+
+msgid "CATALOG_HORSE_17"
+msgstr "CATALOG_HORSE_17"
+
+msgid "CATALOG_HORSE_18"
+msgstr "CATALOG_HORSE_18"
+
+msgid "CATALOG_HORSE_19"
+msgstr "CATALOG_HORSE_19"
+
+msgid "CATALOG_HORSE_20"
+msgstr "CATALOG_HORSE_20"
+
+msgid "CATALOG_HORSE_21"
+msgstr "CATALOG_HORSE_21"
+
+msgid "CATALOG_HORSE_22"
+msgstr "CATALOG_HORSE_22"
+
+msgid "CATALOG_HORSE_23"
+msgstr "CATALOG_HORSE_23"
+
+msgid "CATALOG_HORSE_24"
+msgstr "CATALOG_HORSE_24"
+
+msgid "CATALOG_HORSE_25"
+msgstr "CATALOG_HORSE_25"
+
+msgid "CATALOG_HORSE_26"
+msgstr "CATALOG_HORSE_26"
+
+msgid "CATALOG_HORSE_27"
+msgstr "CATALOG_HORSE_27"
+
+msgid "CATALOG_HORSE_28"
+msgstr "CATALOG_HORSE_28"
+
+msgid "CATALOG_HORSE_29"
+msgstr "CATALOG_HORSE_29"
+
+msgid "CATALOG_HORSE_30"
+msgstr "CATALOG_HORSE_30"
+
+msgid "CATALOG_HORSE_31"
+msgstr "CATALOG_HORSE_31"
+
+msgid "CATALOG_HORSE_32"
+msgstr "CATALOG_HORSE_32"
+
+msgid "CATALOG_HORSE_33"
+msgstr "CATALOG_HORSE_33"
+
+msgid "CATALOG_HORSE_34"
+msgstr "CATALOG_HORSE_34"
+
+msgid "CATALOG_HORSE_35"
+msgstr "CATALOG_HORSE_35"
+
+msgid "CATALOG_HORSE_36"
+msgstr "CATALOG_HORSE_36"
+
+msgid "CATALOG_HORSE_37"
+msgstr "CATALOG_HORSE_37"
+
+msgid "CATALOG_HORSE_38"
+msgstr "CATALOG_HORSE_38"
+
+msgid "CATALOG_HORSE_39"
+msgstr "CATALOG_HORSE_39"
+
+msgid "CATALOG_HORSE_40"
+msgstr "CATALOG_HORSE_40"
+
+msgid "CATALOG_HORSE_41"
+msgstr "CATALOG_HORSE_41"
+
+msgid "CATALOG_HORSE_42"
+msgstr "CATALOG_HORSE_42"
+
+msgid "CATALOG_HORSE_43"
+msgstr "CATALOG_HORSE_43"
+
+msgid "CATALOG_JOCKEY_0"
+msgstr "CATALOG_JOCKEY_0"
+
+msgid "CATALOG_JOCKEY_1"
+msgstr "CATALOG_JOCKEY_1"
+
+msgid "CATALOG_JOCKEY_2"
+msgstr "CATALOG_JOCKEY_2"
+
+msgid "CATALOG_JOCKEY_3"
+msgstr "CATALOG_JOCKEY_3"
+
+msgid "CATALOG_JOCKEY_4"
+msgstr "CATALOG_JOCKEY_4"
+
+msgid "CATALOG_JOCKEY_5"
+msgstr "CATALOG_JOCKEY_5"
+
+msgid "CATALOG_JOCKEY_6"
+msgstr "CATALOG_JOCKEY_6"
+
+msgid "CATALOG_JOCKEY_7"
+msgstr "CATALOG_JOCKEY_7"
+
+msgid "CATALOG_JOCKEY_8"
+msgstr "CATALOG_JOCKEY_8"
+
+msgid "CATALOG_JOCKEY_9"
+msgstr "CATALOG_JOCKEY_9"
+
+msgid "LEARN_TECHNOLOGY"
+msgstr "習得"
+
+msgid "USE_TECHNOLOGY_SHORT"
+msgstr "使う"
+
+msgid "LEARNING_DIALOG"
+msgstr "テクノロジー習得"
+
+msgid "CONFIRM_LEARNING"
+msgstr "習得させる"
+
+msgid "LEARNING_TIME"
+msgstr "習得時間"
+
+msgid "REQUIRED_EXPERIENCE"
+msgstr "必要経験値"
+
+msgid "LEARNING_IN_PROGRESS"
+msgstr "習得中"
+
+msgid "NO_PURCHASED_TECHNOLOGIES"
+msgstr "テクノロジーをひとつも購入していません。"
+
+msgid "NO_LEARNABLE_TECHNOLOGIES"
+msgstr "習得できるテクノロジーはありません。"
+
+msgid "LEARNING_INSUFFICIENT_EXPERIENCE"
+msgstr "経験値がたりません！"
+
+msgid "LEARNING_CANNOT_LEARN"
+msgstr "{0}さんはﾃｸﾉﾛｼﾞｰの習得ができません。"
+
+msgid "LEARNING_CAPACITY_REACHED"
+msgstr "{0}さんは最大{1}つのテクノロジーしか習得できません。"
+
+msgid "EMPLOYEE_LEARNING_EXPERIENCE"
+msgstr "{0}さんの現在の経験値"

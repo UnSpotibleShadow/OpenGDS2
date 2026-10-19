@@ -34,9 +34,9 @@ public partial class Main
             if (!_pokerInterfaceVisible) return;
             var c=state.Casino;var r=c.CardChain;var p=r.Round;
             totals.Text=string.Format(DisplayNumbers.Provider,Tr("CARD_CHAIN_TOTALS"),c.Coins,c.Bet,c.PendingPayout,r.ChainCount,c.ChainBonus);
-            message.Text=Tr(r.DeckExhausted ? "CARD_CHAIN_EXHAUSTED" : r.NumericBoundary ? "CASINO_RESULT_NumericLimit" : p.Phase==6 && p.ChosenCard==0 ? "CARD_CHAIN_DEALER_KEY" : p.Phase switch
+            message.Text=Tr(r.DeckExhausted ? "CARD_CHAIN_EXHAUSTED" : r.NumericBoundary ? "CASINO_NUMERIC_LIMIT_NOTE" : p.Phase==6 && p.ChosenCard==0 ? "CARD_CHAIN_DEALER_KEY" : p.Phase switch
             {0=>c.Bet==50 ? "POKER_RETAINED_BET" : "POKER_BET",1=>"CARD_CHAIN_SELECT",2=>"POKER_REVEAL",3=>"POKER_WIN",4=>c.PendingPayout==0 ? "CARD_CHAIN_ZERO_WAIT" : "POKER_COLLECTING",5=>p.Tick>=18 ? "POKER_CHOOSE_DOUBLE" : "POKER_REVEAL",_=>p.TieRedeal ? "POKER_TIE" : "POKER_REVEAL"});
-            if (p.Phase==3 && (c.PendingPayout>long.MaxValue/2 || c.Coins>long.MaxValue-c.PendingPayout)) message.Text+="\n"+Tr("CASINO_RESULT_NumericLimit");
+            if (p.Phase==3 && (c.PendingPayout>long.MaxValue/2 || c.Coins>long.MaxValue-c.PendingPayout)) message.Text=Tr("CASINO_NUMERIC_LIMIT_NOTE");
             referenceCard.Present(r.PreviousCard??default,r.PreviousCard.HasValue,r.PreviousCard.HasValue);remaining.Text=(52-p.UsedCards.Count).ToString();
             previous.Text=r.PreviousCard is CasinoCard reference?Tr("CARD_CHAIN_REFERENCE")+" "+CardFace(reference).Replace('\n',' '):"";
             bet.Text=Tr(p.Phase is 3 or 4 ? "POKER_COLLECT" : "POKER_ADD_BET");deal.Text=Tr(p.Phase is >=3 and <=6 ? "POKER_DOUBLE" : "POKER_DEAL");

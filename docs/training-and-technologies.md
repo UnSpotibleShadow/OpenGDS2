@@ -81,8 +81,48 @@ employee use handler `009A98E8` establishes its costs and distinguishes immediat
 stress relief, temporary speed boosts and timed project effects. Speed and top-level stress relief remain unresolved. Buying or studying a
 technology does not itself apply a permanent stat bonus.
 
-The original study progress/icon tiles, completion-message timing and Windows
-behavioral comparison remain unfinished. M17 renders employee reading animation
-and provides course progress in the staff screen; it does not fabricate the
-missing original icon behavior. Other workstation task states, external jobs,
-calendar economics and company progression remain separately unresolved.
+The 18 October #154 follow-up restores occupied study PC tiles and office click
+routes from the original assignment hit regions and member-2218 sprite mappings;
+see [review evidence](review151-followups-20261018.md). Course-progress artwork,
+completion-message timing and native Windows behavioral acceptance remain
+separate limitations. Other workstation task states and external jobs are not
+established by the study-PC change.
+
+The 19 October screenshot clarification restores the PC's company research
+panel: Owned Technologies above, Buy Technology in the middle, Available Genres
+below. Both occupied study PCs and the research area open this same compact,
+nonmodal panel. The direct-course shortcut in PR156 was the wrong destination
+and is superseded. The employee-overview Training button remains removed;
+the native Learn control inside the employee technology view opens the
+separate course picker after checking the study-workstation assignment. Opening/cancelling the PC panel never starts a course or charges funds
+or experience. Training eligibility, costs and continuation remain unchanged.
+
+## Original employee learning route (19 October correction)
+
+1. Buy the technology for the company.
+2. Select the employee and right-click a study workstation.
+3. Open the employee's technology view and press **Learn** (習得), beside **Use** (使う).
+4. Select a course and press **Learn** (習得させる) to start it.
+
+The Learn handler is fGMInfo.Command6 (`0098232C`): actions 1–5 open
+fGMWSTech; other assignments produce the original secretary workstation message.
+The serialized button captions are at file offsets `0x29F39B` and `0x29F3DA`.
+The course form's client rectangle is 4095×3570 twips, or 273×238 desktop pixels;
+its controls provide technology/time/experience columns, a description, the
+employee's experience and Learn/Cancel. The added in-dialog seat assignment and
+Save/Load controls are removed. Cancel returns to the employee technology view.
+
+The list filters by company ownership greater than learned level, excluding level
+3, as in `009ABC7C +0396..03F3`; displayed levels are the next level (`+044E..047A`).
+Insufficient experience and skill-capacity refusals remain confirmation-time
+secretary messages from `00993A2C`, rather than disappearing courses. No refusal
+or cancellation spends experience. Confirmation retains the original domain
+transaction, replacement-course cost and study completion rules above. The
+employee technology view updates its learning status, learned levels and Use
+availability as the course completes, without reopening the window.
+
+The original office MouseDown sets research mode at `009C66BC +0716..071B`,
+then its employee hit scan overrides that mode at `+0879..0893`. Employee selection
+therefore takes priority when a seated character overlaps a study PC; clicking
+the computer's uncovered area still opens company research. The native learning
+UI regression clicks the seated character before requesting the next level.

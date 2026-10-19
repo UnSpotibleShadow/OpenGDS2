@@ -17,14 +17,26 @@ func write_json(path: String, value: Dictionary) -> void:
 func saved() -> Dictionary:
     return JSON.parse_string(FileAccess.get_file_as_string("user://saves/slot1.json")).State
 
+func office_input(button_index: int,pixel: Vector2) -> void:
+    var office=main.find_child("OriginalOfficeBackground",true,false)
+    check(office!=null,"Office input surface exists")
+    if office==null:return
+    var scale: float=min(office.size.x/466.0,office.size.y/290.0)
+    var click=InputEventMouseButton.new();click.button_index=button_index;click.pressed=true
+    click.position=(office.size-Vector2(466,290)*scale)/2.0+pixel*scale
+    office.gui_input.emit(click);await process_frame
+
 func press_node(name: String) -> void:
     if name=="TogglePause":
         check(main.call("SetSimulationPaused",not main.call("GetSimulationPaused")),"Harness simulation pause")
         await process_frame
         return
     if name=="ToolbarSTART_GAME_DEVELOPMENT":
-        main.find_child("MENU_DEVELOPMENT",true,false).get_popup().id_pressed.emit(0)
-        await process_frame
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(192,150))
+        await press_node("RoomOriginalGame")
+        return
+    if name=="CompanyFacilities":
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(80,220))
         return
     if name=="ToolbarBACK_TO_TITLE":
         var menu=main.find_child("MENU_GAME",true,false).get_popup()
@@ -36,10 +48,18 @@ func press_node(name: String) -> void:
     if button != null and not button.disabled:
         button.pressed.emit()
     await process_frame
+    if name in ["CompletionRelease","ProjectRelease"]:
+        for page in range(50):
+            var message=main.find_child("ConversationMessage",true,false)
+            if message==null:break
+            var key=InputEventKey.new();key.keycode=KEY_ENTER;key.pressed=true
+            message.gui_input.emit(key);await process_frame
+            if is_instance_valid(message) and message.is_inside_tree():
+                await create_timer(.03).timeout;message.gui_input.emit(key);await process_frame
+        if main.find_child("CloseMediaInformation",true,false)!=null:await press_node("CloseMediaInformation")
 
 func press(key: String) -> void:
-    for menu in main.find_children("*","MenuButton",true,false):
-        var popup=menu.get_popup()
+    for popup in desktop_popups():
         for item in range(popup.item_count):
             if popup.get_item_text(item)==tr(key):
                 popup.about_to_popup.emit()
@@ -112,14 +132,14 @@ func run() -> void:
             var after := saved()
             check(after.PendingFacilityReceipt != null,"Saved result snapshot")
             if kind == 1:
-                check(after.Money == 92000000 and after.Employees[0].Stress == 0 and after.EmployeeSources[0].Employee.Stress == 0,"Hot spring debit and stress relief")
+                check(after.Money == 92000000 and after.Employees[0].Stress == 80 and after.EmployeeSources[0].Employee.Stress == 80,"Hot spring debit precedes secretary acknowledgement")
             elif kind == 2:
-                check(after.Money == 100003500 and after.ReleasedGames[0].Stock == 0 and after.ReleasedGames[0].UnitsSold == 9,"Stock sale at 500 per copy")
+                check(after.Money == 100000000 and after.ReleasedGames[0].Stock == 0 and after.ReleasedGames[0].UnitsSold == 9,"Stock disposal precedes proceeds acknowledgement")
             elif kind == 3:
                 check(after.Money == 60000000 and after.Employees[0].RawParameter34 == 3 and after.EmployeeSources[0].Employee.RawParameter34 == 3,"Study capacity and source synchronization")
                 check(after.OriginalPayrollScratchIndex == 1,"Technology selector scratch writer")
             else:
-                check(after.Money == 90000000 and after.Company.ProductionCapacity >= 65 and after.Company.ProductionCapacity <= 69,"Production gain and direct debit")
+                check(after.Money == 100000000 and after.Company.ProductionCapacity == 50,"Production waits for result acknowledgement")
                 check(after.Company.WeeklyNet == 11,"Production debit does not change financial accumulator")
             var result_text: String = main.find_child("FacilityServiceResult",true,false).text
             check(not result_text.begins_with("FACILITY_"),"Translated service result")
@@ -148,3 +168,11 @@ func run() -> void:
             await process_frame
             await process_frame
     quit(1 if failures else 0)
+
+func desktop_popups() -> Array:
+    var popups=[]
+    for menu in main.find_children("*","MenuButton",true,false):
+        var popup=menu.get_popup()
+        popups.append(popup)
+        popups.append_array(popup.find_children("*","PopupMenu",true,false))
+    return popups

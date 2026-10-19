@@ -56,6 +56,9 @@ public static class ClassicTheme
         theme.SetColor("font_color","TooltipLabel",Colors.Black);
         theme.SetColor("font_shadow_color","TooltipLabel",Colors.Transparent);
         theme.SetFontSize("font_size","TooltipLabel",13);
+        var progressBackground=new StyleBoxFlat {BgColor=Colors.Blue,BorderColor=Colors.Black};progressBackground.SetBorderWidthAll(1);
+        theme.SetStylebox("background","ProgressBar",progressBackground);
+        theme.SetStylebox("fill","ProgressBar",new StyleBoxFlat {BgColor=new Color(0,1,0)});
         return theme;
     }
 
@@ -71,6 +74,14 @@ public static class ClassicTheme
         var box = Bevel(Face, pressed);
         box.ContentMarginLeft = 3; box.ContentMarginRight = 3;
         box.ContentMarginTop = 1; box.ContentMarginBottom = 1;
+        return box;
+    }
+
+    public static StyleBoxTexture CompactInput()
+    {
+        var box=Bevel(Colors.White,true);
+        box.ContentMarginLeft=3;box.ContentMarginRight=3;
+        box.ContentMarginTop=1;box.ContentMarginBottom=1;
         return box;
     }
 

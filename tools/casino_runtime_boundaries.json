@@ -155,6 +155,156 @@
       "address": 10415981,
       "kind": "var_i2",
       "value": 58
+    },
+    {
+      "label": "closeup_copy_rop",
+      "address": 10402705,
+      "kind": "i4",
+      "value": 13369376
+    },
+    {
+      "label": "closeup_top_height",
+      "address": 10402723,
+      "kind": "i4",
+      "value": 77
+    },
+    {
+      "label": "closeup_width",
+      "address": 10402728,
+      "kind": "i4",
+      "value": 421
+    },
+    {
+      "label": "closeup_top_shift",
+      "address": 10402738,
+      "kind": "i4",
+      "value": 2
+    },
+    {
+      "label": "closeup_top_wrap_source",
+      "address": 10402819,
+      "kind": "i4",
+      "value": 419
+    },
+    {
+      "label": "closeup_middle_height",
+      "address": 10402931,
+      "kind": "i4",
+      "value": 91
+    },
+    {
+      "label": "closeup_middle_y",
+      "address": 10402941,
+      "kind": "i4",
+      "value": 82
+    },
+    {
+      "label": "closeup_middle_shift",
+      "address": 10402946,
+      "kind": "i4",
+      "value": 6
+    },
+    {
+      "label": "closeup_middle_wrap_source",
+      "address": 10403027,
+      "kind": "i4",
+      "value": 415
+    },
+    {
+      "label": "closeup_bottom_height",
+      "address": 10403139,
+      "kind": "i4",
+      "value": 44
+    },
+    {
+      "label": "closeup_bottom_y",
+      "address": 10403149,
+      "kind": "i4",
+      "value": 173
+    },
+    {
+      "label": "closeup_bottom_shift",
+      "address": 10403154,
+      "kind": "i4",
+      "value": 21
+    },
+    {
+      "label": "closeup_bottom_wrap_source",
+      "address": 10403235,
+      "kind": "i4",
+      "value": 399
+    },
+    {
+      "label": "finish_camera_test",
+      "address": 10406456,
+      "kind": "var_i2",
+      "value": 210
+    },
+    {
+      "label": "finish_scroll_height",
+      "address": 10406538,
+      "kind": "i4",
+      "value": 173
+    },
+    {
+      "label": "finish_scroll_width",
+      "address": 10406543,
+      "kind": "i4",
+      "value": 421
+    },
+    {
+      "label": "finish_scroll_shift",
+      "address": 10406553,
+      "kind": "i4",
+      "value": 10
+    },
+    {
+      "label": "finish_scroll_wrap_source",
+      "address": 10406634,
+      "kind": "i4",
+      "value": 411
+    },
+    {
+      "label": "finish_post_mask_rop",
+      "address": 10406756,
+      "kind": "i4",
+      "value": 8913094
+    },
+    {
+      "label": "finish_post_source_y",
+      "address": 10406761,
+      "kind": "i4",
+      "value": 169
+    },
+    {
+      "label": "finish_post_height",
+      "address": 10406774,
+      "kind": "i4",
+      "value": 147
+    },
+    {
+      "label": "finish_post_width",
+      "address": 10406779,
+      "kind": "i4",
+      "value": 12
+    },
+    {
+      "label": "finish_post_y",
+      "address": 10406784,
+      "kind": "i4",
+      "value": 10
+    },
+    {
+      "label": "finish_post_camera_offset",
+      "address": 10406796,
+      "kind": "var_i2",
+      "value": 800
+    },
+    {
+      "label": "finish_post_color_rop",
+      "address": 10406873,
+      "kind": "i4",
+      "value": 6684742
     }
   ],
   "odds": [

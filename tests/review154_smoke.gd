@@ -1,0 +1,81 @@
+extends "res://tests/window_artwork_smoke.gd"
+
+func run() -> void:
+    if OS.get_environment("XDG_DATA_HOME").is_empty():quit(1);return
+    root.size=Vector2i(1280,800)
+    blank_bmp("user://original/Graphic/Embedded/OfficeBase.bmp",466,290,true);setup_catalog()
+    var catalog=JSON.parse_string(FileAccess.get_file_as_string("user://original/catalog.json"))
+    catalog.Technologies=[{"SourceIndex":0,"Identifier":0,"Name":"Authored technique","Description":"Authored description","RequiredTrainingWork":[40,60,80],"ExperienceCosts":[10,20,30],"RawTable1568":[1,2,3],"RawTable158C":[1,2,3]}]
+    catalog.Genres[-1].RawMembers["125C"]=24
+    write_json("user://original/catalog.json",integer_tokens(catalog))
+    for locale in ["en","ja"]:
+        var language=ConfigFile.new();language.set_value("language","locale",locale);language.save("user://interface.cfg")
+        var v=complete_value();v.State.SecretarySourceIndex=1;v.State.Company.OriginalMember90=23;v.State.TechnologyOwnershipLevels={"0":3}
+        for e in v.State.Employees:e.TechnologyLevels={"0":0};e.MaximumTechnologies=4
+        await load_fixture(v);await press_node("TogglePause");await select_employee(0)
+        check(main.find_child("EmployeeActions",true,false)==null,"Employee popup omits unsupported action dropdown")
+        check(main.find_child("EmployeeTraining",true,false)==null,"Employee overview omits rejected Training button")
+        await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68));await press_node("ToolbarSAVE_GAME")
+        check(saved().Employees[0].Office.Action==1,"Right-click study desk assigns selected employee")
+        await office_input(MOUSE_BUTTON_RIGHT,Vector2(350,155));await press_node("ToolbarSAVE_GAME")
+        check(saved().Employees[0].Office.Action>=18,"Right-click vending area sends selected employee to rest")
+        await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68))
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(205,50));await window("CompanyResearchWindow",172,305)
+        var technologies=main.find_child("ResearchOwnedTechnologies",true,false)
+        check(technologies.get_root().get_first_child()!=null,"PC-area panel lists company-owned technology")
+        check(main.find_child("ResearchAvailableGenres",true,false).get_root().get_child_count()==catalog.Genres.size()-1,"Research page filters genres using company research level")
+        check(main.call("SetSimulationPaused",false) and main.call("SetSimulationPaused",true),"Research page keeps nonmodal clock controls available")
+        await press_node("ResearchBuyTechnology");check(main.find_child("TechnologyPurchaseWindow",true,false)!=null,"Research page opens technology purchase")
+        await close_window("TechnologyPurchaseWindow")
+        check(main.find_child("CompanyResearchWindow",true,false).visible,"Company research page survives the purchase child window")
+        await close_window("CompanyResearchWindow");await select_employee(1)
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(155,50));await window("CompanyResearchWindow",172,305)
+        check(main.find_child("TrainingWindow",true,false)==null,"Occupied study PC opens the original technology/genre panel, not the course picker")
+        check(main.find_child("ResearchOwnedCaption",true,false).text==tr("OWNED_TECHNOLOGIES") and main.find_child("ResearchGenresCaption",true,false).text==tr("AVAILABLE_GENRES"),"PC panel matches both original headings")
+        var owned_list=main.find_child("ResearchOwnedTechnologies",true,false)
+        var purchase=main.find_child("ResearchBuyTechnology",true,false)
+        var genres_list=main.find_child("ResearchAvailableGenres",true,false)
+        check(owned_list.get_global_rect().end.y<=purchase.get_global_rect().position.y and purchase.get_global_rect().end.y<=genres_list.get_global_rect().position.y,"PC panel places purchase between independent technology and genre lists")
+        check(main.find_child("ResearchOwnedTechnologiesScrollUp",true,false).visible and main.find_child("ResearchOwnedTechnologiesScrollDown",true,false).visible,"Owned list keeps the original arrow controls visible")
+        await press_node("ResearchAvailableGenresScrollDown")
+        check(genres_list.get_scroll().y>0,"Genre down arrow scrolls the actual list")
+        await press_node("ResearchAvailableGenresScrollUp")
+        check(genres_list.get_scroll().y==0,"Genre up arrow returns to the first row")
+        var panel=main.find_child("CompanyResearchWindow",true,false);panel.position=Vector2(650,90)
+        await press_node("ResearchBuyTechnology");await close_window("TechnologyPurchaseWindow")
+        check(panel.position==Vector2(650,90) and panel.visible,"PC panel and its position survive the purchase child")
+        await close_window("CompanyResearchWindow")
+        await office_input(MOUSE_BUTTON_LEFT,Vector2(155,50));await window("CompanyResearchWindow",172,305)
+        check(main.find_child("CompanyResearchWindow",true,false).position==Vector2(650,90),"PC panel reopens at its saved position")
+        await close_window("CompanyResearchWindow");await press_node("ToolbarSAVE_GAME")
+        check(saved().Employees[0].Experience==100 and saved().Employees[0].Office.Training==null and saved().Money==v.State.Money,"Opening or cancelling the PC panel never starts training or charges funds/experience")
+        await select_employee(0);await press_node("EmployeeTechnologies");await press_node("EmployeeLearnTechnology")
+        await press_node("TrainTechnology0");await press_node("ToolbarSAVE_GAME")
+        check(saved().Employees[0].Office.Training.TechnologySourceIndex==0 and saved().Employees[0].Experience==90,"Employee Learn control starts training and charges once")
+        check(main.find_child("CompanyFacilities",true,false)==null and main.find_child("CompanyInformation",true,false)==null,"Company overview omits extra buttons")
+        await dispose()
+        v.State.TechnologyOwnershipLevels={}
+        await load_fixture(v);await press_node("TogglePause");await select_employee(0)
+        await office_input(MOUSE_BUTTON_RIGHT,Vector2(166,68));await office_input(MOUSE_BUTTON_LEFT,Vector2(155,50))
+        await window("CompanyResearchWindow",172,305)
+        check(main.find_child("ResearchOwnedTechnologies",true,false).get_root().get_child_count()==0,"PC panel can show an empty owned-technology list")
+        check(main.find_child("ResearchOwnedTechnologiesScrollUp",true,false).visible and main.find_child("ResearchOwnedTechnologiesScrollDown",true,false).visible,"Empty owned list retains both original scroll arrows")
+        await dispose()
+        v=complete_value();v.State.SecretarySourceIndex=1;var p=stress_fixture().State.DevelopmentProjects[0].duplicate(true)
+        p.PendingDecision=2;p.DecisionIntroductionAcknowledged=2;p.OriginalStage=3;p.Progress=p.RequiredPoints;p.GameTypeSourceIndex=0;p.GenreSourceIndex=0;p.Bugs=3
+        v.State.DevelopmentProjects=[p]
+        await load_fixture(v)
+        check(main.find_child("CompletionQualityFields",true,false)!=null,"Completion has shared quality region")
+        var release=main.find_child("CompletionRelease",true,false);release.pressed.emit();await process_frame
+        check(main.find_child("ConversationPortrait",true,false).visible,"Release secretary has a portrait slot")
+        check(main.find_child("ConversationWindow",true,false)!=null and main.find_child("ShipmentWindow",true,false)==null,"Release begins with secretary dialogue")
+        for page in range(8):
+            if main.find_child("ConversationWindow",true,false)==null:break
+            await award_page()
+        await window("MediaInformationWindow",305,185)
+        check(main.find_child("ShipmentWindow",true,false)==null,"Media information precedes shipment finalization")
+        await press_node("CloseMediaInformation");await window("ShipmentWindow",445,380)
+        await press_node("ToolbarSAVE_GAME")
+        check(saved().ReleasedGames.size()==0 and saved().Money==v.State.Money,"Opening release flow never produces copies or spends funds")
+        await dispose()
+    print("Review 154 smoke failures: ",failures);quit(0 if failures==0 else 1)
