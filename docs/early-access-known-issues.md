@@ -15,7 +15,7 @@ settings work before import. Original game files are not bundled.
 | Saves | Modern JSON saves only; original-game save import is unsupported. Saving retains one previous valid slot. Load Previous Save restores earlier progress in memory without replacing the current slot until explicit Save. Back up saves before upgrades; future versions may require a new company. |
 | Data folder | `OpenGDS2` stays the same across releases. First launch copies previous test-folder imports/settings/saves/playlists/overrides once. Original files stay in the old folder; existing destination files and conflicting save pairs are preserved. Close the old game first. Copy failures offer Retry before starting gameplay. |
 | Original import | Use the supported LZH, not the self-extracting EXE. Refresh the local import when a build requests newly recovered resources/dialogue. Do not bundle or share the imported cache. |
-| Package and testing | The release is intended for Windows x64 with its own .NET runtime. Exact package/source/runtime identity comes from BUILD_MANIFEST.json and SHA256SUMS. Automated and exported-host checks are separate from native Windows acceptance. Full display, sustained and multi-year Windows testing remains community work. |
+| Package and testing | The release is available for Windows x86_32 and x86_64 with its own .NET runtime. Exact package/source/runtime identity comes from BUILD_MANIFEST.json and SHA256SUMS. Automated and exported-host checks are separate from native Windows acceptance. Full display, sustained and multi-year Windows testing remains community work. |
 
 See the accompanying TEST_CHECKLIST.md and DECISIONS.md for test recording and
 scope decisions. In the source repository these are

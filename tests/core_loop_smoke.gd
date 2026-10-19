@@ -1925,7 +1925,7 @@ func run() -> void:
 func finish_core_loop() -> void:
     await process_frame
     await process_frame
-    if DisplayServer.get_name()=="headless":
+    if DisplayServer.get_name()=="headless" and ResourceLoader.exists("res://tests/ManagedTestCleanup.cs"):
         var cleanup=load("res://tests/ManagedTestCleanup.cs").new()
         root.add_child(cleanup)
         # Themes release styleboxes, which in turn release image textures. Allow

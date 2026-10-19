@@ -86,12 +86,14 @@ jobs:
       - name: Export community desktop builds
         run: |
           set -euo pipefail
-          mkdir -p builds/linux builds/windows builds/linux-debug builds/windows-debug /tmp/opengds2-notices
+          mkdir -p builds/linux builds/windows builds/windows32 builds/linux-debug builds/windows-debug /tmp/opengds2-notices
           GODOT_EXPORT=/tmp/godot/Godot_v4.4.1-stable_mono_linux_x86_64/Godot_v4.4.1-stable_mono_linux.x86_64
           "$GODOT_EXPORT" --headless --path . --export-release "Linux Desktop" builds/linux/OpenGDS2.x86_64 2>&1 | tee /tmp/linux-export.log
           if rg '^ERROR:' /tmp/linux-export.log; then exit 1; fi
           "$GODOT_EXPORT" --headless --path . --export-release "Windows Desktop" builds/windows/OpenGDS2.exe 2>&1 | tee /tmp/windows-export.log
           if rg '^ERROR:' /tmp/windows-export.log; then exit 1; fi
+          "$GODOT_EXPORT" --headless --path . --export-release "Windows Desktop 32-bit" builds/windows32/OpenGDS2.exe 2>&1 | tee /tmp/windows32-export.log
+          if rg '^ERROR:' /tmp/windows32-export.log; then exit 1; fi
           "$GODOT_EXPORT" --headless --path . --export-debug "Linux Debug" builds/linux-debug/OpenGDS2.x86_64 2>&1 | tee /tmp/linux-debug-export.log
           if rg '^ERROR:' /tmp/linux-debug-export.log; then exit 1; fi
           "$GODOT_EXPORT" --headless --path . --export-debug "Windows Debug" builds/windows-debug/OpenGDS2.exe 2>&1 | tee /tmp/windows-debug-export.log
@@ -100,7 +102,8 @@ jobs:
       - name: Package binaries, notices and checksums
         run: |
           python3 tools/package_desktop.py --export builds/linux --platform linux --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64.zip
-          python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64.zip
+          python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_x86_64.zip
+          python3 tools/package_desktop.py --export builds/windows32 --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_x86_32.zip
           python3 tools/package_desktop.py --export builds/linux-debug --platform linux --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64-debug.zip
           python3 tools/package_desktop.py --export builds/windows-debug --platform windows --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64-debug.zip
           for package in builds/*.zip; do
@@ -124,8 +127,10 @@ jobs:
           path: |
             builds/OpenGDS2-linux-x86_64.zip
             builds/OpenGDS2-linux-x86_64.zip.sha256
-            builds/OpenGDS2-windows-x86_64.zip
-            builds/OpenGDS2-windows-x86_64.zip.sha256
+            builds/OpenGDS_v0.1.0-ea.2_x86_64.zip
+            builds/OpenGDS_v0.1.0-ea.2_x86_64.zip.sha256
+            builds/OpenGDS_v0.1.0-ea.2_x86_32.zip
+            builds/OpenGDS_v0.1.0-ea.2_x86_32.zip.sha256
           if-no-files-found: error
           retention-days: 14
       - uses: actions/upload-artifact@v4
@@ -155,22 +160,25 @@ jobs:
         with:
           name: OpenGDS2-desktop-debug-${{ github.event.pull_request.merge_commit_sha }}
           path: ${{ runner.temp }}/opengds2-desktop
-      - name: Run packaged Windows release and debug core loops
+      - name: Run both packaged Windows architectures and debug core loop
         shell: pwsh
         run: |
           $packageRoot = Join-Path $env:RUNNER_TEMP "opengds2-desktop"
-          $runRoot = Join-Path $env:RUNNER_TEMP "opengds2-windows-run"
           $fixture = Join-Path $env:GITHUB_WORKSPACE "tests/core_loop_smoke.gd"
-          foreach ($suffix in @("", "-debug")) {
-            $folder = "OpenGDS2-windows-x86_64$suffix"
-            Expand-Archive -Path (Join-Path $packageRoot "$folder.zip") -DestinationPath $runRoot
-            $game = Join-Path $runRoot "$folder/OpenGDS2.console.exe"
+          $cases = @(
+            @{ Zip = "OpenGDS_v0.1.0-ea.2_x86_32"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
+            @{ Zip = "OpenGDS_v0.1.0-ea.2_x86_64"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
+            @{ Zip = "OpenGDS2-windows-x86_64-debug"; Root = "OpenGDS2-windows-x86_64-debug"; Debug = "1" }
+          )
+          foreach ($case in $cases) {
+            $runRoot = Join-Path $env:RUNNER_TEMP $case.Zip
+            Expand-Archive -Path (Join-Path $packageRoot "$($case.Zip).zip") -DestinationPath $runRoot
+            $game = Join-Path $runRoot "$($case.Root)/OpenGDS2.console.exe"
             Set-Location $runRoot
-            $env:OPENGDS2_EXPECT_DEBUG = if ($suffix -eq "-debug") { "1" } else { "0" }
+            $env:APPDATA = Join-Path $runRoot "profile"
+            $env:OPENGDS2_EXPECT_DEBUG = $case.Debug
             & $game --headless --quit-after 5
-            if ($LASTEXITCODE -ne 0) { throw "Packaged Windows $suffix startup failed: $LASTEXITCODE" }
+            if ($LASTEXITCODE -ne 0) { throw "Packaged Windows startup failed: $LASTEXITCODE ($($case.Zip))" }
             & $game --headless --fixed-fps 60 --script $fixture
-            if ($LASTEXITCODE -ne 0) { throw "Packaged Windows $suffix core loop failed: $LASTEXITCODE" }
+            if ($LASTEXITCODE -ne 0) { throw "Packaged Windows core loop failed: $LASTEXITCODE ($($case.Zip))" }
           }
-        env:
-          XDG_DATA_HOME: ${{ runner.temp }}/opengds2-windows-smoke

@@ -1,5 +1,17 @@
 # OpenGDS2 working instructions
 
+## Release authorization — 19 October 2026
+
+The owner approved the final PR158 implementation, then explicitly authorized
+completing the release end to end, including a version bump and Windows 32-bit
+and 64-bit packages. Prepare 0.1.0-ea.2 through a feature PR into develop, then
+a develop-to-main release PR. The approved main merge triggers Actions exports.
+Verify exact packages and checksums, tag the verified main commit and publish a
+GitHub prerelease. Preserve v0.1.0-ea.1 and its assets. This supersedes prior
+no-release/no-main instructions for the accepted review. Keep native Windows
+manual testing limits honest; use Actions packaged Windows checks. Recovery:
+/workspace/private/release-ea2-20261019/.
+
 ## Current work — review follow-ups, 18 October 2026
 
 The owner authorized implementation of #152, #153 and #154, application/taskbar
