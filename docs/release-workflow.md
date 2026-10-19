@@ -3,7 +3,8 @@
 Use git-flow: `main` holds released source and `develop` integrates upcoming work.
 The maintainer authorized this process and resumed Actions on 17 October 2026.
 Source validation may run automatically; a successful check does not authorize a
-release. The current fidelity follow-ups do not create releases or tags.
+release. The owner authorized the 0.1.0-ea.2 publication on 19 October 2026 after
+approving the fidelity review; see the current release-preparation document.
 
 ## Normal changes
 
@@ -26,9 +27,11 @@ All jobs check out the PR's exact merge commit, including if main advances befor
 the run starts. Domain and Godot checks must pass before export. The existing
 presets produce Windows x86_64 and Linux x86_64 release/debug ZIPs, bundled notices
 and external SHA-256 files, with packaged smoke checks on both operating systems.
-This does not add a Windows 32-bit preset. Download artifacts from the eligible
+The Windows Desktop 32-bit preset additionally exports x86_32 release packages,
+which run the same packaged Windows core-loop checks as x86_64. Download artifacts from the eligible
 run's Actions page; artifact names include the full merge SHA and expire after
-14 days. These are development packages, not a newly published Early Access release.
+14 days. Windows release ZIPs carry Early Access source/runtime manifests and notes;
+Linux/debug ZIPs remain development artifacts. Publication is a separate step.
 
 The workflow has read-only repository permissions and never tags, publishes or
 replaces release assets. A skipped build on another PR source is intentional.

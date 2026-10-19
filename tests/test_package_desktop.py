@@ -89,6 +89,7 @@ class DesktopPackageTests(unittest.TestCase):
             self.assertEqual(manifest["candidate_data_directory"], "OpenGDS2")
             self.assertIn("%APPDATA%\\OpenGDS2.", archive.read(prefix+"GETTING_STARTED.txt").decode())
             self.assertEqual(manifest["runtime_packs"], ["microsoft.netcore.app.runtime.win-x64/8.0.0"])
+            self.assertEqual(manifest["runtime_identifiers"], ["win-x64"])
             self.assertEqual(manifest["native_windows_acceptance"], "pending owner testing")
             self.assertEqual(archive.read(prefix+"DECISIONS.md"), b"Authored candidate fixture")
             for line in archive.read(prefix+"SHA256SUMS").decode().splitlines():
@@ -128,6 +129,7 @@ class DesktopPackageTests(unittest.TestCase):
             manifest = json.loads(archive.read(prefix + "BUILD_MANIFEST.json"))
             self.assertFalse(manifest["private_early_access_candidate"])
             self.assertTrue(manifest["public_early_access"])
+            self.assertEqual(manifest["runtime_identifiers"], ["win-x64"])
             self.assertEqual(manifest["source_commit"], "b" * 40)
             self.assertEqual(manifest["data_directory"], "OpenGDS2-AuthoredTest")
             self.assertEqual(manifest["community_report_url"], "https://example.test/bugs")

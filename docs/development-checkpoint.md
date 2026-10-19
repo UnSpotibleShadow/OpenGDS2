@@ -1,3 +1,15 @@
+# Release preparation — 0.1.0-ea.2
+
+The owner approved PR158 and authorized end-to-end release preparation and
+publication on 19 October 2026, with both Windows x86_32 and x86_64. Version
+strings are 0.1.0-ea.2. Follow feature → develop → main PRs, verify Actions
+packages, then publish a prerelease at the tested main commit. Preserve ea.1.
+#154 is completed; #151 now tracks release tasks only. Consumer Investigation
+retains its manual-test waiver. No new native manual playthrough is claimed.
+See [release preparation](early-access-release.md).
+
+---
+
 # Current development checkpoint — 19 October 2026
 
 The owner authorized review #151 follow-ups (#152–154), native application icon

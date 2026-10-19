@@ -12,7 +12,7 @@ Run a game studio: hire and train employees, develop games, ship them, follow re
 
 ## Early Access
 
-**Early Access `v0.1.0-ea.1` is available.** Download the [Windows release](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.1), with separate **32-bit (`x86_32`)** and **64-bit (`x86_64`)** packages and SHA-256 files.
+**Early Access `v0.1.0-ea.2` is available.** Download the [Windows release](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.2), with separate **32-bit (`x86_32`)** and **64-bit (`x86_64`)** packages and SHA-256 files.
 
 The first release is intended for **community testing**. The core game loop is playable, but this is an unfinished reconstruction: expect bugs, presentation differences and missing systems. Automated checks and a Windows export are in place; native Windows playthrough validation remains incomplete.
 
@@ -51,7 +51,7 @@ troubleshooting. A [repository copy](docs/player-guide.md) is also available.
 
 ### Windows release package
 
-Download the matching Windows ZIP from the [release page](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.1), then:
+Download the matching Windows ZIP from the [release page](https://github.com/UnSpotibleShadow/OpenGDS2/releases/tag/v0.1.0-ea.2), then:
 
 1. Extract the **entire ZIP** into a fresh folder.
 2. Run `OpenGDS2.console.exe`, keeping the accompanying files and folders together. The packaged build does not require the Godot editor or a separate .NET installation.

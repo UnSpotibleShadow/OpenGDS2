@@ -4,6 +4,16 @@ This is an experimental community-tested reconstruction of Game Dev Story 2 DX.
 Expect bugs, missing systems and presentation differences. Full native Windows
 acceptance is incomplete; the included checklist guides community testing.
 
+## Changes in 0.1.0-ea.2
+
+Original employee Learn / Use controls and workstation-gated course selection
+are restored. The study-PC research panel, management menus, settings/audio
+controls, application icons, facility conversations, casino save continuation
+and recovery warnings received fidelity and usability fixes. New-company setup
+is compact with translated registration artwork; horse racing restores the
+original scenery transitions and finish post. Startup can optionally check
+GitHub for a newer release. Windows 32-bit and 64-bit packages are supplied.
+
 ## Playable scope
 
 Hire and train employees, assign desks, upgrade PCs, develop original games,
