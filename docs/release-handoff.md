@@ -10,8 +10,8 @@ Use a feature PR into develop, then a develop → main PR. The latter starts the
 read-only Actions build workflow; tagging/publication is a separate authorized
 operation after package checks pass. Do not alter ea.1 or reuse historical ZIPs.
 
-Both `OpenGDS_v0.1.0-ea.2_x86_32.zip` and
-`OpenGDS_v0.1.0-ea.2_x86_64.zip` need matching SHA-256 files. Publish release builds
+Both `OpenGDS_v0.1.0-ea.2_windows_x86_32.zip` and
+`OpenGDS_v0.1.0-ea.2_windows_x86_64.zip` need matching SHA-256 files. Publish release builds
 only. The permanent profile folder remains `%APPDATA%\OpenGDS2`.
 
 Automated Windows packaged checks and the owner's source-play review are distinct

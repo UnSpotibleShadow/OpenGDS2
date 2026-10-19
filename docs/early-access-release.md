@@ -24,8 +24,8 @@ from the reviewed develop commit `3ff22a05cad88ce523a660d94f3eaf18d2fbf6f1`.
 
 Expected public filenames:
 
-- `OpenGDS_v0.1.0-ea.2_x86_32.zip` and `.zip.sha256`
-- `OpenGDS_v0.1.0-ea.2_x86_64.zip` and `.zip.sha256`
+- `OpenGDS_v0.1.0-ea.2_windows_x86_32.zip` and `.zip.sha256`
+- `OpenGDS_v0.1.0-ea.2_windows_x86_64.zip` and `.zip.sha256`
 
 Windows release packages include BUILD_MANIFEST.json with the exact source SHA,
 version, self-contained runtime identifiers and assembly digest; SHA256SUMS covers

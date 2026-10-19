@@ -102,8 +102,8 @@ jobs:
       - name: Package binaries, notices and checksums
         run: |
           python3 tools/package_desktop.py --export builds/linux --platform linux --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64.zip
-          python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_x86_64.zip
-          python3 tools/package_desktop.py --export builds/windows32 --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_x86_32.zip
+          python3 tools/package_desktop.py --export builds/windows --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_windows_x86_64.zip
+          python3 tools/package_desktop.py --export builds/windows32 --platform windows --notices /tmp/opengds2-notices --early-access --source-commit "${{ github.event.pull_request.merge_commit_sha }}" --report-url https://github.com/UnSpotibleShadow/OpenGDS2/issues --output builds/OpenGDS_v0.1.0-ea.2_windows_x86_32.zip
           python3 tools/package_desktop.py --export builds/linux-debug --platform linux --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-linux-x86_64-debug.zip
           python3 tools/package_desktop.py --export builds/windows-debug --platform windows --configuration debug --notices /tmp/opengds2-notices --output builds/OpenGDS2-windows-x86_64-debug.zip
           for package in builds/*.zip; do
@@ -127,10 +127,10 @@ jobs:
           path: |
             builds/OpenGDS2-linux-x86_64.zip
             builds/OpenGDS2-linux-x86_64.zip.sha256
-            builds/OpenGDS_v0.1.0-ea.2_x86_64.zip
-            builds/OpenGDS_v0.1.0-ea.2_x86_64.zip.sha256
-            builds/OpenGDS_v0.1.0-ea.2_x86_32.zip
-            builds/OpenGDS_v0.1.0-ea.2_x86_32.zip.sha256
+            builds/OpenGDS_v0.1.0-ea.2_windows_x86_64.zip
+            builds/OpenGDS_v0.1.0-ea.2_windows_x86_64.zip.sha256
+            builds/OpenGDS_v0.1.0-ea.2_windows_x86_32.zip
+            builds/OpenGDS_v0.1.0-ea.2_windows_x86_32.zip.sha256
           if-no-files-found: error
           retention-days: 14
       - uses: actions/upload-artifact@v4
@@ -166,8 +166,8 @@ jobs:
           $packageRoot = Join-Path $env:RUNNER_TEMP "opengds2-desktop"
           $fixture = Join-Path $env:GITHUB_WORKSPACE "tests/core_loop_smoke.gd"
           $cases = @(
-            @{ Zip = "OpenGDS_v0.1.0-ea.2_x86_32"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
-            @{ Zip = "OpenGDS_v0.1.0-ea.2_x86_64"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
+            @{ Zip = "OpenGDS_v0.1.0-ea.2_windows_x86_32"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
+            @{ Zip = "OpenGDS_v0.1.0-ea.2_windows_x86_64"; Root = "OpenGDS2-windows-0.1.0-ea.2"; Debug = "0" },
             @{ Zip = "OpenGDS2-windows-x86_64-debug"; Root = "OpenGDS2-windows-x86_64-debug"; Debug = "1" }
           )
           foreach ($case in $cases) {
